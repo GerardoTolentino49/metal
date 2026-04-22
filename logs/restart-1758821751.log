@@ -1,0 +1,36 @@
+Conexión exitosa a apoyos_db
+Conexión exitosa a inventario_db
+Conexión exitosa a denuncias_db
+Conexión exitosa a phoenix_tickets
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m🚀 Servidor iniciado exitosamente en puerto 3000[39m
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m🌐 URL: http://localhost:3000[39m
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m📋 API disponible en: http://localhost:3000/api/solicitudes-rh[39m
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m📝 Formulario RH: http://localhost:3000/solicitud_rh.html[39m
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m🧪 Test RH: http://localhost:3000/solicitud_rh_simple.html[39m
+[32mINFO[39m [2025-09-25 10:35:52.333 -0700]: [36m================================================[39m
+[32mINFO[39m [2025-09-25 10:36:14.363 -0700]: [36m[GET] GET /api/inventario/categoria/pox - 200[39m
+[32mINFO[39m [2025-09-25 10:36:14.364 -0700]: [36m[TIME] GET /api/inventario/categoria/pox - 200 - 19ms[39m
+[32mINFO[39m [2025-09-25 10:36:17.513 -0700]: [36m[POST] POST /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:36:17.513 -0700]: [36m[TIME] POST /api/inventario - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 10:36:21.251 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:36:21.252 -0700]: [36m[TIME] GET /almacen.html - 200 - 10ms[39m
+[32mINFO[39m [2025-09-25 10:36:21.271 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:36:21.279 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:36:21.298 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:36:21.298 -0700]: [36m[TIME] GET /api/inventario - 200 - 10ms[39m
+[32mINFO[39m [2025-09-25 10:36:21.304 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:36:21.304 -0700]: [36m[TIME] GET /api/inventario - 200 - 13ms[39m
+[32mINFO[39m [2025-09-25 10:36:25.679 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:36:25.679 -0700]: [36m[TIME] POST /api/inventario - 201 - 32ms[39m
+[32mINFO[39m [2025-09-25 10:36:28.961 -0700]: [36m[POST] POST /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:36:28.961 -0700]: [36m[TIME] POST /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:36:42.096 -0700]: [36m[PUT] PUT /api/inventario/42 - 200[39m
+[32mINFO[39m [2025-09-25 10:36:42.096 -0700]: [36m[TIME] PUT /api/inventario/42 - 200 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:36:42.102 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:36:42.102 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:37:19.236 -0700]: [36m[PUT] PUT /api/inventario/42 - 200[39m
+[32mINFO[39m [2025-09-25 10:37:19.236 -0700]: [36m[TIME] PUT /api/inventario/42 - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 10:37:19.243 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:37:19.243 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:37:50.849 -0700]: [36m[TIME] GET /api/salidas - 304 - 16ms[39m
+[32mINFO[39m [2025-09-25 10:37:56.384 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m

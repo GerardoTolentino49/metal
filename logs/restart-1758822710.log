@@ -1,0 +1,346 @@
+Conexión exitosa a inventario_db
+Conexión exitosa a apoyos_db
+Conexión exitosa a denuncias_db
+Conexión exitosa a phoenix_tickets
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m🚀 Servidor iniciado exitosamente en puerto 3000[39m
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m🌐 URL: http://localhost:3000[39m
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m📋 API disponible en: http://localhost:3000/api/solicitudes-rh[39m
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m📝 Formulario RH: http://localhost:3000/solicitud_rh.html[39m
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m🧪 Test RH: http://localhost:3000/solicitud_rh_simple.html[39m
+[32mINFO[39m [2025-09-25 10:51:50.650 -0700]: [36m================================================[39m
+[32mINFO[39m [2025-09-25 10:52:11.598 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:52:11.598 -0700]: [36m[TIME] GET /almacen.html - 200 - 12ms[39m
+[32mINFO[39m [2025-09-25 10:52:11.617 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:52:11.619 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:52:11.658 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:52:11.658 -0700]: [36m[TIME] GET /api/inventario - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 10:52:11.667 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:52:11.667 -0700]: [36m[TIME] GET /api/inventario - 200 - 26ms[39m
+[32mINFO[39m [2025-09-25 10:52:42.049 -0700]: [36m[PUT] PUT /api/inventario/49 - 200[39m
+[32mINFO[39m [2025-09-25 10:52:42.049 -0700]: [36m[TIME] PUT /api/inventario/49 - 200 - 43ms[39m
+[32mINFO[39m [2025-09-25 10:52:42.059 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:52:42.060 -0700]: [36m[TIME] GET /api/inventario - 200 - 6ms[39m
+[32mINFO[39m [2025-09-25 10:53:15.668 -0700]: [36m[PUT] PUT /api/inventario/49 - 200[39m
+[32mINFO[39m [2025-09-25 10:53:15.668 -0700]: [36m[TIME] PUT /api/inventario/49 - 200 - 32ms[39m
+[32mINFO[39m [2025-09-25 10:53:15.681 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:53:15.682 -0700]: [36m[TIME] GET /api/inventario - 200 - 8ms[39m
+[32mINFO[39m [2025-09-25 10:53:50.481 -0700]: [36m[PUT] PUT /api/inventario/49 - 200[39m
+[32mINFO[39m [2025-09-25 10:53:50.481 -0700]: [36m[TIME] PUT /api/inventario/49 - 200 - 28ms[39m
+[32mINFO[39m [2025-09-25 10:53:50.490 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:53:50.490 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+ID de ingreso generado: ING-1758822840825-gc08824ks
+[32mINFO[39m [2025-09-25 10:54:00.827 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:54:00.827 -0700]: [36m[TIME] POST /api/inventario - 201 - 7ms[39m
+ID de ingreso generado: ING-1758822844479-0joii80s2
+[32mINFO[39m [2025-09-25 10:54:04.179 -0700]: [36m[TIME] GET /api/proveedores - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:54:04.481 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:54:04.481 -0700]: [36m[TIME] POST /api/inventario - 201 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:54:26.542 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:54:26.542 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:54:45.258 -0700]: [36m[TIME] GET /api/salidas - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:54:46.228 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:54:54.300 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:54:54.300 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:54:54.314 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:54:54.316 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:54:54.328 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:54:54.328 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:54:54.330 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:54:54.330 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:55:07.947 -0700]: [36m[PUT] PUT /api/inventario/51 - 200[39m
+[32mINFO[39m [2025-09-25 10:55:07.947 -0700]: [36m[TIME] PUT /api/inventario/51 - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:55:07.953 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:55:07.953 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:55:21.668 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:55:21.668 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:55:21.681 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:55:21.684 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:55:21.694 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:55:21.694 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:55:21.698 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:55:21.698 -0700]: [36m[TIME] GET /api/inventario - 200 - 6ms[39m
+[32mINFO[39m [2025-09-25 10:55:32.412 -0700]: [36m[PUT] PUT /api/inventario/51 - 200[39m
+[32mINFO[39m [2025-09-25 10:55:32.412 -0700]: [36m[TIME] PUT /api/inventario/51 - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:55:32.419 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:55:32.419 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:56:04.852 -0700]: [36m[TIME] GET /api/salidas - 304 - 16ms[39m
+[33mWARN[39m [2025-09-25 10:56:25.765 -0700]: [36m[POST] POST /api/salidas - 400[39m
+[32mINFO[39m [2025-09-25 10:56:25.765 -0700]: [36m[TIME] POST /api/salidas - 400 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:56:33.126 -0700]: [36m[TIME] GET /api/inventario - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:59:10.019 -0700]: [36m[PUT] PUT /api/inventario/51 - 200[39m
+[32mINFO[39m [2025-09-25 10:59:10.019 -0700]: [36m[TIME] PUT /api/inventario/51 - 200 - 25ms[39m
+[32mINFO[39m [2025-09-25 10:59:10.026 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:59:10.026 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:59:32.487 -0700]: [36m[PUT] PUT /api/inventario/50 - 200[39m
+[32mINFO[39m [2025-09-25 10:59:32.487 -0700]: [36m[TIME] PUT /api/inventario/50 - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:59:32.496 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:59:32.496 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:59:51.573 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:59:51.573 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:59:51.585 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 10:59:51.587 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 10:59:51.601 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:59:51.601 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:59:51.604 -0700]: [36m[TIME] GET /api/inventario - 304 - 6ms[39m
+ID de ingreso generado: ING-1758823206327-gz4apaklx
+[32mINFO[39m [2025-09-25 11:00:06.328 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:00:06.328 -0700]: [36m[TIME] POST /api/inventario - 201 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:00:06.339 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:00:06.339 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+ID de ingreso generado: ING-1758823221408-v2zi6mee4
+[32mINFO[39m [2025-09-25 11:00:21.410 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:00:21.410 -0700]: [36m[TIME] POST /api/inventario - 201 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:00:21.420 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:00:21.420 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:00:30.390 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:00:47.490 -0700]: [36m[TIME] GET /api/proveedores - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:01:13.268 -0700]: [36m[TIME] GET /api/inventario - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:02:30.922 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:02:30.922 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:02:30.940 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:02:30.943 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:02:30.991 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:02:30.991 -0700]: [36m[TIME] GET /api/inventario - 200 - 32ms[39m
+[32mINFO[39m [2025-09-25 11:02:30.994 -0700]: [36m[TIME] GET /api/inventario - 304 - 33ms[39m
+[32mINFO[39m [2025-09-25 11:02:34.304 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+ID de ingreso generado: ING-1758823382762-o7n3wsx4n
+[32mINFO[39m [2025-09-25 11:03:02.764 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:03:02.764 -0700]: [36m[TIME] POST /api/inventario - 201 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:03:02.769 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:03:02.769 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+ID de ingreso generado: ING-1758823384235-yviixfbtq
+[32mINFO[39m [2025-09-25 11:03:04.236 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:03:04.236 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:03:04.244 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:03:04.244 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+ID de ingreso generado: ING-1758823390645-jeyfghkgn
+[32mINFO[39m [2025-09-25 11:03:10.647 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:03:10.647 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:03:10.652 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:03:10.652 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+ID de ingreso generado: ING-1758823391375-1d8lgxkir
+[32mINFO[39m [2025-09-25 11:03:11.377 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:03:11.377 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:03:11.382 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:03:11.382 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+ID de ingreso generado: ING-1758823491679-xpf3ko0at
+[32mINFO[39m [2025-09-25 11:04:51.681 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:04:51.681 -0700]: [36m[TIME] POST /api/inventario - 201 - 269ms[39m
+[32mINFO[39m [2025-09-25 11:04:51.689 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:04:51.689 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+ID de ingreso generado: ING-1758823495318-tg4cnh20r
+[32mINFO[39m [2025-09-25 11:04:55.320 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:04:55.320 -0700]: [36m[TIME] POST /api/inventario - 201 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:04:55.326 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:04:55.326 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:04:55.399 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:05:09.116 -0700]: [36m[GET] GET /api/salidas - 200[39m
+[32mINFO[39m [2025-09-25 11:05:09.116 -0700]: [36m[TIME] GET /api/salidas - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:05:11.248 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:05:12.949 -0700]: [36m[TIME] GET /api/proveedores - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:05:15.234 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:05:26.532 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:05:26.532 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:05:26.544 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:05:26.546 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:05:26.556 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:05:26.556 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:05:26.559 -0700]: [36m[TIME] GET /api/inventario - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:06:03.698 -0700]: [36m[TIME] GET /api/inventario - 304 - 18ms[39m
+[32mINFO[39m [2025-09-25 11:06:07.946 -0700]: [36m[TIME] GET /api/proveedores - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:06:09.114 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+ID de ingreso generado: ING-1758823590144-wchfq959h
+[32mINFO[39m [2025-09-25 11:06:30.145 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:06:30.146 -0700]: [36m[TIME] POST /api/inventario - 201 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:06:30.151 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:06:30.151 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+ID de ingreso generado: ING-1758823593133-y70xdmq3i
+[32mINFO[39m [2025-09-25 11:06:33.134 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:06:33.134 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:06:33.141 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:06:33.141 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+ID de ingreso generado: ING-1758823595602-we137jud1
+[32mINFO[39m [2025-09-25 11:06:35.604 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:06:35.604 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:06:35.609 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:06:35.609 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+ID de ingreso generado: ING-1758823606301-etqnoi1c5
+[32mINFO[39m [2025-09-25 11:06:46.302 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:06:46.302 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:06:46.308 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:06:46.308 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:06:48.253 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:06:48.253 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:06:48.264 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:06:48.266 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:06:48.277 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:06:48.277 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:06:48.279 -0700]: [36m[TIME] GET /api/inventario - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:06:49.848 -0700]: [36m[TIME] GET /api/proveedores - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:06:51.680 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:08:37.766 -0700]: [36m[TIME] GET /api/inventario - 304 - 25ms[39m
+[32mINFO[39m [2025-09-25 11:08:41.047 -0700]: [36m[TIME] GET /api/proveedores - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:08:41.932 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+ID de ingreso generado: ING-1758823728770-2m2su7tu5
+[32mINFO[39m [2025-09-25 11:08:48.772 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:08:48.772 -0700]: [36m[TIME] POST /api/inventario - 201 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:08:48.780 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:08:48.780 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:08:51.783 -0700]: [36m[TIME] GET /api/proveedores - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:08:52.467 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:08:56.999 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+ID de ingreso generado: ING-1758823753605-w1vj66wge
+[32mINFO[39m [2025-09-25 11:09:13.606 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:09:13.606 -0700]: [36m[TIME] POST /api/inventario - 201 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:09:13.618 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:09:13.618 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:09:17.750 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:09:32.675 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:09:32.675 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:09:32.688 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:09:32.691 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:09:32.703 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:09:32.703 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:09:32.705 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:09:37.808 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:09:37.808 -0700]: [36m[TIME] GET /almacen.html - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:09:37.824 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:09:37.825 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:09:37.845 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:09:37.845 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:09:37.848 -0700]: [36m[TIME] GET /api/inventario - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 11:09:39.596 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:10:25.106 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:10:25.106 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:10:25.119 -0700]: [36m[GET] GET /styles/almacen.css - 200[39m
+[32mINFO[39m [2025-09-25 11:10:25.119 -0700]: [36m[TIME] GET /styles/almacen.css - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:10:25.120 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:10:25.145 -0700]: [36m[TIME] GET /api/inventario - 304 - 17ms[39m
+[32mINFO[39m [2025-09-25 11:10:25.147 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:10:25.147 -0700]: [36m[TIME] GET /api/inventario - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 11:10:26.197 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+ID de ingreso generado: ING-1758823847763-9fk0h7e12
+[32mINFO[39m [2025-09-25 11:10:47.764 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 11:10:47.764 -0700]: [36m[TIME] POST /api/inventario - 201 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:10:47.770 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:10:47.770 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:12:06.032 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:12:06.032 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:12:06.045 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:12:06.047 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:12:06.078 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:12:06.078 -0700]: [36m[TIME] GET /api/inventario - 200 - 21ms[39m
+[32mINFO[39m [2025-09-25 11:12:06.079 -0700]: [36m[TIME] GET /api/inventario - 304 - 21ms[39m
+[32mINFO[39m [2025-09-25 11:12:07.228 -0700]: [36m[TIME] GET /api/proveedores - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:12:08.811 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:12:27.387 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:12:27.387 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:12:27.400 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:12:27.402 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:12:27.413 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:12:27.413 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:12:27.415 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:12:29.059 -0700]: [36m[TIME] GET /api/inventario - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:12:44.538 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:12:44.538 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:12:44.550 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 11:12:44.552 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:12:44.563 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:12:44.563 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:12:44.565 -0700]: [36m[TIME] GET /api/inventario - 304 - 4ms[39m
+[32mINFO[39m [2025-09-25 11:12:45.743 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-25 11:15:00.306 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 11:15:00.306 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:15:00.327 -0700]: [36m[GET] GET /styles/almacen.css - 200[39m
+[32mINFO[39m [2025-09-25 11:15:00.328 -0700]: [36m[TIME] GET /styles/almacen.css - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 11:15:00.330 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 11:15:00.373 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:15:00.373 -0700]: [36m[TIME] GET /api/inventario - 200 - 30ms[39m
+[32mINFO[39m [2025-09-25 11:15:00.375 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 11:15:00.375 -0700]: [36m[TIME] GET /api/inventario - 200 - 30ms[39m
+[32mINFO[39m [2025-09-25 11:15:03.010 -0700]: [36m[TIME] GET /api/inventario - 304 - 3ms[39m
+[32mINFO[39m [2025-09-26 10:58:38.500 -0700]: [36m[TIME] GET / - 304 - 26ms[39m
+[32mINFO[39m [2025-09-26 10:58:38.505 -0700]: [36m[TIME] GET /styles/selector.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 10:58:38.895 -0700]: [36m[GET] GET /fotos/fondo5.webp - 200[39m
+[32mINFO[39m [2025-09-26 10:58:38.895 -0700]: [36m[TIME] GET /fotos/fondo5.webp - 200 - 7ms[39m
+[32mINFO[39m [2025-09-26 10:58:38.899 -0700]: [36m[TIME] GET /fotos/fondo3.webp - 304 - 0ms[39m
+[33mWARN[39m [2025-09-26 10:58:38.977 -0700]: [36m[GET] GET /apple-touch-icon-precomposed.png - 404[39m
+[32mINFO[39m [2025-09-26 10:58:38.977 -0700]: [36m[TIME] GET /apple-touch-icon-precomposed.png - 404 - 2ms[39m
+[33mWARN[39m [2025-09-26 10:58:39.117 -0700]: [36m[GET] GET /apple-touch-icon.png - 404[39m
+[32mINFO[39m [2025-09-26 10:58:39.117 -0700]: [36m[TIME] GET /apple-touch-icon.png - 404 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:58:42.515 -0700]: [36m[TIME] GET / - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:58:42.517 -0700]: [36m[TIME] GET /styles/selector.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 10:58:42.538 -0700]: [36m[TIME] GET /fotos/fondo5.webp - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:58:42.539 -0700]: [36m[TIME] GET /fotos/fondo3.webp - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 10:59:23.251 -0700]: [36m[TIME] GET /almacen.html - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:59:23.257 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 4ms[39m
+[32mINFO[39m [2025-09-26 10:59:23.258 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 10:59:23.390 -0700]: [36m[TIME] GET /api/inventario - 304 - 31ms[39m
+[32mINFO[39m [2025-09-26 10:59:23.392 -0700]: [36m[TIME] GET /api/inventario - 304 - 36ms[39m
+[32mINFO[39m [2025-09-26 10:59:43.216 -0700]: [36m[TIME] GET /index_mantenimiento.html - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:59:43.219 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:59:43.226 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 10:59:43.226 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 10:59:43.820 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 3ms[39m
+[32mINFO[39m [2025-09-26 11:06:36.261 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:06:36.261 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 7ms[39m
+[32mINFO[39m [2025-09-26 11:06:36.285 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:06:36.288 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:06:36.865 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:06:45.122 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:06:45.122 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:06:45.148 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:06:45.151 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:06:45.219 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:08:59.420 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:08:59.420 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 8ms[39m
+[32mINFO[39m [2025-09-26 11:08:59.428 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:08:59.430 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:08:59.729 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:10:28.564 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:10:28.565 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:10:28.572 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:10:28.575 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:10:28.835 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:13:03.126 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:13:03.126 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:13:03.140 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-26 11:13:03.147 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:13:03.468 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[33mWARN[39m [2025-09-26 11:13:15.504 -0700]: [36m[GET] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404[39m
+[32mINFO[39m [2025-09-26 11:13:15.505 -0700]: [36m[TIME] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404 - 5ms[39m
+[32mINFO[39m [2025-09-26 11:13:34.357 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:13:34.357 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:13:34.379 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:13:34.380 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:13:34.428 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[33mWARN[39m [2025-09-26 11:13:39.991 -0700]: [36m[GET] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404[39m
+[32mINFO[39m [2025-09-26 11:13:39.991 -0700]: [36m[TIME] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:13:42.021 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:13:42.021 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:13:42.036 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:13:42.038 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:13:42.063 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:14:12.673 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:14:12.673 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:14:12.681 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:14:12.682 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:14:12.968 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[33mWARN[39m [2025-09-26 11:14:28.211 -0700]: [36m[GET] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404[39m
+[32mINFO[39m [2025-09-26 11:14:28.211 -0700]: [36m[TIME] GET /api/herramientas_mantenimiento?department=Producci%C3%B3n%20P1 - 404 - 3ms[39m
+[32mINFO[39m [2025-09-26 11:32:17.412 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:32:17.412 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 3ms[39m
+[32mINFO[39m [2025-09-26 11:32:17.430 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:17.433 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:18.039 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:32.348 -0700]: [36m[GET] GET /index_mantenimiento.html - 200[39m
+[32mINFO[39m [2025-09-26 11:32:32.348 -0700]: [36m[TIME] GET /index_mantenimiento.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:32:32.370 -0700]: [36m[TIME] GET /styles/index_mantenimiento_style.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:32:32.371 -0700]: [36m[TIME] GET /IMG_2288.jpg - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:32.410 -0700]: [36m[TIME] GET /fotos/fondo1.webp - 304 - 1ms[39m
+[32mINFO[39m [2025-09-26 11:32:39.999 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-26 11:32:39.999 -0700]: [36m[TIME] GET /almacen.html - 200 - 3ms[39m
+[32mINFO[39m [2025-09-26 11:32:40.010 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:40.012 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-26 11:32:40.042 -0700]: [36m[TIME] GET /api/inventario - 304 - 20ms[39m
+[32mINFO[39m [2025-09-26 11:32:40.044 -0700]: [36m[TIME] GET /api/inventario - 304 - 21ms[39m

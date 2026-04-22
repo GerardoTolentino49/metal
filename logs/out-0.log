@@ -1,0 +1,409 @@
+2025-08-05T09:45:39: Servidor corriendo en http://localhost:3000
+2025-08-05T09:45:39: Conexión exitosa a inventario_db
+2025-08-05T09:45:39: Conexión exitosa a apoyos_db
+2025-08-05T09:45:39: Conexión exitosa a phoenix_tickets
+2025-08-05T09:52:29: 2025-08-05T16:52:29.991Z - GET /styles/w1_edited.jpg
+2025-08-05T09:52:29: Body: {}
+2025-08-05T09:52:29: Ruta no encontrada: /styles/w1_edited.jpg
+2025-08-05T10:02:43: 2025-08-05T17:02:43.043Z - GET /styles/w1_edited.jpg
+2025-08-05T10:02:43: Body: {}
+2025-08-05T10:02:43: Ruta no encontrada: /styles/w1_edited.jpg
+2025-08-05T10:02:43: 2025-08-05T17:02:43.408Z - GET /styles/w1_edited.jpg
+2025-08-05T10:02:43: Body: {}
+2025-08-05T10:02:43: Ruta no encontrada: /styles/w1_edited.jpg
+2025-08-05T10:19:37: 2025-08-05T17:19:37.180Z - GET /api/latest-pdf
+2025-08-05T10:19:37: Body: {}
+2025-08-05T10:19:42: 2025-08-05T17:19:42.961Z - POST /api/auth/check-permissions
+2025-08-05T10:19:42: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:19:43: 2025-08-05T17:19:43.004Z - POST /api/auth/check-permissions
+2025-08-05T10:19:43: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:24:55: 2025-08-05T17:24:55.341Z - GET /styles/w1_edited.jpg
+2025-08-05T10:24:55: Body: {}
+2025-08-05T10:24:55: Ruta no encontrada: /styles/w1_edited.jpg
+2025-08-05T10:33:25: 2025-08-05T17:33:25.642Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:33:25: Body: {}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.647Z - POST /api/auth/check-permissions
+2025-08-05T10:33:25: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.663Z - GET /api/vacaciones/todas
+2025-08-05T10:33:25: Body: {}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.667Z - GET /api/empleados
+2025-08-05T10:33:25: Body: {}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.674Z - GET /api/vacaciones/todas
+2025-08-05T10:33:25: Body: {}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.687Z - POST /api/auth/check-permissions
+2025-08-05T10:33:25: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:33:25: 2025-08-05T17:33:25.693Z - GET /api/vacaciones/todas
+2025-08-05T10:33:25: Body: {}
+2025-08-05T10:33:31: 2025-08-05T17:33:31.342Z - GET /api/empleados/495
+2025-08-05T10:33:31: Body: {}
+2025-08-05T10:33:35: 2025-08-05T17:33:35.758Z - GET /api/empleados/485
+2025-08-05T10:33:35: Body: {}
+2025-08-05T10:33:35: 2025-08-05T17:33:35.768Z - GET /api/vacaciones/empleado/485
+2025-08-05T10:33:35: Body: {}
+2025-08-05T10:33:56: 2025-08-05T17:33:56.226Z - GET /api/empleados/1000
+2025-08-05T10:33:56: Body: {}
+2025-08-05T10:33:56: 2025-08-05T17:33:56.235Z - GET /api/vacaciones/empleado/1000
+2025-08-05T10:33:56: Body: {}
+2025-08-05T10:34:21: 2025-08-05T17:34:21.623Z - GET /api/empleados/395
+2025-08-05T10:34:21: Body: {}
+2025-08-05T10:34:21: 2025-08-05T17:34:21.632Z - GET /api/vacaciones/empleado/395
+2025-08-05T10:34:21: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.451Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:35:04: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.457Z - POST /api/auth/check-permissions
+2025-08-05T10:35:04: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.469Z - GET /api/vacaciones/todas
+2025-08-05T10:35:04: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.473Z - GET /api/empleados
+2025-08-05T10:35:04: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.478Z - GET /api/vacaciones/todas
+2025-08-05T10:35:04: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.490Z - GET /api/vacaciones/todas
+2025-08-05T10:35:04: Body: {}
+2025-08-05T10:35:04: 2025-08-05T17:35:04.497Z - POST /api/auth/check-permissions
+2025-08-05T10:35:04: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:35:47: 2025-08-05T17:35:47.437Z - GET /api/empleados/395
+2025-08-05T10:35:47: Body: {}
+2025-08-05T10:35:47: 2025-08-05T17:35:47.460Z - GET /api/vacaciones/empleado/395
+2025-08-05T10:35:47: Body: {}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.865Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:35:58: Body: {}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.870Z - POST /api/auth/check-permissions
+2025-08-05T10:35:58: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.883Z - GET /api/vacaciones/todas
+2025-08-05T10:35:58: Body: {}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.887Z - GET /api/empleados
+2025-08-05T10:35:58: Body: {}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.892Z - GET /api/vacaciones/todas
+2025-08-05T10:35:58: Body: {}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.904Z - POST /api/auth/check-permissions
+2025-08-05T10:35:58: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:35:58: 2025-08-05T17:35:58.908Z - GET /api/vacaciones/todas
+2025-08-05T10:35:58: Body: {}
+2025-08-05T10:37:05: 2025-08-05T17:37:05.352Z - GET /api/empleados/395
+2025-08-05T10:37:05: Body: {}
+2025-08-05T10:37:05: 2025-08-05T17:37:05.375Z - GET /api/vacaciones/empleado/395
+2025-08-05T10:37:05: Body: {}
+2025-08-05T10:42:30: 2025-08-05T17:42:30.136Z - GET /
+2025-08-05T10:42:30: Body: {}
+2025-08-05T10:42:30: Accediendo a la ruta principal /
+2025-08-05T10:42:30: Sirviendo archivo: /Users/gerardotolentino/Pictures/COPIA DEL 25/frontend/selector.html
+2025-08-05T10:42:34: 2025-08-05T17:42:34.076Z - GET /
+2025-08-05T10:42:34: Body: {}
+2025-08-05T10:42:34: Accediendo a la ruta principal /
+2025-08-05T10:42:34: Sirviendo archivo: /Users/gerardotolentino/Pictures/COPIA DEL 25/frontend/selector.html
+2025-08-05T10:42:35: 2025-08-05T17:42:35.891Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:42:35: Body: {}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.897Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.905Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.913Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.919Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.946Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.953Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:35: 2025-08-05T17:42:35.960Z - POST /api/auth/check-permissions
+2025-08-05T10:42:35: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:38: 2025-08-05T17:42:38.980Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:42:38: Body: {}
+2025-08-05T10:42:38: 2025-08-05T17:42:38.985Z - POST /api/auth/check-permissions
+2025-08-05T10:42:38: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:39: 2025-08-05T17:42:39.002Z - GET /api/vacaciones/todas
+2025-08-05T10:42:39: Body: {}
+2025-08-05T10:42:39: 2025-08-05T17:42:39.006Z - GET /api/empleados
+2025-08-05T10:42:39: Body: {}
+2025-08-05T10:42:39: 2025-08-05T17:42:39.010Z - GET /api/vacaciones/todas
+2025-08-05T10:42:39: Body: {}
+2025-08-05T10:42:39: 2025-08-05T17:42:39.024Z - POST /api/auth/check-permissions
+2025-08-05T10:42:39: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:39: 2025-08-05T17:42:39.029Z - GET /api/vacaciones/todas
+2025-08-05T10:42:39: Body: {}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.315Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:42:47: Body: {}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.320Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.327Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.333Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.339Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.350Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.356Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:47: 2025-08-05T17:42:47.364Z - POST /api/auth/check-permissions
+2025-08-05T10:42:47: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:49: 2025-08-05T17:42:49.728Z - GET /api/empleados/5
+2025-08-05T10:42:49: Body: {}
+2025-08-05T10:42:49: 2025-08-05T17:42:49.740Z - GET /api/empleados/5/historial
+2025-08-05T10:42:49: Body: {}
+2025-08-05T10:42:49: 2025-08-05T17:42:49.755Z - GET /api/empleados/5
+2025-08-05T10:42:49: Body: {}
+2025-08-05T10:42:49: 2025-08-05T17:42:49.765Z - GET /api/empleados/5/historial
+2025-08-05T10:42:49: Body: {}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.249Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:42:57: Body: {}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.255Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.261Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.268Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.273Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.284Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.291Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:57: 2025-08-05T17:42:57.298Z - POST /api/auth/check-permissions
+2025-08-05T10:42:57: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:42:58: 2025-08-05T17:42:58.767Z - GET /api/empleados/5
+2025-08-05T10:42:58: Body: {}
+2025-08-05T10:42:58: 2025-08-05T17:42:58.780Z - GET /api/empleados/5/historial
+2025-08-05T10:42:58: Body: {}
+2025-08-05T10:42:58: 2025-08-05T17:42:58.792Z - GET /api/empleados/5
+2025-08-05T10:42:58: Body: {}
+2025-08-05T10:42:58: 2025-08-05T17:42:58.803Z - GET /api/empleados/5/historial
+2025-08-05T10:42:58: Body: {}
+2025-08-05T10:48:45: 2025-08-05T17:48:45.359Z - GET /$%7BemployeeData.foto_url%7D
+2025-08-05T10:48:45: Body: {}
+2025-08-05T10:48:45: Ruta no encontrada: /$%7BemployeeData.foto_url%7D
+2025-08-05T10:48:45: 2025-08-05T17:48:45.709Z - GET /$%7Bsupport.foto_url%7D
+2025-08-05T10:48:45: Body: {}
+2025-08-05T10:48:45: Ruta no encontrada: /$%7Bsupport.foto_url%7D
+2025-08-05T10:48:45: 2025-08-05T17:48:45.717Z - GET /$%7Burl%7D
+2025-08-05T10:48:45: Body: {}
+2025-08-05T10:48:45: Ruta no encontrada: /$%7Burl%7D
+2025-08-05T10:48:45: 2025-08-05T17:48:45.723Z - GET /$%7Be.target.result%7D
+2025-08-05T10:48:45: Body: {}
+2025-08-05T10:48:45: Ruta no encontrada: /$%7Be.target.result%7D
+2025-08-05T10:48:46: 2025-08-05T17:48:46.336Z - GET /$%7Bsupport.foto_url%7D
+2025-08-05T10:48:46: Body: {}
+2025-08-05T10:48:46: Ruta no encontrada: /$%7Bsupport.foto_url%7D
+2025-08-05T10:48:46: 2025-08-05T17:48:46.355Z - GET /$%7Burl%7D
+2025-08-05T10:48:46: Body: {}
+2025-08-05T10:48:46: Ruta no encontrada: /$%7Burl%7D
+2025-08-05T10:48:46: 2025-08-05T17:48:46.365Z - GET /$%7Be.target.result%7D
+2025-08-05T10:48:46: Body: {}
+2025-08-05T10:48:46: Ruta no encontrada: /$%7Be.target.result%7D
+2025-08-05T10:48:46: 2025-08-05T17:48:46.379Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:48:46: Body: {}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.387Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.396Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.413Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:48:46: Body: {}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.421Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.431Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.475Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.493Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.505Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.518Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:48:46: 2025-08-05T17:48:46.528Z - POST /api/auth/check-permissions
+2025-08-05T10:48:46: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.312Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:49:01: Body: {}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.325Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.341Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.350Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.369Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.384Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.397Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:01: 2025-08-05T17:49:01.427Z - POST /api/auth/check-permissions
+2025-08-05T10:49:01: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:03: 2025-08-05T17:49:03.673Z - GET /api/empleados/5
+2025-08-05T10:49:03: Body: {}
+2025-08-05T10:49:03: 2025-08-05T17:49:03.687Z - GET /api/empleados/5/historial
+2025-08-05T10:49:03: Body: {}
+2025-08-05T10:49:03: 2025-08-05T17:49:03.704Z - GET /api/empleados/5
+2025-08-05T10:49:03: Body: {}
+2025-08-05T10:49:03: 2025-08-05T17:49:03.720Z - GET /api/empleados/5/historial
+2025-08-05T10:49:03: Body: {}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.367Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:49:11: Body: {}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.372Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.377Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.383Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.388Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.399Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.407Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:11: 2025-08-05T17:49:11.414Z - POST /api/auth/check-permissions
+2025-08-05T10:49:11: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:49:12: 2025-08-05T17:49:12.891Z - GET /api/empleados/5
+2025-08-05T10:49:12: Body: {}
+2025-08-05T10:49:12: 2025-08-05T17:49:12.901Z - GET /api/empleados/5/historial
+2025-08-05T10:49:12: Body: {}
+2025-08-05T10:49:12: 2025-08-05T17:49:12.911Z - GET /api/empleados/5
+2025-08-05T10:49:12: Body: {}
+2025-08-05T10:49:12: 2025-08-05T17:49:12.922Z - GET /api/empleados/5/historial
+2025-08-05T10:49:12: Body: {}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.918Z - GET /api/usuario/favorite-color/1
+2025-08-05T10:51:24: Body: {}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.928Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.937Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.942Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.949Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.984Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:24: 2025-08-05T17:51:24.997Z - POST /api/auth/check-permissions
+2025-08-05T10:51:24: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:25: 2025-08-05T17:51:25.021Z - POST /api/auth/check-permissions
+2025-08-05T10:51:25: Body: {
+  "username": "gerardo.lisa"
+}
+2025-08-05T10:51:27: 2025-08-05T17:51:27.333Z - GET /api/empleados/5
+2025-08-05T10:51:27: Body: {}
+2025-08-05T10:51:27: 2025-08-05T17:51:27.352Z - GET /api/empleados/5/historial
+2025-08-05T10:51:27: Body: {}
+2025-08-05T10:51:27: 2025-08-05T17:51:27.371Z - GET /api/empleados/5
+2025-08-05T10:51:27: Body: {}
+2025-08-05T10:51:27: 2025-08-05T17:51:27.392Z - GET /api/empleados/5/historial
+2025-08-05T10:51:27: Body: {}

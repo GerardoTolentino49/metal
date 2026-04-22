@@ -1,0 +1,196 @@
+Conexión exitosa a apoyos_db
+Conexión exitosa a inventario_db
+Conexión exitosa a denuncias_db
+Conexión exitosa a phoenix_tickets
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m🚀 Servidor iniciado exitosamente en puerto 3000[39m
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m🌐 URL: http://localhost:3000[39m
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m📋 API disponible en: http://localhost:3000/api/solicitudes-rh[39m
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m📝 Formulario RH: http://localhost:3000/solicitud_rh.html[39m
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m🧪 Test RH: http://localhost:3000/solicitud_rh_simple.html[39m
+[32mINFO[39m [2025-09-25 10:39:11.489 -0700]: [36m================================================[39m
+[32mINFO[39m [2025-09-25 10:39:11.834 -0700]: [36m[TIME] GET /almacen.html - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:39:11.837 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:39:11.838 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:39:11.893 -0700]: [36m[TIME] GET /api/inventario - 304 - 9ms[39m
+[32mINFO[39m [2025-09-25 10:39:11.896 -0700]: [36m[TIME] GET /api/inventario - 304 - 12ms[39m
+[32mINFO[39m [2025-09-25 10:39:31.760 -0700]: [36m[PUT] PUT /api/inventario/42 - 200[39m
+[32mINFO[39m [2025-09-25 10:39:31.761 -0700]: [36m[TIME] PUT /api/inventario/42 - 200 - 17ms[39m
+[32mINFO[39m [2025-09-25 10:39:31.767 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:39:31.767 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:39:44.241 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:39:44.241 -0700]: [36m[TIME] POST /api/inventario - 201 - 6ms[39m
+[32mINFO[39m [2025-09-25 10:39:48.552 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:39:48.553 -0700]: [36m[TIME] POST /api/inventario - 201 - 24ms[39m
+[32mINFO[39m [2025-09-25 10:42:16.826 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:42:16.826 -0700]: [36m[TIME] GET /almacen.html - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:42:16.838 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:42:16.840 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:42:16.868 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:42:16.868 -0700]: [36m[TIME] GET /api/inventario - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 10:42:16.870 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:42:16.870 -0700]: [36m[TIME] GET /api/inventario - 200 - 20ms[39m
+[32mINFO[39m [2025-09-25 10:45:51.617 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:45:51.617 -0700]: [36m[TIME] POST /api/inventario - 201 - 23ms[39m
+[32mINFO[39m [2025-09-25 10:45:55.657 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:45:55.657 -0700]: [36m[TIME] POST /api/inventario - 201 - 11ms[39m
+[32mINFO[39m [2025-09-25 10:46:20.555 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:46:20.555 -0700]: [36m[TIME] GET /almacen.html - 200 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:46:20.567 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:46:20.569 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:46:20.580 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:46:20.580 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:46:20.597 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:46:20.597 -0700]: [36m[TIME] GET /api/inventario - 200 - 19ms[39m
+[32mINFO[39m [2025-09-25 10:46:41.446 -0700]: [36m[PUT] PUT /api/inventario/47 - 200[39m
+[32mINFO[39m [2025-09-25 10:46:41.446 -0700]: [36m[TIME] PUT /api/inventario/47 - 200 - 7ms[39m
+[32mINFO[39m [2025-09-25 10:46:41.451 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:46:41.451 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:47:06.656 -0700]: [36m[PUT] PUT /api/inventario/47 - 200[39m
+[32mINFO[39m [2025-09-25 10:47:06.657 -0700]: [36m[TIME] PUT /api/inventario/47 - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:47:06.662 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:47:06.662 -0700]: [36m[TIME] GET /api/inventario - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:48:08.254 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:48:08.254 -0700]: [36m[TIME] POST /api/inventario - 201 - 24ms[39m
+[32mINFO[39m [2025-09-25 10:48:11.626 -0700]: [36m[POST] POST /api/inventario - 201[39m
+[32mINFO[39m [2025-09-25 10:48:11.626 -0700]: [36m[TIME] POST /api/inventario - 201 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:48:16.418 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:48:16.418 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:48:16.440 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:48:16.443 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:48:16.460 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:48:16.460 -0700]: [36m[TIME] GET /api/inventario - 200 - 4ms[39m
+[32mINFO[39m [2025-09-25 10:48:16.478 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:48:16.478 -0700]: [36m[TIME] GET /api/inventario - 200 - 21ms[39m
+[32mINFO[39m [2025-09-25 10:48:41.537 -0700]: [36m[PUT] PUT /api/inventario/49 - 200[39m
+[32mINFO[39m [2025-09-25 10:48:41.537 -0700]: [36m[TIME] PUT /api/inventario/49 - 200 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:48:41.544 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:48:41.544 -0700]: [36m[TIME] GET /api/inventario - 200 - 3ms[39m
+[32mINFO[39m [2025-09-25 10:50:50.506 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:50:50.506 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:50:50.524 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 1ms[39m
+[32mINFO[39m [2025-09-25 10:50:50.527 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 0ms[39m
+[32mINFO[39m [2025-09-25 10:50:50.561 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:50:50.561 -0700]: [36m[TIME] GET /api/inventario - 200 - 21ms[39m
+[32mINFO[39m [2025-09-25 10:50:50.564 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:50:50.564 -0700]: [36m[TIME] GET /api/inventario - 200 - 27ms[39m
+Error al crear inventario: error: null value in column "id_ingreso" of relation "inventario" violates not-null constraint
+    at /Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/gerardotolentino/Pictures/COPIA DEL 25/server.js:2511:22 {
+  length: 429,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (50, PRUEBA CON ID INGRESO, 111, f, 0, t, 2025-09-25 10:51:06.0663, 2025-09-25 10:51:06.0663, null, pox, null, ABRASIVE, PRUEBA CON ID INGRESO, ID-001, ID INGRESO, null, null, null, null, null, null, null, null, null, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'inventario',
+  column: 'id_ingreso',
+  dataType: undefined,
+  constraint: undefined,
+  file: 'execMain.c',
+  line: '1988',
+  routine: 'ExecConstraints'
+}
+[31mERROR[39m [2025-09-25 10:51:06.071 -0700]: [36m[ERROR] POST /api/inventario - 500 - failed with status code 500[39m
+    err: {
+      "type": "Error",
+      "message": "failed with status code 500",
+      "stack":
+          Error: failed with status code 500
+              at onResFinished (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:115:39)
+              at ServerResponse.onResponseComplete (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:178:14)
+              at ServerResponse.emit (node:events:536:35)
+              at onFinish (node:_http_outgoing:1031:10)
+              at callback (node:internal/streams/writable:766:21)
+              at afterWrite (node:internal/streams/writable:710:5)
+              at afterWriteTick (node:internal/streams/writable:696:10)
+              at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+    }
+[32mINFO[39m [2025-09-25 10:51:06.073 -0700]: [36m[TIME] POST /api/inventario - 500 - 11ms[39m
+Error al crear inventario: error: null value in column "id_ingreso" of relation "inventario" violates not-null constraint
+    at /Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/gerardotolentino/Pictures/COPIA DEL 25/server.js:2511:22 {
+  length: 439,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (50, PRUEBA CON ID INGRESO 2, 222, f, 0, t, 2025-09-25 10:51:13.668887, 2025-09-25 10:51:13.668887, null, pox, null, ABRASIVE, PRUEBA CON ID INGRESO 2, ID-002, ID INGRESO 2, null, null, null, null, null, null, null, null, null, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'inventario',
+  column: 'id_ingreso',
+  dataType: undefined,
+  constraint: undefined,
+  file: 'execMain.c',
+  line: '1988',
+  routine: 'ExecConstraints'
+}
+[31mERROR[39m [2025-09-25 10:51:13.670 -0700]: [36m[ERROR] POST /api/inventario - 500 - failed with status code 500[39m
+    err: {
+      "type": "Error",
+      "message": "failed with status code 500",
+      "stack":
+          Error: failed with status code 500
+              at onResFinished (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:115:39)
+              at ServerResponse.onResponseComplete (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:178:14)
+              at ServerResponse.emit (node:events:536:35)
+              at onFinish (node:_http_outgoing:1031:10)
+              at callback (node:internal/streams/writable:766:21)
+              at afterWrite (node:internal/streams/writable:710:5)
+              at afterWriteTick (node:internal/streams/writable:696:10)
+              at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+    }
+[32mINFO[39m [2025-09-25 10:51:13.670 -0700]: [36m[TIME] POST /api/inventario - 500 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:51:36.569 -0700]: [36m[GET] GET /almacen.html - 200[39m
+[32mINFO[39m [2025-09-25 10:51:36.569 -0700]: [36m[TIME] GET /almacen.html - 200 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:51:36.600 -0700]: [36m[TIME] GET /styles/almacen.css - 304 - 5ms[39m
+[32mINFO[39m [2025-09-25 10:51:36.603 -0700]: [36m[TIME] GET /js/fecha-utils.js - 304 - 2ms[39m
+[32mINFO[39m [2025-09-25 10:51:36.665 -0700]: [36m[GET] GET /api/inventario - 200[39m
+[32mINFO[39m [2025-09-25 10:51:36.665 -0700]: [36m[TIME] GET /api/inventario - 200 - 42ms[39m
+[32mINFO[39m [2025-09-25 10:51:36.679 -0700]: [36m[TIME] GET /api/inventario - 304 - 51ms[39m
+Error al crear inventario: error: null value in column "id_ingreso" of relation "inventario" violates not-null constraint
+    at /Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pg-pool/index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/gerardotolentino/Pictures/COPIA DEL 25/server.js:2511:22 {
+  length: 451,
+  severity: 'ERROR',
+  code: '23502',
+  detail: 'Failing row contains (50, PRUEBA CON ID INGRESO FINAL, 333, f, 0, t, 2025-09-25 10:51:42.337381, 2025-09-25 10:51:42.337381, null, pox, null, ABRASIVE, PRUEBA CON ID INGRESO FINAL, ID-003, ID INGRESO FINAL, null, null, null, null, null, null, null, null, null, null).',
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: 'public',
+  table: 'inventario',
+  column: 'id_ingreso',
+  dataType: undefined,
+  constraint: undefined,
+  file: 'execMain.c',
+  line: '1988',
+  routine: 'ExecConstraints'
+}
+[31mERROR[39m [2025-09-25 10:51:42.339 -0700]: [36m[ERROR] POST /api/inventario - 500 - failed with status code 500[39m
+    err: {
+      "type": "Error",
+      "message": "failed with status code 500",
+      "stack":
+          Error: failed with status code 500
+              at onResFinished (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:115:39)
+              at ServerResponse.onResponseComplete (/Users/gerardotolentino/Pictures/COPIA DEL 25/node_modules/pino-http/logger.js:178:14)
+              at ServerResponse.emit (node:events:536:35)
+              at onFinish (node:_http_outgoing:1031:10)
+              at callback (node:internal/streams/writable:766:21)
+              at afterWrite (node:internal/streams/writable:710:5)
+              at afterWriteTick (node:internal/streams/writable:696:10)
+              at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+    }
+[32mINFO[39m [2025-09-25 10:51:42.339 -0700]: [36m[TIME] POST /api/inventario - 500 - 6ms[39m
