@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel de Soporte IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/tickets_rh.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/panel_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  
+  <!-- Incluir el sistema de color global -->
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <!-- IT -->
+      <div class="menu-item has-submenu" id="itMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+        </div>
+      </div>
+      
+      <!-- RH -->
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="faltas.html" class="submenu-item">Faltas</a>
+          <a href="tickets_rh.html" class="submenu-item">Solicitudes</a>
+          <a href="formatos.html" class="submenu-item">Formatos</a>
+        </div>
+      </div>
+      
+      <!-- Design -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Design
+        <div class="submenu" id="designSubmenu">
+          <a href="design.html" class="submenu-item">Design</a>
+        </div>
+      </div>
+      
+      <!-- Warehouse -->
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Warehouse
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Inventario</a>
+        </div>
+      </div>
+      
+      <!-- Maintenance -->
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Maintenance
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+      
+      <!-- Administración -->
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Administración
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="passwordsLink">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+          <button class="logout-button" id="logoutButton">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="container">
+      <div class="kanban-board" id="kanbanBoard">
+        <div class="kanban-column pending" data-status="pending">
+          <h2>Solicitudes Pendientes</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column critical" data-status="critical">
+          <h2>Crítico</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column high" data-status="high">
+          <h2>Alto</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column medium" data-status="medium">
+          <h2>Medio</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column low" data-status="low">
+          <h2>Bajo</h2>
+          <div class="tickets-container"></div>
+        </div>
+      </div>
+      <button class="completed-button" id="completedButton">
+        Terminados <span class="ticket-count">0</span>
+      </button>
+    </div>
+
+    <!-- Modal para detalles del ticket -->
+    <div class="ticket-modal" id="ticketModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-header">
+          <h2>Detalles del Ticket</h2>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- El contenido se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Visor de imagen completa -->
+    <div class="image-viewer" id="imageViewer">
+      <div class="image-viewer-content">
+        <button class="image-viewer-close" onclick="closeImageViewer()">×</button>
+        <img id="fullImage" src="" alt="Imagen completa">
+      </div>
+    </div>
+
+    <!-- Modal para tickets terminados -->
+    <div class="completed-modal" id="completedModal">
+      <div class="completed-modal-content">
+        <button class="completed-modal-close" onclick="closeCompletedModal()">×</button>
+        <div class="completed-modal-header">
+          <h2>Tickets Terminados</h2>
+        </div>
+        <div class="completed-tickets-grid" id="completedTicketsGrid">
+          <!-- Los tickets terminados se cargarán aquí -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón flotante para abrir/cerrar la lista de tickets -->
+    <div style="position: fixed; bottom: 20px; right: 100px; display: flex; gap: 15px; z-index: 1002;">
+    <div class="floating-button" id="chatButton">
+      <i class="fas fa-comments"></i>
+        <span id="unreadCount" class="unread-badge" style="display:none;">0</span>
+      </div>
+      <div class="floating-button" id="uploadPdfButton" title="Subir PDF">
+        <i class="fas fa-plus"></i>
+        <input type="file" id="pdfInput" accept="application/pdf" style="display:none;">
+      </div>
+      <div class="floating-button" id="settingsButton" title="Ajustes">
+        <i class="fas fa-cog"></i>
+      </div>
+    </div>
+
+    <!-- Modal de tickets abiertos -->
+    <div class="messages-modal" id="messagesModal" style="display: none;">
+      <div class="messages-modal-content">
+        <div class="messages-header">
+          <h3>Tickets Abiertos</h3>
+          <button class="close-messages" id="closeMessages">&times;</button>
+        </div>
+        <div class="messages-list" id="ticketsList">
+          <!-- Los tickets se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Ventana de chat individual -->
+    <div class="chat-window" id="chatWindow" style="display: none;">
+      <div class="chat-window-content">
+        <div class="chat-header">
+          <h3 id="chatTitle">Chat con <span id="userName"></span></h3>
+          <button class="close-chat" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- Los mensajes se cargarán aquí -->
+        </div>
+        <div class="chat-input-container">
+          <input type="text" class="chat-input" id="messageInput" placeholder="Escribe un mensaje...">
+          <button class="send-message-btn" id="sendMessage">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pdfPreviewModal">
+      <div id="pdfPreviewContent">
+        <iframe id="pdfPreviewFrame"></iframe>
+        <div>
+          <button id="closePdfPreview">Cancelar</button>
+          <button id="uploadPdfConfirm">Subir PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de ajustes -->
+    <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:3000;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+      <div style="background:rgba(255,255,255,0.95);border-radius:18px;padding:32px 24px;min-width:320px;max-width:90vw;box-shadow:0 8px 32px rgba(31,38,135,0.18);position:relative;">
+        <button onclick="closeSettingsModal()" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:28px;color:#888;cursor:pointer;">×</button>
+        <h3 style="margin:0 0 20px 0;color:#333;font-size:20px;">Ajustes</h3>
+        
+        <!-- Nuevo switch para mostrar PDF -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <label for="showPdfSwitch" style="color:#333;font-size:16px;">Mostrar PDF los tickets:</label>
+          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
+            <input type="checkbox" id="showPdfSwitch" style="opacity:0;width:0;height:0;">
+            <span class="slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:34px;">
+              <span class="slider-thumb" style="position:absolute;content:'';height:26px;width:26px;left:4px;bottom:4px;background-color:white;transition:.4s;border-radius:50%;"></span>
+            </span>
+          </label>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+          <label for="pdfDuration" style="color:#333;font-size:16px;">Segundos de duración del PDF:</label>
+          <input type="number" id="pdfDuration" min="1" max="60" style="width:80px;padding:8px 12px;border-radius:8px;border:1px solid #ccc;font-size:16px;text-align:center;">
+          <span style="color:#333;font-size:16px;">segundos</span>
+        </div>
+        <button onclick="saveSettings()" style="background:#2196F3;color:#fff;border:none;border-radius:8px;padding:12px 24px;cursor:pointer;font-size:16px;width:100%;">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Reemplazar todo el JavaScript existente con la nueva implementación
+    document.addEventListener('DOMContentLoaded', async function() {
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const response = await fetch('/api/auth/check-permissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else {
+          switch(currentPage) {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+        document.body.classList.add('topbar-ready');
+      } catch (e) {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+    });
+
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        // Efecto cromático al icono de usuario
+        const userIcon = document.getElementById('userIcon');
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    // Control del modal de mensajes
+    const messagesModal = document.getElementById('messagesModal');
+    const closeMessages = document.getElementById('closeMessages');
+    const messagesList = document.getElementById('ticketsList');
+
+    closeMessages.addEventListener('click', function() {
+      messagesModal.style.display = 'none';
+    });
+
+    // Cerrar el modal al hacer clic fuera de él
+    window.addEventListener('click', function(event) {
+      if (event.target === messagesModal) {
+        messagesModal.style.display = 'none';
+    }
+    });
+
+    // Al cargar, obtener el estado actual del PDF y reflejarlo en el switch
+    fetch('/api/pdf_show')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('showPdfSwitch').checked = data.pdf_show;
+      });
+
+    // Al cambiar el switch, actualizar en el backend
+    document.getElementById('showPdfSwitch').addEventListener('change', function() {
+      fetch('/api/pdf_show', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ show: this.checked })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+        } else {
+          alert('Error al guardar el ajuste');
+        }
+      })
+      .catch(() => alert('Error de red o servidor'));
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script src="js/tickets-rh.js"></script>
+</body>
+</html>

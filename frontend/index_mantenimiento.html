@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solicitud de Mantenimiento Industrial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/heic2any"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="js/tarjetas-guard.js" defer></script>
+    <script src="js/global-color.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <link rel="stylesheet" href="styles/index_mantenimiento_style.css">
+  <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+  <style>
+    :root { --bg-color: #ffdfb7 !important; }
+    body { background: var(--bg-color) !important; }
+  </style>
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 26px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #0b6623;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .switch-label {
+      margin-left: 0;
+      margin-right: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+  </style>
+  <script>
+    (function()
+    {
+      emailjs.init("Y63K5l5LayjckvFLe");
+    })();
+  </script>
+</head>
+<body>
+  <!-- Notificación flotante para ID válido -->
+  <div id="validIdNotification" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 16px 24px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-weight: 600; z-index: 10000; display: none; animation: slideIn 0.3s ease-out;">
+    ✓ ID válido
+  </div>
+
+  <style>
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+  </style>
+
+  <!--
+  <div class="back-button-container">
+    <a href="inicio.html" class="back-button">
+      <svg class="back-button-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>Menú principal</a>
+  </div>-->
+
+  <button class="back-to-menu" onclick="goToMenu()" title="Regresar al menú principal" style="display: none;">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+    </svg>
+    Menú principal
+  </button>
+  <!--tab switch-->
+      <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+        <div class="tab-switch">
+
+          <button class="tab-switch-button" data-tab="inicio">
+            <i class="fas fa-house"></i>
+          </button>      
+
+          <button class="tab-switch-button active" data-tab="vacaciones">
+            <i class="fas fa-plus-circle"></i> Nueva solicitud
+          </button>      
+
+        </div>
+      </div>
+      <script>
+          // Navegación del tab-switch de RH
+      document.addEventListener('DOMContentLoaded', function() {
+        const tabRoutes = {
+          inicio: 'nuevo-inicio.html',
+          vacaciones: 'vacaciones.html'
+        };
+
+        const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+        document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+          button.addEventListener('click', function() {
+            const targetPage = tabRoutes[this.dataset.tab];
+            if (!targetPage || targetPage === currentPage) {
+              return;
+            }
+            window.location.href = targetPage;
+          });
+        });
+      });
+        </script>
+  <div class="main-flex-container">
+    <div class="container">
+      <h1>Solicitud de Mantenimiento Industrial</h1>
+      <form id="ticketForm" onsubmit="submitTicket(event)">
+    
+        <div class="form-group">
+          <label for="employeeId" class="required-field">ID de empleado</label>
+             <input type="number" id="employeeId" name="employeeId" placeholder="Ingresa tu ID" required style="transition: all 0.3s;"
+               onkeydown="if (event.key === 'e' || event.key === 'E') event.preventDefault();"
+               oninput="this.value = this.value.replace(/[eE]/g, '');"
+               onpaste="setTimeout(()=>{this.value=this.value.replace(/[eE]/g,'');},0);">
+        </div>
+
+        <div class="form-group">
+          <label for="tipoApoyo" class="required-field">Tipo de apoyo</label>
+          <select id="tipoApoyo" name="tipoApoyo" required>
+            <option value="">Selecciona un tipo de apoyo</option>
+            <option value="Correctivo">Correctivo</option>
+            <option value="Apoyo de mecánica">Apoyo de mecánica</option>
+            <option value="Apoyo de infraestructura">Apoyo de infraestructura</option>
+            <option value="Servicio de apoyo y modificaciones">Servicio de apoyo y modificaciones</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="department" class="required-field">Departamento</label>
+          <select id="department" name="department" required>
+            <option value="">Selecciona un departamento</option>
+            <option value="Recursos Humanos">Recursos Humanos</option>
+            <option value="Gerencia">Gerencia</option>
+            <option value="Planeación / Compras">Planeación / Compras</option>
+            <option value="Contabilidad">Contabilidad</option>
+            <option value="Producción P1">Producción P1</option>
+            <option value="Producción BA">Producción BA</option>
+            <option value="Producción WD">Producción WD</option>
+            <option value="Almacén">Almacén</option>
+            <option value="Import / Export">Import / Export</option>
+            <option value="QC">QC</option>
+            <option value="Diseño">Diseño</option>
+            <option value="IT">IT</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+            <option value="Intendencia">Intendencia</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="subDepartmentGroup">
+          <label for="subDepartment" class="required-field">Área específica</label>
+          <select id="subDepartment" name="subDepartment" required>
+            <option value="">Selecciona un área</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="activosGroup" style="display:none;">
+          <label for="activo" class="required-field">Herramienta/Activo</label>
+          <select id="activo" name="activo">
+            <option value="">Selecciona una herramienta/activo</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="issue" class="required-field">Descripción detallada del problema</label>
+          <textarea id="issue" name="issue" required maxlength="255"></textarea>
+          <div class="character-counter">
+            <span id="charCount">0</span>/255 caracteres
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Archivos multimedia (opcional):</label>
+          <div class="file-input-container">
+            <label class="file-input-label">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              Seleccionar archivos
+              <input type="file" id="media" class="file-input" accept="image/*" multiple />
+            </label>
+          </div>
+          <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">0%</div>
+          </div>
+          <div class="preview-title">Vista previa de archivos</div>
+          <div class="media-preview" id="mediaPreview">
+            <div class="no-files">No hay archivos seleccionados</div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Enviar Ticket</button>
+      </form>
+    </div>
+    <div class="main-image-container">
+      <div class="image-wrapper">
+        <img src="IMG_2288.jpg" alt="Imagen principal" class="main-image" id="mainImage" onclick="toggleFullscreen()" />
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="success-message" id="successMessage">
+    <h2>¡Solicitud Enviada!</h2>
+    <p>Tu solicitud ha sido registrada correctamente.</p>
+    <p>Nos pondremos en contacto contigo pronto.</p>
+  </div>
+
+  <div class="overlay-blur" id="overlayBlur"></div>
+
+  <div class="ticket-status-modal" id="ticketStatusModal" style="display:none;">
+    <div class="ticket-status-columns">
+      <div class="ticket-status-col" id="statusRecibido">
+        <div class="status-circle"></div>
+        <div class="status-label">Recibido</div>
+      </div>
+      <div class="ticket-status-col" id="statusEvaluacion">
+        <div class="status-circle"></div>
+        <div class="status-label">En proceso</div>
+      </div>
+      <div class="ticket-status-col" id="statusTerminado">
+        <div class="status-circle"></div>
+        <div class="status-label">Terminado</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ticketIdModal" class="ticket-id-modal">
+    <div class="ticket-id-content">
+      <button onclick="closeTicketIdModal()" class="close-ticket-id-btn">×</button>
+      <h3>Ingresa tu ID de ticket</h3>
+      <div class="input-container">
+        <input type="text" id="inputTicketId" placeholder="ID de ticket">
+        <button onclick="clearSavedTicketId()" class="clear-btn" title="Limpiar">×</button>
+      </div>
+      <div id="ticketIdError" class="error-message"></div>
+    </div>
+  </div>
+
+  <div class="fullscreen-modal" id="fullscreenModal">
+    <img src="IMG_2288.jpg" alt="Imagen en pantalla completa" class="fullscreen-image" id="fullscreenImage" />
+    <button class="fullscreen-close" onclick="closeFullscreen()">×</button>
+  </div>
+
+    <!-- Botón flotante para cerrar ticket -->
+    <button id="closeTicketBtn" title="Cerrar ticket" style="position:fixed;right:20px;bottom:20px;background:#d9534f;color:#fff;border:none;padding:12px 16px;border-radius:30px;box-shadow:0 4px 12px rgba(0,0,0,0.2);cursor:pointer;z-index:2000;font-weight:900;">Cerrar ticket</button>
+
+    <!-- Modal para cerrar ticket por empleado -->
+    <div id="closeTicketModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2100;align-items:center;justify-content:center;">
+      <div style="background:#fff;width:min(920px,95%);max-height:90vh;overflow:auto;border-radius:30px;padding:18px;position:relative;">
+        <button id="closeTicketModalClose" style="position:absolute;right:12px;top:10px;border:none;background:none;font-size:22px;cursor:pointer;">×</button>
+        <h2>Cerrar ticket por empleado</h2>
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;">
+          <input id="closeEmployeeId" type="text" placeholder="Número de empleado" style="flex:1;padding:8px;border:1px solid #ccc;border-radius:30px;" />
+          <button id="closeSearchBtn" style="background:#007bff;color:#fff;border:none;padding:8px 12px;border-radius:30px;cursor:pointer;">Buscar</button>
+        </div>
+      <div id="closeEmployeeInfo" style="margin-bottom:12px;padding:10px;background:#f0f8ff;border-radius:30px;display:none;">
+        <strong>Empleado:</strong> <span id="closeEmployeeName"></span>
+      </div>
+          <div id="closeTicketListContainer">
+            <div id="closeTicketListEmpty" style="color:#666">Ingrese un número y presione "Buscar" para listar tickets abiertos.</div>
+            <ul id="closeTicketList" style="list-style:none;padding:0;margin:0;display:grid;gap:8px;margin-top:8px;"></ul>
+          </div>
+          <div id="closeTicketFeedback" style="margin-top:12px;color:#2a7f2a;display:none;"></div>
+  <script>
+    function toggleFullscreen() 
+    {
+      const modal = document.getElementById('fullscreenModal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeFullscreen() 
+    {
+      const modal = document.getElementById('fullscreenModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    async function goToMenu() 
+    {
+      try 
+      {
+        const res = await fetch('selector.html', { method: 'HEAD' });
+        if (res.ok) 
+        {
+          window.location.href = 'selector.html';
+          return;
+        }
+      } catch (e) 
+      {
+        // ignorar y usar fallback
+      }
+      if (document.referrer) 
+      {
+        history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') 
+      {
+        closeFullscreen();
+      }
+    });
+
+    document.getElementById('fullscreenModal').addEventListener('click', function(event) {
+      if (event.target === this) 
+      {
+        closeFullscreen();
+      }
+    });
+
+    const form = document.getElementById("ticketForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const mediaInput = document.getElementById("media");
+    const mediaPreview = document.getElementById("mediaPreview");
+    let selectedMedia = [];
+
+    window.currentTicketId = null;
+    let lastMessageCount = 0; // Para rastrear mensajes nuevos
+
+    function generateTicketId() 
+    {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function saveTicketToLocalStorage(ticketData) 
+    {
+      const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+      tickets.push(ticketData);
+      localStorage.setItem('tickets', JSON.stringify(tickets));
+    }
+
+    async function convertHeicToJpg(file) 
+    {
+      try 
+      {
+        const blob = await heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.8
+        });
+        return new File([blob], file.name.replace(/\.heic$/i, '.jpg'), {
+          type: 'image/jpeg'
+        });
+      } catch (error) 
+      {
+        console.error('Error al convertir HEIC:', error);
+        throw error;
+      }
+    }
+
+    async function handleFileSelect(event) 
+    {
+      const files = event.target.files;
+      const preview = document.getElementById('mediaPreview');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+
+      if (files.length > 0) 
+      {
+        preview.innerHTML = '';
+        progressContainer.style.display = 'block';
+        let processedFiles = 0;
+        
+        for (let file of files) 
+        {
+          try 
+          {
+            let processedFile = file;   
+            // Convertir de HEIC a JPG
+            if (file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) 
+            {
+              processedFile = await convertHeicToJpg(file);
+            }
+
+            if (!processedFile.type.startsWith('image/') && !processedFile.type.startsWith('video/')) 
+            {
+              alert('Por favor, seleccione solo imágenes o videos.');
+              continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const mediaContainer = document.createElement('div');
+              mediaContainer.className = 'media-container';
+              const element = document.createElement(processedFile.type.startsWith('image/') ? 'img' : 'video');
+              element.src = e.target.result;
+              element.alt = processedFile.name;
+              
+              if (processedFile.type.startsWith('video/')) 
+              {
+                element.controls = true;
+                element.preload = 'metadata';
+              }
+
+              const typeLabel = document.createElement('div');
+              typeLabel.className = 'media-type';
+              typeLabel.textContent = processedFile.type.startsWith('image/') ? 'Imagen' : 'Video';
+              const nameLabel = document.createElement('div');
+              nameLabel.className = 'media-name';
+              nameLabel.textContent = processedFile.name;
+              const removeBtn = document.createElement('button');
+              removeBtn.className = 'remove-media';
+              removeBtn.innerHTML = '×';
+              removeBtn.onclick = function() {
+                mediaContainer.remove();
+                const index = selectedMedia.findIndex(m => m.name === processedFile.name);
+                if (index !== -1) 
+                {
+                  selectedMedia.splice(index, 1);
+                }
+                if (preview.children.length === 0) 
+                {
+                  preview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+                }
+              };
+
+              mediaContainer.appendChild(element);
+              mediaContainer.appendChild(typeLabel);
+              mediaContainer.appendChild(nameLabel);
+              mediaContainer.appendChild(removeBtn);
+              preview.appendChild(mediaContainer);
+
+              selectedMedia.push({
+                type: processedFile.type.startsWith('image/') ? 'image' : 'video',
+                data: e.target.result,
+                name: processedFile.name
+              });
+              processedFiles++;
+              const progress = (processedFiles / files.length) * 100;
+              progressBar.style.width = progress + '%';
+              progressText.textContent = Math.round(progress) + '%';
+
+              if (processedFiles === files.length) 
+              {
+                setTimeout(() => {
+                  progressContainer.style.display = 'none';
+                  progressBar.style.width = '0%';
+                  progressText.textContent = '0%';
+                }, 500);
+              }
+            };
+            reader.readAsDataURL(processedFile);
+          } catch (error) 
+          {
+            console.error('Error al procesar archivo:', error);
+            alert(`Error al procesar ${file.name}. Por favor, intente con otro archivo.`);
+          }
+        }
+      } else {
+        preview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+      }
+    }
+
+    document.getElementById('media').addEventListener('change', handleFileSelect);
+
+    (function() 
+    {
+      emailjs.init("Y63K5l5LayjckvFLe");
+    })();
+
+    function showStatus(message, isError = false) 
+    {
+      const statusDiv = document.createElement('div');
+      statusDiv.style.position = 'fixed';
+      statusDiv.style.top = '20px';
+      statusDiv.style.left = '50%';
+      statusDiv.style.transform = 'translateX(-50%)';
+      statusDiv.style.padding = '15px 25px';
+      statusDiv.style.borderRadius = '8px';
+      statusDiv.style.backgroundColor = isError ? '#ff4444' : '#4CAF50';
+      statusDiv.style.color = 'white';
+      statusDiv.style.zIndex = '1000';
+      statusDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      statusDiv.textContent = message;
+      
+      document.body.appendChild(statusDiv);
+      
+      setTimeout(() => {
+        statusDiv.remove();
+      }, 5000);
+    }
+
+    document.getElementById('ticketForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      submitTicket(event);
+    }, { once: true }); // Usar { once: true } para asegurar que el evento solo se ejecute una vez
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const issueTextarea = document.getElementById('issue');
+      const charCounter = document.getElementById('charCount');
+
+      if (issueTextarea && charCounter) 
+      {
+        issueTextarea.addEventListener('input', function(e) 
+        {
+          const textarea = e.target;
+          const charCount = textarea.value.length;
+          const maxLength = 255;
+          const counter = document.getElementById('charCount');
+
+          counter.textContent = charCount;
+
+          if (charCount > maxLength * 0.9) 
+          {
+            counter.style.color = '#ff4444'; 
+          } else if (charCount > maxLength * 0.8) 
+          {
+            counter.style.color = '#ff6b35';
+          } else 
+          {
+            counter.style.color = '#007bff';
+          }
+          if (charCount >= maxLength) 
+          {
+            textarea.style.borderColor = '#ff4444';
+            textarea.style.backgroundColor = 'rgba(255, 68, 68, 0.1)';
+          } else 
+          {
+            textarea.style.borderColor = '';
+            textarea.style.backgroundColor = '';
+          }
+        });
+        charCounter.textContent = issueTextarea.value.length;
+      }
+    });
+
+    const API_BASE_URL = '/api';
+
+    const employeeIdInput = document.getElementById('employeeId');
+    const departmentInput = document.getElementById('department');
+    const subDepartmentInput = document.getElementById('subDepartment');
+    const subDepartmentGroup = document.getElementById('subDepartmentGroup');
+
+    let empleadoCargado = null;
+
+    // Función para mostrar notificación de ID válido
+    let notificationTimeout = null;
+    function mostrarNotificacionIdValido() {
+      const notification = document.getElementById('validIdNotification');
+      
+      // Limpiar timeout anterior si existe
+      if (notificationTimeout) {
+        clearTimeout(notificationTimeout);
+      }
+      
+      // Mostrar notificación
+      notification.style.display = 'block';
+      notification.style.animation = 'slideIn 0.3s ease-out';
+      
+      // Ocultar después de 5 segundos
+      notificationTimeout = setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 300);
+      }, 5000);
+    }
+
+    function limpiarEmpleado() {
+      empleadoCargado = null;
+      departmentInput.value = '';
+      subDepartmentInput.value = '';
+      employeeIdInput.style.borderColor = '#ccc';
+    }
+
+    async function cargarEmpleadoPorId() {
+      const id = employeeIdInput.value.trim();
+      if (!id) {
+        limpiarEmpleado();
+        employeeIdInput.style.borderColor = '#ccc';
+        showStatus('Ingresa un ID de empleado para continuar.', true);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/empleados/${id}`);
+        if (!res.ok) {
+          limpiarEmpleado();
+          employeeIdInput.style.borderColor = '#f44336'; // Rojo
+          showStatus('Empleado no encontrado.', true);
+          return;
+        }
+
+        const empleado = await res.json();
+        empleadoCargado = empleado;
+        employeeIdInput.style.borderColor = '#4CAF50'; // Verde
+        mostrarNotificacionIdValido(); // Mostrar notificación
+        // Los campos de departamento y área se dejan vacíos para ingreso manual
+        departmentInput.value = '';
+        subDepartmentInput.value = '';
+        subDepartmentGroup.style.display = 'block';
+        showStatus('', false);
+
+        // Si ya se eligió tipo de apoyo Correctivo, recargar activos con el departamento del empleado
+        if (tipoApoyoSelect.value === 'Correctivo' && activosGroup.style.display === 'block') {
+          cargarActivosPorDepartamento(departmentInput.value, subDepartmentInput.value || null);
+        }
+      } catch (error) {
+        console.error('Error al cargar empleado:', error);
+        limpiarEmpleado();
+        employeeIdInput.style.borderColor = '#f44336'; // Rojo
+        showStatus('Error al consultar el empleado.', true);
+      }
+    }
+
+    employeeIdInput.addEventListener('change', cargarEmpleadoPorId);
+    employeeIdInput.addEventListener('blur', cargarEmpleadoPorId);
+    employeeIdInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        cargarEmpleadoPorId();
+      }
+    });
+
+    // Mapeo de departamentos con sus áreas
+    const departmentAreas = {
+      'Producción P1': [
+        'Corte P1',
+        'Armado P1',
+        'Soldadura P1',
+        'Pulido',
+        'Pintura',
+        'Envíos y Recibos',
+        'Maquinado'
+      ],
+      'Producción BA': [
+        'Corte BA',
+        'Armado BA',
+        'Soldadura BA',
+      ],
+      'Producción WD': [
+        'Área General'
+      ]
+    };
+
+    // Actualizar áreas cuando cambia el departamento
+    departmentInput.addEventListener('change', function() {
+      const selectedDept = this.value;
+      const areaOptions = departmentAreas[selectedDept] || [];
+      
+      // Limpiar opciones previas
+      subDepartmentInput.innerHTML = '<option value="">Selecciona un área</option>';
+      
+      // Agregar nuevas opciones
+      if (areaOptions.length > 0) {
+        areaOptions.forEach(area => {
+          const option = document.createElement('option');
+          option.value = area;
+          option.textContent = area;
+          subDepartmentInput.appendChild(option);
+        });
+        subDepartmentInput.disabled = false;
+      } else {
+        // Si el departamento no tiene áreas predefinidas, permitir ingreso libre
+        subDepartmentInput.disabled = true;
+        subDepartmentInput.value = '';
+      }
+      
+      // Activar/desactivar el selector de herramientas solo para P1 y BA
+      if (selectedDept === 'Producción P1' || selectedDept === 'Producción BA' || selectedDept === 'Producción WD') {
+        activosGroup.style.display = 'block';
+        cargarActivosPorDepartamento(selectedDept, null);
+      } else {
+        activosGroup.style.display = 'none';
+        activoSelect.innerHTML = '<option value="">Selecciona una herramienta/activo</option>';
+      }
+    });
+
+    // Actualizar herramientas cuando cambia el área específica
+    subDepartmentInput.addEventListener('change', function() {
+      const departmentSelected = departmentInput.value;
+      const areaSelected = this.value;
+      
+      // Solo cargar activos si estamos en P1 o BA y hay un área seleccionada
+      if ((departmentSelected === 'Producción P1' || departmentSelected === 'Producción BA'|| departmentSelected === 'Producción WD') && areaSelected) {
+        cargarActivosPorDepartamento(departmentSelected, areaSelected);
+      }
+    });
+
+    async function submitTicket(event) 
+    {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      if (submitBtn.disabled) return;  
+
+      if (!employeeIdInput.value.trim()) {
+        showStatus('Ingresa el ID de empleado.', true);
+        return;
+      }
+
+      if (!empleadoCargado) {
+        showStatus('Consulta un empleado válido antes de enviar.', true);
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loading-spinner"></div> Enviando...';
+      const activoSeleccionado = activoSelect.options[activoSelect.selectedIndex] || null;
+      const activoNombre = (activosGroup.style.display === 'block' && activoSelect.value) ? activoSelect.value : null;
+      const activoId = (activosGroup.style.display === 'block' && activoSeleccionado)
+        ? (activoSeleccionado.dataset.id || null)
+        : null;
+
+      const ticketData = {
+        employee_id: employeeIdInput.value.trim(),
+        name: empleadoCargado?.nombre_completo || empleadoCargado?.name || '',
+        department: departmentInput.value,
+        area: subDepartmentGroup.style.display === 'block' ? subDepartmentInput.value : null,
+        tipoApoyo: document.getElementById('tipoApoyo').value,
+        activo: activoNombre,
+        id_herramienta: activoId,
+        issue: document.getElementById('issue').value
+      };
+
+      try 
+      {
+        // SUBIR LA IMAGEN PRIMERO Y OBTENER LA RUTA
+        const mediaFiles = document.getElementById('media').files;
+        if (mediaFiles.length > 0) 
+        {
+          const firstImage = mediaFiles[0];
+          const formData = new FormData();
+          formData.append('image', firstImage);
+
+          const uploadResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!uploadResponse.ok) 
+          {
+            throw new Error('Error al subir la imagen');
+          }
+
+          const uploadData = await uploadResponse.json();
+          ticketData.image_name = firstImage.name;
+          ticketData.image_type = firstImage.type;
+          ticketData.image_path = uploadData.path;
+        }
+
+        const response = await fetch('/api/mantenimiento/tickets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(ticketData)
+        });
+
+        if (!response.ok) 
+        {
+          const errorData = await response.json();
+          throw new Error(errorData?.message || `Error del servidor: ${response.status}`);
+        }
+        const responseData = await response.json();
+        localStorage.setItem('ticketId', responseData.id);
+        window.currentTicketId = responseData.id;
+
+        // Enviar correo usando EmailJS
+        try 
+        {
+          const templateParams = {
+            name: empleadoCargado?.nombre_completo || empleadoCargado?.name || '',
+            department: departmentInput.value,
+            area: subDepartmentGroup.style.display === 'block' ? subDepartmentInput.value : 'No especificada',
+            tipoApoyo: document.getElementById('tipoApoyo').value,
+            activo: activosGroup.style.display === 'block' ? activoSelect.value : 'No aplica',
+            issue: document.getElementById('issue').value,
+            ticket_id: responseData.id,
+            date: new Date().toLocaleString('es-ES', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          };
+
+          await emailjs.send(
+            'service_vydzhcg',      // Service ID
+            'template_xeafxqj',     // Template ID
+            templateParams
+          );
+
+          showStatus('¡Solicitud enviada y correo notificado correctamente!', false);
+        } catch (emailError) {
+          console.error('Error al enviar correo:', emailError);
+          showStatus('La solicitud se guardó pero hubo un error al enviar el correo.', true);
+        }
+        
+        document.getElementById('ticketForm').reset();
+        employeeIdInput.style.borderColor = '#ccc'; // Resetear color del input
+        document.getElementById('mediaPreview').innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+        selectedMedia = [];
+
+      } catch (error) 
+      {
+        console.error('Error al crear ticket:', error);
+        showStatus(`Error al crear el ticket: ${error.message}`, true);
+      } finally 
+      {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Enviar Solicitud';
+      }
+    }
+
+    async function requestNotificationPermission() {
+      try 
+      {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+      } catch (error) 
+      {
+        console.error('Error al solicitar permiso de notificaciones:', error);
+        return false;
+      }
+    }
+
+    function playMessageSound(type) 
+    {
+      try 
+      {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        if (type === 'send') 
+        {
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.2);
+        } else if (type === 'receive') 
+        {
+          oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + 0.15);
+          oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
+          gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.4);
+        } else if (type === 'notification') 
+        {
+          const audio = new Audio('/audios/notificacion-lisa.mp3');
+          audio.volume = 0.6;
+          audio.play().catch(e => console.log('Error al reproducir sonido de notificación:', e));
+          return;
+        }
+        
+      } catch (error) 
+      {
+        try 
+        {
+          const audio = new Audio();
+          audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT';
+          audio.volume = 0.3;
+          audio.play().catch(e => console.log('Error en fallback de sonido:', e));
+        } catch (fallbackError) 
+        {
+          console.log('Error en fallback de sonido:', fallbackError);
+        }
+      }
+    }
+
+    function showNewMessageNotification(message) 
+    {
+      if (Notification.permission === 'granted') {
+        const notification = new Notification('Nuevo mensaje recibido', {
+          body: message.content,
+          icon: '/img/logo.png',
+          badge: '/img/logo.png',
+          tag: 'new-message',
+          requireInteraction: true
+        });
+        playMessageSound('notification');
+      }
+    }
+
+    async function updateTicketStatusDisplay(ticketId) 
+    {
+      if (!ticketId) return;
+      try 
+      {
+        const ticketStatus = await getTicketStatus(ticketId);
+        showTicketStatusModal(ticketStatus);
+      } catch (error) 
+      {
+        console.error('Error al actualizar estado del ticket:', error);
+      }
+    }
+
+    function closeTicketIdModal() 
+    {
+      document.getElementById('ticketIdModal').style.display = 'none';
+    }
+
+    function mostrarErrorTicketId(msg) 
+    {
+      const err = document.getElementById('ticketIdError');
+      err.textContent = msg;
+      err.style.display = 'block';
+    }
+
+
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) 
+      {
+        requestNotificationPermission();
+      }
+    });
+
+    function hideTicketStatusModal() 
+    {
+      document.getElementById('ticketStatusModal').style.display = 'none';
+    }
+
+    async function getTicketStatus(ticketId) {
+      try 
+      {
+        const response = await fetch(`/api/tickets`);
+        if (!response.ok) 
+        {
+          throw new Error('Error al obtener tickets');
+        }
+        
+        const tickets = await response.json();
+        const ticket = tickets.find(t => String(t.id) === String(ticketId));
+        
+        if (!ticket) 
+        {
+          console.error('Ticket no encontrado:', ticketId);
+          return 'recibido'; // Estado por defecto
+        }
+
+        if (ticket.urgency === 'pending') 
+        {
+          return 'recibido';
+        } else if (ticket.urgency === 'completed') 
+        {
+          return 'terminado';
+        } else 
+        {
+          return 'evaluacion';
+        }
+      } catch (error) 
+      {
+        console.error('Error al obtener estado del ticket:', error);
+        return 'recibido'; // Estado por defecto en caso de error
+      }
+    }
+
+    function clearSavedTicketId() 
+    {
+      localStorage.removeItem('ticketId');
+      document.getElementById('inputTicketId').value = '';
+    }
+
+    const tipoApoyoSelect = document.getElementById('tipoApoyo');
+    const activosGroup = document.getElementById('activosGroup');
+    const activoSelect = document.getElementById('activo');
+
+    async function cargarActivosPorDepartamento(department, area = null) 
+    {
+      try 
+      {
+        // Si se proporciona un área, filtrar SOLO por área
+        // Si no, filtrar por departamento
+        let url = '/api/mantenimiento/herramientas?';
+        
+        if (area) {
+          url += `area=${encodeURIComponent(area)}`;
+        } else {
+          url += `department=${encodeURIComponent(department)}`;
+        }
+        
+        const response = await fetch(url);   
+        if (!response.ok) 
+        {
+          const errorText = await response.text();
+          throw new Error(`Error del servidor (${response.status}): ${errorText}`);
+        }
+        const activos = await response.json();
+        console.log(`Herramientas cargadas para área "${area || department}":`, activos);
+        
+        activoSelect.innerHTML = '<option value="">Selecciona una herramienta/activo</option>';
+        if (activos && activos.length > 0) 
+        {
+          activos.forEach(activo => {
+            const option = document.createElement('option');
+            option.value = activo.nombre;
+            option.textContent = activo.nombre;
+            option.dataset.id = activo.id;
+            activoSelect.appendChild(option);
+          });
+        } else 
+        {
+          const mensaje = area 
+            ? `No hay herramientas disponibles para el área "${area}"`
+            : 'No hay activos disponibles para este departamento';
+          activoSelect.innerHTML = `<option value="">${mensaje}</option>`;
+        }
+      } catch (error) 
+      {
+        console.error('Error al cargar activos:', error);
+        activoSelect.innerHTML = `<option value="">Error: ${error.message}</option>`;
+      }
+    }
+
+    // --- Funcionalidad para botón 'Cerrar ticket' y modal ---
+    function initCloseTicketWidget() {
+      const btn = document.getElementById('closeTicketBtn');
+      const modal = document.getElementById('closeTicketModal');
+      const modalClose = document.getElementById('closeTicketModalClose');
+      const searchBtn = document.getElementById('closeSearchBtn');
+      const empInput = document.getElementById('closeEmployeeId');
+      const listEl = document.getElementById('closeTicketList');
+      const emptyEl = document.getElementById('closeTicketListEmpty');
+      const feedback = document.getElementById('closeTicketFeedback');
+      const empInfoDiv = document.getElementById('closeEmployeeInfo');
+      const empNameSpan = document.getElementById('closeEmployeeName');
+      let currentEmployeeName = null;
+
+      if (!btn || !modal) return;
+
+      btn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        if (feedback) feedback.style.display = 'none';
+        if (listEl) listEl.innerHTML = '';
+        if (emptyEl) emptyEl.style.display = 'block';
+        if (empInfoDiv) empInfoDiv.style.display = 'none';
+        currentEmployeeName = null;
+      });
+
+      if (modalClose) modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
+      if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+      async function searchEmployee(employeeId) {
+        try {
+          console.log('[close-ticket] searchEmployee -> employeeId:', employeeId);
+          const res = await fetch(`${API_BASE_URL}/empleados/${encodeURIComponent(employeeId)}`);
+          console.log('[close-ticket] /api/empleados status:', res.status);
+          if (!res.ok) throw new Error('Empleado no encontrado');
+          const employee = await res.json();
+          console.log('[close-ticket] empleado recibido:', employee);
+          currentEmployeeName = employee.nombre_completo || employee.name || null;
+          if (empNameSpan) empNameSpan.textContent = currentEmployeeName || '';
+          if (empInfoDiv) empInfoDiv.style.display = 'block';
+          console.log('[close-ticket] nombre calculado:', currentEmployeeName);
+          await fetchAndRender(currentEmployeeName);
+        } catch (err) {
+          console.error('[close-ticket] searchEmployee error:', err);
+          if (empInfoDiv) empInfoDiv.style.display = 'none';
+          if (listEl) listEl.innerHTML = '';
+          if (emptyEl) { emptyEl.style.display = 'block'; emptyEl.textContent = 'Error: ' + err.message; }
+        }
+      }
+
+      async function fetchAndRender(employeeName) {
+        try {
+          console.log('[close-ticket] fetchAndRender -> employeeName:', employeeName);
+          if (emptyEl) emptyEl.style.display = 'none';
+          if (listEl) listEl.innerHTML = '<li style="color:#666">Cargando...</li>';
+          const res = await fetch(`${API_BASE_URL}/mantenimiento/tickets`);
+          console.log('[close-ticket] /api/mantenimiento/tickets status:', res.status);
+          if (!res.ok) throw new Error('Error al obtener tickets');
+          const allTickets = await res.json();
+          console.log('[close-ticket] total tickets recibidos:', Array.isArray(allTickets) ? allTickets.length : typeof allTickets);
+          const searchName = String(employeeName || '').toLowerCase();
+          const tickets = allTickets.filter(t =>
+            (t.name || '').toLowerCase().includes(searchName) &&
+            (t.urgency || '').toLowerCase() === 'pending'
+          );
+          console.log('[close-ticket] tickets filtrados para', employeeName, ':', tickets.length);
+          renderList(tickets);
+        } catch (err) {
+          console.error('[close-ticket] fetchAndRender error:', err);
+          if (listEl) listEl.innerHTML = '';
+          if (emptyEl) { emptyEl.style.display = 'block'; emptyEl.textContent = 'Error al cargar tickets: ' + err.message; }
+        }
+      }
+
+      function renderList(tickets) {
+        console.log('[close-ticket] renderList -> tickets.length:', tickets ? tickets.length : 0);
+        if (!listEl) { console.warn('[close-ticket] renderList: listEl not found'); return; }
+        listEl.innerHTML = '';
+        // Temporary visual debugging styling
+        listEl.style.background = '#fff';
+        listEl.style.padding = '8px';
+        if (!tickets || tickets.length === 0) {
+          if (emptyEl) { emptyEl.style.display = 'block'; emptyEl.textContent = 'No se encontraron tickets abiertos para este empleado.'; }
+          return;
+        }
+        if (emptyEl) emptyEl.style.display = 'none';
+        tickets.forEach(t => {
+          const li = document.createElement('li');
+          li.style.border = '1px solid #e6e6e6';
+          li.style.padding = '16px';
+          li.style.borderRadius = '12px';
+          li.style.display = 'flex';
+          li.style.flexDirection = 'column';
+          li.style.alignItems = 'stretch';
+          li.style.background = '#fafafa';
+          li.style.marginBottom = '12px';
+          li.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+
+          // Información del ticket (sin ID)
+          const info = document.createElement('div');
+          info.style.flex = '1';
+          info.style.marginBottom = '12px';
+          const tipoApoyo = t.tipo_apoyo || t.tipoApoyo || t.tipo || '-';
+          const problema = (t.issue || '').substring(0, 200) + ((t.issue || '').length > 200 ? '...' : '');
+          info.innerHTML = `<div style="margin-bottom: 8px;"><strong>Tipo:</strong> ${tipoApoyo}</div><div style="color:#555; font-size: 14px;">${problema}</div>`;
+
+          // Contenedor para el switch de resolución
+          const resolutionDiv = document.createElement('div');
+          resolutionDiv.style.display = 'flex';
+          resolutionDiv.style.justifyContent = 'space-between';
+          resolutionDiv.style.alignItems = 'center';
+          resolutionDiv.style.marginBottom = '12px';
+          resolutionDiv.style.padding = '8px 0';
+
+          const labelText = document.createElement('span');
+          labelText.className = 'switch-label';
+          labelText.textContent = '¿Se resolvió?';
+          labelText.style.marginRight = '12px';
+          labelText.style.marginLeft = '0';
+
+          const switchLabel = document.createElement('label');
+          switchLabel.className = 'switch';
+          switchLabel.htmlFor = `resuelto_${t.id}`;
+
+          const switchInput = document.createElement('input');
+          switchInput.type = 'checkbox';
+          switchInput.name = `resuelto_${t.id}`;
+          switchInput.id = `resuelto_${t.id}`;
+          switchInput.value = 'true';
+
+          const slider = document.createElement('span');
+          slider.className = 'slider';
+
+          switchLabel.appendChild(switchInput);
+          switchLabel.appendChild(slider);
+
+          resolutionDiv.appendChild(labelText);
+          resolutionDiv.appendChild(switchLabel);
+
+          // Botón de completar (en una sola línea, ancho completo)
+          const completeBtn = document.createElement('button');
+          completeBtn.textContent = 'Marcar completado';
+          completeBtn.style.background = '#28a745';
+          completeBtn.style.color = '#fff';
+          completeBtn.style.border = 'none';
+          completeBtn.style.padding = '12px';
+          completeBtn.style.borderRadius = '30px';
+          completeBtn.style.cursor = 'pointer';
+          completeBtn.style.width = '100%';
+          completeBtn.style.fontWeight = 'bold';
+          completeBtn.style.fontSize = '15px';
+
+          completeBtn.disabled = false;
+          completeBtn.addEventListener('click', async () => {
+            const switchElement = resolutionDiv.querySelector(`input[id="resuelto_${t.id}"]`);
+            const resuelto = switchElement.checked ? 'si' : 'no';
+            const confirmOk = confirm('¿Marcar el ticket como completado?');
+            if (!confirmOk) return;
+            try {
+              completeBtn.disabled = true;
+              completeBtn.textContent = 'Procesando...';
+              const resp = await fetch(`${API_BASE_URL}/mantenimiento/tickets/${t.id}/completar`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ resuelto: resuelto === 'si' })
+              });
+              if (!resp.ok) {
+                const err = await resp.json().catch(()=>({message:'error'}));
+                throw new Error(err?.message || 'Error al completar ticket');
+              }
+              li.remove();
+              if (feedback) { feedback.style.display = 'block'; feedback.textContent = `Ticket marcado como completado.`; }
+            } catch (error) {
+              alert('Error al completar ticket: ' + error.message);
+              completeBtn.disabled = false;
+              completeBtn.textContent = 'Marcar completado';
+            }
+          });
+
+          // Estructura del li: info arriba, resolución en medio, botón abajo
+          li.style.flexDirection = 'column';
+          li.style.alignItems = 'stretch';
+          li.appendChild(info);
+          li.appendChild(resolutionDiv);
+          li.appendChild(completeBtn);
+          listEl.appendChild(li);
+        });
+      }
+
+      if (searchBtn) searchBtn.addEventListener('click', () => {
+        const emp = empInput?.value?.trim();
+        if (!emp) { alert('Ingresa tu número de empleado'); return; }
+        searchEmployee(emp);
+      });
+
+      if (empInput) empInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchBtn?.click(); } });
+    }
+    document.addEventListener('DOMContentLoaded', initCloseTicketWidget);
+
+    tipoApoyoSelect.addEventListener('change', function() {
+      const selected = this.value;
+      // El selector de herramientas se activa automáticamente cuando se selecciona P1 o BA
+      // desde el event listener del departamento, no por tipo de apoyo
+      console.log('Tipo de apoyo seleccionado:', selected);
+    });
+  </script>
+</body>
+</html>

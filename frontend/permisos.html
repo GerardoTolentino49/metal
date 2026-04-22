@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Permisos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="js/tarjetas-guard.js" defer></script>
+    <script src="js/global-color.js"></script>
+    <link rel="stylesheet" href="styles/permisos.css">
+        <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+        <style>
+            :root { --bg-color: #71a7e5ab !important; }
+            body { background: var(--bg-color) !important; }
+        </style>
+</head>
+<body>
+    <!--
+    <div class="back-button-container">
+      <a href="inicio.html" class="back-button">
+        <svg class="back-button-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>Menú principal</a>
+    </div>-->
+    <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-house"></i> 
+    </button>
+
+    <button class="tab-switch-button active" data-tab="permiso">
+      <i class="fas fa-user-check"></i> Permisos
+    </button>        
+  </div>
+</div>
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    permiso: 'permisos.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+    <div class="container" style="margin-top: 2%;">
+        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+            <h1>Solicitud de permisos</h1>
+            <!-- <div class="switch-tabs-container" style="display: inline-finiciobackground; background-color: rgba(255, 255, 2use, 0.08); border-radius: 50px; padding: 4px; border: 1px solid rgba(255permiso 255, 0.15); gap: 0;">
+                <butPermiso="tabPermisos"600; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3); flex: 1; mipermisoh: permisos                  </button>
+            </div> -->
+        </div>
+        <form id="formVacaciones" style="margin-bottom: 30px; text-align: left;">
+            <div class="form-grid">
+                <div class="panel-card">
+                    <h3 class="panel-title">Datos del permiso</h3>
+                    <label for="idEmpleado" class="field-label">ID de empleado:</label>
+                    <input type="text" id="idEmpleado" name="idEmpleado" required class="text-input" placeholder="Ingresa el ID del empleado">
+                    
+                    <div id="empleadoInfo" class="empleado-info">
+                        <h4>Información del Empleado</h4>
+                        <p><strong>Nombre:</strong> <span id="nombreEmpleado"></span></p>
+                        <p><strong>Puesto:</strong> <span id="puestoEmpleado"></span></p>
+                        <p><strong>Supervisor:</strong> <span id="supervisorEmpleado"></span></p>
+                        <button type="button" id="btnVerPermisosEmpleado" class="btn-ver-permisos" style="display:none;">
+                          Ver permisos del empleado
+                        </button>
+                    </div>
+
+                    <div id="tiposPermisosPanel">
+                        <label class="field-label">Tipo de ausentismo:</label>
+                        <div class="switch-grid">
+                        <label class="switch-item">
+                            <span>Llegar tarde (salida normal)</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="llegar_tarde_salida_normal" id="switch10" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Salir temprano</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="salir_temprano" id="switch11" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Salir del horario (regresará)</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="salir_regresar" id="switch12" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Día completo</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="dia_completo" id="switch1" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Paternidad</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="paternidad" id="switch3" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Home office</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="home_office" id="switch4" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Por defunción familiar</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="defuncion_familiar" id="switch5" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Falta injustificada</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="falta_injustificada" id="switch6" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Capacitación</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="capacitacion" id="switch7" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Festivo</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="festivo" id="switch8" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>USA</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoPermiso" value="usa" id="switch9" class="tipo-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                    </div>
+
+                    <div id="tiposIncapacidadesPanel" style="display: none;">
+                        <label class="field-label">Tipo de incapacidad:</label>
+                        <div class="switch-grid">
+                        <label class="switch-item">
+                            <span>Accidente laboral</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoIncapacidad" value="accidente_laboral" id="incap1" class="tipo-incapacidad-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Accidente de tránsito</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoIncapacidad" value="accidente_transito" id="incap2" class="tipo-incapacidad-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Enfermedad general</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoIncapacidad" value="enfermedad_general" id="incap3" class="tipo-incapacidad-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                        <label class="switch-item">
+                            <span>Paternidad</span>
+                            <div class="switch">
+                                <input type="checkbox" name="tipoIncapacidad" value="paternidad" id="incap4" class="tipo-incapacidad-switch">
+                                <span class="slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="panel-card">
+                    <h3 id="panelTitle" class="panel-title">Detalles del permiso</h3>
+
+                    <div id="tiemposPanel">
+                        <label class="field-label">Tiempo de llegada:</label>
+                        <input type="time" id="tiempoLlegada" name="tiempoLlegada" disabled class="text-input time-input" placeholder="HH:MM">
+
+                        <label class="field-label">Tiempo de salida:</label>
+                        <input type="time" id="tiempoSalida" name="tiempoSalida" disabled class="text-input time-input" placeholder="HH:MM">
+                    </div>
+
+                    <div id="fechasPanel">
+                        <label for="fechaInicio" class="field-label" id="labelFechaInicio">Fecha de inicio:</label>
+                        <input type="date" id="fechaInicio" name="fechaInicio" required class="text-input">
+                        <label for="fechaFin" class="field-label" id="labelFechaFin">Fecha de fin:</label>
+                        <input type="date" id="fechaFin" name="fechaFin" required class="text-input">
+                    </div>
+
+                    <div id="motivoPanel">
+                        <label class="field-label" id="labelMotivo">Motivo / Razón:</label>
+                        <input type="text" id="motivo" name="motivo" class="text-input" placeholder="Ingresa el motivo del permiso">
+                    </div>
+
+                    <div id="evidenciasPanel" style="display: none;">
+                        <label class="field-label">Evidencias de incapacidad:</label>
+                        <input type="file" id="evidencias" name="evidencias" accept="image/*,.pdf" multiple class="text-input" style="padding: 8px;">
+                        <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">Puedes subir imágenes o PDFs (máximo 5 archivos)</small>
+                        <div id="listaEvidencias" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <label class="field-label">Notas:</label>
+                    <input type="text" id="notas" name="notas" class="text-input" placeholder="Ingresa notas adicionales (opcional)">                    
+                    <div id="mensajeInhabilitado" class="mensaje-inhabilitado" style="display:none;"></div>
+                </div>
+            </div>
+        </form>
+        <div style="display: flex; justify-content: center;">
+            <button type="submit" id="btnSolicitar" form="formVacaciones" class="back-button" style="width:50%;margin-top:10px;justify-content:center;display: flex;">Solicitar permiso</button>
+        </div>
+        
+    </div>
+
+    <!-- Modal: Permisos del empleado -->
+    <div id="permisosEmpleadoOverlay" class="permisos-empleado-overlay hidden" aria-hidden="true">
+      <div class="permisos-empleado-modal" role="dialog" aria-modal="true" aria-labelledby="permisosEmpleadoTitle">
+        <div class="pem-header">
+          <h3 id="permisosEmpleadoTitle">Permisos del empleado</h3>
+          <button type="button" class="pem-close" id="permisosEmpleadoCloseBtn">×</button>
+        </div>
+        <div id="permisosEmpleadoBody" class="pem-body">
+          <div class="pem-loading">Cargando...</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        let modoIncapacidades = false;
+        let empleadoSeleccionadoId = null;
+        let empleadoSeleccionadoNombre = '';
+
+        // Configurar tabs - Con validación para elementos que pueden no existir
+        const tabPermisos = document.getElementById('tabPermisos');
+        const tabIncapacidades = document.getElementById('tabIncapacidades');
+        
+        if (tabPermisos) {
+            tabPermisos.addEventListener('click', function() {
+                modoIncapacidades = false;
+                actualizarModo();
+            });
+        }
+
+        if (tabIncapacidades) {
+            tabIncapacidades.addEventListener('click', function() {
+                modoIncapacidades = true;
+                actualizarModo();
+            });
+        }
+
+        function actualizarModo() {
+            const tabPermisos = document.getElementById('tabPermisos');
+            const tabIncapacidades = document.getElementById('tabIncapacidades');
+            const panelTitle = document.getElementById('panelTitle');
+            const labelMotivo = document.getElementById('labelMotivo');
+            const labelFechaInicio = document.getElementById('labelFechaInicio');
+            const labelFechaFin = document.getElementById('labelFechaFin');
+            const tiemposPanel = document.getElementById('tiemposPanel');
+            const tiposPermisosPanel = document.getElementById('tiposPermisosPanel');
+            const tiposIncapacidadesPanel = document.getElementById('tiposIncapacidadesPanel');
+            const motivoPanel = document.getElementById('motivoPanel');
+            const evidenciasPanel = document.getElementById('evidenciasPanel');
+            const btnSolicitar = document.getElementById('btnSolicitar');
+
+            if (modoIncapacidades) 
+            {
+                // Modo Incapacidades
+                if (tabPermisos) tabPermisos.style.background = 'rgba(76, 175, 80, 0.25)';
+                if (tabPermisos) tabPermisos.style.color = '#4CAF50';
+                if (tabPermisos) tabPermisos.style.boxShadow = 'none';
+                if (tabIncapacidades) tabIncapacidades.style.background = '#4CAF50';
+                if (tabIncapacidades) tabIncapacidades.style.color = '#ffffff';
+                if (tabIncapacidades) tabIncapacidades.style.boxShadow = '0 2px 8px rgba(76, 175, 80, 0.3)';
+                
+                if (panelTitle) panelTitle.textContent = 'Detalles de la incapacidad';
+                if (labelFechaInicio) labelFechaInicio.textContent = 'Fecha de inicio:';
+                if (labelFechaFin) labelFechaFin.textContent = 'Fecha de fin:';
+                if (labelFechaFin) labelFechaFin.style.display = 'block';
+                const fechaFin = document.getElementById('fechaFin');
+                if (fechaFin) fechaFin.style.display = 'block';
+                if (tiemposPanel) tiemposPanel.style.display = 'none';
+                if (tiposPermisosPanel) tiposPermisosPanel.style.display = 'none';
+                if (tiposIncapacidadesPanel) tiposIncapacidadesPanel.style.display = 'block';
+                if (motivoPanel) motivoPanel.style.display = 'none';
+                if (evidenciasPanel) evidenciasPanel.style.display = 'block';
+                if (btnSolicitar) btnSolicitar.textContent = 'Registrar incapacidad';
+            } else 
+            {
+                // Modo Permisos
+                if (tabPermisos) tabPermisos.style.background = '#4CAF50';
+                if (tabPermisos) tabPermisos.style.color = '#ffffff';
+                if (tabPermisos) tabPermisos.style.boxShadow = '0 2px 8px rgba(76, 175, 80, 0.3)';
+                if (tabIncapacidades) tabIncapacidades.style.background = 'rgba(76, 175, 80, 0.25)';
+                if (tabIncapacidades) tabIncapacidades.style.color = '#4CAF50';
+                if (tabIncapacidades) tabIncapacidades.style.boxShadow = 'none';
+                
+                if (panelTitle) panelTitle.textContent = 'Detalles del permiso';
+                if (labelMotivo) labelMotivo.textContent = 'Motivo / Razón:';
+                if (labelFechaInicio) labelFechaInicio.textContent = 'Fecha de inicio:';
+                if (labelFechaFin) labelFechaFin.textContent = 'Fecha de fin:';
+                if (labelFechaFin) labelFechaFin.style.display = 'block';
+                const fechaFin = document.getElementById('fechaFin');
+                if (fechaFin) fechaFin.style.display = 'block';
+                if (tiemposPanel) tiemposPanel.style.display = 'block';
+                if (tiposPermisosPanel) tiposPermisosPanel.style.display = 'block';
+                if (tiposIncapacidadesPanel) tiposIncapacidadesPanel.style.display = 'none';
+                if (motivoPanel) motivoPanel.style.display = 'block';
+                if (evidenciasPanel) evidenciasPanel.style.display = 'none';
+                if (btnSolicitar) btnSolicitar.textContent = 'Solicitar permiso';
+            }
+
+            // Limpiar el formulario al cambiar de modo
+            document.getElementById('formVacaciones').reset();
+            document.getElementById('empleadoInfo').classList.remove('show');
+            document.getElementById('mensajeInhabilitado').style.display = 'none';
+            document.getElementById('listaEvidencias').innerHTML = '';
+            validarFormulario();
+        }
+
+        // Manejar visualización de archivos seleccionados
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            const inputEvidencias = document.getElementById('evidencias');
+            const listaEvidencias = document.getElementById('listaEvidencias');
+            
+            if (inputEvidencias) 
+            {
+                inputEvidencias.addEventListener('change', function(e) 
+                {
+                    const archivos = Array.from(e.target.files);
+                    if (archivos.length > 5) 
+                    {
+                        mostrarAlertaPersonalizada('Solo puedes subir un máximo de 5 archivos', 'info');
+                        e.target.value = '';
+                        listaEvidencias.innerHTML = '';
+                        return;
+                    }
+                    
+                    listaEvidencias.innerHTML = '';
+                    archivos.forEach((archivo, index) => {
+                        const div = document.createElement('div');
+                        div.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 8px; background: #f5f5f5; border-radius: 6px; margin-top: 5px;';
+                        div.innerHTML = `
+                            <span style="flex: 1; font-size: 13px; color: #333;">📎 ${archivo.name} (${(archivo.size / 1024).toFixed(1)} KB)</span>
+                        `;
+                        listaEvidencias.appendChild(div);
+                    });
+                });
+            }
+        });
+
+        function mostrarAlertaPersonalizada(mensaje, tipo = 'info') 
+        {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.inset = '0';
+            overlay.style.background = 'rgba(0,0,0,0.4)';
+            overlay.style.backdropFilter = 'blur(1px)';
+            overlay.style.zIndex = '1090';
+            const modal = document.createElement('div');
+            modal.className = 'modal-confirmacion';
+            modal.innerHTML = `
+                <h2>${tipo === 'success' ? 'Éxito' : tipo === 'error' ? 'Error' : 'Aviso'}</h2>
+                <div class="dato">${mensaje}</div>
+                <button class="close-btn">Cerrar</button>
+            `;
+
+            if (tipo === 'error') 
+            {
+                modal.querySelector('h2').style.color = '#d32f2f';
+            } else if (tipo === 'info') 
+            {
+                modal.querySelector('h2').style.color = '#1976d2';
+            }
+
+            function cerrar() 
+            {
+                document.body.removeChild(modal);
+                document.body.removeChild(overlay);
+            }
+            modal.querySelector('.close-btn').addEventListener('click', cerrar);
+            overlay.addEventListener('click', cerrar);
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+        }
+
+        function normalizarTexto(valor) 
+        {
+            return String(valor || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function tokensNombre(nombre) 
+        {
+            const limpio = normalizarTexto(nombre);
+            return limpio ? limpio.split(' ').filter(Boolean) : [];
+        }
+
+        function tokensSubconjunto(qTokens, nombreTokens) {
+            return qTokens.every(qt => nombreTokens.some(nt => nt.startsWith(qt)));
+        }
+
+        async function buscarEmpleadoPorNombreFlexible(entrada) 
+        {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const qTokens = tokensNombre(entrada);
+            try 
+            {
+                empleadoInfo.innerHTML = '<p class="loading">Buscando por nombre...</p>';
+                empleadoInfo.classList.add('show');
+                const resp = await fetch('/api/empleados');
+                if (!resp.ok) throw new Error('No se pudo obtener la lista de empleados');
+                const lista = await resp.json();
+                const resultados = lista.filter(e => tokensSubconjunto(qTokens, tokensNombre(e.nombre_completo || '')));
+
+                if (resultados.length === 0) 
+                {
+                    empleadoInfo.innerHTML = '<p class="error">No se encontraron coincidencias</p>';
+                    document.getElementById('btnSolicitar').disabled = true;
+                    document.getElementById('mensajeInhabilitado').textContent = 'No se puede pedir permiso para un empleado válido';
+                    document.getElementById('mensajeInhabilitado').style.display = 'block';
+                    return;
+                }
+
+                if (resultados.length === 1) 
+                {
+                    const unico = resultados[0];
+                    const idInput = document.getElementById('idEmpleado');
+                    idInput.value = String(unico.id);
+                    await buscarEmpleado(unico.id);
+                    return;
+                }
+                renderListaCoincidencias(resultados);
+            } catch (err) 
+            {
+                console.error('Error en búsqueda por nombre:', err);
+                empleadoInfo.innerHTML = '<p class="error">Error al buscar. Intenta de nuevo.</p>';
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').style.display = 'block';
+            }
+        }
+
+        function renderListaCoincidencias(empleados) 
+        {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const items = empleados.slice(0, 30).map(e => {
+                const nombre = e.nombre_completo || 'Sin nombre';
+                return `<button class="coincidencia-item" data-id="${e.id}" style="display:block;width:100%;text-align:left;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;margin-bottom:8px;cursor:pointer;">
+                    <span style=\"font-weight:600;\">${nombre}</span><br>
+                    <span style=\"color:#666;\">ID: ${e.id}${e.puesto ? ' • ' + e.puesto : ''}</span>
+                </button>`;
+            }).join('');
+            empleadoInfo.innerHTML = `
+                <h4>Selecciona un empleado</h4>
+                <div>${items}</div>
+                <small style="color:#666;">Mostrando ${Math.min(empleados.length, 30)} de ${empleados.length} coincidencias</small>
+            `;
+            empleadoInfo.classList.add('show');
+            empleadoInfo.querySelectorAll('.coincidencia-item').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const idSel = e.currentTarget.getAttribute('data-id');
+                    const idInput = document.getElementById('idEmpleado');
+                    idInput.value = String(idSel);
+                    await buscarEmpleado(idSel);
+                });
+            });
+        }
+
+        async function buscarEmpleado(id) 
+        {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const nombreEmpleado = document.getElementById('nombreEmpleado');
+            const puestoEmpleado = document.getElementById('puestoEmpleado');
+            const supervisorEmpleado = document.getElementById('supervisorEmpleado');
+            
+            try 
+            {
+                empleadoInfo.innerHTML = '<p class="loading">Buscando empleado...</p>';
+                empleadoInfo.classList.add('show');
+                const response = await fetch(`/api/empleados/${id}`);
+                if (!response.ok) 
+                {
+                    throw new Error('Empleado no encontrado');
+                }
+                
+                const empleado = await response.json();
+                empleadoSeleccionadoId = empleado.id;
+                empleadoSeleccionadoNombre = empleado.nombre_completo || '';
+                empleadoInfo.innerHTML = `
+                    <h4>Información del Empleado</h4>
+                    <p><strong>Nombre:</strong> <span id="nombreEmpleado">${empleado.nombre_completo || 'No disponible'}</span></p>
+                    <p><strong>Puesto:</strong> <span id="puestoEmpleado">${empleado.puesto || 'No disponible'}</span></p>
+                    <p><strong>Supervisor:</strong> <span id="supervisorEmpleado">${empleado.supervisor || 'No disponible'}</span></p>
+                    <button type="button" id="btnVerPermisosEmpleado" class="btn-ver-permisos">
+                      Ver permisos del empleado
+                    </button>
+                `;
+                document.getElementById('mensajeInhabilitado').style.display = 'none';
+                validarFormulario();
+
+                // Bind botón ver permisos
+                const btnVerPermisosEmpleado = document.getElementById('btnVerPermisosEmpleado');
+                if (btnVerPermisosEmpleado) {
+                  btnVerPermisosEmpleado.style.display = 'inline-flex';
+                  btnVerPermisosEmpleado.addEventListener('click', async () => {
+                    if (!empleadoSeleccionadoId) return;
+                    await abrirModalPermisosEmpleado(empleadoSeleccionadoId, empleadoSeleccionadoNombre);
+                  });
+                }
+                
+            } catch (error) 
+            {
+                console.error('Error al buscar empleado:', error);
+                empleadoInfo.innerHTML = '<p class="error">Empleado no encontrado. Verifica el ID ingresado.</p>';
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').textContent = 'No se puede amonestar a un empleado inexistente';
+                document.getElementById('mensajeInhabilitado').style.display = 'block';
+            }
+        }
+
+        // ===== Modal permisos del empleado =====
+        const permisosEmpleadoOverlay = document.getElementById('permisosEmpleadoOverlay');
+        const permisosEmpleadoBody = document.getElementById('permisosEmpleadoBody');
+        const permisosEmpleadoCloseBtn = document.getElementById('permisosEmpleadoCloseBtn');
+        const permisosEmpleadoTitle = document.getElementById('permisosEmpleadoTitle');
+
+        function cerrarModalPermisosEmpleado() 
+        {
+          if (!permisosEmpleadoOverlay) return;
+          permisosEmpleadoOverlay.classList.add('hidden');
+          permisosEmpleadoOverlay.setAttribute('aria-hidden', 'true');
+        }
+
+        async function abrirModalPermisosEmpleado(empleadoId, nombre) 
+        {
+          if (!permisosEmpleadoOverlay || !permisosEmpleadoBody) return;
+
+          const tipoLabels = {
+            // Permisos (switches)
+            llegar_tarde_salida_normal: 'Llegar tarde (salida normal)',
+            salir_temprano: 'Salir temprano',
+            salir_regresar: 'Salir del horario (regresará)',
+            dia_completo: 'Día completo',
+            paternidad: 'Paternidad',
+            home_office: 'Home office',
+            defuncion_familiar: 'Por defunción familiar',
+            falta_injustificada: 'Falta injustificada',
+            capacitacion: 'Capacitación',
+            festivo: 'Festivo',
+            usa: 'USA',
+            // Incapacidades (switches) /YA NO SE VAN A REGISTRAR LAS INCAPACIDADES
+            accidente_laboral: 'Accidente laboral',
+            accidente_transito: 'Accidente de tránsito',
+            enfermedad_general: 'Enfermedad general'
+          };
+
+          const formatFechaLarga = (yyyyMmDd) => {
+            if (!yyyyMmDd || yyyyMmDd === '-') return '-';
+            const partes = String(yyyyMmDd).split('-');
+            if (partes.length !== 3) return String(yyyyMmDd);
+            const d = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+            return d.toLocaleDateString('es-MX', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          };
+
+          permisosEmpleadoOverlay.classList.remove('hidden');
+          permisosEmpleadoOverlay.setAttribute('aria-hidden', 'false');
+          if (permisosEmpleadoTitle) 
+          {
+            permisosEmpleadoTitle.textContent = `Permisos de ${nombre || ('Empleado ' + empleadoId)}`;
+          }
+          permisosEmpleadoBody.innerHTML = `<div class="pem-loading">Cargando...</div>`;
+
+          try 
+          {
+            const resp = await fetch(`/api/permisos/empleado/${empleadoId}`);
+            if (!resp.ok) throw new Error(`Error HTTP ${resp.status}`);
+            const lista = await resp.json();
+
+            if (!Array.isArray(lista) || lista.length === 0) {
+              permisosEmpleadoBody.innerHTML = `<div class="pem-empty">Este empleado no tiene permisos registrados.</div>`;
+              return;
+            }
+
+            permisosEmpleadoBody.innerHTML = lista.map(p => {
+              const tipoKey = p.tipo || '-';
+              const tipo = tipoLabels[tipoKey] || tipoKey;
+              const inicio = p.fecha_inicio ? String(p.fecha_inicio).split('T')[0] : '-';
+              const fin = p.fecha_fin ? String(p.fecha_fin).split('T')[0] : '-';
+              const motivo = p.motivo || '-';
+              const notas = p.notas_postpermiso || '';
+
+              const fechaLargaInicio = formatFechaLarga(inicio);
+              const fechaLargaFin = formatFechaLarga(fin);
+              const fechaLarga = (inicio !== '-' && fin !== '-' && inicio === fin)
+                ? fechaLargaInicio
+                : `${fechaLargaInicio} → ${fechaLargaFin}`;
+
+              return `
+                <div class="pem-item" data-permiso-id="${p.id}">
+                  <div class="pem-meta">
+                    <div><strong>Tipo:</strong> ${tipo}</div>
+                    <div><strong>Fecha:</strong> ${fechaLarga}</div>
+                    <div class="pem-motivo"><strong>Motivo:</strong> ${motivo}</div>
+                  </div>
+                  <label class="pem-label">Nota del permiso</label>
+                  <textarea class="pem-textarea" rows="2" placeholder="Agregar nota...">${notas}</textarea>
+                  <div class="pem-actions">
+                    <button type="button" class="pem-save-btn">Guardar nota</button>
+                    <span class="pem-status"></span>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+            // Bind guardar nota
+            permisosEmpleadoBody.querySelectorAll('.pem-item').forEach(item => {
+              const idPermiso = item.getAttribute('data-permiso-id');
+              const textarea = item.querySelector('.pem-textarea');
+              const btnSave = item.querySelector('.pem-save-btn');
+              const statusEl = item.querySelector('.pem-status');
+
+              if (!btnSave || !textarea) return;
+
+              btnSave.addEventListener('click', async () => {
+                try {
+                  btnSave.disabled = true;
+                  if (statusEl) statusEl.textContent = 'Guardando...';
+
+                  const resp = await fetch(`/api/permisos/${idPermiso}/nota`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ notas_postpermiso: textarea.value })
+                  });
+
+                  const data = await resp.json().catch(() => ({}));
+                  if (!resp.ok || data.success === false) {
+                    throw new Error(data.message || data.error || `Error HTTP ${resp.status}`);
+                  }
+                  if (statusEl) statusEl.textContent = 'Guardado';
+                  setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 1500);
+                } catch (err) {
+                  console.error('Error al guardar nota:', err);
+                  if (statusEl) statusEl.textContent = 'Error al guardar';
+                } finally {
+                  btnSave.disabled = false;
+                }
+              });
+            });
+          } catch (err) {
+            console.error('Error al cargar permisos del empleado:', err);
+            permisosEmpleadoBody.innerHTML = `<div class="pem-empty">Error al cargar permisos.</div>`;
+          }
+        }
+
+        if (permisosEmpleadoCloseBtn) 
+        {
+          permisosEmpleadoCloseBtn.addEventListener('click', cerrarModalPermisosEmpleado);
+        }
+        if (permisosEmpleadoOverlay) 
+        {
+          permisosEmpleadoOverlay.addEventListener('click', (e) => {
+            if (e.target === permisosEmpleadoOverlay) cerrarModalPermisosEmpleado();
+          });
+        }
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') cerrarModalPermisosEmpleado();
+        });
+        // Función para validar y actualizar el estado del botón
+        function validarFormulario() 
+        {
+            const todosSwitches = modoIncapacidades ? 
+                document.querySelectorAll('.tipo-incapacidad-switch') : 
+                document.querySelectorAll('.tipo-switch');
+            const switch10 = document.getElementById('switch10'); // Llegar tarde salida normal
+            const switch11 = document.getElementById('switch11'); // Salir temprano
+            const switch12 = document.getElementById('switch12'); // Salir regresar
+            const tiempoLlegada = document.getElementById('tiempoLlegada');
+            const tiempoSalida = document.getElementById('tiempoSalida');
+            const motivo = document.getElementById('motivo');
+            const fechaInicio = document.getElementById('fechaInicio');
+            const fechaFin = document.getElementById('fechaFin');
+            const btnSolicitar = document.getElementById('btnSolicitar');
+            
+            // Verificar si hay algún switch activo
+            let haySwitchActivo = false;
+            todosSwitches.forEach(sw => {
+                if (sw.checked) haySwitchActivo = true;
+            });
+            
+            // En modo incapacidades no se requiere motivo, solo evidencias y tipo
+            const hayMotivo = modoIncapacidades ? true : motivo.value.trim().length > 0;
+            const hayFechas = fechaInicio.value && fechaFin.value;
+            
+            // Validar que fecha de fin sea mayor o igual a fecha de inicio
+            let fechasValidas = true;
+            if (fechaInicio.value && fechaFin.value) 
+            {
+                const inicio = new Date(fechaInicio.value);
+                const fin = new Date(fechaFin.value);
+                if (fin < inicio) 
+                {
+                    fechasValidas = false;
+                }
+            }
+            
+            // Determinar qué campos de tiempo deben estar habilitados
+            const necesitaTiempoLlegada = switch10.checked || switch12.checked;
+            const necesitaTiempoSalida = switch11.checked || switch12.checked;
+            
+            // Habilitar/deshabilitar tiempo de llegada
+            if (necesitaTiempoLlegada) 
+            {
+                tiempoLlegada.disabled = false;
+                tiempoLlegada.style.borderColor = '#6abf35';
+                tiempoLlegada.style.backgroundColor = '#fff';
+                tiempoLlegada.style.cursor = 'text';
+            } else 
+            {
+                tiempoLlegada.disabled = true;
+                tiempoLlegada.value = '';
+                tiempoLlegada.style.borderColor = '#ccc';
+                tiempoLlegada.style.backgroundColor = '#f5f5f5';
+                tiempoLlegada.style.cursor = 'not-allowed';
+            }
+            
+            // Habilitar/deshabilitar tiempo de salida
+            if (necesitaTiempoSalida) 
+            {
+                tiempoSalida.disabled = false;
+                tiempoSalida.style.borderColor = '#6abf35';
+                tiempoSalida.style.backgroundColor = '#fff';
+                tiempoSalida.style.cursor = 'text';
+            } else 
+            {
+                tiempoSalida.disabled = true;
+                tiempoSalida.value = '';
+                tiempoSalida.style.borderColor = '#ccc';
+                tiempoSalida.style.backgroundColor = '#f5f5f5';
+                tiempoSalida.style.cursor = 'not-allowed';
+            }
+            
+            // Validar que los campos de tiempo requeridos estén llenos
+            let tiemposValidos = true;
+            if (necesitaTiempoLlegada && !tiempoLlegada.value) {
+                tiemposValidos = false;
+            }
+            if (necesitaTiempoSalida && !tiempoSalida.value) {
+                tiemposValidos = false;
+            }
+            
+            // Activar botón solo si hay switch activo, motivo, fechas válidas y tiempos válidos
+            if (haySwitchActivo && hayMotivo && hayFechas && fechasValidas && tiemposValidos) 
+            {
+                btnSolicitar.disabled = false;
+                btnSolicitar.style.background = 'linear-gradient(135deg, #4CAF50, #388E3C)';
+            } else {
+                btnSolicitar.disabled = true;
+                btnSolicitar.style.background = '#cccccc';
+            }
+        }
+
+        document.querySelectorAll('.tipo-switch').forEach(switchElement => {
+            switchElement.addEventListener('change', function() {
+                if (this.checked) {
+                    // Desactivar todos los demás switches
+                    document.querySelectorAll('.tipo-switch').forEach(otherSwitch => {
+                        if (otherSwitch !== this) {
+                            otherSwitch.checked = false;
+                        }
+                    });
+                }
+                validarFormulario();
+            });
+        });
+        
+        // Hacer que todos los switches de incapacidad sean mutuamente excluyentes
+        document.querySelectorAll('.tipo-incapacidad-switch').forEach(switchElement => {
+            switchElement.addEventListener('change', function() 
+            {
+                if (this.checked) 
+                {
+                    // Desactivar todos los demás switches
+                    document.querySelectorAll('.tipo-incapacidad-switch').forEach(otherSwitch => {
+                        if (otherSwitch !== this) 
+                        {
+                            otherSwitch.checked = false;
+                        }
+                    });
+                    
+                    // Si es paternidad, calcular fechas automáticamente
+                    if (this.value === 'paternidad') 
+                    {
+                        const fechaInicio = document.getElementById('fechaInicio');
+                        if (fechaInicio.value) 
+                        {
+                            calcularFechaPaternidad(fechaInicio.value);
+                        }
+                    } else 
+                    {
+                        // Para otros tipos, habilitar edición manual
+                        document.getElementById('fechaFin').disabled = false;
+                        document.getElementById('fechaFin').style.cursor = 'text';
+                        document.getElementById('fechaFin').style.backgroundColor = '#fff';
+                    }
+                }
+                validarFormulario();
+            });
+        });
+        
+        // Función para calcular 5 días hábiles sin contar domingos
+        function calcularFechaPaternidad(fechaInicio) 
+        {
+            const fecha = new Date(fechaInicio + 'T00:00:00');
+            let diasAgregados = 0;
+            
+            while (diasAgregados < 5) 
+            {
+                fecha.setDate(fecha.getDate() + 1);
+                // Si no es domingo (0), contar el día
+                if (fecha.getDay() !== 0) 
+                {
+                    diasAgregados++;
+                }
+            }
+            
+            const year = fecha.getFullYear();
+            const month = String(fecha.getMonth() + 1).padStart(2, '0');
+            const day = String(fecha.getDate()).padStart(2, '0');
+            const fechaFin = `${year}-${month}-${day}`;
+            
+            document.getElementById('fechaFin').value = fechaFin;
+            document.getElementById('fechaFin').disabled = true;
+            document.getElementById('fechaFin').style.cursor = 'not-allowed';
+            document.getElementById('fechaFin').style.backgroundColor = '#f5f5f5';
+            validarFormulario();
+        }
+        
+        // Validar cuando cambian los campos
+        document.getElementById('motivo').addEventListener('input', validarFormulario);
+        document.getElementById('fechaInicio').addEventListener('change', function() 
+        {
+            // Si está seleccionada paternidad, recalcular automáticamente
+            const paternidad = document.getElementById('incap4');
+            if (paternidad && paternidad.checked && this.value) 
+            {
+                calcularFechaPaternidad(this.value);
+            }
+            validarFormulario();
+        });
+        document.getElementById('fechaFin').addEventListener('change', validarFormulario);
+        document.getElementById('tiempoLlegada').addEventListener('change', validarFormulario);
+        document.getElementById('tiempoSalida').addEventListener('change', validarFormulario);
+        
+        // ENVOLVER TODO EN DOMContentLoaded para evitar errores de elementos no encontrados
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            validarFormulario();
+            
+            // Listeners para idEmpleado
+            const idEmpleadoInput = document.getElementById('idEmpleado');
+            if (idEmpleadoInput) 
+            {
+                idEmpleadoInput.addEventListener('input', function(e) 
+                {
+                    const entrada = e.target.value.trim();
+                    if (!entrada) 
+                    {
+                        document.getElementById('empleadoInfo').classList.remove('show');
+                        document.getElementById('btnSolicitar').disabled = true;
+                        document.getElementById('mensajeInhabilitado').style.display = 'none';
+                        validarFormulario();
+                        return;
+                    }
+                    clearTimeout(this.timeout);
+                    this.timeout = setTimeout(() => 
+                    {
+                        if (!entrada) return;
+                        const esNumerico = /^\d+$/.test(entrada);
+                        if (esNumerico) 
+                        {
+                            buscarEmpleado(entrada);
+                        } else {
+                            buscarEmpleadoPorNombreFlexible(entrada);
+                        }
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                });
+
+                idEmpleadoInput.addEventListener('keypress', function(e) 
+                {
+                    if (e.key === 'Enter') 
+                    {
+                        e.preventDefault();
+                        const entrada = this.value.trim();
+                        if (!entrada) 
+                        {
+                            return;
+                        }
+                        clearTimeout(this.timeout);
+                        const esNumerico = /^\d+$/.test(entrada);
+                        if (esNumerico) 
+                        {
+                            buscarEmpleado(entrada);
+                        } else 
+                        {
+                            buscarEmpleadoPorNombreFlexible(entrada);
+                        }
+                    }
+                });
+            } else {
+                console.error('idEmpleado NO encontrado');
+            }
+        });
+
+        document.getElementById('formVacaciones').addEventListener('submit', async function(e) 
+        {
+            e.preventDefault();  
+            const idEmpleado = document.getElementById('idEmpleado').value;
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const tiempoLlegada = document.getElementById('tiempoLlegada').value;
+            const tiempoSalida = document.getElementById('tiempoSalida').value;
+            const motivo = document.getElementById('motivo').value.trim();
+            const notas = document.getElementById('notas').value.trim();
+            
+            // Validaciones comunes
+            if (!idEmpleado) 
+            {
+                mostrarAlertaPersonalizada('Por favor ingresa el ID del empleado', 'info');
+                return;
+            }
+            
+            // Solo validar motivo en modo permisos
+            if (!modoIncapacidades && !motivo) 
+            {
+                mostrarAlertaPersonalizada('Por favor ingresa el motivo del permiso', 'info');
+                return;
+            }
+
+            // Modo Incapacidades
+
+            if (modoIncapacidades) 
+            {
+                const switchIncapacidadSeleccionado = document.querySelector('.tipo-incapacidad-switch:checked');
+                if (!switchIncapacidadSeleccionado) 
+                {
+                    mostrarAlertaPersonalizada('Por favor selecciona un tipo de incapacidad', 'info');
+                    return;
+                }
+                const tipoIncapacidad = switchIncapacidadSeleccionado.value;
+                
+                if (!fechaInicio || !fechaFin) {
+                    mostrarAlertaPersonalizada('Por favor ingresa la fecha de inicio y fecha de fin de la incapacidad', 'info');
+                    return;
+                }
+
+                const inicio = new Date(fechaInicio);
+                const fin = new Date(fechaFin);
+                if (fin < inicio) 
+                {
+                    mostrarAlertaPersonalizada('La fecha de fin debe ser mayor o igual a la fecha de inicio', 'info');
+                    return;
+                }
+
+                try 
+                {
+                    // Crear FormData para enviar archivos
+                    const formData = new FormData();
+                    formData.append('empleado_id', parseInt(idEmpleado));
+                    formData.append('tipo', tipoIncapacidad);
+                    formData.append('fecha_inicio', fechaInicio);
+                    formData.append('fecha_fin', fechaFin);
+                    formData.append('notas', notas || '');
+                    
+                    // Agregar archivos de evidencias
+                    const evidenciasInput = document.getElementById('evidencias');
+                    if (evidenciasInput.files.length > 0) {
+                        Array.from(evidenciasInput.files).forEach((file, index) => {
+                            formData.append('evidencias', file);
+                        });
+                    }
+                    
+                    const response = await fetch('/api/incapacidades', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        mostrarAlertaPersonalizada('Incapacidad registrada exitosamente', 'success');
+                        document.getElementById('formVacaciones').reset();
+                        document.getElementById('empleadoInfo').classList.remove('show');
+                        document.getElementById('mensajeInhabilitado').style.display = 'none';
+                        validarFormulario();
+                    } else {
+                        const errorData = await response.json();
+                        mostrarAlertaPersonalizada('Error al registrar la incapacidad: ' + (errorData.message || 'Error desconocido'), 'error');
+                    }
+                } catch (error) {
+                    console.error('Error al enviar la incapacidad:', error);
+                    mostrarAlertaPersonalizada('Error al conectar con el servidor', 'error');
+                }
+            } else {
+                // Modo Permisos (código original)
+                const switchSeleccionado = document.querySelector('.tipo-switch:checked');
+                if (!switchSeleccionado) {
+                    mostrarAlertaPersonalizada('Por favor selecciona un tipo de ausentismo', 'info');
+                    return;
+                }
+                const tipoPermiso = switchSeleccionado.value;
+                
+                if (!fechaInicio || !fechaFin) {
+                    mostrarAlertaPersonalizada('Por favor ingresa la fecha de inicio y fecha de fin', 'info');
+                    return;
+                }
+                
+                // Validar que fecha de fin sea mayor o igual a fecha de inicio
+                const inicio = new Date(fechaInicio);
+                const fin = new Date(fechaFin);
+                if (fin < inicio) {
+                    mostrarAlertaPersonalizada('La fecha de fin debe ser mayor o igual a la fecha de inicio', 'info');
+                    return;
+                }
+                
+                // Validar tiempos según el tipo de permiso
+                const necesitaTiempoLlegada = ['llegar_tarde_salida_normal', 'salir_regresar'].includes(tipoPermiso);
+                const necesitaTiempoSalida = ['salir_temprano', 'salir_regresar'].includes(tipoPermiso);
+                
+                if (necesitaTiempoLlegada && !tiempoLlegada) {
+                    mostrarAlertaPersonalizada('Por favor ingresa el tiempo de llegada', 'info');
+                    return;
+                }
+                
+                if (necesitaTiempoSalida && !tiempoSalida) {
+                    mostrarAlertaPersonalizada('Por favor ingresa el tiempo de salida', 'info');
+                    return;
+                }
+                
+                try 
+                {
+                    const datos = {
+                        empleado_id: parseInt(idEmpleado),
+                        tipo: tipoPermiso,
+                        motivo: motivo,
+                        notas: notas || null,
+                        fecha_inicio: fechaInicio,
+                        fecha_fin: fechaFin,
+                        tiempo_llegada: necesitaTiempoLlegada ? tiempoLlegada : null,
+                        tiempo_salida: necesitaTiempoSalida ? tiempoSalida : null
+                    };
+                    
+                    const response = await fetch('/api/permisos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datos)
+                    });
+                    
+                    if (response.ok) 
+                    {
+                        mostrarAlertaPersonalizada('Solicitud de permiso registrada exitosamente', 'success');
+                        document.getElementById('formVacaciones').reset();
+                        document.getElementById('empleadoInfo').classList.remove('show');
+                        document.getElementById('mensajeInhabilitado').style.display = 'none';
+                        validarFormulario();
+                    } else {
+                        const errorData = await response.json();
+                        mostrarAlertaPersonalizada('Error al registrar la solicitud: ' + (errorData.message || 'Error desconocido'), 'error');
+                    }
+                } catch (error) {
+                    console.error('Error al enviar la solicitud:', error);
+                    mostrarAlertaPersonalizada('Error al conectar con el servidor', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

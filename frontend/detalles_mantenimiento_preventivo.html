@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Estadísticas de Mantenimiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/detalles_mantenimiento_preventivo.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+  
+  <!-- Incluir el sistema de color global -->
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!-- <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+      <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button " data-tab="tickets">
+          <i class="fa-solid fa-ticket"></i>Tickets
+        </button>
+        <button class="tab-switch-button" data-tab="calendario_de_mantenimiento_preventivo">
+          <i class="fas fa-calendar-alt"></i>Calendario de Mantenimiento Preventivo
+        </button>
+        <button class="tab-switch-button  active" data-tab="estadisticas_preventivas">
+          <i class="fas fa-chart-bar"></i>  Estadísticas Preventivas      </button>
+        <button class="tab-switch-button" data-tab="estadisticas_correctivas">
+          <i class="fas fa-chart-area"></i>Estadísticas Correctivas
+        </button>
+        
+      </div>
+    </div>
+
+  
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'mantenimiento.html',
+    calendario_de_mantenimiento_preventivo: 'calendario_mantenimiento.html',
+    estadisticas_preventivas: 'detalles_mantenimiento_preventivo.html',
+    estadisticas_correctivas: 'detalles_mantenimiento.html',
+
+
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <div class="main-content" style="margin-top: 0px;align-items: normal;">
+    <div class="stats-container">
+      <h2 class="stats-title">Estadísticas de Mantenimiento Industrial</h2>
+      <div class="year-slider">
+        <button class="carousel-nav prev" id="prevYear">❮</button>
+        <div class="year-carousel" id="yearCarousel">
+          <!-- Los botones se generarán dinámicamente -->
+        </div>
+        <button class="carousel-nav next" id="nextYear">❯</button>
+      </div>
+      
+      <!-- Contenedor para el recuadro y la gráfica lado a lado -->
+      <div class="stats-layout">
+        <div class="stats-percentage-container">
+          <div class="stats-percentage-box">100%</div>
+          <div class="stats-percentage-label">Cumplimiento de MP</div>
+        </div>
+        
+        <!-- Gráfica de tendencia -->
+        <div class="trend-chart-container">
+          <h3 class="trend-chart-title">Tendencia de Mantenimiento Preventivo</h3>
+          <div class="trend-chart-wrapper">
+            <canvas id="trendChart" width="800" height="300"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+  <script>
+    // Nueva función para calcular el porcentaje de completado
+    function getCompletionPercentage(date) {
+      const dayEvents = events.filter(event => {
+        const eventDate = new Date(event.fecha_evento);
+        const compareDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        return eventDate.getTime() === compareDate.getTime();
+      });
+
+      if (dayEvents.length === 0) {
+        return 0;
+      }
+
+      const completedEvents = dayEvents.filter(event => event.completado);
+      const percentage = Math.round((completedEvents.length / dayEvents.length) * 100);
+      return percentage;
+    }
+
+    // Función para calcular el promedio del mes activo (mes actual)
+    function calculateCurrentMonthAverage() {
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      let totalPercentage = 0;
+      let daysWithEvents = 0;
+
+      // Calcular para todos los días del mes actual
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(currentYear, currentMonth, day);
+        const percentage = getCompletionPercentage(date);
+        
+        // Solo contar días que tienen eventos
+        const dayEvents = events.filter(event => {
+          const eventDate = new Date(event.fecha_evento);
+          const compareDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+          return eventDate.getTime() === compareDate.getTime();
+        });
+
+        if (dayEvents.length > 0) {
+          totalPercentage += percentage;
+          daysWithEvents++;
+        }
+      }
+
+      // Si no hay días con eventos, retornar 0
+      if (daysWithEvents === 0) {
+        return 0;
+      }
+
+      return Math.round(totalPercentage / daysWithEvents);
+    }
+
+    // Función para obtener el promedio del mes actual
+    function getCurrentMonthAverage() {
+      return calculateCurrentMonthAverage();
+    }
+
+    // Función para actualizar el porcentaje en detalles_mantenimiento_preventivo.html
+    function updateMaintenanceStats() {
+      const currentAverage = getCurrentMonthAverage();
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      
+      // Guardar en localStorage para que esté disponible en otros archivos
+      localStorage.setItem('maintenanceMonthlyAverage', currentAverage);
+      
+      // Guardar el promedio del mes actual con clave específica
+      localStorage.setItem(`maintenanceMonthlyAverage_${currentYear}_${currentMonth}`, currentAverage);
+      
+      // También puedes enviar a una API si es necesario
+      fetch('/api/mantenimiento/estadisticas/promedio-mensual', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          promedio: currentAverage,
+          mes: currentMonth + 1,
+          año: currentYear
+        })
+      }).catch(error => {
+        console.log('No se pudo enviar el promedio a la API:', error);
+      });
+    }
+
+    // Llamar a la función cuando se carguen los eventos
+    async function loadEventsFromDatabase() {
+        try {
+            const response = await fetch('/api/mantenimiento/calendario/eventos');
+            if (response.ok) {
+                events = await response.json();
+                renderMonthlyCalendar();
+                renderYearlyCalendar();
+                if (selectedDate) {
+                    loadEvents();
+                }
+                // Actualizar estadísticas después de cargar eventos
+                updateMaintenanceStats();
+            } else {
+                console.error('Error al cargar eventos:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al cargar eventos:', error);
+        }
+    }
+
+    // Gráfica de tendencia
+    document.addEventListener('DOMContentLoaded', function() {
+      // Obtener el promedio mensual del localStorage
+      const monthlyAverage = localStorage.getItem('maintenanceMonthlyAverage') || 0;
+      
+      // Actualizar el recuadro de porcentaje
+      const percentageBox = document.querySelector('.stats-percentage-box');
+      if (percentageBox) {
+        percentageBox.textContent = monthlyAverage + '%';
+      }
+
+      const ctx = document.getElementById('trendChart').getContext('2d');
+      
+      // Datos reales para la gráfica de tendencia
+      const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      
+      // Inicializar array con datos reales
+      const maintenanceData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      
+      // Obtener datos reales del localStorage si están disponibles
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth(); // Mes actual
+      
+      // Cargar datos reales para cada mes
+      for (let month = 0; month < 12; month++) {
+        const monthData = localStorage.getItem(`maintenanceMonthlyAverage_${currentYear}_${month}`);
+        if (monthData) {
+          maintenanceData[month] = parseInt(monthData);
+        }
+      }
+      
+      // Asegurar que el mes actual tenga el dato más reciente
+      maintenanceData[currentMonth] = parseInt(monthlyAverage);
+      
+      const trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Cumplimiento de Mantenimiento Preventivo (%)',
+            data: maintenanceData,
+            borderColor: '#4CAF50',
+            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#4CAF50',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                  weight: '500'
+                }
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              titleColor: '#ffffff',
+              bodyColor: '#ffffff',
+              borderColor: '#4CAF50',
+              borderWidth: 1,
+              cornerRadius: 8,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  const value = context.parsed.y;
+                  const month = months[context.dataIndex];
+                  return `${month}: ${value}%`;
+                }
+              }
+            },
+            annotation: {
+              annotations: {
+                line50: {
+                  type: 'line',
+                  yMin: 90,
+                  yMax: 90,
+                  borderColor: 'red',
+                  borderWidth: 2,
+                  borderDash: [6, 6],
+                  label: {
+                    enabled: true,
+                    content: 'Meta > 90%',
+                    position: 'end',
+                    backgroundColor: '#43a047',
+                    color: '#fff',
+                    font: { weight: 'bold' }
+                  }
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)',
+                borderColor: 'rgba(255, 255, 255, 0.2)'
+              },
+              ticks: {
+                color: '#ffffff',
+                font: {
+                  size: 12
+                }
+              },
+              title: {
+                display: true,
+                text: 'Meses',
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                  weight: '500'
+                }
+              }
+            },
+            y: {
+              beginAtZero: true,
+              max: 100,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)',
+                borderColor: 'rgba(255, 255, 255, 0.2)'
+              },
+              ticks: {
+                color: '#ffffff',
+                font: {
+                  size: 12
+                },
+                callback: function(value) {
+                  return value + '%';
+                }
+              },
+              title: {
+                display: true,
+                text: 'Porcentaje de Cumplimiento',
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                  weight: '500'
+                }
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          },
+          elements: {
+            point: {
+              hoverBackgroundColor: '#4CAF50',
+              hoverBorderColor: '#ffffff'
+            }
+          }
+        }
+      });
+    });
+  </script>
+    <script src="js/topbar.js"></script>
+</body>
+</html>
+

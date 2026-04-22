@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recordatorios - Control de Presentaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles/recordatorios.css">
+</head>
+<body>
+  <div class="recordatorios-container">
+    <div class="page-header">
+      <h1 class="page-title">
+        Control de Presentaciones
+      </h1>
+    </div>
+
+    <!-- Sección de carga de PowerPoint -->
+    <div class="upload-section glass-card">
+      <h2 class="section-title">
+        Cargar Presentación
+      </h2>
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="fileInput" accept=".pptx,.ppt,.pdf,.jpg,.jpeg,.png,.gif,.webp,.bmp,.svg" style="display: none;">
+        <div class="upload-content">
+          <i class="fas fa-cloud-upload-alt upload-icon"></i>
+          <p class="upload-text">Haz clic para seleccionar un archivo PowerPoint, PDF o imagen</p>
+          <p class="upload-hint">Formatos soportados: .pptx, .ppt, .pdf, .jpg, .png, .gif, etc.</p>
+        </div>
+        <div class="file-info hidden" id="fileInfo">
+          <i class="fas fa-file-powerpoint file-icon"></i>
+          <div class="file-details">
+            <p class="file-name" id="fileName"></p>
+            <p class="file-size" id="fileSize"></p>
+          </div>
+          <button class="btn-remove" id="btnRemove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <button class="btn-upload" id="btnUpload" disabled>
+        <i class="fas fa-upload"></i>
+        <span>Subir Presentación</span>
+      </button>
+    </div>
+
+    <!-- Sección de control -->
+    <div class="control-section glass-card">
+      <h2 class="section-title">
+        Control Remoto
+      </h2>
+      
+      <div class="control-grid">
+        <!-- Información de la presentación actual -->
+        <div class="control-item">
+          <label class="control-label">Presentación Actual</label>
+          <div class="control-value" id="currentPresentation">
+            <i class="fas fa-file-powerpoint"></i>
+            <span>Ninguna</span>
+          </div>
+        </div>
+
+        <!-- Control de hora -->
+        <div class="control-item">
+          <label class="control-label">Mostrar Hora</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggleHora" checked>
+            <label for="toggleHora" class="toggle-label"></label>
+          </div>
+        </div>
+
+        <!-- Formato de hora -->
+        <div class="control-item">
+          <label class="control-label">Formato de Hora</label>
+          <select id="formatoHora" class="control-select">
+            <option value="12">12 horas (AM/PM)</option>
+            <option value="24" selected>24 horas</option>
+          </select>
+        </div>
+
+        <!-- Posición de la hora -->
+        <div class="control-item">
+          <label class="control-label">Posición de la Hora</label>
+          <select id="posicionHora" class="control-select">
+            <option value="top-left">Superior Izquierda</option>
+            <option value="top-right" selected>Superior Derecha</option>
+            <option value="bottom-left">Inferior Izquierda</option>
+            <option value="bottom-right">Inferior Derecha</option>
+          </select>
+        </div>
+
+        <!-- Música al cambiar de imagen -->
+        <div class="control-item control-item-audio full-width">
+          <label class="control-label">Música al cambiar de imagen</label>
+          <div class="audio-control-row">
+            <select id="audioImagenSelect" class="control-select audio-select">
+              <option value="/MEDIA/notificacion-audio1.mp3">Notificación suave (predeterminada)</option>
+              <option value="/MEDIA/bounce-tales.mp3">Bounce Tales</option>
+            </select>
+            <button type="button" class="btn-audio-preview" id="btnAudioPreview">
+              <i class="fas fa-play"></i>
+              <span>Escuchar</span>
+            </button>
+          </div>
+          <p class="control-hint">
+            Esta canción se reproducirá en la TV cada vez que cambie una imagen programada.
+          </p>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <button class="btn-action btn-primary" id="btnReproducir" disabled>
+          <i class="fas fa-play"></i>
+          <span>Reproducir en Pantalla Completa</span>
+        </button>
+        <button class="btn-action btn-secondary" id="btnDetener" disabled>
+          <i class="fas fa-stop"></i>
+          <span>Detener</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sección de programación automática -->
+    <div class="control-section glass-card" id="programacionSection" style="display: none;">
+      <h2 class="section-title">
+        <i class="fas fa-clock"></i>
+        Programación Automática
+      </h2>
+      
+      <div class="control-grid">
+        <!-- Activar programación automática -->
+        <div class="control-item full-width">
+          <label class="control-label">Activar Programación Automática</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="toggleAutomatico">
+            <label for="toggleAutomatico" class="toggle-label"></label>
+          </div>
+          <p class="control-hint">La presentación se activará automáticamente dentro del rango de horas configurado</p>
+        </div>
+
+        <!-- Hora de inicio -->
+        <div class="control-item">
+          <label class="control-label">Hora de Inicio</label>
+          <input type="time" id="horaInicio" class="control-input" disabled>
+        </div>
+
+        <!-- Hora de fin -->
+        <div class="control-item">
+          <label class="control-label">Hora de Fin</label>
+          <input type="time" id="horaFin" class="control-input" disabled>
+        </div>
+      </div>
+
+      <!-- Botón para guardar programación -->
+      <div class="action-buttons" style="margin-top: 20px;">
+        <button class="btn-action btn-guardar-programacion" id="btnGuardarProgramacion">
+          <i class="fas fa-save"></i>
+          <span>Guardar Programación</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Timeline de programación -->
+    <div class="timeline-section glass-card">
+      <h2 class="section-title">
+        Línea de Tiempo - Programación
+      </h2>
+      <div id="timelineContainer" class="timeline-container">
+        <div class="empty-state">
+          <i class="fas fa-clock"></i>
+          <p>No hay presentaciones programadas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de presentaciones guardadas -->
+    <div class="presentations-section glass-card">
+      <h2 class="section-title">
+        Presentaciones Guardadas
+      </h2>
+      <div id="presentationsList" class="presentations-list">
+        <div class="empty-state">
+          <p>No hay presentaciones guardadas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div id="mensaje" class="mensaje glass-card hidden">
+      <i class="fas fa-info-circle"></i>
+      <p id="mensajeTexto"></p>
+    </div>
+  </div>
+
+  <script>
+    let selectedFile = null;
+    let currentPresentationId = null;
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const btnRemove = document.getElementById('btnRemove');
+    const btnUpload = document.getElementById('btnUpload');
+    const btnReproducir = document.getElementById('btnReproducir');
+    const btnDetener = document.getElementById('btnDetener');
+    const toggleHora = document.getElementById('toggleHora');
+    const formatoHora = document.getElementById('formatoHora');
+    const posicionHora = document.getElementById('posicionHora');
+    const currentPresentation = document.getElementById('currentPresentation');
+    const presentationsList = document.getElementById('presentationsList');
+    const mensaje = document.getElementById('mensaje');
+    const mensajeTexto = document.getElementById('mensajeTexto');
+    const timelineContainer = document.getElementById('timelineContainer');
+    const audioImagenSelect = document.getElementById('audioImagenSelect');
+    const btnAudioPreview = document.getElementById('btnAudioPreview');
+    
+    // Elementos de programación automática
+    const programacionSection = document.getElementById('programacionSection');
+    const toggleAutomatico = document.getElementById('toggleAutomatico');
+    const horaInicio = document.getElementById('horaInicio');
+    const horaFin = document.getElementById('horaFin');
+    const btnGuardarProgramacion = document.getElementById('btnGuardarProgramacion');
+
+    // Abrir selector de archivos al hacer clic en el área de carga
+    uploadArea.addEventListener('click', () => {
+      if (!fileInfo.classList.contains('hidden')) return;
+      fileInput.click();
+    });
+
+    // Manejar selección de archivo
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        selectedFile = file;
+        mostrarInfoArchivo(file);
+        btnUpload.disabled = false;
+      }
+    });
+
+    // Remover archivo seleccionado
+    btnRemove.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedFile = null;
+      fileInput.value = '';
+      fileInfo.classList.add('hidden');
+      uploadArea.querySelector('.upload-content').classList.remove('hidden');
+      btnUpload.disabled = true;
+    });
+
+    // Subir archivo
+    btnUpload.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      btnUpload.disabled = true;
+      btnUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Subiendo...</span>';
+
+      const formData = new FormData();
+      formData.append('presentation', selectedFile);
+
+      try {
+        const response = await fetch('/api/recordatorios/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al subir la presentación');
+        }
+
+        const data = await response.json();
+        mostrarMensaje('Presentación subida exitosamente', 'success');
+        
+        // Limpiar selección
+        selectedFile = null;
+        fileInput.value = '';
+        fileInfo.classList.add('hidden');
+        uploadArea.querySelector('.upload-content').classList.remove('hidden');
+        btnUpload.disabled = true;
+        btnUpload.innerHTML = '<i class="fas fa-upload"></i> <span>Subir Presentación</span>';
+
+        // Cargar lista de presentaciones
+        cargarPresentaciones();
+      } catch (error) {
+        console.error('Error:', error);
+        mostrarMensaje('Error al subir la presentación: ' + error.message, 'error');
+        btnUpload.disabled = false;
+        btnUpload.innerHTML = '<i class="fas fa-upload"></i> <span>Subir Presentación</span>';
+      }
+    });
+
+    // Reproducir en pantalla completa
+    btnReproducir.addEventListener('click', async () => {
+      if (!currentPresentationId) {
+        mostrarMensaje('Por favor, selecciona una presentación primero', 'error');
+        return;
+      }
+      
+      const controlData = {
+        showHora: toggleHora.checked,
+        formatoHora: formatoHora.value,
+        posicionHora: posicionHora.value
+      };
+
+      try {
+        // Guardar configuración de control
+        await fetch('/api/recordatorios/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            presentationId: currentPresentationId,
+            action: 'play',
+            ...controlData
+          })
+        });
+
+        // Abrir en pantalla completa
+        const newWindow = window.open(`tv-diseno.html?presentation=${currentPresentationId}`, '_blank');
+        
+        if (!newWindow) {
+          mostrarMensaje('Por favor, permite ventanas emergentes para reproducir la presentación', 'error');
+        } else {
+          mostrarMensaje('Abriendo presentación en pantalla completa...', 'success');
+        }
+      } catch (error) {
+        console.error('Error al reproducir:', error);
+        mostrarMensaje('Error al reproducir la presentación: ' + error.message, 'error');
+      }
+    });
+
+    // Detener reproducción
+    btnDetener.addEventListener('click', () => {
+      if (!currentPresentationId) return;
+      
+      fetch('/api/recordatorios/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          presentationId: currentPresentationId,
+          action: 'stop'
+        })
+      });
+
+      mostrarMensaje('Reproducción detenida', 'info');
+    });
+
+    // Actualizar control cuando cambian los valores
+    [toggleHora, formatoHora, posicionHora].forEach(control => {
+      control.addEventListener('change', () => {
+        if (currentPresentationId) {
+          actualizarControl();
+        }
+      });
+    });
+
+    // ===== Configuración de audio para cambio de imagen (solo frontend / TV) =====
+    const AUDIO_STORAGE_KEY = 'recordatorios_audio_imagen';
+    let audioPreviewPlayer = null;
+
+    // Cargar audio guardado en localStorage
+    (function inicializarSeleccionAudio() {
+      if (!audioImagenSelect) return;
+      try {
+        const saved = localStorage.getItem(AUDIO_STORAGE_KEY);
+        if (saved) {
+          const optionExists = Array.from(audioImagenSelect.options).some(opt => opt.value === saved);
+          if (optionExists) {
+            audioImagenSelect.value = saved;
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo leer configuración de audio desde localStorage:', e);
+      }
+    })();
+
+    // Guardar selección de audio
+    if (audioImagenSelect) {
+      audioImagenSelect.addEventListener('change', () => {
+        try {
+          localStorage.setItem(AUDIO_STORAGE_KEY, audioImagenSelect.value);
+          mostrarMensaje('Canción para cambio de imagen actualizada', 'success');
+        } catch (e) {
+          console.warn('No se pudo guardar configuración de audio en localStorage:', e);
+        }
+      });
+    }
+
+    // Reproducir previsualización de la canción seleccionada
+    if (btnAudioPreview) {
+      btnAudioPreview.addEventListener('click', () => {
+        if (!audioImagenSelect) return;
+
+        try {
+          const src = audioImagenSelect.value;
+          if (!src) return;
+
+          // Detener reproducción anterior si existe
+          if (audioPreviewPlayer) {
+            audioPreviewPlayer.pause();
+            audioPreviewPlayer = null;
+          }
+
+          audioPreviewPlayer = new Audio(src);
+          audioPreviewPlayer.volume = 0.7;
+          audioPreviewPlayer.play().catch(err => {
+            console.warn('No se pudo reproducir el audio de previsualización:', err);
+          });
+        } catch (e) {
+          console.warn('Error al intentar reproducir previsualización de audio:', e);
+        }
+      });
+    }
+
+    function mostrarInfoArchivo(file) {
+      fileName.textContent = file.name;
+      fileSize.textContent = formatearTamaño(file.size);
+      
+      // Cambiar icono según el tipo de archivo
+      const fileIcon = fileInfo.querySelector('.file-icon');
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+      
+      if (imageExtensions.includes(fileExtension)) {
+        fileIcon.className = 'fas fa-file-image file-icon';
+        fileIcon.style.color = '#4CAF50';
+      } else if (fileExtension === 'pdf') {
+        fileIcon.className = 'fas fa-file-pdf file-icon';
+        fileIcon.style.color = '#d04423';
+      } else {
+        fileIcon.className = 'fas fa-file-powerpoint file-icon';
+        fileIcon.style.color = '';
+      }
+      
+      fileInfo.classList.remove('hidden');
+      uploadArea.querySelector('.upload-content').classList.add('hidden');
+    }
+
+    function formatearTamaño(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    async function cargarPresentaciones() {
+      try {
+        const response = await fetch('/api/recordatorios/list');
+        if (!response.ok) throw new Error('Error al cargar presentaciones');
+        
+        const presentations = await response.json();
+        mostrarPresentaciones(presentations);
+        mostrarTimeline(presentations);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function mostrarTimeline(presentations) {
+      const timelineContainer = document.getElementById('timelineContainer');
+      
+      // Filtrar solo las presentaciones con programación activa
+      // Manejar diferentes formatos de boolean (true, "true", 1, etc.)
+      const programadas = presentations.filter(p => {
+        const activarAutomatico = p.activar_automatico === true || 
+                                  p.activar_automatico === 'true' || 
+                                  p.activar_automatico === 1 ||
+                                  p.activar_automatico === '1';
+        const tieneHoraInicio = p.hora_inicio && p.hora_inicio !== null && p.hora_inicio !== '';
+        const tieneHoraFin = p.hora_fin && p.hora_fin !== null && p.hora_fin !== '';
+        
+        return activarAutomatico && tieneHoraInicio && tieneHoraFin;
+      });
+      
+      console.log('Total presentaciones:', presentations.length);
+      console.log('Presentaciones programadas:', programadas.length);
+      console.log('Datos de presentaciones:', presentations.map(p => ({
+        id: p.id,
+        name: p.name,
+        activar_automatico: p.activar_automatico,
+        hora_inicio: p.hora_inicio,
+        hora_fin: p.hora_fin
+      })));
+      
+      if (programadas.length === 0) {
+        timelineContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clock"></i>
+            <p>No hay presentaciones programadas</p>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 10px;">
+              Asegúrate de que las presentaciones tengan "Activar Programación Automática" activado y horarios configurados
+            </p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Ordenar por hora de inicio
+      programadas.sort((a, b) => {
+        const horaA = String(a.hora_inicio).slice(0, 5);
+        const horaB = String(b.hora_inicio).slice(0, 5);
+        return horaA.localeCompare(horaB);
+      });
+      
+      // Renderizar timeline
+      timelineContainer.innerHTML = `
+        <div class="timeline">
+          ${programadas.map((p, index) => {
+            // Extraer solo HH:MM del formato TIME de PostgreSQL
+            const horaInicio = String(p.hora_inicio).slice(0, 5);
+            const horaFin = String(p.hora_fin).slice(0, 5);
+            const isActive = currentPresentationId && parseInt(p.id) === parseInt(currentPresentationId);
+            
+            // Determinar icono según extensión
+            const fileExtension = p.name.split('.').pop().toLowerCase();
+            let iconClass = 'fas fa-file-powerpoint';
+            let iconColor = '#d04423';
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+            
+            if (imageExtensions.includes(fileExtension)) {
+              iconClass = 'fas fa-file-image';
+              iconColor = '#4CAF50';
+            } else if (fileExtension === 'pdf') {
+              iconClass = 'fas fa-file-pdf';
+              iconColor = '#d04423';
+            }
+            
+            return `
+              <div class="timeline-item ${isActive ? 'active' : ''}" data-id="${p.id}">
+                <div class="timeline-marker">
+                  <div class="timeline-number">${index + 1}</div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <i class="${iconClass}" style="color: ${iconColor};"></i>
+                    <h4 class="timeline-title">${p.name}</h4>
+                    ${isActive ? '<span class="timeline-badge active-badge">Activa</span>' : ''}
+                  </div>
+                  <div class="timeline-time">
+                    <i class="fas fa-clock"></i>
+                    <span><strong>${horaInicio}</strong> - <strong>${horaFin}</strong></span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function mostrarPresentaciones(presentations) {
+      if (presentations.length === 0) {
+        presentationsList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No hay presentaciones guardadas</p>
+          </div>
+        `;
+        return;
+      }
+
+      presentationsList.innerHTML = presentations.map(p => {
+        const isActive = currentPresentationId && parseInt(p.id) === parseInt(currentPresentationId);
+        
+        // Determinar icono según extensión del archivo
+        const fileExtension = p.name.split('.').pop().toLowerCase();
+        let iconClass = 'fas fa-file-powerpoint';
+        let iconColor = '#d04423';
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+        
+        if (imageExtensions.includes(fileExtension)) {
+          iconClass = 'fas fa-file-image';
+          iconColor = '#4CAF50';
+        } else if (fileExtension === 'pdf') {
+          iconClass = 'fas fa-file-pdf';
+          iconColor = '#d04423';
+        }
+        
+        // Formatear tiempo programado si está configurado
+        let tiempoProgramado = '';
+        // Manejar diferentes formatos de boolean (true, "true", 1, etc.)
+        const activarAutomatico = p.activar_automatico === true || 
+                                  p.activar_automatico === 'true' || 
+                                  p.activar_automatico === 1 ||
+                                  p.activar_automatico === '1';
+        const tieneHoraInicio = p.hora_inicio && p.hora_inicio !== null && p.hora_inicio !== '';
+        const tieneHoraFin = p.hora_fin && p.hora_fin !== null && p.hora_fin !== '';
+        
+        if (activarAutomatico && tieneHoraInicio && tieneHoraFin) {
+          // Extraer solo HH:MM del formato TIME de PostgreSQL
+          const horaInicio = String(p.hora_inicio).slice(0, 5); // HH:MM
+          const horaFin = String(p.hora_fin).slice(0, 5); // HH:MM
+          tiempoProgramado = `
+            <p class="presentation-schedule">
+              <i class="fas fa-clock"></i>
+              <strong>Programado:</strong> ${horaInicio} - ${horaFin}
+            </p>
+          `;
+        }
+        
+        // Generar contenido del icono/previsualización
+        let iconContent = '';
+        if (imageExtensions.includes(fileExtension) && p.file_path) {
+          // Mostrar previsualización de imagen
+          iconContent = `<img src="${p.file_path}" alt="${p.name}" class="presentation-thumbnail" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'${iconClass}\' style=\'color: ${iconColor};\'></i>';">`;
+        } else {
+          // Mostrar icono para archivos que no son imágenes
+          iconContent = `<i class="${iconClass}" style="color: ${iconColor};"></i>`;
+        }
+        
+        return `
+        <div class="presentation-item ${isActive ? 'active' : ''}" data-id="${p.id}">
+          <div class="presentation-icon">
+            ${iconContent}
+          </div>
+          <div class="presentation-details">
+            <h3 class="presentation-name">${p.name}</h3>
+            <p class="presentation-date">${new Date(p.uploaded_at).toLocaleString('es-ES')}</p>
+            ${tiempoProgramado}
+          </div>
+          <div class="presentation-actions">
+            <button class="btn-delete" data-id="${p.id}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      }).join('');
+
+      // Event listener para eliminar
+      presentationsList.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation(); // Evitar que se active también el clic en el item
+          const id = e.currentTarget.dataset.id;
+          if (confirm('¿Estás seguro de eliminar esta presentación?')) {
+            await eliminarPresentacion(id);
+          }
+        });
+      });
+
+      // Hacer que toda la barra sea clickeable (excepto el botón de eliminar)
+      presentationsList.querySelectorAll('.presentation-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          // Solo activar si el clic no fue en el botón de eliminar
+          if (!e.target.closest('.btn-delete')) {
+            const id = item.dataset.id;
+            seleccionarPresentacion(id, presentations);
+          }
+        });
+      });
+    }
+
+    async function seleccionarPresentacion(id, presentations) {
+      currentPresentationId = parseInt(id);
+      const presentation = presentations.find(p => p.id === parseInt(id));
+      
+      if (presentation) {
+        const span = currentPresentation.querySelector('span');
+        if (span) {
+          span.textContent = presentation.name;
+        }
+        btnReproducir.disabled = false;
+        btnDetener.disabled = false;
+        
+        // Mostrar sección de programación
+        programacionSection.style.display = 'block';
+        
+        // Cargar configuración de programación
+        await cargarConfiguracionProgramacion();
+        
+        // Actualizar visualmente la selección sin recargar toda la lista
+        document.querySelectorAll('.presentation-item').forEach(item => {
+          if (parseInt(item.dataset.id) === currentPresentationId) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+        
+        // Mostrar mensaje de confirmación
+        mostrarMensaje(`Presentación "${presentation.name}" seleccionada`, 'success');
+      }
+    }
+    
+    // Cargar configuración de programación
+    async function cargarConfiguracionProgramacion() {
+      if (!currentPresentationId) return;
+      
+      try {
+        const response = await fetch(`/api/recordatorios/control/${currentPresentationId}`);
+        if (response.ok) {
+          const data = await response.json();
+          toggleAutomatico.checked = data.activarAutomatico || false;
+          horaInicio.value = data.horaInicio || '';
+          horaFin.value = data.horaFin || '';
+          
+          // Habilitar/deshabilitar campos según el toggle
+          actualizarEstadoCamposProgramacion();
+        }
+      } catch (error) {
+        console.error('Error al cargar configuración de programación:', error);
+      }
+    }
+    
+    // Actualizar estado de campos de programación
+    function actualizarEstadoCamposProgramacion() {
+      const isEnabled = toggleAutomatico.checked;
+      horaInicio.disabled = !isEnabled;
+      horaFin.disabled = !isEnabled;
+      // El botón de guardar siempre está activo
+    }
+    
+    // Event listeners para programación automática
+    toggleAutomatico.addEventListener('change', actualizarEstadoCamposProgramacion);
+    horaInicio.addEventListener('change', actualizarEstadoCamposProgramacion);
+    horaFin.addEventListener('change', actualizarEstadoCamposProgramacion);
+    
+    // Guardar programación
+    btnGuardarProgramacion.addEventListener('click', async () => {
+      if (!currentPresentationId) {
+        mostrarMensaje('Por favor, selecciona una presentación primero', 'error');
+        return;
+      }
+      
+      // Validar horas solo si la programación automática está activada
+      if (toggleAutomatico.checked) {
+        if (!horaInicio.value || !horaFin.value) {
+          mostrarMensaje('Por favor, completa ambas horas (inicio y fin)', 'error');
+          return;
+        }
+        
+        if (horaInicio.value >= horaFin.value) {
+          mostrarMensaje('La hora de inicio debe ser anterior a la hora de fin', 'error');
+          return;
+        }
+      }
+      
+      try {
+        const response = await fetch('/api/recordatorios/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            presentationId: currentPresentationId,
+            activarAutomatico: toggleAutomatico.checked,
+            horaInicio: horaInicio.value || null,
+            horaFin: horaFin.value || null
+          })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Error desconocido' }));
+          throw new Error(errorData.error || 'Error al guardar la programación');
+        }
+        
+        // Mostrar mensaje de éxito
+        mostrarMensaje('✓ Programación guardada exitosamente', 'success');
+        
+        // Recargar presentaciones para actualizar el timeline y la lista
+        await cargarPresentaciones();
+        
+        // También recargar la configuración de programación para actualizar los campos
+        await cargarConfiguracionProgramacion();
+      } catch (error) {
+        console.error('Error al guardar programación:', error);
+        // Mostrar mensaje de error
+        mostrarMensaje('✗ Error al guardar la programación: ' + error.message, 'error');
+      }
+    });
+
+    async function eliminarPresentacion(id) {
+      try {
+        const response = await fetch(`/api/recordatorios/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) throw new Error('Error al eliminar');
+
+        mostrarMensaje('Presentación eliminada', 'success');
+        if (currentPresentationId === id) {
+          currentPresentationId = null;
+          currentPresentation.querySelector('span').textContent = 'Ninguna';
+          btnReproducir.disabled = true;
+          btnDetener.disabled = true;
+          programacionSection.style.display = 'none';
+        }
+        cargarPresentaciones();
+      } catch (error) {
+        console.error('Error:', error);
+        mostrarMensaje('Error al eliminar la presentación', 'error');
+      }
+    }
+
+    async function actualizarControl() {
+      const controlData = {
+        showHora: toggleHora.checked,
+        formatoHora: formatoHora.value,
+        posicionHora: posicionHora.value
+      };
+
+      try {
+        await fetch('/api/recordatorios/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            presentationId: currentPresentationId,
+            action: 'update',
+            ...controlData
+          })
+        });
+      } catch (error) {
+        console.error('Error al actualizar control:', error);
+      }
+    }
+
+    function mostrarMensaje(texto, tipo = 'info') {
+      mensajeTexto.textContent = texto;
+      mensaje.className = `mensaje glass-card ${tipo}`;
+      mensaje.classList.remove('hidden');
+
+      setTimeout(() => {
+        mensaje.classList.add('hidden');
+      }, 5000);
+    }
+
+    // Cargar presentaciones al iniciar
+    cargarPresentaciones();
+
+    // Verificar si hay una presentación seleccionada al cargar
+    window.addEventListener('load', () => {
+      // Si hay presentaciones guardadas, intentar mantener la selección
+      setTimeout(() => {
+        if (currentPresentationId) {
+          const span = currentPresentation.querySelector('span');
+          if (span && span.textContent === 'Ninguna') {
+            // Si se perdió la selección, buscar en la lista
+            cargarPresentaciones();
+          }
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
+

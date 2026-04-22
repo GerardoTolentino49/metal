@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi perfil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/perfil.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/global-color.js"></script>
+  <script src="js/permisos.js"></script>
+</head>
+<body>
+  
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button active" data-tab="perfil">
+      <i class="fas fa-user"></i> Perfil
+    </button>
+
+  </div>
+</div>
+<script>
+  // Navegación del tab-switch
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof initializeNotificationsDropdown === 'function') {
+      initializeNotificationsDropdown();
+    }
+
+    const tabRoutes = {
+      inicio: 'inicio.html',
+      perfil: 'perfil.html',
+    };
+
+    const currentPage = window.location.pathname.split('/').pop() || 'perfil.html';
+
+    document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+      button.addEventListener('click', function() {
+        const targetPage = tabRoutes[this.dataset.tab];
+        if (!targetPage || targetPage === currentPage) {
+          return;
+        }
+        window.location.href = targetPage;
+      });
+    });
+  });
+</script>
+    <div class="page-layout page-layout-no-sidebar">
+      <aside class="profile-sidebar glass-card" aria-label="Navegacion del perfil" hidden>
+        <h3 class="sidebar-title">Mi cuenta</h3>
+        <nav class="sidebar-nav">
+          <a class="sidebar-link active" href="perfil.html">
+            <i class="fas fa-user"></i>
+            <span>Perfil</span>
+          </a>
+          <a class="sidebar-link" href="amonestaciones.html">
+            <i class="fas fa-triangle-exclamation"></i>
+            <span>Amonestaciones</span>
+          </a>
+          <a class="sidebar-link" href="usuario.html">
+            <i class="fas fa-key"></i>
+            <span>Permisos</span>
+          </a>
+          <a class="sidebar-link" href="faltas.html">
+            <i class="fas fa-clock"></i>
+            <span>Faltas y retardos</span>
+          </a>
+          <a class="sidebar-link" href="vacaciones.html">
+            <i class="fas fa-umbrella-beach"></i>
+            <span>Vacaciones</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="content-wrapper">
+        <!-- <div class="profile-header">
+          <h2>Mi perfil</h2>
+          <p>Administra tu información personal</p>
+        </div> -->
+
+        <div class="profile-container" style="margin-top:2%;">
+          <div class="profile-layout">
+            <section class="profile-hero-card glass-card">
+              <div class="profile-photo-container">
+                <div class="profile-photo-wrapper">
+                  <div class="profile-photo" id="profilePhoto">
+                    <div class="photo-placeholder" id="photoPlaceholder">
+                      <i class="fas fa-user"></i>
+                    </div>
+                    <img id="profilePhotoImg" src="" alt="Profile photo" style="display: none;">
+                    <div class="profile-photo-overlay"></div>
+                    <div class="profile-name-overlay">
+                      <h2 id="profileDisplayName">User</h2>
+                      <p class="profile-email-overlay" id="profileDisplayEmail">ejemplo@pdmmetal.com</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="profile-details-card glass-card">
+              <div class="profile-details-header">
+                <h3>Ficha del Empleado</h3>
+                <p>Resumen general del usuario logeado.</p>
+              </div>
+
+              <div class="profile-info-section">
+                <div class="employee-summary-grid" id="employeeSummaryGrid">
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Nombre completo</span>
+                    <strong class="employee-summary-value" id="profileFullName">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Fecha de nacimiento</span>
+                    <strong class="employee-summary-value" id="profileBirthDate">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Aniversario en la empresa</span>
+                    <strong class="employee-summary-value" id="profileCompanyAnniversary">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Correo</span>
+                    <strong class="employee-summary-value" id="profileEmail">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Contacto de emergencia</span>
+                    <strong class="employee-summary-value" id="profileEmergencyContact">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Telefono de emergencia</span>
+                    <strong class="employee-summary-value" id="profileEmergencyPhone">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Puesto</span>
+                    <strong class="employee-summary-value" id="profilePosition">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item">
+                    <span class="employee-summary-label">Departamento / Area</span>
+                    <strong class="employee-summary-value" id="profileDepartmentArea">No disponible</strong>
+                  </div>
+                  <div class="employee-summary-item employee-summary-item-wide">
+                    <span class="employee-summary-label">Supervisor</span>
+                    <strong class="employee-summary-value" id="profileSupervisor">No disponible</strong>
+                  </div>
+                </div>
+
+                <div class="info-note">
+                  <i class="fas fa-info-circle"></i>
+                  <span>Esta informacion se llena automaticamente con los datos proporcionados por RH.</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="profile-password-card glass-card">
+            <form id="passwordForm">
+              <div class="form-group">
+                <label for="currentPassword">Contraseña Actual</label>
+                <div class="password-input-wrapper">
+                  <input type="password" id="currentPassword" name="currentPassword" placeholder="Ingresa tu contraseña actual" required>
+                  <button type="button" class="password-toggle" data-target="currentPassword" aria-label="Show current password" title="Mostrar/Ocultar contraseña">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">Nueva Contraseña</label>
+                <div class="password-input-wrapper">
+                  <input type="password" id="newPassword" name="newPassword" placeholder="Ingresa tu nueva contraseña" required>
+                  <button type="button" class="password-toggle" data-target="newPassword" aria-label="Show new password" title="Mostrar/Ocultar contraseña">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                <div class="password-input-wrapper">
+                  <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirma tu nueva contraseña" required>
+                  <button type="button" class="password-toggle" data-target="confirmPassword" aria-label="Show confirm password" title="Mostrar/Ocultar contraseña">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-save">Change Password</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <input type="file" id="photoInput" accept="image/*" style="display: none;">
+
+  <script>
+    // Verificar autenticación
+    document.addEventListener('DOMContentLoaded', function() {
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+      if (!isLoggedIn || isLoggedIn !== 'true') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Función para verificar si hay una orden activa
+      function hasActiveOrder() {
+        const activeSession = localStorage.getItem('activeSession');
+        if (activeSession) {
+          try {
+            const session = JSON.parse(activeSession);
+            if (session.orderNumber && session.startTime) {
+              return true;
+            }
+          } catch (e) {
+            console.error('Error al parsear activeSession:', e);
+          }
+        }
+        return false;
+      }
+
+      // Prevenir cerrar la pestaña si hay una orden activa
+      window.addEventListener('beforeunload', function(e) {
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          e.returnValue = 'You have an active order. Are you sure you want to close the tab? You must finish the order first from the Design page.';
+          return e.returnValue;
+        }
+      });
+
+      // Cargar datos del perfil desde la base de datos
+      loadProfileData();
+
+      // Subir foto
+      const photoInput = document.getElementById('photoInput');
+      if (photoInput) {
+        photoInput.addEventListener('change', handlePhotoUpload);
+      }
+
+      // Cambiar contraseña
+      document.getElementById('passwordForm').addEventListener('submit', changePassword);
+      setupPasswordVisibilityToggles();
+    });
+
+    async function loadProfileData() {
+      const token = localStorage.getItem('sessionToken');
+      const username = localStorage.getItem('username') || 'User';
+      const localProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      const employeeIdentity = getStoredEmployeeNumber(localProfile, token);
+      let employeeNumber = employeeIdentity.value;
+
+      console.log('[perfil] Numero de empleado detectado:', employeeNumber || '(vacio)', '| fuente:', employeeIdentity.source);
+
+      if (employeeNumber && !isNumericEmployeeId(employeeNumber)) {
+        console.log('[perfil][paso 1] Valor detectado no numerico, se tratara como username:', employeeNumber);
+        const resolvedNumber = await resolveEmployeeNumberFromUsername(employeeNumber);
+        if (resolvedNumber) {
+          employeeNumber = resolvedNumber;
+          console.log('[perfil][paso 2] numero_empleado obtenido desde usuarios:', employeeNumber);
+        } else {
+          console.warn('[perfil] No se pudo resolver numero_empleado desde usuarios; se cancela consulta a /api/empleados por seguridad.');
+          employeeNumber = '';
+        }
+      }
+
+      let employee = token ? await fetchEmployeeFromMe(token) : null;
+
+      if (!employee && employeeNumber) {
+        console.log('[perfil][paso 3] Consultando tabla empleados por numero_empleado:', employeeNumber);
+        employee = await fetchEmployeeById(employeeNumber);
+      }
+
+      if (employee) {
+        renderProfileData(employee, username);
+        return;
+      }
+
+      renderProfileData(localProfile, username);
+    }
+
+    function isNumericEmployeeId(value) {
+      return /^\d+$/.test(String(value || '').trim());
+    }
+
+    async function resolveEmployeeNumberFromUsername(username) {
+      const cleanUsername = String(username || '').trim();
+      if (!cleanUsername) return '';
+
+      try {
+        console.log('[perfil][paso 1] Buscando username en usuarios:', cleanUsername);
+        const response = await fetch(`/api/usuarios/numero-empleado/${encodeURIComponent(cleanUsername)}`, {
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          console.warn('[perfil] Fallo endpoint /api/usuarios/numero-empleado/:username con status:', response.status);
+          return '';
+        }
+
+        const data = await response.json();
+        const numeroEmpleado = String(data?.numero_empleado || '').trim();
+        console.log('[perfil][paso 2] Respuesta de usuarios.numero_empleado:', numeroEmpleado || '(vacio)');
+        return isNumericEmployeeId(numeroEmpleado) ? numeroEmpleado : '';
+      } catch (error) {
+        console.error('Error al resolver numero_empleado por username:', error);
+        return '';
+      }
+    }
+
+    function getStoredEmployeeNumber(localProfile = {}, token = '') {
+      const username = localStorage.getItem('username');
+
+      let loggedInUser = null;
+      let userInfo = null;
+
+      try {
+        loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+      } catch (error) {
+        loggedInUser = null;
+      }
+
+      try {
+        userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+      } catch (error) {
+        userInfo = null;
+      }
+
+      const tokenPayload = parseJwtPayload(token);
+
+      const candidates = [
+        { source: 'token.username', value: tokenPayload?.username },
+        { source: 'token.employeeNumber', value: tokenPayload?.employeeNumber || tokenPayload?.employee_number },
+        { source: 'loggedInUser.employeeNumber', value: loggedInUser?.employeeNumber },
+        { source: 'loggedInUser.employee_number', value: loggedInUser?.employee_number },
+        { source: 'userInfo.employeeNumber', value: userInfo?.employeeNumber },
+        { source: 'userInfo.employee_number', value: userInfo?.employee_number },
+        { source: 'localStorage.username', value: username },
+        { source: 'userProfile.numero_empleado', value: localProfile?.numero_empleado },
+        { source: 'userProfile.employeeNumber', value: localProfile?.employeeNumber }
+      ];
+
+      for (const candidate of candidates) {
+        const normalized = String(candidate.value || '').trim();
+        if (normalized) {
+          return {
+            value: normalized,
+            source: candidate.source
+          };
+        }
+      }
+
+      return {
+        value: '',
+        source: 'none'
+      };
+    }
+
+    function parseJwtPayload(token) {
+      try {
+        if (!token || typeof token !== 'string') return null;
+        const parts = token.split('.');
+        if (parts.length !== 3) return null;
+
+        const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+        const json = atob(padded);
+        return JSON.parse(json);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    async function fetchEmployeeFromMe(token) {
+      try {
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch('/api/employees/me', {
+          headers
+        });
+
+        if (!response.ok) {
+          return null;
+        }
+
+        const data = await response.json();
+        return data && data.success && data.employee ? data.employee : null;
+      } catch (error) {
+        console.error('Error al consultar /api/employees/me:', error);
+        return null;
+      }
+    }
+
+    async function fetchEmployeeById(employeeId) {
+      try {
+        console.log('[perfil] Consultando empleado por ID:', employeeId);
+        const response = await fetch(`/api/empleados/${encodeURIComponent(employeeId)}`, { cache: 'no-store' });
+        if (!response.ok) {
+          return null;
+        }
+        const data = await response.json();
+        return data && typeof data === 'object' ? data : null;
+      } catch (error) {
+        console.error('Error al consultar /api/empleados/:id', error);
+        return null;
+      }
+    }
+
+    function renderProfileData(employee, fallbackUsername) {
+      const fullName = firstValue(employee, ['nombre_completo', 'fullName', 'nombre']) || fallbackUsername || 'Usuario';
+      const email = firstValue(employee, ['correo', 'email', 'mail']) || 'No disponible';
+      const birthDateRaw = firstValue(employee, ['fecha_cumpleanos', 'fecha_nacimiento', 'birth_date', 'nacimiento', 'fechaNacimiento']);
+      const startDateRaw = firstValue(employee, ['fecha_ingreso', 'hire_date', 'fechaIngreso', 'fecha_alta']);
+      const emergencyContact = firstValue(employee, ['contacto_emergencia', 'nombre_contacto_emergencia', 'emergency_contact', 'contactoEmergencia']) || 'No disponible';
+      const emergencyPhone = firstValue(employee, ['telefono_emergencia', 'telefonoEmergencia', 'celular_emergencia', 'emergency_phone', 'telefono_contacto_emergencia']) || 'No disponible';
+      const position = firstValue(employee, ['puesto', 'position', 'cargo']) || 'No disponible';
+      const department = firstValue(employee, ['departamento', 'department']) || '';
+      const area = firstValue(employee, ['area']) || '';
+      const supervisor = firstValue(employee, ['supervisor', 'manager']) || 'No disponible';
+      const photoUrl = firstValue(employee, ['foto_url', 'photo', 'photo_url', 'avatar']);
+
+      const departmentArea = [department, area].filter(Boolean).join(' / ') || 'No disponible';
+      const formattedBirthDate = formatDateValue(birthDateRaw);
+      const companyAnniversary = formatAnniversary(startDateRaw);
+
+      setTextContent('profileDisplayName', fullName);
+      setTextContent('profileDisplayEmail', email);
+      setTextContent('profileFullName', fullName);
+      setTextContent('profileBirthDate', formattedBirthDate);
+      setTextContent('profileCompanyAnniversary', companyAnniversary);
+      setTextContent('profileEmail', email);
+      setTextContent('profileEmergencyContact', emergencyContact);
+      setTextContent('profileEmergencyPhone', emergencyPhone);
+      setTextContent('profilePosition', position);
+      setTextContent('profileDepartmentArea', departmentArea);
+      setTextContent('profileSupervisor', supervisor);
+
+      if (photoUrl) {
+        setProfilePhoto(photoUrl);
+      }
+
+      localStorage.setItem('userProfile', JSON.stringify({
+        ...employee,
+        fullName,
+        email,
+        photo: photoUrl || ''
+      }));
+    }
+
+    function firstValue(obj, keys) {
+      if (!obj || typeof obj !== 'object') return '';
+      for (const key of keys) {
+        const value = obj[key];
+        if (value !== null && value !== undefined && String(value).trim() !== '') {
+          return String(value).trim();
+        }
+      }
+      return '';
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase();
+    }
+
+    function setTextContent(elementId, value) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.textContent = value || 'No disponible';
+      }
+    }
+
+    function formatDateValue(rawValue) {
+      if (!rawValue) return 'No disponible';
+      const date = new Date(rawValue);
+      if (Number.isNaN(date.getTime())) return String(rawValue);
+      return date.toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    function formatAnniversary(rawStartDate) {
+      if (!rawStartDate) return 'No disponible';
+      const startDate = new Date(rawStartDate);
+      if (Number.isNaN(startDate.getTime())) return String(rawStartDate);
+
+      const now = new Date();
+      let years = now.getFullYear() - startDate.getFullYear();
+      const hasNotReachedAnniversary =
+        now.getMonth() < startDate.getMonth() ||
+        (now.getMonth() === startDate.getMonth() && now.getDate() < startDate.getDate());
+
+      if (hasNotReachedAnniversary) {
+        years -= 1;
+      }
+
+      const yearsLabel = years > 0 ? ` (${years} ${years === 1 ? 'año' : 'años'})` : '';
+      return `${formatDateValue(rawStartDate)}${yearsLabel}`;
+    }
+
+    function setProfilePhoto(photoUrl) {
+      const img = document.getElementById('profilePhotoImg');
+      const placeholder = document.getElementById('photoPlaceholder');
+      if (!img || !placeholder || !photoUrl) return;
+
+      img.src = photoUrl;
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+      img.onerror = function() {
+        this.style.display = 'none';
+        placeholder.style.display = 'flex';
+      };
+    }
+
+    async function handlePhotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Validar tamaño (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('The image is too large. Please select an image smaller than 5MB.', 'error');
+        return;
+      }
+
+      // Validar tipo
+      if (!file.type.startsWith('image/')) {
+        showNotification('Please select a valid image file.', 'error');
+        return;
+      }
+
+      // Buscar el ID del empleado
+      let employeeId = null;
+      try {
+        const token = localStorage.getItem('sessionToken');
+        const meData = await fetchEmployeeFromMe(token);
+        if (meData && meData.id) {
+          employeeId = meData.id;
+        }
+      } catch (error) {
+        console.error('Error al buscar usuario:', error);
+      }
+
+      if (!employeeId) {
+        showNotification('Could not find your information in the system.', 'error');
+        return;
+      }
+
+      // Mostrar indicador de carga
+      const uploadBtn = document.querySelector('.settings-photo-btn');
+      const originalText = uploadBtn ? uploadBtn.innerHTML : '';
+      if (uploadBtn) {
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+        uploadBtn.disabled = true;
+      }
+
+      // Crear FormData para enviar el archivo
+      const formData = new FormData();
+      formData.append('foto', file);
+
+      try {
+        const response = await fetch(`/api/empleados/${employeeId}/foto`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Actualizar la imagen en la interfaz
+          // Usar la URL del servidor
+          const updatedPhotoUrl = data?.foto_url || data?.employee?.foto_url || '';
+          if (updatedPhotoUrl) {
+            setProfilePhoto(updatedPhotoUrl);
+          }
+
+          // Guardar en localStorage también
+          const profileData = JSON.parse(localStorage.getItem('userProfile') || '{}');
+          profileData.photo = updatedPhotoUrl;
+          localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+          showNotification('Profile photo updated successfully', 'success');
+        } else {
+          showNotification(data.error || 'Error uploading photo', 'error');
+        }
+      } catch (error) {
+        console.error('Error al subir foto:', error);
+        showNotification('Error connecting to server', 'error');
+      } finally {
+        // Restaurar botón
+        if (uploadBtn) {
+          uploadBtn.innerHTML = originalText;
+          uploadBtn.disabled = false;
+        }
+        // Limpiar input para permitir seleccionar el mismo archivo de nuevo
+        e.target.value = '';
+      }
+    }
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type = 'success') {
+      // Crear elemento de notificación
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      
+      const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas ${icon}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+
+      // Agregar al body
+      document.body.appendChild(notification);
+
+      // Animar entrada
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+
+      // Remover después de 3 segundos
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    async function changePassword(e) {
+      e.preventDefault();
+
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        showNotification('Please fill in all fields.', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showNotification('Passwords do not match.', 'error');
+        return;
+      }
+
+      if (newPassword === currentPassword) {
+        showNotification('New password must be different from your current password.', 'error');
+        return;
+      }
+
+      const token = localStorage.getItem('sessionToken');
+
+      // Mostrar indicador de carga
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing...';
+      submitBtn.disabled = true;
+
+      try {
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch('/api/employees/change-password', {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({
+            currentPassword: currentPassword,
+            newPassword: newPassword
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          showNotification('Password changed successfully', 'success');
+          // Limpiar formulario
+          document.getElementById('passwordForm').reset();
+        } else {
+          showNotification(data.error || 'Error changing password', 'error');
+        }
+      } catch (error) {
+        console.error('Error al cambiar contraseña:', error);
+        showNotification('Error connecting to server', 'error');
+      } finally {
+        // Restaurar botón
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+
+    function setupPasswordVisibilityToggles() {
+      const toggleButtons = document.querySelectorAll('.password-toggle');
+
+      toggleButtons.forEach((button) => {
+        button.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+
+          const isVisible = input.type === 'text';
+          input.type = isVisible ? 'password' : 'text';
+
+          const icon = this.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-eye', isVisible);
+            icon.classList.toggle('fa-eye-slash', !isVisible);
+          }
+
+          const actionText = isVisible ? 'Show' : 'Hide';
+          this.setAttribute('title', `${actionText} password`);
+          this.setAttribute('aria-label', `${actionText} password`);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
+

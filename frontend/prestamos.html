@@ -1,0 +1,3675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Préstamo de equipos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/prestamos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://unpkg.com/heic2any"></script>
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+      <!-- Warehouse -->
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics</a>
+        </div>
+      </div>
+      
+      <!-- Maintenance -->
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenemiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+            <div class="menu-item has-submenu visible" id="tareasMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Tareas (Nuevo)
+        <div class="submenu" id="tareasSubmenu">
+          <a href="tareas_personales.html" class="submenu-item">Tareas Personales</a>
+        </div>
+      </div>
+      
+      <!-- Administración -->
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Ajustes
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="passwordsLink">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="form-container">
+      <h2 class="form-title">Información del Empleado</h2>
+      
+      <div class="id-search">
+        <div class="form-group" style="position: relative;">
+          <label for="employeeId">ID o Nombre del Empleado</label>
+          <input type="text" id="employeeId" name="employeeId" placeholder="Ingresa el ID o nombre del empleado" autocomplete="off" required>
+          <div id="suggestionsList" style="display:none; position:absolute; top:100%; left:0; right:0; background:#111; border:1px solid #333; border-radius:10px; margin-top:8px; z-index:1000; max-height:280px; overflow:auto;"></div>
+        </div>
+        <button type="button" class="submit-button" id="searchButton" title="Buscar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="#fff" stroke-width="2"/>
+            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="info-container">
+        <div class="employee-photo-wrapper">
+          <div class="photo-container employee-photo" id="employeePhoto" onclick="document.getElementById('inputEmployeePhoto').click()">
+            <span>Foto del Empleado</span>
+          </div>
+          <input type="file" id="inputEmployeePhoto" accept="image/*" style="display: none;" onchange="handleEmployeePhoto(event)">
+          <div class="status-switch-container">
+            <span class="status-label" id="statusLabel">Inactivo</span>
+          </div>
+        </div>
+        <div class="info-fields">
+          <div class="form-group">
+            <label for="fullName">Nombre Completo</label>
+            <input type="text" id="fullName" name="fullName" disabled readonly style="cursor: not-allowed; opacity: 0.8;">
+          </div>
+          <div class="form-group">
+            <label for="supervisor">Supervisor</label>
+            <input type="text" id="supervisor" name="supervisor" disabled readonly style="cursor: not-allowed; opacity: 0.8;">
+          </div>
+          <div class="form-group">
+            <label for="position">Puesto</label>
+            <input type="text" id="position" name="position" disabled readonly style="cursor: not-allowed; opacity: 0.8;">
+          </div>
+          <div class="form-group">
+            <label for="hireDate">Fecha de Ingreso</label>
+            <input type="date" id="hireDate" name="hireDate" disabled readonly style="cursor: not-allowed; opacity: 0.8;">
+          </div>
+        </div>
+      </div>
+
+      <div class="last-support">
+        <h3>Último Apoyo Proporcionado</h3>
+        <p><strong>Fecha:</strong> <span class="date">---</span></p>
+      </div>
+
+      <div class="support-buttons">
+        <button type="button" class="submit-button" id="equipmentLoanButton">Solicitar préstamo de equipo</button>
+      </div>
+
+      <div class="support-history">
+        <h3 class="form-title">Historial de Apoyos</h3>
+        <div class="history-container">
+          <div class="history-table-container">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Folio</th>
+                  <th>Estado de la Solicitud</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="historyTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-section">
+        <p class="last-modified"><span id="lastModifiedBy">-</span></p>
+        <button type="button" class="save-button" id="saveButton" style="display: none;">Guardar Cambios</button>
+        <button type="button" class="save-button" id="openAdditionalInfoModal" style="display: none; background: #2196F3; margin-left: 10px;">Ver Información Adicional</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="successNotification" class="success-notification" style="display:none;">
+    Cambios guardados correctamente
+  </div>
+
+  <!-- Contenedor para notificaciones en la esquina superior derecha -->
+  <div id="notificationContainer" style="position: fixed; top: 100px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
+
+  <div id="uniqueSupportModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Advertencia</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Este es un apoyo único. Una vez otorgado, no podrá solicitar más apoyos en el futuro.</p>
+        <p>¿Desea continuar?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-button cancel-button">Cancelar</button>
+        <button class="modal-button confirm-button">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Préstamo de Equipo -->
+  <div id="equipmentLoanModal" class="modal" style="display:none;">
+    <div class="modal-content" style="background: white; color: #333; max-width: 600px;">
+      <div class="modal-header" style="background: #2196F3; color: white; border-radius: 30px 30px 0 0;">
+        <h3 style="color: white;">Solicitar Préstamo de Equipo</h3>
+        <button class="close-modal" onclick="closeEquipmentLoanModal()" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: white; padding: 30px;">
+        <form id="equipmentLoanForm">
+          <!-- Sección Hardware -->
+          <div class="checklist-section">
+            <h4 style="color: #2196F3; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #2196F3; padding-bottom: 8px;">Hardware</h4>
+            <div class="checklist-items">
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="monitor" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Monitor</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="teclado" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Teclado</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="mouse" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Mouse</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="base_laptop" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Base para Laptop</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="docking" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Docking</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="hardware" value="usb" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">USB</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sección Software -->
+          <div class="checklist-section" style="margin-top: 25px;">
+            <h4 style="color: #4CAF50; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #4CAF50; padding-bottom: 8px;">Software</h4>
+            <div class="checklist-items">
+              <label class="switch-item">
+                <input type="checkbox" name="software" value="autodesk" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Autodesk</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="software" value="antivirus" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Antivirus</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="software" value="windows" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Windows</span>
+              </label>
+              <label class="switch-item">
+                <input type="checkbox" name="software" value="dropbox" class="equipment-checkbox">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Dropbox</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Fechas -->
+          <div class="dates-section" style="margin-top: 25px;">
+            <h4 style="color: #FF9800; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #FF9800; padding-bottom: 8px;">Fechas</h4>
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div class="form-group">
+                <label for="pickupDate" style="color: #333; font-weight: 600; display: block; margin-bottom: 8px;">Fecha de Retiro</label>
+                <input type="date" id="pickupDate" name="pickupDate" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; color: #333;">
+              </div>
+              <div class="form-group">
+                <label for="returnDate" style="color: #333; font-weight: 600; display: block; margin-bottom: 8px;">Fecha de Devolución</label>
+                <input type="date" id="returnDate" name="returnDate" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; color: #333;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="form-group" style="margin-top: 20px;">
+            <label for="equipmentNotes" style="color: #333; font-weight: 600; display: block; margin-bottom: 8px;">Observaciones (opcional)</label>
+            <textarea id="equipmentNotes" name="equipmentNotes" rows="3" placeholder="Agregue notas adicionales..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; resize: vertical; color: #333;"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="background: #f5f5f5; border-radius: 0 0 30px 30px;">
+        <button class="modal-button cancel-button" onclick="closeEquipmentLoanModal()" style="background: #757575;">Cancelar</button>
+        <button class="modal-button confirm-button" onclick="submitEquipmentLoan()" style="background: #2196F3;">Enviar Solicitud</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="addEmployeeModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Agregar Nuevo Empleado</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addEmployeeForm">
+          <div class="form-group">
+            <label for="newEmployeeId">ID del Empleado</label>
+            <input type="text" id="newEmployeeId" name="newEmployeeId" required>
+          </div>
+          <div class="form-group">
+            <label for="newEmployeeName">Nombre Completo</label>
+            <input type="text" id="newEmployeeName" name="newEmployeeName" required>
+          </div>
+          <div class="form-group">
+            <label for="newEmployeeSupervisor">Supervisor</label>
+            <select id="newEmployeeSupervisor" name="newEmployeeSupervisor" required>
+              <option value="">Seleccionar supervisor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newEmployeePosition">Puesto</label>
+            <input type="text" id="newEmployeePosition" name="newEmployeePosition" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-button cancel-button" id="cancelAddEmployee">Cancelar</button>
+        <button class="modal-button confirm-button" id="confirmAddEmployee">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Información Adicional -->
+  <div id="additionalInfoModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Información Adicional</h3>
+        <button class="close-modal" onclick="closeAdditionalInfoModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="voucher-info">
+          <h3 class="form-title">Información del Vale</h3>
+          <div class="voucher-grid">
+            <div class="voucher-field">
+              <label for="folio">Folio</label>
+              <input type="text" id="folio" disabled>
+            </div>
+            <div class="voucher-field">
+              <label for="valeStatus">Entrega del Vale Original</label>
+              <select id="valeStatus" disabled>
+                <option value="entregado">Entregado</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+            <div class="voucher-field">
+              <label for="tipoApoyo">Tipo de Apoyo</label>
+              <select id="tipoApoyo">
+                <option value="simple">Sencillo</option>
+                <option value="mediano">Mediano</option>
+                <option value="unico">Único</option>
+                <option value="Herramienta">Herramienta</option>
+              </select>
+            </div>
+            <div class="voucher-field" style="grid-column: span 3;">
+              <label for="description">Descripción del Requerimiento</label>
+              <textarea id="description" disabled></textarea>
+            </div>
+            <div class="voucher-field">
+              <label for="materialOutDate">Fecha de Salida</label>
+              <input type="date" id="materialOutDate" disabled>
+            </div>
+            <div class="voucher-field">
+              <label for="materialReturnDate">Fecha de Regreso</label>
+              <input type="date" id="materialReturnDate" disabled>
+            </div>
+            <div class="voucher-field">
+              <label for="manualLastSupportDate">Última Modificación</label>
+              <input type="datetime-local" id="manualLastSupportDate" name="manualLastSupportDate">
+            </div>
+            <div class="voucher-field" style="grid-column: span 2;">
+              <label for="materialStatus">Estatus del Material</label>
+              <input type="text" id="materialStatus" disabled>
+            </div>
+            <div class="voucher-field" style="grid-column: span 1;">
+              <label for="toolLoan">Préstamo de Herramienta</label>
+              <textarea id="toolLoan" disabled placeholder="Ingrese la herramienta prestada"></textarea>
+            </div>
+            <div class="voucher-field" style="grid-column: span 3;">
+              <label for="notes">Observaciones Generales (Notas)</label>
+              <textarea id="notes" disabled></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="evidence-section">
+          <h3 class="form-title">Evidencias</h3>
+          <div class="evidence-grid">
+              <div class="evidence-item">
+                  <div class="photo-container" id="evidencia1" onclick="document.getElementById('inputEvidencia1').click()">
+                      <span>Foto 1</span>
+                  </div>
+                  <input type="file" id="inputEvidencia1" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 1)">
+              </div>
+              <div class="evidence-item">
+                  <div class="photo-container" id="evidencia2" onclick="document.getElementById('inputEvidencia2').click()">
+                      <span>Foto 2</span>
+                  </div>
+                  <input type="file" id="inputEvidencia2" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 2)">
+              </div>
+              <div class="evidence-item">
+                  <div class="photo-container" id="evidencia3" onclick="document.getElementById('inputEvidencia3').click()">
+                      <span>Foto 3</span>
+                  </div>
+                  <input type="file" id="inputEvidencia3" accept="image/*" style="display: none;" onchange="handleFileSelect(event, 3)">
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="modal-button confirm-button" id="saveButtonModal">Guardar Cambios</button>
+        <button type="button" class="modal-button cancel-button" onclick="closeAdditionalInfoModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar todos los empleados -->
+  <div id="allEmployeesModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:90%;max-height:90%;overflow:auto;">
+      <div class="modal-header">
+        <h3>Lista de Todos los Empleados</h3>
+        <button class="close-modal" onclick="closeAllEmployeesModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Barra de búsqueda -->
+        <div class="search-container" style="margin-bottom: 20px;">
+          <div class="search-box" style="position: relative; max-width: 400px;">
+            <input 
+              type="text" 
+              id="employeeSearchInput" 
+              placeholder="Buscar por nombre..." 
+              style="width: 100%; padding: 12px 16px; padding-left: 45px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; background: #fff; color: #333; transition: border-color 0.3s ease;"
+              oninput="validateSearchInput(this)"
+              onpaste="validateSearchInput(this)"
+            >
+            <i class="fas fa-search" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #666; font-size: 16px;"></i>
+            <div id="searchError" class="error-message" style="display: none; color: #dc3545; font-size: 12px; margin-top: 5px; text-align: center;">
+              Solo se permiten letras y espacios
+            </div>
+          </div>
+        </div>
+        
+        <div class="employees-table-container">
+          <table class="employees-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th class="sortable-header" onclick="sortTable('id')" style="cursor: pointer;">
+                  ID <i class="fas fa-sort" style="margin-left: 5px; opacity: 0.5;"></i>
+                </th>
+                <th class="sortable-header" onclick="sortTable('nombre')" style="cursor: pointer;">
+                  Nombre Completo <i class="fas fa-sort" style="margin-left: 5px; opacity: 0.5;"></i>
+                </th>
+                <th class="sortable-header" onclick="sortTable('supervisor')" style="cursor: pointer;">
+                  Supervisor <i class="fas fa-sort" style="margin-left: 5px; opacity: 0.5;"></i>
+                </th>
+                <th class="sortable-header" onclick="sortTable('puesto')" style="cursor: pointer;">
+                  Puesto <i class="fas fa-sort" style="margin-left: 5px; opacity: 0.5;"></i>
+                </th>
+                <th>Fecha de Ingreso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="allEmployeesTableBody">
+              <!-- El contenido se llenará dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-button download-button" onclick="downloadEmployeesExcel()">
+          <i class="fas fa-download" style="margin-right:8px;"></i>
+          Descargar Excel
+        </button>
+        <button class="modal-button cancel-button" onclick="closeAllEmployeesModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar apoyos pendientes de todos los empleados -->
+  <div id="pendingSupportsModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:95%;max-height:90%;overflow:auto;">
+      <div class="modal-header">
+        <h3>Apoyos Pendientes - Todos los Empleados</h3>
+        <button class="close-modal" onclick="closePendingSupportsModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="employees-table-container">
+          <table class="employees-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Nombre del empleado</th>
+                <th>Supervisor</th>
+                <th>Tipo de apoyo</th>
+                <th>Folio</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody id="pendingSupportsTableBody">
+              <!-- Contenido dinámico -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Controles de paginación -->
+        <div class="paginacion-container" id="pendingSupportsPaginacionContainer" style="display: none; margin-top: 20px;">
+          <div class="paginacion-info">
+            <span id="pendingSupportsPaginacionInfo">Página 1 de 1</span>
+          </div>
+          <div class="paginacion-controles">
+            <button class="btn-paginacion" id="pendingSupportsBtnPrimera" title="Primera página">
+              <i class="fas fa-angle-double-left"></i>
+            </button>
+            <button class="btn-paginacion" id="pendingSupportsBtnAnterior" title="Página anterior">
+              <i class="fas fa-angle-left"></i>
+            </button>
+            <div class="paginacion-numeros" id="pendingSupportsPaginacionNumeros">
+              <!-- Los números de página se generarán dinámicamente -->
+            </div>
+            <button class="btn-paginacion" id="pendingSupportsBtnSiguiente" title="Página siguiente">
+              <i class="fas fa-angle-right"></i>
+            </button>
+            <button class="btn-paginacion" id="pendingSupportsBtnUltima" title="Última página">
+              <i class="fas fa-angle-double-right"></i>
+            </button>
+          </div>
+          <div class="paginacion-opciones">
+            <label for="pendingSupportsPorPagina">Apoyos por página:</label>
+            <select id="pendingSupportsPorPagina">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sidebar.js"></script>
+  <script>
+    // Función para manejar la foto del empleado
+    function handleEmployeePhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Mostrar preview en el contenedor
+      const container = document.getElementById('employeePhoto');
+      const reader = new FileReader();
+      reader.onload = function(e) 
+      {
+        container.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+      };
+      reader.readAsDataURL(file);
+
+      // Subir la foto al servidor
+      const formData = new FormData();
+      formData.append('foto', file);
+      const employeeId = document.getElementById('employeeId').value;
+      if (employeeId) 
+      {
+        formData.append('employeeId', employeeId);
+        
+        fetch('/api/empleados/upload-photo', 
+        {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) 
+          {
+            console.log('Foto subida exitosamente');
+          } else 
+          {
+            console.error('Error al subir foto:', data.error);
+          }
+        })
+        .catch(error => 
+        {
+          console.error('Error al subir foto:', error);
+        });
+      }
+    }
+
+  </script>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script src="js/utils.js"></script>
+  <script>
+    // Variables globales para el historial y empleados
+    let supportHistory = []; // Inicializar el array vacío
+    let originalSupportHistory = []; // Copia completa del historial original
+    let currentEditingSupportId = null;
+    let allEmployees = []; // Variable global para almacenar todos los empleados
+    let isFilteredByPending = false; // Indicador si se está filtrando por pendientes
+    
+    // Variables globales para el ordenamiento
+    let currentSortColumn = null;
+    let currentSortDirection = 'asc';
+
+    // Funciones para abrir/cerrar el modal de Información Adicional
+    function openAdditionalInfoModal() {
+      const modal = document.getElementById('additionalInfoModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('active');
+        // Ocultar los botones inferiores cuando el modal está abierto
+        const bottomButtons = document.querySelectorAll('.bottom-action-button');
+        bottomButtons.forEach(button => {
+          button.style.display = 'none';
+        });
+      }
+    }
+
+    function closeAdditionalInfoModal() {
+      const modal = document.getElementById('additionalInfoModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+        // Mostrar los botones inferiores cuando el modal está cerrado
+        const bottomButtons = document.querySelectorAll('.bottom-action-button');
+        bottomButtons.forEach(button => {
+          button.style.display = '';
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const response = await fetch('/api/auth/check-permissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else 
+        {
+          switch(currentPage) 
+          {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) 
+        {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+        document.body.classList.add('sidebar-ready');
+      } catch (e) {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+    });
+
+    // Función para cargar supervisores en el select
+    async function cargarSupervisores() {
+      try {
+        console.log('Cargando supervisores...');
+        const response = await fetch('/api/empleados/supervisores-activos');
+        console.log('Respuesta del servidor:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`Error al cargar supervisores: ${response.status}`);
+        }
+        const supervisores = await response.json();
+        console.log('Supervisores obtenidos:', supervisores);
+        
+        // Cargar en el select de agregar empleado
+        const selectNuevoSupervisor = document.getElementById('newEmployeeSupervisor');
+        if (selectNuevoSupervisor) {
+          selectNuevoSupervisor.innerHTML = '<option value="">Seleccionar supervisor</option>';
+          supervisores.forEach(supervisor => {
+            const option = document.createElement('option');
+            option.value = supervisor.nombre_completo;
+            option.textContent = supervisor.nombre_completo;
+            selectNuevoSupervisor.appendChild(option);
+          });
+          console.log('Select de agregar actualizado con', supervisores.length, 'supervisores');
+        }
+      } catch (error) {
+        console.error('Error al cargar supervisores:', error);
+        // Mostrar mensaje de error al usuario
+        const selectNuevoSupervisor = document.getElementById('newEmployeeSupervisor');
+        if (selectNuevoSupervisor) {
+          selectNuevoSupervisor.innerHTML = '<option value="">Error al cargar supervisores</option>';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkPermissions);
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const addEmployeeModal = document.getElementById('addEmployeeModal');
+      const addEmployeeButton = document.getElementById('addEmployeeButton');
+      const cancelAddEmployeeButton = document.getElementById('cancelAddEmployee');
+      const confirmAddEmployeeButton = document.getElementById('confirmAddEmployee');
+
+      // Verificar que los elementos existan antes de agregar listeners
+      if (addEmployeeButton) {
+        addEmployeeButton.addEventListener('click', async () => 
+        {
+          await cargarSupervisores();
+          if (addEmployeeModal) {
+            addEmployeeModal.style.display = 'flex';
+          }
+        });
+      }
+
+      function closeModal() {
+        if (addEmployeeModal) {
+          addEmployeeModal.style.display = 'none';
+        }
+        const form = document.getElementById('addEmployeeForm');
+        if (form) {
+          form.reset();
+        }
+      }
+
+      if (addEmployeeModal) {
+        const closeModalButton = addEmployeeModal.querySelector('.close-modal');
+        if (closeModalButton) {
+          closeModalButton.addEventListener('click', closeModal);
+        }
+      }
+
+      if (cancelAddEmployeeButton) {
+        cancelAddEmployeeButton.addEventListener('click', closeModal);
+      }
+
+      if (confirmAddEmployeeButton) {
+        confirmAddEmployeeButton.addEventListener('click', async () => 
+        {
+          const form = document.getElementById('addEmployeeForm');
+          if (!form || !form.checkValidity()) 
+          {
+            if (form) form.reportValidity();
+            return;
+          }
+
+        const formData = new FormData();
+        formData.append('id', document.getElementById('newEmployeeId').value);
+        formData.append('nombre_completo', document.getElementById('newEmployeeName').value);
+        formData.append('supervisor', document.getElementById('newEmployeeSupervisor').value);
+        formData.append('puesto', document.getElementById('newEmployeePosition').value);
+        
+        try 
+        {
+          const response = await fetch('/api/empleados', 
+          {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al agregar el empleado');
+          }
+
+          const data = await response.json();
+          
+          // Mostrar notificación de éxito
+          const notif = document.getElementById('successNotification');
+          notif.textContent = 'Empleado agregado correctamente';
+          notif.style.display = 'block';
+          
+            setTimeout(() => 
+            {
+            notif.style.display = 'none';
+          }, 2000);
+
+          closeModal();
+          
+          // Actualizar el campo de ID con el nuevo empleado
+          document.getElementById('employeeId').value = data.id;
+          
+          // Simular clic en el botón de búsqueda para cargar los datos
+          document.getElementById('searchButton').click();
+        } catch (error) 
+        {
+          console.error('Error:', error);
+          alert('Error al agregar el empleado: ' + error.message);
+        }
+        });
+      }
+
+      // Configurar el botón para abrir el modal de Información Adicional
+      const openAdditionalInfoBtn = document.getElementById('openAdditionalInfoModal');
+      if (openAdditionalInfoBtn) {
+        openAdditionalInfoBtn.addEventListener('click', openAdditionalInfoModal);
+      }
+
+      // Configurar el botón de cerrar del modal
+      const closeModalBtn = document.querySelector('#additionalInfoModal .close-modal');
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeAdditionalInfoModal);
+      }
+
+      // Cerrar modal al hacer clic fuera de él
+      const additionalInfoModal = document.getElementById('additionalInfoModal');
+      if (additionalInfoModal) {
+        additionalInfoModal.addEventListener('click', function(e) {
+          if (e.target === additionalInfoModal) {
+            closeAdditionalInfoModal();
+          }
+        });
+      }
+
+      // Conectar el botón de guardar del modal con la función de guardar existente
+      const saveButtonModal = document.getElementById('saveButtonModal');
+      if (saveButtonModal) {
+        saveButtonModal.addEventListener('click', function() {
+          // Simular clic en el botón de guardar original
+          const saveButton = document.getElementById('saveButton');
+          if (saveButton) {
+            saveButton.click();
+          }
+        });
+      }
+
+      let employeeIdValid = false;
+
+      // Función para manejar la búsqueda por ID o nombre
+      document.getElementById('searchButton').addEventListener('click', async function() 
+      {
+        // Deshabilitar ambos botones inmediatamente
+        document.getElementById('simpleSupportButton').disabled = true;
+        document.getElementById('mediumSupportButton').disabled = true;
+        document.getElementById('uniqueSupportButton').disabled = true;
+        let query = document.getElementById('employeeId').value;
+        if (!query) 
+        {
+          mostrarNotificacion('Por favor ingresa un ID de empleado', 'error');
+          return;
+        }
+
+        try 
+        {
+          query = query.trim();
+          let idToFetch = null;
+          
+          if (/^\d+$/.test(query)) {
+            // Es un ID numérico
+            idToFetch = query;
+          } else {
+            // Buscar por nombre
+            try {
+              const resp = await fetch(`/api/empleados/buscar/${encodeURIComponent(query)}`);
+              if (resp.ok) {
+                const dataNombre = await resp.json();
+                let candidato = null;
+                if (dataNombre && Array.isArray(dataNombre.empleados) && dataNombre.empleados.length > 0) {
+                  candidato = dataNombre.empleados.find(e => (e.nombre_completo || '').toLowerCase() === query.toLowerCase()) || dataNombre.empleados[0];
+                } else if (dataNombre && dataNombre.empleado) {
+                  candidato = dataNombre.empleado;
+                }
+                if (candidato && candidato.id) {
+                  idToFetch = String(candidato.id);
+                  document.getElementById('employeeId').value = idToFetch;
+                }
+              }
+            } catch (searchError) {
+              console.error('Error al buscar por nombre:', searchError);
+              // Continuar para intentar buscar por ID si el nombre falla
+            }
+          }
+
+          if (!idToFetch) {
+            mostrarNotificacion('Empleado no encontrado. Por favor verifica el ID o nombre ingresado.', 'error');
+            employeeIdValid = false;
+            return;
+          }
+
+          const employeeId = idToFetch;
+          const employeeResponse = await fetch(`/api/empleados/${employeeId}`);
+          if (!employeeResponse.ok) 
+          {
+            if (employeeResponse.status === 500) {
+              mostrarNotificacion('Error del servidor al buscar el empleado. Por favor intenta nuevamente.', 'error');
+            } else {
+              mostrarNotificacion('Empleado no encontrado. Por favor verifica el ID ingresado.', 'error');
+            }
+            employeeIdValid = false;
+            return;
+          }
+          const employeeData = await employeeResponse.json();
+          // Verificar si el empleado está activo y cambiar el color del modal
+          const infoContainer = document.querySelector('.info-container');
+          infoContainer.classList.remove('empleado-activo', 'empleado-inactivo');
+         
+          if (employeeData.activo === true) {
+            // Empleado activo - color verde y foto normal
+            infoContainer.classList.add('empleado-activo');
+            
+            // Actualizar solo el label (el switch está oculto, solo informativo)
+            const statusLabel = document.getElementById('statusLabel');
+            if (statusLabel) {
+              statusLabel.textContent = 'Activo';
+            }
+          } else {
+            // Empleado inactivo - color rojo y foto en blanco y negro
+            infoContainer.classList.add('empleado-inactivo');
+            
+            // Actualizar solo el label (el switch está oculto, solo informativo)
+            const statusLabel = document.getElementById('statusLabel');
+            if (statusLabel) {
+              statusLabel.textContent = 'Inactivo';
+            }
+          }
+
+          // Actualizar los campos con los datos del empleado
+          document.getElementById('fullName').value = employeeData.nombre_completo || '';
+          document.getElementById('supervisor').value = employeeData.supervisor || '';
+          document.getElementById('position').value = employeeData.puesto || '';
+
+          // Manejar la fecha de ingreso con mejor formato
+          if (employeeData.fecha_ingreso && employeeData.fecha_ingreso !== 'undefined') 
+          {
+            let fecha = employeeData.fecha_ingreso;
+            // Si la fecha tiene formato ISO (con T), extraer solo la parte de la fecha
+            if (fecha.includes('T')) 
+            {
+              fecha = fecha.split('T')[0];
+            }
+            // Si la fecha tiene formato con espacios, extraer solo la parte de la fecha
+            else if (fecha.includes(' ')) 
+            {
+              fecha = fecha.split(' ')[0];
+            }
+            document.getElementById('hireDate').value = fecha;
+          } else {
+            document.getElementById('hireDate').value = '';
+          }
+
+          // Hacer los campos editables
+          // Campos de información del empleado siempre deshabilitados (solo informativos)
+          // No se pueden habilitar para edición
+
+          // Los campos de información del empleado (Nombre Completo, Supervisor, Puesto, Fecha de Ingreso)
+          // son solo informativos y no se pueden editar desde esta interfaz
+
+          document.getElementById('folio').value = '';
+          document.getElementById('valeStatus').value = 'pendiente';
+          document.getElementById('description').value = '';
+          document.getElementById('materialStatus').value = '';
+          document.getElementById('materialOutDate').value = '';
+          document.getElementById('materialReturnDate').value = '';
+          document.getElementById('toolLoan').value = '';
+          document.getElementById('notes').value = '';
+          
+          // Limpiar las evidencias
+          ['evidencia1', 'evidencia2', 'evidencia3'].forEach((evi, idx) => {
+            const container = document.getElementById(evi);
+            container.innerHTML = `<span>Foto de Evidencia ${idx + 1}</span>`;
+          });
+
+          closeAdditionalInfoModal();
+
+          // Limpiar el contador y la fecha del último apoyo por defecto
+          const lastSupportDate = document.querySelector('.last-support .date');
+          const countdownTimer = document.querySelector('.countdown-timer');
+          lastSupportDate.textContent = '---';
+          countdownTimer.textContent = '---';
+
+          const response = await fetch(`/api/empleados/${employeeId}/historial`);
+          if (!response.ok) {
+            throw new Error('Error al cargar el historial');
+          }
+
+          const data = await response.json();
+          if (data.length > 0) {
+            // Filtra solo apoyos que NO sean de tipo herramienta
+            const apoyosParaTemporizador = data.filter(apoyo => 
+              apoyo.tipo !== 'herramienta' && 
+              apoyo.tipo !== 'Herramienta'
+            );
+            // El más reciente
+            const ultimoApoyo = apoyosParaTemporizador.length > 0 ? apoyosParaTemporizador[0] : null;
+
+            if (ultimoApoyo && ultimoApoyo.fecha) 
+            {
+              const fechaUltimoApoyo = new Date(ultimoApoyo.fecha);
+              const tipoUltimoApoyo = (ultimoApoyo.tipo || '').toLowerCase();
+              startCountdown(fechaUltimoApoyo, tipoUltimoApoyo);
+              lastSupportDate.textContent = formatearFechaEspanol(fechaUltimoApoyo);
+            } else {
+              startCountdown(null, null);
+            }
+          } else {
+            startCountdown(null, null);
+          }
+
+          // Cargar el historial después de una búsqueda exitosa
+          await loadSupportHistory();
+          employeeIdValid = true;
+
+          const photoContainer = document.getElementById('employeePhoto');
+          if (employeeData.foto_url) 
+          {
+            photoContainer.innerHTML = `<img src="${employeeData.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+          } else {
+            photoContainer.innerHTML = `<span>Foto del Empleado</span>`;
+          }
+
+          // Lógica para deshabilitar permanentemente el botón de apoyo único si ya existe un apoyo único
+          const uniqueSupportButton = document.getElementById('uniqueSupportButton');
+          if (data.some(s => s.tipo === false || s.tipo === 'unico')) {
+            uniqueSupportButton.disabled = true;
+            uniqueSupportButton.title = 'Este empleado ya recibió un apoyo único y no podrá volver a solicitarlo.';
+            // Marcar con un atributo para nunca volver a habilitarlo
+            uniqueSupportButton.setAttribute('data-permanently-disabled', 'true');
+            uniqueSupportButton.classList.add('permanently-disabled');
+          } else {
+            // Solo habilitar si NO está permanentemente deshabilitado
+            if (!uniqueSupportButton.hasAttribute('data-permanently-disabled')) {
+              uniqueSupportButton.disabled = false;
+              uniqueSupportButton.title = '';
+              uniqueSupportButton.classList.remove('permanently-disabled');
+            }
+          }
+
+          // Verificar si el empleado tiene amonestaciones y mostrar popup
+          await checkAndShowAmonestaciones(employeeId);
+        } catch (error) 
+        {
+          console.error('Error:', error);
+          alert('No se encontró el empleado');
+          employeeIdValid = false;
+          startCountdown(null, null);
+          
+          // Resetear el color del modal a verde por defecto cuando hay error
+          const infoContainer = document.querySelector('.info-container');
+          infoContainer.classList.remove('empleado-activo', 'empleado-inactivo');
+          infoContainer.classList.add('empleado-activo');
+          
+          // Resetear el label a inactivo por defecto (el switch está oculto)
+          const statusLabel = document.getElementById('statusLabel');
+          if (statusLabel) {
+            statusLabel.textContent = 'Inactivo';
+          }
+        }
+      });
+
+      // Los listeners de Enter se han movido al bloque DOMContentLoaded
+      // para asegurar que el elemento existe cuando se agregan
+
+      // Función para mostrar notificación en la esquina superior derecha
+      function mostrarNotificacion(mensaje, tipo = 'error') {
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+
+        // Crear elemento de notificación
+        const notif = document.createElement('div');
+        notif.style.cssText = `
+          background: ${tipo === 'error' ? '#dc3545' : tipo === 'success' ? '#28a745' : '#ffc107'};
+          color: white;
+          padding: 14px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          font-size: 14px;
+          font-weight: 500;
+          min-width: 300px;
+          max-width: 400px;
+          animation: slideInRight 0.3s ease-out;
+          pointer-events: auto;
+          word-wrap: break-word;
+          font-family: 'Montserrat', sans-serif;
+        `;
+        notif.textContent = mensaje;
+
+        // Agregar animación CSS si no existe
+        if (!document.getElementById('notificationStyles')) {
+          const style = document.createElement('style');
+          style.id = 'notificationStyles';
+          style.textContent = `
+            @keyframes slideInRight {
+              from {
+                transform: translateX(100%);
+                opacity: 0;
+              }
+              to {
+                transform: translateX(0);
+                opacity: 1;
+              }
+            }
+            @keyframes slideOutRight {
+              from {
+                transform: translateX(0);
+                opacity: 1;
+              }
+              to {
+                transform: translateX(100%);
+                opacity: 0;
+              }
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
+        // Agregar al contenedor
+        container.appendChild(notif);
+
+        // Remover después de 2 segundos
+        setTimeout(() => {
+          notif.style.animation = 'slideOutRight 0.3s ease-out';
+          setTimeout(() => {
+            if (notif.parentNode) {
+              notif.parentNode.removeChild(notif);
+            }
+          }, 300);
+        }, 2000);
+      }
+
+      // Función para mostrar notificación de error (mantener compatibilidad)
+      function mostrarNotificacionError(mensaje) 
+      {
+        mostrarNotificacion(mensaje, 'error');
+      }
+
+      // Función para verificar si existe un folio
+      async function verificarFolioExistente(folio, supportId = null) {
+        try 
+        {
+          const response = await fetch(`/api/empleados/verificar-folio/${folio}`);
+          if (!response.ok) {
+            throw new Error('Error al verificar el folio');
+          }
+          const data = await response.json();
+
+          if (supportId && data.supportId === supportId) {
+            return false;
+          }
+          
+          return data.existe;
+        } catch (error) 
+        {
+          console.error('Error al verificar folio:', error);
+          return false;
+        }
+      }
+
+      // Función para cargar el historial de apoyos (scope global)
+      async function loadSupportHistory() {
+        const employeeId = document.getElementById('employeeId').value;
+        if (!employeeId) return;
+
+        try 
+        {
+          // Cargar datos del empleado
+          const employeeResponse = await fetch(`/api/empleados/${employeeId}`);
+          if (!employeeResponse.ok) {
+            throw new Error('Error al cargar datos del empleado');
+          }
+          const employeeData = await employeeResponse.json();
+
+          // Cargar el historial de apoyos (solo los reales de la base de datos)
+          const response = await fetch(`/api/empleados/${employeeId}/historial`);
+          if (!response.ok) 
+          {
+            throw new Error('Error al cargar el historial');
+          }     
+          const data = await response.json();
+          
+          if (!Array.isArray(data)) 
+          {
+            console.error('Los datos recibidos no son un array:', data);
+            return;
+          }
+
+          // Asignar el historial real sin mezclar ni duplicar
+          supportHistory = data.map(support => (
+            {
+            ...support,
+            id: String(support.id), // Asegurar que el ID sea string
+
+            nombre_completo: support.nombre_completo || employeeData.nombre_completo,
+            supervisor: support.supervisor || employeeData.supervisor,
+            puesto: support.puesto || employeeData.puesto
+          })).sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+          
+          // Guardar copia completa del historial original
+          originalSupportHistory = JSON.parse(JSON.stringify(supportHistory));
+          isFilteredByPending = false;
+          
+          // Actualizar la tabla
+          updateHistoryTable();
+
+          // ACTUALIZAR EL CAMPO DE ÚLTIMA MODIFICACIÓN
+          const lastModifiedBy = document.getElementById('lastModifiedBy');
+          if (supportHistory.length > 0 && supportHistory[0].modificado_por && supportHistory[0].ultima_modificacion) {
+            const fechaObj = new Date(supportHistory[0].ultima_modificacion);
+            // Formatear fecha en formato completo: "28 de noviembre de 2025"
+            const dia = fechaObj.getDate();
+            const mes = fechaObj.toLocaleDateString('es-ES', { month: 'long' });
+            const año = fechaObj.getFullYear();
+            const fechaCompleta = `${dia} de ${mes} de ${año}`;
+            lastModifiedBy.textContent = `Última modificación hecha por: ${supportHistory[0].modificado_por} el ${fechaCompleta}`;
+          } else 
+          {
+            lastModifiedBy.textContent = '-';
+          }
+
+          // Deshabilitar el botón de apoyo único si ya existe un apoyo único
+          const uniqueSupportButton = document.getElementById('uniqueSupportButton');
+          if (supportHistory.some(s => s.tipo === false || s.tipo === 'unico')) 
+          {
+            uniqueSupportButton.disabled = true;
+            uniqueSupportButton.title = 'Este empleado ya recibió un apoyo único y no podrá volver a solicitarlo.';
+            // Marcar con un atributo para nunca volver a habilitarlo
+            uniqueSupportButton.setAttribute('data-permanently-disabled', 'true');
+            uniqueSupportButton.classList.add('permanently-disabled');
+          } else {
+            // Solo habilitar si NO está permanentemente deshabilitado
+            if (!uniqueSupportButton.hasAttribute('data-permanently-disabled')) 
+            {
+              uniqueSupportButton.disabled = false;
+              uniqueSupportButton.title = '';
+              uniqueSupportButton.classList.remove('permanently-disabled');
+            }
+          }
+        } catch (error) 
+        {
+          console.error('Error al cargar el historial:', error);
+          const tbody = document.getElementById('historyTableBody');
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 20px;">
+                Error al cargar el historial. Por favor, intente nuevamente.
+              </td>
+            </tr>
+          `;
+        }
+      };
+
+      // Función para actualizar la tabla de historial (scope global)
+      function updateHistoryTable() 
+      {
+        const tbody = document.getElementById('historyTableBody');
+        tbody.innerHTML = '';
+
+        if (supportHistory.length === 0) 
+        {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 20px;">
+                No hay registros para mostrar
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        // Llenar la tabla con todos los datos
+        supportHistory.forEach(item => 
+        {
+          const row = document.createElement('tr');
+          // Normalizar el estado para comparación y visualización
+          let rawEstado = (item.estado || '').toString().trim();
+          let estado = rawEstado.toLowerCase();
+          let badgeClass = '';
+          let estadoMostrar = rawEstado ? rawEstado.toLowerCase() : '-';
+          if (estado === 'entregado') 
+          {
+            badgeClass = 'status-badge entregado';
+            estadoMostrar = 'entregado';
+          } else if (estado === 'pendiente') 
+          {
+            badgeClass = 'status-badge pendiente';
+            estadoMostrar = 'pendiente';
+          } else if (estado === 'cancelado') 
+          {
+            badgeClass = 'status-badge cancelado';
+            estadoMostrar = 'cancelado';
+          } else 
+          {
+            badgeClass = 'status-badge';
+            estadoMostrar = '-';
+          }
+
+          let tipoMostrar = '-';
+          if (typeof item.tipo === 'string') 
+          {
+            if (item.tipo.toLowerCase() === 'simple') tipoMostrar = 'Sencillo';
+            else if (item.tipo.toLowerCase() === 'unico') tipoMostrar = 'Único';
+            else if (item.tipo.toLowerCase() === 'mediano') tipoMostrar = 'Mediano';
+            else if (item.tipo.toLowerCase() === 'herramienta') tipoMostrar = 'Herramienta';
+            else tipoMostrar = item.tipo; // Por si hay otros valores
+          } else if (item.tipo === true) {
+            tipoMostrar = 'Sencillo';
+          } else if (item.tipo === false) {
+            tipoMostrar = 'Único';
+          }
+
+          row.innerHTML = `
+            <td>${formatearFechaEspanol(new Date(item.fecha))}</td>
+            <td>${tipoMostrar}</td>
+            <td>${item.folio || '-'}</td>
+            <td><span class="${badgeClass}">${estadoMostrar}</span></td>
+            <td>
+              <button class="action-button" data-support-id="${item.id}">Ver Detalles</button>
+              <button class="delete-button" data-support-id="${item.id}" data-folio="${item.folio || ''}">Eliminar</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+
+          // Agregar el evento click al botón de ver detalles
+          const button = row.querySelector('.action-button');
+          button.addEventListener('click', function() 
+          {
+            const supportId = this.getAttribute('data-support-id');
+            viewSupportDetails(supportId);
+          });
+
+          // Agregar el evento click al botón de eliminar
+          const deleteButton = row.querySelector('.delete-button');
+          deleteButton.addEventListener('click', function() 
+          {
+            const supportId = this.getAttribute('data-support-id');
+            const folio = this.getAttribute('data-folio');
+            showDeleteConfirmation(supportId, folio);
+          });
+        });
+      }
+
+      // Función para ver detalles del apoyo (scope global)
+      function viewSupportDetails(supportId) {
+        
+        const supportIdStr = String(supportId);
+        currentEditingSupportId = supportIdStr;
+        
+        // Buscar el apoyo en el historial
+        const support = supportHistory.find(s => String(s.id) === supportIdStr);
+        
+        if (!support) {
+          console.error('Apoyo no encontrado:', supportId);
+          console.error('IDs disponibles:', supportHistory.map(s => s.id));
+          alert('Apoyo no encontrado');
+          return;
+        }
+        // Función para formatear la fecha al formato YYYY-MM-DD
+        function formatDateInput(fecha) {
+          if (!fecha) return '';
+          if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return fecha;
+          return fecha.split('T')[0];
+        }
+
+        // Llenar los campos con los datos del apoyo usando los nombres correctos de las propiedades
+        document.getElementById('folio').value = support.folio || '';
+        document.getElementById('valeStatus').value = support.estado || 'pendiente';
+        document.getElementById('description').value = support.descripcion || '';
+        document.getElementById('materialStatus').value = support.estatus_material || '';
+        document.getElementById('materialOutDate').value = formatDateInput(support.fecha_salida_herramienta);
+        document.getElementById('materialReturnDate').value = formatDateInput(support.fecha_regreso_herramienta);
+        document.getElementById('toolLoan').value = support.tool_loan || '';
+        document.getElementById('notes').value = support.notas || '';
+        // Mostrar la foto del empleado si existe
+        if (support.foto_url) {
+          const photoContainer = document.getElementById('employeePhoto');
+          photoContainer.innerHTML = `<img src="${support.foto_url}" alt="Foto del Empleado" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+        }
+        // Mostrar evidencias guardadas
+        ['evidencia1', 'evidencia2', 'evidencia3'].forEach((evi, idx) => {
+          const container = document.getElementById(evi);
+          const url = support[evi];
+          if (url) {
+            container.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+          } else {
+            container.innerHTML = `<span>Foto de Evidencia ${idx + 1}</span>`;
+          }
+        });
+        // Abrir el modal de información adicional
+        openAdditionalInfoModal();
+        // Habilitar todos los campos para edición
+        const allInputs = document.querySelectorAll('#additionalInfoModal input, #additionalInfoModal select, #additionalInfoModal textarea');
+        allInputs.forEach(input => {
+          input.disabled = false;
+          input.readOnly = false;
+          input.style.background = 'var(--bg-color)';
+          input.style.cursor = 'text';
+          input.style.opacity = '1';
+        });
+        document.getElementById('saveButton').style.display = 'block';
+        document.getElementById('saveButtonModal').style.display = 'block';
+        const lastModifiedBy = document.getElementById('lastModifiedBy');
+        if (support.modificado_por && support.ultima_modificacion) {
+          const fechaObj = new Date(support.ultima_modificacion);
+          // Formatear fecha en formato completo: "28 de noviembre de 2025"
+          const dia = fechaObj.getDate();
+          const mes = fechaObj.toLocaleDateString('es-ES', { month: 'long' });
+          const año = fechaObj.getFullYear();
+          const fechaCompleta = `${dia} de ${mes} de ${año}`;
+          lastModifiedBy.textContent = `Última modificación hecha por: ${support.modificado_por} el ${fechaCompleta}`;
+        }
+        if (support.ultima_modificacion) {
+          // Formatear a yyyy-MM-ddTHH:mm (formato para input datetime-local)
+          const date = new Date(support.ultima_modificacion);
+          const pad = n => n.toString().padStart(2, '0');
+          const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+          document.getElementById('manualLastSupportDate').value = formatted;
+        } else {
+          document.getElementById('manualLastSupportDate').value = '';
+        }
+        // Establecer el tipo de apoyo correctamente desde los datos del apoyo
+        let tipoApoyoValue = 'simple'; // Valor por defecto
+        
+        if (typeof support.tipo === 'string') {
+          // Si es un string, usar el valor directamente (puede ser 'simple', 'mediano', 'unico', 'herramienta')
+          const tipoLower = support.tipo.toLowerCase();
+          if (tipoLower === 'simple' || tipoLower === 'sencillo') {
+            tipoApoyoValue = 'simple';
+          } else if (tipoLower === 'mediano') {
+            tipoApoyoValue = 'mediano';
+          } else if (tipoLower === 'unico' || tipoLower === 'único') {
+            tipoApoyoValue = 'unico';
+          } else if (tipoLower === 'herramienta') {
+            tipoApoyoValue = 'Herramienta';
+          } else {
+            tipoApoyoValue = support.tipo; // Usar el valor tal cual si no coincide
+          }
+        } else if (support.tipo === true) {
+          // Si es true, es un apoyo sencillo
+          tipoApoyoValue = 'simple';
+        } else if (support.tipo === false) {
+          // Si es false, es un apoyo único
+          tipoApoyoValue = 'unico';
+        } else if (support.tipo) {
+          // Si tiene algún otro valor, intentar usarlo
+          tipoApoyoValue = String(support.tipo);
+        }
+        
+        document.getElementById('tipoApoyo').value = tipoApoyoValue;
+      }
+
+      // Función para mostrar confirmación de eliminación
+      function showDeleteConfirmation(supportId, folio) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Confirmar Eliminación</h3>
+              <button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p><strong>¿Está seguro que desea eliminar este apoyo?</strong></p>
+              <p>Folio: <strong>${folio || 'Sin folio'}</strong></p>
+              <p>Esta acción no se puede deshacer y eliminará permanentemente el apoyo de la base de datos.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="modal-button cancel-button" onclick="this.closest('.modal').remove()">Cancelar</button>
+              <button class="modal-button delete-confirm-button" data-support-id="${supportId}">Eliminar</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Agregar el event listener al botón de eliminar después de crear el modal
+        const deleteButton = modal.querySelector('.delete-confirm-button');
+        deleteButton.addEventListener('click', function() 
+        {
+          const supportId = this.getAttribute('data-support-id');
+          deleteSupport(supportId, this);
+        });
+      }
+
+      // Función para eliminar el apoyo
+      async function deleteSupport(supportId, buttonElement) {
+        try 
+        {
+          buttonElement.disabled = true;
+          buttonElement.textContent = 'Eliminando...';
+
+          const response = await fetch(`/api/empleados/apoyos/${supportId}`, {
+            method: 'DELETE',
+            headers: 
+            {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) 
+          {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al eliminar el apoyo');
+          }
+
+          const modal = buttonElement.closest('.modal');
+          if (modal) 
+          {
+            modal.remove();
+          }
+
+          // Mostrar notificación de éxito
+          const notif = document.getElementById('successNotification');
+          notif.textContent = 'Apoyo eliminado correctamente';
+          notif.style.display = 'block';
+          notif.style.backgroundColor = '#28a745';
+          notif.style.borderColor = '#218838';
+          
+        setTimeout(() => 
+        {
+            notif.style.display = 'none';
+          }, 2000);
+
+          await loadSupportHistory();
+          await updateTimerAndButtons();
+          if (currentEditingSupportId === supportId) 
+          {
+            currentEditingSupportId = null;
+            // Limpiar el formulario
+            document.getElementById('folio').value = '';
+            document.getElementById('valeStatus').value = 'pendiente';
+            document.getElementById('description').value = '';
+            document.getElementById('materialStatus').value = '';
+            document.getElementById('materialOutDate').value = '';
+            document.getElementById('materialReturnDate').value = '';
+            document.getElementById('toolLoan').value = '';
+            document.getElementById('notes').value = '';
+            // Ocultar la sección adicional
+            closeAdditionalInfoModal();
+            // Limpiar evidencias
+            ['evidencia1', 'evidencia2', 'evidencia3'].forEach((evi, idx) => {
+              const container = document.getElementById(evi);
+              container.innerHTML = `<span>Foto de Evidencia ${idx + 1}</span>`;
+            });
+          }
+
+        } catch (error) {
+          console.error('Error al eliminar apoyo:', error);
+          
+          // Habilitar el botón nuevamente
+          buttonElement.disabled = false;
+          buttonElement.textContent = 'Eliminar';
+
+          // Mostrar notificación de error
+          const notif = document.getElementById('successNotification');
+          notif.textContent = 'Error al eliminar el apoyo: ' + error.message;
+          notif.style.display = 'block';
+          notif.style.backgroundColor = '#dc3545';
+          notif.style.borderColor = '#bd2130';
+          
+      setTimeout(() => 
+      {
+            notif.style.display = 'none';
+            notif.style.backgroundColor = '#28a745';
+            notif.style.borderColor = '#218838';
+          }, 3000);
+        }
+      }
+
+      // Función para manejar el guardado
+      document.getElementById('saveButton').addEventListener('click', async function() 
+      {
+        // Eliminamos la validación de evidencias
+        const username = localStorage.getItem('username');
+        if (!username) 
+        {
+          mostrarNotificacionError('No hay sesión activa');
+          return;
+        }
+
+        try 
+        {
+          // Obtener el nombre completo del usuario
+          const userResponse = await fetch('/api/auth/check-permissions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+          });
+
+          if (!userResponse.ok) 
+          {
+            throw new Error('Error al obtener información del usuario');
+          }
+
+          const userData = await userResponse.json();
+          const nombreCompleto = userData.user.nombre_completo;
+
+          const employeeId = document.getElementById('employeeId').value;
+          if (!employeeId) {
+            mostrarNotificacionError('Por favor busque un empleado primero');
+            return;
+          }
+
+          // Obtener el folio actual
+          const folio = document.getElementById('folio').value.trim();
+          if (!folio) 
+          {
+            mostrarNotificacionError('El folio es obligatorio');
+            return;
+          }
+
+          // Buscar en el historial si ya existe un apoyo con ese folio (excluyendo el actual)
+          const apoyoExistente = supportHistory.find(s => 
+            String(s.folio) === folio && 
+            (!currentEditingSupportId || String(s.id) !== currentEditingSupportId)
+          );
+
+          if (apoyoExistente) 
+          {
+            mostrarNotificacionError('Ya existe un apoyo con ese folio');
+            return;
+          }
+
+          // Obtener el estado actual del vale
+          const valeStatus = document.getElementById('valeStatus').value;
+          const manualDate = document.getElementById('manualLastSupportDate').value;
+          let currentDate;
+          if (manualDate && manualDate.trim() !== "") 
+          {
+            currentDate = manualDate;
+              } else 
+              {
+            currentDate = new Date().toISOString();
+          }
+
+          // Habilitar los campos de fecha para asegurar que sus valores se recojan correctamente
+          document.getElementById('materialOutDate').disabled = false;
+          document.getElementById('materialReturnDate').disabled = false;
+
+          let tipoApoyo = 'simple'; // Por defecto
+          
+          if (currentEditingSupportId) 
+          {
+            const apoyoActual = supportHistory.find(s => String(s.id) === currentEditingSupportId);
+            if (apoyoActual) 
+            {
+              tipoApoyo = apoyoActual.tipo || 'simple';
+            }
+          } else 
+          {
+            if (supportHistory.length > 0) 
+            {
+              tipoApoyo = supportHistory[0].tipo || 'simple';
+            }
+          }
+
+          const formData = 
+          {
+            id: employeeId,
+            nombre_completo: document.getElementById('fullName').value,
+            supervisor: document.getElementById('supervisor').value,
+            puesto: document.getElementById('position').value,
+            folio: folio,
+            vale_status: valeStatus,
+            descripcion: document.getElementById('description').value,
+            estatus_material: document.getElementById('materialStatus').value,
+            fecha_salida_herramienta: document.getElementById('materialOutDate').value,
+            fecha_regreso_herramienta: document.getElementById('materialReturnDate').value,
+            tool_loan: document.getElementById('toolLoan').value,
+            notas: document.getElementById('notes').value,
+            ultima_modificacion: currentDate,
+            modificado_por: nombreCompleto,
+            tipo: tipoApoyo,
+            fecha: currentDate,
+            estado: valeStatus
+          };
+          formData.tipo = document.getElementById('tipoApoyo').value;
+
+          let responseData;
+          if (currentEditingSupportId) {
+            // Si estamos editando un apoyo existente, actualizar (PUT)
+            const apoyoResponse = await fetch(`/api/empleados/apoyos/${currentEditingSupportId}`, {
+              method: 'PUT',
+              headers: 
+              {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+            if (!apoyoResponse.ok) 
+            {
+              throw new Error('Error al actualizar el apoyo existente');
+            }
+            responseData = await apoyoResponse.json();
+          } else {
+            // Si es un nuevo apoyo, crear (POST)
+            const apoyoResponse = await fetch('/api/empleados/apoyos', 
+            {
+              method: 'POST',
+              headers: 
+              {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
+            });
+            if (!apoyoResponse.ok) 
+            {
+              throw new Error('Error al crear el apoyo');
+            }
+            responseData = await apoyoResponse.json();
+          }
+          
+          // Limpiar el ID de edición actual
+          currentEditingSupportId = null;
+          await loadSupportHistory();
+          await updateTimerAndButtons();
+          mostrarNotificacionGuardado();
+          closeAdditionalInfoModal();
+          
+          // Limpiar el formulario
+          document.getElementById('folio').value = '';
+          document.getElementById('valeStatus').value = 'pendiente';
+          document.getElementById('description').value = '';
+          document.getElementById('materialStatus').value = '';
+          document.getElementById('materialOutDate').value = '';
+          document.getElementById('materialReturnDate').value = '';
+          document.getElementById('toolLoan').value = '';
+          document.getElementById('notes').value = '';
+          document.getElementById('manualLastSupportDate').value = '';
+          
+          // Limpiar evidencias
+          ['evidencia1', 'evidencia2', 'evidencia3'].forEach((evi, idx) => 
+          {
+            const container = document.getElementById(evi);
+            container.innerHTML = `<span>Foto de Evidencia ${idx + 1}</span>`;
+          });
+          
+          // Ocultar los botones de guardar
+          document.getElementById('saveButton').style.display = 'none';
+          const saveButtonModal = document.getElementById('saveButtonModal');
+          if (saveButtonModal) {
+            saveButtonModal.style.display = 'none';
+          }
+        } catch (error) 
+        {
+          console.error('Error:', error);
+          mostrarNotificacionError('Error al guardar los cambios: ' + error.message);
+        }
+      });
+
+      // Función para iniciar el contador de cuenta regresiva
+      let countdownInterval = null;
+      function startCountdown(lastSupportDate, tipoUltimoApoyo) 
+      {
+        if (countdownInterval) 
+        {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+
+        const countdownTimer = document.querySelector('.countdown-timer');
+        const simpleSupportButton = document.getElementById('simpleSupportButton');
+        const mediumSupportButton = document.getElementById('mediumSupportButton');
+        const uniqueSupportButton = document.getElementById('uniqueSupportButton');
+
+        if (!lastSupportDate || !tipoUltimoApoyo) 
+        {
+          countdownTimer.textContent = '---';
+          simpleSupportButton.disabled = false;
+          mediumSupportButton.disabled = false;
+          uniqueSupportButton.disabled = false;
+          return;
+        }
+        //Cambiar variables de los meses si es que llegan a pedir un cambio
+        let cooldownDate;
+        if (tipoUltimoApoyo === 'simple') 
+        {
+          cooldownDate = new Date(lastSupportDate);
+          cooldownDate.setMonth(cooldownDate.getMonth() + 3);
+        } else if (tipoUltimoApoyo === 'mediano') 
+        {
+          cooldownDate = new Date(lastSupportDate);
+          cooldownDate.setMonth(cooldownDate.getMonth() + 6);
+        } else 
+        {
+          // Por si acaso, default a 6 meses
+          cooldownDate = new Date(lastSupportDate);
+          cooldownDate.setMonth(cooldownDate.getMonth() + 6);
+        }
+
+        function updateCountdown() 
+        {
+          const now = new Date();
+          const timeLeft = cooldownDate - now;
+
+          if (timeLeft <= 0) 
+          {
+            countdownTimer.textContent = '¡Listo para nuevo apoyo!';
+            simpleSupportButton.disabled = false;
+            mediumSupportButton.disabled = false;
+            uniqueSupportButton.disabled = false;
+            if (countdownInterval) 
+            {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+            }
+            return;
+          }
+
+          // Calcular días, horas, minutos, segundos
+          const totalSeconds = Math.floor(timeLeft / 1000);
+          const days = Math.floor(totalSeconds / (24 * 60 * 60));
+          const remainingSecondsAfterDays = totalSeconds % (24 * 60 * 60);
+          const hours = Math.floor(remainingSecondsAfterDays / (60 * 60));
+          const remainingSecondsAfterHours = remainingSecondsAfterDays % (60 * 60);
+          const minutes = Math.floor(remainingSecondsAfterHours / 60);
+          const seconds = remainingSecondsAfterHours % 60;
+
+          let countdownText = '';
+          countdownText += `${days} días, `;
+          countdownText += `${hours} horas, `;
+          countdownText += `${minutes} minutos, `;
+          countdownText += `${seconds} segundos`;
+
+          countdownTimer.textContent = countdownText;
+
+          // Deshabilita ambos botones mientras el contador esté activo
+          simpleSupportButton.disabled = true;
+          mediumSupportButton.disabled = true;
+          uniqueSupportButton.disabled = true;
+        }
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+      }
+
+      function mostrarNotificacionGuardado() 
+      {
+        const notif = document.getElementById('successNotification');
+        notif.style.display = 'block';
+        notif.textContent = 'Cambios guardados correctamente';
+        
+        setTimeout(() => 
+        {
+          notif.style.display = 'none';
+        }, 2000);
+      }
+
+      async function mostrarBotonNotificaciones() 
+      {
+        const data = await verificarPermisosCentral();
+        if (!data) return;
+
+        const notificacionesLink = document.getElementById('notificacionesLink');
+        if (data.user.rol === 'IT' || data.permissions.includes('notificaciones')) 
+        {
+          notificacionesLink.style.display = 'flex';
+        }
+      }
+      document.addEventListener('DOMContentLoaded', mostrarBotonNotificaciones);
+
+      // Configurar los contenedores de evidencia
+      for (let i = 1; i <= 3; i++) 
+      {
+        const container = document.getElementById(`evidencia${i}`);
+        const input = document.getElementById(`inputEvidencia${i}`);
+        if (container && input) 
+        {
+          container.onclick = function() 
+          {
+            input.click();
+          };
+        }
+      }
+
+      // Listener para apoyo sencillo
+      document.getElementById('simpleSupportButton').addEventListener('click', async function() {
+        if (!employeeIdValid) 
+        {
+          mostrarNotificacion('Por favor, busque un empleado válido primero', 'error');
+          return;
+        }
+        const employeeId = document.getElementById('employeeId').value;
+        const username = localStorage.getItem('username');
+        const nombreCompleto = document.getElementById('fullName').value;
+        const formData = {
+          id: employeeId,
+          nombre_completo: nombreCompleto,
+          tipo: 'simple',
+          folio: '',
+          estado: 'pendiente',
+          descripcion: '',
+          estatus_material: '',
+          fecha_salida_herramienta: '',
+          fecha_regreso_herramienta: '',
+          tool_loan: '',
+          notas: '',
+          ultima_modificacion: new Date().toISOString(),
+          modificado_por: username,
+          fecha: new Date().toISOString(),
+          vale_status: 'pendiente'
+        };
+        try 
+        {
+          const response = await fetch('/api/empleados/apoyos', 
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          if (!response.ok) throw new Error('Error al crear el apoyo');
+          const apoyoCreado = await response.json();
+          currentEditingSupportId = apoyoCreado.id; // <-- ESTA LÍNEA ES CLAVE
+          // Ahora sí puedes permitir subir evidencias
+          await loadSupportHistory();
+          // Actualizar el temporizador y botones después de crear el apoyo
+          await updateTimerAndButtons();
+          document.getElementById('folio').value = '';
+          document.getElementById('valeStatus').value = 'pendiente';
+          document.getElementById('description').value = '';
+          document.getElementById('materialStatus').value = '';
+          document.getElementById('materialOutDate').value = '';
+          document.getElementById('materialReturnDate').value = '';
+          document.getElementById('toolLoan').value = '';
+          document.getElementById('notes').value = '';
+          openAdditionalInfoModal();
+          // Establecer el tipo de apoyo correcto
+          document.getElementById('tipoApoyo').value = 'simple';
+          const allInputs = document.querySelectorAll('#additionalInfoModal input, #additionalInfoModal select, #additionalInfoModal textarea');
+          allInputs.forEach(input => {
+            input.disabled = false;
+            input.style.background = 'var(--bg-color)';
+            input.style.cursor = 'text';
+            input.style.opacity = '1';
+          });
+          document.getElementById('saveButton').style.display = 'block';
+          document.getElementById('saveButtonModal').style.display = 'block';
+        } catch (e) {
+          alert('Error al crear el apoyo: ' + e.message);
+        }
+      });
+
+      // Listener para apoyo mediano
+      document.getElementById('mediumSupportButton').addEventListener('click', async function() 
+      {
+        if (!employeeIdValid) {
+          mostrarNotificacion('Por favor, busque un empleado válido primero', 'error');
+          return;
+        }
+        const employeeId = document.getElementById('employeeId').value;
+        const username = localStorage.getItem('username');
+        const nombreCompleto = document.getElementById('fullName').value;
+        const formData = {
+          id: employeeId,
+          nombre_completo: nombreCompleto,
+          tipo: 'mediano',
+          folio: '',
+          estado: 'pendiente',
+          descripcion: '',
+          estatus_material: '',
+          fecha_salida_herramienta: '',
+          fecha_regreso_herramienta: '',
+          tool_loan: '',
+          notas: '',
+          ultima_modificacion: new Date().toISOString(),
+          modificado_por: username,
+          fecha: new Date().toISOString(),
+          vale_status: 'pendiente'
+        };
+        try {
+          const response = await fetch('/api/empleados/apoyos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          if (!response.ok) throw new Error('Error al crear el apoyo');
+          const apoyoCreado = await response.json();
+          currentEditingSupportId = apoyoCreado.id; // GUARDAR EL ID DEL APOYO CREADO
+          await loadSupportHistory();
+          // Actualizar el temporizador y botones después de crear el apoyo
+          await updateTimerAndButtons();
+          document.getElementById('folio').value = '';
+          document.getElementById('valeStatus').value = 'pendiente';
+          document.getElementById('description').value = '';
+          document.getElementById('materialStatus').value = '';
+          document.getElementById('materialOutDate').value = '';
+          document.getElementById('materialReturnDate').value = '';
+          document.getElementById('toolLoan').value = '';
+          document.getElementById('notes').value = '';
+          openAdditionalInfoModal();
+          // Establecer el tipo de apoyo correcto
+          document.getElementById('tipoApoyo').value = 'mediano';
+          const allInputs = document.querySelectorAll('#additionalInfoModal input, #additionalInfoModal select, #additionalInfoModal textarea');
+          allInputs.forEach(input => 
+          {
+            input.disabled = false;
+            input.style.background = 'var(--bg-color)';
+            input.style.cursor = 'text';
+            input.style.opacity = '1';
+          });
+          document.getElementById('saveButton').style.display = 'block';
+          document.getElementById('saveButtonModal').style.display = 'block';
+        } catch (e) {
+          alert('Error al crear el apoyo: ' + e.message);
+        }
+      });
+
+      // Listener para apoyo único
+      document.getElementById('uniqueSupportButton').addEventListener('click', function() 
+      {
+        if (this.disabled || this.classList.contains('permanently-disabled')) return;
+        if (!employeeIdValid) 
+        {
+          mostrarNotificacion('Por favor, busque un empleado válido primero', 'error');
+          return;
+        }
+        const modal = document.getElementById('uniqueSupportModal');
+        modal.style.display = 'flex';
+        const closeModal = modal.querySelector('.close-modal');
+        const cancelButton = modal.querySelector('.cancel-button');
+        const confirmButton = modal.querySelector('.confirm-button');
+        function closeModalFunction() 
+        {
+          modal.style.display = 'none';
+        }
+        closeModal.onclick = closeModalFunction;
+        cancelButton.onclick = closeModalFunction;
+        confirmButton.onclick = async function() 
+        {
+          closeModalFunction();
+          const employeeId = document.getElementById('employeeId').value;
+          const username = localStorage.getItem('username');
+          const nombreCompleto = document.getElementById('fullName').value;
+          const formData = {
+            id: employeeId,
+            nombre_completo: nombreCompleto,
+            tipo: 'unico',
+            folio: '',
+            estado: 'pendiente',
+            descripcion: '',
+            estatus_material: '',
+            fecha_salida_herramienta: '',
+            fecha_regreso_herramienta: '',
+            tool_loan: '',
+            notas: '',
+            ultima_modificacion: new Date().toISOString(),
+            modificado_por: username,
+            fecha: new Date().toISOString(),
+            vale_status: 'pendiente'
+          };
+          try 
+          {
+            const response = await fetch('/api/empleados/apoyos', 
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+            });
+            if (!response.ok) throw new Error('Error al crear el apoyo');
+            const apoyoCreado = await response.json();
+            currentEditingSupportId = apoyoCreado.id; // GUARDAR EL ID DEL APOYO CREADO
+            await loadSupportHistory();
+            // Actualizar el temporizador y botones después de crear el apoyo
+            await updateTimerAndButtons();
+            document.getElementById('folio').value = '';
+            document.getElementById('valeStatus').value = 'pendiente';
+            document.getElementById('description').value = '';
+            document.getElementById('materialStatus').value = '';
+            document.getElementById('materialOutDate').value = '';
+            document.getElementById('materialReturnDate').value = '';
+            document.getElementById('toolLoan').value = '';
+            document.getElementById('notes').value = '';
+            openAdditionalInfoModal();
+            // Establecer el tipo de apoyo correcto
+            document.getElementById('tipoApoyo').value = 'unico';
+            const allInputs = document.querySelectorAll('#additionalInfoModal input, #additionalInfoModal select, #additionalInfoModal textarea');
+            allInputs.forEach(input => 
+            {
+              input.disabled = false;
+              input.style.background = 'var(--bg-color)';
+              input.style.cursor = 'text';
+              input.style.opacity = '1';
+            });
+            document.getElementById('saveButton').style.display = 'block';
+            document.getElementById('saveButtonModal').style.display = 'block';
+          } catch (e) {
+            alert('Error al crear el apoyo: ' + e.message);
+          }
+        };
+      });
+
+      // Listener para préstamo de herramienta
+      document.getElementById('SupportButton').addEventListener('click', async function() 
+      {
+        if (!employeeIdValid) 
+        {
+          mostrarNotificacion('Por favor, busque un empleado válido primero', 'error');
+          return;
+        }
+        const employeeId = document.getElementById('employeeId').value;
+        const username = localStorage.getItem('username');
+        const nombreCompleto = document.getElementById('fullName').value;
+        const formData = 
+        {
+          id: employeeId,
+          nombre_completo: nombreCompleto,
+          tipo: 'herramienta',
+          folio: '',
+          estado: 'pendiente',
+          descripcion: '',
+          estatus_material: '',
+          fecha_salida_herramienta: '',
+          fecha_regreso_herramienta: '',
+          tool_loan: '',
+          notas: '',
+          ultima_modificacion: new Date().toISOString(),
+          modificado_por: username,
+          fecha: new Date().toISOString(),
+          vale_status: 'pendiente'
+        };
+        try 
+        {
+          const response = await fetch('/api/empleados/apoyos', 
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          if (!response.ok) throw new Error('Error al crear el apoyo');
+          const apoyoCreado = await response.json();
+          currentEditingSupportId = apoyoCreado.id; // GUARDAR EL ID DEL APOYO CREADO
+          await loadSupportHistory();
+          // Actualizar el temporizador y botones después de crear el apoyo
+          await updateTimerAndButtons();
+          document.getElementById('folio').value = '';
+          document.getElementById('valeStatus').value = 'pendiente';
+          document.getElementById('description').value = '';
+          document.getElementById('materialStatus').value = '';
+          document.getElementById('materialOutDate').value = '';
+          document.getElementById('materialReturnDate').value = '';
+          document.getElementById('toolLoan').value = '';
+          document.getElementById('notes').value = '';
+          openAdditionalInfoModal();
+          // Establecer el tipo de apoyo correcto
+          document.getElementById('tipoApoyo').value = 'Herramienta';
+          const allInputs = document.querySelectorAll('#additionalInfoModal input, #additionalInfoModal select, #additionalInfoModal textarea');
+          allInputs.forEach(input => 
+          {
+            input.disabled = false;
+            input.style.background = 'var(--bg-color)';
+            input.style.cursor = 'text';
+            input.style.opacity = '1';
+          });
+          document.getElementById('saveButton').style.display = 'block';
+          document.getElementById('saveButtonModal').style.display = 'block';
+        } catch (e) 
+        {
+          alert('Error al crear el apoyo: ' + e.message);
+        }
+      });
+    });
+
+    // Manejar la subida de evidencias (scope global) - usando la misma lógica que handleEmployeePhoto
+    function handleFileSelect(event, index) 
+    {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Mostrar preview en el contenedor
+      const container = document.getElementById(`evidencia${index}`);
+      const reader = new FileReader();
+      reader.onload = function(e) 
+      {
+        container.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+      };
+      reader.readAsDataURL(file);
+
+      // Subir la evidencia al servidor
+      const formData = new FormData();
+      formData.append('foto', file);
+      formData.append('indice', index);
+      
+      // Obtener el ID del apoyo actual
+      const apoyoId = currentEditingSupportId || (supportHistory.length > 0 ? supportHistory[0].id : null);
+      if (apoyoId) 
+      {
+        formData.append('apoyoId', apoyoId);
+        
+        fetch('/api/empleados/apoyos/evidencia', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const notif = document.getElementById('successNotification');
+            notif.textContent = 'Evidencia subida correctamente';
+            notif.style.display = 'block';
+            setTimeout(() => 
+            {
+              notif.style.display = 'none';
+            }, 2000);
+          } else {
+            console.error('Error al subir evidencia:', data.error);
+            alert('Error al subir la evidencia: ' + (data.error || 'Error desconocido'));
+          }
+        })
+        .catch(error => 
+        {
+          console.error('Error al subir evidencia:', error);
+          alert('Error al subir la evidencia: ' + error.message);
+        });
+      } else 
+      {
+        console.error('No hay apoyo disponible para subir evidencia');
+        alert('Primero debes crear o seleccionar un apoyo antes de subir evidencias.');
+      }
+    }
+
+    // Función para actualizar el temporizador y los botones de apoyo
+    async function updateTimerAndButtons() {
+      const employeeId = document.getElementById('employeeId').value;
+      if (!employeeId) return;
+
+      try {
+        // Obtener el historial actualizado
+        const response = await fetch(`/api/empleados/${employeeId}/historial`);
+        if (!response.ok) {
+          throw new Error('Error al cargar el historial');
+        }
+        
+        const data = await response.json();
+        const lastSupportDate = document.querySelector('.last-support .date');
+        
+        // Actualizar la fecha del último apoyo y el temporizador
+        if (data.length > 0) {
+          // Filtrar solo apoyos que NO sean de tipo herramienta para el temporizador
+          const apoyosParaTemporizador = data.filter(apoyo => 
+            apoyo.tipo !== 'herramienta' && 
+            apoyo.tipo !== 'Herramienta'
+          );
+          const ultimoApoyo = apoyosParaTemporizador.length > 0 ? apoyosParaTemporizador[0] : null;
+          if (ultimoApoyo && ultimoApoyo.fecha) 
+          {
+            const fechaUltimoApoyo = new Date(ultimoApoyo.fecha);
+            const tipoUltimoApoyo = (ultimoApoyo.tipo || '').toLowerCase();
+            startCountdown(fechaUltimoApoyo, tipoUltimoApoyo);
+            lastSupportDate.textContent = formatearFechaEspanol(fechaUltimoApoyo);
+          } else 
+          {
+            startCountdown(null, null);
+          }
+        } else 
+        {
+          lastSupportDate.textContent = '---';
+          startCountdown(null, null);
+        }
+
+        // Actualizar el estado de los botones de apoyo único
+        const uniqueSupportButton = document.getElementById('uniqueSupportButton');
+        if (data.some(s => s.tipo === false || s.tipo === 'unico')) {
+          uniqueSupportButton.disabled = true;
+          uniqueSupportButton.title = 'Este empleado ya recibió un apoyo único y no podrá volver a solicitarlo.';
+          uniqueSupportButton.setAttribute('data-permanently-disabled', 'true');
+          uniqueSupportButton.classList.add('permanently-disabled');
+        } else 
+        {
+          if (!uniqueSupportButton.hasAttribute('data-permanently-disabled')) 
+          {
+            uniqueSupportButton.disabled = false;
+            uniqueSupportButton.title = '';
+            uniqueSupportButton.classList.remove('permanently-disabled');
+          }
+        }
+      } catch (error) {
+        console.error('Error al actualizar temporizador y botones:', error);
+      }
+    }
+
+    // Función para formatear fecha en español
+    function formatearFechaEspanol(fecha) 
+    {
+      const opciones = 
+      {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      };
+      return fecha.toLocaleDateString('es-ES', opciones);
+    }
+
+    // Búsqueda en tiempo real por ID o nombre del empleado
+    document.addEventListener('DOMContentLoaded', function() {
+      const employeeIdInput = document.getElementById('employeeId');
+      const suggestionsList = document.getElementById('suggestionsList');
+      let searchTimeout;
+      let currentSuggestions = [];
+      let highlightedIndex = -1;
+
+      function ocultarSugerencias() {
+        if (suggestionsList) {
+          suggestionsList.style.display = 'none';
+          suggestionsList.innerHTML = '';
+          currentSuggestions = [];
+          highlightedIndex = -1;
+        }
+      }
+
+      function resaltarItem(index) {
+        if (!suggestionsList) return;
+        const children = suggestionsList.children;
+        for (let i = 0; i < children.length; i++) {
+          children[i].style.background = i === index ? '#1f1f1f' : 'transparent';
+        }
+        highlightedIndex = index;
+      }
+
+      function mostrarSugerencias(empleados, termino) {
+        if (!suggestionsList) return;
+        suggestionsList.innerHTML = '';
+        currentSuggestions = empleados.slice(0, 20);
+
+        const lcTerm = (termino || '').toLowerCase();
+        currentSuggestions.forEach((empleado, idx) => {
+          const item = document.createElement('div');
+          item.style.padding = '10px 12px';
+          item.style.cursor = 'pointer';
+          item.style.borderBottom = '1px solid #222';
+          const nombre = (empleado.nombre_completo || 'Sin nombre');
+          const nombreHTML = lcTerm
+            ? nombre.replace(new RegExp(`(${lcTerm})`, 'ig'), '<mark style="background:#ffc10733;color:#ffc107;border-radius:4px;padding:0 2px;">$1</mark>')
+            : nombre;
+          item.innerHTML = `<strong>${nombreHTML}</strong> <span style="opacity:.7">ID: ${empleado.id}</span>`;
+          item.addEventListener('click', () => {
+            ocultarSugerencias();
+            selectEmployee(empleado.id);
+          });
+          item.addEventListener('mouseenter', () => resaltarItem(idx));
+          suggestionsList.appendChild(item);
+        });
+
+        suggestionsList.style.display = currentSuggestions.length > 0 ? 'block' : 'none';
+        highlightedIndex = currentSuggestions.length > 0 ? 0 : -1;
+        if (highlightedIndex >= 0) resaltarItem(highlightedIndex);
+      }
+
+      async function buscarEmpleadosTiempoReal(termino) {
+        try {
+          if (!termino || termino.trim().length < 2) {
+            ocultarSugerencias();
+            return;
+          }
+          
+          // Validar que el término no tenga caracteres peligrosos
+          const terminoLimpio = termino.trim().replace(/[^\w\sáéíóúÁÉÍÓÚñÑ]/gi, '');
+          if (terminoLimpio.length < 2) {
+            ocultarSugerencias();
+            return;
+          }
+          
+          const resp = await fetch(`/api/empleados/buscar/${encodeURIComponent(terminoLimpio)}`, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          
+          if (!resp.ok) {
+            // Solo mostrar error si no es 500 (error del servidor que ya se está manejando)
+            if (resp.status !== 500) {
+              console.warn('Error al buscar empleados:', resp.status);
+            }
+            ocultarSugerencias();
+            return;
+          }
+          
+          const data = await resp.json();
+          
+          // Manejar diferentes formatos de respuesta
+          let empleados = [];
+          
+          if (data && data.success !== false) {
+            if (data.success && Array.isArray(data.empleados)) {
+              empleados = data.empleados;
+            } else if (data.empleado) {
+              // Si viene un solo empleado como objeto
+              empleados = [data.empleado];
+            } else if (data.empleados && Array.isArray(data.empleados)) {
+              empleados = data.empleados;
+            }
+          }
+          
+          if (empleados.length > 0) {
+            mostrarSugerencias(empleados, termino);
+          } else {
+            ocultarSugerencias();
+          }
+        } catch (e) {
+          // Silenciar errores de red cuando el servidor responde con error
+          if (e.name !== 'TypeError' || !e.message.includes('fetch')) {
+            console.error('Error al buscar empleados en tiempo real:', e);
+          }
+          ocultarSugerencias();
+        }
+      }
+
+      employeeIdInput.addEventListener('input', function(e) {
+        const valor = e.target.value.trim();
+        clearTimeout(searchTimeout);
+        if (!valor) { 
+          ocultarSugerencias(); 
+          return; 
+        }
+        // Si es solo numérico, no mostrar sugerencias por nombre
+        if (/^\d+$/.test(valor)) { 
+          ocultarSugerencias(); 
+          return; 
+        }
+        // Requiere al menos 2 caracteres para buscar
+        if (valor.length < 2) { 
+          ocultarSugerencias(); 
+          return; 
+        }
+        // Ejecutar búsqueda con debounce
+        searchTimeout = setTimeout(() => {
+          buscarEmpleadosTiempoReal(valor);
+        }, 250);
+      });
+
+      // Navegación por teclado en la lista de sugerencias y Enter
+      employeeIdInput.addEventListener('keydown', function(e) {
+        const tieneSugerencias = suggestionsList && suggestionsList.style.display === 'block' && currentSuggestions.length > 0;
+        
+        if (tieneSugerencias) {
+          // Si hay sugerencias visibles, manejar navegación
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (highlightedIndex < currentSuggestions.length - 1) {
+              resaltarItem(highlightedIndex + 1);
+            }
+            return;
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (highlightedIndex > 0) {
+              resaltarItem(highlightedIndex - 1);
+            }
+            return;
+          } else if (e.key === 'Enter') {
+            if (highlightedIndex >= 0 && highlightedIndex < currentSuggestions.length) {
+              e.preventDefault();
+              e.stopPropagation();
+              const sel = currentSuggestions[highlightedIndex];
+              ocultarSugerencias();
+              selectEmployee(sel.id);
+              return;
+            }
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            ocultarSugerencias();
+            return;
+          }
+        }
+        
+        // Si no hay sugerencias o se presiona Enter sin sugerencia seleccionada, ejecutar búsqueda normal
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          // Si hay sugerencias pero no se seleccionó ninguna, no prevenir y dejar que se ejecute la búsqueda
+          if (!tieneSugerencias || highlightedIndex < 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Ocultar sugerencias si están visibles
+            ocultarSugerencias();
+            // Ejecutar la búsqueda haciendo clic en el botón de búsqueda
+            const searchButton = document.getElementById('searchButton');
+            if (searchButton) {
+              searchButton.click();
+            }
+          }
+        }
+      });
+
+      // No necesitamos keypress porque keydown maneja todo
+
+      // Cerrar sugerencias al hacer clic fuera
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.form-group')) {
+          ocultarSugerencias();
+        }
+      });
+    });
+
+    // Funciones para el modal de todos los empleados
+    async function showAllEmployees() 
+    {
+      try 
+      {
+        // Mostrar modal con loading
+        const modal = document.getElementById('allEmployeesModal');
+        const tbody = document.getElementById('allEmployeesTableBody');
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">Cargando empleados...</td></tr>';
+        modal.style.display = 'flex';
+
+        // Obtener todos los empleados
+        const response = await fetch('/api/empleados');
+        if (!response.ok) {
+          throw new Error('Error al cargar los empleados');
+        }
+        const employees = await response.json();
+        allEmployees = employees;
+        tbody.innerHTML = '';
+
+        if (employees.length === 0) 
+        {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">No hay empleados registrados</td></tr>';
+          return;
+        }
+        renderEmployees(employees);
+
+      } catch (error) 
+      {
+        console.error('Error al cargar empleados:', error);
+        const tbody = document.getElementById('allEmployeesModal').querySelector('tbody');
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:#dc3545;">Error al cargar los empleados</td></tr>';
+      }
+    }
+
+    // Nueva función para mostrar solo empleados inactivos
+    async function showInactiveEmployees() 
+    {
+      try 
+      {
+        // Mostrar modal con loading
+        const modal = document.getElementById('allEmployeesModal');
+        const tbody = document.getElementById('allEmployeesTableBody');
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">Cargando empleados inactivos...</td></tr>';
+        modal.style.display = 'flex';
+
+        // Obtener todos los empleados
+        const response = await fetch('/api/empleados');
+        if (!response.ok) {
+          throw new Error('Error al cargar los empleados');
+        }
+        const allEmployeesData = await response.json();
+        
+        // Filtrar solo los empleados inactivos
+        const inactiveEmployees = allEmployeesData.filter(employee => employee.activo === false);
+        allEmployees = inactiveEmployees; // Guardar para la búsqueda
+        
+        tbody.innerHTML = '';
+
+        if (inactiveEmployees.length === 0) 
+        {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">No hay empleados inactivos</td></tr>';
+          return;
+        }
+        renderEmployees(inactiveEmployees);
+
+      } catch (error) 
+      {
+        console.error('Error al cargar empleados inactivos:', error);
+        const tbody = document.getElementById('allEmployeesTableBody');
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:#dc3545;">Error al cargar los empleados inactivos</td></tr>';
+      }
+    }
+
+    // Función para renderizar empleados
+    function renderEmployees(employees) 
+    {
+      const tbody = document.getElementById('allEmployeesTableBody');
+      tbody.innerHTML = '';
+
+      if (employees.length === 0) 
+      {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">No se encontraron empleados</td></tr>';
+        return;
+      }
+
+      employees.forEach(employee => {
+        const row = document.createElement('tr');
+        
+        // Formatear fecha de ingreso
+        let fechaIngreso = '-';
+        if (employee.fecha_ingreso) {
+          const fecha = new Date(employee.fecha_ingreso);
+          fechaIngreso = fecha.toLocaleDateString('es-ES');
+        }
+
+        // Estado del empleado
+        const estado = employee.activo ? 
+          '<span class="employee-status-active">Activo</span>' : 
+          '<span class="employee-status-inactive">Inactivo</span>';
+
+        // Generar HTML para la foto
+        let fotoHTML = '';
+        if (employee.foto_url) 
+        {
+          fotoHTML = `<img src="${employee.foto_url}" alt="Foto de ${employee.nombre_completo}" class="employee-photo-table" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`;
+        }
+        fotoHTML += `<div class="employee-photo-table no-photo" style="display: ${employee.foto_url ? 'none' : 'flex'};">${employee.nombre_completo.charAt(0)}</div>`;
+
+        row.innerHTML = `
+          <td>${fotoHTML}</td>
+          <td>${employee.id}</td>
+          <td>${employee.nombre_completo || '-'}</td>
+          <td>${employee.supervisor || '-'}</td>
+          <td>${employee.puesto || '-'}</td>
+          <td>${fechaIngreso}</td>
+          <td>${estado}</td>
+          <td>
+            <button class="select-employee-btn" onclick="selectEmployee(${employee.id})">
+              Seleccionar
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Función para filtrar empleados por nombre
+    function filterEmployees() 
+    {
+      const searchTerm = document.getElementById('employeeSearchInput').value.toLowerCase().trim();
+      
+      if (searchTerm === '') //Si no encuentra nada, muestra todo
+      {
+        renderEmployees(allEmployees);
+        return;
+      }
+      const filteredEmployees = allEmployees.filter(employee => {
+        const nombreCompleto = (employee.nombre_completo || '').toLowerCase();
+        return nombreCompleto.includes(searchTerm);
+      });
+      renderEmployees(filteredEmployees); //Renderizar lo filtrado
+    }
+
+    // Función para validar la entrada de búsqueda (solo letras y espacios)
+    function validateSearchInput(input) 
+    {
+      const value = input.value;
+      const lettersOnly = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+      const errorDiv = document.getElementById('searchError');
+      
+      if (value !== lettersOnly) {
+        // Mostrar mensaje de error
+        errorDiv.style.display = 'block';
+        // Limpiar el campo de caracteres no permitidos
+        input.value = lettersOnly;
+        
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+          errorDiv.style.display = 'none';
+        }, 3000);
+      } else {
+        // Ocultar mensaje de error si solo hay letras y espacios
+        errorDiv.style.display = 'none';
+      }
+      filterEmployees();
+    }
+
+    function closeAllEmployeesModal() 
+    {
+      const modal = document.getElementById('allEmployeesModal');
+      modal.style.display = 'none';
+    }
+
+    // Función para ordenar la tabla
+    function sortTable(column) {
+      // Cambiar dirección si es la misma columna
+      if (currentSortColumn === column) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSortColumn = column;
+        currentSortDirection = 'asc';
+      }
+
+      // Ordenar los empleados
+      const sortedEmployees = [...allEmployees].sort((a, b) => {
+        let aValue, bValue;
+
+        switch (column) {
+          case 'id':
+            aValue = parseInt(a.id) || 0;
+            bValue = parseInt(b.id) || 0;
+            break;
+          case 'nombre':
+            aValue = (a.nombre_completo || '').toLowerCase();
+            bValue = (b.nombre_completo || '').toLowerCase();
+            break;
+          case 'supervisor':
+            aValue = (a.supervisor || '').toLowerCase();
+            bValue = (b.supervisor || '').toLowerCase();
+            break;
+          case 'puesto':
+            aValue = (a.puesto || '').toLowerCase();
+            bValue = (b.puesto || '').toLowerCase();
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) {
+          return currentSortDirection === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return currentSortDirection === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+
+      // Actualizar la tabla
+      renderEmployees(sortedEmployees);
+      
+      // Actualizar indicadores de ordenamiento
+      updateSortIndicators(column);
+    }
+
+    // Función para actualizar los indicadores de ordenamiento
+    function updateSortIndicators(activeColumn) {
+      const headers = document.querySelectorAll('.sortable-header');
+      
+      headers.forEach(header => {
+        const icon = header.querySelector('i');
+        const column = header.getAttribute('onclick').match(/sortTable\('([^']+)'\)/)[1];
+        
+        if (column === activeColumn) {
+          // Mostrar dirección actual
+          if (currentSortDirection === 'asc') {
+            icon.className = 'fas fa-sort-up';
+            icon.style.opacity = '1';
+          } else {
+            icon.className = 'fas fa-sort-down';
+            icon.style.opacity = '1';
+          }
+        } else {
+          // Resetear otros headers
+          icon.className = 'fas fa-sort';
+          icon.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function selectEmployee(employeeId) 
+    {
+      closeAllEmployeesModal();
+      document.getElementById('employeeId').value = employeeId;
+      document.getElementById('searchButton').click();
+    }
+
+    // Función para descargar Excel con todos los empleados
+    async function downloadEmployeesExcel() 
+    {
+      try 
+      {
+        // Mostrar indicador de carga
+        const downloadBtn = document.querySelector('.download-button');
+        const originalText = downloadBtn.innerHTML;
+        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Generando...';
+        downloadBtn.disabled = true;
+
+        // Usar los empleados que están actualmente en la tabla
+        let employees = allEmployees;
+        
+        // Si no hay empleados en la tabla, obtener todos los activos por defecto
+        if (!employees || employees.length === 0) {
+          const response = await fetch('/api/empleados');
+          if (!response.ok) {
+            throw new Error('Error al obtener los empleados');
+          }
+          employees = await response.json();
+        }
+
+        if (employees.length === 0) 
+        {
+          alert('No hay empleados para descargar');
+          downloadBtn.innerHTML = originalText;
+          downloadBtn.disabled = false;
+          return;
+        }
+
+        // Crear el CSV
+        let csvContent = 'ID,Nombre Completo,Supervisor,Puesto,Fecha de Ingreso,Estado\n';
+        
+        employees.forEach(employee => 
+        {
+          // Formatear fecha de ingreso
+          let fechaIngreso = '-';
+          if (employee.fecha_ingreso) 
+          {
+            const fecha = new Date(employee.fecha_ingreso);
+            fechaIngreso = fecha.toLocaleDateString('es-ES');
+          }
+
+          // Estado del empleado
+          const estado = employee.activo ? 'Activo' : 'Inactivo';
+
+          // Escapar comillas y caracteres especiales
+          const nombre = (employee.nombre_completo || '-').replace(/"/g, '""');
+          const supervisor = (employee.supervisor || '-').replace(/"/g, '""');
+          const puesto = (employee.puesto || '-').replace(/"/g, '""');
+
+          csvContent += `"${employee.id}","${nombre}","${supervisor}","${puesto}","${fechaIngreso}","${estado}"\n`;
+        });
+
+        // Crear el blob y descargar
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        
+        if (link.download !== undefined) {
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', `empleados_${new Date().toISOString().split('T')[0]}.csv`);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
+        // Restaurar botón
+        downloadBtn.innerHTML = originalText;
+        downloadBtn.disabled = false;
+
+        // Mostrar notificación de éxito
+        const notif = document.getElementById('successNotification');
+        notif.textContent = `Excel descargado con ${employees.length} empleados`;
+        notif.style.display = 'block';
+        setTimeout(() => {
+          notif.style.display = 'none';
+        }, 3000);
+
+      } catch (error) {
+        console.error('Error al descargar Excel:', error);
+        
+        // Restaurar botón en caso de error
+        const downloadBtn = document.querySelector('.download-button');
+        downloadBtn.innerHTML = '<i class="fas fa-download" style="margin-right:8px;"></i>Descargar Excel';
+        downloadBtn.disabled = false;
+
+        // Mostrar notificación de error
+        const notif = document.getElementById('successNotification');
+        notif.textContent = 'Error al descargar el Excel: ' + error.message;
+        notif.style.display = 'block';
+        notif.style.backgroundColor = '#dc3545';
+        notif.style.borderColor = '#bd2130';
+        setTimeout(() => {
+          notif.style.display = 'none';
+          notif.style.backgroundColor = '#28a745';
+          notif.style.borderColor = '#218838';
+        }, 3000);
+      }
+    }
+
+    // Event listener para el switch de estado activo - DESHABILITADO (solo informativo)
+    document.addEventListener('DOMContentLoaded', function() {
+      const statusSwitch = document.getElementById('activeStatusSwitch');
+      
+      // El switch está oculto, solo se muestra el estado de forma informativa
+      // Se mantiene el código por si se necesita en el futuro, pero no se ejecuta
+      if (statusSwitch) {
+        statusSwitch.style.display = 'none';
+      }
+    });
+
+    // Variables globales para paginación de apoyos pendientes
+    let allPendingSupports = [];
+    let pendingSupportsPaginaActual = 1;
+    let pendingSupportsPorPagina = 20;
+    let pendingSupportsTotalPaginas = 1;
+
+    // Mostrar únicamente apoyos con estado 'pendiente' o restaurar todos
+    function showPendingSupports() {
+      const modal = document.getElementById('pendingSupportsModal');
+      const tbody = document.getElementById('pendingSupportsTableBody');
+      if (!modal || !tbody) return;
+
+      // Mostrar modal con mensaje de carga
+      modal.style.display = 'flex';
+      modal.style.zIndex = '10001'; // Asegurar que esté en primer plano
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">Cargando apoyos pendientes...</td></tr>';
+      
+      // Aplicar blur a los botones de abajo
+      const bottomButtons = document.querySelectorAll('.bottom-action-button');
+      bottomButtons.forEach(button => {
+        button.style.filter = 'blur(3px)';
+        button.style.opacity = '0.5';
+        button.style.pointerEvents = 'none';
+      });
+
+      // Obtener todos los empleados
+      fetch('/api/empleados')
+        .then(r => {
+          if (!r.ok) throw new Error('Error al cargar empleados');
+          return r.json();
+        })
+        .then(async (employees) => {
+          if (!Array.isArray(employees) || employees.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No hay empleados</td></tr>';
+            return;
+          }
+
+          // Limitar concurrencia si fuera necesario; por simplicidad usamos Promise.all
+          const requests = employees.map(emp => 
+            fetch(`/api/empleados/${emp.id}/apoyos-pendientes`).then(res => res.ok ? res.json() : [])
+              .catch(() => [])
+          );
+          const results = await Promise.all(requests);
+          // Aplanar resultados
+          allPendingSupports = results.flat().map(item => ({
+            fecha: item.fecha || item.ultima_modificacion,
+            nombre_completo: item.nombre_completo || '-',
+            supervisor: item.supervisor || '-',
+            tipo: item.tipo || item.tipo_apoyo || null,
+            folio: item.folio || '-',
+            notas: item.notas || '-'
+          }));
+
+          if (allPendingSupports.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No hay apoyos pendientes</td></tr>';
+            document.getElementById('pendingSupportsPaginacionContainer').style.display = 'none';
+            return;
+          }
+
+          // Ordenar por fecha descendente
+          allPendingSupports.sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+
+          // Reiniciar paginación
+          pendingSupportsPaginaActual = 1;
+          pendingSupportsPorPagina = parseInt(document.getElementById('pendingSupportsPorPagina').value) || 20;
+          calcularPaginacionPendingSupports();
+          renderizarPendingSupports();
+          mostrarControlesPaginacionPendingSupports();
+        })
+        .catch(err => {
+          console.error('Error al cargar apoyos pendientes globales:', err);
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#dc3545;">Error al cargar apoyos pendientes</td></tr>';
+        });
+    }
+
+    // Función para formatear el tipo de apoyo
+    function formatearTipoApoyo(tipo) {
+      if (!tipo || tipo === null || tipo === 'null' || tipo === 'undefined') return '-';
+      if (typeof tipo === 'string') {
+        const tipoLower = tipo.toLowerCase();
+        if (tipoLower === 'simple' || tipo === 'true') return 'Sencillo';
+        if (tipoLower === 'mediano') return 'Mediano';
+        if (tipoLower === 'unico' || tipo === 'false') return 'Único';
+        if (tipoLower === 'herramienta') return 'Herramienta';
+        return tipo; // Devolver el valor original si no coincide
+      }
+      if (tipo === true) return 'Sencillo';
+      if (tipo === false) return 'Único';
+      return '-';
+    }
+
+    // Función para calcular paginación
+    function calcularPaginacionPendingSupports() {
+      pendingSupportsTotalPaginas = Math.ceil(allPendingSupports.length / pendingSupportsPorPagina);
+      if (pendingSupportsPaginaActual > pendingSupportsTotalPaginas) {
+        pendingSupportsPaginaActual = pendingSupportsTotalPaginas || 1;
+      }
+    }
+
+    // Función para renderizar apoyos pendientes con paginación
+    function renderizarPendingSupports() {
+      const tbody = document.getElementById('pendingSupportsTableBody');
+      tbody.innerHTML = '';
+
+      const inicio = (pendingSupportsPaginaActual - 1) * pendingSupportsPorPagina;
+      const fin = Math.min(inicio + pendingSupportsPorPagina, allPendingSupports.length);
+      const apoyosPagina = allPendingSupports.slice(inicio, fin);
+
+      apoyosPagina.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.fecha ? formatearFechaEspanol(new Date(item.fecha)) : '-'}</td>
+          <td>${item.nombre_completo}</td>
+          <td>${item.supervisor}</td>
+          <td>${formatearTipoApoyo(item.tipo)}</td>
+          <td>${item.folio}</td>
+          <td>${item.notas}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      actualizarInfoPaginacionPendingSupports();
+    }
+
+    // Función para mostrar controles de paginación
+    function mostrarControlesPaginacionPendingSupports() {
+      const container = document.getElementById('pendingSupportsPaginacionContainer');
+      if (allPendingSupports.length > 0) {
+        container.style.display = 'flex';
+        actualizarControlesPaginacionPendingSupports();
+      } else {
+        container.style.display = 'none';
+      }
+    }
+
+    // Función para actualizar información de paginación
+    function actualizarInfoPaginacionPendingSupports() {
+      const info = document.getElementById('pendingSupportsPaginacionInfo');
+      const totalApoyos = allPendingSupports.length;
+      const inicio = (pendingSupportsPaginaActual - 1) * pendingSupportsPorPagina + 1;
+      const fin = Math.min(pendingSupportsPaginaActual * pendingSupportsPorPagina, totalApoyos);
+      
+      info.textContent = `Página ${pendingSupportsPaginaActual} de ${pendingSupportsTotalPaginas} (${inicio}-${fin} de ${totalApoyos} apoyos)`;
+    }
+
+    // Función para actualizar controles de paginación
+    function actualizarControlesPaginacionPendingSupports() {
+      const btnPrimera = document.getElementById('pendingSupportsBtnPrimera');
+      const btnAnterior = document.getElementById('pendingSupportsBtnAnterior');
+      const btnSiguiente = document.getElementById('pendingSupportsBtnSiguiente');
+      const btnUltima = document.getElementById('pendingSupportsBtnUltima');
+      const numerosContainer = document.getElementById('pendingSupportsPaginacionNumeros');
+
+      // Habilitar/deshabilitar botones
+      btnPrimera.disabled = pendingSupportsPaginaActual === 1;
+      btnAnterior.disabled = pendingSupportsPaginaActual === 1;
+      btnSiguiente.disabled = pendingSupportsPaginaActual === pendingSupportsTotalPaginas;
+      btnUltima.disabled = pendingSupportsPaginaActual === pendingSupportsTotalPaginas;
+
+      // Generar números de página
+      numerosContainer.innerHTML = '';
+      const maxNumeros = 5;
+      let inicio = Math.max(1, pendingSupportsPaginaActual - Math.floor(maxNumeros / 2));
+      let fin = Math.min(pendingSupportsTotalPaginas, inicio + maxNumeros - 1);
+      
+      if (fin - inicio + 1 < maxNumeros) {
+        inicio = Math.max(1, fin - maxNumeros + 1);
+      }
+
+      for (let i = inicio; i <= fin; i++) {
+        const btn = document.createElement('button');
+        btn.className = `btn-paginacion-numero ${i === pendingSupportsPaginaActual ? 'activo' : ''}`;
+        btn.textContent = i;
+        btn.onclick = () => irAPaginaPendingSupports(i);
+        numerosContainer.appendChild(btn);
+      }
+    }
+
+    // Función para ir a una página específica
+    function irAPaginaPendingSupports(pagina) {
+      if (pagina >= 1 && pagina <= pendingSupportsTotalPaginas && pagina !== pendingSupportsPaginaActual) {
+        pendingSupportsPaginaActual = pagina;
+        renderizarPendingSupports();
+        actualizarControlesPaginacionPendingSupports();
+      }
+    }
+
+    // Funciones de navegación de paginación
+    function primeraPaginaPendingSupports() {
+      irAPaginaPendingSupports(1);
+    }
+
+    function paginaAnteriorPendingSupports() {
+      if (pendingSupportsPaginaActual > 1) {
+        irAPaginaPendingSupports(pendingSupportsPaginaActual - 1);
+      }
+    }
+
+    function siguientePaginaPendingSupports() {
+      if (pendingSupportsPaginaActual < pendingSupportsTotalPaginas) {
+        irAPaginaPendingSupports(pendingSupportsPaginaActual + 1);
+      }
+    }
+
+    function ultimaPaginaPendingSupports() {
+      irAPaginaPendingSupports(pendingSupportsTotalPaginas);
+    }
+
+    // Función para cambiar apoyos por página
+    function cambiarPendingSupportsPorPagina() {
+      pendingSupportsPorPagina = parseInt(document.getElementById('pendingSupportsPorPagina').value) || 20;
+      pendingSupportsPaginaActual = 1;
+      calcularPaginacionPendingSupports();
+      renderizarPendingSupports();
+      actualizarControlesPaginacionPendingSupports();
+    }
+
+    function closePendingSupportsModal(){
+      const modal = document.getElementById('pendingSupportsModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.style.zIndex = '';
+      }
+      
+      // Quitar blur de los botones de abajo
+      const bottomButtons = document.querySelectorAll('.bottom-action-button');
+      bottomButtons.forEach(button => {
+        button.style.filter = '';
+        button.style.opacity = '';
+        button.style.pointerEvents = '';
+      });
+    }
+
+    // Event listeners para paginación de apoyos pendientes
+    document.addEventListener('DOMContentLoaded', function() {
+      // Event listeners para paginación
+      const btnPrimera = document.getElementById('pendingSupportsBtnPrimera');
+      const btnAnterior = document.getElementById('pendingSupportsBtnAnterior');
+      const btnSiguiente = document.getElementById('pendingSupportsBtnSiguiente');
+      const btnUltima = document.getElementById('pendingSupportsBtnUltima');
+      const selectPorPagina = document.getElementById('pendingSupportsPorPagina');
+
+      if (btnPrimera) btnPrimera.addEventListener('click', primeraPaginaPendingSupports);
+      if (btnAnterior) btnAnterior.addEventListener('click', paginaAnteriorPendingSupports);
+      if (btnSiguiente) btnSiguiente.addEventListener('click', siguientePaginaPendingSupports);
+      if (btnUltima) btnUltima.addEventListener('click', ultimaPaginaPendingSupports);
+      if (selectPorPagina) selectPorPagina.addEventListener('change', cambiarPendingSupportsPorPagina);
+
+      // Event listener para el botón de información (hover)
+      const infoButton = document.getElementById('infoApoyosButton');
+      const infoModal = document.getElementById('infoApoyosModal');
+      
+      if (infoButton && infoModal) {
+        let hideTimeout;
+        
+        function showModal() {
+          clearTimeout(hideTimeout);
+          infoButton.style.opacity = '1';
+          infoModal.style.display = 'block';
+        }
+        
+        function hideModal() {
+          hideTimeout = setTimeout(() => {
+            infoModal.style.display = 'none';
+            infoButton.style.opacity = '0.3';
+          }, 100);
+        }
+        
+        // Mostrar modal cuando el mouse entra al botón
+        infoButton.addEventListener('mouseenter', showModal);
+        
+        // Ocultar modal cuando el mouse sale del botón
+        infoButton.addEventListener('mouseleave', function() {
+          hideModal();
+        });
+        
+        // Mantener el modal visible cuando el mouse está sobre él
+        infoModal.addEventListener('mouseenter', function() {
+          clearTimeout(hideTimeout);
+          infoButton.style.opacity = '1';
+        });
+        
+        // Ocultar modal cuando el mouse sale del modal
+        infoModal.addEventListener('mouseleave', function() {
+          hideModal();
+        });
+      }
+    });
+  </script>
+  <script>
+    function moverHighlight() 
+    {
+      const topbar = document.querySelector('.topbar');
+      const highlight = topbar.querySelector('.glass-highlight');
+      const btnSel = topbar.querySelector('.menu-item.selected');
+      
+      if (!btnSel) return;
+      
+      const rectTopbar = topbar.getBoundingClientRect();
+      const rectBtn = btnSel.getBoundingClientRect();
+      const left = rectBtn.left - rectTopbar.left; 
+      highlight.style.left = left + 'px';
+      highlight.style.width = rectBtn.width + 'px';
+    }
+
+    function addChromaticEffect(element) 
+    {
+      element.classList.add('clicked');
+      setTimeout(() => 
+      {
+        element.classList.remove('clicked');
+      }, 600);
+    }
+
+    document.querySelectorAll('.menu-item').forEach(menuItem => 
+    {
+      menuItem.addEventListener('click', function(e) 
+      {
+        if (e.target.closest('.submenu-item')) return; // Permite navegación normal
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Efecto visual
+        document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        addChromaticEffect(this);
+        moverHighlight();
+
+        // Submenús
+        if (this.classList.contains('has-submenu')) 
+        {
+          const submenu = this.querySelector('.submenu');
+          const arrow = this.querySelector('.submenu-arrow');
+          document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+          document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          if (submenu) 
+          {
+            submenu.classList.toggle('active');
+            if (submenu.classList.contains('active')) 
+            {
+              arrow.style.transform = 'rotate(180deg)';
+            } else 
+            {
+              arrow.style.transform = 'rotate(0deg)';
+            }
+          }
+        }
+      });
+    });
+
+    document.addEventListener('click', function(e) 
+    {
+      if (!e.target.closest('.menu-item.has-submenu')) 
+      {
+        document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+      }
+    });
+
+    document.querySelectorAll('.submenu-item').forEach(link => 
+    {
+      link.addEventListener('click', function(e) 
+      {
+        console.log('Clic en enlace de submenú:', this.href);
+      });
+    });
+
+    moverHighlight();
+    window.addEventListener('resize', moverHighlight);
+
+    // Función para verificar y mostrar amonestaciones del empleado
+    async function checkAndShowAmonestaciones(employeeId) {
+      try {
+        const response = await fetch(`/api/amonestaciones/empleado/${employeeId}`);
+        if (response.ok) {
+          const amonestaciones = await response.json();
+          if (amonestaciones && amonestaciones.length > 0) {
+            showAmonestacionesModal(amonestaciones);
+          }
+        }
+      } catch (error) {
+        console.error('Error al verificar amonestaciones:', error);
+      }
+    }
+
+    // Función para mostrar el modal de amonestaciones
+    function showAmonestacionesModal(amonestaciones) {
+      // Crear el modal si no existe
+      let modal = document.getElementById('amonestacionesModal');
+      if (!modal) {
+        modal = createAmonestacionesModal();
+        document.body.appendChild(modal);
+      }
+
+      // Actualizar el contenido del modal
+      updateAmonestacionesContent(amonestaciones);
+      
+      // Mostrar el modal
+      modal.style.display = 'flex';
+    }
+
+    // Función para crear el modal de amonestaciones
+    function createAmonestacionesModal() {
+      const modal = document.createElement('div');
+      modal.id = 'amonestacionesModal';
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+      `;
+
+      modal.innerHTML = `
+        <div style="
+          background: white;
+          border-radius: 12px;
+          padding: 24px;
+          max-width: 800px;
+          max-height: 80vh;
+          width: 90%;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        ">
+          <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+          ">
+            <h2 style="
+              margin: 0;
+              color: #d32f2f;
+              font-size: 24px;
+              font-weight: 600;
+            ">Amonestaciones del Empleado</h2>
+            <button id="closeAmonestacionesModal" style="
+              background: none;
+              border: none;
+              font-size: 24px;
+              cursor: pointer;
+              color: #666;
+              padding: 5px;
+              border-radius: 50%;
+              width: 35px;
+              height: 35px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            ">×</button>
+          </div>
+          <div id="amonestacionesContent" style="
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+          ">
+            <!-- El contenido se llenará dinámicamente -->
+          </div>
+        </div>
+      `;
+
+      // Agregar evento para cerrar el modal
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal || e.target.id === 'closeAmonestacionesModal') {
+          modal.style.display = 'none';
+        }
+      });
+
+      return modal;
+    }
+
+    // Función para actualizar el contenido del modal
+    function updateAmonestacionesContent(amonestaciones) {
+      const content = document.getElementById('amonestacionesContent');
+      
+      if (amonestaciones.length === 0) {
+        content.innerHTML = '<p style="text-align: center; color: #000; font-style: italic;">No hay amonestaciones registradas.</p>';
+        return;
+      }
+
+      let html = '';
+      amonestaciones.forEach((amonestacion, index) => {
+        const fecha = new Date(amonestacion.fecha_solicitud).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Obtener los tipos de amonestación activos
+        const tiposAmonestacion = [];
+        if (amonestacion.falta_injustificada) tiposAmonestacion.push('Falta Injustificada');
+        if (amonestacion.retardos) tiposAmonestacion.push('Retardos');
+        if (amonestacion.baja_calidad) tiposAmonestacion.push('Baja Calidad');
+        if (amonestacion.estandar) tiposAmonestacion.push('Estándar');
+        if (amonestacion.indisciplina) tiposAmonestacion.push('Indisciplina');
+        if (amonestacion.desobedecer) tiposAmonestacion.push('Desobedecer');
+        if (amonestacion.danar_equipo) tiposAmonestacion.push('Dañar Equipo');
+        if (amonestacion.equipo_seguridad) tiposAmonestacion.push('Equipo de Seguridad');
+        if (amonestacion.seguridad_higiene) tiposAmonestacion.push('Seguridad e Higiene');
+
+        html += `
+          <div style="
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: ${amonestacion.revisado ? '#f8f9fa' : '#fff3e0'};
+            border-left: 4px solid ${amonestacion.revisado ? '#4caf50' : '#ff9800'};
+          ">
+            <div style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 12px;
+            ">
+              <h3 style="
+                margin: 0;
+                color: #333;
+                font-size: 18px;
+                font-weight: 600;
+              ">Amonestación #${amonestacion.id}</h3>
+              <span style="
+                background: ${amonestacion.revisado ? '#4caf50' : '#ff9800'};
+                color: white;
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+              ">${amonestacion.revisado ? 'Revisada' : 'Pendiente'}</span>
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+              <strong style="color: #000;">Fecha:</strong> <span style="color: #000;">${fecha}</span>
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+              <strong style="color: #000;">Motivo:</strong> <span style="color: #000;">${amonestacion.motivo || 'No especificado'}</span>
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+              <strong style="color: #000;">Tipos de Amonestación:</strong>
+              <div style="margin-top: 4px;">
+                ${tiposAmonestacion.map(tipo => `
+                  <span style="
+                    display: inline-block;
+                    background: #e3f2fd;
+                    color: #1976d2;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    margin: 2px 4px 2px 0;
+                  ">${tipo}</span>
+                `).join('')}
+              </div>
+            </div>
+            
+            ${amonestacion.comentarios ? `
+              <div style="margin-bottom: 12px;">
+                <strong style="color: #000;">Comentarios:</strong>
+                <p style="margin: 4px 0 0 0; color: #000; font-style: italic;">${amonestacion.comentarios}</p>
+              </div>
+            ` : ''}
+            
+            ${amonestacion.aprobado_por ? `
+              <div style="margin-bottom: 12px;">
+                <strong style="color: #000;">Aprobado por:</strong> <span style="color: #000;">${amonestacion.aprobado_por}</span>
+              </div>
+            ` : ''}
+            
+            ${amonestacion.evidencia_url ? `
+              <div style="margin-bottom: 12px;">
+                <strong style="color: #000;">Evidencia:</strong>
+                <a href="${amonestacion.evidencia_url}" target="_blank" style="
+                  color: #1976d2;
+                  text-decoration: none;
+                  margin-left: 8px;
+                ">Ver evidencia</a>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+
+      content.innerHTML = html;
+    }
+  </script>
+
+  <!-- Botón de disponibilidad de equipos -->
+  <button id="equipmentAvailabilityBtn" class="availability-fab">
+    <i class="fas fa-list-check"></i>
+    <span>Disponibilidad de Equipos</span>
+  </button>
+
+  <!-- Modal de Disponibilidad de Equipos -->
+  <div id="availabilityModal" class="modal" style="display:none;">
+    <div class="modal-content" style="background: white; color: #333; max-width: 800px;">
+      <div class="modal-header" style="background: #2196F3; color: white; border-radius: 8px 8px 0 0;">
+        <h3 style="color: white;">Disponibilidad de Equipos de Préstamo</h3>
+        <button class="close-modal" onclick="closeAvailabilityModal()" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="background: white; padding: 30px;">
+        <div class="availability-grid" style="background: white;">
+          <div class="availability-item">
+            <i class="fas fa-laptop"></i>
+            <h4>Laptops</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="laptopsAvailable">0</strong></span>
+              <span class="total">Total: <strong id="laptopsTotal">0</strong></span>
+            </div>
+          </div>
+          <div class="availability-item">
+            <i class="fas fa-tablet-alt"></i>
+            <h4>Bases para Laptop</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="basesAvailable">0</strong></span>
+              <span class="total">Total: <strong id="basesTotal">0</strong></span>
+            </div>
+          </div>
+          <div class="availability-item">
+            <i class="fas fa-plug"></i>
+            <h4>Docking Stations</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="dockingAvailable">0</strong></span>
+              <span class="total">Total: <strong id="dockingTotal">0</strong></span>
+            </div>
+          </div>
+          <div class="availability-item">
+            <i class="fas fa-desktop"></i>
+            <h4>Monitores</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="monitorsAvailable">0</strong></span>
+              <span class="total">Total: <strong id="monitorsTotal">0</strong></span>
+            </div>
+          </div>
+          <div class="availability-item">
+            <i class="fas fa-keyboard"></i>
+            <h4>Teclados</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="keyboardsAvailable">0</strong></span>
+              <span class="total">Total: <strong id="keyboardsTotal">0</strong></span>
+            </div>
+          </div>
+          <div class="availability-item">
+            <i class="fas fa-computer-mouse"></i>
+            <h4>Mouse</h4>
+            <div class="availability-status">
+              <span class="available">Disponibles: <strong id="mouseAvailable">0</strong></span>
+              <span class="total">Total: <strong id="mouseTotal">0</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="background: #f5f5f5; border-radius: 0 0 8px 8px;">
+        <button class="modal-button confirm-button" onclick="closeAvailabilityModal()" style="background: #2196F3;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Función para abrir el modal de préstamo de equipo
+    document.getElementById('equipmentLoanButton').addEventListener('click', function() {
+      document.getElementById('equipmentLoanModal').style.display = 'flex';
+    });
+
+    // Función para cerrar el modal de préstamo de equipo
+    function closeEquipmentLoanModal() {
+      document.getElementById('equipmentLoanModal').style.display = 'none';
+      document.getElementById('equipmentLoanForm').reset();
+    }
+
+    // Enviar solicitud de préstamo de equipo
+    async function submitEquipmentLoan() {
+      const pickupDate = document.getElementById('pickupDate').value;
+      const returnDate = document.getElementById('returnDate').value;
+      const notes = document.getElementById('equipmentNotes').value;
+
+      if (!pickupDate || !returnDate) {
+        alert('Por favor complete las fechas de retiro y devolución');
+        return;
+      }
+
+      // Validar que la fecha de devolución sea posterior a la de retiro
+      if (new Date(returnDate) <= new Date(pickupDate)) {
+        alert('La fecha de devolución debe ser posterior a la fecha de retiro');
+        return;
+      }
+
+      // Obtener hardware seleccionado
+      const hardwareChecked = [];
+      document.querySelectorAll('input[name="hardware"]:checked').forEach(cb => {
+        hardwareChecked.push(cb.value);
+      });
+
+      // Obtener software seleccionado
+      const softwareChecked = [];
+      document.querySelectorAll('input[name="software"]:checked').forEach(cb => {
+        softwareChecked.push(cb.value);
+      });
+
+      if (hardwareChecked.length === 0 && softwareChecked.length === 0) {
+        alert('Por favor seleccione al menos un elemento de hardware o software');
+        return;
+      }
+
+      // Aquí iría la lógica para enviar la solicitud al servidor
+      console.log('Solicitud de préstamo:', {
+        hardware: hardwareChecked,
+        software: softwareChecked,
+        fechaRetiro: pickupDate,
+        fechaDevolucion: returnDate,
+        observaciones: notes
+      });
+
+      alert('Solicitud de préstamo enviada correctamente');
+      closeEquipmentLoanModal();
+    }
+
+    // Botón de disponibilidad de equipos
+    document.getElementById('equipmentAvailabilityBtn').addEventListener('click', function() {
+      document.getElementById('availabilityModal').style.display = 'flex';
+      loadEquipmentAvailability();
+    });
+
+    function closeAvailabilityModal() {
+      document.getElementById('availabilityModal').style.display = 'none';
+    }
+
+    // Cargar la disponibilidad de equipos (ejemplo con datos estáticos)
+    function loadEquipmentAvailability() {
+      // Aquí iría la llamada al servidor para obtener la disponibilidad real
+      // Por ahora usamos datos de ejemplo
+      document.getElementById('laptopsAvailable').textContent = '3';
+      document.getElementById('laptopsTotal').textContent = '10';
+      document.getElementById('basesAvailable').textContent = '5';
+      document.getElementById('basesTotal').textContent = '8';
+      document.getElementById('dockingAvailable').textContent = '2';
+      document.getElementById('dockingTotal').textContent = '6';
+      document.getElementById('monitorsAvailable').textContent = '4';
+      document.getElementById('monitorsTotal').textContent = '12';
+      document.getElementById('keyboardsAvailable').textContent = '7';
+      document.getElementById('keyboardsTotal').textContent = '15';
+      document.getElementById('mouseAvailable').textContent = '8';
+      document.getElementById('mouseTotal').textContent = '15';
+    }
+
+    // Cerrar modales al hacer clic fuera de ellos
+    window.addEventListener('click', function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script src="js/topbar.js"></script>
+</body>
+</html> 

@@ -1,0 +1,3024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link rel="stylesheet" href="styles/nuevo-selector.css">
+    <link rel="stylesheet" href="styles/inicio.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Modal de acceso requerido */
+        .acceso-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .acceso-modal-content {
+            background: linear-gradient(135deg, rgba(120, 197, 162, 0.422) 0%, rgba(240, 248, 255, 0.95) 100%);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .acceso-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #333;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .acceso-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .acceso-modal-title {
+            margin: 0 0 25px 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .acceso-modal-body {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .acceso-modal-body p {
+            margin: 15px 0;
+            font-size: 16px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .acceso-email {
+            margin: 20px 0 !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+        }
+
+        .acceso-email a {
+            color: #1a5f3f;
+            text-decoration: none;
+            transition: all 0.2s;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .acceso-email a:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .acceso-modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .acceso-btn-cancelar {
+            background: linear-gradient(135deg, #ffb3ba 0%, #ff9aa2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 154, 162, 0.3);
+        }
+
+        .acceso-btn-cancelar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 154, 162, 0.4);
+        }
+
+        .acceso-btn-cancelar:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de anuncio -->
+    <div id="anuncioModal" class="anuncio-modal">
+        <div class="anuncio-modal-content">
+            <button class="anuncio-close" onclick="cerrarAnuncio()">&times;</button>
+            <img id="anuncioImagen" src="" alt="Anuncio" class="anuncio-imagen">
+        </div>
+    </div>
+
+    <!-- Modal de detalles del empleado -->
+    <div id="empleadoModal" class="empleado-modal" style="display: none;">
+        <div class="empleado-modal-content">
+            <button class="empleado-modal-close" onclick="cerrarEmpleadoModal()">&times;</button>
+            <div class="empleado-modal-header">
+                <div class="empleado-modal-foto"></div>
+                <div class="empleado-modal-info">
+                    <h2 id="empleadoNombre"></h2>
+                    <p id="empleadoPuesto"></p>
+                    <p id="empleadoFechaIngreso"></p>
+                </div>
+            </div>
+            <div class="empleado-modal-tabs">
+                <button class="modal-tab active" onclick="mostrarTab('amonestaciones')">Amonestaciones</button>
+                <button class="modal-tab" onclick="mostrarTab('retardos')">Retardos</button>
+                <button class="modal-tab" onclick="mostrarTab('apoyos')">Apoyos</button>
+                <button class="modal-tab" onclick="mostrarTab('vacaciones')">Vacaciones</button>
+            </div>
+            <div class="empleado-modal-content-section">
+                <div id="amonestaciones-tab" class="modal-tab-content active"></div>
+                <div id="retardos-tab" class="modal-tab-content"></div>
+                <div id="apoyos-tab" class="modal-tab-content"></div>
+                <div id="vacaciones-tab" class="modal-tab-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de acceso requerido -->
+    <div id="accesoModal" class="acceso-modal" style="display: none;">
+        <div class="acceso-modal-content">
+            <button class="acceso-modal-close" onclick="cerrarAccesoModal()">&times;</button>
+            <h2 class="acceso-modal-title">Acceso Requerido</h2>
+            <div class="acceso-modal-body">
+                <p>Si requiere acceso a esta funcionalidad, por favor envíe un mensaje a los siguientes correos:</p>
+                <p class="acceso-email">
+                    <a href="mailto:gerardo@pdmmetal.com">gerardo@pdmmetal.com</a>
+                    <a href="mailto:nahum@pdmmetal.com">nahum@pdmmetal.com</a>
+                </p>
+            </div>
+            <div class="acceso-modal-footer">
+                <button class="acceso-btn-cancelar" onclick="cerrarAccesoModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón hamburguesa para móviles -->
+    <button class="hamburger-menu-btn" id="hamburgerBtn" aria-label="Menú">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+
+    <!-- Overlay para cerrar el menú al hacer clic fuera -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Menú lateral (drawer) -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+        <div class="mobile-menu-header">
+            <h3>Menú</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">
+                <span>&times;</span>
+            </button>
+        </div>
+        <div class="mobile-menu-content">
+            <button class="mobile-menu-option active" id="mobileInicioBtn" onclick="if (!tieneEmpleadosACargo) { mostrarMensajeSinEmpleados(); } else { showInicio(); closeMobileMenu(); }">
+                <span>Tablero</span>
+            </button>
+            <button class="mobile-menu-option" id="mobilePdmLineBtn" onclick="showPDMLine(); closeMobileMenu();">
+                <span>PDM MRP</span>
+            </button>
+            <button class="mobile-menu-option" id="mobileMostFrequentBtn" onclick="showMostFrequent(); closeMobileMenu();">
+                <span>Opciones más usadas</span>
+            </button>
+            <button class="mobile-menu-option" id="mobileDepartamentosayuda" onclick="if (!document.getElementById('departamentosayuda') || !document.getElementById('departamentosayuda').classList.contains('disabled')) { showDepartamentosAyuda(); closeMobileMenu(); } else { mostrarAccesoModal(); }">
+                <span>Departamentos de apoyo</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Switch container original (visible en desktop) -->
+    <div class="switch-container">
+        <button class="switch-option active" id="inicioBtn" onclick="if (!tieneEmpleadosACargo) { mostrarMensajeSinEmpleados(); } else { showInicio(); }">Tablero</button>
+                <button class="switch-option" id="pdmLineBtn" onclick="showPDMLine()">PDM MRP</button>
+        <button class="switch-option" id="mostFrequentBtn" onclick="showMostFrequent()">Opciones más usadas</button>
+        <button class="switch-option" id="departamentosayuda" onclick="showDepartamentosAyuda()">Departamentos de apoyo</button>
+    </div>
+    
+    <div class="cards-container">
+        <!-- Sección de Inicio con empleados a cargo -->
+        <div id="empleadosList" class="inicio-section" style="display: none;">
+            <!-- Total de Empleados Activos -->
+            <div id="empleadosTotalCard" onclick="abrirModalEmpleados()" style="background: rgb(255, 255, 255); backdrop-filter: blur(20px); border-radius: 30px; padding: 40px; margin-bottom: 40px; max-width: 1400px; margin-left: auto; margin-right: auto; text-align: center; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.25)'; this.style.boxShadow='0 8px 32px rgba(0, 0, 0, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 1)'; this.style.boxShadow='0 8px 32px rgba(0, 0, 0, 0.1)'">
+                <h3 style="color: #000000; margin: 0 0 15px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Empleados asignados</h3>
+                <p id="empleadosTotalNum" style="color: #000000; font-size: 56px; font-weight: 700; margin: 10px 0; line-height: 1;">0</p>
+                <p style="color: rgb(0, 0, 0); font-size: 16px; margin: 0;">Total en mi equipo</p>
+            </div>
+            
+            <!-- Modal de Empleados -->
+            <div id="modalEmpleados" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999; align-items: center; justify-content: center;">
+                <div style="background: white; border-radius: 30px; padding: 40px; max-width: 1100px; width: 95%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); position: relative;">
+                    <button onclick="cerrarModalEmpleados()" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 28px; cursor: pointer; color: #999; z-index: 10;">&times;</button>
+                    <h2 style="color: #333; margin-top: 0; margin-bottom: 30px; font-size: 24px; text-align: center;">Información de Empleado</h2>
+                    
+                    <!-- Input para ID de empleado -->
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; color: #666; font-weight: 600; margin-bottom: 10px; font-size: 14px;">Selecciona un empleado:</label>
+                        <select id="empleadoIdSelect" onchange="cargarInfoEmpleadoModal()" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                            <option value="">-- Selecciona un empleado --</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Pestañas -->
+                    <div id="contenidoEmpleadoModal" style="display: none;">
+                        <div style="display: flex; gap: 10px; border-bottom: 2px solid #e0e0e0; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: hidden;">
+                            <button class="tab-empleado-btn active" onclick="cambiarTabEmpleado('apoyos')" data-tab="apoyos" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Apoyos</button>
+                            <button class="tab-empleado-btn" onclick="cambiarTabEmpleado('amonestaciones')" data-tab="amonestaciones" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Amonestaciones</button>
+                            <button class="tab-empleado-btn" onclick="cambiarTabEmpleado('faltas')" data-tab="faltas" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Faltas</button>
+                            <button class="tab-empleado-btn" onclick="cambiarTabEmpleado('permisos')" data-tab="permisos" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Permisos</button>
+                            <button class="tab-empleado-btn" onclick="cambiarTabEmpleado('retardos')" data-tab="retardos" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Retardos</button>
+                            <button class="tab-empleado-btn" onclick="cambiarTabEmpleado('vacaciones')" data-tab="vacaciones" style="padding: 12px 24px; background: none; border: none; cursor: pointer; font-weight: 600; color: #999; border-bottom: 3px solid transparent; transition: all 0.3s;">Vacaciones</button>
+                        </div>
+                        
+                        <!-- Contenido de pestañas -->
+                        <div id="tab-apoyos-empleado" class="tab-empleado-content" style="display: block;">
+                            <div style="min-height: 200px;">Cargando apoyos...</div>
+                        </div>
+                        <div id="tab-amonestaciones-empleado" class="tab-empleado-content" style="display: none;">
+                            <div style="min-height: 200px;">Cargando amonestaciones...</div>
+                        </div>
+                        <div id="tab-faltas-empleado" class="tab-empleado-content" style="display: none;">
+                            <div style="min-height: 200px;">Cargando faltas...</div>
+                        </div>
+                        <div id="tab-permisos-empleado" class="tab-empleado-content" style="display: none;">
+                            <div style="min-height: 200px;">Cargando permisos...</div>
+                        </div>
+                        <div id="tab-retardos-empleado" class="tab-empleado-content" style="display: none;">
+                            <div style="min-height: 200px;">Cargando retardos...</div>
+                        </div>
+                        <div id="tab-vacaciones-empleado" class="tab-empleado-content" style="display: none;">
+                            <div style="min-height: 200px;">Cargando vacaciones...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficas de Ausentismo -->
+            <div id="grafiasAusentismo" style="margin-bottom: 50px; width: 100%; display: flex; justify-content: center; padding: 0 20px;">
+                <div id="contenedorGraficas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; max-width: 1600px; width: 100%;">
+                    <!-- Las gráficas se generarán aquí -->
+                </div>
+            </div>
+            
+            <!-- Calendario Semanal -->
+            <div class="calendario-semanal">
+                <h3 class="calendario-titulo">Calendario Semanal</h3>
+                <div class="calendario-dias-container" id="calendarioDias">
+                    <!-- Los días se generarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <div class="card most-frequent" data-permission="show_tickets_it" onclick="window.location.href='/index.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">confirmation_number</span>
+                    <h2>Ticket de IT</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/index.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card most-frequent" data-permission="show_tickets_mantenimiento" onclick="window.location.href='/index_mantenimiento.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">confirmation_number</span>
+                    <h2>Ticket de Mantenimiento</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/index_mantenimiento.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card most-frequent" data-permission="show_vacaciones" onclick="window.location.href='/vacaciones.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">beach_access</span>
+                    <h2>Vacaciones</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/vacaciones.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+
+                <div class="card most-frequent" data-permission="show_permisos" onclick="window.location.href='/permisos.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">key</span>
+                    <h2>Permisos para empleados</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/permisos.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card most-frequent" data-permission="show_amonestaciones" onclick="window.location.href='/amonestacion_supervisor.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">warning</span>
+                    <h2>Amonestaciones</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/amonestacion_supervisor.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card most-frequent" data-permission="show_comidas" onclick="window.location.href='/comida.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">restaurant</span>
+                    <h2>Registro de comidas</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/comida.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_proyectos" onclick="window.location.href='/nuevo-pm.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">folder</span>
+                    <h2>Proyectos</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/inicio.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_diseno" onclick="window.location.href='/logeo-diseno.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">palette</span>
+                    <h2>Diseño</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/inicio.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_planeacion_compras" onclick="window.location.href='/planning.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">event_note</span>
+                    <h2>Planeación y Compras</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/planning.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_produccion" onclick="window.location.href='/production.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">precision_manufacturing</span>
+                    <h2>Producción</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/production.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_calidad" onclick="window.location.href='/qc.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">fact_check</span>
+                    <h2>Calidad (QC)</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/qc.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_importacion_exportacion" onclick="window.location.href='/import_export.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">import_export</span>
+                    <h2>Importación y Exportación</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/import_export.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_contabilidad" onclick="window.location.href='/accounting.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">account_balance</span>
+                    <h2>Contabilidad</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/accounting.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pdm-line" data-permission="show_almacen" onclick="window.location.href='/almacen.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">inventory_2</span>
+                    <h2>Almacén</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/almacen.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjetas añadidas: IT, Recursos Humanos y Mantenimiento -->
+        <div class="card apoyos-line" data-permission="show_it" onclick="window.location.href='/inicio.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">computer</span>
+                    <h2>IT</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/inicio.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card apoyos-line" data-permission="show_rh" onclick="window.location.href='/inicio.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">people</span>
+                    <h2>Recursos Humanos (RH)</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/inicio.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card apoyos-line" data-permission="show_mantenimiento" onclick="window.location.href='/inicio.html'">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="material-symbols-rounded">engineering</span>
+                    <h2>Mantenimiento</h2>
+                </div>
+                <div class="card-back">
+                    <a href="/inicio.html" class="enter-button">Entrar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="userInfo" style="position: fixed; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.95); padding: 10px 14px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); display: none;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <img id="userPhoto" alt="Foto del empleado" title="Perfil del empleado" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(0,0,0,0.08); background: #f3f4f6;" />
+            <button id="logoutButton" title="Cerrar sesión" style="background:#e74c3c; border:none; color:white; padding:8px 12px; border-radius:20px; cursor:pointer; font-weight:600;">Cerrar Sesión</button>
+        </div>
+    </div>
+
+
+    <script>
+        const DEFAULT_USER_PHOTO = "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'><rect width='80' height='80' rx='40' fill='#e5e7eb'/><circle cx='40' cy='30' r='14' fill='#9ca3af'/><path d='M14 68c3-13 14-22 26-22s23 9 26 22' fill='#9ca3af'/></svg>");
+
+        function getUserPhotoUrl(user) {
+            if (!user || typeof user !== 'object') return DEFAULT_USER_PHOTO;
+            return user.foto_url || user.photo_url || user.avatar || user.foto || DEFAULT_USER_PHOTO;
+        }
+
+        function renderUserPhoto(user) {
+            const userPhoto = document.getElementById('userPhoto');
+            if (!userPhoto) return;
+            userPhoto.src = getUserPhotoUrl(user);
+            userPhoto.onerror = function() {
+                this.onerror = null;
+                this.src = DEFAULT_USER_PHOTO;
+            };
+        }
+
+        function isGenericUserName(name) {
+            const n = (name || '').toString().trim().toLowerCase();
+            return !n || ['usuario', 'administrador', 'user', 'admin'].includes(n);
+        }
+
+        async function getEmpleadoDesdeTabla(user) {
+            const name = (user?.nombre_completo || user?.name || user?.nombre || '').toString().trim();
+            const employeeNumber = (user?.employeeNumber || user?.username || user?.user || '').toString().trim();
+
+            try {
+                if (name && !isGenericUserName(name)) {
+                    const byNameRes = await fetch(`/api/empleados?nombre=${encodeURIComponent(name)}`, { credentials: 'same-origin' });
+                    if (byNameRes.ok) {
+                        const empleado = await byNameRes.json();
+                        if (empleado && empleado.foto_url) return empleado;
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                if (employeeNumber && /^\d+$/.test(employeeNumber)) {
+                    const byIdRes = await fetch(`/api/empleados/${encodeURIComponent(employeeNumber)}`, { credentials: 'same-origin' });
+                    if (byIdRes.ok) {
+                        const empleado = await byIdRes.json();
+                        if (empleado && empleado.foto_url) return empleado;
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                const allRes = await fetch('/api/empleados', { credentials: 'same-origin' });
+                if (!allRes.ok) return null;
+                const empleados = await allRes.json();
+                if (!Array.isArray(empleados)) return null;
+
+                const nameLower = name.toLowerCase();
+                const emp = empleados.find(e => {
+                    const eName = (e?.nombre_completo || '').toString().trim().toLowerCase();
+                    const eId = (e?.id ?? '').toString().trim();
+                    return (nameLower && eName === nameLower) || (employeeNumber && eId === employeeNumber);
+                });
+                return emp || null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function renderUserPhotoFromEmployeeTable(user) {
+            renderUserPhoto(user);
+
+            const currentPhoto = getUserPhotoUrl(user);
+            if (currentPhoto && currentPhoto !== DEFAULT_USER_PHOTO) return;
+
+            const empleado = await getEmpleadoDesdeTabla(user);
+            if (!empleado || !empleado.foto_url) return;
+
+            const mergedUser = {
+                ...(user || {}),
+                nombre_completo: empleado.nombre_completo || user?.nombre_completo || user?.name,
+                name: empleado.nombre_completo || user?.name,
+                employeeNumber: (user?.employeeNumber || user?.username || user?.user || '').toString(),
+                foto_url: empleado.foto_url
+            };
+
+            localStorage.setItem('loggedInUser', JSON.stringify(mergedUser));
+            renderUserPhoto(mergedUser);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            const savedUser = localStorage.getItem('loggedInUser');
+            if (!savedUser) 
+            {
+                window.location.href = 'login.html';
+            } else 
+            {
+                const user = JSON.parse(savedUser);
+                const userInfo = document.getElementById('userInfo');
+                renderUserPhotoFromEmployeeTable(user);
+                userInfo.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginModal = document.getElementById('loginModal');
+            const loginButton = document.getElementById('loginButton');
+            const userInfo = document.getElementById('userInfo');
+
+            const savedUser = localStorage.getItem('loggedInUser');
+            if (savedUser) 
+            {
+                const user = JSON.parse(savedUser);
+                renderUserPhotoFromEmployeeTable(user);
+                if (userInfo) userInfo.style.display = 'block';
+                if (loginModal) loginModal.style.display = 'none';
+            }
+
+            document.addEventListener('keydown', (event) => 
+            {
+                if (event.key === 'Enter' && loginButton) 
+                {
+                    loginButton.click();
+                }
+            });
+
+            if (loginButton) 
+            {
+                loginButton.addEventListener('click', () => {
+                    const employeeNumber = document.getElementById('employeeNumber').value;
+                    const password = document.getElementById('password').value;
+
+                    if (employeeNumber === 'administrador' && password === 'administrador') {
+                        const user = { name: 'Administrador', employeeNumber: 'administrador', username: 'administrador' };
+                        localStorage.setItem('loggedInUser', JSON.stringify(user));
+                        localStorage.setItem('userInfo', JSON.stringify(user)); // Para logeo-diseno
+                        if (loginModal) loginModal.style.display = 'none';
+                        renderUserPhotoFromEmployeeTable(user);
+                        if (userInfo) userInfo.style.display = 'block';
+                        alert('Acceso concedido como administrador.');
+                    } else if (employeeNumber && password) {
+                        const user = { name: 'Usuario', employeeNumber, username: employeeNumber };
+                        localStorage.setItem('loggedInUser', JSON.stringify(user));
+                        localStorage.setItem('userInfo', JSON.stringify(user)); // Para logeo-diseno
+                        if (loginModal) loginModal.style.display = 'none';
+                        renderUserPhotoFromEmployeeTable(user);
+                        if (userInfo) userInfo.style.display = 'block';
+                    } else {
+                        alert('Por favor, complete ambos campos.');
+                    }
+                });
+            }
+
+            const newsModal = document.getElementById('newsModal');
+
+            // Mostrar el modal inmediatamente
+            newsModal.style.display = 'block';
+
+            // Ocultar el modal después de 5 segundos
+            setTimeout(() => {
+                newsModal.style.display = 'none';
+            }, 5000);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInfo = document.getElementById('userInfo');
+
+            const savedUser = localStorage.getItem('loggedInUser');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                renderUserPhotoFromEmployeeTable(user);
+                userInfo.style.display = 'block';
+            }
+        });
+
+        // Logout handler: borrar localStorage y volver al login
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutBtn = document.getElementById('logoutButton');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('rol');
+                    localStorage.removeItem('userPermissions');
+                    // opcional: limpiar otras claves relacionadas
+                    // localStorage.clear();
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+
+        function showInicio() 
+        {
+            // Verificar si tiene empleados a cargo antes de mostrar el tablero
+            if (!tieneEmpleadosACargo) {
+                mostrarMensajeSinEmpleados();
+                return; // No hacer nada si no tiene empleados
+            }
+            
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const apoyosLine = document.querySelectorAll('.apoyos-line');
+            const empleadosList = document.getElementById('empleadosList');
+            const inicioBtn = document.getElementById('inicioBtn');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            const departamentosAyudaBtn = document.getElementById('departamentosayuda');
+            
+            mostFrequent.forEach(item => item.style.display = 'none');
+            pdmLine.forEach(item => item.style.display = 'none');
+            apoyosLine.forEach(item => item.style.display = 'none');
+            if (empleadosList) empleadosList.style.display = 'block';
+            
+            inicioBtn.classList.add('active');
+            mostFrequentBtn.classList.remove('active');
+            pdmLineBtn.classList.remove('active');
+            departamentosAyudaBtn.classList.remove('active');
+            
+            // Cargar empleados a cargo
+            cargarEmpleadosACargo();
+            
+            // Generar calendario semanal
+            generarCalendarioSemanal();
+            
+            // Generar gráficas de ausentismo
+            generarGraficasAusentismo();
+        }
+
+        function showMostFrequent() 
+        {
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const apoyosLine = document.querySelectorAll('.apoyos-line');
+            const empleadosList = document.getElementById('empleadosList');
+            const inicioBtn = document.getElementById('inicioBtn');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            const departamentosAyudaBtn = document.getElementById('departamentosayuda');
+            
+            // Mostrar todas las tarjetas de most-frequent (habilitadas o deshabilitadas)
+            mostFrequent.forEach(item => {
+                item.style.display = 'block';
+            });
+            pdmLine.forEach(item => {
+                item.style.display = 'none';
+            });
+            apoyosLine.forEach(item => {
+                item.style.display = 'none';
+            });
+            if (empleadosList) empleadosList.style.display = 'none';
+            
+            inicioBtn.classList.remove('active');
+            mostFrequentBtn.classList.add('active');
+            pdmLineBtn.classList.remove('active');
+            departamentosAyudaBtn.classList.remove('active');
+        }
+
+        function showDepartamentosAyuda() 
+        {
+            const departamentosAyudaBtn = document.getElementById('departamentosayuda');
+            
+            // Verificar si el botón está deshabilitado (todas las tarjetas están en gris)
+            if (departamentosAyudaBtn && departamentosAyudaBtn.classList.contains('disabled')) {
+                // Si todas las tarjetas están deshabilitadas, no hacer nada o mostrar mensaje
+                mostrarAccesoModal();
+                return;
+            }
+            
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const apoyosLine = document.querySelectorAll('.apoyos-line');
+            const empleadosList = document.getElementById('empleadosList');
+            const inicioBtn = document.getElementById('inicioBtn');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            
+            mostFrequent.forEach(item => {
+                item.style.display = 'none';
+            });
+            pdmLine.forEach(item => {
+                item.style.display = 'none';
+            });
+            // Mostrar todas las tarjetas de apoyos-line (habilitadas o deshabilitadas)
+            apoyosLine.forEach(item => {
+                item.style.display = 'block';
+            });
+            if (empleadosList) empleadosList.style.display = 'none';
+            
+            inicioBtn.classList.remove('active');
+            mostFrequentBtn.classList.remove('active');
+            pdmLineBtn.classList.remove('active');
+            departamentosAyudaBtn.classList.add('active');
+        }
+        
+        function showPDMLine() 
+        {
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const apoyosLine = document.querySelectorAll('.apoyos-line');
+            const empleadosList = document.getElementById('empleadosList');
+            const inicioBtn = document.getElementById('inicioBtn');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            const departamentosAyudaBtn = document.getElementById('departamentosayuda');
+            
+            mostFrequent.forEach(item => {
+                item.style.display = 'none';
+            });
+            // Mostrar todas las tarjetas de pdm-line (habilitadas o deshabilitadas)
+            pdmLine.forEach(item => {
+                item.style.display = 'block';
+            });
+            apoyosLine.forEach(item => {
+                item.style.display = 'none';
+            });
+            if (empleadosList) empleadosList.style.display = 'none';
+            
+            inicioBtn.classList.remove('active');
+            mostFrequentBtn.classList.remove('active');
+            pdmLineBtn.classList.add('active');
+            departamentosAyudaBtn.classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+          try 
+          {
+            const raw = localStorage.getItem('loggedInUser');
+            const fallbackUsername = localStorage.getItem('username') || '';
+            if (!raw && !fallbackUsername) return; // no hay sesión guardada
+
+            let user = {};
+            if (raw) {
+              try { user = JSON.parse(raw); } catch(e) { user = { name: raw } }
+            }
+
+            let name = (user.nombre_completo || user.name || user.nombre || fallbackUsername || '').toString().trim();
+            let employeeNumber = (user.username || user.user || user.employeeNumber || fallbackUsername || '').toString().trim();
+
+            const userInfoEl = document.getElementById('userInfo');
+
+            // Si el nombre es genérico o igual al employeeNumber, intentamos obtener datos reales del servidor
+            const isGeneric = ['usuario', 'administrador', 'user', 'admin'].includes(name.toLowerCase()) || name === '' || name === employeeNumber;
+
+            async function tryFetchRemote() {
+              if (!employeeNumber) return false;
+              const endpoints = [
+                `/api/usuarios?username=${encodeURIComponent(employeeNumber)}`,
+                `/api/users?username=${encodeURIComponent(employeeNumber)}`,
+                `/api/users/${encodeURIComponent(employeeNumber)}`,
+                `/api/usuarios/${encodeURIComponent(employeeNumber)}`
+              ];
+
+              for (const url of endpoints) {
+                try 
+                {
+                  const res = await fetch(url, { credentials: 'same-origin' });
+                  if (!res.ok) continue;
+                  const data = await res.json();
+                  // data puede venir directo o en data.user
+                  const u = (data && (data.user || data)) || null;
+                  if (!u) continue;
+                  const remoteName = (u.nombre_completo || u.name || u.nombre || u.fullname || '').toString().trim();
+                  const remoteEmp = (u.employeeNumber || u.employee_number || u.username || u.user || '').toString().trim();
+                  if (remoteName || remoteEmp) {
+                    // actualizar variables y localStorage
+                    name = remoteName || name;
+                    employeeNumber = remoteEmp || employeeNumber;
+                    const newUser = { name, employeeNumber };
+                    localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+                    return true;
+                  }
+                } catch (e) 
+                {
+                  // ignora y sigue al siguiente endpoint
+                }
+              }
+              return false;
+            }
+
+            (async function() 
+            {
+              if (isGeneric) 
+              {
+                await tryFetchRemote();
+              }
+
+                            renderUserPhotoFromEmployeeTable({ ...user, name, employeeNumber, username: employeeNumber });
+              if (userInfoEl) userInfoEl.style.display = 'block';
+            })();
+
+          } catch (err) {
+            console.error('Error al cargar usuario desde localStorage:', err);
+          }
+        });
+
+        // Función para cargar y aplicar permisos de tarjetas
+        async function cargarPermisosTarjetas() {
+            try {
+                // Obtener el username del usuario
+                let username = localStorage.getItem('username');
+                
+                // Si no hay username, intentar obtenerlo de loggedInUser
+                if (!username) {
+                    const loggedInUser = localStorage.getItem('loggedInUser');
+                    if (loggedInUser) {
+                        try {
+                            const user = JSON.parse(loggedInUser);
+                            username = user.employeeNumber || user.name || user.username;
+                        } catch (e) {
+                            console.error('Error al parsear loggedInUser:', e);
+                        }
+                    }
+                }
+                
+                if (!username) {
+                    console.warn('No se pudo obtener el username para consultar permisos de tarjetas');
+                    return;
+                }
+                
+                // Consultar el endpoint de permisos de tarjetas
+                const response = await fetch(`/api/tarjetas-disponibles?username=${encodeURIComponent(username)}`);
+                
+                if (!response.ok) {
+                    throw new Error('Error al obtener permisos de tarjetas');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success || !data.tarjetas) {
+                    console.warn('No se pudieron obtener los permisos de tarjetas');
+                    return;
+                }
+                
+                const permisos = data.tarjetas;
+                
+                // Guardar los permisos en una variable global para usarlos en las funciones de cambio de categoría
+                window.tarjetasPermisos = permisos;
+                
+                // Obtener todas las tarjetas
+                const tarjetas = document.querySelectorAll('.card[data-permission]');
+                
+                tarjetas.forEach(tarjeta => {
+                    const permiso = tarjeta.getAttribute('data-permission');
+                    
+                    // Si el permiso existe en los datos y es true, la tarjeta está habilitada
+                    // Si es false o no existe, deshabilitar la tarjeta (gris, sin clic)
+                    if (permisos[permiso] === true) {
+                        tarjeta.classList.remove('disabled');
+                        tarjeta.setAttribute('data-has-permission', 'true');
+                        // Asegurar que el enlace funcione
+                        const link = tarjeta.querySelector('.enter-button');
+                        if (link) 
+                        {
+                            link.style.pointerEvents = 'auto';
+                            link.style.cursor = 'pointer';
+                        }
+                    } else 
+                    {
+                        
+                        // Si el permiso es false o no existe, deshabilitar la tarjeta (gris, sin clic)
+                        tarjeta.classList.add('disabled');
+                        tarjeta.setAttribute('data-has-permission', 'false');
+                        
+                        // Remover el onclick original del HTML y reemplazarlo
+                        const originalOnclick = tarjeta.getAttribute('onclick');
+                        tarjeta.removeAttribute('onclick');
+                        
+                        // Función para manejar el clic y mostrar el modal
+                        function handleDisabledCardClick(e) 
+                        {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+                            mostrarAccesoModal();
+                            return false;
+                        }
+                        
+                        // Sobrescribir el onclick directamente usando setAttribute para que tenga prioridad
+                        tarjeta.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); mostrarAccesoModal(); return false;');
+                        // También sobrescribir la propiedad onclick
+                        tarjeta.onclick = function(e) 
+                        {
+                            if (e) 
+                            {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                e.stopImmediatePropagation();
+                            }
+                            mostrarAccesoModal();
+                            return false;
+                        };
+                        
+                        // Agregar mousedown para capturar antes del click
+                        tarjeta.addEventListener('mousedown', function(e) 
+                        {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }, true);
+                        
+                        // Agregar event listener en fase de captura para interceptar antes que cualquier otro
+                        tarjeta.addEventListener('click', handleDisabledCardClick, true);
+
+                        // También agregar en fase de burbuja como respaldo
+                        tarjeta.addEventListener('click', handleDisabledCardClick, false);
+
+                        // Agregar también a los elementos internos (card-inner, card-front, card-back)
+                        const cardInner = tarjeta.querySelector('.card-inner');
+                        if (cardInner) 
+                        {
+                            cardInner.addEventListener('mousedown', handleDisabledCardClick, true);
+                            cardInner.addEventListener('click', handleDisabledCardClick, true);
+                            cardInner.style.cursor = 'not-allowed';
+                            cardInner.style.pointerEvents = 'auto';
+                            cardInner.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); mostrarAccesoModal(); return false;');
+                        }
+                        
+                        const cardFront = tarjeta.querySelector('.card-front');
+                        if (cardFront) {
+                            cardFront.addEventListener('mousedown', handleDisabledCardClick, true);
+                            cardFront.addEventListener('click', handleDisabledCardClick, true);
+                            cardFront.style.cursor = 'not-allowed';
+                            cardFront.style.pointerEvents = 'auto';
+                            cardFront.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); mostrarAccesoModal(); return false;');
+                        }
+                        
+                        const cardBack = tarjeta.querySelector('.card-back');
+                        if (cardBack) {
+                            cardBack.addEventListener('mousedown', handleDisabledCardClick, true);
+                            cardBack.addEventListener('click', handleDisabledCardClick, true);
+                            cardBack.style.cursor = 'not-allowed';
+                            cardBack.style.pointerEvents = 'auto';
+                            cardBack.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); mostrarAccesoModal(); return false;');
+                        }
+                        
+                        // Deshabilitar el enlace
+                        const link = tarjeta.querySelector('.enter-button');
+                        if (link) {
+                            link.style.pointerEvents = 'auto';
+                            link.style.cursor = 'not-allowed';
+                            link.addEventListener('mousedown', handleDisabledCardClick, true);
+                            link.addEventListener('click', handleDisabledCardClick, true);
+                            // Remover el href para prevenir navegación
+                            link.removeAttribute('href');
+                            link.setAttribute('onclick', 'event.preventDefault(); event.stopPropagation(); mostrarAccesoModal(); return false;');
+                            link.onclick = function(e) 
+                            {
+                                if (e) 
+                                {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    e.stopImmediatePropagation();
+                                }
+                                mostrarAccesoModal();
+                                return false;
+                            };
+                        }
+                        
+                        // Cambiar el cursor de toda la tarjeta
+                        tarjeta.style.cursor = 'not-allowed';
+                        tarjeta.style.pointerEvents = 'auto';
+                    }
+                });
+
+                // Verificar si hay al menos una tarjeta de "Departamentos de apoyo" habilitada
+                verificarEstadoBotonDepartamentos();
+                
+            } catch (error) {
+                console.error('Error al cargar permisos de tarjetas:', error);
+            }
+        }
+
+        // Función para verificar el estado del botón "Departamentos de apoyo"
+        function verificarEstadoBotonDepartamentos() {
+            const departamentosAyudaBtn = document.getElementById('departamentosayuda');
+            const mobileDepartamentosayuda = document.getElementById('mobileDepartamentosayuda');
+            
+            if (!departamentosAyudaBtn) return;
+            
+            // Obtener todas las tarjetas de "Departamentos de apoyo"
+            const tarjetasApoyos = document.querySelectorAll('.apoyos-line');
+            
+            // Verificar si hay al menos una tarjeta habilitada
+            let tieneAlMenosUnaHabilitada = false;
+            tarjetasApoyos.forEach(tarjeta => {
+                const hasPermission = tarjeta.getAttribute('data-has-permission');
+                if (hasPermission === 'true') {
+                    tieneAlMenosUnaHabilitada = true;
+                }
+            });
+            
+            if (tieneAlMenosUnaHabilitada) {
+                // Si hay al menos una tarjeta habilitada, el botón está activo
+                departamentosAyudaBtn.classList.remove('disabled');
+                departamentosAyudaBtn.style.opacity = '1';
+                departamentosAyudaBtn.style.cursor = 'pointer';
+                departamentosAyudaBtn.style.pointerEvents = 'auto';
+                
+                if (mobileDepartamentosayuda) {
+                    mobileDepartamentosayuda.classList.remove('disabled');
+                    mobileDepartamentosayuda.style.opacity = '1';
+                    mobileDepartamentosayuda.style.cursor = 'pointer';
+                    mobileDepartamentosayuda.style.pointerEvents = 'auto';
+                }
+            } else {
+                // Si todas las tarjetas están deshabilitadas, el botón está en gris
+                departamentosAyudaBtn.classList.add('disabled');
+                departamentosAyudaBtn.style.opacity = '0.5';
+                departamentosAyudaBtn.style.cursor = 'not-allowed';
+                departamentosAyudaBtn.style.pointerEvents = 'auto'; // Mantener para poder mostrar mensaje si es necesario
+                
+                if (mobileDepartamentosayuda) {
+                    mobileDepartamentosayuda.classList.add('disabled');
+                    mobileDepartamentosayuda.style.opacity = '0.5';
+                    mobileDepartamentosayuda.style.cursor = 'not-allowed';
+                    mobileDepartamentosayuda.style.pointerEvents = 'auto';
+                }
+            }
+        }
+        
+        // Cargar permisos cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asegurar que todas las tarjetas se muestren inicialmente
+            const allCards = document.querySelectorAll('.card[data-permission]');
+            allCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            
+            // Decidir qué pestaña mostrar inicialmente según si el usuario tiene empleados a cargo
+            (async () => {
+                try {
+                    const vistaSolicitada = new URLSearchParams(window.location.search).get('vista');
+                    const totalEmpleados = await cargarEmpleadosACargo();
+                    if (vistaSolicitada === 'personal-cargo') {
+                        if (totalEmpleados > 0) {
+                            showInicio();
+                        } else {
+                            showPDMLine();
+                        }
+                    } else if (totalEmpleados > 0) {
+                        // Tiene gente a su cargo: mostrar Tablero
+                        showInicio();
+                    } else {
+                        // No tiene gente a su cargo: mostrar PDM MRP
+                        showPDMLine();
+                    }
+                } catch (e) {
+                    console.error('Error al decidir pestaña inicial:', e);
+                    // En caso de error, dejamos el comportamiento por defecto en PDM MRP
+                    showPDMLine();
+                }
+            })();
+            
+            // Esperar un poco para asegurar que el usuario esté cargado
+            setTimeout(() => {
+                cargarPermisosTarjetas();
+            }, 500);
+            
+            // Cargar y mostrar anuncio
+            cargarAnuncio();
+
+            // Cerrar modal de empleado al hacer clic fuera
+            const empleadoModal = document.getElementById('empleadoModal');
+            if (empleadoModal) {
+                empleadoModal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        cerrarEmpleadoModal();
+                    }
+                });
+            }
+
+            // Cerrar modal con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') 
+                {
+                    const modal = document.getElementById('empleadoModal');
+                    if (modal && modal.style.display === 'flex') 
+                    {
+                        cerrarEmpleadoModal();
+                    }
+                }
+            });
+        });
+        
+        async function cargarAnuncio() {
+            try 
+            {
+                const response = await fetch('/api/anuncio/actual');
+                if (response.ok) 
+                {
+                    const data = await response.json();
+                    const esMenuSemanal = data.menu_semana === true;
+                    
+                    if (data.imagen_url && !esMenuSemanal) 
+                    {
+                        const modal = document.getElementById('anuncioModal');
+                        const imagen = document.getElementById('anuncioImagen');
+                        imagen.src = data.imagen_url;
+                        modal.style.display = 'flex';
+                    } else if (esMenuSemanal) 
+                    {
+                        console.log('Anuncio es menú de la semana, NO SE MUESTRA en selector');
+                    }
+                } else 
+                {
+                    // No hay anuncio activo, no hacer nada
+                    console.log('No hay anuncios activos para mostrar');
+                }
+            } catch (error) 
+            {
+                // Error al cargar anuncio, continuar sin mostrar nada
+                console.log('Error al cargar anuncio:', error);
+            }
+        }
+        
+        function cerrarAnuncio() {
+            const modal = document.getElementById('anuncioModal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+        
+        // Cerrar modal con ESC o click fuera del contenido
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('anuncioModal');
+                if (modal && modal.style.display === 'flex') {
+                    cerrarAnuncio();
+                }
+            }
+        });
+        
+        // Click fuera del modal para cerrar
+        document.getElementById('anuncioModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarAnuncio();
+            }
+        });
+
+        // Funciones para manejar el modal de empleado
+        function abrirEmpleadoModal(empleadoId, nombre, puesto, fechaIngreso, fotoUrl) {
+            const modal = document.getElementById('empleadoModal');
+            const fotoDiv = document.querySelector('.empleado-modal-foto');
+            
+            // Limpiar tabs
+            document.getElementById('amonestaciones-tab').innerHTML = '';
+            document.getElementById('retardos-tab').innerHTML = '';
+            document.getElementById('apoyos-tab').innerHTML = '';
+            document.getElementById('vacaciones-tab').innerHTML = '';
+            
+            // Establecer información del empleado
+            document.getElementById('empleadoNombre').textContent = nombre;
+            document.getElementById('empleadoPuesto').textContent = puesto;
+            document.getElementById('empleadoFechaIngreso').textContent = fechaIngreso ? `Ingreso: ${new Date(fechaIngreso).toLocaleDateString('es-MX')}` : 'Ingreso: N/A';
+            
+            // Establecer foto
+            if (fotoUrl) {
+                fotoDiv.innerHTML = `<img src="${fotoUrl}" alt="${nombre}" onerror="this.style.display='none'">`;
+            } else {
+                fotoDiv.innerHTML = nombre.charAt(0).toUpperCase();
+            }
+            
+            // Mostrar modal y cargar datos
+            modal.style.display = 'flex';
+            cargarDatosEmpleado(empleadoId);
+            
+            // Mostrar tab de amonestaciones por defecto
+            mostrarTab('amonestaciones');
+        }
+
+        function cerrarEmpleadoModal() {
+            document.getElementById('empleadoModal').style.display = 'none';
+        }
+
+        // Funciones para el modal de acceso requerido
+        function mostrarAccesoModal() 
+        {
+            const modal = document.getElementById('accesoModal');
+            if (modal) 
+            {
+                modal.style.display = 'flex';
+            } else {
+                console.error('🔴 ERROR: No se encontró el modal accesoModal');
+            }
+        }
+
+        function cerrarAccesoModal() {
+            const modal = document.getElementById('accesoModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Cerrar modal de acceso con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('accesoModal');
+                if (modal && modal.style.display === 'flex') {
+                    cerrarAccesoModal();
+                }
+            }
+        });
+
+        // Click fuera del modal de acceso para cerrar
+        document.getElementById('accesoModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarAccesoModal();
+            }
+        });
+
+        function mostrarTab(tabName) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.modal-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones
+            document.querySelectorAll('.modal-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostrar tab seleccionado y activar botón
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function cargarDatosEmpleado(empleadoId) {
+            try {
+                // Cargar amonestaciones
+                cargarAmonestacionesEmpleado(empleadoId);
+                
+                // Cargar retardos
+                cargarRetardosEmpleado(empleadoId);
+                
+                // Cargar apoyos
+                cargarApoyosEmpleado(empleadoId);
+                
+                // Cargar vacaciones
+                cargarVacacionesEmpleado(empleadoId);
+            } catch (error) {
+                console.error('Error al cargar datos del empleado:', error);
+            }
+        }
+
+        async function cargarAmonestacionesEmpleado(empleadoId) {
+            try {
+                const response = await fetch(`/api/amonestaciones/empleado/${empleadoId}`);
+                if (response.ok) {
+                    const amonestaciones = await response.json();
+                    const container = document.getElementById('amonestaciones-tab');
+                    
+                    if (!amonestaciones || amonestaciones.length === 0) {
+                        container.innerHTML = '<div class="tab-empty">No hay amonestaciones registradas</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = amonestaciones.map(amon => {
+                        const tipos = [];
+                        if (amon.falta_injustificada) tipos.push('Falta injustificada');
+                        if (amon.retardos) tipos.push('Retardos');
+                        if (amon.baja_calidad) tipos.push('Baja calidad');
+                        if (amon.estandar) tipos.push('Incumplimiento de estándar');
+                        if (amon.indisciplina) tipos.push('Indisciplina');
+                        if (amon.desobedecer) tipos.push('Desobediencia');
+                        if (amon.danar_equipo) tipos.push('Daño a equipo');
+                        if (amon.equipo_seguridad) tipos.push('Equipo de seguridad');
+                        if (amon.seguridad_higiene) tipos.push('Seguridad e higiene');
+                        
+                        return `
+                            <div class="tab-item">
+                                <div class="tab-item-title">Amonestación del ${new Date(amon.fecha_solicitud).toLocaleDateString('es-MX')}</div>
+                                ${tipos.length > 0 ? `<div class="tab-item-detail"><strong>Tipo:</strong> ${tipos.join(', ')}</div>` : ''}
+                                ${amon.motivo ? `<div class="tab-item-detail"><strong>Motivo:</strong> ${amon.motivo}</div>` : ''}
+                                ${amon.comentarios ? `<div class="tab-item-detail"><strong>Comentarios:</strong> ${amon.comentarios}</div>` : ''}
+                                <div class="tab-item-detail"><strong>Aprobado por:</strong> ${amon.aprobado_por || 'N/A'}</div>
+                                ${amon.dias_suspension ? `<div class="tab-item-detail"><strong>Días de suspensión:</strong> ${amon.dias_suspension}</div>` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('amonestaciones-tab').innerHTML = '<div class="tab-empty">No hay amonestaciones registradas</div>';
+                }
+            } catch (error) {
+                console.error('Error al cargar amonestaciones:', error);
+                document.getElementById('amonestaciones-tab').innerHTML = '<div class="tab-empty">Error al cargar datos</div>';
+            }
+        }
+
+        async function cargarRetardosEmpleado(empleadoId) {
+            try {
+                const response = await fetch(`/faltas-retardos?empleado_id=${empleadoId}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    const container = document.getElementById('retardos-tab');
+                    
+                    // Filtrar solo retardos
+                    const retardos = result.data.filter(item => item.tipo === 'retardo');
+                    
+                    if (!retardos || retardos.length === 0) {
+                        container.innerHTML = '<div class="tab-empty">No hay retardos registrados</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = retardos.map(ret => `
+                        <div class="tab-item">
+                            <div class="tab-item-title">Retardo del ${new Date(ret.fecha).toLocaleDateString('es-MX')}</div>
+                            <div class="tab-item-detail"><strong>Minutos:</strong> ${ret.minutos || 'N/A'}</div>
+                            ${ret.motivo ? `<div class="tab-item-detail"><strong>Motivo:</strong> ${ret.motivo}</div>` : ''}
+                            ${ret.descripcion ? `<div class="tab-item-detail"><strong>Descripción:</strong> ${ret.descripcion}</div>` : ''}
+                            ${ret.justificado ? `<div class="tab-item-detail"><strong>Justificado:</strong> Sí</div>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('retardos-tab').innerHTML = '<div class="tab-empty">No hay retardos registrados</div>';
+                }
+            } catch (error) {
+                console.error('Error al cargar retardos:', error);
+                document.getElementById('retardos-tab').innerHTML = '<div class="tab-empty">Error al cargar datos</div>';
+            }
+        }
+
+        async function cargarApoyosEmpleado(empleadoId) {
+            try {
+                const response = await fetch(`/api/empleados/${empleadoId}/historial`);
+                if (response.ok) {
+                    const apoyos = await response.json();
+                    const container = document.getElementById('apoyos-tab');
+                    
+                    if (!apoyos || apoyos.length === 0) {
+                        container.innerHTML = '<div class="tab-empty">No hay apoyos registrados</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = apoyos.map(apoyo => `
+                        <div class="tab-item">
+                            <div class="tab-item-title">Folio: ${apoyo.folio || 'N/A'}</div>
+                            <div class="tab-item-detail"><strong>Tipo:</strong> ${apoyo.tipo || 'Apoyo'}</div>
+                            <div class="tab-item-detail">Fecha: ${new Date(apoyo.fecha).toLocaleDateString('es-MX')}</div>
+                            <div class="tab-item-detail">Estado: ${apoyo.estado || 'Sin estado'}</div>
+                            ${apoyo.descripcion ? `<div class="tab-item-detail">Descripción: ${apoyo.descripcion}</div>` : ''}
+                            ${apoyo.notas ? `<div class="tab-item-detail">Notas: ${apoyo.notas}</div>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('apoyos-tab').innerHTML = '<div class="tab-empty">No hay apoyos registrados</div>';
+                }
+            } catch (error) {
+                console.error('Error al cargar apoyos:', error);
+                document.getElementById('apoyos-tab').innerHTML = '<div class="tab-empty">Error al cargar datos</div>';
+            }
+        }
+
+        async function cargarVacacionesEmpleado(empleadoId) {
+            try {
+                const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+                if (response.ok) {
+                    const vacaciones = await response.json();
+                    const container = document.getElementById('vacaciones-tab');
+                    
+                    if (!vacaciones || vacaciones.length === 0) {
+                        container.innerHTML = '<div class="tab-empty">No hay vacaciones registradas</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = vacaciones.map(vac => `
+                        <div class="tab-item">
+                            <div class="tab-item-title">Vacaciones del ${new Date(vac.fecha_inicio).toLocaleDateString('es-MX')} al ${new Date(vac.fecha_fin).toLocaleDateString('es-MX')}</div>
+                            <div class="tab-item-detail"><strong>Días solicitados:</strong> ${vac.dias_solicitados || 'N/A'}</div>
+                            <div class="tab-item-detail"><strong>Estado:</strong> ${vac.estado || 'Pendiente'}</div>
+                            <div class="tab-item-detail"><strong>Días disponibles:</strong> ${vac.dias_pendientes || 'N/A'}</div>
+                            ${vac.observaciones ? `<div class="tab-item-detail"><strong>Observaciones:</strong> ${vac.observaciones}</div>` : ''}
+                            ${vac.revisado_por ? `<div class="tab-item-detail"><strong>Revisado por:</strong> ${vac.revisado_por}</div>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('vacaciones-tab').innerHTML = '<div class="tab-empty">No hay vacaciones registradas</div>';
+                }
+            } catch (error) {
+                console.error('Error al cargar vacaciones:', error);
+                document.getElementById('vacaciones-tab').innerHTML = '<div class="tab-empty">Error al cargar datos</div>';
+            }
+        }
+
+        // Variable global para almacenar empleados
+        let empleadosListaGlobal = [];
+        // Variable global para saber si el usuario tiene empleados a cargo
+        let tieneEmpleadosACargo = false;
+
+        // Función para cargar empleados a cargo del supervisor
+        // Devuelve el número de empleados a cargo (0 si no tiene ninguno o si hay error)
+        async function cargarEmpleadosACargo() {
+            try {
+                const savedUser = localStorage.getItem('loggedInUser');
+                if (!savedUser) {
+                    document.getElementById('empleadosTotalNum').textContent = '0';
+                    tieneEmpleadosACargo = false;
+                    actualizarEstadoBotonTablero();
+                    return 0;
+                }
+
+                const user = JSON.parse(savedUser);
+                const nombreCompleto = user.nombre_completo || user.name || user.nombre || '';
+
+                if (!nombreCompleto) {
+                    document.getElementById('empleadosTotalNum').textContent = '0';
+                    tieneEmpleadosACargo = false;
+                    actualizarEstadoBotonTablero();
+                    return 0;
+                }
+
+                // Hacer la petición al endpoint
+                const response = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(nombreCompleto)}`);
+                
+                if (!response.ok) {
+                    throw new Error('Error al obtener empleados');
+                }
+
+                const empleados = await response.json();
+                empleadosListaGlobal = empleados; // Guardar en variable global
+                
+                // Actualizar el total de empleados
+                const totalEmpleados = empleados && empleados.length > 0 ? empleados.length : 0;
+                document.getElementById('empleadosTotalNum').textContent = totalEmpleados;
+                
+                // Actualizar variable global
+                tieneEmpleadosACargo = totalEmpleados > 0;
+                
+                // Actualizar estado de los botones del Tablero
+                actualizarEstadoBotonTablero();
+                
+                // Si no hay empleados, devolvemos 0
+                if (!empleados || empleados.length === 0) {
+                    return 0;
+                }
+
+                return totalEmpleados;
+            } catch (error) {
+                console.error('Error al cargar empleados:', error);
+                document.getElementById('empleadosTotalNum').textContent = '0';
+                tieneEmpleadosACargo = false;
+                actualizarEstadoBotonTablero();
+                return 0;
+            }
+        }
+
+        // Función para actualizar el estado visual de los botones del Tablero
+        function actualizarEstadoBotonTablero() {
+            const inicioBtn = document.getElementById('inicioBtn');
+            const mobileInicioBtn = document.getElementById('mobileInicioBtn');
+            
+            if (tieneEmpleadosACargo) {
+                // Habilitar botones
+                if (inicioBtn) {
+                    inicioBtn.classList.remove('disabled');
+                    inicioBtn.style.opacity = '1';
+                    inicioBtn.style.cursor = 'pointer';
+                    inicioBtn.style.pointerEvents = 'auto';
+                }
+                if (mobileInicioBtn) {
+                    mobileInicioBtn.classList.remove('disabled');
+                    mobileInicioBtn.style.opacity = '1';
+                    mobileInicioBtn.style.cursor = 'pointer';
+                    mobileInicioBtn.style.pointerEvents = 'auto';
+                }
+            } else {
+                // Deshabilitar botones
+                if (inicioBtn) {
+                    inicioBtn.classList.add('disabled');
+                    inicioBtn.style.opacity = '0.5';
+                    inicioBtn.style.cursor = 'not-allowed';
+                    inicioBtn.style.pointerEvents = 'auto'; // Mantener para poder mostrar mensaje
+                }
+                if (mobileInicioBtn) {
+                    mobileInicioBtn.classList.add('disabled');
+                    mobileInicioBtn.style.opacity = '0.5';
+                    mobileInicioBtn.style.cursor = 'not-allowed';
+                    mobileInicioBtn.style.pointerEvents = 'auto'; // Mantener para poder mostrar mensaje
+                }
+            }
+        }
+
+        // Función para mostrar mensaje cuando intentan acceder al Tablero sin empleados
+        function mostrarMensajeSinEmpleados() {
+            alert('No tiene personal a su cargo para realizar esta acción.\n\nEl Tablero solo está disponible para usuarios que tienen empleados asignados.');
+        }
+        
+        function abrirModalEmpleados() {
+            const modal = document.getElementById('modalEmpleados');
+            const select = document.getElementById('empleadoIdSelect');
+            const contenido = document.getElementById('contenidoEmpleadoModal');
+            
+            // Limpiar y llenar el select con empleados
+            select.innerHTML = '<option value="">-- Selecciona un empleado --</option>';
+            
+            if (empleadosListaGlobal.length === 0) {
+                select.innerHTML = '<option value="">No hay empleados a cargo</option>';
+            } else {
+                empleadosListaGlobal.forEach((empleado) => {
+                    const option = document.createElement('option');
+                    option.value = empleado.id;
+                    option.textContent = empleado.nombre_completo || 'Sin nombre';
+                    select.appendChild(option);
+                });
+            }
+            
+            contenido.style.display = 'none';
+            modal.style.display = 'flex';
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        let empleadoIdActual = null;
+        
+        async function cargarInfoEmpleadoModal() {
+            const select = document.getElementById('empleadoIdSelect');
+            const empleadoId = select.value;
+            const contenido = document.getElementById('contenidoEmpleadoModal');
+            
+            if (!empleadoId) {
+                contenido.style.display = 'none';
+                return;
+            }
+            
+            empleadoIdActual = empleadoId;
+            contenido.style.display = 'block';
+            
+            // Cargar la pestaña activa
+            const tabActiva = document.querySelector('.tab-empleado-btn.active');
+            if (tabActiva) {
+                const tabName = tabActiva.getAttribute('data-tab');
+                await cargarTabEmpleado(tabName, empleadoId);
+            }
+        }
+        
+        async function cambiarTabEmpleado(tabName) {
+            // Actualizar botones activos
+            document.querySelectorAll('.tab-empleado-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.color = '#999';
+                btn.style.borderBottom = '3px solid transparent';
+            });
+            
+            const btnActivo = document.querySelector(`[data-tab="${tabName}"]`);
+            if (btnActivo) {
+                btnActivo.classList.add('active');
+                btnActivo.style.color = '#2196F3';
+                btnActivo.style.borderBottom = '3px solid #2196F3';
+            }
+            
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-empleado-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Mostrar pestaña seleccionada
+            const tabContent = document.getElementById(`tab-${tabName}-empleado`);
+            if (tabContent) {
+                tabContent.style.display = 'block';
+            }
+            
+            // Cargar datos si hay un empleado seleccionado
+            if (empleadoIdActual) {
+                await cargarTabEmpleado(tabName, empleadoIdActual);
+            }
+        }
+        
+        async function cargarTabEmpleado(tabName, empleadoId) {
+            const tabContent = document.getElementById(`tab-${tabName}-empleado`);
+            if (!tabContent) return;
+            
+            tabContent.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">Cargando...</p></div>';
+            
+            try {
+                switch(tabName) {
+                    case 'apoyos':
+                        await cargarApoyosEmpleado(empleadoId, tabContent);
+                        break;
+                    case 'amonestaciones':
+                        await cargarAmonestacionesEmpleado(empleadoId, tabContent);
+                        break;
+                    case 'faltas':
+                        await cargarFaltasEmpleado(empleadoId, tabContent);
+                        break;
+                    case 'permisos':
+                        await cargarPermisosEmpleado(empleadoId, tabContent);
+                        break;
+                    case 'retardos':
+                        await cargarRetardosEmpleado(empleadoId, tabContent);
+                        break;
+                    case 'vacaciones':
+                        await cargarVacacionesEmpleadoModal(empleadoId, tabContent);
+                        break;
+                }
+            } catch (error) {
+                console.error(`Error al cargar ${tabName}:`, error);
+                tabContent.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #f44336;">Error al cargar datos</p></div>';
+            }
+        }
+        
+        async function cargarApoyosEmpleado(empleadoId, container) 
+        {
+            const response = await fetch(`/api/empleados/${empleadoId}/historial`);
+            if (!response.ok) throw new Error('Error al cargar apoyos');
+            
+            const apoyos = await response.json();
+            
+            if (!apoyos || apoyos.length === 0) 
+            {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay apoyos registrados</p></div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            apoyos.forEach(apoyo => {
+                // Determinar color según estado - buscar en diferentes campos posibles
+                let colorEstado = '#FF9800'; // Pendiente por defecto
+                let textColor = 'white';
+                const estado = (apoyo.vale_status || apoyo.estado || apoyo.estatus || 'pendiente').toLowerCase();
+                
+                if (estado === 'entregado') 
+                {
+                    colorEstado = '#4CAF50'; // Verde
+                } else if (estado === 'cancelado') 
+                {
+                    colorEstado = '#f44336'; // Rojo
+                } else if (estado === 'pendiente') 
+                {
+                    colorEstado = '#FF9800'; // Naranja/Amarillo
+                }
+                
+                html += `
+                    <div style="background: #f5f7fa; border-radius: 30px; padding: 15px; border-left: 4px solid #2196F3;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <h4 style="margin: 0; color: #333; font-size: 16px;">Folio: ${apoyo.folio || 'N/A'}</h4>
+                            <span style="background: ${colorEstado}; color: ${textColor}; padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: 600; text-transform: capitalize;">${estado}</span>
+                        </div>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;"><strong>Descripción:</strong> ${apoyo.descripcion || 'Sin descripción'}</p>
+                        ${apoyo.tipo ? `<p style="margin: 5px 0; color: #999; font-size: 13px;"><strong>Tipo:</strong> ${apoyo.tipo}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function cargarFaltasEmpleado(empleadoId, container) {
+            const response = await fetch(`/api/faltas-retardos?empleado_id=${empleadoId}`);
+            if (!response.ok) throw new Error('Error al cargar faltas');
+            
+            const data = await response.json();
+            const registros = Array.isArray(data) ? data : (data?.registros || data?.rows || data?.result || []);
+            const faltas = registros.filter(r => (r.tipo || r.tipo_incidencia || '').toLowerCase() === 'falta');
+            
+            if (!faltas || faltas.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay faltas registradas</p></div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            faltas.forEach(falta => {
+                html += `
+                    <div style="background: #ffebee; border-radius: 30px; padding: 15px; border-left: 4px solid #f44336;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <p style="margin: 0; color: #333; font-size: 15px; font-weight: 600;">Falta registrada</p>
+                            <span style="background: #f44336; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Falta</span>
+                        </div>
+                        <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">${falta.fecha ? new Date(falta.fecha).toLocaleDateString() : 'Sin fecha'}</p>
+                        ${falta.motivo ? `<p style="margin: 5px 0 0 0; color: #999; font-size: 13px;">Motivo: ${falta.motivo}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function cargarAmonestacionesEmpleado(empleadoId, container) {
+            const response = await fetch(`/api/amonestaciones/empleado/${empleadoId}`);
+            if (!response.ok) throw new Error('Error al cargar amonestaciones');
+            
+            const data = await response.json();
+            const amonestaciones = Array.isArray(data) ? data : (data?.data || data?.rows || []);
+            
+            if (!amonestaciones || amonestaciones.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay amonestaciones registradas</p></div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            amonestaciones.forEach(amon => {
+                html += `
+                    <div style="background: #fff3e0; border-radius: 30px; padding: 15px; border-left: 4px solid #FF9800;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <p style="margin: 0; color: #333; font-size: 15px; font-weight: 600;">Amonestación</p>
+                            <span style="background: #FF9800; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">${amon.tipo || 'Escrita'}</span>
+                        </div>
+                        <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">${amon.fecha ? new Date(amon.fecha).toLocaleDateString() : 'Sin fecha'}</p>
+                        ${amon.motivo ? `<p style="margin: 5px 0 0 0; color: #666; font-size: 14px;"><strong>Motivo:</strong> ${amon.motivo}</p>` : ''}
+                        ${amon.descripcion ? `<p style="margin: 5px 0 0 0; color: #999; font-size: 13px;">${amon.descripcion}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function cargarPermisosEmpleado(empleadoId, container) {
+            const response = await fetch(`/api/permisos/empleado/${empleadoId}`);
+            if (!response.ok) throw new Error('Error al cargar permisos');
+            
+            const permisos = await response.json();
+            
+            if (!permisos || permisos.length === 0) 
+            {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay permisos registrados</p></div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            permisos.forEach(permiso => {
+                const fechaInicio = permiso.fecha_inicio ? new Date(permiso.fecha_inicio).toLocaleDateString() : 'N/A';
+                const fechaFin = permiso.fecha_fin ? new Date(permiso.fecha_fin).toLocaleDateString() : 'N/A';
+                
+                html += `
+                    <div style="background: #e8f5e9; border-radius: 30px; padding: 15px; border-left: 4px solid #4CAF50;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <h4 style="margin: 0; color: #333; font-size: 16px;">Permisos</h4>
+                            <span style="background: #4CAF50; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">${permiso.estado || 'Pendiente'}</span>
+                        </div>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;"><strong>Desde:</strong> ${fechaInicio} <strong>Hasta:</strong> ${fechaFin}</p>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;"><strong>Días:</strong> ${permiso.dias_solicitados || 'N/A'}</p>
+                        ${permiso.motivo ? `<p style="margin: 5px 0; color: #999; font-size: 13px;">Motivo: ${permiso.motivo}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function cargarRetardosEmpleado(empleadoId, container) 
+        {
+            const response = await fetch(`/api/faltas-retardos?empleado_id=${empleadoId}`);
+            if (!response.ok) throw new Error('Error al cargar retardos');
+            
+            const data = await response.json();
+            const registros = Array.isArray(data) ? data : (data?.registros || data?.rows || data?.result || []);
+            const retardos = registros.filter(r => (r.tipo || r.tipo_incidencia || '').toLowerCase() === 'retardo');
+            
+            if (!retardos || retardos.length === 0) 
+            {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay retardos registrados</p></div>';
+                return;
+            }
+            
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            retardos.forEach(retardo => {
+                html += `
+                    <div style="background: #fff3e0; border-radius: 30px; padding: 15px; border-left: 4px solid #FF9800;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <p style="margin: 0; color: #333; font-size: 15px; font-weight: 600;">Retardo registrado</p>
+                            <span style="background: #FF9800; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Retardo</span>
+                        </div>
+                        <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">${retardo.fecha ? new Date(retardo.fecha).toLocaleDateString() : 'Sin fecha'}</p>
+                        ${retardo.minutos ? `<p style="margin: 5px 0 0 0; color: #999; font-size: 13px;">Minutos: ${retardo.minutos}</p>` : ''}
+                        ${retardo.motivo ? `<p style="margin: 5px 0 0 0; color: #999; font-size: 13px;">Motivo: ${retardo.motivo}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function cargarVacacionesEmpleadoModal(empleadoId, container) {
+            const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+            if (!response.ok) throw new Error('Error al cargar vacaciones');
+
+            const data = await response.json();
+            const vacaciones = Array.isArray(data) ? data : (data?.data || data?.rows || data?.result || []);
+
+            if (!vacaciones || vacaciones.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;"><p style="color: #999;">No hay vacaciones registradas</p></div>';
+                return;
+            }
+
+            let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+            vacaciones.forEach(vac => {
+                const fechaInicio = vac.fecha_inicio ? new Date(vac.fecha_inicio).toLocaleDateString() : 'N/A';
+                const fechaFin = vac.fecha_fin ? new Date(vac.fecha_fin).toLocaleDateString() : 'N/A';
+                const estado = vac.estado || 'Pendiente';
+
+                html += `
+                    <div style="background: #e3f2fd; border-radius: 30px; padding: 15px; border-left: 4px solid #2196F3;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <h4 style="margin: 0; color: #333; font-size: 16px;">Vacaciones</h4>
+                            <span style="background: #2196F3; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">${estado}</span>
+                        </div>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;"><strong>Desde:</strong> ${fechaInicio} <strong>Hasta:</strong> ${fechaFin}</p>
+                        <p style="margin: 5px 0; color: #666; font-size: 14px;"><strong>Dias solicitados:</strong> ${vac.dias_solicitados || 'N/A'}</p>
+                        ${vac.observaciones ? `<p style="margin: 5px 0; color: #999; font-size: 13px;">Observaciones: ${vac.observaciones}</p>` : ''}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function cerrarModalEmpleados() {
+            const modal = document.getElementById('modalEmpleados');
+            modal.style.display = 'none';
+            empleadoIdActual = null;
+            document.getElementById('empleadoIdSelect').value = '';
+            document.getElementById('contenidoEmpleadoModal').style.display = 'none';
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        }
+        
+        // Cerrar modal al hacer clic fuera de él
+        document.addEventListener('click', function(event) 
+        {
+            const modal = document.getElementById('modalEmpleados');
+            if (modal && event.target === modal) 
+            {
+                cerrarModalEmpleados();
+            }
+        });
+
+        // Cache semanal para evitar recargar los mismos datos múltiples veces
+        const CACHE_SEMANAL_TTL_MS = 2 * 60 * 1000;
+        let cacheEventosSemanal = {
+            key: null,
+            timestamp: 0,
+            dataByEmployee: new Map()
+        };
+
+        function parseApiArray(payload) {
+            if (Array.isArray(payload)) return payload;
+            return payload?.data || payload?.registros || payload?.rows || payload?.result || [];
+        }
+
+        async function cargarDatosEventosEmpleado(empleadoId) {
+            const [respVacaciones, respPermisos, respFaltas] = await Promise.all([
+                fetch(`/api/vacaciones/empleado/${empleadoId}`).catch(() => null),
+                fetch(`/api/permisos/empleado/${empleadoId}`).catch(() => null),
+                fetch(`/api/faltas-retardos?empleado_id=${empleadoId}`).catch(() => null)
+            ]);
+            const respAmon = await fetch(`/api/amonestaciones/empleado/${empleadoId}`).catch(() => null);
+
+            let vacaciones = [];
+            let permisos = [];
+            let faltasRetardos = [];
+            let amonestaciones = [];
+
+            if (respVacaciones && respVacaciones.ok) {
+                const payload = await respVacaciones.json();
+                vacaciones = parseApiArray(payload);
+            }
+
+            if (respPermisos && respPermisos.ok) {
+                const payload = await respPermisos.json();
+                permisos = parseApiArray(payload);
+            }
+
+            if (respFaltas && respFaltas.ok) {
+                const payload = await respFaltas.json();
+                faltasRetardos = parseApiArray(payload);
+            }
+
+            if (respAmon && respAmon.ok) {
+                const payload = await respAmon.json();
+                amonestaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || payload?.result || []);
+            }
+
+            return { vacaciones, permisos, faltasRetardos, amonestaciones };
+        }
+
+        async function construirCacheEventosSemana(empleados, inicioSemana) {
+            if (!Array.isArray(empleados) || empleados.length === 0) {
+                return new Map();
+            }
+
+            const idsOrdenados = empleados
+                .map(e => Number(e.id))
+                .filter(id => !Number.isNaN(id))
+                .sort((a, b) => a - b)
+                .join(',');
+
+            // Usar formato de fecha local en lugar de toISOString() que usa UTC
+            const inicioSemanaStr = `${inicioSemana.getFullYear()}-${String(inicioSemana.getMonth() + 1).padStart(2, '0')}-${String(inicioSemana.getDate()).padStart(2, '0')}`;
+            const semanaKey = `${inicioSemanaStr}|${idsOrdenados}`;
+            const cacheValido = cacheEventosSemanal.key === semanaKey
+                && (Date.now() - cacheEventosSemanal.timestamp) < CACHE_SEMANAL_TTL_MS
+                && cacheEventosSemanal.dataByEmployee instanceof Map;
+
+            if (cacheValido) {
+                return cacheEventosSemanal.dataByEmployee;
+            }
+
+            const dataByEmployee = new Map();
+            const BATCH_SIZE = 8;
+
+            for (let i = 0; i < empleados.length; i += BATCH_SIZE) {
+                const batch = empleados.slice(i, i + BATCH_SIZE);
+                const batchResults = await Promise.all(batch.map(async (empleado) => {
+                    try {
+                        const data = await cargarDatosEventosEmpleado(empleado.id);
+                        return { empleadoId: Number(empleado.id), data };
+                    } catch (error) {
+                        console.error(`Error al precargar eventos para empleado ${empleado.id}:`, error);
+                        return { empleadoId: Number(empleado.id), data: { vacaciones: [], permisos: [], faltasRetardos: [], amonestaciones: [] } };
+                    }
+                }));
+
+                batchResults.forEach(({ empleadoId, data }) => {
+                    dataByEmployee.set(empleadoId, data);
+                });
+            }
+
+            cacheEventosSemanal = {
+                key: semanaKey,
+                timestamp: Date.now(),
+                dataByEmployee
+            };
+
+            return dataByEmployee;
+        }
+
+        // Función helper para parsear fechas en zona horaria local (no UTC)
+        function parsearFechaLocal(fechaStr, esFinDia = false) {
+            if (!fechaStr) return null;
+            // Extraer solo la parte de fecha (YYYY-MM-DD) aunque venga con hora/zona
+            const raw = String(fechaStr);
+            const match = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+            const parte = match ? match[0] : raw.split('T')[0];
+            const [año, mes, día] = parte.split('-').map(x => parseInt(x, 10));
+            if (!año || !mes || !día) return null;
+            // Crear fecha sin interpretar como UTC
+            const fecha = new Date(año, mes - 1, día);
+            if (esFinDia) {
+                fecha.setHours(23, 59, 59, 999);
+            } else {
+                fecha.setHours(0, 0, 0, 0);
+            }
+            return fecha;
+        }
+
+        function normalizarFechaEvento(fechaRaw) {
+            if (!fechaRaw) return null;
+            const fechaLocal = parsearFechaLocal(fechaRaw);
+            if (fechaLocal) return fechaLocal;
+            const fechaTexto = String(fechaRaw).toLowerCase().trim();
+            const meses = {
+                enero: 0,
+                febrero: 1,
+                marzo: 2,
+                abril: 3,
+                mayo: 4,
+                junio: 5,
+                julio: 6,
+                agosto: 7,
+                septiembre: 8,
+                setiembre: 8,
+                octubre: 9,
+                noviembre: 10,
+                diciembre: 11
+            };
+            const matchTexto = fechaTexto.match(/(\d{1,2})\s+de\s+([a-z]+)\s+del?\s+(\d{4})/);
+            if (matchTexto) {
+                const dia = parseInt(matchTexto[1], 10);
+                const mes = meses[matchTexto[2]];
+                const anio = parseInt(matchTexto[3], 10);
+                if (!Number.isNaN(dia) && mes !== undefined && !Number.isNaN(anio)) {
+                    const fechaObj = new Date(anio, mes, dia);
+                    fechaObj.setHours(0, 0, 0, 0);
+                    return fechaObj;
+                }
+            }
+            const fechaObj = new Date(fechaRaw);
+            if (Number.isNaN(fechaObj.getTime())) return null;
+            fechaObj.setHours(0, 0, 0, 0);
+            return fechaObj;
+        }
+
+        // Función para generar el calendario semanal
+        async function generarCalendarioSemanal() 
+        {
+            const container = document.getElementById('calendarioDias');
+            const hoy = new Date();
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            // Obtener el inicio de la semana (Lunes)
+            const diaSemana = hoy.getDay();
+            const inicioSemana = new Date(hoy);
+            inicioSemana.setDate(hoy.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1));
+            
+            // Obtener el supervisor actual
+            const savedUser = localStorage.getItem('loggedInUser');
+            const user = savedUser ? JSON.parse(savedUser) : null;
+            const nombreSupervisor = user ? (user.nombre_completo || user.name || user.nombre || '') : '';
+            
+            if (!nombreSupervisor) 
+            {
+                container.innerHTML = '<p style="text-align: center; color: #999;">No se pudo identificar al supervisor</p>';
+                return;
+            }
+            
+            // Obtener empleados a cargo
+            const responseEmpleados = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(nombreSupervisor)}`);
+            const empleados = responseEmpleados.ok ? await responseEmpleados.json() : [];
+            const totalEmpleados = empleados.length;
+            const cacheSemana = await construirCacheEventosSemana(empleados, inicioSemana);
+            
+            let diasHTML = '';
+            let ausenciasSemana = 0;
+            
+            // Generar solo lunes a sábado (i = 0 a 5)
+            for (let i = 0; i < 6; i++) 
+            {
+                const fecha = new Date(inicioSemana);
+                fecha.setDate(inicioSemana.getDate() + i);
+                
+                const esHoy = fecha.toDateString() === hoy.toDateString();
+                const diaNum = fecha.getDate();
+                const mes = meses[fecha.getMonth()];
+                const nombreDia = diasSemana[fecha.getDay()];
+                // Usar formato de fecha local YYYY-MM-DD en lugar de toISOString() que usa UTC
+                const fechaStr = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+                
+                // Obtener eventos del día
+                const eventos = await obtenerEventosDia(empleados, fechaStr, cacheSemana);
+                const ausenciasDia = eventos.filter(evento => evento.affectsForce !== false).length;
+                ausenciasSemana += ausenciasDia;
+                
+                const fuerzaLaboralDia = totalEmpleados > 0 ? ((totalEmpleados - ausenciasDia) / totalEmpleados * 100).toFixed(1) : 100;
+                
+                diasHTML += `
+                    <div class="calendario-dia ${esHoy ? 'dia-actual' : ''}">
+                        <div class="dia-header">
+                            <div class="dia-nombre">${nombreDia}</div>
+                            <div class="dia-numero">${diaNum}</div>
+                            <div class="dia-mes">${mes}</div>
+                        </div>
+                        <div class="dia-eventos">
+                            ${eventos.length > 0 ? `
+                                <div class="eventos-grid">
+                                    ${eventos.map(evento => `
+                                        <div class="evento-empleado" data-tooltip="${evento.tooltip}">
+                                            ${evento.foto_url ? 
+                                                `<img src="${evento.foto_url}" alt="${evento.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                                                 <div style="display:none; width:50px; height:50px; border-radius:50%; background:#4CAF50; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold;">
+                                                    ${evento.nombre.charAt(0).toUpperCase()}
+                                                 </div>` :
+                                                `<div style="width:50px; height:50px; border-radius:50%; background:#4CAF50; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold;">
+                                                    ${evento.nombre.charAt(0).toUpperCase()}
+                                                 </div>`
+                                            }
+                                            <div class="evento-badge ${evento.tipo}">${evento.tipoLabel}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : '<div class="evento-placeholder">Sin ausencias</div>'}
+                        </div>
+                        <div class="fuerza-laboral-dia">
+                            <div class="fuerza-label">Fuerza laboral del día</div>
+                            <div class="fuerza-barra">
+                                <div class="fuerza-progreso" style="width: ${fuerzaLaboralDia}%"></div>
+                            </div>
+                            <div class="fuerza-porcentaje">${fuerzaLaboralDia}% (${totalEmpleados - ausenciasDia}/${totalEmpleados})</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Calcular fuerza laboral de la semana (6 días)
+            const fuerzaLaboralSemana = totalEmpleados > 0 ? ((totalEmpleados * 6 - ausenciasSemana) / (totalEmpleados * 6) * 100).toFixed(1) : 100;
+            
+            container.innerHTML = diasHTML;
+            
+            // Eliminar cualquier barra de fuerza laboral semanal existente antes de crear una nueva
+            const calendarioSemanal = container.closest('.calendario-semanal');
+            if (calendarioSemanal) {
+                const fuerzaSemanalExistente = calendarioSemanal.querySelector('.fuerza-laboral-semana');
+                if (fuerzaSemanalExistente) {
+                    fuerzaSemanalExistente.remove();
+                }
+            }
+            
+            // Agregar barra de fuerza laboral semanal
+            const fuerzaSemanalHTML = `
+                <div class="fuerza-laboral-semana">
+                    <div class="fuerza-semana-titulo">Fuerza laboral de la semana</div>
+                    <div class="fuerza-semana-barra">
+                        <div class="fuerza-semana-progreso" style="width: ${fuerzaLaboralSemana}%"></div>
+                    </div>
+                    </div>
+            `;
+            container.insertAdjacentHTML('afterend', fuerzaSemanalHTML);
+        }
+        
+        // Función para obtener eventos de un día específico
+        async function obtenerEventosDia(empleados, fecha, cacheSemana = null) {
+            const eventos = [];
+            // Usar parsearFechaLocal para evitar problemas de zona horaria UTC
+            const fechaActual = parsearFechaLocal(fecha);
+            
+            for (const empleado of empleados) 
+            {
+                try 
+                {
+                    const empleadoId = Number(empleado.id);
+                    let datosEmpleado = cacheSemana instanceof Map ? cacheSemana.get(empleadoId) : null;
+                    if (!datosEmpleado) {
+                        datosEmpleado = await cargarDatosEventosEmpleado(empleado.id);
+                    } else if (!('amonestaciones' in datosEmpleado)) {
+                        try {
+                            const respAmon = await fetch(`/api/amonestaciones/empleado/${empleado.id}`);
+                            if (respAmon.ok) {
+                                const payload = await respAmon.json();
+                                datosEmpleado.amonestaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || payload?.result || []);
+                                if (cacheSemana instanceof Map) {
+                                    cacheSemana.set(empleadoId, datosEmpleado);
+                                }
+                            }
+                        } catch (error) {
+                            datosEmpleado.amonestaciones = [];
+                        }
+                    }
+
+                    const vacaciones = Array.isArray(datosEmpleado?.vacaciones) ? datosEmpleado.vacaciones : [];
+                    const permisos = Array.isArray(datosEmpleado?.permisos) ? datosEmpleado.permisos : [];
+                    const faltas = Array.isArray(datosEmpleado?.faltasRetardos) ? datosEmpleado.faltasRetardos : [];
+                    const amonestaciones = Array.isArray(datosEmpleado?.amonestaciones) ? datosEmpleado.amonestaciones : [];
+
+                    let empleadoEnVacaciones = false;
+                    let empleadoConPermisoDiaCompleto = false;
+                    let empleadoConFalta = false;
+
+                    // Verificar vacaciones
+                    vacaciones.forEach(vac => {
+                        const inicio = parsearFechaLocal(vac.fecha_inicio);
+                        const fin = parsearFechaLocal(vac.fecha_fin, true);
+
+                        const estadoVacacion = (vac.estado || '').toString().trim().toLowerCase();
+                        const estados = ['aprobado', 'aprobada', 'pendiente'];
+                        if (fechaActual >= inicio && fechaActual <= fin && estados.includes(estadoVacacion)) {
+                            empleadoEnVacaciones = true;
+                            const diasRestantes = Math.ceil((fin - fechaActual) / (1000 * 60 * 60 * 24)) + 1;
+
+                            const existe = eventos.find(e =>
+                                e.nombre === empleado.nombre_completo &&
+                                e.tipo === 'vacaciones'
+                            );
+
+                            if (!existe)
+                            {
+                                eventos.push({
+                                    nombre: empleado.nombre_completo,
+                                    foto_url: empleado.foto_url,
+                                    tipo: 'vacaciones',
+                                    tipoLabel: 'V',
+                                    tooltip: `${empleado.nombre_completo} - Va a estar de vacaciones (${diasRestantes} días)`,
+                                    affectsForce: true
+                                });
+                            }
+                        }
+                    });
+
+                    // Verificar permisos de día completo
+                    permisos.forEach(permiso => {
+                        const tipoPermiso = (permiso.tipo || '').toString().trim().toLowerCase();
+                        if (tipoPermiso !== 'dia_completo') return;
+
+                        const estadoPermiso = (permiso.estado || '').toString().trim().toLowerCase();
+                        const estadosPermitidos = ['aprobado', 'aprobada', 'pendiente'];
+                        if (!estadosPermitidos.includes(estadoPermiso)) return;
+
+                        const inicioPermiso = parsearFechaLocal(permiso.fecha_inicio || permiso.fecha);
+                        const finPermiso = parsearFechaLocal(permiso.fecha_fin || permiso.fecha_inicio || permiso.fecha, true);
+
+                        if (fechaActual >= inicioPermiso && fechaActual <= finPermiso) {
+                            empleadoConPermisoDiaCompleto = true;
+
+                            const existe = eventos.find(e =>
+                                e.nombre === empleado.nombre_completo &&
+                                e.tipo === 'permiso'
+                            );
+
+                            if (!existe && !empleadoEnVacaciones)
+                            {
+                                eventos.push({
+                                    nombre: empleado.nombre_completo,
+                                    foto_url: empleado.foto_url,
+                                    tipo: 'permiso',
+                                    tipoLabel: 'P',
+                                    tooltip: `${empleado.nombre_completo} - Va a estar con permiso (día completo)`,
+                                    affectsForce: true
+                                });
+                            }
+                        }
+                    });
+                    
+                    // Verificar faltas/retardos
+                    faltas.forEach(falta => {
+                        const fechaFalta = parsearFechaLocal(falta.fecha);
+                        const tipoFalta = (falta.tipo || '').toString().trim().toLowerCase();
+
+                        if (fechaFalta.getTime() === fechaActual.getTime() && tipoFalta === 'falta' && !empleadoEnVacaciones && !empleadoConPermisoDiaCompleto)
+                        {
+                            const existe = eventos.find(e =>
+                                e.nombre === empleado.nombre_completo &&
+                                e.tipo === 'falta'
+                            );
+
+                            if (!existe)
+                            {
+                                empleadoConFalta = true;
+                                eventos.push({
+                                    nombre: empleado.nombre_completo,
+                                    foto_url: empleado.foto_url,
+                                    tipo: 'falta',
+                                    tipoLabel: 'F',
+                                    tooltip: `${empleado.nombre_completo} - Falta${falta.justificado ? ' (Justificada)' : ''}`,
+                                    affectsForce: true
+                                });
+                            }
+                        }
+                    });
+
+                    // Verificar retardos (solo visual, no afecta fuerza laboral)
+                    faltas.forEach(retardo => {
+                        const fechaRetardo = parsearFechaLocal(retardo.fecha);
+                        const tipoRetardo = (retardo.tipo || '').toString().trim().toLowerCase();
+
+                        if (fechaRetardo.getTime() === fechaActual.getTime()
+                            && tipoRetardo === 'retardo'
+                            && !empleadoEnVacaciones
+                            && !empleadoConPermisoDiaCompleto
+                            && !empleadoConFalta) {
+                            const existe = eventos.find(e =>
+                                e.nombre === empleado.nombre_completo &&
+                                e.tipo === 'retardo'
+                            );
+
+                            if (!existe) {
+                                const horaValor = retardo.hora || retardo.hora_entrada || retardo.hora_registro || retardo.hora_evento || '';
+                                let horaTexto = '';
+
+                                if (horaValor) {
+                                    const horaStr = String(horaValor).trim();
+                                    const match = horaStr.match(/\b(\d{1,2}):(\d{2})/);
+                                    if (match) {
+                                        const h = match[1].padStart(2, '0');
+                                        const m = match[2];
+                                        horaTexto = `${h}:${m}`;
+                                    }
+                                } else if (retardo.fecha) {
+                                    const fechaStr = String(retardo.fecha);
+                                    const tieneHora = /T\d{2}:\d{2}/.test(fechaStr) || /\b\d{2}:\d{2}/.test(fechaStr);
+                                    if (tieneHora) {
+                                        const fechaObj = new Date(retardo.fecha);
+                                        if (!Number.isNaN(fechaObj.getTime())) {
+                                            horaTexto = fechaObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                                        }
+                                    }
+                                }
+
+                                const tooltipHora = horaTexto ? ` - ${horaTexto}` : '';
+                                eventos.push({
+                                    nombre: empleado.nombre_completo,
+                                    foto_url: empleado.foto_url,
+                                    tipo: 'retardo',
+                                    tipoLabel: 'R',
+                                    tooltip: `${empleado.nombre_completo} - Retardo${tooltipHora}`,
+                                    affectsForce: false
+                                });
+                            }
+                        }
+                    });
+
+                    // Verificar amonestaciones (solo visual, no afecta fuerza laboral)
+                    amonestaciones.forEach(amon => {
+                        const fechaRaw = amon.fecha_solicitud || amon.fecha || amon.fecha_amonestacion || amon.fecha_registro || amon.created_at || amon.timestamp;
+                        const fechaAmon = normalizarFechaEvento(fechaRaw);
+
+                        if (fechaAmon && fechaAmon.getTime() === fechaActual.getTime()) {
+                            const existe = eventos.find(e =>
+                                e.nombre === empleado.nombre_completo &&
+                                e.tipo === 'amonestacion'
+                            );
+
+                            if (!existe) {
+                                eventos.push({
+                                    nombre: empleado.nombre_completo,
+                                    foto_url: empleado.foto_url,
+                                    tipo: 'amonestacion',
+                                    tipoLabel: 'A',
+                                    tooltip: `${empleado.nombre_completo} - Amonestacion`,
+                                    affectsForce: false
+                                });
+                            }
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error(`Error al verificar eventos para ${empleado.nombre_completo}:`, error);
+                }
+            }
+            
+            return eventos;
+        }
+
+        // Función para generar las gráficas de ausentismo
+        async function generarGraficasAusentismo() 
+        {
+            try 
+            {
+                const savedUser = localStorage.getItem('loggedInUser');
+                if (!savedUser) return;
+                
+                const user = JSON.parse(savedUser);
+                const nombreSupervisor = user.nombre_completo || user.name || user.nombre || '';
+                
+                if (!nombreSupervisor) return;
+                
+                // Obtener empleados a cargo
+                const responseEmpleados = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(nombreSupervisor)}`);
+                if (!responseEmpleados.ok) return;
+                
+                const empleados = await responseEmpleados.json();
+                if (!empleados || empleados.length === 0) return;
+                
+                const hoy = new Date();
+                const inicioSemana = new Date(hoy);
+                const diaSemana = hoy.getDay();
+                inicioSemana.setDate(hoy.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1));
+                const cacheSemana = await construirCacheEventosSemana(empleados, inicioSemana);
+                
+                let container = document.getElementById('contenedorGraficas');
+                container.innerHTML = '';
+                
+                // Contar total de ausencias de todos los empleados esta semana
+                let ausenciasTotal = 0;
+                
+                for (const empleado of empleados) 
+                {
+                    // Contar ausencias esta semana
+                    for (let i = 0; i < 6; i++) 
+                    {
+                        const fecha = new Date(inicioSemana);
+                        fecha.setDate(inicioSemana.getDate() + i);
+                        // Usar formato de fecha local en lugar de toISOString() que usa UTC
+                        const fechaStr = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+                        
+                        const eventos = await obtenerEventosDia([empleado], fechaStr, cacheSemana);
+                        if (eventos.length > 0) ausenciasTotal++;
+                    }
+                }
+                
+                // Calcular porcentaje promedio de ausentismo
+                const diasTrabajadosTotal = empleados.length * 6; // 6 días laborales * cantidad de empleados
+                let porcentajeAusenciaPromedio = (ausenciasTotal / diasTrabajadosTotal) * 100;
+
+                const modoTest = false; 
+                let porcentajeActual = 0;
+                
+                // Función para determinar color y nivel
+                function determinarNivelYColor(porcentaje) 
+                {
+                    let color = '#4CAF50'; // Verde - Bajo
+                    let nivel = 'Bajo';
+                    
+                    if (porcentaje > 60) 
+                    {
+                        color = '#F44336'; // Rojo - Alto
+                        nivel = 'Alto';
+                    } else if (porcentaje > 20) 
+                    {
+                        color = '#FFB800'; // Amarillo - Medio
+                        nivel = 'Medio';
+                    }
+                    
+                    return { color, nivel };
+                }
+                
+                // Obtener color y nivel basado en el porcentaje actual (ausentismo)
+                const { color: colorFinal, nivel: nivelFinal } = determinarNivelYColor(porcentajeAusenciaPromedio);
+
+                // Calcular desempeño basado en amonestaciones y retardos dentro de la semana
+                let incidentesTotal = 0; // amonestaciones + retardos
+                let detallesIncidentes = {
+                    amonestaciones: [],
+                    retardos: [],
+                    totalAmonestaciones: 0,
+                    totalRetardos: 0,
+                    empleados: empleados.length,
+                    diasReferencia: empleados.length * 6,
+                    rangoFechas: {
+                        inicio: inicioSemana.toLocaleDateString(),
+                        fin: hoy.toLocaleDateString()
+                    },
+                    empleadosConsultados: empleados.map(e => ({ id: e.id, nombre: e.nombre_completo }))
+                };
+                
+                for (const empleado of empleados) 
+                {
+                    // Amonestaciones
+                    try 
+                    {
+                        const respAmon = await fetch(`/api/amonestaciones/empleado/${empleado.id}`);
+                        if (respAmon.ok) 
+                        {
+                            const dataAmon = await respAmon.json();
+                            const amonestaciones = Array.isArray(dataAmon) ? dataAmon : (dataAmon?.data || dataAmon?.rows || []);
+                            
+                            // Mostrar estructura de la primera amonestación si existe
+                            if (amonestaciones.length > 0) 
+                            {
+                                console.log('    Estructura de amonestación:', Object.keys(amonestaciones[0]));
+                                console.log('    Primera amonestación completa:', amonestaciones[0]);
+                            }
+                            
+                            amonestaciones.forEach(a => {
+                                // El campo de fecha en amonestaciones es fecha_solicitud
+                                const fechaRaw = a.fecha_solicitud || a.fecha || a.fecha_amonestacion || a.fecha_registro || a.created_at;
+                                const f = fechaRaw ? new Date(fechaRaw) : null;
+                                if (f) 
+                                {
+                                    f.setHours(0, 0, 0, 0);
+                                    const enRango = f >= inicioSemana && f <= hoy;
+
+                                    if (enRango) 
+                                    {
+                                        incidentesTotal += 1;
+                                        detallesIncidentes.totalAmonestaciones += 1;
+                                        detallesIncidentes.amonestaciones.push({
+                                            empleado: empleado.nombre_completo,
+                                            empleadoId: empleado.id,
+                                            fecha: f.toLocaleDateString(),
+                                            fechaOriginal: fechaRaw,
+                                            motivo: a.motivo || 'Sin motivo',
+                                            tipo: 'Amonestación'
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    } catch (e) {
+
+                        console.error('Error cargando amonestaciones para empleado:', empleado.id, e);
+                    }
+
+                    // Retardos
+                    try 
+                    {
+                        const respFal = await fetch(`/api/faltas-retardos?empleado_id=${empleado.id}`);
+                        if (respFal.ok) 
+                        {
+                            const dataFal = await respFal.json();
+                            const registros = Array.isArray(dataFal) ? dataFal : (dataFal?.registros || dataFal?.rows || dataFal?.result || []);
+                            
+                            registros.forEach(r => {
+                                const tipo = (r.tipo || r.tipo_incidencia || '').toLowerCase();
+                                if (tipo === 'retardo') 
+                                {
+                                    const f = r.fecha ? new Date(r.fecha) : null;
+                                    if (f) 
+                                    {
+                                        f.setHours(0, 0, 0, 0);
+                                        const enRango = f >= inicioSemana && f <= hoy;
+                                        
+                                        if (enRango) 
+                                        {
+                                            incidentesTotal += 1;
+                                            detallesIncidentes.totalRetardos += 1;
+                                            detallesIncidentes.retardos.push({
+                                                empleado: empleado.nombre_completo,
+                                                empleadoId: empleado.id,
+                                                fecha: f.toLocaleDateString(),
+                                                fechaOriginal: r.fecha,
+                                                minutos: r.minutos || 'N/A',
+                                                motivo: r.motivo || 'Sin motivo'
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    } catch (e) { 
+                        console.error('Error cargando retardos para empleado:', empleado.id, e);
+                    }
+                }
+                
+
+                const diasReferencia = empleados.length * 6 || 1;
+                const porcentajeIncidentes = Math.min(100, (incidentesTotal / diasReferencia) * 100);
+                const porcentajeDesempeno = Math.max(0, 100 - porcentajeIncidentes);
+
+                function determinarNivelDesempeno(porcentaje) {
+                    let color = '#F44336'; // rojo bajo
+                    let nivel = 'Bajo';
+                    if (porcentaje > 80) 
+                    {
+                        color = '#4CAF50'; // verde alto
+                        nivel = 'Alto';
+                    } else if (porcentaje > 50) 
+                    {
+                        color = '#FFB800'; // amarillo medio
+                        nivel = 'Medio';
+                    }
+                    return { color, nivel };
+                }
+                const { color: colorDes, nivel: nivelDes } = determinarNivelDesempeno(porcentajeDesempeno);
+
+                // Crear HTML para las gráficas (ausentismo, desempeño y vales)
+                const graficaHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; align-items: stretch;">
+                        <div style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center;">
+                            <h3 style="color: #333; margin: 0 0 30px 0; text-align: center; font-size: 18px; font-weight: 600;">Ausentismo General</h3>
+                            <div style="position: relative; width: 280px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <canvas id="grafica-ausentismo-general" style="width: 100%; height: 100%; position: absolute; top: 0; left: 50%; transform: translateX(-52%);"></canvas>
+                                <div style="position: relative; z-index: 10; text-align: center; margin-top: 60px;">
+                                    <p id="porcentaje-ausentismo" style="font-size: 38px; font-weight: 700; color: ${colorFinal}; margin: 0;">${porcentajeAusenciaPromedio.toFixed(1)}%</p>
+                                    <p id="nivel-ausentismo" style="font-size: 14px; font-weight: 600; color: ${colorFinal}; margin: 5px 0 0 0;">${nivelFinal}</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; text-align: center; width: 100%;">
+                                <p style="color: #666; margin: 5px 0; font-size: 14px;"><strong>Total de ausencias:</strong> <span id="total-ausencias">${ausenciasTotal}</span> </p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; " onclick="mostrarDetallesDesempeno()">
+                            <h3 style="color: #333; margin: 0 0 30px 0; text-align: center; font-size: 18px; font-weight: 600;">Desempeño General</h3>
+                            <div style="position: relative; width: 280px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <canvas id="grafica-desempeno-general" style="width: 100%; height: 100%; position: absolute; top: 0; left: 50%; transform: translateX(-52%);"></canvas>
+                                <div style="position: relative; z-index: 10; text-align: center; margin-top: 60px;">
+                                    <p id="porcentaje-desempeno" style="font-size: 38px; font-weight: 700; color: ${colorDes}; margin: 0;">${porcentajeDesempeno.toFixed(1)}%</p>
+                                    <p id="nivel-desempeno" style="font-size: 14px; font-weight: 600; color: ${colorDes}; margin: 5px 0 0 0;">${nivelDes}</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; text-align: center; width: 100%;">
+                                <p style="color: #666; margin: 5px 0; font-size: 14px;">Basado en amonestaciones y retardos de la semana</p>
+                                <p style="color: #999; margin: 0; font-size: 12px;">Incidentes totales: ${incidentesTotal}</p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; opacity: 0.7;">
+                            <h3 style="color: #333; margin: 0 0 30px 0; text-align: center; font-size: 18px; font-weight: 600;">Vales ($700)</h3>
+                            <div style="position: relative; width: 280px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <canvas id="grafica-vales" style="width: 100%; height: 100%; position: absolute; top: 0; left: 50%; transform: translateX(-52%);"></canvas>
+                                <div style="position: relative; z-index: 10; text-align: center; margin-top: 60px;">
+                                    <p id="dinero-gastado-vales" style="font-size: 48px; font-weight: 700; color: #9E9E9E; margin: 0;">$0</p>
+                                    <p id="porcentaje-vales" style="font-size: 14px; font-weight: 600; color: #9E9E9E; margin: 5px 0 0 0;">En desarrollo</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; text-align: center; width: 100%;">
+                                <p style="color: #999; margin: 5px 0; font-size: 14px;"><strong>Próximamente disponible</strong><span id="dinero-disponible-vales" style="display:none;">$700</span></p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 30px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; opacity: 0.7;">
+                            <h3 style="color: #333; margin: 0 0 30px 0; text-align: center; font-size: 18px; font-weight: 600;">Órdenes</h3>
+                            <div style="position: relative; width: 280px; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <canvas id="grafica-ordenes" style="width: 100%; height: 100%; position: absolute; top: 0; left: 50%; transform: translateX(-52%);"></canvas>
+                                <div style="position: relative; z-index: 10; text-align: center; margin-top: 60px;">
+                                    <p style="font-size: 48px; font-weight: 700; color: #9E9E9E; margin: 0;">0</p>
+                                    <p style="font-size: 14px; font-weight: 600; color: #9E9E9E; margin: 5px 0 0 0;">En desarrollo</p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; text-align: center; width: 100%;">
+                                <p style="color: #999; margin: 5px 0; font-size: 14px;"><strong>Próximamente disponible</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.insertAdjacentHTML('beforeend', graficaHTML);
+                
+                // Función global para mostrar detalles del desempeño
+                window.detallesDesempenoData = detallesIncidentes;
+                window.mostrarDetallesDesempeno = function() 
+                {
+                    console.log('=== DETALLES DE DESEMPEÑO ===');
+                    console.log('Total de empleados:', detallesIncidentes.empleados);
+                    console.log('Días de referencia (empleados × 6):', detallesIncidentes.diasReferencia);
+                    console.log('Rango de fechas:', detallesIncidentes.rangoFechas);
+                    console.log('\n--- AMONESTACIONES ---');
+                    console.log('Total de amonestaciones:', detallesIncidentes.totalAmonestaciones);
+                    console.table(detallesIncidentes.amonestaciones);
+                    console.log('\n--- RETARDOS ---');
+                    console.log('Total de retardos:', detallesIncidentes.totalRetardos);
+                    console.table(detallesIncidentes.retardos);
+                    console.log('\n--- CÁLCULOS ---');
+                    console.log('Incidentes totales (amonestaciones + retardos):', incidentesTotal);
+                    console.log('Porcentaje de incidentes:', porcentajeIncidentes.toFixed(2) + '%');
+                    console.log('Porcentaje de desempeño (100 - incidentes):', porcentajeDesempeno.toFixed(2) + '%');
+                    console.log('Nivel:', nivelDes);
+                    console.log('==============================');
+                };
+                
+                // Crear gráficas con Chart.js tipo gauge (semicírculo)
+                setTimeout(() => {
+                    const ctxAus = document.getElementById('grafica-ausentismo-general');
+                    if (ctxAus) {
+                        new Chart(ctxAus, {
+                            type: 'doughnut',
+                            data: {
+                                datasets: [{
+                                    data: [porcentajeAusenciaPromedio, 100 - porcentajeAusenciaPromedio],
+                                    backgroundColor: [colorFinal, '#E0E0E0'],
+                                    borderColor: ['#fff', '#fff'],
+                                    borderWidth: 0,
+                                    circumference: 180,
+                                    rotation: 270
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                cutout: '80%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: { enabled: false }
+                                }
+                            }
+                        });
+                    }
+                    const ctxDes = document.getElementById('grafica-desempeno-general');
+                    if (ctxDes) {
+                        new Chart(ctxDes, {
+                            type: 'doughnut',
+                            data: {
+                                datasets: [{
+                                    data: [porcentajeDesempeno, 100 - porcentajeDesempeno],
+                                    backgroundColor: [colorDes, '#E0E0E0'],
+                                    borderColor: ['#fff', '#fff'],
+                                    borderWidth: 0,
+                                    circumference: 180,
+                                    rotation: 270
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                cutout: '80%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: { enabled: false }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Crear gráfica de vales
+                    const ctxVales = document.getElementById('grafica-vales');
+                    if (ctxVales) {
+                        // Por defecto mostrar 0% gastado
+                        const porcentajeVales = 0;
+                        const colorVales = '#9E9E9E';
+                        
+                        new Chart(ctxVales, {
+                            type: 'doughnut',
+                            data: {
+                                datasets: [{
+                                    data: [porcentajeVales, 100 - porcentajeVales],
+                                    backgroundColor: [colorVales, '#E0E0E0'],
+                                    borderColor: ['#fff', '#fff'],
+                                    borderWidth: 0,
+                                    circumference: 180,
+                                    rotation: 270
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                cutout: '80%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: { enabled: false }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Crear gráfica de órdenes (en desarrollo - gris)
+                    const ctxOrdenes = document.getElementById('grafica-ordenes');
+                    if (ctxOrdenes) 
+                    {
+                        new Chart(ctxOrdenes, {
+                            type: 'doughnut',
+                            data: {
+                                datasets: [{
+                                    data: [0, 100],
+                                    backgroundColor: ['#9E9E9E', '#E0E0E0'],
+                                    borderColor: ['#fff', '#fff'],
+                                    borderWidth: 0,
+                                    circumference: 180,
+                                    rotation: 270
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                cutout: '80%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: { enabled: false }
+                                }
+                            }
+                        });
+                    }
+                }, 0);
+            } catch (error) 
+            {
+                console.error('Error al generar gráficas de ausentismo:', error);
+            }
+            
+            // Función global para actualizar gráfica de vales
+            window.actualizarVales = function(dineroGastado, valeTotal = 700) {
+                const porcentajeGastado = (dineroGastado / valeTotal) * 100;
+                const dineroDisponible = valeTotal - dineroGastado;
+                
+                // Actualizar textos
+                document.getElementById('dinero-gastado-vales').textContent = `$${dineroGastado.toFixed(2)}`;
+                document.getElementById('porcentaje-vales').textContent = `${porcentajeGastado.toFixed(1)}%`;
+                document.getElementById('dinero-disponible-vales').textContent = `$${dineroDisponible.toFixed(2)}`;
+                
+                // Actualizar color según porcentaje
+                let colorVales = '#2196F3'; // Azul por defecto
+                if (porcentajeGastado > 80) {
+                    colorVales = '#F44336'; // Rojo si está casi agotado
+                } else if (porcentajeGastado > 50) {
+                    colorVales = '#FFB800'; // Amarillo si está a mitad
+                }
+                
+                document.getElementById('dinero-gastado-vales').style.color = colorVales;
+                document.getElementById('porcentaje-vales').style.color = colorVales;
+                
+                // Actualizar gráfica
+                const ctxVales = document.getElementById('grafica-vales');
+                if (ctxVales && ctxVales.chart) 
+                {
+                    ctxVales.chart.data.datasets[0].data = [porcentajeGastado, 100 - porcentajeGastado];
+                    ctxVales.chart.data.datasets[0].backgroundColor = [colorVales, '#E0E0E0'];
+                    ctxVales.chart.update();
+                }
+            };
+            
+            // Script de prueba para simular gasto de vales
+            window.testearVales = function() 
+            {
+                let dineroActual = 0;
+                const valeTotal = 700;
+                const incremento = 50; // Incrementar $50 cada vez
+                const intervalo = 800; // Esperar 800ms entre actualizaciones
+                
+                const intervaloId = setInterval(() => {
+                    window.actualizarVales(dineroActual, valeTotal);
+                        dineroActual += incremento;
+                    
+                    // Si llegó al límite, reiniciar desde 0
+                    if (dineroActual > valeTotal) 
+                    {
+                        dineroActual = 0;
+                    }
+                }, intervalo);
+                
+                // Retornar función para detener el bucle
+                window.detenerTestVales = function() 
+                {
+                    clearInterval(intervaloId);
+
+                };
+            };
+        }
+
+        // Funcionalidad del menú hamburguesa
+        function openMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('menuOverlay');
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            
+            drawer.classList.add('open');
+            overlay.classList.add('active');
+            hamburgerBtn.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const overlay = document.getElementById('menuOverlay');
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            
+            drawer.classList.remove('open');
+            overlay.classList.remove('active');
+            hamburgerBtn.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners para el menú hamburguesa
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const menuOverlay = document.getElementById('menuOverlay');
+
+            if (hamburgerBtn) {
+                hamburgerBtn.addEventListener('click', openMobileMenu);
+            }
+
+            if (mobileMenuClose) {
+                mobileMenuClose.addEventListener('click', closeMobileMenu);
+            }
+
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', closeMobileMenu);
+            }
+
+            // Sincronizar el estado activo entre el menú desktop y móvil
+            function syncActiveState(activeId) {
+                // Actualizar botones desktop
+                document.querySelectorAll('.switch-option').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                const desktopBtn = document.getElementById(activeId);
+                if (desktopBtn) {
+                    desktopBtn.classList.add('active');
+                }
+
+                // Actualizar botones móvil - mapeo de IDs
+                document.querySelectorAll('.mobile-menu-option').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const mobileIdMap = {
+                    'inicioBtn': 'mobileInicioBtn',
+                    'mostFrequentBtn': 'mobileMostFrequentBtn',
+                    'departamentosayuda': 'mobileDepartamentosayuda',
+                    'pdmLineBtn': 'mobilePdmLineBtn'
+                };
+                
+                const mobileBtnId = mobileIdMap[activeId];
+                if (mobileBtnId) {
+                    const mobileBtn = document.getElementById(mobileBtnId);
+                    if (mobileBtn) {
+                        mobileBtn.classList.add('active');
+                    }
+                }
+            }
+
+            // Interceptar las funciones show para sincronizar el estado
+            const originalShowInicio = window.showInicio;
+            window.showInicio = function() {
+                originalShowInicio();
+                syncActiveState('inicioBtn');
+            };
+
+            const originalShowMostFrequent = window.showMostFrequent;
+            window.showMostFrequent = function() {
+                originalShowMostFrequent();
+                syncActiveState('mostFrequentBtn');
+            };
+
+            const originalShowDepartamentosAyuda = window.showDepartamentosAyuda;
+            window.showDepartamentosAyuda = function() {
+                originalShowDepartamentosAyuda();
+                syncActiveState('departamentosayuda');
+            };
+
+            const originalShowPDMLine = window.showPDMLine;
+            window.showPDMLine = function() {
+                originalShowPDMLine();
+                syncActiveState('pdmLineBtn');
+            };
+        });
+    </script>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="copyright">2026 © Phoenix Diseño y Manufactura</span>
+                <span class="divider">•</span>
+                <a href="terminos.html" class="footer-link">Términos y Condiciones</a>
+                <span class="divider">•</span>
+                <a href="privacidad.html" class="footer-link">Política de Privacidad</a>
+            </div>
+
+            <div class="footer-right-group" style="display:flex; gap:48px; align-items:flex-start; justify-content:flex-start; text-align:left; flex-wrap:wrap;">
+                <div class="footer-center">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/p/Phoenix-Dise%C3%B1o-y-Manufactura-100075787393304/?locale=es_LA" aria-label="Facebook" class="social fb"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/" aria-label="Instagram" class="social ig"><i class="fab fa-instagram"></i></a>
+                        <a href="https://mx.linkedin.com/company/phoenix-dise%C3%B1o-y-manufactura" aria-label="LinkedIn" class="social li"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://pdmmetal.com" aria-label="Sitio Web" class="social web"><i class="fas fa-globe"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </body>
+</html>

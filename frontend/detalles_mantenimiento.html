@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Estadísticas de Mantenimiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <script src="js/topbar.js"></script>
+  <link rel="stylesheet" href="styles/detalles_mantenimiento.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Incluir el sistema de color global -->
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!-- <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+      <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button" data-tab="tickets">
+          <i class="fa-solid fa-ticket"></i>Tickets
+        </button>
+        <button class="tab-switch-button" data-tab="calendario_de_mantenimiento_preventivo">
+          <i class="fas fa-calendar-alt"></i>Calendario de Mantenimiento Preventivo
+        </button>
+        <button class="tab-switch-button" data-tab="estadisticas_preventivas">
+          <i class="fas fa-chart-bar"></i>  Estadísticas Preventivas      </button>
+        <button class="tab-switch-button active" data-tab="estadisticas_correctivas">
+          <i class="fas fa-chart-area"></i>Estadísticas Correctivas
+        </button>
+        
+      </div>
+    </div>
+
+  
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'mantenimiento.html',
+    calendario_de_mantenimiento_preventivo: 'calendario_mantenimiento.html',
+    estadisticas_preventivas: 'detalles_mantenimiento_preventivo.html',
+    estadisticas_correctivas: 'detalles_mantenimiento.html',
+
+
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <div class="main-content">
+    <div class="stats-container">
+      <h2 class="stats-title">Estadísticas de Mantenimiento Industrial</h2>
+      <div class="year-slider">
+        <button class="carousel-nav prev" id="prevYear">❮</button>
+        <div class="year-carousel" id="yearCarousel">
+          <!-- Los botones se generarán dinámicamente -->
+        </div>
+        <button class="carousel-nav next" id="nextYear">❯</button>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-section">
+          <h2>Tickets por Mes</h2>
+          <div class="chart-container">
+            <canvas id="ticketsChart"></canvas>
+          </div>
+          <div style="text-align:center; margin-top: 10px;">
+            <label class="switch-label">
+              <span>Radial</span>
+              <label class="switch">
+                <input type="checkbox" id="ticketsChartSwitch">
+                <span class="slider"></span>
+              </label>
+              <span>Barras</span>
+            </label>
+          </div>
+        </div>
+        <div class="chart-section">
+          <h2>Tickets por Departamento</h2>
+          <div class="chart-container">
+            <canvas id="departmentsChart"></canvas>
+          </div>
+          <!-- Switch para cambiar tipo de gráfica -->
+          <div style="text-align:center; margin-top: 10px;">
+            <label class="switch-label">
+              <span>Radial</span>
+              <label class="switch">
+                <input type="checkbox" id="departmentsChartSwitch">
+                <span class="slider"></span>
+              </label>
+              <span>Barras</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="rankings-container">
+        <div class="ranking-section full-width">
+          <h2>Tiempos de Resolución por Urgencia</h2>
+          <div id="urgencyTimes">
+            <div style="text-align: center; padding: 20px; color: #888;">
+              <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>
+              Cargando datos...
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Nuevo apartado para herramientas más reparadas -->
+      <div class="tools-rankings-grid">
+        <div class="tools-ranking">
+          <h2>Herramientas Más reparadas</h2>
+          <div id="toolsRanking">
+          </div>
+        </div>
+        <div class="tools-ranking">
+          <h2>Ranking de todo el personal de mantenimiento (tickets resueltos)</h2>
+          <div id="fullMaintenanceRanking">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar los tickets del usuario -->
+  <div id="userTicketsModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; color:#000; border-radius:10px; max-width:600px; width:90%; max-height:80vh; overflow:auto; padding:30px; position:relative;">
+      <button id="closeUserTicketsModal" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+      <h2 id="modalUserName" style="margin-top:0;"></h2>
+      <ul id="modalUserTickets" style="list-style:none; padding:0;"></ul>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Función para mover el highlight de la barra superior
+      function moverHighlight() {
+        const topbar = document.querySelector('.topbar');
+        const highlight = topbar.querySelector('.glass-highlight');
+        const btnSel = topbar.querySelector('.menu-item.selected');
+        
+        if (!btnSel) return;
+        
+        const rectTopbar = topbar.getBoundingClientRect();
+        const rectBtn = btnSel.getBoundingClientRect();
+        const left = rectBtn.left - rectTopbar.left;
+        
+        highlight.style.left = left + 'px';
+        highlight.style.width = rectBtn.width + 'px';
+      }
+
+      // Función para el efecto de aberración cromática
+      function addChromaticEffect(element) {
+        element.classList.add('clicked');
+        setTimeout(() => {
+          element.classList.remove('clicked');
+        }, 600);
+      }
+
+      // Función para el contraste automático
+      function getContrastYIQ(hexcolor) {
+        hexcolor = hexcolor.replace('#', '');
+        if (hexcolor.length === 3) {
+          hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+        }
+        var r = parseInt(hexcolor.substr(0,2),16);
+        var g = parseInt(hexcolor.substr(2,2),16);
+        var b = parseInt(hexcolor.substr(4,2),16);
+        var yiq = ((r*299)+(g*587)+(b*114))/1000;
+        return (yiq >= 128) ? 'dark' : 'light';
+      }
+
+      function updateTopbarContrast() {
+        const topbar = document.querySelector('.topbar');
+        if (!topbar) return;
+        let bg = window.getComputedStyle(topbar).backgroundColor;
+        function rgb2hex(rgb) {
+          if (!rgb) return '#fff';
+          let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+          if (!result) return '#fff';
+          return '#' +
+            (parseInt(result[1]).toString(16).padStart(2, '0')) +
+            (parseInt(result[2]).toString(16).padStart(2, '0')) +
+            (parseInt(result[3]).toString(16).padStart(2, '0'));
+        }
+        let hex = rgb2hex(bg);
+        let contrast = getContrastYIQ(hex);
+        document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+          el.setAttribute('data-contrast', contrast);
+        });
+      }
+
+      // MANEJO UNIFICADO DE MENÚS Y SUBMENÚS
+      document.querySelectorAll('.menu-item').forEach(menuItem => {
+        menuItem.addEventListener('click', function(e) {
+          // No hacer nada si se hace clic en el submenú mismo
+          if (e.target.closest('.submenu')) return;
+          
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Efecto cromático
+          addChromaticEffect(this);
+          
+          // Si tiene submenú, manejarlo
+          if (this.classList.contains('has-submenu')) {
+            const submenu = this.querySelector('.submenu');
+            const arrow = this.querySelector('.submenu-arrow');
+            
+            // Cerrar todos los otros submenús
+            document.querySelectorAll('.menu-item.has-submenu').forEach(otherItem => {
+              if (otherItem !== this) {
+                const otherSubmenu = otherItem.querySelector('.submenu');
+                const otherArrow = otherItem.querySelector('.submenu-arrow');
+                if (otherSubmenu) {
+                  otherSubmenu.classList.remove('active');
+                  otherArrow.style.transform = 'rotate(0deg)';
+                }
+              }
+            });
+            
+            // Alternar el submenú actual
+            if (submenu) {
+              const isActive = submenu.classList.contains('active');
+              
+              if (isActive) {
+                // Cerrar
+                submenu.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+              } else {
+                // Abrir
+                submenu.classList.add('active');
+                arrow.style.transform = 'rotate(180deg)';
+              }
+            }
+          } else {
+            // Para elementos sin submenú, solo manejar highlight
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            moverHighlight();
+          }
+        });
+      });
+      
+      // Botón LISA
+      document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+        btn.addEventListener('click', function() {
+          window.location.href = 'inicio.html';
+        });
+      });
+      
+      // Icono de usuario
+      const userIcon = document.getElementById('userIcon');
+      if (userIcon) {
+        userIcon.addEventListener('click', function() {
+          addChromaticEffect(this);
+        });
+      }
+      
+      // Cerrar submenús al hacer clic fuera
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.menu-item.has-submenu')) {
+          document.querySelectorAll('.menu-item.has-submenu .submenu').forEach(submenu => {
+            submenu.classList.remove('active');
+          });
+          document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(arrow => {
+            arrow.style.transform = 'rotate(0deg)';
+          });
+        }
+      });
+      
+      // Prevenir que el clic en el submenú cierre el submenú
+      document.querySelectorAll('.submenu').forEach(submenu => {
+        submenu.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      });
+      
+      // Inicialización
+      setTimeout(() => {
+        moverHighlight();
+        updateTopbarContrast();
+      }, 100);
+      
+      // Eventos de resize
+      window.addEventListener('resize', function() {
+        moverHighlight();
+        updateTopbarContrast();
+      });
+    });
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script>
+    // FUNCION UTILIDAD: Calcular duración solo en horario hábil (L-V 6:00-16:00)
+    function getBusinessDurationMs(start, end) {
+      // Copias para no modificar los originales
+      let s = new Date(start);
+      let e = new Date(end);
+      if (e <= s) return 0;
+      let totalMs = 0;
+      // Horario hábil
+      const startHour = 6;
+      const endHour = 16;
+      // Iterar día por día
+      while (s < e) {
+        // Si es sábado (6) o domingo (0), saltar al lunes siguiente
+        if (s.getDay() === 0) { // domingo
+          s.setDate(s.getDate() + 1);
+          s.setHours(startHour, 0, 0, 0);
+          continue;
+        }
+        if (s.getDay() === 6) { // sábado
+          s.setDate(s.getDate() + 2);
+          s.setHours(startHour, 0, 0, 0);
+          continue;
+        }
+        // Si antes de las 6am, mover a 6am
+        if (s.getHours() < startHour) {
+          s.setHours(startHour, 0, 0, 0);
+        }
+        // Si después de las 16h, saltar al siguiente día hábil a las 6am
+        if (s.getHours() >= endHour) {
+          s.setDate(s.getDate() + 1);
+          s.setHours(startHour, 0, 0, 0);
+          continue;
+        }
+        // Calcular fin de jornada actual
+        let endOfWork = new Date(s);
+        endOfWork.setHours(endHour, 0, 0, 0);
+        // El siguiente corte es el menor entre fin de jornada y end
+        let next = end < endOfWork ? end : endOfWork;
+        totalMs += next - s;
+        s = new Date(next);
+        // Si llegamos al final de la jornada, saltar al siguiente día hábil
+        if (s >= endOfWork) {
+          s.setDate(s.getDate() + 1);
+          s.setHours(startHour, 0, 0, 0);
+        }
+      }
+      return totalMs;
+    }
+
+    // Inicialización simple sin conflictos de sidebar
+    window.addEventListener('load', function() {
+      initThemeSwitch();
+      generateYearButtons();
+      const currentYear = new Date().getFullYear();
+      loadTicketStats(currentYear);
+      loadDepartmentStats(currentYear);
+      loadToolsRanking(currentYear);
+      loadFullMaintenanceRanking(currentYear); // NUEVO
+    });
+
+    // Variables globales para los gráficos
+    let ticketsChart = null;
+    let departmentsChart = null;
+    let currentDeptChartType = 'bar'; // Cambiado a 'bar' por defecto
+    let currentTicketsChartType = 'bar'; // Cambiado a 'bar' por defecto
+
+    // Función para manejar el cambio de tema
+    function initThemeSwitch() {
+      const themeSwitch = document.getElementById('themeSwitch');
+      const themeLabel = document.querySelector('.theme-switch-label');
+
+      // Solo proceder si existe el switch de tema
+      if (!themeSwitch) {
+        console.log('Switch de tema no encontrado, omitiendo inicialización');
+        return;
+      }
+
+      // Función para actualizar los colores de los gráficos
+      function updateChartsColors() {
+        const textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000';
+        
+        if (ticketsChart) {
+          ticketsChart.options.scales.x.ticks.color = textColor;
+          ticketsChart.options.scales.y.ticks.color = textColor;
+          ticketsChart.options.plugins.legend.labels.color = textColor;
+          ticketsChart.update();
+        }
+        
+        if (departmentsChart) {
+          departmentsChart.options.scales.x.ticks.color = textColor;
+          departmentsChart.options.scales.y.ticks.color = textColor;
+          departmentsChart.options.plugins.legend.labels.color = textColor;
+          departmentsChart.update();
+        }
+      }
+
+      // Manejar cambio de tema
+      themeSwitch.addEventListener('change', function() {
+        if (this.checked) {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('theme', 'dark');
+        }
+        // Actualizar colores de los gráficos
+        updateChartsColors();
+      });
+    }
+
+    // Función para generar los botones de años
+    function generateYearButtons() {
+      const yearCarousel = document.getElementById('yearCarousel');
+      const currentYear = new Date().getFullYear();
+      const firstYear = 2025;
+      const lastYear = currentYear;
+
+      const years = [];
+      for (let y = firstYear; y <= lastYear; y++) years.push(y);
+
+      yearCarousel.innerHTML = years.map(year => `
+        <button class="year-button" data-year="${year}">
+          ${year}
+        </button>
+      `).join('');
+
+      // Evento click a los botones
+      yearCarousel.querySelectorAll('.year-button').forEach(button => {
+        button.addEventListener('click', function() {
+          yearCarousel.querySelectorAll('.year-button').forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          loadTicketStats(this.dataset.year);
+          loadDepartmentStats(this.dataset.year);
+          loadToolsRanking(this.dataset.year);
+          loadFullMaintenanceRanking(this.dataset.year); // NUEVO
+        });
+      });
+
+      // Activar el botón del año actual por defecto
+      const defaultYearButton = yearCarousel.querySelector(`[data-year="${currentYear}"]`);
+      if (defaultYearButton) {
+        defaultYearButton.classList.add('active');
+      }
+
+      // Configurar navegación del carrusel
+      const prevButton = document.getElementById('prevYear');
+      const nextButton = document.getElementById('nextYear');
+      prevButton.addEventListener('click', () => {
+        yearCarousel.scrollBy({ left: -200, behavior: 'smooth' });
+      });
+      nextButton.addEventListener('click', () => {
+        yearCarousel.scrollBy({ left: 200, behavior: 'smooth' });
+      });
+
+      // Cargar los datos del año actual manualmente
+      loadTicketStats(currentYear);
+      loadDepartmentStats(currentYear);
+      loadToolsRanking(currentYear);
+      loadFullMaintenanceRanking(currentYear); // NUEVO
+    }
+
+    // Función para cargar los datos de tickets
+    async function loadTicketStats(selectedYear) {
+      try {
+        console.log('Cargando estadísticas para el año:', selectedYear);
+        
+        const response = await fetch('/api/mantenimiento/tickets');
+        if (!response.ok) {
+          console.error('Error al obtener tickets:', response.status, response.statusText);
+          document.getElementById('urgencyTimes').innerHTML = 
+            '<div style="text-align: center; padding: 20px; color: #e74c3c;">Error al cargar los datos de tickets</div>';
+          return;
+        }
+        
+        const tickets = (await response.json())
+          .filter(ticket => new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear));
+        
+        console.log('Tickets obtenidos:', tickets.length);
+        
+        if (tickets.length === 0) {
+          document.getElementById('urgencyTimes').innerHTML = 
+            '<div style="text-align: center; padding: 20px; color: #888;">No hay tickets para el año ' + selectedYear + '</div>';
+          return;
+        }
+
+        const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // Inicializar contadores de tickets por mes
+        const totalTickets = new Array(12).fill(0);
+        const completedTickets = new Array(12).fill(0);
+        const notCompletedTickets = new Array(12).fill(0);
+
+        // Contar tickets por mes y estado
+        tickets.forEach(ticket => {
+          const date = new Date(ticket.timestamp);
+          const month = date.getMonth();
+          totalTickets[month]++;
+          if (ticket.urgency === 'completed') {
+            completedTickets[month]++;
+          } else {
+            notCompletedTickets[month]++;
+          }
+        });
+
+        // Destruir el gráfico existente si existe
+        if (ticketsChart) {
+          ticketsChart.destroy();
+        }
+
+        // Crear gráfica apilada
+        const ctx = document.getElementById('ticketsChart').getContext('2d');
+        ticketsChart = new Chart(ctx, {
+          type: currentTicketsChartType,
+          data: {
+            labels: months,
+            datasets: [
+              {
+                label: 'Terminados',
+                data: completedTickets,
+                backgroundColor: '#43a047', // Verde
+                borderColor: '#1b5e20',
+                borderWidth: 1
+              },
+              {
+                label: 'No Terminados',
+                data: notCompletedTickets,
+                backgroundColor: '#e53935', // Rojo
+                borderColor: '#b71c1c',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            onClick: function(evt, elements) {
+              if (elements.length > 0) {
+                const element = elements[0];
+                const monthIndex = element.index;
+                const monthName = months[monthIndex];
+                const monthTickets = tickets.filter(ticket => {
+                  const date = new Date(ticket.timestamp);
+                  return date.getMonth() === monthIndex;
+                });
+                
+                console.log(`Cargando datos del mes: ${monthName}`, monthTickets.length, 'tickets');
+                loadDepartmentStatsForMonth(monthTickets, monthName);
+                loadUrgencyTimesForMonth(monthTickets, monthName);
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                ticks: {
+                  color: '#ffffff'
+                },
+                grid: {
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                }
+              },
+              y: {
+                stacked: true,
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                  color: '#ffffff'
+                },
+                grid: {
+                  color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {
+                  color: '#ffffff'
+                }
+              }
+            }
+          }
+        });
+
+        // Ranking de usuarios con más tickets terminados
+        const userCounts = {};
+        const userTimes = {}; // Para calcular tiempos promedio
+        
+        // Estadísticas de tiempos por nivel de urgencia
+        const urgencyStats = {
+          'critical': { totalTime: 0, count: 0, tickets: [] },
+          'high': { totalTime: 0, count: 0, tickets: [] },
+          'medium': { totalTime: 0, count: 0, tickets: [] },
+          'low': { totalTime: 0, count: 0, tickets: [] }
+        };
+        
+        tickets.forEach(ticket => {
+          const user = ticket.name || 'Desconocido';
+          
+          userCounts[user] = (userCounts[user] || 0) + 1;
+          
+          // Calcular tiempo de resolución si existe time_end
+          if (ticket.time_end) {
+            const startTime = new Date(ticket.timestamp);
+            const endTime = new Date(ticket.time_end);
+            const duration = getBusinessDurationMs(startTime, endTime);
+            
+            if (!userTimes[user]) {
+              userTimes[user] = { totalTime: 0, count: 0 };
+            }
+            userTimes[user].totalTime += duration;
+            userTimes[user].count += 1;
+            
+            // Agrupar por la última urgencia del ticket antes de completarse
+            const lastUrgency = ticket.last_urgency || ticket.urgency || 'medium'; // Usar last_urgency o urgency como fallback
+            if (urgencyStats[lastUrgency]) {
+              urgencyStats[lastUrgency].totalTime += duration;
+              urgencyStats[lastUrgency].count += 1;
+              urgencyStats[lastUrgency].tickets.push(ticket);
+            }
+          }
+        });
+        
+        const sortedUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        
+        // Mostrar estadísticas de tiempos por urgencia
+        const urgencyTimesDiv = document.getElementById('urgencyTimes');
+        if (urgencyTimesDiv) {
+          console.log('Renderizando tiempos de urgencia...');
+          console.log('Estadísticas de urgencia:', urgencyStats);
+          
+          const urgencyLabels = {
+            'critical': 'Crítico',
+            'medium': 'Medio',
+            'low': 'Bajo'
+          };
+          
+          // Mostrar siempre las 4 categorías de urgencia, incluso si no hay tickets
+          const urgencyHTML = Object.entries(urgencyLabels).map(([urgency, label]) => {
+            const stats = urgencyStats[urgency] || { totalTime: 0, count: 0, tickets: [] };
+            
+            // Calcular tiempo promedio en horas y minutos
+            let avgTimeHours = 0;
+            let avgTimeMinutes = 0;
+            let timeDisplay = 'Sin datos';
+            
+            if (stats.count > 0) {
+              const avgTimeMs = stats.totalTime / stats.count;
+              avgTimeHours = Math.floor(avgTimeMs / (1000 * 60 * 60));
+              avgTimeMinutes = Math.floor((avgTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+              
+              if (avgTimeHours > 0) {
+                timeDisplay = `${avgTimeHours}h ${avgTimeMinutes}m`;
+              } else if (avgTimeMinutes > 0) {
+                timeDisplay = `${avgTimeMinutes}m`;
+              } else {
+                timeDisplay = '< 1m';
+              }
+            }
+            
+            // Calcular el tiempo máximo para normalizar las barras (solo entre categorías con datos)
+            const categoriesWithData = Object.values(urgencyStats).filter(stat => stat.count > 0);
+            const maxTime = categoriesWithData.length > 0 ? 
+              Math.max(...categoriesWithData.map(stat => stat.totalTime / stats.count)) : 0;
+            
+            // Calcular el porcentaje para la barra
+            let percentage = 0;
+            if (maxTime > 0 && stats.count > 0) {
+              const avgTimeMs = stats.totalTime / stats.count;
+              percentage = (avgTimeMs / maxTime) * 100;
+            }
+            
+            // Si solo hay 1 ticket en esta categoría, mostrar una barra mínima del 10%
+            if (stats.count === 1 && percentage === 0) {
+              percentage = 10;
+            }
+            
+            // Información adicional para mostrar
+            let additionalInfo = '';
+            if (stats.count === 1) {
+              additionalInfo = '<span class="single-ticket-indicator">1 ticket</span>';
+            } else if (stats.count > 1) {
+              additionalInfo = `<span class="urgency-info">Promedio de ${stats.count} tickets</span>`;
+            } else {
+              additionalInfo = '<span class="urgency-info">Sin tickets completados</span>';
+            }
+            
+            return `
+              <div class="urgency-time-item clickable-urgency" data-urgency="${urgency}">
+                <div class="urgency-header">
+                  <span class="urgency-label">${label}</span>
+                  <span class="urgency-count">${stats.count} tickets</span>
+                </div>
+                <div class="time-bar-container">
+                  <div class="time-bar">
+                    <div class="time-bar-fill ${urgency}" style="width: ${Math.min(percentage, 100)}%"></div>
+                  </div>
+                  <div class="time-value">
+                    ${timeDisplay}
+                    ${additionalInfo}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+          urgencyTimesDiv.innerHTML = urgencyHTML;
+          
+          // Agregar evento para abrir modal al dar clic en cada urgencia
+          urgencyTimesDiv.querySelectorAll('.urgency-time-item').forEach(item => {
+            item.addEventListener('click', function() {
+              const urgency = this.getAttribute('data-urgency');
+              // Filtrar tickets terminados de esa urgencia
+              const ticketsFiltrados = tickets.filter(ticket => {
+                const urg = ticket.last_urgency || ticket.urgency || 'medium';
+                return urg === urgency && ticket.urgency === 'completed';
+              });
+              showUrgencyTicketsModal(urgency, ticketsFiltrados);
+            });
+          });
+        }
+        
+        // Cargar ranking de herramientas más utilizadas
+        loadToolsRanking(selectedYear);
+        
+        // Limpiar el gráfico de departamentos al cargar un nuevo año
+        clearDepartmentChart();
+        
+      } catch (error) {
+        console.error('Error en loadTicketStats:', error);
+        document.getElementById('urgencyTimes').innerHTML = 
+          '<div style="text-align: center; padding: 20px; color: #e74c3c;">Error al cargar las estadísticas: ' + error.message + '</div>';
+      }
+    }
+
+    // Nueva función para cargar estadísticas de departamentos para un mes específico
+    function loadDepartmentStatsForMonth(monthTickets, monthName) {
+      const departments = [
+        'Recursos Humanos',
+        'Gerencia',
+        'Planeación',
+        'Contabilidad',
+        'Producción P1',
+        'Producción BA',
+        'QC',
+        'Diseño',
+        'IT',
+        'Mantenimiento',
+        'Almacen',
+        'WD'
+      ];
+      
+      // Inicializar contador de tickets por departamento para este mes
+      const completedDepartmentCounts = {};
+      const notCompletedDepartmentCounts = {};
+      departments.forEach(dept => {
+        completedDepartmentCounts[dept] = 0;
+        notCompletedDepartmentCounts[dept] = 0;
+      });
+      
+      // Contar tickets por departamento y estado para este mes
+      monthTickets.forEach(ticket => {
+        if (ticket.department && completedDepartmentCounts.hasOwnProperty(ticket.department)) {
+          if (ticket.urgency === 'completed') {
+            completedDepartmentCounts[ticket.department]++;
+          } else {
+            notCompletedDepartmentCounts[ticket.department]++;
+          }
+        }
+      });
+      
+      // Destruir el gráfico existente si existe
+      if (departmentsChart) {
+        departmentsChart.destroy();
+      }
+
+      // Crear la gráfica apilada para el mes seleccionado
+      const ctx = document.getElementById('departmentsChart').getContext('2d');
+      departmentsChart = new Chart(ctx, {
+        type: currentDeptChartType,
+        data: {
+          labels: departments,
+          datasets: [
+            {
+              label: 'Terminados',
+              data: departments.map(dept => completedDepartmentCounts[dept]),
+              backgroundColor: '#43a047', // Verde
+              borderColor: '#1b5e20',
+              borderWidth: 1
+            },
+            {
+              label: 'No Terminados',
+              data: departments.map(dept => notCompletedDepartmentCounts[dept]),
+              backgroundColor: '#e53935', // Rojo
+              borderColor: '#b71c1c',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: `Tickets por Departamento - ${monthName}`,
+              color: '#ffffff',
+              font: {
+                size: 16
+              }
+            },
+            legend: {
+              labels: {
+                color: '#ffffff'
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            }
+          }
+        }
+      });
+
+      // Agregar evento de clic para mostrar tickets del departamento
+      document.getElementById('departmentsChart').onclick = function(evt) {
+        const points = departmentsChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+        if (points.length) {
+          const firstPoint = points[0];
+          const datasetIndex = firstPoint.datasetIndex;
+          const index = firstPoint.index;
+          const departamento = departmentsChart.data.labels[index];
+
+          if (departmentsChart.data.datasets[datasetIndex].label === 'No Terminados') {
+            // Filtra los tickets no terminados de ese departamento en este mes
+            const ticketsNoTerminados = monthTickets.filter(ticket =>
+              ticket.department === departamento && ticket.urgency !== 'completed'
+            );
+            showUserTicketsModal(`No terminados de ${departamento} - ${monthName}`, ticketsNoTerminados);
+          } else if (departmentsChart.data.datasets[datasetIndex].label === 'Terminados') {
+            // Filtra los tickets terminados de ese departamento en este mes
+            const ticketsTerminados = monthTickets.filter(ticket =>
+              ticket.department === departamento && ticket.urgency === 'completed'
+            );
+            showUserTicketsModal(`Terminados de ${departamento} - ${monthName}`, ticketsTerminados);
+          }
+        }
+      };
+    }
+
+    // Función para limpiar el gráfico de departamentos
+    function clearDepartmentChart() {
+      if (departmentsChart) {
+        departmentsChart.destroy();
+      }
+      
+      const ctx = document.getElementById('departmentsChart').getContext('2d');
+      departmentsChart = new Chart(ctx, {
+        type: currentDeptChartType,
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Terminados',
+              data: [],
+              backgroundColor: '#43a047',
+              borderColor: '#1b5e20',
+              borderWidth: 1
+            },
+            {
+              label: 'No Terminados',
+              data: [],
+              backgroundColor: '#e53935',
+              borderColor: '#b71c1c',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Tickets por Departamento - Selecciona un mes',
+              color: '#ffffff',
+              font: {
+                size: 16
+              }
+            },
+            legend: {
+              labels: {
+                color: '#ffffff'
+              }
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Función para cargar el ranking de herramientas más utilizadas
+    async function loadToolsRanking(selectedYear) {
+      try {
+        // Obtener tickets completados del año seleccionado
+        const ticketsResponse = await fetch('/api/mantenimiento/tickets');
+        if (!ticketsResponse.ok) return;
+        
+        const allTickets = await ticketsResponse.json();
+        const tickets = allTickets.filter(ticket => 
+          ticket.urgency === 'completed' && 
+          new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear) &&
+          ticket.id_herramienta // Solo tickets que tienen herramienta asignada
+        );
+
+        // Obtener todas las herramientas
+        const toolsResponse = await fetch('/api/mantenimiento/herramientas');
+        if (!toolsResponse.ok) return;
+        
+        const tools = await toolsResponse.json();
+        
+        // Crear un mapa de herramientas por ID para acceso rápido
+        const toolsMap = {};
+        tools.forEach(tool => {
+          toolsMap[tool.id] = tool;
+        });
+        
+        // Contar uso de herramientas
+        const toolUsage = {};
+        tickets.forEach(ticket => {
+          if (ticket.id_herramienta && toolsMap[ticket.id_herramienta]) {
+            const toolId = ticket.id_herramienta;
+            if (!toolUsage[toolId]) {
+              toolUsage[toolId] = {
+                id: toolId,
+                name: toolsMap[toolId].nombre,
+                description: toolsMap[toolId].descripcion || 'Sin descripción',
+                count: 0,
+                preventivo: 0,
+                correctivo: 0
+              };
+            }
+            toolUsage[toolId].count++;
+            if (ticket.mantenimiento_preventivo) toolUsage[toolId].preventivo++;
+            if (ticket.mantenimiento_correctivo) toolUsage[toolId].correctivo++;
+          }
+        });
+        
+        // Ordenar por cantidad de uso y tomar las primeras 10
+        const sortedTools = Object.values(toolUsage)
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 10);
+        
+        // Mostrar ranking de herramientas
+        const toolsRankingDiv = document.getElementById('toolsRanking');
+        if (toolsRankingDiv) {
+          if (sortedTools.length === 0) {
+            toolsRankingDiv.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No hay herramientas utilizadas en este año.</div>';
+          } else {
+            toolsRankingDiv.innerHTML = '<ul class="tools-list">' +
+              sortedTools.map((tool, idx) => `
+                <li class="tool-item">
+                  <div class="tool-info">
+                    <span class="tool-rank">#${idx + 1}</span>
+                    <div class="tool-details">
+                      <span class="tool-name">${tool.name}</span>
+                      <span class="tool-description">${tool.description}</span>
+                      <div class="tool-counters">
+                        <span class="counter-circle">
+                          ${tool.count}
+                          <span class="counter-label">usos</span>
+                        </span>
+                        <span class="counter-circle counter-preventivo">
+                          ${tool.preventivo}
+                          <span class="counter-label">Preventivo</span>
+                        </span>
+                        <span class="counter-circle counter-correctivo">
+                          ${tool.correctivo}
+                          <span class="counter-label">Correctivo</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              `).join('') +
+            '</ul>';
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar ranking de herramientas:', error);
+        const toolsRankingDiv = document.getElementById('toolsRanking');
+        if (toolsRankingDiv) {
+          toolsRankingDiv.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Error al cargar las herramientas.</div>';
+        }
+      }
+    }
+
+    // Función para mostrar el modal con los tickets del usuario
+    function showUserTicketsModal(user, tickets) {
+      const modal = document.getElementById('userTicketsModal');
+      const modalUserName = document.getElementById('modalUserName');
+      const modalUserTickets = document.getElementById('modalUserTickets');
+      modalUserName.textContent = `Tickets de ${user}`;
+      
+      if (tickets.length === 0) {
+        modalUserTickets.innerHTML = '<li>No hay tickets para este usuario.</li>';
+      } else {
+        const urgencyLabels = {
+          'critical': 'Crítico',
+          'high': 'Alto',
+          'medium': 'Medio',
+          'low': 'Bajo',
+          'completed': 'Completado'
+        };
+        modalUserTickets.innerHTML = tickets.map(ticket => {
+          let resolutionTime = 'Sin datos de tiempo';
+          if (ticket.time_end) {
+            const startTime = new Date(ticket.timestamp);
+            const endTime = new Date(ticket.time_end);
+            const duration = getBusinessDurationMs(startTime, endTime);
+            const hours = Math.floor(duration / (1000 * 60 * 60));
+            const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+            if (hours > 0) {
+              resolutionTime = `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+              resolutionTime = `${minutes}m`;
+            } else {
+              resolutionTime = '< 1m';
+            }
+          }
+          // Obtener la urgencia original
+          const originalUrgency = ticket.last_urgency || ticket.urgency || 'Sin especificar';
+          return `
+            <li class="user-ticket-item">
+              <div class="ticket-header">
+                <div class="ticket-problem">
+                  <strong>Problema:</strong> ${ticket.problem || ticket.description || ticket.issue || 'Sin descripción'}
+                </div>
+                <div>
+                  <span class="urgency-badge ${originalUrgency}">
+                    ${urgencyLabels[originalUrgency] || originalUrgency}
+                  </span>
+                </div>
+              </div>
+              <div class="ticket-details">
+                <div>
+                  <strong>Fecha de creación:</strong> ${new Date(ticket.timestamp).toLocaleString()}
+                </div>
+                <div>
+                  <strong>Tiempo de resolución:</strong> 
+                  <span class="resolution-time">${resolutionTime}</span>
+                </div>
+              </div>
+              ${ticket.department ? `<div class="ticket-department"><strong>Departamento:</strong> ${ticket.department}</div>` : ''}
+            </li>
+          `;
+        }).join('');
+      }
+      modal.style.display = 'flex';
+    }
+
+    // Función para mostrar el modal con los tickets por urgencia
+    function showUrgencyTicketsModal(urgency, tickets) {
+      const modal = document.getElementById('userTicketsModal');
+      const modalUserName = document.getElementById('modalUserName');
+      const modalUserTickets = document.getElementById('modalUserTickets');
+      const urgencyLabels = {
+        'critical': 'Crítico',
+        'medium': 'Medio',
+        'low': 'Bajo'
+      };
+      modalUserName.textContent = `Tickets terminados de urgencia: ${urgencyLabels[urgency] || urgency}`;
+      
+      if (tickets.length === 0) {
+        modalUserTickets.innerHTML = '<li>No hay tickets terminados con esta urgencia.</li>';
+      } else {
+        modalUserTickets.innerHTML = tickets.map(ticket => {
+          let resolutionTime = 'Sin datos de tiempo';
+          if (ticket.time_end) {
+            const startTime = new Date(ticket.timestamp);
+            const endTime = new Date(ticket.time_end);
+            const duration = getBusinessDurationMs(startTime, endTime);
+            const hours = Math.floor(duration / (1000 * 60 * 60));
+            const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+            if (hours > 0) {
+              resolutionTime = `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+              resolutionTime = `${minutes}m`;
+            } else {
+              resolutionTime = '< 1m';
+            }
+          }
+          return `
+            <li class="user-ticket-item">
+              <div class="ticket-header">
+                <div class="ticket-problem">
+                  <strong>Problema:</strong> ${ticket.problem || ticket.description || ticket.issue || 'Sin descripción'}
+                </div>
+                <div>
+                  <span class="urgency-badge ${urgency}">
+                    ${urgencyLabels[urgency] || urgency}
+                  </span>
+                </div>
+              </div>
+              <div class="ticket-details">
+                <div>
+                  <strong>Fecha de creación:</strong> ${new Date(ticket.timestamp).toLocaleString()}
+                </div>
+                <div>
+                  <strong>Tiempo de resolución:</strong> 
+                  <span class="resolution-time">${resolutionTime}</span>
+                </div>
+              </div>
+              ${ticket.department ? `<div class="ticket-department"><strong>Departamento:</strong> ${ticket.department}</div>` : ''}
+            </li>
+          `;
+        }).join('');
+      }
+      modal.style.display = 'flex';
+    }
+
+    // Cerrar el modal
+    document.getElementById('closeUserTicketsModal').onclick = function() {
+      document.getElementById('userTicketsModal').style.display = 'none';
+    };
+    // Cerrar al hacer clic fuera del modal
+    document.getElementById('userTicketsModal').onclick = function(e) {
+      if (e.target === this) this.style.display = 'none';
+    };
+
+    // Función para cargar los datos de tickets por departamento
+    async function loadDepartmentStats(selectedYear) {
+      const response = await fetch('/api/mantenimiento/tickets');
+      if (!response.ok) return;
+      const tickets = (await response.json())
+        .filter(ticket => new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear));
+      const departments = [
+        'Recursos Humanos',
+        'Gerencia',
+        'Planeación',
+        'Contabilidad',
+        'Producción P1',
+        'Producción BA',
+        'QC',
+        'Diseño',
+        'IT',
+        'Mantenimiento',
+        'Almacen',
+        'WD'
+      ];
+      
+      // Inicializar contador de tickets por departamento
+      const completedDepartmentCounts = {};
+      const notCompletedDepartmentCounts = {};
+      departments.forEach(dept => {
+        completedDepartmentCounts[dept] = 0;
+        notCompletedDepartmentCounts[dept] = 0;
+      });
+      // Contar tickets por departamento y estado
+      let ticketsSinDepartamento = 0;
+      let ticketsDeptNoReconocido = 0;
+      let nombresDeptNoReconocidos = [];
+      tickets.forEach(ticket => {
+        if (!ticket.department) {
+          ticketsSinDepartamento++;
+        } else if (!completedDepartmentCounts.hasOwnProperty(ticket.department)) {
+          ticketsDeptNoReconocido++;
+          if (!nombresDeptNoReconocidos.includes(ticket.department)) {
+            nombresDeptNoReconocidos.push(ticket.department);
+          }
+        } else {
+          if (ticket.urgency === 'completed') {
+            completedDepartmentCounts[ticket.department]++;
+          } else {
+            notCompletedDepartmentCounts[ticket.department]++;
+          }
+        }
+      });
+      // Mostrar en consola para depuración
+      console.log('Tickets sin departamento:', ticketsSinDepartamento);
+      console.log('Tickets con departamento no reconocido:', ticketsDeptNoReconocido);
+      if (nombresDeptNoReconocidos.length > 0) {
+        console.log('Nombres de departamentos no reconocidos:', nombresDeptNoReconocidos);
+      }
+      console.log('Total tickets:', tickets.length);
+
+      // Destruir el gráfico existente si existe
+      if (departmentsChart) {
+        departmentsChart.destroy();
+      }
+
+      // Crear la gráfica apilada
+      const ctx = document.getElementById('departmentsChart').getContext('2d');
+      departmentsChart = new Chart(ctx, {
+        type: currentDeptChartType,
+        data: {
+          labels: departments,
+          datasets: [
+            {
+              label: 'Terminados',
+              data: departments.map(dept => completedDepartmentCounts[dept]),
+              backgroundColor: '#43a047', // Verde
+              borderColor: '#1b5e20',
+              borderWidth: 1
+            },
+            {
+              label: 'No Terminados',
+              data: departments.map(dept => notCompletedDepartmentCounts[dept]),
+              backgroundColor: '#e53935', // Rojo
+              borderColor: '#b71c1c',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            },
+            y: {
+              stacked: true,
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1,
+                color: '#ffffff'
+              },
+              grid: {
+                color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#ffffff'
+              }
+            }
+          }
+        }
+      });
+
+      // Agrega aquí el manejador de clics
+      document.getElementById('departmentsChart').onclick = function(evt) {
+        const points = departmentsChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+        if (points.length) {
+          const firstPoint = points[0];
+          const datasetIndex = firstPoint.datasetIndex;
+          const index = firstPoint.index;
+          const departamento = departmentsChart.data.labels[index];
+
+          if (departmentsChart.data.datasets[datasetIndex].label === 'No Terminados') {
+            // Filtra los tickets no terminados de ese departamento
+            const ticketsNoTerminados = tickets.filter(ticket =>
+              ticket.department === departamento && ticket.urgency !== 'completed'
+            );
+            showUserTicketsModal(`No terminados de ${departamento}`, ticketsNoTerminados);
+          } else if (departmentsChart.data.datasets[datasetIndex].label === 'Terminados') {
+            // Filtra los tickets terminados de ese departamento
+            const ticketsTerminados = tickets.filter(ticket =>
+              ticket.department === departamento && ticket.urgency === 'completed'
+            );
+            showUserTicketsModal(`Terminados de ${departamento}`, ticketsTerminados);
+          }
+        }
+      };
+    }
+
+    // Evento para el switch de tipo de gráfica
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="chartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentDeptChartType = this.value;
+          // Recargar la gráfica con el tipo seleccionado
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadDepartmentStats(year);
+        });
+      });
+    });
+
+    document.getElementById('adminMenuBtn').addEventListener('click', function() {
+      const submenu = document.getElementById('adminSubmenu');
+      if (submenu.style.display === 'block') {
+        submenu.style.display = 'none';
+      } else {
+        submenu.style.display = 'block';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+        });
+      });
+    });
+
+    document.getElementById('userRanking').addEventListener('click', function(e) {
+      const item = e.target.closest('.user-item');
+      if (item) {
+        const username = item.getAttribute('data-username');
+        fetch('/api/mantenimiento/tickets')
+          .then(res => res.json())
+          .then(allTickets => {
+            const userTickets = allTickets.filter(t => t.name === username);
+            showUserTicketsModal(username, userTickets);
+          });
+      }
+    });
+
+    // Switch para tipo de gráfica de tickets por mes
+    document.getElementById('ticketsChartSwitch').addEventListener('change', function() {
+      currentTicketsChartType = this.checked ? 'bar' : 'radar';
+      const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+      loadTicketStats(year);
+    });
+
+    // Switch para tipo de gráfica de departamentos
+    document.getElementById('departmentsChartSwitch').addEventListener('change', function() {
+      currentDeptChartType = this.checked ? 'bar' : 'radar';
+      const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+      loadDepartmentStats(year);
+    });
+
+    // Haz clickeables los bloques de urgencia
+    document.querySelectorAll('.clickable-urgency').forEach(item => {
+      item.addEventListener('click', function() {
+        const urgency = this.getAttribute('data-urgency');
+        // Filtra los tickets de esa urgencia y que estén terminados
+        const filteredTickets = urgencyStats[urgency].tickets || [];
+        showUrgencyTicketsModal(urgency, filteredTickets);
+      });
+    });
+
+    function renderCharts() {
+      // ...código que carga y muestra los datos...
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderCharts();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        // IDs de los dos switches
+        const switch1 = document.getElementById('ticketsChartSwitch');
+        const switch2 = document.getElementById('departmentsChartSwitch');
+        // Animar ambos switches a "Barras" (checked = true)
+        if (switch1 && !switch1.checked) {
+          switch1.checked = true;
+          switch1.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (switch2 && !switch2.checked) {
+          switch2.checked = true;
+          switch2.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }, 500); // 500 ms después de cargar la página
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      generateYearButtons();
+    });
+
+    // NUEVA FUNCIÓN: Ranking completo de mantenimiento
+    async function loadFullMaintenanceRanking(selectedYear) {
+      try {
+        console.log('Cargando ranking de mantenimiento para año:', selectedYear);
+        
+        // Obtener todos los usuarios de mantenimiento
+        const usersResponse = await fetch('/api/mantenimiento/usuarios');
+        if (!usersResponse.ok) {
+          console.error('Error al obtener usuarios:', usersResponse.status);
+          return;
+        }
+        const users = await usersResponse.json();
+        console.log('Usuarios obtenidos:', users);
+
+        // Obtener todos los tickets completados del año seleccionado
+        const ticketsResponse = await fetch('/api/mantenimiento/tickets');
+        if (!ticketsResponse.ok) {
+          console.error('Error al obtener tickets:', ticketsResponse.status);
+          return;
+        }
+        const allTickets = await ticketsResponse.json();
+        console.log('Total de tickets obtenidos:', allTickets.length);
+        
+        // Filtrar solo tickets completados del año
+        const completedTickets = allTickets.filter(ticket => 
+          ticket.urgency === 'completed' && 
+          ticket.timestamp && 
+          new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear)
+        );
+        console.log('Tickets completados del año', selectedYear, ':', completedTickets.length);
+
+        // Contar tickets resueltos por cada usuario de mantenimiento
+        const userTicketCount = {};
+        users.forEach(user => {
+          userTicketCount[user.id] = 0;
+        });
+        
+        completedTickets.forEach(ticket => {
+          let assigned = ticket.assigned_user_id;
+          console.log('Ticket', ticket.id, 'assigned_user_id:', assigned);
+          if (Array.isArray(assigned)) {
+            assigned.forEach(uid => {
+              if (userTicketCount.hasOwnProperty(uid)) {
+                userTicketCount[uid]++;
+                console.log('Incrementando contador para usuario', uid);
+              }
+            });
+          } else if (typeof assigned === 'number' && userTicketCount.hasOwnProperty(assigned)) {
+            userTicketCount[assigned]++;
+            console.log('Incrementando contador para usuario', assigned);
+          }
+        });
+        
+        console.log('Conteo final por usuario:', userTicketCount);
+
+        // Ordenar usuarios por número de tickets resueltos (desc)
+        const sortedUsers = users.slice().sort((a, b) => userTicketCount[b.id] - userTicketCount[a.id]);
+        console.log('Usuarios ordenados:', sortedUsers);
+
+        // Renderizar la lista
+        const rankingDiv = document.getElementById('fullMaintenanceRanking');
+        console.log('Elemento rankingDiv encontrado:', !!rankingDiv);
+        
+        if (rankingDiv) {
+          if (sortedUsers.length === 0) {
+            rankingDiv.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No hay usuarios de mantenimiento.</div>';
+          } else {
+            const html = '<ul class="users-list">' +
+              sortedUsers.map(user =>
+                `<li class="user-item" data-userid="${user.id}" data-username="${user.nombre}">
+                  <span class="user-name">${user.nombre}</span>
+                  <span class="ticket-count">${userTicketCount[user.id]} tickets</span>
+                </li>`
+              ).join('') +
+              '</ul>';
+            console.log('HTML generado:', html);
+            rankingDiv.innerHTML = html;
+            // Agregar evento para mostrar tickets resueltos al hacer clic en el nombre
+            rankingDiv.querySelectorAll('.user-item').forEach(item => {
+              item.addEventListener('click', function() {
+                const userId = this.getAttribute('data-userid');
+                const userName = this.getAttribute('data-username');
+                // Filtrar tickets resueltos por este usuario
+                const ticketsUsuario = completedTickets.filter(ticket => {
+                  if (Array.isArray(ticket.assigned_user_id)) {
+                    return ticket.assigned_user_id.includes(Number(userId));
+                  } else {
+                    return ticket.assigned_user_id === Number(userId);
+                  }
+                });
+                showUserTicketsModal(userName, ticketsUsuario);
+              });
+            });
+          }
+        } else {
+          console.error('No se encontró el elemento fullMaintenanceRanking');
+        }
+      } catch (error) {
+        console.error('Error al cargar ranking completo de mantenimiento:', error);
+        const rankingDiv = document.getElementById('fullMaintenanceRanking');
+        if (rankingDiv) rankingDiv.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Error al cargar el ranking.</div>';
+      }
+    }
+
+    // Nueva función para cargar tiempos de resolución por urgencia para un mes específico
+    function loadUrgencyTimesForMonth(monthTickets, monthName) {
+      // Filtrar solo tickets terminados del mes seleccionado
+      const completedMonthTickets = monthTickets.filter(ticket => 
+        ticket.urgency === 'completed' && ticket.time_end
+      );
+      
+      // Estadísticas de tiempos por nivel de urgencia para este mes
+      const urgencyStats = {
+        'critical': { totalTime: 0, count: 0, tickets: [] },
+        'high': { totalTime: 0, count: 0, tickets: [] },
+        'medium': { totalTime: 0, count: 0, tickets: [] },
+        'low': { totalTime: 0, count: 0, tickets: [] }
+      };
+      
+      // Calcular tiempos de resolución por urgencia para este mes
+      completedMonthTickets.forEach(ticket => {
+        const startTime = new Date(ticket.timestamp);
+        const endTime = new Date(ticket.time_end);
+        const duration = getBusinessDurationMs(startTime, endTime);
+        
+        // Agrupar por la última urgencia del ticket antes de completarse
+        const lastUrgency = ticket.last_urgency || ticket.urgency || 'medium';
+        if (urgencyStats[lastUrgency]) {
+          urgencyStats[lastUrgency].totalTime += duration;
+          urgencyStats[lastUrgency].count += 1;
+          urgencyStats[lastUrgency].tickets.push(ticket);
+        }
+      });
+      
+      // Mostrar estadísticas de tiempos por urgencia para este mes
+      const urgencyTimesDiv = document.getElementById('urgencyTimes');
+      if (urgencyTimesDiv) {
+        console.log(`Renderizando tiempos de urgencia para ${monthName}...`);
+        console.log('Estadísticas de urgencia del mes:', urgencyStats);
+        
+        const urgencyLabels = {
+          'critical': 'Crítico',
+          'high': 'Alto',
+          'medium': 'Medio',
+          'low': 'Bajo'
+        };
+        
+        // Mostrar siempre las 4 categorías de urgencia, incluso si no hay tickets
+        const urgencyHTML = Object.entries(urgencyLabels).map(([urgency, label]) => {
+          const stats = urgencyStats[urgency] || { totalTime: 0, count: 0, tickets: [] };
+          
+          // Calcular tiempo promedio en horas y minutos
+          let avgTimeHours = 0;
+          let avgTimeMinutes = 0;
+          let timeDisplay = 'Sin datos';
+          
+          if (stats.count > 0) {
+            const avgTimeMs = stats.totalTime / stats.count;
+            avgTimeHours = Math.floor(avgTimeMs / (1000 * 60 * 60));
+            avgTimeMinutes = Math.floor((avgTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (avgTimeHours > 0) {
+              timeDisplay = `${avgTimeHours}h ${avgTimeMinutes}m`;
+            } else if (avgTimeMinutes > 0) {
+              timeDisplay = `${avgTimeMinutes}m`;
+            } else {
+              timeDisplay = '< 1m';
+            }
+          }
+          
+          // Calcular el tiempo máximo para normalizar las barras (solo entre categorías con datos)
+          const categoriesWithData = Object.values(urgencyStats).filter(stat => stat.count > 0);
+          const maxTime = categoriesWithData.length > 0 ? 
+            Math.max(...categoriesWithData.map(stat => stat.totalTime / stat.count)) : 0;
+          
+          // Calcular el porcentaje para la barra
+          let percentage = 0;
+          if (maxTime > 0 && stats.count > 0) {
+            const avgTimeMs = stats.totalTime / stats.count;
+            percentage = (avgTimeMs / maxTime) * 100;
+          }
+          
+          // Si solo hay 1 ticket en esta categoría, mostrar una barra mínima del 10%
+          if (stats.count === 1 && percentage === 0) {
+            percentage = 10;
+          }
+          
+          // Información adicional para mostrar
+          let additionalInfo = '';
+          if (stats.count === 1) {
+            additionalInfo = '<span class="single-ticket-indicator">1 ticket</span>';
+          } else if (stats.count > 1) {
+            additionalInfo = `<span class="urgency-info">Promedio de ${stats.count} tickets</span>`;
+          } else {
+            additionalInfo = '<span class="urgency-info">Sin tickets completados</span>';
+          }
+          
+          return `
+            <div class="urgency-time-item clickable-urgency" data-urgency="${urgency}">
+              <div class="urgency-header">
+                <span class="urgency-label">${label}</span>
+                <span class="urgency-count">${stats.count} tickets</span>
+              </div>
+              <div class="time-bar-container">
+                <div class="time-bar">
+                  <div class="time-bar-fill ${urgency}" style="width: ${Math.min(percentage, 100)}%"></div>
+                </div>
+                <div class="time-value">
+                  ${timeDisplay}
+                  ${additionalInfo}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        // Agregar título indicando el mes seleccionado
+        const titleHTML = `<div class="urgency-section-title">Tiempos de Resolución por Urgencia - ${monthName}</div>`;
+        urgencyTimesDiv.innerHTML = titleHTML + urgencyHTML;
+        
+        // Agregar evento para abrir modal al dar clic en cada urgencia
+        urgencyTimesDiv.querySelectorAll('.urgency-time-item').forEach(item => {
+          item.addEventListener('click', function() {
+            const urgency = this.getAttribute('data-urgency');
+            // Filtrar tickets terminados de esa urgencia en este mes
+            const ticketsFiltrados = completedMonthTickets.filter(ticket => {
+              const urg = ticket.last_urgency || ticket.urgency || 'medium';
+              return urg === urgency && ticket.urgency === 'completed';
+            });
+            showUrgencyTicketsModal(urgency, ticketsFiltrados);
+          });
+        });
+      }
+    }
+  </script>
+  <script>
+    document.querySelectorAll('.chart-section, .tools-ranking').forEach(el => {
+      el.addEventListener('dblclick', function() {
+        this.classList.toggle('fullscreen');
+      });
+    });
+  </script>
+  <script>
+    // Eliminar el efecto de desenfoque: NO hacer nada al pasar el mouse
+    // (Se elimina el código que agregaba/quita clases 'hovered' y 'blur-others')
+  </script>
+</body>
+<script src="js/topbar.js"></script>
+</html>
+

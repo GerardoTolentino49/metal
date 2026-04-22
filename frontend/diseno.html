@@ -1,0 +1,4228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Design - Xen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/diseno.css">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/tarjetas-guard.js" defer></script>
+  <script src="js/theme.js"></script>
+  <script src="js/permissions.js"></script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item" id="homeBtn">
+        <a href="inicio.html" style="display:block;text-decoration:none;color:inherit;">Home</a>
+      </div>
+      <div class="menu-item" id="tasksBtn">
+        <a href="tareas.html" style="display:block;text-decoration:none;color:inherit;">Tasks</a>
+      </div>
+      <div class="menu-item" id="teamBtn">
+        <a href="equipo.html" style="display:block;text-decoration:none;color:inherit;">Team</a>
+      </div>
+      <div class="menu-item selected" id="designBtn">
+        <a href="diseno.html" style="display:block;text-decoration:none;color:inherit;">Design</a>
+      </div>
+      <div class="menu-item" id="reportsBtn">
+        <a href="reportes.html" style="display:block;text-decoration:none;color:inherit;">Reports</a>
+      </div>
+      <div class="menu-item" id="settingsBtn">
+        <a href="ajustes.html" style="display:block;text-decoration:none;color:inherit;">Settings</a>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hamburger-menu" id="hamburgerMenu">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="mobile-menu-content">
+      <div class="mobile-menu-item"><a href="inicio.html" class="mobile-submenu-item">Home</a></div>
+      <div class="mobile-menu-item"><a href="tareas.html" class="mobile-submenu-item">Tasks</a></div>
+      <div class="mobile-menu-item"><a href="equipo.html" class="mobile-submenu-item">Team</a></div>
+      <div class="mobile-menu-item"><a href="diseno.html" class="mobile-submenu-item">Design</a></div>
+      <div class="mobile-menu-item"><a href="reportes.html" class="mobile-submenu-item">Reports</a></div>
+      <div class="mobile-menu-item"><a href="ajustes.html" class="mobile-submenu-item">Settings</a></div>
+    </div>
+    <div class="mobile-user-info">
+      <div id="mobileUserInfo">Usuario</div>
+      <button class="mobile-logout-btn" id="mobileLogoutBtn">Cerrar Sesión</button>
+    </div>
+    <div class="mobile-menu-close" id="mobileMenuClose">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+  <main class="main-content">
+    <div class="content-wrapper">
+      <div class="design-header">
+      </div>
+
+      <div class="design-container">
+        <div class="order-form-card glass-card" id="projectLoginCard">
+          <h3>
+            <span>Project Login</span>
+          </h3>
+          <div class="form-group">
+            <input type="text" id="projectNameInput" placeholder="Enter project name" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <button class="btn-start" id="projectLoginBtn">
+              <i class="fas fa-sign-in-alt"></i>
+              <span>Login to Project</span>
+            </button>
+          </div>
+        </div>
+        <div class="order-form-card glass-card" id="orderFormCard" style="display: none;">
+          <h3>
+            <span>Order Number</span>
+          </h3>
+          <div class="form-group">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+              <span style="font-size: 14px; color: var(--text-secondary);">Project: <strong id="currentProjectName">-</strong></span>
+              <button class="btn-change-project" id="changeProjectBtn" style="padding: 4px 12px; font-size: 12px; background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; color: var(--text-primary);">
+                <i class="fas fa-exchange-alt"></i> Change Project
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+          <input type="text" id="orderNumber" placeholder="Example: 4934" maxlength="20" autocomplete="off" autocapitalize="characters" required>
+          </div>
+          <div class="form-group">
+            <select id="partNumberSelect" class="order-select" disabled required>
+            <option value="">Select part number (optional)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button class="btn-start" id="startOrderBtn" disabled>
+              <i class="fas fa-play"></i>
+              <span>Start Order</span>
+            </button>
+          </div>
+        </div>
+        <div class="time-panel glass-card" id="timePanel" style="display: none;">
+          <div class="time-display">
+            <div class="time-label">Time in Order</div>
+            <div class="time-value" id="timeDisplay">00:00:00</div>
+            <div class="order-info">
+              <span class="order-info-item" id="projectInfo">-</span>
+              <span class="order-info-separator">></span>
+              <span class="order-info-item">
+                <span class="order-number-badge" id="orderNameInfo">-</span>
+              </span>
+              <span class="order-info-separator">></span>
+              <span class="order-info-item">
+                <span class="order-number-badge" id="partNumberInfo">-</span>
+              </span>
+            </div>
+            <div class="order-status-control">
+              <label>Order Status:</label>
+              <div class="order-status-buttons">
+                <button class="btn-status" data-status="revision" id="btnStatusRevision">
+                  <i class="fas fa-eye"></i>
+                  <span>Review</span>
+                  <span class="status-time" id="timeStatusRevision">00:00</span>
+                </button>
+                <button class="btn-status" data-status="trabajando en ella" id="btnStatusWorking">
+                  <i class="fas fa-drafting-compass"></i>
+                  <span>Working on it</span>
+                  <span class="status-time" id="timeStatusWorking">00:00</span>
+                </button>
+                <button class="btn-status" data-status="en espera de aprobacion" id="btnStatusPending">
+                  <i class="fas fa-clock"></i>
+                  <span>Pending Approval</span>
+                  <span class="status-time" id="timeStatusPending">00:00</span>
+                </button>
+                <button class="btn-status" data-status="aprobada" id="btnStatusApproved" disabled>
+                  <i class="fas fa-check-circle"></i>
+                  <span>Approved</span>
+                  <span class="status-time" id="timeStatusApproved">00:00</span>
+                </button>
+                <button class="btn-status" data-status="cambios" id="btnStatusChanges">
+                  <i class="fas fa-edit"></i>
+                  <span>Changes</span>
+                  <span class="status-time" id="timeStatusChanges">00:00</span>
+                </button>
+                <button class="btn-status" data-status="issues" id="btnStatusIssues">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <span>Issues</span>
+                  <span class="status-time" id="timeStatusIssues">00:00</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="activity-tracking">
+            <div class="activity-buttons">
+              <button class="btn-activity" data-activity="pausa" id="btnPausa">
+                <i class="fas fa-pause"></i>
+                <span>Pause</span>
+                <span class="activity-time" id="timePausa">00:00</span>
+              </button>
+              <button class="btn-activity" data-activity="comida" id="btnComida">
+                <i class="fas fa-utensils"></i>
+                <span>Lunch</span>
+                <span class="activity-time" id="timeComida">00:00</span>
+              </button>
+              <button class="btn-activity" data-activity="meeting" id="btnMeeting">
+                <i class="fas fa-users"></i>
+                <span>Meeting</span>
+                <span class="activity-time" id="timeMeeting">00:00</span>
+              </button>
+              <button class="btn-activity" data-activity="training" id="btnTraining">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Training</span>
+                <span class="activity-time" id="timeTraining">00:00</span>
+              </button>
+              <button class="btn-activity" data-activity="5s" id="btn5S">
+                <i class="fas fa-broom"></i>
+                <span>5S</span>
+                <span class="activity-time" id="time5S">00:00</span>
+              </button>
+              <button class="btn-activity btn-finalizar" data-activity="finalizar" id="btnFinalizar">
+                <i class="fas fa-stop"></i>
+                <span>Finish Order</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="parts-table-card glass-card">
+          <h3>
+            <span>Part Numbers</span>
+          </h3>
+          <div class="parts-table-container">
+            <table class="parts-table">
+              <thead>
+                <tr>
+                  <th>PART NUMBER</th>
+                  <th>UNITS</th>
+                  <th>UOM</th>
+                  <th>AMOUNT</th>
+                  <th>NOTES</th>
+                  <th>LOGIN</th>
+                </tr>
+              </thead>
+              <tbody id="partsTableBody">
+                <tr class="empty-row">
+                  <td colspan="6">
+                    <div class="empty-parts">
+                      <i class="fas fa-hashtag"></i>
+                      <p>No part numbers added yet</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="mini-calendar glass-card" id="miniCalendar" style="cursor: pointer;">
+    <div class="mini-calendar-header">
+      <span class="mini-calendar-month" id="miniCalendarMonth"></span>
+    </div>
+    <div class="mini-calendar-weekdays">
+      <span class="mini-calendar-weekday">M</span>
+      <span class="mini-calendar-weekday">T</span>
+      <span class="mini-calendar-weekday">W</span>
+      <span class="mini-calendar-weekday">T</span>
+      <span class="mini-calendar-weekday">F</span>
+      <span class="mini-calendar-weekday">S</span>
+      <span class="mini-calendar-weekday">S</span>
+    </div>
+    <div class="mini-calendar-days" id="miniCalendarDays"></div>
+  </div>
+
+  <div class="modal" id="calendarModal" style="display: none;">
+    <div class="glass-card calendar-modal">
+      <div class="modal-header">
+        <h3>
+          <span>Weekly Hours</span>
+        </h3>
+        <button class="modal-close-btn" id="closeCalendarModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="calendar-nav">
+          <button class="calendar-nav-btn" id="prevWeekBtn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span class="calendar-week-label" id="calendarWeekLabel"></span>
+          <button class="calendar-nav-btn" id="nextWeekBtn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="calendar-container">
+          <div class="calendar-weekdays">
+            <div class="calendar-weekday">Monday</div>
+            <div class="calendar-weekday">Tuesday</div>
+            <div class="calendar-weekday">Wednesday</div>
+            <div class="calendar-weekday">Thursday</div>
+            <div class="calendar-weekday">Friday</div>
+            <div class="calendar-weekday">Saturday</div>
+            <div class="calendar-weekday">Sunday</div>
+          </div>
+          <div class="calendar-days" id="calendarDays">
+          </div>
+        </div>
+        <div class="calendar-summary" id="calendarSummary">
+          <div class="summary-item">
+            <span class="summary-label">Total Hours:</span>
+            <span class="summary-value" id="totalHours">0h 0m</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Sessions:</span>
+            <span class="summary-value" id="totalSessions">0</span>
+          </div>
+        </div>
+        <div class="calendar-lifetime-summary">
+          <div class="lifetime-item">
+            <i class="fas fa-clock"></i>
+            <div class="lifetime-content">
+              <span class="lifetime-label">Total Lifetime Hours</span>
+              <span class="lifetime-value" id="lifetimeHours">0h 0m</span>
+            </div>
+          </div>
+          <div class="lifetime-item">
+            <i class="fas fa-list-check"></i>
+            <div class="lifetime-content">
+              <span class="lifetime-label">Total Sessions</span>
+              <span class="lifetime-value" id="lifetimeSessions">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="errorModal" style="display: none;">
+    <div class="modal-content glass-card error-modal">
+      <div class="modal-header">
+        <h3>
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Error</span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <p id="errorMessage"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="closeErrorBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="floating-sessions-button" id="viewSessionsBtn" title="View sessions">
+    <i class="fas fa-history"></i>
+    <span>Sessions</span>
+  </button>
+
+  <button class="floating-part-button" id="addPartNumberBtn" title="Add part number">
+    <i class="fas fa-plus"></i>
+    <span>Add Part Number</span>
+  </button>
+
+  <div class="modal" id="sessionsModal" style="display: none;">
+    <div class="glass-card sessions-modal">
+      <div class="modal-header">
+        <h3>
+          <i class="fas fa-history"></i>
+          <span>Sessions History</span>
+        </h3>
+        <button class="modal-close" id="closeSessionsModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="sessions-table-container">
+          <table class="sessions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Order</th>
+                <th>Part Number</th>
+                <th>Duration</th>
+                <th>Working</th>
+                <th>Pause</th>
+                <th>Lunch</th>
+                <th>Meeting</th>
+                <th>Training</th>
+                <th>5S</th>
+              </tr>
+            </thead>
+            <tbody id="sessionsTableBody">
+              <tr>
+                <td colspan="10" class="sessions-loading">Loading sessions...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sessions-pagination">
+          <div class="sessions-rows-info" id="sessionsRowsInfo">0 records</div>
+          <div class="sessions-pagination-buttons">
+            <button class="pagination-btn" id="sessionsPrevPage" disabled>
+              <i class="fas fa-chevron-left"></i>
+              Previous
+            </button>
+            <span id="sessionsPaginationInfo">Page 1 of 1</span>
+            <button class="pagination-btn" id="sessionsNextPage" disabled>
+              Next
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="closeSessionsBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="ordersModal" style="display: none;">
+    <div class="glass-card part-number-modal" style="max-width: 800px; max-height: 80vh;">
+      <div class="modal-header">
+        <h3>
+          <i class="fas fa-list"></i>
+          <span id="ordersModalTitle">Available Orders</span>
+        </h3>
+        <button class="modal-close" id="closeOrdersModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+        <div id="ordersList" style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
+            <i class="fas fa-spinner fa-spin"></i> Loading orders...
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="closeOrdersModalBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="loginPartNumberModal" style="display: none;">
+    <div class="glass-card part-number-modal">
+      <div class="modal-header">
+        <h3>
+          <span>Login to Part Number</span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <p id="loginPartNumberMessage">Are you sure you want to login to this part number?</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="cancelLoginPartNumberBtn">Cancel</button>
+        <button class="btn-start" id="confirmLoginPartNumberBtn">
+          <i class="fas fa-check"></i>
+          <span>Yes, Login</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <!-- Modal para agregar número de parte -->
+  <div class="modal" id="partNumberModal" style="display: none;">
+    <div class="glass-card part-number-modal">
+      <div class="modal-header">
+        <h3>
+          <span>Add Part Number</span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <p>Enter a new part number for the current order.</p>
+        <div class="form-group">
+          <label for="newPartNumberInput">Part Number</label>
+          <input type="text" id="newPartNumberInput" placeholder="Example: PN-12345" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="newPartNumberUomInput">UOM</label>
+          <select id="newPartNumberUomInput" class="order-select">
+            <option value="">Select UOM</option>
+            <option value="EA">EA (each)</option>
+            <option value="LF">LF (linear feet)</option>
+            <option value="SF">SF (square feet)</option>
+            <option value="RS">RS (Riser)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newPartNumberUnitsInput">Units</label>
+          <input type="text" id="newPartNumberUnitsInput" placeholder="Example: 100" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="newPartNumberAmountInput">Amount</label>
+          <input type="text" id="newPartNumberAmountInput" placeholder="Example: 100" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="cancelPartNumberBtn">Cancel</button>
+        <button class="btn-start" id="savePartNumberBtn">
+          <i class="fas fa-save"></i>
+          <span>Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="uomModal" style="display: none;">
+    <div class="glass-card part-number-modal">
+      <div class="modal-header">
+        <h3>
+          <span id="uomModalTitle">Add UOM</span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <p id="uomModalMessage">Add a UOM and quantity for this part number.</p>
+        <div class="form-group">
+          <label for="uomInput">UOM *</label>
+          <select id="uomInput" class="order-select" required>
+            <option value="">Select UOM</option>
+            <option value="EA">EA (each)</option>
+            <option value="LF">LF (linear feet)</option>
+            <option value="SF">SF (square feet)</option>
+            <option value="RS">RS (Riser)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cantidadInput">Units</label>
+          <input type="text" id="cantidadInput" placeholder="Example: 100" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="amountInput">Amount</label>
+          <input type="text" id="amountInput" placeholder="Example: 100" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-close-error" id="cancelUomBtn">Cancel</button>
+        <button class="btn-start" id="saveUomBtn">
+          <i class="fas fa-save"></i>
+          <span>Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let timerInterval = null;
+    let startTime = null;
+    let pausedTime = 0;
+    let isPaused = false;
+    let currentOrder = null;
+    let currentOrderId = null; // ID de la orden en la BD
+    let currentPartNumber = null; // Número de parte seleccionado
+    let currentProjectName = null; // Nombre del proyecto actual
+    let sessionHistory = [];
+    let lastSavedTime = 0; // Tiempo que ya se guardó en la BD (en milisegundos desde startTime)
+    let activityTimeSaved = 0; // Tiempo de actividades ya guardado en la BD
+    let lastSaveTimestamp = 0; // Timestamp del último guardado
+    
+    let activityTimes = {
+      pausa: 0,
+      comida: 0,
+      meeting: 0,
+      training: 0,
+      '5s': 0
+    };
+
+    let activityTimers = {
+      pausa: null,
+      comida: null,
+      meeting: null,
+      training: null,
+      '5s': null
+    };
+
+    let statusTimes = {
+      'revision': 0,
+      'trabajando en ella': 0,
+      'en espera de aprobacion': 0,
+      'aprobada': 0,
+      'cambios': 0,
+      'issues': 0
+    };
+
+    let statusStartTime = null;
+    let currentStatus = null;
+    let statusTimer = null;
+    let activityStartTimes = {pausa: null, comida: null, meeting: null, training: null, '5s': null};
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const username = localStorage.getItem('username');
+      const savedProjectName = localStorage.getItem('currentProjectName');
+      if (savedProjectName) 
+      {
+        currentProjectName = savedProjectName;
+        document.getElementById('currentProjectName').textContent = savedProjectName;
+        document.getElementById('projectLoginCard').style.display = 'none';
+        document.getElementById('orderFormCard').style.display = 'block';
+        loadProjectOrders(savedProjectName);
+      } else 
+      {
+        document.getElementById('projectLoginCard').style.display = 'block';
+        document.getElementById('orderFormCard').style.display = 'none';
+      }
+      const rol = localStorage.getItem('rol');
+      if (rol === 'diseñador') 
+      {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          if (text !== 'home' && text !== 'design' && text !== 'tasks') 
+          {
+            item.style.display = 'none';
+          }
+        });
+      }
+      if (rol === 'pm') 
+      {
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          const href = item.getAttribute('href') || '';
+          if (text !== 'home' && !href.includes('pm.html')) 
+          {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      if (username) 
+      {
+        loadEmployeeNameAndPhoto(username);
+      }
+
+      async function loadEmployeeNameAndPhoto(username) {
+        try {
+          const responseDesign = await fetch('/api/employees/design');
+          const responseIT = await fetch('/api/employees/it');
+          
+          let employee = null;
+          
+          if (responseDesign.ok) 
+          {
+            const data = await responseDesign.json();
+            console.log('Design employees:', data);
+            if (data.success && data.employees) 
+            {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (!employee && responseIT.ok) 
+          {
+            const data = await responseIT.json();
+            console.log('IT employees:', data);
+            if (data.success && data.employees) 
+            {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (employee) 
+          {
+            console.log('Empleado encontrado:', employee);
+            const fullName = employee.nombre_completo || employee.nombre || username;
+            const firstName = fullName.split(' ')[0];
+            
+            // Aplicar color favorito si existe
+            if (employee.color_favorito) {
+              console.log('Aplicando color favorito:', employee.color_favorito);
+              document.documentElement.style.setProperty('--primary-color', employee.color_favorito);
+              const hoverColor = adjustColorBrightness(employee.color_favorito, -20);
+              document.documentElement.style.setProperty('--primary-hover', hoverColor);
+            }
+            
+            // Actualizar foto en topbar
+            if (employee.foto_url) 
+            {
+              console.log('Aplicando foto:', employee.foto_url);
+              updateTopbarPhoto(employee.foto_url);
+            }
+          } else 
+          {
+            console.log('No se encontró empleado para:', username);
+          }
+        } catch (error) 
+        {
+          console.error('Error al cargar información del empleado:', error);
+        }
+      }
+      
+      // Función para cargar foto del usuario (mantener para compatibilidad)
+      async function loadUserPhoto(username) 
+      {
+        await loadEmployeeNameAndPhoto(username);
+      }
+      
+      function updateTopbarPhoto(photoUrl) 
+      {
+        const userIcon = document.getElementById('userIcon');
+        if (userIcon) 
+        {
+          // Ocultar el ícono de usuario predeterminado
+          const icon = userIcon.querySelector('i');
+          if (icon) icon.style.display = 'none';
+          
+          // Crear o actualizar imagen
+          let img = userIcon.querySelector('img');
+          if (!img) 
+          {
+            img = document.createElement('img');
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '50%';
+            img.alt = 'Usuario';
+            userIcon.appendChild(img);
+          }
+          img.src = photoUrl;
+          img.style.display = 'block';
+          img.onerror = function() 
+          {
+            console.error('Error al cargar foto:', photoUrl);
+            this.style.display = 'none';
+            if (icon) icon.style.display = 'block';
+          };
+        }
+      }
+
+      function hasActiveOrder() 
+      {
+        if (currentOrder && startTime) 
+        {
+          return true;
+        }
+        
+        const activeSession = localStorage.getItem('activeSession');
+        if (activeSession) 
+        {
+          try 
+          {
+            const session = JSON.parse(activeSession);
+            if (session.orderNumber && session.startTime) {
+              return true;
+            }
+          } catch (e) 
+          {
+            console.error('Error al parsear activeSession:', e);
+          }
+        }
+        
+        return false;
+      }
+
+      async function checkActiveSessionInDB() 
+      {
+        try 
+        {
+          const token = localStorage.getItem('sessionToken');
+          if (!token) return false;
+          
+          const response = await fetch('/api/sesiones-activas/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) 
+          {
+            const data = await response.json();
+            return data.success && data.hasActiveSession;
+          }
+        } catch (error) 
+        {
+          console.error('Error al verificar sesión activa en BD:', error);
+        }
+        return false;
+      }
+
+      document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+        if (hasActiveOrder()) 
+        {
+          e.preventDefault();
+          alert('You cannot log out while you have an active order. Please finish the order first from the design panel.');
+          return;
+        }
+
+        if (timerInterval) 
+        {
+          stopTimer();
+        }
+        
+        const token = localStorage.getItem('sessionToken');
+        if (token) 
+        {
+          try {
+            await fetch('/api/auth/logout', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+          } catch (error) 
+          {
+            console.error('Error al registrar logout en servidor:', error);
+          }
+        }
+        
+        localStorage.clear();
+        window.location.href = 'login.html';
+      });
+
+      window.addEventListener('beforeunload', function(e) //Evitar que se cierre la pestaña con orden activa
+      {
+        if (hasActiveOrder()) 
+        {
+          e.preventDefault();
+          e.returnValue = 'You have an active order. Are you sure you want to close the tab? You must finish the order first.';
+          return e.returnValue;
+        }
+      });
+
+      // Función auxiliar para ajustar brillo del color
+      function adjustColorBrightness(color, percent) {
+        const num = parseInt(color.replace('#', ''), 16);
+        const amt = Math.round(2.55 * percent);
+        const R = (num >> 16) + amt;
+        const G = (num >> 8 & 0x00FF) + amt;
+        const B = (num & 0x0000FF) + amt;
+        return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+          (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+          (B < 255 ? B < 1 ? 0 : B : 255))
+          .toString(16).slice(1);
+      }
+
+      // Llamar funciones de inicialización
+      loadHistory();
+
+      // Cargar sesión activa si existe (primero verificar BD, luego localStorage)
+      loadActiveSession().then(() => {
+        console.log('erificación de sesión activa completada');
+      }).catch(error => {
+        console.error('Error al cargar sesión activa:', error);
+      });
+
+      const orderNumberInput = document.getElementById('orderNumber');
+      const startOrderBtn = document.getElementById('startOrderBtn');
+
+      function validateForm() 
+      {
+        const orderNumber = document.getElementById('orderNumber').value.trim();
+        const startOrderBtn = document.getElementById('startOrderBtn');
+        startOrderBtn.disabled = !(orderNumber.length > 0);
+      }
+
+      orderNumberInput.addEventListener('input', function() 
+      {
+        const hasValue = this.value.trim().length > 0;
+        if (hasValue) 
+        {
+          validateOrderAndLoadPartNumbers(this.value.trim());
+        } else 
+        {
+          const partNumberSelect = document.getElementById('partNumberSelect');
+          partNumberSelect.innerHTML = '<option value="">Select part number</option>';
+          partNumberSelect.disabled = true;
+        }
+        validateForm();//Validar que  esté completo el formulario
+      });
+
+      const partNumberSelect = document.getElementById('partNumberSelect');
+      partNumberSelect.addEventListener('change', function() {
+        validateForm();
+      });
+      
+      // Permitir iniciar orden con Enter
+      orderNumberInput.addEventListener('keypress', function(e) 
+      {
+        if (e.key === 'Enter' && !startOrderBtn.disabled) 
+        {
+          e.preventDefault();
+          startOrder();
+        }
+      });
+      
+      startOrderBtn.addEventListener('click', startOrder);
+      document.getElementById('btnPausa').addEventListener('click', () => toggleActivity('pausa'));
+      document.getElementById('btnComida').addEventListener('click', () => toggleActivity('comida'));
+      document.getElementById('btnMeeting').addEventListener('click', () => toggleActivity('meeting'));
+      document.getElementById('btnTraining').addEventListener('click', () => toggleActivity('training'));
+      document.getElementById('btn5S').addEventListener('click', () => toggleActivity('5s'));
+      document.getElementById('btnFinalizar').addEventListener('click', stopOrder);
+      // Event listeners para botones de estado
+      document.querySelectorAll('.btn-status').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const status = this.getAttribute('data-status');
+          changeOrderStatus(status, this);
+        });
+      });
+      document.getElementById('closeErrorBtn').addEventListener('click', closeErrorModal);
+      document.getElementById('errorModal').addEventListener('click', function(e) {
+        if (e.target === this) 
+        {
+          closeErrorModal();
+        }
+      });
+      
+      // Filtros del historial (solo si existen los elementos; en esta vista se reemplazó por tabla de partes)
+      const historySearchInput = document.getElementById('historySearchInput');
+      const historyDateFilter = document.getElementById('historyDateFilter');
+      const clearHistoryFilterBtn = document.getElementById('clearHistoryFilter');
+
+      if (historySearchInput) 
+      {
+        historySearchInput.addEventListener('input', filterHistory);
+      }
+      if (historyDateFilter) 
+      {
+        historyDateFilter.addEventListener('change', filterHistory);
+      }
+      if (clearHistoryFilterBtn) 
+      {
+        clearHistoryFilterBtn.addEventListener('click', clearHistoryFilters);
+      }
+
+      renderMiniCalendar();
+      const miniCalendar = document.getElementById('miniCalendar');
+      if (miniCalendar) 
+      {
+        miniCalendar.addEventListener('click', openCalendarModal);
+      }
+      const closeCalendarModalBtn = document.getElementById('closeCalendarModal');
+      const prevWeekBtn = document.getElementById('prevWeekBtn');
+      const nextWeekBtn = document.getElementById('nextWeekBtn');
+      const calendarModal = document.getElementById('calendarModal');
+
+      if (closeCalendarModalBtn) 
+      {
+        closeCalendarModalBtn.addEventListener('click', closeCalendarModal);
+      }
+      if (prevWeekBtn) 
+      {
+        prevWeekBtn.addEventListener('click', () => navigateWeek(-1));
+      }
+      if (nextWeekBtn) 
+      {
+        nextWeekBtn.addEventListener('click', () => navigateWeek(1));
+      }
+      if (calendarModal) 
+      {
+        calendarModal.addEventListener('click', function(e) {
+          if (e.target === this) 
+          {
+            closeCalendarModal();
+          }
+        });
+      }
+
+      // Botón flotante para ver sesiones
+      const viewSessionsBtn = document.getElementById('viewSessionsBtn');
+      const closeSessionsModal = document.getElementById('closeSessionsModal');
+      const closeSessionsBtn = document.getElementById('closeSessionsBtn');
+      const sessionsModal = document.getElementById('sessionsModal');
+      const sessionsPrevPage = document.getElementById('sessionsPrevPage');
+      const sessionsNextPage = document.getElementById('sessionsNextPage');
+      if (viewSessionsBtn) 
+      {
+        viewSessionsBtn.addEventListener('click', () => {
+          sessionsPaginationState.currentPage = 1;
+          openSessionsModal();
+        });
+      }
+
+      if (closeSessionsModal) 
+      {
+        closeSessionsModal.addEventListener('click', closeSessionsModalFunc);
+      }
+
+      if (closeSessionsBtn) 
+      {
+        closeSessionsBtn.addEventListener('click', closeSessionsModalFunc);
+      }
+
+      if (sessionsModal) 
+      {
+        sessionsModal.addEventListener('click', function(e) {
+          if (e.target === this) 
+          {
+            closeSessionsModalFunc();
+          }
+        });
+      }
+
+      if (sessionsPrevPage) 
+      {
+        sessionsPrevPage.addEventListener('click', goToSessionsPrevPage);
+      }
+
+      if (sessionsNextPage) 
+      {
+        sessionsNextPage.addEventListener('click', goToSessionsNextPage);
+      }
+
+      // Botón flotante para agregar números de parte
+      const addPartNumberBtn = document.getElementById('addPartNumberBtn');
+      const cancelPartNumberBtn = document.getElementById('cancelPartNumberBtn');
+      const savePartNumberBtn = document.getElementById('savePartNumberBtn');
+      const partNumberModal = document.getElementById('partNumberModal');
+
+      if (addPartNumberBtn) 
+      {
+        addPartNumberBtn.addEventListener('click', openPartNumberModal);
+      }
+
+      if (cancelPartNumberBtn) 
+      {
+        cancelPartNumberBtn.addEventListener('click', closePartNumberModal);
+      }
+
+      if (savePartNumberBtn) 
+      {
+        savePartNumberBtn.addEventListener('click', savePartNumberForCurrentOrder);
+      }
+
+      if (partNumberModal) 
+      {
+        partNumberModal.addEventListener('click', function(e) {
+          if (e.target === this) 
+          {
+            closePartNumberModal();
+          }
+        });
+      }
+
+      // Modal de UOM
+      const cancelUomBtn = document.getElementById('cancelUomBtn');
+      const saveUomBtn = document.getElementById('saveUomBtn');
+      const uomModal = document.getElementById('uomModal');
+
+      if (cancelUomBtn) 
+      {
+        cancelUomBtn.addEventListener('click', closeUomModal);
+      }
+
+      if (saveUomBtn) 
+      {
+        saveUomBtn.addEventListener('click', saveUom);
+      }
+
+      if (uomModal) 
+      {
+        uomModal.addEventListener('click', function(e) {
+          if (e.target === this) 
+          {
+            closeUomModal();
+          }
+        });
+      }
+
+      // Permitir Enter para guardar en el modal de UOM
+      const uomInput = document.getElementById('uomInput');
+      const cantidadInput = document.getElementById('cantidadInput');
+      if (uomInput) 
+      {
+        uomInput.addEventListener('keypress', function(e) 
+        {
+          if (e.key === 'Enter') 
+          {
+            e.preventDefault();
+            saveUom();
+          }
+        });
+      }
+      if (cantidadInput) 
+      {
+        cantidadInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') 
+          {
+            e.preventDefault();
+            saveUom();
+          }
+        });
+      }
+
+      // Modal de login a número de parte
+      const cancelLoginPartNumberBtn = document.getElementById('cancelLoginPartNumberBtn');
+      const confirmLoginPartNumberBtn = document.getElementById('confirmLoginPartNumberBtn');
+      const loginPartNumberModal = document.getElementById('loginPartNumberModal');
+      if (cancelLoginPartNumberBtn) 
+      {
+        cancelLoginPartNumberBtn.addEventListener('click', closeLoginPartNumberModal);
+      }
+
+      if (confirmLoginPartNumberBtn) 
+      {
+        confirmLoginPartNumberBtn.addEventListener('click', confirmLoginToPartNumber);
+      }
+
+      if (loginPartNumberModal) 
+      {
+        loginPartNumberModal.addEventListener('click', function(e) 
+        {
+          if (e.target === this) 
+          {
+            closeLoginPartNumberModal();
+          }
+        });
+      }
+
+      // Event listeners para login de proyecto
+      const projectLoginBtn = document.getElementById('projectLoginBtn');
+      const projectNameInput = document.getElementById('projectNameInput');
+      const changeProjectBtn = document.getElementById('changeProjectBtn');
+      const closeOrdersModal = document.getElementById('closeOrdersModal');
+      const closeOrdersModalBtn = document.getElementById('closeOrdersModalBtn');
+
+      if (projectLoginBtn) {
+        projectLoginBtn.addEventListener('click', async function() {
+          const projectName = projectNameInput.value.trim();
+          if (!projectName) {
+            showError('Please enter a project name');
+            return;
+          }
+          await loginToProject(projectName);
+        });
+      }
+
+      if (projectNameInput) {
+        projectNameInput.addEventListener('keypress', async function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const projectName = this.value.trim();
+            if (projectName) {
+              await loginToProject(projectName);
+            }
+          }
+        });
+      }
+
+      if (changeProjectBtn) {
+        changeProjectBtn.addEventListener('click', function() {
+          localStorage.removeItem('currentProjectName');
+          currentProjectName = null;
+          document.getElementById('projectLoginCard').style.display = 'block';
+          document.getElementById('orderFormCard').style.display = 'none';
+          document.getElementById('projectNameInput').value = '';
+          document.getElementById('orderNumber').value = '';
+        });
+      }
+
+      if (closeOrdersModal) {
+        closeOrdersModal.addEventListener('click', closeOrdersModalFunc);
+      }
+
+      if (closeOrdersModalBtn) {
+        closeOrdersModalBtn.addEventListener('click', closeOrdersModalFunc);
+      }
+
+      const ordersModal = document.getElementById('ordersModal');
+      if (ordersModal) {
+        ordersModal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            closeOrdersModalFunc();
+          }
+        });
+      }
+    });
+
+    function showError(message) 
+    {
+      const errorModal = document.getElementById('errorModal');
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = message;
+      errorModal.style.display = 'flex';
+    }
+
+    function closeErrorModal() 
+    {
+      document.getElementById('errorModal').style.display = 'none';
+    }
+
+    // Funciones para login de proyecto y órdenes
+    async function loginToProject(projectName) {
+      try {
+        // Guardar el proyecto en localStorage (permitir cualquier texto)
+        currentProjectName = projectName;
+        localStorage.setItem('currentProjectName', projectName);
+
+        // Mostrar el formulario de orden y ocultar el login
+        document.getElementById('projectLoginCard').style.display = 'none';
+        document.getElementById('orderFormCard').style.display = 'block';
+        document.getElementById('currentProjectName').textContent = projectName;
+
+        // Intentar cargar órdenes si existen
+        try {
+          const response = await fetch('/api/orders');
+          if (response.ok) {
+            const data = await response.json();
+            const orders = data.success && data.orders ? data.orders : [];
+            
+            // Filtrar órdenes del proyecto
+            const projectOrders = orders.filter(order => 
+              order.project_name && order.project_name.toLowerCase() === projectName.toLowerCase()
+            );
+
+            if (projectOrders.length > 0) {
+              // Mostrar modal con órdenes disponibles si hay
+              showOrdersModal(projectOrders, projectName);
+            }
+          }
+        } catch (err) {
+          console.log('No se pudieron cargar órdenes, pero se permite continuar:', err);
+        }
+      } catch (error) {
+        console.error('Error al hacer login al proyecto:', error);
+        showError('Error al procesar login del proyecto');
+      }
+    }
+
+    async function loadProjectOrders(projectName) {
+      try {
+        const response = await fetch('/api/orders');
+        if (!response.ok) {
+          throw new Error('Error al cargar órdenes');
+        }
+        
+        const data = await response.json();
+        const orders = data.success && data.orders ? data.orders : [];
+        
+        // Filtrar órdenes del proyecto
+        const projectOrders = orders.filter(order => 
+          order.project_name && order.project_name.toLowerCase() === projectName.toLowerCase()
+        );
+
+        // Mostrar botón para ver órdenes si hay más de una
+        if (projectOrders.length > 0) {
+          // Agregar botón para ver órdenes disponibles
+          const orderFormCard = document.getElementById('orderFormCard');
+          let viewOrdersBtn = document.getElementById('viewOrdersBtn');
+          if (!viewOrdersBtn) {
+            viewOrdersBtn = document.createElement('button');
+            viewOrdersBtn.id = 'viewOrdersBtn';
+            viewOrdersBtn.className = 'btn-start';
+            viewOrdersBtn.style.marginTop = '10px';
+            viewOrdersBtn.innerHTML = '<i class="fas fa-list"></i> <span>View Available Orders</span>';
+            viewOrdersBtn.addEventListener('click', () => showOrdersModal(projectOrders, projectName));
+            const formGroup = document.createElement('div');
+            formGroup.className = 'form-group';
+            formGroup.appendChild(viewOrdersBtn);
+            orderFormCard.appendChild(formGroup);
+          } else {
+            viewOrdersBtn.onclick = () => showOrdersModal(projectOrders, projectName);
+          }
+        }
+      } catch (error) {
+        console.error('Error al cargar órdenes del proyecto:', error);
+      }
+    }
+
+    function showOrdersModal(orders, projectName) {
+      const modal = document.getElementById('ordersModal');
+      const ordersList = document.getElementById('ordersList');
+      const modalTitle = document.getElementById('ordersModalTitle');
+
+      modalTitle.textContent = `Available Orders - ${projectName}`;
+      ordersList.innerHTML = '';
+
+      if (orders.length === 0) {
+        ordersList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">No orders available</div>';
+      } else {
+        orders.forEach(order => {
+          const orderCard = document.createElement('div');
+          orderCard.className = 'order-card-item';
+          orderCard.style.cssText = 'padding: 15px; background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer; transition: all 0.2s ease;';
+          orderCard.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 600; font-size: 16px; margin-bottom: 5px;">${order.nombre || 'No name'}</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Client: ${order.cliente || '-'} | Status: ${order.estado || '-'}</div>
+              </div>
+              <button class="btn-start" style="padding: 8px 16px; font-size: 14px;" data-order-id="${order.id}" data-order-name="${order.nombre}">
+                <i class="fas fa-check"></i> Select
+              </button>
+            </div>
+          `;
+          
+          orderCard.addEventListener('mouseenter', function() {
+            this.style.background = 'rgba(255,255,255,0.15)';
+            this.style.transform = 'translateY(-2px)';
+          });
+          
+          orderCard.addEventListener('mouseleave', function() {
+            this.style.background = 'var(--glass-bg)';
+            this.style.transform = 'translateY(0)';
+          });
+
+          const selectBtn = orderCard.querySelector('button');
+          selectBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            selectOrder(order);
+          });
+
+          ordersList.appendChild(orderCard);
+        });
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function selectOrder(order) {
+      // Cargar la orden en el formulario
+      const orderNumberInput = document.getElementById('orderNumber');
+      const startOrderBtn = document.getElementById('startOrderBtn');
+      
+      orderNumberInput.value = order.nombre || '';
+      currentOrderId = order.id;
+      currentOrder = order;
+      
+      // Cerrar el modal
+      closeOrdersModalFunc();
+      
+      // Habilitar el botón inmediatamente si hay valor
+      if (order.nombre && order.nombre.trim().length > 0) {
+        startOrderBtn.disabled = false;
+      }
+      
+      // Disparar evento input para activar la validación y cargar números de parte
+      const inputEvent = new Event('input', { bubbles: true });
+      orderNumberInput.dispatchEvent(inputEvent);
+      
+      // Enfocar el campo para que el Enter funcione
+      setTimeout(() => {
+        orderNumberInput.focus();
+      }, 100);
+      
+      // Habilitar el selector de número de parte
+      loadPartNumbersForOrder(order.id);
+    }
+
+    function closeOrdersModalFunc() {
+      const modal = document.getElementById('ordersModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    function renderMiniCalendar() 
+    {
+      const monthLabel = document.getElementById('miniCalendarMonth');
+      const daysContainer = document.getElementById('miniCalendarDays');
+      if (!monthLabel || !daysContainer) return;
+
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+      monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+      // Día de la semana del primer día del mes (0=Domingo...6=Sábado)
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Nuestro calendario empieza en Lunes, así que ajustamos
+      const offset = (firstDay + 6) % 7; // convierte Domingo(0) en 6, Lunes(1) en 0, etc.
+      daysContainer.innerHTML = '';
+
+      // Celdas vacías antes del día 1
+      for (let i = 0; i < offset; i++) 
+      {
+        const emptyCell = document.createElement('span');
+        emptyCell.className = 'mini-calendar-day mini-calendar-day--empty';
+        daysContainer.appendChild(emptyCell);
+      }
+      // Días del mes
+      for (let day = 1; day <= daysInMonth; day++) 
+      {
+        const cell = document.createElement('span');
+        cell.textContent = day;
+        cell.className = 'mini-calendar-day';
+
+        if (day === today.getDate()) 
+        {
+          cell.classList.add('mini-calendar-day--today');
+        }
+
+        daysContainer.appendChild(cell);
+      }
+    }
+
+    // Variables para el calendario modal
+    let currentWeekStart = null;
+    function getWeekStart(date = new Date()) 
+    {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajustar para que Lunes sea el primer día
+      return new Date(d.setDate(diff));
+    }
+
+    function openCalendarModal() 
+    {
+      const modal = document.getElementById('calendarModal');
+      if (!modal) return;
+      currentWeekStart = getWeekStart();
+      modal.style.display = 'flex';
+      loadCalendarWeek();
+    }
+
+    function closeCalendarModal() 
+    {
+      const modal = document.getElementById('calendarModal');
+      if (modal) 
+      {
+        modal.style.display = 'none';
+      }
+    }
+
+    function navigateWeek(direction) 
+    {
+      if (!currentWeekStart) {
+        currentWeekStart = getWeekStart();
+      }
+      currentWeekStart.setDate(currentWeekStart.getDate() + (direction * 7));
+      loadCalendarWeek();
+    }
+
+    async function loadCalendarWeek() 
+    {
+      if (!currentWeekStart) 
+      {
+        currentWeekStart = getWeekStart();
+      }
+
+      const weekEnd = new Date(currentWeekStart);
+      weekEnd.setDate(currentWeekStart.getDate() + 6);
+      weekEnd.setHours(23, 59, 59, 999);
+
+      const username = localStorage.getItem('username');
+      if (!username) 
+      {
+        showError('User not found');
+        return;
+      }
+
+      try 
+      {
+        // Obtener sesiones del usuario (últimas 200 para cubrir varias semanas), no más para  evitar desboerdar la  memoria
+        const response = await fetch(
+          `/api/sesiones?usuario_nombre=${encodeURIComponent(username)}&limit=200`
+        );
+
+        if (!response.ok) 
+        {
+          throw new Error('Error al cargar horas');
+        }
+
+        const data = await response.json();
+        if (!data.success) 
+        {
+          throw new Error(data.error || 'Error al cargar horas');
+        }
+
+        const weekStartTime = currentWeekStart.getTime();
+        const weekEndTime = weekEnd.getTime();
+        const sesionesSemana = (data.sesiones || []).filter(sesion => {
+          const fechaInicio = new Date(sesion.fecha_inicio).getTime();
+          return fechaInicio >= weekStartTime && fechaInicio <= weekEndTime;
+        });
+
+        const horasPorDia = calculateHoursByDay(sesionesSemana, currentWeekStart, weekEnd);
+        renderCalendarWeek(currentWeekStart, horasPorDia);
+        updateCalendarSummary(horasPorDia);
+        loadLifetimeHours();
+      } catch (error) 
+      {
+        console.error('Error al cargar horas por semana:', error);
+        showError('Error loading weekly hours');
+      }
+    }
+
+    async function loadLifetimeHours() 
+    {
+      const username = localStorage.getItem('username');
+      if (!username) return;
+
+      try 
+      {
+        // Obtener todas las sesiones del usuario (con un límite alto para obtener todas)
+        const response = await fetch(
+          `/api/sesiones?usuario_nombre=${encodeURIComponent(username)}&limit=10000`
+        );
+        if (!response.ok) 
+        {
+          throw new Error('Error al cargar horas totales');
+        }
+
+        const data = await response.json();
+        if (!data.success) 
+        {
+          throw new Error(data.error || 'Error al cargar horas totales');
+        }
+
+        // Calcular total de horas y sesiones
+        let totalSegundos = 0;
+        let totalSesiones = 0;
+
+        (data.sesiones || []).forEach(sesion => {
+          // Usar duracion_formateada o duracion_total para obtener la duración total de la sesión
+          const duracion = sesion.duracion_formateada || sesion.duracion_total || '00:00:00';
+          let segundos = 0;
+          
+          if (typeof duracion === 'string' && duracion.includes(':')) // Si es un string en formato HH:MM:SS
+          {
+            const [hours, minutes, seconds] = duracion.split(':').map(Number);
+            segundos = (hours || 0) * 3600 + (minutes || 0) * 60 + (seconds || 0);
+          } 
+          else if (typeof duracion === 'number') // Si es un número (ya en segundos)
+          {
+            segundos = duracion;
+          }
+          else if (typeof duracion === 'object' && duracion.totalSeconds !== undefined) // Si es un objeto con totalSeconds (formato intervalo de PostgreSQL)
+          {
+            segundos = Math.floor(duracion.totalSeconds || 0);
+          }
+          
+          totalSegundos += segundos;
+          totalSesiones += 1;
+        });
+
+        const totalHoras = Math.floor(totalSegundos / 3600);
+        const totalMinutos = Math.floor((totalSegundos % 3600) / 60);
+        // Actualizar UI
+        const lifetimeHoursEl = document.getElementById('lifetimeHours');
+        const lifetimeSessionsEl = document.getElementById('lifetimeSessions');
+
+        if (lifetimeHoursEl) 
+        {
+          lifetimeHoursEl.textContent = `${totalHoras}h ${totalMinutos}m`;
+        }
+        if (lifetimeSessionsEl) 
+        {
+          lifetimeSessionsEl.textContent = totalSesiones.toString();
+        }
+      } catch (error) 
+      {
+        console.error('Error al cargar horas totales:', error);// No mostrar error al usuario, solo loguear
+      }
+    }
+
+    function calculateHoursByDay(sesiones, weekStart, weekEnd) 
+    {
+      const horasPorDia = {};   
+      // Inicializar todos los días de la semana con 0 horas
+      for (let i = 0; i < 7; i++) 
+      {
+        const currentDay = new Date(weekStart);
+        currentDay.setDate(weekStart.getDate() + i);
+        const fechaStr = currentDay.toISOString().split('T')[0];
+        horasPorDia[fechaStr] = {fecha: fechaStr, horas: 0, minutos: 0, total_segundos: 0, total_sesiones: 0};
+      }
+      // Procesar sesiones
+      sesiones.forEach(sesion => {
+        const fechaInicio = new Date(sesion.fecha_inicio);
+        const fechaStr = fechaInicio.toISOString().split('T')[0];
+        
+        if (horasPorDia[fechaStr]) 
+        {
+          const duracion = sesion.duracion_formateada || sesion.duracion_total || '00:00:00';// Usar duracion_formateada o duracion_total para obtener la duración total de la sesión
+          let totalSegundos = 0;// Convertir duración a segundos
+
+          if (typeof duracion === 'string' && duracion.includes(':'))// Si es un string en formato HH:MM:SS 
+          {
+            const [hours, minutes, seconds] = duracion.split(':').map(Number);
+            totalSegundos = (hours || 0) * 3600 + (minutes || 0) * 60 + (seconds || 0);
+          } 
+          else if (typeof duracion === 'number')// Si es un número (ya en segundos) 
+          {
+            totalSegundos = duracion;
+          }
+          else if (typeof duracion === 'object' && duracion.totalSeconds !== undefined) // Si es un objeto con totalSeconds (formato intervalo de PostgreSQL)
+          {
+            totalSegundos = Math.floor(duracion.totalSeconds || 0);
+          }
+          horasPorDia[fechaStr].total_segundos += totalSegundos;
+          horasPorDia[fechaStr].total_sesiones += 1;
+        }
+      });
+
+      // Convertir segundos a horas y minutos
+      Object.keys(horasPorDia).forEach(fecha => {
+        const totalSegundos = horasPorDia[fecha].total_segundos;
+        horasPorDia[fecha].horas = Math.floor(totalSegundos / 3600);
+        horasPorDia[fecha].minutos = Math.floor((totalSegundos % 3600) / 60);
+      });
+
+      return Object.values(horasPorDia);
+    }
+
+    function renderCalendarWeek(weekStart, horasPorDia) 
+    {
+      const weekLabel = document.getElementById('calendarWeekLabel');
+      const daysContainer = document.getElementById('calendarDays');
+      
+      if (!weekLabel || !daysContainer) return;
+
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+      const startMonth = monthNames[weekStart.getMonth()];
+      const endMonth = monthNames[weekEnd.getMonth()];
+      
+      if (weekStart.getMonth() === weekEnd.getMonth()) 
+      {
+        weekLabel.textContent = `${startMonth} ${weekStart.getDate()} - ${weekEnd.getDate()}, ${weekStart.getFullYear()}`;
+      } else 
+      {
+        weekLabel.textContent = `${startMonth} ${weekStart.getDate()} - ${endMonth} ${weekEnd.getDate()}, ${weekStart.getFullYear()}`;
+      }
+
+      daysContainer.innerHTML = '';
+
+      // Crear un mapa de horas por fecha para acceso rápido
+      const horasMap = {};
+      horasPorDia.forEach(item => {
+        horasMap[item.fecha] = item;
+      });
+
+      // Renderizar los 7 días de la semana
+      for (let i = 0; i < 7; i++) 
+      {
+        const currentDay = new Date(weekStart);
+        currentDay.setDate(weekStart.getDate() + i);
+        
+        const fechaStr = currentDay.toISOString().split('T')[0];
+        const horasData = horasMap[fechaStr] || { horas: 0, minutos: 0, total_sesiones: 0 };
+        const isToday = currentDay.toDateString() === new Date().toDateString();
+
+        const dayCard = document.createElement('div');
+        dayCard.className = 'calendar-day-card';
+        if (isToday) 
+        {
+          dayCard.classList.add('calendar-day-card--today');
+        }
+
+        const dayNumber = currentDay.getDate();
+        const hours = horasData.horas || 0;
+        const minutes = horasData.minutos || 0;
+        const sessions = horasData.total_sesiones || 0;
+
+        dayCard.innerHTML = `
+          <div class="calendar-day-number">${dayNumber}</div>
+          <div class="calendar-day-hours">
+            ${hours > 0 || minutes > 0 ? `${hours}h ${minutes}m` : 'No hours'}
+          </div>
+          ${sessions > 0 ? `<div class="calendar-day-sessions">${sessions} session${sessions !== 1 ? 's' : ''}</div>` : ''}
+        `;
+
+        daysContainer.appendChild(dayCard);
+      }
+    }
+
+    function updateCalendarSummary(horasPorDia) 
+    {
+      let totalSegundos = 0;
+      let totalSesiones = 0;
+
+      horasPorDia.forEach(item => {
+        totalSegundos += item.total_segundos || 0;
+        totalSesiones += item.total_sesiones || 0;
+      });
+
+      const totalHoras = Math.floor(totalSegundos / 3600);
+      const totalMinutos = Math.floor((totalSegundos % 3600) / 60);
+      const totalHoursEl = document.getElementById('totalHours');
+      const totalSessionsEl = document.getElementById('totalSessions');
+
+      if (totalHoursEl) 
+      {
+        totalHoursEl.textContent = `${totalHoras}h ${totalMinutos}m`;
+      }
+      if (totalSessionsEl) 
+      {
+        totalSessionsEl.textContent = totalSesiones.toString();
+      }
+    }
+
+    function openPartNumberModal() 
+    {
+      if (!currentOrderId) // Solo permitir si hay una orden activa
+      {
+        showError('You must start an order before adding part numbers.');
+        return;
+      }
+
+      const modal = document.getElementById('partNumberModal');
+      const partNumberInput = document.getElementById('newPartNumberInput');
+      
+      if (partNumberInput) 
+      {
+        partNumberInput.value = '';
+      }
+      if (modal) 
+      {
+        modal.style.display = 'flex';
+      }
+      if (partNumberInput) 
+      {
+        setTimeout(() => partNumberInput.focus(), 50);
+      }
+    }
+
+    let pendingPartNumberLogin = null;// Variables para el modal de login a número de parte
+    let pendingPartNumberId = null;
+
+    function updateOrderInfo() // Función para actualizar la información de orden mostrada
+    {
+      
+      const projectInfoEl = document.getElementById('projectInfo');
+      const orderNameInfoEl = document.getElementById('orderNameInfo');
+      const partNumberInfoEl = document.getElementById('partNumberInfo');
+
+      if (projectInfoEl) 
+      {
+        projectInfoEl.textContent = currentProjectName || '-';
+      }
+      if (orderNameInfoEl) 
+      {
+        orderNameInfoEl.textContent = currentOrder || '-';
+      } 
+      if (partNumberInfoEl) 
+      {
+        partNumberInfoEl.textContent = currentPartNumber || '-';
+      }
+    }
+
+    function openLoginPartNumberModal(partNumber, partId) 
+    {
+      pendingPartNumberLogin = partNumber;
+      pendingPartNumberId = partId;
+      
+      const modal = document.getElementById('loginPartNumberModal');
+      const message = document.getElementById('loginPartNumberMessage');
+      
+      if (modal && message) 
+      {
+        message.textContent = `Are you sure you want to login to part number "${partNumber}"?`;
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeLoginPartNumberModal() 
+    {
+      const modal = document.getElementById('loginPartNumberModal');
+      if (modal) 
+      {
+        modal.style.display = 'none';
+      }
+      pendingPartNumberLogin = null;
+      pendingPartNumberId = null;
+    }
+
+    async function confirmLoginToPartNumber() 
+    {
+      if (!pendingPartNumberLogin || !currentOrderId) 
+      {
+        closeLoginPartNumberModal();
+        return;
+      }
+      const partNumberToLogin = pendingPartNumberLogin;// Guardar el número de parte antes de limpiar las variables
+
+      try 
+      {
+        const previousPartNumber = currentPartNumber;// Si había un número de parte anterior y había tiempo corriendo, guardar el tiempo antes de resetear
+        if (previousPartNumber && startTime && currentOrderId) 
+        {
+          const elapsed = Date.now() - startTime - pausedTime;// Guardar tiempo del número de parte anterior
+          if (elapsed > 0) 
+          {
+            try 
+            {
+              await fetch(`/api/orders/${currentOrderId}/time`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  tiempo_trabajando: elapsed
+                })
+              });
+            } catch (error) 
+            {
+              console.error('Error al guardar tiempo del número de parte anterior:', error);
+            }
+          }
+        }
+
+        for (const activity of Object.keys(activityStartTimes)) // Detener cualquier actividad activa antes de resetear
+        {
+          if (activityStartTimes[activity]) 
+          {
+            const elapsed = Date.now() - activityStartTimes[activity];
+            activityTimes[activity] += elapsed;
+            activityStartTimes[activity] = null;
+            
+            if (activityTimers[activity]) 
+            {
+              clearInterval(activityTimers[activity]);
+              activityTimers[activity] = null;
+            }
+          }
+        }
+
+        if (currentStatus && statusStartTime) 
+        {
+          const elapsed = Date.now() - statusStartTime;
+          statusTimes[currentStatus] += elapsed;
+          updateStatusTime(currentStatus);
+          
+          if (statusTimer) 
+          {
+            clearInterval(statusTimer);
+            statusTimer = null;
+          }
+          
+          currentStatus = null;
+          statusStartTime = null;
+        }
+
+        startTime = Date.now();// Resetear tiempos para el nuevo número de parte
+        pausedTime = 0;
+        isPaused = false;
+        lastSavedTime = 0;
+        activityTimeSaved = 0;
+        lastSaveTimestamp = Date.now();
+        activityTimes = 
+        {
+          pausa: 0,
+          comida: 0,
+          meeting: 0,
+          training: 0,
+          '5s': 0
+        };
+
+        currentPartNumber = partNumberToLogin.trim();
+        await loadOrderStatus();
+        updateTimeDisplay(0);
+        updateActivityTimes();
+
+        // Reiniciar el timer
+        if (timerInterval) 
+        {
+          clearInterval(timerInterval);
+        }
+        startTimer();
+
+        // Actualizar en el backend
+        const username = localStorage.getItem('username');
+        if (username) 
+        {
+          await fetch('/api/employees/update-order-login', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: username,
+              ordenNombre: currentOrder,
+              partNumber: currentPartNumber,
+              inicioTimestamp: startTime
+            })
+          });
+        }
+
+        await saveActiveSession();
+        closeLoginPartNumberModal();
+
+        showNotification(`Successfully logged in to part number "${partNumberToLogin}"`, 'success');// Mostrar notificación con el número de parte guardado
+        const partNumberSelect = document.getElementById('partNumberSelect');// Actualizar selector de número de parte si existe
+        if (partNumberSelect) 
+        {
+          partNumberSelect.value = partNumberToLogin;
+        }
+        updateStatusTimes();
+        updateOrderInfo();
+        await refreshPartsTable();
+
+        pendingPartNumberLogin = null;
+        pendingPartNumberId = null;
+      } catch (error) 
+      {
+        console.error('Error al hacer login al número de parte:', error);
+        showNotification('Error logging in to part number. Please try again.', 'error');
+      }
+    }
+
+    function showNotification(message, type = 'success') 
+    {
+      const container = document.getElementById('notificationContainer');
+      if (!container) return;
+
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      
+      const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+      notification.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+
+      // Remover después de 3 segundos
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) 
+          {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    function closePartNumberModal() 
+    {
+      const modal = document.getElementById('partNumberModal');
+      if (modal) 
+      {
+        modal.style.display = 'none';
+      }
+      
+      const partNumberInput = document.getElementById('newPartNumberInput');
+      const uomInput = document.getElementById('newPartNumberUomInput');
+      const unitsInput = document.getElementById('newPartNumberUnitsInput');
+      const amountInput = document.getElementById('newPartNumberAmountInput');
+      
+      if (partNumberInput) partNumberInput.value = '';
+      if (uomInput) uomInput.value = '';
+      if (unitsInput) unitsInput.value = '';
+      if (amountInput) amountInput.value = '';
+    }
+
+    async function refreshPartNumberSelect() {
+      if (!currentOrderId) return;
+
+      try 
+      {
+        const partNumbers = await loadPartNumbersForOrder(currentOrderId);
+        const partNumberSelect = document.getElementById('partNumberSelect');
+        if (!partNumberSelect) return;
+
+        if (partNumbers && partNumbers.length > 0) 
+        {
+          partNumberSelect.innerHTML = '<option value=\"\">Select part number</option>';
+          partNumbers.forEach(partNumber => {
+            const option = document.createElement('option');
+            option.value = partNumber.part_number;
+            option.textContent = partNumber.part_number;
+            partNumberSelect.appendChild(option);
+          });
+          partNumberSelect.disabled = false;
+        } else 
+        {
+          partNumberSelect.innerHTML = '<option value=\"\">No part numbers available</option>';
+          partNumberSelect.disabled = true;
+        }
+      } catch (error) 
+      {
+        console.error('Error al refrescar números de parte:', error);
+      }
+    }
+
+    async function refreshPartsTable() 
+    {
+      if (!currentOrderId) 
+      {
+        const tbody = document.getElementById('partsTableBody');
+        if (tbody) 
+        {
+          tbody.innerHTML = `
+            <tr class="empty-row">
+              <td colspan="3">
+                <div class="empty-parts">
+                  <i class="fas fa-hashtag"></i>
+                  <p>No active order</p>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+        return;
+      }
+
+      try 
+      {
+        const partNumbers = await loadPartNumbersForOrder(currentOrderId);
+        const tbody = document.getElementById('partsTableBody');
+        if (!tbody) return;
+
+        if (!partNumbers || partNumbers.length === 0) 
+        {
+          tbody.innerHTML = `
+            <tr class="empty-row">
+              <td colspan="4">
+                <div class="empty-parts">
+                  <i class="fas fa-hashtag"></i>
+                  <p>No part numbers added yet</p>
+                </div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = '';
+        partNumbers.forEach(part => {
+          const row = document.createElement('tr');
+          row.className = 'part-row';
+          row.setAttribute('data-part-id', part.id);
+          
+          const notes = part.notes || part.nota || part.comments || '';
+          const partNumber = (part.part_number || '').trim();
+          const currentPartNumberTrimmed = currentPartNumber ? currentPartNumber.trim() : '';
+          const isLoggedIn = currentPartNumberTrimmed && currentPartNumberTrimmed === partNumber;
+          const uoms = part.uoms || [];
+          const uomMeanings = {'EA': 'each', 'LF': 'linear feet', 'SF': 'square feet', 'RS': 'Riser'};
+          
+          // Construir lista de cantidades (units) para la columna UNITS
+          let unitsHtml = '<div class="units-list">';
+          if (uoms.length === 0) 
+          {
+            unitsHtml += '<span class="no-units">No units</span>';
+          } else 
+          {
+            uoms.forEach(uom => {
+              const cantidad = uom.cantidad || '';
+              unitsHtml += `
+                <div class="unit-item" data-uom-id="${uom.id}">
+                  <span class="unit-value">${cantidad}</span>
+                </div>
+              `;
+            });
+          }
+          unitsHtml += '</div>';
+          
+          // Construir lista de amounts (cantidades de medida) para la columna AMOUNT
+          let amountsHtml = '<div class="amounts-list">';
+          if (uoms.length === 0) 
+          {
+            amountsHtml += '<span class="no-amounts">No amounts</span>';
+          } else 
+          {
+            uoms.forEach(uom => {
+              const amount = uom.amount || '';
+              amountsHtml += `
+                <div class="amount-item" data-uom-id="${uom.id}">
+                  <span class="amount-value">${amount}</span>
+                </div>
+              `;
+            });
+          }
+          amountsHtml += '</div>';
+          
+          // Construir lista de UOMs (sin cantidades) para la columna UOMs
+          let uomsHtml = '<div class="uoms-list">';
+          if (uoms.length === 0) 
+          {
+            uomsHtml += '<span class="no-uoms">No UOMs added</span>';
+          } else 
+          {
+            uoms.forEach(uom => {
+              const uomCode = uom.uom || '';
+              const uomMeaning = uomMeanings[uomCode] || '';
+              const uomDisplay = uomMeaning ? `${uomCode} (${uomMeaning})` : uomCode;
+              const amount = uom.amount || uom.cantidad || '';
+              uomsHtml += `
+                <div class="uom-item" data-uom-id="${uom.id}" data-amount="${amount}">
+                  <span class="uom-value">${uomDisplay}</span>
+                  <button class="btn-edit-uom" data-uom-id="${uom.id}" data-part-id="${part.id}" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn-delete-uom" data-uom-id="${uom.id}" data-part-id="${part.id}" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              `;
+            });
+          }
+          uomsHtml += `
+            <button class="btn-add-uom" data-part-id="${part.id}" title="Add UOM">
+              <i class="fas fa-plus"></i> Add UOM
+            </button>
+          </div>`;
+          
+          row.innerHTML = `
+            <td class="part-number-cell">${partNumber}</td>
+            <td class="units-cell">${unitsHtml}</td>
+            <td class="uom-cell">${uomsHtml}</td>
+            <td class="amount-cell">${amountsHtml}</td>
+            <td class="notes-cell">
+              <input type="text" 
+                     class="notes-input" 
+                     value="${notes}" 
+                     placeholder="Notes"
+                     data-part-id="${part.id}"
+                     data-field="notes">
+            </td>
+            <td class="login-cell">
+              <button class="btn-login-part ${isLoggedIn ? 'btn-login-part-logged' : ''}" 
+                      data-part-number="${partNumber}" 
+                      data-part-id="${part.id}"
+                      ${isLoggedIn ? 'disabled' : ''}>
+                <span>${isLoggedIn ? 'Logged In' : 'Login'}</span>
+              </button>
+            </td>
+          `;
+          
+          tbody.appendChild(row);
+        });
+
+        // Agregar event listeners para notas
+        const notesInputs = tbody.querySelectorAll('.notes-input');
+        notesInputs.forEach(input => {
+          input.addEventListener('blur', handlePartFieldUpdate);
+          input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              this.blur();
+            }
+          });
+        });
+
+        // Agregar event listeners para botones de login
+        const loginButtons = tbody.querySelectorAll('.btn-login-part');
+        loginButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const partNumber = this.getAttribute('data-part-number');
+            const partId = this.getAttribute('data-part-id');
+            openLoginPartNumberModal(partNumber, partId);
+          });
+        });
+
+        // Agregar event listeners para botones de UOM
+        const addUomButtons = tbody.querySelectorAll('.btn-add-uom');
+        addUomButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const partId = this.getAttribute('data-part-id');
+            openUomModal(partId);
+          });
+        });
+
+        const editUomButtons = tbody.querySelectorAll('.btn-edit-uom');
+        editUomButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const partId = this.getAttribute('data-part-id');
+            const uomId = this.getAttribute('data-uom-id');
+            const uomItem = this.closest('.uom-item');
+            const uomValue = uomItem.querySelector('.uom-value').textContent;
+            // Extraer el código UOM (antes del paréntesis)
+            const uomMatch = uomValue.match(/^([A-Z]+)/);
+            const uom = uomMatch ? uomMatch[1] : '';
+            // Obtener cantidad y amount de los elementos correspondientes
+            const row = uomItem.closest('tr');
+            const unitItem = row.querySelector(`.unit-item[data-uom-id="${uomId}"]`);
+            const amountItem = row.querySelector(`.amount-item[data-uom-id="${uomId}"]`);
+            const cantidad = unitItem ? unitItem.querySelector('.unit-value').textContent.trim() : '';
+            const amount = amountItem ? amountItem.querySelector('.amount-value').textContent.trim() : '';
+            openUomModal(partId, uomId, uom, cantidad, amount);
+          });
+        });
+
+        const deleteUomButtons = tbody.querySelectorAll('.btn-delete-uom');
+        deleteUomButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const partId = this.getAttribute('data-part-id');
+            const uomId = this.getAttribute('data-uom-id');
+            deleteUom(partId, uomId);
+          });
+        });
+      } catch (error) {
+        console.error('Error al refrescar tabla de números de parte:', error);
+        const tbody = document.getElementById('partsTableBody');
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr class="empty-row">
+              <td colspan="3">
+                <div class="empty-parts">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <p>Error loading part numbers</p>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      }
+    }
+
+    async function handlePartFieldUpdate(e) 
+    {
+      const input = e.target;
+      const partId = input.getAttribute('data-part-id');
+      const field = input.getAttribute('data-field');
+      // Para selects, obtener el value directamente; para inputs, usar trim()
+      const value = input.tagName === 'SELECT' ? input.value : input.value.trim();
+
+      if (!partId || !field) return;
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}/part-numbers/${partId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            [field]: value
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error updating part number field');
+        }
+
+        const data = await response.json();
+        if (!data.success) 
+        {
+          throw new Error(data.error || 'Error updating field');
+        }
+      } catch (error) 
+      {
+        console.error('Error al actualizar campo:', error);
+        showError('Error updating ' + field + '. Please try again.');
+        // Recargar la tabla para restaurar el valor anterior
+        await refreshPartsTable();
+      }
+    }
+
+    async function savePartNumberForCurrentOrder() 
+    {
+      const partNumberInput = document.getElementById('newPartNumberInput');
+      const uomInput = document.getElementById('newPartNumberUomInput');
+      const unitsInput = document.getElementById('newPartNumberUnitsInput');
+      const amountInput = document.getElementById('newPartNumberAmountInput');
+      
+      const partNumber = partNumberInput ? partNumberInput.value.trim() : '';
+      const uom = uomInput ? uomInput.value.trim() : '';
+      const units = unitsInput ? unitsInput.value.trim() : '';
+      const amount = amountInput ? amountInput.value.trim() : '';
+
+      if (!currentOrderId) 
+      {
+        showError('There is no active order to add a part number to.');
+        return;
+      }
+
+      if (!partNumber) 
+      {
+        showError('Please enter a part number.');
+        return;
+      }
+
+      try 
+      {
+        const requestBody = {
+          part_number: partNumber
+        };
+
+        const response = await fetch(`/api/orders/${currentOrderId}/part-numbers`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Server error:', errorText);
+          showError('Error adding part number. Please try again.');
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          showError(data.error || 'Error adding part number.');
+          return;
+        }
+
+        // Si se proporcionó UOM, crear el UOM después de crear el part number
+        if (uom && data.partNumber && data.partNumber.id) 
+        {
+          const uomRequestBody = {uom: uom, cantidad: units || '', amount: amount || ''};
+
+          const uomResponse = await fetch(`/api/orders/${currentOrderId}/part-numbers/${data.partNumber.id}/uoms`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(uomRequestBody)
+          });
+
+          if (!uomResponse.ok) 
+          {
+            console.error('Error adding UOM to part number');
+          }
+        }
+
+        // Limpiar los campos del modal
+        if (partNumberInput) partNumberInput.value = '';
+        if (uomInput) uomInput.value = '';
+        if (unitsInput) unitsInput.value = '';
+        if (amountInput) amountInput.value = '';
+
+        await refreshPartNumberSelect();
+        await refreshPartsTable();
+        closePartNumberModal();
+      } catch (error) 
+      {
+        console.error('Error al agregar número de parte:', error);
+        showError('Error adding part number: ' + error.message);
+      }
+    }
+
+    // Variables para el modal de UOM
+    let currentUomPartId = null;
+    let currentUomId = null;
+
+    function openUomModal(partId, uomId = null, uom = '', cantidad = '', amount = '') {
+      currentUomPartId = partId;
+      currentUomId = uomId;
+      
+      const modal = document.getElementById('uomModal');
+      const title = document.getElementById('uomModalTitle');
+      const message = document.getElementById('uomModalMessage');
+      const uomInput = document.getElementById('uomInput');
+      const cantidadInput = document.getElementById('cantidadInput');
+      const amountInput = document.getElementById('amountInput');
+      
+      if (uomId) 
+      {
+        title.textContent = 'Edit UOM';
+        message.textContent = 'Edit the UOM and quantity for this part number.';
+      } else 
+      {
+        title.textContent = 'Add UOM';
+        message.textContent = 'Add a UOM and quantity for this part number.';
+      }
+      if (uomInput) 
+      {
+        uomInput.value = uom;
+      }
+      if (cantidadInput) 
+      {
+        cantidadInput.value = cantidad;
+      }
+      if (amountInput) 
+      {
+        amountInput.value = amount;
+      }
+      
+      if (modal) 
+      {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          if (uomInput) uomInput.focus();
+        }, 50);
+      }
+    }
+
+    function closeUomModal() 
+    {
+      const modal = document.getElementById('uomModal');
+      if (modal) 
+      {
+        modal.style.display = 'none';
+      }
+      currentUomPartId = null;
+      currentUomId = null;
+      
+      const uomInput = document.getElementById('uomInput');
+      const cantidadInput = document.getElementById('cantidadInput');
+      const amountInput = document.getElementById('amountInput');
+      if (uomInput) uomInput.value = '';
+      if (cantidadInput) cantidadInput.value = '';
+      if (amountInput) amountInput.value = '';
+    }
+
+    async function saveUom() {
+      if (!currentUomPartId || !currentOrderId) {
+        showError('Error: No part number selected.');
+        return;
+      }
+
+      const uomInput = document.getElementById('uomInput');
+      const cantidadInput = document.getElementById('cantidadInput');
+      const amountInput = document.getElementById('amountInput');
+      const uom = uomInput ? uomInput.value.trim() : '';
+      const cantidad = cantidadInput ? cantidadInput.value.trim() : '';
+      const amount = amountInput ? amountInput.value.trim() : '';
+
+      if (!uom) 
+      {
+        showError('Please select a UOM.');
+        return;
+      }
+
+      try 
+      {
+        const url = currentUomId 
+          ? `/api/orders/${currentOrderId}/part-numbers/${currentUomPartId}/uoms/${currentUomId}`
+          : `/api/orders/${currentOrderId}/part-numbers/${currentUomPartId}/uoms`;
+        
+        const method = currentUomId ? 'PATCH' : 'POST';
+        
+        const requestBody = {
+          uom: uom
+        };
+        
+        // Siempre enviar cantidad y amount, incluso si están vacíos
+        requestBody.cantidad = cantidad || '';
+        requestBody.amount = amount || '';
+
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) 
+        {
+          const errorText = await response.text();
+          console.error('Server error:', errorText);
+          showError('Error saving UOM. Please try again.');
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) 
+        {
+          showError(data.error || 'Error saving UOM.');
+          return;
+        }
+
+        await refreshPartsTable();
+        closeUomModal();
+        showNotification(currentUomId ? 'UOM updated successfully' : 'UOM added successfully', 'success');
+      } catch (error) 
+      {
+        console.error('Error al guardar UOM:', error);
+        showError('Error saving UOM: ' + error.message);
+      }
+    }
+
+    async function deleteUom(partId, uomId) 
+    {
+      if (!partId || !uomId || !currentOrderId) 
+      {
+        showError('Error: Missing information to delete UOM.');
+        return;
+      }
+
+      if (!confirm('Are you sure you want to delete this UOM?')) 
+      {
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(
+          `/api/orders/${currentOrderId}/part-numbers/${partId}/uoms/${uomId}`,
+          {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) 
+        {
+          const errorText = await response.text();
+          console.error('Server error:', errorText);
+          showError('Error deleting UOM. Please try again.');
+          return;
+        }
+
+        const data = await response.json();
+
+        if (!data.success) 
+        {
+          showError(data.error || 'Error deleting UOM.');
+          return;
+        }
+
+        await refreshPartsTable();
+        showNotification('UOM deleted successfully', 'success');
+      } catch (error) 
+      {
+        console.error('Error al eliminar UOM:', error);
+        showError('Error deleting UOM: ' + error.message);
+      }
+    }
+
+    async function loadPartNumbersForOrder(orderId) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/orders/${orderId}/part-numbers`);
+        if (!response.ok) 
+        {
+          return [];
+        }
+        const data = await response.json();
+        return data.success && data.partNumbers ? data.partNumbers : [];
+      } catch (error) 
+      {
+        console.error('Error al cargar números de parte:', error);
+        return [];
+      }
+    }
+
+    async function validateOrderAndLoadPartNumbers(orderNumber) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/orders/validate/${encodeURIComponent(orderNumber)}`);
+        const data = await response.json();
+
+        if (data.success && data.exists) {
+          // Orden válida, cargar números de parte
+          const orderId = data.order.id;
+          const partNumbers = await loadPartNumbersForOrder(orderId);
+          const partNumberSelect = document.getElementById('partNumberSelect');
+          
+          if (partNumbers.length > 0) 
+          {
+            partNumberSelect.innerHTML = '<option value="">Select part number</option>';
+            partNumbers.forEach(partNumber => 
+            {
+              const option = document.createElement('option');
+              option.value = partNumber.part_number;
+              option.textContent = partNumber.part_number;
+              partNumberSelect.appendChild(option);
+            });
+            partNumberSelect.disabled = false;
+          } else 
+          {
+            partNumberSelect.innerHTML = '<option value="">No part numbers available</option>';
+            partNumberSelect.disabled = true;
+          }
+        } else 
+        {
+          const partNumberSelect = document.getElementById('partNumberSelect');
+          partNumberSelect.innerHTML = '<option value="">Select part number</option>';
+          partNumberSelect.disabled = true;
+        }
+
+        if (typeof validateForm === 'function') 
+        {
+          validateForm();
+        }
+      } catch (error) 
+      {
+        console.error('Error al validar orden:', error);
+        const partNumberSelect = document.getElementById('partNumberSelect');
+        partNumberSelect.innerHTML = '<option value="">Select part number (optional)</option>';
+        partNumberSelect.disabled = true;
+      }
+    }
+
+    async function startOrder() 
+    {
+      const orderNumber = document.getElementById('orderNumber').value.trim();
+      const partNumberSelect = document.getElementById('partNumberSelect');
+      const selectedPartNumber = partNumberSelect ? partNumberSelect.value.trim() : '';
+
+      if (!orderNumber) 
+      {
+        showError('Please enter an order number');
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/orders/validate/${encodeURIComponent(orderNumber)}`);
+        const data = await response.json();
+
+        if (!data.success || !data.exists) 
+        {
+          showError('The order does not exist in the database. Please verify the order name.');
+          return;
+        }
+
+        const orderId = data.order.id;
+        const partNumbers = await loadPartNumbersForOrder(orderId);
+        const partNumberSelectEl = document.getElementById('partNumberSelect');
+        const selectedPartNumber = partNumberSelectEl ? partNumberSelectEl.value.trim() : '';
+        const orderResponse = await fetch(`/api/orders/${orderId}`);
+        const orderData = await orderResponse.json();
+
+        if (orderData.success && orderData.order) 
+        {
+          currentProjectName = orderData.order.project_name || null;
+        }
+
+      currentOrder = orderNumber;
+        currentOrderId = orderId;
+        currentPartNumber = selectedPartNumber || null; // Guardar número de parte seleccionado
+      startTime = Date.now();
+      pausedTime = 0;
+      isPaused = false;
+
+      // Resetear tiempos de estado (se cargarán desde la BD en loadOrderStatus si existen)
+      statusTimes = { 'revision': 0, 'trabajando en ella': 0, 'en espera de aprobacion': 0, 'aprobada': 0, 'cambios': 0, 'issues': 0};
+      currentStatus = null;
+      statusStartTime = null;
+      if (statusTimer) 
+      {
+        clearInterval(statusTimer);
+        statusTimer = null;
+      }
+      await loadOrderStatus();
+      updateOrderInfo();
+
+      const username = localStorage.getItem('username');
+      if (username) 
+      {
+        try 
+        {
+          await fetch('/api/employees/update-order-login', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: username,
+              ordenNombre: orderNumber,
+                partNumber: selectedPartNumber || null, // Incluir número de parte
+              inicioTimestamp: startTime // Enviar el timestamp de inicio
+            })
+          });
+        } catch (error) 
+        {
+          console.error('Error al actualizar orden_en_logeo:', error);
+        }
+      }
+
+      lastSessionSave = Date.now();
+      await saveActiveSession();
+      activityTimes = {pausa: 0, comida: 0, meeting: 0, training: 0, '5s': 0};
+      document.getElementById('timePanel').style.display = 'block';
+      updateActivityTimes();
+      lastSavedTime = 0;
+      activityTimeSaved = 0;
+      lastSaveTimestamp = 0;
+      lastSaveTimestamp = Date.now(); // Inicializar timestamp del último guardado
+      startTimer();
+
+      await refreshPartsTable();
+      setTimeout(() => {
+        if (currentOrderId && startTime) 
+        {
+          saveTimeToDatabase();
+        }
+      }, 2000); // Esperar 2 segundos después de iniciar para asegurar que todo esté listo
+
+        document.querySelector('.order-form-card').style.opacity = '0.5';
+        document.getElementById('orderNumber').disabled = true;
+        document.getElementById('startOrderBtn').disabled = true;
+        const partNumberSelect = document.getElementById('partNumberSelect');
+        if (partNumberSelect) 
+        {
+          partNumberSelect.disabled = true;
+        }
+      } catch (error) 
+      {
+        console.error('Error al validar orden:', error);
+        showError('Error validating the order. Please try again.');
+      }
+    }
+    let lastSessionSave = 0; // Timestamp del último guardado de sesión activa
+    
+    function startTimer() 
+    {
+      if (timerInterval) clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+        if (startTime) 
+        {
+          const elapsed = Date.now() - startTime - pausedTime;
+          updateTimeDisplay(elapsed);
+          
+          // Guardar tiempo en la BD cada 10 segundos (10000 ms) para guardado en tiempo real
+          const timeSinceLastSave = Date.now() - lastSaveTimestamp;
+          if (currentOrderId && timeSinceLastSave >= 10000) 
+          {
+            saveTimeToDatabase();
+          }
+          
+          // Guardar sesión activa en la BD cada 30 segundos para protección contra cortes de luz
+          const timeSinceLastSessionSave = Date.now() - lastSessionSave;
+          if (timeSinceLastSessionSave >= 30000) 
+          {
+            saveActiveSession().catch(err => console.error('Error al guardar sesión activa:', err));
+            lastSessionSave = Date.now();
+          }
+        }
+      }, 1000);
+    }
+
+    async function saveTimeToDatabase() 
+    {
+      if (!currentOrderId || !startTime) 
+      {
+        return;
+      }
+
+      const elapsed = Date.now() - startTime - pausedTime;
+      const tiempoNuevo = elapsed - lastSavedTime;
+
+      if (tiempoNuevo <= 0) 
+      {
+        console.log('Tiempo nuevo <= 0, no se guarda. elapsed:', elapsed, 'lastSavedTime:', lastSavedTime);
+        return;
+      }
+
+      // Si hay tiempo de actividades guardado, restarlo para evitar duplicados
+      const tiempoAguardar = Math.max(0, tiempoNuevo - activityTimeSaved);
+
+      if (tiempoAguardar <= 0) 
+      {
+        // Aún así actualizamos el timestamp para que el próximo guardado funcione
+        lastSaveTimestamp = Date.now();
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}/time`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tiempoAgregado: tiempoAguardar // En milisegundos
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) 
+        {
+          lastSavedTime = elapsed; // Actualizar el tiempo guardado
+          activityTimeSaved = 0; // Resetear el tiempo de actividades guardado
+          lastSaveTimestamp = Date.now(); // Actualizar timestamp del último guardado
+        } else 
+        {
+          console.error('Error al guardar tiempo:', data);
+        }
+      } catch (error) 
+      {
+        console.error('Error al guardar tiempo en BD:', error);
+      }
+    }
+
+    async function toggleActivity(activity) 
+    {
+      if (!startTime) return;
+      
+      // Mapeo de actividades a IDs de botones
+      const buttonIdMap = {'pausa': 'btnPausa', 'comida': 'btnComida', 'meeting': 'btnMeeting', 'training': 'btnTraining', '5s': 'btn5S'};
+      
+      const buttonId = buttonIdMap[activity];
+      if (!buttonId) 
+      {
+        console.error('Actividad no reconocida:', activity);
+        return;
+      }
+      
+      const button = document.getElementById(buttonId);
+      if (!button) 
+      {
+        console.error('Botón no encontrado:', buttonId);
+        return;
+      }
+      
+      const isActive = activityStartTimes[activity] !== null;
+      
+      if (isActive) 
+      {
+        // Detener actividad actual
+        const elapsed = Date.now() - activityStartTimes[activity];
+        activityTimes[activity] += elapsed;
+        
+        // Guardar tiempo en la BD cuando se desactiva la actividad
+        if (currentOrderId && elapsed > 0) 
+        {
+          await saveActivityTimeToDatabase(elapsed, activity);
+          await saveTimeToDatabase();
+          await updateEmployeeStatus(activity, elapsed);
+        }
+        
+        await updateEmployeeStatus('trabajando', 0);
+        
+        activityStartTimes[activity] = null;
+        
+        if (activityTimers[activity]) 
+        {
+          clearInterval(activityTimers[activity]);
+          activityTimers[activity] = null;
+        }
+        
+        button.classList.remove('active');
+        updateActivityTime(activity);
+      } else 
+      {
+        // Desactivar todas las demás actividades primero
+        const activities = ['pausa', 'comida', 'meeting', 'training', '5s', 'pdm_rwk'];
+        for (const otherActivity of activities) 
+        {
+          if (otherActivity !== activity && activityStartTimes[otherActivity] !== null) 
+          {
+            // Detener la otra actividad
+            const elapsed = Date.now() - activityStartTimes[otherActivity];
+            activityTimes[otherActivity] += elapsed;
+            
+            // Guardar tiempo en la BD cuando se desactiva la otra actividad
+            if (currentOrderId && elapsed > 0) 
+            {
+              await saveActivityTimeToDatabase(elapsed, otherActivity);
+              await saveTimeToDatabase();
+              await updateEmployeeStatus(otherActivity, elapsed);
+            }
+            
+            activityStartTimes[otherActivity] = null;
+            
+            if (activityTimers[otherActivity]) 
+            {
+              clearInterval(activityTimers[otherActivity]);
+              activityTimers[otherActivity] = null;
+            }
+            
+            const otherButtonIdMap = {'pausa': 'btnPausa', 'comida': 'btnComida', 'meeting': 'btnMeeting', 'training': 'btnTraining', '5s': 'btn5S'};
+            const otherButtonId = otherButtonIdMap[otherActivity];
+            if (otherButtonId) 
+            {
+              const otherButton = document.getElementById(otherButtonId);
+              if (otherButton) 
+              {
+                otherButton.classList.remove('active');
+              }
+            }
+            updateActivityTime(otherActivity);
+          }
+        }
+        
+        // Iniciar la nueva actividad
+        activityStartTimes[activity] = Date.now();
+        button.classList.add('active');
+        if (currentOrderId) 
+        {
+          await updateEstadoCambiadoEn(currentOrderId, activity);
+        }
+        
+        // Actualizar estado del empleado en la BD
+        await updateEmployeeStatus(activity, 0);
+        
+        // Actualizar tiempo cada segundo
+        activityTimers[activity] = setInterval(() => {
+          if (activityStartTimes[activity]) 
+          {
+            const currentElapsed = activityTimes[activity] + (Date.now() - activityStartTimes[activity]);
+            updateActivityTime(activity, currentElapsed);
+            saveActiveSession();
+          }
+        }, 1000);
+        
+        updateActivityTime(activity);
+      }
+      saveActiveSession();
+    }
+
+    // Función para actualizar estado_cambiado_en cuando se inicia una actividad
+    async function updateEstadoCambiadoEn(orderId, actividad) {
+      if (!orderId || !actividad) return;
+      try 
+      {
+        // Llamar al endpoint de tiempo con iniciarActividad=true para actualizar estado_cambiado_en
+        const response = await fetch(`/api/orders/${orderId}/time`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tiempoAgregado: 0, // No agregamos tiempo, solo actualizamos el timestamp
+            actividad: actividad,
+            iniciarActividad: true // Flag para indicar que se está iniciando la actividad
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) 
+        {
+        } else 
+        {
+          console.error('✗ Error al actualizar estado_cambiado_en:', data);
+        }
+      } catch (error) 
+      {
+        console.error('Error al actualizar estado_cambiado_en:', error);
+      }
+    }
+
+    // Función para actualizar el estado del empleado en la BD
+    async function updateEmployeeStatus(estado, tiempoAgregado) 
+    {
+      const username = localStorage.getItem('username');
+      if (!username) return;
+
+      try 
+      {
+        const response = await fetch('/api/employees/update-status', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            estado: estado,
+            tiempoAgregado: tiempoAgregado // En milisegundos
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) 
+        {
+          console.log(`✓ Estado del empleado actualizado: ${estado}`);
+        } else 
+        {
+          console.error('✗ Error al actualizar estado del empleado:', data);
+        }
+      } catch (error) 
+      {
+        console.error('Error al actualizar estado del empleado:', error);
+      }
+    }
+
+    async function saveActivityTimeToDatabase(tiempoEnMilisegundos, actividad) 
+    {
+      if (!currentOrderId || tiempoEnMilisegundos <= 0) return;
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}/time`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tiempoAgregado: tiempoEnMilisegundos, // En milisegundos
+            actividad: actividad // Tipo de actividad: 'pausa', 'comida', 'meeting', 'training', '5s'
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) 
+        {
+          activityTimeSaved += tiempoEnMilisegundos;
+          // También actualizar lastSavedTime para que el próximo guardado no cuente este tiempo
+          const elapsed = Date.now() - startTime - pausedTime;
+          lastSavedTime = elapsed;
+          lastSaveTimestamp = Date.now(); // Actualizar timestamp del último guardado
+        } else 
+        {
+          console.error('✗ Error al guardar tiempo de actividad:', data);
+        }
+      } catch (error) 
+      {
+        console.error('Error al guardar tiempo de actividad en BD:', error);
+      }
+    }
+    
+    function updateActivityTime(activity, totalTime = null) 
+    {
+      const time = totalTime !== null ? totalTime : activityTimes[activity];
+      const minutes = Math.floor(time / 60000);
+      const seconds = Math.floor((time % 60000) / 1000);
+      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      const activityId = activity === '5s' ? '5S' : activity.charAt(0).toUpperCase() + activity.slice(1);
+      const timeElement = document.getElementById(`time${activityId}`);
+      if (timeElement) 
+      {
+        timeElement.textContent = formatted;
+      }
+    }
+    
+    function updateActivityTimes() 
+    {
+      Object.keys(activityTimes).forEach(activity => {
+        if (activityStartTimes[activity]) 
+        {
+          const currentElapsed = activityTimes[activity] + (Date.now() - activityStartTimes[activity]);
+          updateActivityTime(activity, currentElapsed);
+        } else 
+        {
+          updateActivityTime(activity);
+        }
+      });
+    }
+
+    async function stopOrder() 
+    {
+      if (!confirm('Are you sure you want to finish this session?')) 
+      {
+        return;
+      }
+
+      // Guardar tiempo del estado actual antes de detener
+      if (currentStatus && statusStartTime) 
+      {
+        const elapsed = Date.now() - statusStartTime;
+        statusTimes[currentStatus] += elapsed;
+        updateStatusTime(currentStatus);
+
+        if (elapsed > 0) 
+        {
+          await saveStatusTimeToDatabase(elapsed, currentStatus);
+        }
+
+        if (statusTimer) 
+        {
+          clearInterval(statusTimer);
+          statusTimer = null;
+        }
+        
+        currentStatus = null;
+        statusStartTime = null;
+      }
+
+      // Detener todas las actividades activas y guardar tiempo en BD
+      for (const activity of Object.keys(activityStartTimes)) 
+      {
+        if (activityStartTimes[activity]) 
+        {
+          const elapsed = Date.now() - activityStartTimes[activity];
+          activityTimes[activity] += elapsed;
+          
+          // Guardar tiempo en la BD cuando se finaliza la orden
+          if (currentOrderId && elapsed > 0) 
+          {
+            await saveActivityTimeToDatabase(elapsed, activity);
+          }
+          
+          activityStartTimes[activity] = null;
+          
+          if (activityTimers[activity]) 
+          {
+            clearInterval(activityTimers[activity]);
+            activityTimers[activity] = null;
+          }
+        }
+      }
+
+      if (startTime && currentOrderId) 
+      {
+        const elapsed = Date.now() - startTime - pausedTime;
+        // Calcular el tiempo trabajado real (excluyendo el tiempo de actividades que ya se guardó)
+        // El tiempo total trabajado es elapsed, pero el tiempo de actividades ya se guardó por separado
+        // Así que solo guardamos el tiempo restante que no se ha guardado
+        const tiempoTrabajado = elapsed - lastSavedTime - activityTimeSaved;
+        
+        // Guardar el tiempo restante solo si hay tiempo nuevo que no se haya guardado
+        // Esto asegura que todo el tiempo se guarde antes de crear la sesión
+        if (tiempoTrabajado > 0) 
+        {
+          // Guardar el tiempo en la base de datos
+          try 
+          {
+            const response = await fetch(`/api/orders/${currentOrderId}/time`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                tiempoAgregado: tiempoTrabajado // En milisegundos
+              })
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) 
+            {
+              console.error('Error al guardar tiempo:', data);
+              showError('Session finished but there was an error saving time to the database.');
+            } else 
+            {
+              lastSavedTime = elapsed;
+            }
+          } catch (error) 
+          {
+            console.error('Error al guardar tiempo en BD:', error);
+            showError('Se finalizó la sesión pero hubo un error al guardar el tiempo en la base de datos.');
+          }
+        }
+
+        const username = localStorage.getItem('username');
+        if (username) 
+        {
+          try 
+          {
+            // Obtener información del usuario desde la base de datos
+            const userResponse = await fetch('/api/employees/it');
+            let usuario_id = null;
+            if (userResponse.ok) 
+            {
+              const userData = await userResponse.json();
+              if (userData.success && userData.employees) 
+              {
+                const user = userData.employees.find(emp => 
+                  emp.usuario === username || 
+                  (emp.nombre && emp.nombre.toLowerCase().includes(username.toLowerCase()))
+                );
+                if (user) 
+                {
+                  usuario_id = user.id;
+                }
+              }
+            }
+
+            // Calcular tiempo trabajando (tiempo total menos actividades)
+            const tiempoTrabajando = elapsed - 
+              (activityTimes.pausa || 0) - 
+              (activityTimes.comida || 0) - 
+              (activityTimes.meeting || 0) - 
+              (activityTimes.training || 0) - 
+              (activityTimes['5s'] || 0);
+
+            await fetch('/api/sesiones', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                usuario_id: usuario_id,
+                usuario_nombre: username,
+                orden_nombre: currentOrder,
+                orden_id: currentOrderId,
+                part_number: currentPartNumber,
+                fecha_inicio: startTime,
+                fecha_fin: Date.now(),
+                duracion_total: elapsed,
+                tiempo_pausa: activityTimes.pausa || 0,
+                tiempo_comida: activityTimes.comida || 0,
+                tiempo_meeting: activityTimes.meeting || 0,
+                tiempo_training: activityTimes.training || 0,
+                tiempo_5s: activityTimes['5s'] || 0,
+                tiempo_trabajando: tiempoTrabajando > 0 ? tiempoTrabajando : 0
+              })
+            });
+          } catch (error) {
+            console.error('Error al guardar sesión en BD:', error);
+          }
+        }
+
+        // Guardar en historial local también
+        const session = {
+          orderNumber: currentOrder,
+          duration: elapsed,
+          startTime: startTime,
+          endTime: Date.now(),
+          date: new Date().toISOString(),
+          activities: { ...activityTimes }
+        };
+
+        sessionHistory.push(session);
+        saveHistory();
+        
+        // Recargar historial desde la API para mostrar la nueva sesión
+        setTimeout(() => {
+          loadHistory();
+        }, 1000);
+      }
+
+      // Limpiar la orden del campo orden_en_logeo del empleado
+      const username = localStorage.getItem('username');
+      if (username) 
+      {
+        try 
+        {
+          await fetch('/api/employees/update-order-login', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: username,
+              ordenNombre: null // null limpia el timestamp también
+            })
+          });
+        } catch (error) {
+          console.error('Error al limpiar orden_en_logeo:', error);
+        }
+      }
+
+      stopTimer();
+      await resetUI();
+    }
+
+    function stopTimer() 
+    {
+      if (timerInterval) 
+      {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    async function resetUI() 
+    {
+      Object.keys(activityTimers).forEach(activity => {
+        if (activityTimers[activity]) {
+          clearInterval(activityTimers[activity]);
+          activityTimers[activity] = null;
+        }
+      });
+      
+      activityTimes = {pausa: 0, comida: 0, meeting: 0, training: 0, '5s': 0};
+      activityStartTimes = {pausa: null, comida: null, meeting: null, raining: null, '5s': null};
+
+      document.querySelectorAll('.btn-activity').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      currentOrder = null;
+      currentOrderId = null;
+      currentPartNumber = null;
+      currentProjectName = null;
+      startTime = null;
+      
+      // Actualizar información de orden mostrada
+      updateOrderInfo();
+      pausedTime = 0;
+      isPaused = false;
+      lastSavedTime = 0;
+      activityTimeSaved = 0;
+      lastSaveTimestamp = 0;
+
+      document.getElementById('timePanel').style.display = 'none';
+      document.getElementById('orderNumber').value = '';
+      document.getElementById('orderNumber').disabled = false;
+      document.getElementById('startOrderBtn').disabled = true; // Deshabilitar hasta que haya texto
+      document.querySelector('.order-form-card').style.opacity = '1';
+      document.getElementById('timeDisplay').textContent = '00:00:00';
+      updateActivityTimes();
+
+      localStorage.removeItem('activeSession');
+      localStorage.removeItem('pauseStartTime');
+      localStorage.removeItem('isPaused');
+      try 
+      {
+        const token = localStorage.getItem('sessionToken');
+        if (token) 
+        {
+          await fetch('/api/sesiones-activas/me', {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+        }
+      } catch (error) 
+      {
+        console.error('Error al eliminar sesión activa de BD:', error);
+      }
+
+      loadHistory();
+    }
+
+    function updateTimeDisplay(milliseconds) 
+    {
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById('timeDisplay').textContent = formatted;
+    }
+
+    async function saveActiveSession() 
+    {
+      if (startTime) 
+      {
+        const currentActivityTimes = { ...activityTimes };
+        Object.keys(activityStartTimes).forEach(activity => {
+          if (activityStartTimes[activity]) 
+          {
+            currentActivityTimes[activity] += Date.now() - activityStartTimes[activity];
+          }
+        });
+        
+        const session = {
+          orderNumber: currentOrder,
+          orderId: currentOrderId,
+          partNumber: currentPartNumber, // Incluir número de parte
+          startTime: startTime,
+          pausedTime: pausedTime,
+          isPaused: isPaused,
+          lastSavedTime: lastSavedTime,
+          activityTimeSaved: activityTimeSaved,
+          lastSaveTimestamp: lastSaveTimestamp,
+          activityTimes: currentActivityTimes,
+          activityStartTimes: activityStartTimes
+        };
+        localStorage.setItem('activeSession', JSON.stringify(session));
+        try 
+        {
+          const token = localStorage.getItem('sessionToken');
+          if (token && currentOrder) 
+          {
+            console.log('Intentando guardar sesión activa en BD...', {
+              orden: currentOrder,
+              ordenId: currentOrderId,
+              startTime: startTime
+            });
+            
+            const response = await fetch('/api/sesiones-activas', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                orden_nombre: currentOrder,
+                orden_id: currentOrderId,
+                part_number: currentPartNumber, // Incluir número de parte
+                start_time: startTime,
+                paused_time: pausedTime,
+                is_paused: isPaused,
+                last_saved_time: lastSavedTime,
+                activity_time_saved: activityTimeSaved,
+                last_save_timestamp: lastSaveTimestamp,
+                activity_times: currentActivityTimes,
+                activity_start_times: activityStartTimes
+              })
+            });
+            
+            if (!response.ok) 
+            {
+              const errorText = await response.text();
+              console.error('✗ Error HTTP al guardar sesión activa:', response.status, errorText);
+              
+              // Si es error 401, el token expiró - limpiar token y sugerir login
+              if (response.status === 401) 
+              {
+                console.warn('Token de sesión expirado. Limpiando token...');
+                localStorage.removeItem('sessionToken');
+              }
+              return;
+            }
+            
+            const data = await response.json();
+            if (data.success) 
+            {
+              console.log('Sesión activa guardada en BD correctamente. ID:', data.session?.id);
+            } else 
+            {
+              console.error('Error al guardar sesión activa:', data);
+            }
+          } else 
+          {
+            if (!token) console.warn('⚠ No hay token de sesión para guardar sesión activa');
+            if (!currentOrder) console.warn('⚠ No hay orden activa para guardar');
+          }
+        } catch (error) 
+        {
+          console.error('Error al guardar sesión activa en BD:', error);
+        }
+      }
+    }
+
+    async function loadActiveSession() 
+    {
+      let session = null;
+      let fromDatabase = false;
+
+      const saved = localStorage.getItem('activeSession');
+      if (saved) 
+      {
+        try 
+        {
+          session = JSON.parse(saved);
+        } catch (e) 
+        {
+          console.error('Error al parsear sesión de localStorage:', e);
+        }
+      }
+      
+      // Si no hay en localStorage, intentar cargar desde la BD (protección contra cortes de luz)
+      if (!session) 
+      {
+        try 
+        {
+          const token = localStorage.getItem('sessionToken');
+          if (token) 
+          {
+            const response = await fetch('/api/sesiones-activas/me', {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            if (response.ok) 
+            {
+              const data = await response.json();
+              if (data.success && data.hasActiveSession && data.session) 
+              {
+                const dbSession = data.session;
+                
+                // Calcular el tiempo que pasó mientras estaba desconectado
+                const now = Date.now();
+                const lastUpdate = new Date(dbSession.ultima_actualizacion).getTime();
+                const timeDisconnected = now - lastUpdate;
+
+                let activityTimes = {};
+                let activityStartTimes = {};
+                
+                try 
+                {
+                  if (typeof dbSession.activity_times === 'string') 
+                  {
+                    activityTimes = JSON.parse(dbSession.activity_times);
+                  } else 
+                  {
+                    activityTimes = dbSession.activity_times || {};
+                  }
+                  
+                  if (typeof dbSession.activity_start_times === 'string') {
+                    activityStartTimes = JSON.parse(dbSession.activity_start_times);
+                  } else 
+                  {
+                    activityStartTimes = dbSession.activity_start_times || {};
+                  }
+                } catch (e) 
+                {
+                  console.error('Error al parsear activity_times:', e);
+                  activityTimes = {};
+                  activityStartTimes = {};
+                }
+                
+                session = {
+                  orderNumber: dbSession.orden_nombre,
+                  orderId: dbSession.orden_id,
+                  startTime: parseInt(dbSession.start_time),
+                  pausedTime: parseInt(dbSession.paused_time || 0),
+                  isPaused: dbSession.is_paused || false,
+                  lastSavedTime: parseInt(dbSession.last_saved_time || 0),
+                  activityTimeSaved: parseInt(dbSession.activity_time_saved || 0),
+                  lastSaveTimestamp: parseInt(dbSession.last_save_timestamp || 0),
+                  activityTimes: activityTimes,
+                  activityStartTimes: activityStartTimes
+                };
+                
+                fromDatabase = true;
+                console.log('✓ Sesión activa restaurada desde la base de datos', {
+                  orden: session.orderNumber,
+                  startTime: new Date(session.startTime).toLocaleString(),
+                  tiempoDesconectado: Math.floor(timeDisconnected / 1000) + 's'
+                });
+              }
+            }
+          }
+        } catch (error) 
+        {
+          console.error('Error al cargar sesión desde BD:', error);
+        }
+      }
+      
+      if (session) {
+        currentOrder = session.orderNumber;
+        currentOrderId = session.orderId || null;
+          currentPartNumber = session.partNumber || null; // Restaurar número de parte
+        startTime = session.startTime;
+        pausedTime = session.pausedTime || 0;
+        isPaused = session.isPaused || false;
+        lastSavedTime = session.lastSavedTime || 0;
+        activityTimeSaved = session.activityTimeSaved || 0;
+        lastSaveTimestamp = session.lastSaveTimestamp || Date.now();
+
+        if (currentOrder && !currentOrderId) 
+        {
+          try 
+          {
+            const response = await fetch(`/api/orders/validate/${encodeURIComponent(currentOrder)}`);
+            const data = await response.json();
+            if (data.success && data.exists) 
+            {
+              currentOrderId = data.order.id;
+            }
+          } catch (error) 
+          {
+            console.error('Error al obtener ID de orden:', error);
+          }
+        }
+        if (session.activityTimes) 
+        {
+          activityTimes = { ...session.activityTimes };
+        }
+        if (session.activityStartTimes) 
+        {
+          activityStartTimes = {pausa: null, comida: null, meeting: null, training: null, '5s': null};
+        }
+        const orderNumberInput = document.getElementById('orderNumber');
+        const timePanel = document.getElementById('timePanel');
+        const orderFormCard = document.querySelector('.order-form-card');
+        const startOrderBtn = document.getElementById('startOrderBtn');
+        
+        if (orderNumberInput) 
+        {
+          orderNumberInput.value = currentOrder;
+          orderNumberInput.disabled = true;
+        }
+        if (timePanel) 
+        {
+          timePanel.style.display = 'block';
+        } 
+        if (orderFormCard) 
+        {
+          orderFormCard.style.opacity = '0.5';
+        } 
+        if (startOrderBtn) 
+        {
+          startOrderBtn.disabled = true;
+        }
+
+        await refreshPartsTable();
+
+        // Si se restauró desde la BD, actualizar orden_en_logeo del empleado
+        if (fromDatabase) 
+        {
+          const username = localStorage.getItem('username');
+          if (username) 
+          {
+            try 
+            {
+              await fetch('/api/employees/update-order-login', {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  username: username,
+                  ordenNombre: currentOrder
+                })
+              });
+            } catch (error) 
+            {
+              console.error('Error al actualizar orden_en_logeo:', error);
+            }
+          }
+        }
+
+        if (currentOrderId) 
+        {
+          try 
+          {
+            const orderResponse = await fetch(`/api/orders/${currentOrderId}`);
+            const orderData = await orderResponse.json();
+            if (orderData.success && orderData.order) 
+            {
+              currentProjectName = orderData.order.project_name || null;
+            }
+          } catch (error) 
+          {
+            console.error('Error al obtener información de la orden:', error);
+          }
+        }
+
+        await loadOrderStatus();
+        updateOrderInfo();
+        updateActivityTimes();
+        startTimer();
+        const elapsed = Date.now() - startTime - pausedTime;
+        updateTimeDisplay(elapsed);
+      
+      
+        if (fromDatabase) 
+        {
+          await saveActiveSession();
+        }
+      } else 
+      {
+        console.log('ℹ No hay sesión activa para restaurar');
+      }
+    }
+
+    function saveHistory() 
+    {
+      localStorage.setItem('designSessionHistory', JSON.stringify(sessionHistory));
+    }
+
+    async function loadHistory() 
+    {
+      try 
+      {
+        const username = localStorage.getItem('username');
+        if (!username) 
+        {
+          renderHistory([]);
+          return;
+        }
+
+        const searchTerm = document.getElementById('historySearchInput').value.trim();
+        const dateFilter = document.getElementById('historyDateFilter').value;
+
+        const params = new URLSearchParams({
+          limit: 50,
+          offset: 0
+        });
+
+        params.append('usuario_nombre', username);
+
+        if (searchTerm) 
+        {
+          params.append('orden_nombre', searchTerm);
+        }
+
+        if (dateFilter) 
+        {
+          params.append('fecha', dateFilter);
+        }
+
+        const response = await fetch(`/api/sesiones?${params}`);
+        const data = await response.json();
+
+        if (data.success && data.sesiones) 
+        {
+          // Convertir formato de API a formato local para compatibilidad
+          const formattedSessions = data.sesiones.map(sesion => {
+            // Priorizar duracion_formateada si existe, sino usar duracion_total
+            // El endpoint devuelve duracion_formateada con TO_CHAR
+            const duracion = sesion.duracion_formateada || sesion.duracion_total || '00:00:00';
+            
+            return {
+              orderNumber: sesion.orden_nombre || 'No order',
+              usuario_nombre: sesion.usuario_nombre || localStorage.getItem('username') || 'User',
+              duration: parseIntervalToMs(duracion),
+              startTime: new Date(sesion.fecha_inicio).getTime(),
+              endTime: sesion.fecha_fin ? new Date(sesion.fecha_fin).getTime() : Date.now(),
+              date: sesion.fecha_inicio,
+              activities: {
+                pausa: parseIntervalToMs(sesion.tiempo_pausa_formateado || sesion.tiempo_pausa || '00:00:00'),
+                comida: parseIntervalToMs(sesion.tiempo_comida_formateado || sesion.tiempo_comida || '00:00:00'),
+                meeting: parseIntervalToMs(sesion.tiempo_meeting_formateado || sesion.tiempo_meeting || '00:00:00'),
+                training: parseIntervalToMs(sesion.tiempo_training_formateado || sesion.tiempo_training || '00:00:00'),
+                '5s': parseIntervalToMs(sesion.tiempo_5s_formateado || sesion.tiempo_5s || '00:00:00')
+              }
+            };
+          });
+          
+          sessionHistory = formattedSessions;
+          renderHistory();
+        } else 
+        {
+          renderHistory([]);
+        }
+      } catch (error) 
+      {
+        console.error('Error al cargar historial desde API:', error);
+        // Fallback a localStorage si hay error
+        const saved = localStorage.getItem('designSessionHistory');
+        if (saved) 
+        {
+          sessionHistory = JSON.parse(saved);
+          renderHistory();
+        } else 
+        {
+          renderHistory([]);
+        }
+      }
+    }
+
+    // Función auxiliar para convertir formato INTERVAL (HH:MM:SS) a milisegundos
+    function parseIntervalToMs(interval) {
+      if (!interval) return 0;
+      if (typeof interval === 'number') return interval;
+      if (typeof interval === 'string') 
+      {
+        const cleaned = interval.trim();
+        const parts = cleaned.split(':');
+        if (parts.length === 3) 
+        {
+          const hours = parseInt(parts[0], 10) || 0;
+          const minutes = parseInt(parts[1], 10) || 0;
+          const seconds = parseInt(parts[2], 10) || 0;
+          const totalMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+          return totalMs;
+        }
+
+        if (cleaned.includes('hour') || cleaned.includes('minute') || cleaned.includes('second')) 
+        {
+          const hoursMatch = cleaned.match(/(\d+)\s*hour/i);
+          const minutesMatch = cleaned.match(/(\d+)\s*minute/i);
+          const secondsMatch = cleaned.match(/(\d+)\s*second/i);
+          
+          const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+          const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+          const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+          const totalMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+          return totalMs;
+        }
+      }
+
+      if (typeof interval === 'object' && interval !== null) 
+      {
+        if (interval.totalSeconds !== undefined) 
+        {
+          return interval.totalSeconds * 1000;
+        }
+        if (interval.hours !== undefined || interval.minutes !== undefined || interval.seconds !== undefined) 
+        {
+          const hours = interval.hours || 0;
+          const minutes = interval.minutes || 0;
+          const seconds = interval.seconds || 0;
+          return (hours * 3600 + minutes * 60 + seconds) * 1000;
+        }
+      }
+      
+      console.warn('No se pudo parsear el intervalo:', interval);
+      return 0;
+    }
+
+    function filterHistory() 
+    {
+      loadHistory();
+    }
+
+    function clearHistoryFilters() 
+    {
+      document.getElementById('historySearchInput').value = '';
+      document.getElementById('historyDateFilter').value = '';
+      loadHistory();
+    }
+
+    function renderHistory(sessions = null) 
+    {
+      const historyList = document.getElementById('historyList');
+      const sessionsToRender = sessions || sessionHistory;
+      
+      if (!sessionsToRender || sessionsToRender.length === 0) 
+      {
+        historyList.innerHTML = `
+          <div class="empty-history">
+            <i class="fas fa-inbox"></i>
+            <p>No sessions recorded</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Los filtros ya se aplicaron en loadHistory(), solo renderizar
+      const filteredHistory = sessionsToRender;
+      historyList.innerHTML = filteredHistory
+        .slice()
+        .reverse()
+        .map(session => {
+          const durationMs = typeof session.duration === 'number' ? session.duration : parseIntervalToMs(session.duration);
+          const duration = formatDuration(durationMs);
+          const date = new Date(session.date);
+          const day = date.getDate();
+          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+          const month = monthNames[date.getMonth()];
+          const year = date.getFullYear();
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          const dateStr = `${day} ${month} ${year}, ${hours}:${minutes}`;
+
+          const activities = session.activities || {};
+          const formatActivityTime = (ms) => {
+            if (!ms || ms === 0) return '00:00';
+            const minutes = Math.floor(ms / 60000);
+            const seconds = Math.floor((ms % 60000) / 1000);
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+          };
+
+          const pausaTime = formatActivityTime(activities.pausa || 0);
+          const comidaTime = formatActivityTime(activities.comida || 0);
+          const meetingTime = formatActivityTime(activities.meeting || 0);
+          const trainingTime = formatActivityTime(activities.training || 0);
+          const tiempo5s = formatActivityTime(activities['5s'] || 0);
+
+          // Obtener nombre de la orden de la sesión
+          const sessionOrderName = session.orderNumber || 'No order';
+
+          return `
+            <div class="history-item">
+              <div class="history-user">${sessionOrderName}</div>
+              <div class="history-time-main">
+                <div class="history-total-time">
+                  <strong>Total:</strong> ${duration}
+                </div>
+                <div class="history-activities">
+                  <div class="activity-time-item">
+                    <i class="fas fa-pause"></i>
+                    <span>Pause: ${pausaTime}</span>
+                  </div>
+                  <div class="activity-time-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>Lunch: ${comidaTime}</span>
+                  </div>
+                  <div class="activity-time-item">
+                    <i class="fas fa-users"></i>
+                    <span>Meeting: ${meetingTime}</span>
+                  </div>
+                  <div class="activity-time-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Training: ${trainingTime}</span>
+                  </div>
+                  <div class="activity-time-item">
+                    <i class="fas fa-broom"></i>
+                    <span>5S: ${tiempo5s}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="history-date">${dateStr}</div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function formatDuration(milliseconds) 
+    {
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      if (hours > 0) 
+      {
+        return `${hours}h ${minutes}m ${seconds}s`;
+      } else if (minutes > 0) 
+      {
+        return `${minutes}m ${seconds}s`;
+      } else 
+      {
+        return `${seconds}s`;
+      }
+    }
+
+    function timeToMilliseconds(timeString) 
+    {
+      if (!timeString || timeString === '00:00:00') return 0;
+      
+      const parts = timeString.split(':');
+      if (parts.length !== 3) return 0;
+      
+      const hours = parseInt(parts[0], 10) || 0;
+      const minutes = parseInt(parts[1], 10) || 0;
+      const seconds = parseInt(parts[2], 10) || 0;
+      
+      return (hours * 3600 + minutes * 60 + seconds) * 1000;
+    }
+    
+    async function loadOrderStatus() {
+      if (!currentOrderId) return;
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}`);
+        const data = await response.json();
+
+        if (response.ok && data.success && data.order) 
+        {
+          const estadoActual = data.order.estado || 'trabajando en ella';
+          
+          // Mapeo de columnas de BD a estados del frontend
+          const statusTimeMap = {
+            'revision': data.order.tiempo_revision || '00:00:00',
+            'trabajando en ella': data.order.tiempo_trabajando_en_ella || '00:00:00',
+            'en espera de aprobacion': data.order.tiempo_en_espera_de_aprobacion || '00:00:00',
+            'aprobada': data.order.tiempo_aprobada || '00:00:00',
+            'cambios': data.order.tiempo_cambios || '00:00:00',
+            'issues': data.order.tiempo_issues || '00:00:00'
+          };
+          
+          Object.keys(statusTimeMap).forEach(status => {
+            statusTimes[status] = timeToMilliseconds(statusTimeMap[status]);
+          });
+          document.querySelectorAll('.btn-status').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          const activeButton = document.querySelector(`.btn-status[data-status="${estadoActual}"]`);
+          if (activeButton) 
+          {
+            activeButton.classList.add('active');
+            activeButton.setAttribute('data-current-state', estadoActual);
+          }
+
+          currentStatus = estadoActual;
+          statusStartTime = Date.now();
+          if (statusTimer) 
+          {
+            clearInterval(statusTimer);
+          }
+          statusTimer = setInterval(() => {
+            updateStatusTimes();
+          }, 1000);
+          updateStatusTimes();
+        }
+      } catch (error) 
+      {
+        console.error('Error al cargar estado de la orden:', error);
+      }
+    }
+
+    function updateStatusTime(status, totalTime = null) 
+    {
+      const time = totalTime !== null ? totalTime : statusTimes[status];
+      const hours = Math.floor(time / 3600000);
+      const minutes = Math.floor((time % 3600000) / 60000);
+      const seconds = Math.floor((time % 60000) / 1000);
+      const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;   
+      const statusIdMap = {'revision': 'Revision', 'trabajando en ella': 'Working', 'en espera de aprobacion': 'Pending', 'aprobada': 'Approved', 'cambios': 'Changes', 'issues': 'Issues'};
+      
+      const statusId = statusIdMap[status];
+      if (statusId) 
+      {
+        const timeElement = document.getElementById(`timeStatus${statusId}`);
+        if (timeElement) 
+        {
+          timeElement.textContent = formatted;
+        }
+      }
+    }
+    
+    function updateStatusTimes() 
+    {
+      Object.keys(statusTimes).forEach(status => {
+        if (currentStatus === status && statusStartTime) 
+        {
+          const currentElapsed = statusTimes[status] + (Date.now() - statusStartTime);
+          updateStatusTime(status, currentElapsed);
+        } else 
+        {
+          updateStatusTime(status);
+        }
+      });
+    }
+
+    async function changeOrderStatus(nuevoEstado, clickedButton) 
+    {
+      if (!currentOrderId) return;
+      const activeButton = document.querySelector('.btn-status.active');
+      const estadoAnterior = activeButton ? activeButton.getAttribute('data-status') : currentStatus;
+      if (nuevoEstado === estadoAnterior) return;
+      if (currentStatus && statusStartTime) 
+      {
+        const elapsed = Date.now() - statusStartTime;
+        statusTimes[currentStatus] += elapsed;
+        updateStatusTime(currentStatus);
+
+        if (elapsed > 0) 
+        {
+          await saveStatusTimeToDatabase(elapsed, currentStatus);
+        }
+      }
+
+      if (statusTimer) 
+      {
+        clearInterval(statusTimer);
+        statusTimer = null;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}/estado`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            nuevoEstado: nuevoEstado
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) 
+        {
+          currentStatus = nuevoEstado;
+          statusStartTime = Date.now();
+          
+          document.querySelectorAll('.btn-status').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          if (clickedButton) 
+          {
+            clickedButton.classList.add('active');
+            clickedButton.setAttribute('data-current-state', nuevoEstado);
+          }
+          
+          statusTimer = setInterval(() => {
+            updateStatusTimes();
+          }, 1000);
+          
+        } else 
+        {
+          showError(data.error || data.message || 'Error changing order status');
+        }
+      } catch (error) 
+      {
+        console.error('Error al cambiar estado de orden:', error);
+        showError('Error changing order status. Please try again.');
+      }
+    }
+
+    async function saveStatusTimeToDatabase(tiempoEnMilisegundos, estado) {
+      if (!currentOrderId || tiempoEnMilisegundos <= 0) return;
+
+      try 
+      {
+        const response = await fetch(`/api/orders/${currentOrderId}/time`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tiempoAgregado: tiempoEnMilisegundos
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) 
+        {
+          console.log(`✓ Tiempo de estado guardado: ${estado}`);
+        } else 
+        {
+          console.error('✗ Error al guardar tiempo de estado:', data);
+        }
+      } catch (error) 
+      {
+        console.error('Error al guardar tiempo de estado:', error);
+      }
+    }
+
+    // Funciones para el modal de sesiones
+    async function openSessionsModal() 
+    {
+      const modal = document.getElementById('sessionsModal');
+      if (modal) 
+      {
+        modal.style.display = 'flex';
+        await loadSessionsTable();
+      }
+    }
+
+    function closeSessionsModalFunc() 
+    {
+      const modal = document.getElementById('sessionsModal');
+      if (modal) 
+      {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Estado de paginación para sesiones
+    const sessionsPaginationState = {
+      currentPage: 1,
+      pageSize: 20,
+      total: 0
+    };
+
+    async function loadSessionsTable() 
+    {
+      const tableBody = document.getElementById('sessionsTableBody');
+      if (!tableBody) return;
+
+      tableBody.innerHTML = '<tr><td colspan="10" class="sessions-loading">Loading sessions...</td></tr>';
+
+      try 
+      {
+        const username = localStorage.getItem('username');
+        const offset = (sessionsPaginationState.currentPage - 1) * sessionsPaginationState.pageSize;
+        const params = new URLSearchParams({
+          limit: sessionsPaginationState.pageSize,
+          offset: offset
+        });
+
+        if (username) 
+        {
+          params.append('usuario_nombre', username);
+        }
+
+        const response = await fetch(`/api/sesiones?${params}`);
+        const data = await response.json();
+
+        if (data.success && data.sesiones) 
+        {
+          sessionsPaginationState.total = data.total || data.sesiones.length;
+          renderSessionsTable(data.sesiones);
+          updateSessionsPagination();
+        } else 
+        {
+          tableBody.innerHTML = '<tr><td colspan="10" class="sessions-table-empty">No sessions found</td></tr>';
+          sessionsPaginationState.total = 0;
+          updateSessionsPagination();
+        }
+      } catch (error) 
+      {
+        console.error('Error al cargar sesiones:', error);
+        tableBody.innerHTML = '<tr><td colspan="10" class="sessions-table-empty">Error loading sessions</td></tr>';
+        sessionsPaginationState.total = 0;
+        updateSessionsPagination();
+      }
+    }
+
+    function renderSessionsTable(sesiones) 
+    {
+      const tableBody = document.getElementById('sessionsTableBody');
+      if (!tableBody) return;
+
+      if (sesiones.length === 0) 
+      {
+
+        tableBody.innerHTML = '<tr><td colspan="10" class="sessions-table-empty">No sessions found</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = sesiones.map(sesion => {
+        const fechaInicio = new Date(sesion.fecha_inicio);
+        const fechaFormateada = fechaInicio.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        const formatTime = (timeString) => {
+          if (!timeString || timeString === '00:00:00') return '00:00';
+          const parts = timeString.split(':');
+          if (parts.length === 3) 
+          {
+            return `${parts[1]}:${parts[2]}`;
+          }
+          return timeString;
+        };
+
+        return `
+          <tr>
+            <td>${fechaFormateada}</td>
+            <td>${sesion.orden_nombre || 'N/A'}</td>
+            <td>${sesion.part_number || 'N/A'}</td>
+            <td><strong>${formatTime(sesion.duracion_formateada || sesion.duracion_total || '00:00:00')}</strong></td>
+            <td>${formatTime(sesion.tiempo_trabajando_formateado || sesion.tiempo_trabajando || '00:00:00')}</td>
+            <td>${formatTime(sesion.tiempo_pausa_formateado || sesion.tiempo_pausa || '00:00:00')}</td>
+            <td>${formatTime(sesion.tiempo_comida_formateado || sesion.tiempo_comida || '00:00:00')}</td>
+            <td>${formatTime(sesion.tiempo_meeting_formateado || sesion.tiempo_meeting || '00:00:00')}</td>
+            <td>${formatTime(sesion.tiempo_training_formateado || sesion.tiempo_training || '00:00:00')}</td>
+            <td>${formatTime(sesion.tiempo_5s_formateado || sesion.tiempo_5s || '00:00:00')}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateSessionsPagination() {
+      const paginationInfo = document.getElementById('sessionsPaginationInfo');
+      const rowsInfo = document.getElementById('sessionsRowsInfo');
+      const prevBtn = document.getElementById('sessionsPrevPage');
+      const nextBtn = document.getElementById('sessionsNextPage');
+
+      const totalPages = Math.max(1, Math.ceil(sessionsPaginationState.total / sessionsPaginationState.pageSize));
+      
+      if (paginationInfo) 
+      {
+        paginationInfo.textContent = `Page ${sessionsPaginationState.currentPage} of ${totalPages}`;
+      }
+      if (rowsInfo) 
+      {
+        rowsInfo.textContent = `${sessionsPaginationState.total} record${sessionsPaginationState.total === 1 ? '' : 's'}`;
+      }
+      if (prevBtn) 
+      {
+        prevBtn.disabled = sessionsPaginationState.currentPage === 1;
+      }
+      if (nextBtn) 
+      {
+        nextBtn.disabled = sessionsPaginationState.currentPage >= totalPages;
+      }
+    }
+    function goToSessionsPrevPage() {
+      if (sessionsPaginationState.currentPage > 1) 
+      {
+        sessionsPaginationState.currentPage--;
+        loadSessionsTable();
+      }
+    }
+
+    function goToSessionsNextPage() 
+    {
+      const totalPages = Math.max(1, Math.ceil(sessionsPaginationState.total / sessionsPaginationState.pageSize));
+      if (sessionsPaginationState.currentPage < totalPages) 
+      {
+        sessionsPaginationState.currentPage++;
+        loadSessionsTable();
+      }
+    }
+  </script>
+  <script src="js/mobile-menu.js"></script>
+  <script src="js/topbar.js"></script>
+</body>
+</html>

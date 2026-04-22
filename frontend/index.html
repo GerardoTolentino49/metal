@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solicitud de Soporte IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/heic2any"></script>
+  <script src="js/tarjetas-guard.js" defer></script>
+  <script src="js/global-color.js" defer></script>
+  <link rel="stylesheet" href="styles/index_style.css">
+  <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+  <style>
+    :root { --bg-color: #cadaf7 !important; }
+    body { background: var(--bg-color) !important; }
+  </style>
+</head>
+<body>
+
+  <!--back button
+  <div class="back-button-container">
+    <a href="inicio.html" class="back-button">
+      <svg class="back-button-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>Menú principal</a>
+  </div>-->
+
+  <!--tab switch-->
+      <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+        <div class="tab-switch">
+
+          <button class="tab-switch-button" data-tab="inicio">
+            <i class="fas fa-house"></i>
+          </button>      
+
+          <button class="tab-switch-button active" data-tab="ticketit">
+            <i class="fas fa-plus-circle"></i> Nueva solicitud
+          </button>      
+
+        </div>
+      </div>
+      <script>
+          // Navegación del tab-switch de RH
+      document.addEventListener('DOMContentLoaded', function() {
+        const tabRoutes = {
+          inicio: 'nuevo-inicio.html',
+          ticketit: 'index.html'
+        };
+
+        const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+        document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+          button.addEventListener('click', function() {
+            const targetPage = tabRoutes[this.dataset.tab];
+            if (!targetPage || targetPage === currentPage) {
+              return;
+            }
+            window.location.href = targetPage;
+          });
+        });
+      });
+        </script>
+
+
+  <div class="container">
+    <h1>Solicitud de Soporte IT</h1>
+    <form id="ticketForm" onsubmit="submitTicket(event)">
+
+      <div class="form-group">
+        <label for="employeeNumber" class="required-field">Número de Empleado</label>
+        <input type="number" id="employeeNumber" name="employeeNumber" placeholder="Ingresa tu número de empleado" required>
+      </div>
+      
+      <div class="form-group" style="display: none;">
+        <label for="name" class="required-field">Nombre Completo (Nombre, Apellido Paterno y Apellido Materno)</label>
+        <input type="text" id="name" name="name" placeholder="Juan Perez Garcia" required pattern="^[a-zA-ZÀ-ÿ\s]{3,}(?:\s[a-zA-ZÀ-ÿ\s]{3,}){2,9}$" title="Por favor ingresa tu nombre completo (mínimo 3 palabras, máximo 10 palabras)">
+      </div>
+
+      <div class="form-row" style="display: none;">
+        <div class="form-group">
+          <label for="department" class="required-field">Departamento al que perteneces</label>
+          <select id="department" name="department" required>
+            <option value="">Selecciona un departamento</option>
+            <option value="Recursos Humanos">Recursos Humanos</option>
+            <option value="Gerencia">Gerencia</option>
+            <option value="Planeación">Planeación</option>
+            <option value="Contabilidad">Contabilidad</option>
+            <option value="Producción P1">Producción P1</option>
+            <option value="Producción BA">Producción BA</option>
+            <option value="QC">QC</option>
+            <option value="Diseño">Diseño</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="required-field">Correo Electrónico</label>
+          <input type="email" id="email" name="email" placeholder="ejemplo@pdmmetal.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="issue" class="required-field">Descripción detallada del problema</label>
+        <textarea id="issue" name="issue" required maxlength="255"></textarea>
+        <div class="character-counter">
+          <span id="charCount">0</span>/255 caracteres
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="anydesk">AnyDesk (opcional):</label>
+        <div class="anydesk-input">
+          <input type="text" id="anydesk" name="anydesk" placeholder="123-456-7890">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Archivos multimedia (opcional):</label>
+        <div class="file-input-container">
+          <label class="file-input-label">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            Seleccionar archivos
+            <input type="file" id="media" class="file-input" accept="image/*" multiple />
+          </label>
+        </div>
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar" id="progressBar"></div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+        <div class="media-preview" id="mediaPreview">
+          <div class="no-files">No hay archivos seleccionados</div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Enviar Ticket</button>
+    </form>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="success-message" id="successMessage">
+    <h2>¡Solicitud Enviada!</h2>
+    <p>Tu solicitud ha sido registrada correctamente.</p>
+    <p>Nos pondremos en contacto contigo pronto.</p>
+  </div>
+
+  <div class="overlay-blur" id="previewOverlay" style="display:none;"></div>
+  <div class="ticket-preview-modal" id="ticketPreviewModal" style="display:none;">
+    <div class="ticket-preview-content">
+      <button class="close-preview-modal" onclick="closePreviewModal()">×</button>
+      <h2>Vista Previa del Ticket</h2>
+      <div class="preview-section">
+        <div class="preview-item">
+          <label>Número de Empleado:</label>
+          <span id="previewEmployeeNumber"></span>
+        </div>
+        <div class="preview-item">
+          <label>Nombre Completo:</label>
+          <span id="previewName"></span>
+        </div>
+        <div class="preview-item">
+          <label>Departamento:</label>
+          <span id="previewDepartment"></span>
+        </div>
+        <div class="preview-item" style="display: none;">
+          <label>Correo Electrónico:</label>
+          <span id="previewEmail"></span>
+        </div>
+        <div class="preview-item">
+          <label>Descripción del Problema:</label>
+          <div class="preview-issue" id="previewIssue"></div>
+        </div>
+        <div class="preview-item" id="previewAnyDeskContainer" style="display:none;">
+          <label>AnyDesk:</label>
+          <span id="previewAnyDesk"></span>
+        </div>
+        <div class="preview-item" id="previewMediaContainer" style="display:none;">
+          <label>Archivos Adjuntos:</label>
+          <div class="preview-media" id="previewMedia"></div>
+        </div>
+      </div>
+      <div class="preview-actions">
+        <button class="preview-btn preview-btn-cancel" onclick="closePreviewModal()">Cancelar</button>
+        <button class="preview-btn preview-btn-confirm" onclick="confirmSubmitTicket()">Confirmar y Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay-blur" id="overlayBlur"></div>
+  <div class="chat-modal" id="chatModal">
+    <div class="chat-modal-content">
+      <button class="close-chat-modal" onclick="closeChatModal()">×</button>
+      <h2>Chat de Soporte</h2>
+      <div id="chatMessages"></div>
+      <div class="chat-input-container">
+        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+        <button onclick="sendChatMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticket-status-modal" id="ticketStatusModal" style="display:none;">
+    <div class="ticket-status-columns">
+      <div class="ticket-status-col" id="statusRecibido">
+        <div class="status-circle"></div>
+        <div class="status-label">Recibido</div>
+      </div>
+      <div class="ticket-status-col" id="statusEvaluacion">
+        <div class="status-circle"></div>
+        <div class="status-label">En proceso</div>
+      </div>
+      <div class="ticket-status-col" id="statusTerminado">
+        <div class="status-circle"></div>
+        <div class="status-label">Terminado</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ticketIdModal" class="ticket-id-modal">
+    <div class="ticket-id-content">
+      <button onclick="closeTicketIdModal()" class="close-ticket-id-btn">×</button>
+      <h3>Ingresa tu ID de ticket</h3>
+      <div class="input-container">
+        <input type="text" id="inputTicketId" placeholder="ID de ticket">
+        <button onclick="clearSavedTicketId()" class="clear-btn" title="Limpiar">×</button>
+      </div>
+      <button onclick="verificarYMostrarChatTicket()" class="bottom-btn verify-btn">Ver chat</button>
+      <div id="ticketIdError" class="error-message"></div>
+    </div>
+  </div>
+
+  <div id="fullscreenPdfModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:5000;background:rgba(0,0,0,0.3);backdrop-filter:blur(20px);align-items:center;justify-content:center;">
+    <button id="closeFullscreenPdf" style="position:absolute;top:30px;right:40px;font-size:38px;color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5010;backdrop-filter:blur(10px);transition:all 0.3s ease;">×</button>
+    <iframe id="fullscreenPdfFrame" style="width:30vw;height:80vh;border:none;border-radius:25px;box-shadow:0 20px 60px rgba(0,0,0,0.3);background:rgba(255,255,255,0.95);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.3);object-fit:contain;" onerror="document.getElementById('pdfErrorMsg').style.display='block';"></iframe>
+    <div id="pdfErrorMsg" style="display:none; color:white; text-align:center;">
+      No se puede mostrar el PDF en este dispositivo.<br>
+      <a href="URL_DEL_PDF" style="color:#4CAF50;" target="_blank">Descargar PDF</a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+    const form = document.getElementById("ticketForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const mediaInput = document.getElementById("media");
+    const mediaPreview = document.getElementById("mediaPreview");
+    let selectedMedia = [];
+
+    window.currentTicketId = null;
+    let chatPollingInterval = null;
+    let lastMessageCount = 0; // Para rastrear mensajes nuevos
+
+    function generateTicketId() 
+    {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function saveTicketToLocalStorage(ticketData) 
+    {
+      const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+      tickets.push(ticketData);
+      localStorage.setItem('tickets', JSON.stringify(tickets));
+    }
+
+    async function buscarEmpleadoPorNumero(numeroEmpleado) 
+    {
+      if (!numeroEmpleado || numeroEmpleado.trim() === '') 
+      {
+        return;
+      }
+      const numero = numeroEmpleado.trim();
+      if (!/^\d+$/.test(numero)) 
+      {
+        showStatus('Por favor ingresa un número de empleado válido', true);
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/empleados/${numero}`);
+        if (!response.ok) 
+        {
+          if (response.status === 404) 
+          {
+            showStatus('Empleado no encontrado. Verifica el número de empleado.', true);
+          } else 
+          {
+            throw new Error('Error al buscar empleado');
+          }
+          return;
+        }
+
+        const empleado = await response.json();
+        if (empleado) 
+        {
+          if (empleado.nombre_completo) 
+          {
+            document.getElementById('name').value = empleado.nombre_completo;
+            document.getElementById('name').dispatchEvent(new Event('input'));
+          }
+
+          if (empleado.departamento) 
+          {
+            const departmentSelect = document.getElementById('department');
+            const options = Array.from(departmentSelect.options);
+            const matchingOption = options.find(opt => 
+              opt.value.toLowerCase() === empleado.departamento.toLowerCase() ||
+              opt.text.toLowerCase().includes(empleado.departamento.toLowerCase())
+            );
+            
+            if (matchingOption) 
+            {
+              departmentSelect.value = matchingOption.value;
+            } else 
+            {
+              const newOption = document.createElement('option');
+              newOption.value = empleado.departamento;
+              newOption.textContent = empleado.departamento;
+              departmentSelect.appendChild(newOption);
+              departmentSelect.value = empleado.departamento;
+            }
+          }
+
+          if (empleado.email) 
+          {
+            document.getElementById('email').value = empleado.email;
+          }
+          const datosCargados = [];
+          if (empleado.nombre_completo) 
+          {
+            datosCargados.push(`Nombre: ${empleado.nombre_completo}`);
+          }
+          if (empleado.departamento) 
+          {
+            datosCargados.push(`Departamento: ${empleado.departamento}`);
+          }
+          // if (empleado.email) 
+          // {
+          //   datosCargados.push(`Correo: ${empleado.email}`);
+          // }
+          
+          if (datosCargados.length > 0) 
+          {
+            showStatus(datosCargados.join('<br>'), false, true);
+          } else 
+          {
+            showStatus('Información cargada correctamente', false);
+          }
+        }
+      } catch (error) 
+      {
+        console.error('Error al buscar empleado:', error);
+        showStatus('Error al buscar el empleado. Por favor intenta de nuevo.', true);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const employeeNumberInput = document.getElementById('employeeNumber');
+      if (employeeNumberInput) 
+      {
+        employeeNumberInput.addEventListener('blur', function(e) 
+        {
+          const numero = e.target.value.trim();
+          if (numero) 
+          {
+            buscarEmpleadoPorNumero(numero);
+          }
+        });
+
+        employeeNumberInput.addEventListener('keypress', function(e) 
+        {
+          if (e.key === 'Enter') 
+          {
+            e.preventDefault();
+            const numero = e.target.value.trim();
+            if (numero) 
+            {
+              buscarEmpleadoPorNumero(numero);
+            }
+          }
+        });
+
+        // Evitar que el usuario ingrese la letra 'e' o 'E' (comportamiento de exponentes en inputs type=number)
+        employeeNumberInput.addEventListener('keydown', function(e) {
+          if (e.key === 'e' || e.key === 'E') {
+            e.preventDefault();
+          }
+        });
+
+        // Evitar pegar contenido que incluya 'e' o 'E' (limpia el contenido pegado)
+        employeeNumberInput.addEventListener('paste', function(e) {
+          try {
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            if (/[eE]/.test(paste)) {
+              e.preventDefault();
+              const cleaned = paste.replace(/[eE]/g, '');
+              const start = this.selectionStart || 0;
+              const end = this.selectionEnd || 0;
+              const value = this.value || '';
+              this.value = value.slice(0, start) + cleaned + value.slice(end);
+              const cursorPos = start + cleaned.length;
+              this.setSelectionRange(cursorPos, cursorPos);
+            }
+          } catch (err) {
+            // si algo falla, no bloquear la operación
+          }
+        });
+
+        // Asegurarse de eliminar cualquier 'e' que pudiera aparecer (por métodos no cubiertos)
+        employeeNumberInput.addEventListener('input', function() {
+          if (this.value && /[eE]/.test(this.value)) {
+            this.value = this.value.replace(/[eE]/g, '');
+          }
+        });
+      }
+    });
+
+    async function convertHeicToJpg(file) 
+    {
+      try 
+      {
+        const blob = await heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.8
+        });
+        return new File([blob], file.name.replace(/\.heic$/i, '.jpg'), {
+          type: 'image/jpeg'
+        });
+      } catch (error) 
+      {
+        console.error('Error al convertir HEIC:', error);
+        throw error;
+      }
+    }
+
+    async function handleFileSelect(event) 
+    {
+      const files = event.target.files;
+      const preview = document.getElementById('mediaPreview');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+    
+      if (files.length > 0) 
+      {
+        preview.innerHTML = '';
+        progressContainer.style.display = 'block';
+        let processedFiles = 0;
+        
+        for (let file of files) 
+        {
+          try 
+          {
+            let processedFile = file;
+            // Convertir de HEIC a JPG
+            if (file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) 
+            {
+              processedFile = await convertHeicToJpg(file);
+            }
+
+            if (!processedFile.type.startsWith('image/') && !processedFile.type.startsWith('video/')) 
+            {
+              alert('Por favor, seleccione solo imágenes o videos.');
+              continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) 
+            {
+              const mediaContainer = document.createElement('div');
+              mediaContainer.className = 'media-container';
+
+              const element = document.createElement(processedFile.type.startsWith('image/') ? 'img' : 'video');
+              element.src = e.target.result;
+              element.alt = processedFile.name;
+              
+              if (processedFile.type.startsWith('video/')) 
+              {
+                element.controls = true;
+                element.preload = 'metadata';
+              }
+
+              const typeLabel = document.createElement('div');
+              typeLabel.className = 'media-type';
+              typeLabel.textContent = processedFile.type.startsWith('image/') ? 'Imagen' : 'Video';
+
+              const nameLabel = document.createElement('div');
+              nameLabel.className = 'media-name';
+              nameLabel.textContent = processedFile.name;
+
+              const removeBtn = document.createElement('button');
+              removeBtn.className = 'remove-media';
+              removeBtn.innerHTML = '×';
+              removeBtn.onclick = function() 
+              {
+                mediaContainer.remove();
+                const index = selectedMedia.findIndex(m => m.name === processedFile.name);
+                if (index !== -1) 
+                {
+                  selectedMedia.splice(index, 1);
+                }
+                if (preview.children.length === 0) 
+                {
+                  preview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+                }
+              };
+
+              mediaContainer.appendChild(element);
+              mediaContainer.appendChild(typeLabel);
+              mediaContainer.appendChild(nameLabel);
+              mediaContainer.appendChild(removeBtn);
+              preview.appendChild(mediaContainer);
+
+              selectedMedia.push({
+                type: processedFile.type.startsWith('image/') ? 'image' : 'video',
+                data: e.target.result,
+                name: processedFile.name
+              });
+
+              processedFiles++;
+              const progress = (processedFiles / files.length) * 100;
+              progressBar.style.width = progress + '%';
+              progressText.textContent = Math.round(progress) + '%';
+
+              if (processedFiles === files.length) 
+              {
+                setTimeout(() => {
+                  progressContainer.style.display = 'none';
+                  progressBar.style.width = '0%';
+                  progressText.textContent = '0%';
+                }, 500);
+              }
+            };
+            reader.readAsDataURL(processedFile);
+          } catch (error) 
+          {
+            alert(`Error al procesar ${file.name}. Por favor, intente con otro archivo.`);
+          }
+        }
+      } else 
+      {
+        preview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+      }
+    }
+
+    document.getElementById('media').addEventListener('change', handleFileSelect);
+
+    function showStatus(message, isError = false, allowHTML = false) {
+      const statusDiv = document.createElement('div');
+      statusDiv.style.position = 'fixed';
+      statusDiv.style.top = '20px';
+      statusDiv.style.right = '20px';
+      statusDiv.style.padding = '15px 25px';
+      statusDiv.style.borderRadius = '8px';
+      statusDiv.style.backgroundColor = isError ? '#ff4444' : '#4CAF50';
+      statusDiv.style.color = 'white';
+      statusDiv.style.zIndex = '10000';
+      statusDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+      statusDiv.style.fontSize = '14px';
+      statusDiv.style.fontWeight = '500';
+      statusDiv.style.maxWidth = '400px';
+      statusDiv.style.wordWrap = 'break-word';
+      statusDiv.style.lineHeight = '1.6';
+      statusDiv.style.animation = 'slideInRight 0.3s ease-out';
+      
+      if (allowHTML) 
+      {
+        statusDiv.innerHTML = message;
+      } else 
+      {
+        statusDiv.textContent = message;
+      }
+
+      if (!document.getElementById('statusAnimationStyle')) 
+      {
+        const style = document.createElement('style');
+        style.id = 'statusAnimationStyle';
+        style.textContent = `
+          @keyframes slideInRight {
+            from {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+            to {
+              transform: translateX(0);
+              opacity: 1;
+            }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      document.body.appendChild(statusDiv);
+      
+      setTimeout(() => 
+      {
+        statusDiv.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => {
+          statusDiv.remove();
+        }, 300);
+      }, 5000);
+    }
+
+    async function requestNotificationPermission() 
+    {
+      try 
+      {
+        if (Notification.permission === 'default') 
+        {
+          const permission = await Notification.requestPermission();
+          return permission === 'granted';
+        }
+        return Notification.permission === 'granted';
+      } catch (error) 
+      {
+        return false;
+      }
+    }
+
+    function playMessageSound(type) 
+    {
+      try 
+      {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        if (type === 'send') 
+        {
+          oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.2);
+        } else if (type === 'receive') 
+        {
+          oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(500, audioContext.currentTime + 0.15);
+          oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
+          gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.4);
+        } else if (type === 'notification') 
+        {
+          const audio = new Audio('/audios/notificacion-lisa.mp3');
+          audio.volume = 0.6;
+          audio.play().catch(e => console.log('Error al reproducir sonido de notificación:', e));
+          return;
+        }
+        
+      } catch (error) 
+      {
+        try 
+        {
+          const audio = new Audio();
+          audio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT';
+          audio.volume = 0.3;
+          audio.play().catch(e => console.log('Error en fallback de sonido:', e));
+        } catch (fallbackError) 
+        {
+          //No poner el log
+        }
+      }
+    }
+
+    function showNewMessageNotification(message) 
+    {
+      if (Notification.permission === 'granted') 
+      {
+        const notification = new Notification('Nuevo mensaje recibido', 
+        {
+          body: message.content,
+          icon: '/img/logo.png', badge: '/img/logo.png', tag: 'new-message', requireInteraction: true
+        });
+        playMessageSound('notification');
+      }
+    }
+
+    function formatName(name) 
+    {
+      return name.split(' ').map(word => 
+      {
+        if (word.length === 0) return '';
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }).join(' ');
+    }
+
+    function validateName() 
+    {
+      const nameInput = document.getElementById('name');
+      const nameLabel = nameInput.previousElementSibling;
+      const name = nameInput.value.trim();
+      const nameWords = name.split(/\s+/);
+
+      if (nameWords.length < 3 || nameWords.length > 10) 
+      {
+        nameLabel.classList.add('error');
+        nameLabel.innerHTML = nameLabel.innerHTML.replace('Nombre completo', '<span class="required-text">Nombre completo</span>');
+        return false;
+      }
+      const formattedName = formatName(name);      // Validar mayúsculas/minúsculas
+      if (name !== formattedName) 
+      {
+        nameInput.value = formattedName;
+      }
+      nameLabel.classList.remove('error');
+      nameLabel.innerHTML = nameLabel.innerHTML.replace('<span class="required-text">Nombre completo</span>', 'Nombre completo');
+      return true;
+    }
+
+    document.getElementById('ticketForm').addEventListener('submit', function(event) 
+    {
+      event.preventDefault(); 
+      if (!validateName()) 
+      {
+        showStatus('Por favor ingresa tu nombre completo (mínimo 3 palabras, máximo 10 palabras)', true);
+        return;
+      } 
+      submitTicket(event);
+    }, { once: true }); // Usar { once: true } para asegurar que el evento solo se ejecute una vez
+
+    document.getElementById('name').addEventListener('input', function(e) 
+    {
+      const input = e.target;
+      const cursorPosition = input.selectionStart;
+      const oldValue = input.value;
+      const formattedValue = formatName(oldValue);
+      if (oldValue !== formattedValue) 
+      {
+        input.value = formattedValue;
+        const newPosition = cursorPosition + (formattedValue.length - oldValue.length);
+        input.setSelectionRange(newPosition, newPosition);
+      }
+
+      const nameWords = input.value.trim().split(/\s+/);
+      const label = input.previousElementSibling;
+      
+      if (nameWords.length < 3) 
+      {
+        input.classList.add('error');
+        label.classList.add('error');
+      } else 
+      {
+        input.classList.remove('error');
+        label.classList.remove('error');
+      }
+    });
+
+    document.querySelectorAll('label[for="name"], label[for="department"], label[for="email"]').forEach(label => 
+    {
+      label.classList.add('required-field');
+    });
+
+    const API_BASE_URL = '/api';
+    let pendingTicketData = null;
+
+    async function showTicketPreview() 
+    {
+      const employeeNumber = document.getElementById('employeeNumber').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const department = document.getElementById('department').value.trim();
+      const issue = document.getElementById('issue').value.trim();
+      const anydesk = document.getElementById('anydesk').value.trim();
+      const mediaFiles = document.getElementById('media').files;
+
+      if (!employeeNumber || employeeNumber === '') 
+      {
+        showStatus('Por favor ingresa tu número de empleado', true);
+        return;
+      }
+
+      if (!name || name === '' || !department || department === '') 
+      {
+        try 
+        {
+          const response = await fetch(`/api/empleados/${employeeNumber}`);
+          if (!response.ok) 
+          {
+            if (response.status === 404) 
+            {
+              showStatus('Empleado no encontrado. Verifica el número de empleado.', true);
+              return;
+            } else 
+            {
+              showStatus('Error al buscar el empleado. Por favor intenta de nuevo.', true);
+              return;
+            }
+          }
+          const empleado = await response.json();
+          if (!empleado) 
+          {
+            showStatus('Empleado no encontrado. Verifica el número de empleado.', true);
+            return;
+          }
+        } catch (error) 
+        {
+          showStatus('Error al buscar el empleado. Por favor intenta de nuevo.', true);
+          return;
+        }
+      }
+
+      if (!name || name === '') 
+      {
+        showStatus('El nombre completo es obligatorio', true);
+        return;
+      }
+
+      const nameWords = name.split(/\s+/).filter(word => word.length > 0);
+      if (nameWords.length < 3 || nameWords.length > 10) 
+      {
+        showStatus('Por favor ingresa tu nombre completo (mínimo 3 palabras, máximo 10 palabras)', true);
+        return;
+      }
+
+      if (!department || department === '') 
+      {
+        showStatus('El departamento es obligatorio', true);
+        return;
+      }
+
+      if (!issue || issue === '') 
+      {
+        showStatus('La descripción del problema es obligatoria', true);
+        return;
+      }
+
+      document.getElementById('previewEmployeeNumber').textContent = employeeNumber || 'No especificado';
+      document.getElementById('previewName').textContent = name || 'No especificado';
+      document.getElementById('previewDepartment').textContent = department || 'No especificado';
+      document.getElementById('previewEmail').textContent = email || 'No especificado';
+      document.getElementById('previewIssue').textContent = issue || 'No especificado';
+
+      if (anydesk && anydesk.trim() !== '') 
+      {
+        document.getElementById('previewAnyDesk').textContent = anydesk;
+        document.getElementById('previewAnyDeskContainer').style.display = 'block';
+      } else 
+      {
+        document.getElementById('previewAnyDeskContainer').style.display = 'none';
+      }
+
+      const previewMedia = document.getElementById('previewMedia');
+      if (mediaFiles.length > 0) 
+      {
+        previewMedia.innerHTML = '';
+        Array.from(mediaFiles).forEach((file, index) => {
+          const fileDiv = document.createElement('div');
+          fileDiv.className = 'preview-media-item';
+          fileDiv.innerHTML = `
+            <svg class="file-icon" viewBox="0 0 24 24">
+              <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+            </svg>
+            <span>${file.name}</span>
+            <span class="file-size">(${(file.size / 1024).toFixed(2)} KB)</span>
+          `;
+          previewMedia.appendChild(fileDiv);
+        });
+        document.getElementById('previewMediaContainer').style.display = 'block';
+      } else 
+      {
+        document.getElementById('previewMediaContainer').style.display = 'none';
+      }
+
+      pendingTicketData = {employeeNumber: employeeNumber || '', name: name || '', email: email || '', department: department || '', issue: issue || '', anydesk: anydesk || ''};
+
+      document.getElementById('previewOverlay').style.display = 'block';
+      document.getElementById('ticketPreviewModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePreviewModal() 
+    {
+      document.getElementById('previewOverlay').style.display = 'none';
+      document.getElementById('ticketPreviewModal').style.display = 'none';
+      document.body.style.overflow = '';
+      pendingTicketData = null;
+    }
+
+    async function confirmSubmitTicket() 
+    {
+      if (!pendingTicketData) 
+      {
+        showStatus('Error: No hay datos del ticket para enviar', true);
+        return;
+      }
+
+      const ticketDataToSend = { ...pendingTicketData };
+
+      if (!ticketDataToSend.name || ticketDataToSend.name.trim() === '') 
+      {
+        showStatus('El nombre es obligatorio', true);
+        return;
+      }
+
+      if (!ticketDataToSend.department || ticketDataToSend.department.trim() === '') 
+      {
+        showStatus('El departamento es obligatorio', true);
+        return;
+      }
+
+      if (!ticketDataToSend.issue || ticketDataToSend.issue.trim() === '') 
+      {
+        showStatus('La descripción del problema es obligatoria', true);
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loading-spinner"></div> Enviando...';
+
+      closePreviewModal();
+
+      try 
+      {
+        const ticketData = {
+          name: ticketDataToSend.name.trim(),
+          department: ticketDataToSend.department.trim(),
+          issue: ticketDataToSend.issue.trim(),
+          email: ticketDataToSend.email && ticketDataToSend.email.trim() !== '' ? ticketDataToSend.email.trim() : null,
+          anydesk: ticketDataToSend.anydesk && ticketDataToSend.anydesk.trim() !== '' ? ticketDataToSend.anydesk.trim() : ''
+        };
+
+        const mediaFiles = document.getElementById('media').files;
+        if (mediaFiles.length > 0) 
+        {
+          const firstImage = mediaFiles[0];
+          const formData = new FormData();
+          formData.append('image', firstImage);
+
+          const uploadResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!uploadResponse.ok) 
+          {
+            throw new Error('Error al subir la imagen');
+          }
+
+          const uploadData = await uploadResponse.json();
+          ticketData.image_name = firstImage.name;
+          ticketData.image_type = firstImage.type;
+          ticketData.image_path = uploadData.path;
+        }
+
+        const response = await fetch('/api/tickets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(ticketData)
+        });
+
+        if (!response.ok) 
+        {
+          let errorMessage = `Error del servidor: ${response.status}`;
+          try 
+          {
+            const errorData = await response.json();
+            errorMessage = errorData?.message || errorData?.error || errorMessage;
+            console.error('Error del servidor:', errorData);
+          } catch (e) 
+          {
+            const errorText = await response.text();
+            console.error('Error del servidor (texto):', errorText);
+            errorMessage = errorText || errorMessage;
+          }
+          throw new Error(errorMessage);
+        }
+        const responseData = await response.json();
+        localStorage.setItem('ticketId', responseData.id);
+        window.currentTicketId = responseData.id;
+
+        // Enviar notificación a usuarios de IT
+        try {
+          const usersResponse = await fetch('/api/usuarios/it', { cache: 'no-store' });
+          if (usersResponse.ok) {
+            const users = await usersResponse.json();
+            const usuariosIT = (Array.isArray(users) ? users : [])
+              .map(u => u.username)
+              .filter(username => username && username.trim().length > 0);
+            
+            if (usuariosIT.length > 0) {
+              const titulo = `Nuevo Ticket de Soporte #${responseData.id}`;
+              const mensaje = `${ticketData.name} del departamento ${ticketData.department} ha creado un ticket: "${ticketData.issue.substring(0, 100)}${ticketData.issue.length > 100 ? '...' : ''}"`;
+              
+              const notifResponse = await fetch('/api/notificaciones-inicio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                  titulo, 
+                  mensaje, 
+                  foto_url: '', 
+                  destinatarios: usuariosIT 
+                })
+              });
+
+              if (notifResponse.ok) {
+                console.log('Notificación enviada exitosamente a IT');
+              } else {
+                const notifError = await notifResponse.json().catch(() => ({}));
+                console.error('No se pudo guardar notificación en notificaciones_usuario:', notifError);
+              }
+            } else {
+              console.warn('No hay usuarios de IT activos para notificar');
+            }
+          } else {
+            const usersError = await usersResponse.json().catch(() => ({}));
+            console.error('No se pudo consultar /api/usuarios/it:', usersError);
+          }
+        } catch (notifError) {
+          console.error('Error al enviar notificación:', notifError);
+        }
+
+        showStatus('¡Ticket creado exitosamente!');
+        
+        setTimeout(() => {
+          showChatModal();
+        }, 100);
+
+        document.getElementById('ticketForm').reset();
+        document.getElementById('mediaPreview').innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+        selectedMedia = [];
+      } catch (error) 
+      {
+        console.error('Error al crear ticket:', error);
+        showStatus(`Error al crear el ticket: ${error.message}`, true);
+      } finally 
+      {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Enviar Ticket';
+        pendingTicketData = null;
+      }
+    }
+
+    async function submitTicket(event) 
+    {
+      event.preventDefault();
+      showTicketPreview();
+    }
+
+    async function updateTicketStatusDisplay(ticketId) 
+    {
+      if (!ticketId) return;
+      try 
+      {
+        const ticketStatus = await getTicketStatus(ticketId);
+        showTicketStatusModal(ticketStatus);
+      } catch (error) 
+      {
+        console.error('Error al actualizar estado del ticket:', error);
+      }
+    }
+
+    async function cargarMensajesChatIndex(ticketId) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}/messages`);
+        if (!response.ok) return;
+        const messages = await response.json();
+        const chatMessages = document.getElementById('chatMessages');
+        const currentMessages = chatMessages.children.length;
+        if (messages.length > currentMessages) 
+        {
+          let newMessagesReceived = false;
+          for (let i = currentMessages; i < messages.length; i++) 
+          {
+            const messageDiv = crearMensajeElemento(messages[i]);
+            chatMessages.appendChild(messageDiv);
+            if (messages[i].is_staff === true || messages[i].is_staff === 'true') 
+            {
+              newMessagesReceived = true;
+            }
+          }
+
+          if (newMessagesReceived) 
+          {
+            playMessageSound('receive');
+          }     
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          if (document.hidden && newMessagesReceived) 
+          {
+            const lastMessage = messages[messages.length - 1];
+            showNewMessageNotification(lastMessage);
+          }
+        }
+
+        await updateTicketStatusDisplay(ticketId);
+        await updateChatInputStatus(ticketId);
+      } catch (e) 
+      {
+        console.log('Error en cargarMensajesChatIndex:', e);
+      }
+    }
+
+    async function showChatModal() 
+    {
+      document.getElementById('overlayBlur').style.display = 'block';
+      document.getElementById('chatModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      requestNotificationPermission();
+      if (window.currentTicketId) 
+      {
+        const ticketStatus = await getTicketStatus(window.currentTicketId);
+        showTicketStatusModal(ticketStatus);
+        await updateChatInputStatus(window.currentTicketId);  
+        startChatPolling(window.currentTicketId);
+      } else 
+      {
+        showTicketStatusModal("recibido");
+      }
+    }
+    function closeChatModal() 
+    {
+      document.getElementById('overlayBlur').style.display = 'none';
+      document.getElementById('chatModal').style.display = 'none';
+      document.body.style.overflow = '';
+      stopChatPolling();
+      hideTicketStatusModal();
+    }
+
+    function startChatPolling(ticketId) 
+    {
+      stopChatPolling(); // Limpiar si ya hay uno
+      cargarMensajesChatIndex(ticketId);
+      chatPollingInterval = setInterval(() => 
+      {
+        cargarMensajesChatIndex(ticketId);
+      }, 3000);
+    }
+    function stopChatPolling() 
+    {
+      if (chatPollingInterval) 
+      {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+      }
+    }
+
+    function crearMensajeElemento(message) 
+    {
+      const isStaff = (message.is_staff === true || message.is_staff === 'true');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message-bubble ${isStaff ? 'received' : 'sent'}`;
+      const time = new Date(message.timestamp).toLocaleTimeString('es-ES', 
+      {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      messageDiv.innerHTML = `
+        <div class="message-content">${message.content}</div>
+        <div class="message-time">${time}</div>
+      `;
+      return messageDiv;
+    }
+
+    // Lógica para el botón y modal de chat por ID
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const openTicketChatBtn = document.getElementById('openTicketChatBtn');
+      if (openTicketChatBtn) 
+      {
+        openTicketChatBtn.addEventListener('click', function() 
+        {
+          document.getElementById('ticketIdModal').style.display = 'flex';
+          const savedId = localStorage.getItem('ticketId');
+          if (savedId) 
+          {
+            document.getElementById('inputTicketId').value = savedId;
+          } else 
+          {
+            document.getElementById('inputTicketId').value = '';
+          }
+          
+          document.getElementById('ticketIdError').style.display = 'none';
+        });
+      }
+    });
+    function closeTicketIdModal() 
+    {
+      document.getElementById('ticketIdModal').style.display = 'none';
+    }
+    async function verificarYMostrarChatTicket() 
+    {
+      const id = document.getElementById('inputTicketId').value.trim();
+      if (!id) 
+      {
+        mostrarErrorTicketId('Por favor ingresa un ID.');
+        return;
+      }
+
+      try 
+      {
+        const res = await fetch(`/api/tickets`);
+        if (!res.ok) throw new Error('No se pudo verificar el ticket');
+        const tickets = await res.json();
+        const ticket = tickets.find(t => String(t.id) === id);
+        if (!ticket) 
+        {
+          mostrarErrorTicketId('No se encontró un ticket con ese ID.');
+          return;
+        }
+        
+        window.currentTicketId = id;
+        localStorage.setItem('ticketId', id);
+        closeTicketIdModal();
+        const ticketStatus = await getTicketStatus(id);
+        showChatModal();
+        showTicketStatusModal(ticketStatus);
+        await updateChatInputStatus(id);
+        
+      } catch (e) 
+      {
+        mostrarErrorTicketId('Error al verificar el ticket.');
+      }
+    }
+    function mostrarErrorTicketId(msg) 
+    {
+      const err = document.getElementById('ticketIdError');
+      err.textContent = msg;
+      err.style.display = 'block';
+    }
+    document.getElementById('chatInput').addEventListener('keypress', function(e) 
+    {
+      if (e.key === 'Enter') 
+      {
+        e.preventDefault();
+        sendChatMessage();
+      }
+    });
+    document.getElementById('chatInput').addEventListener('input', function(e) 
+    {
+      const sendButton = this.nextElementSibling; // Obtener el botón de enviar
+      if (this.value.trim().length > 0) 
+      {
+        sendButton.style.background = 'rgba(0, 123, 255, 0.35)';
+        sendButton.style.transform = 'scale(1.05)';
+      } else 
+      {
+        sendButton.style.background = 'rgba(0, 123, 255, 0.18)'; // Color base
+        sendButton.style.transform = 'scale(1)';
+      }
+    });
+    document.addEventListener('visibilitychange', function() 
+    {
+      if (document.hidden) 
+      {
+        if (Notification.permission === 'granted') 
+        {
+          // Las notificaciones ya están habilitadas
+        }
+      }
+    });
+
+    async function sendChatMessage() 
+    {
+      const chatInput = document.getElementById('chatInput');
+      const content = chatInput.value.trim();
+      
+      if (chatInput.disabled) 
+      {
+        return;
+      }
+      
+      if (!content || !window.currentTicketId) return;
+      
+      try 
+      {
+        const response = await fetch(`/api/tickets/${window.currentTicketId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            { 
+            content, 
+            is_staff: false // false porque es el usuario quien envía
+          })
+        });
+
+        if (!response.ok) 
+        {
+          throw new Error('Error al enviar mensaje');
+        }
+
+        playMessageSound('send');
+        chatInput.value = '';
+        await cargarMensajesChatIndex(window.currentTicketId);
+        
+      } catch (error) 
+      {
+        console.error('Error al enviar mensaje:', error);
+        showStatus('Error al enviar el mensaje. Por favor, intenta de nuevo.', true);
+      }
+    }
+
+    document.querySelector('.chat-input-container button').onclick = sendChatMessage;
+    document.addEventListener('DOMContentLoaded', async function() 
+    {
+      try 
+      {
+        const res = await fetch('/api/latest-pdf');
+        if (!res.ok) return;
+        const pdf = await res.json();
+        if (pdf && pdf.file_path && pdf.pdf_show === true) 
+        {
+          const modal = document.getElementById('fullscreenPdfModal');
+          const frame = document.getElementById('fullscreenPdfFrame');
+          const pdfUrl = `${pdf.file_path}#view=Fit&zoom=page-fit`;
+          frame.src = pdfUrl;
+          modal.style.display = 'flex';
+
+          document.getElementById('closeFullscreenPdf').onclick = function() 
+          {
+            modal.style.display = 'none';
+            frame.src = '';
+          };
+
+          const pdfDuration = parseInt(localStorage.getItem('pdfDuration')) || 10;
+          setTimeout(() => 
+          {
+            modal.style.display = 'none';
+            frame.src = '';
+          }, pdfDuration * 1000);
+        }
+      } catch (e) 
+      {
+        // Si no hay PDF, no hacer nada
+      }
+    });
+
+    function showTicketStatusModal(status = "recibido") 
+    {
+      const modal = document.getElementById('ticketStatusModal');
+      modal.style.display = 'flex';
+      ['statusRecibido', 'statusEvaluacion', 'statusTerminado'].forEach(id => {
+        document.getElementById(id).classList.remove('active', 'completed');
+      });
+      if (status === "recibido") 
+      {
+        document.getElementById('statusRecibido').classList.add('active');
+      } else if (status === "evaluacion") 
+      {
+        document.getElementById('statusRecibido').classList.add('completed');
+        document.getElementById('statusEvaluacion').classList.add('active');
+      } else if (status === "terminado") 
+      {
+        document.getElementById('statusRecibido').classList.add('completed');
+        document.getElementById('statusEvaluacion').classList.add('completed');
+        document.getElementById('statusTerminado').classList.add('active');
+      }
+    }
+
+    function hideTicketStatusModal() 
+    {
+      document.getElementById('ticketStatusModal').style.display = 'none';
+    }
+
+    async function getTicketStatus(ticketId) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/tickets`);
+        if (!response.ok) 
+        {
+          throw new Error('Error al obtener tickets');
+        }
+        
+        const tickets = await response.json();
+        const ticket = tickets.find(t => String(t.id) === String(ticketId));
+        
+        if (!ticket) 
+        {
+          console.error('Ticket no encontrado:', ticketId);
+          return 'recibido'; // Estado por defecto
+        }
+        
+        if (ticket.urgency === 'pending') {
+          return 'recibido';
+        } else if (ticket.urgency === 'completed') 
+        {
+          return 'terminado';
+        } else 
+        {
+          return 'evaluacion';
+        }
+      } catch (error) 
+      {
+        console.error('Error al obtener estado del ticket:', error);
+        return 'recibido'; // Estado por defecto en caso de error
+      }
+    }
+
+    async function updateChatInputStatus(ticketId) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/tickets`);
+        if (!response.ok) 
+        {
+          throw new Error('Error al obtener tickets');
+        }
+        
+        const tickets = await response.json();
+        const ticket = tickets.find(t => String(t.id) === String(ticketId));
+        
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.querySelector('.chat-input-container button');
+        
+        if (ticket && ticket.urgency === 'completed') 
+        {
+          chatInput.disabled = true;
+          chatInput.placeholder = 'Este chat ha sido finalizado. No se pueden enviar más mensajes.';
+          chatInput.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+          chatInput.style.color = '#888';
+          chatInput.style.cursor = 'not-allowed';
+          
+          sendButton.disabled = true;
+          sendButton.style.opacity = '0.5';
+          sendButton.style.cursor = 'not-allowed';
+          sendButton.style.background = 'rgba(128, 128, 128, 0.3)';
+          
+        } else 
+        {
+          chatInput.disabled = false;
+          chatInput.placeholder = 'Escribe tu mensaje...';
+          chatInput.style.backgroundColor = 'rgba(255, 255, 255, 0.18)';
+          chatInput.style.color = 'var(--text-color)';
+          chatInput.style.cursor = 'text';
+
+          sendButton.disabled = false;
+          sendButton.style.opacity = '1';
+          sendButton.style.cursor = 'pointer';
+          sendButton.style.background = 'rgba(0, 123, 255, 0.18)';
+        }
+      } catch (error) 
+      {
+        console.error('Error al actualizar estado del chat:', error);
+      }
+    }
+
+    function clearSavedTicketId() 
+    {
+      localStorage.removeItem('ticketId');
+      document.getElementById('inputTicketId').value = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const issueTextarea = document.getElementById('issue');
+      const charCounter = document.getElementById('charCount');
+      
+      if (issueTextarea && charCounter) 
+      {
+        issueTextarea.addEventListener('input', function(e) 
+        {
+          const textarea = e.target;
+          const charCount = textarea.value.length;
+          const maxLength = 255;
+          const counter = document.getElementById('charCount');
+          counter.textContent = charCount;
+
+          if (charCount > maxLength * 0.9) 
+          {
+            counter.style.color = '#ff4444';
+          } else if (charCount > maxLength * 0.8) 
+          {
+            counter.style.color = '#ff6b35';
+          } else 
+          {
+            counter.style.color = '#007bff';
+          }
+
+          if (charCount >= maxLength) 
+          {
+            textarea.style.borderColor = '#ff4444';
+            textarea.style.backgroundColor = 'rgba(255, 68, 68, 0.1)';
+          } else 
+          {
+            textarea.style.borderColor = '';
+            textarea.style.backgroundColor = '';
+          }
+        });
+        charCounter.textContent = issueTextarea.value.length;
+      }
+    });
+  </script>
+
+  <!--<footer class="main-footer">
+    <a href="https://anydesk.com/download" target="_blank" class="footer-btn">
+      <svg class="footer-btn-icon" viewBox="0 0 24 24">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+      </svg>
+      Descargar AnyDesk
+    </a>
+    <button id="openTicketChatBtn" class="footer-btn">Ver el estado de mi ticket</button>
+  </footer>-->
+</body>
+</html>

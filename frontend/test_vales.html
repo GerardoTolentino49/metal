@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Vales</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 24px;
+        }
+        
+        .grafica-container {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            width: 280px;
+            height: 200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #grafica-vales {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-52%);
+        }
+        
+        .valores {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        #dinero-gastado-vales {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2196F3;
+            margin: 0;
+        }
+        
+        #porcentaje-vales {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2196F3;
+            margin: 5px 0 0 0;
+        }
+        
+        .info {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .info p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .botones {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-test {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-test:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-stop {
+            background: #F44336;
+            color: white;
+        }
+        
+        .btn-stop:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        .btn-reset {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #0b7dda;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .status {
+            background: #f5f5f5;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .status strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Test de Gráfica de Vales</h1>
+        
+        <div class="grafica-container">
+            <h2>Vales ($700)</h2>
+            <div class="chart-wrapper">
+                <canvas id="grafica-vales"></canvas>
+                <div class="valores">
+                    <p id="dinero-gastado-vales">$0</p>
+                    <p id="porcentaje-vales">0%</p>
+                </div>
+            </div>
+            <div class="info">
+                <p><strong>Disponible:</strong> <span id="dinero-disponible-vales">$700</span></p>
+            </div>
+        </div>
+        
+        <div class="botones">
+            <button class="btn-test" onclick="iniciarTest()">▶ Iniciar Test</button>
+            <button class="btn-stop" onclick="detenerTest()">⏹ Detener</button>
+            <button class="btn-reset" onclick="resetearVales()">🔄 Resetear</button>
+        </div>
+        
+        <div class="status">
+            <strong>Estado:</strong> <span id="estado">Listo para iniciar</span>
+            <br><strong>Dinero gastado:</strong> <span id="gastado">$0</span>
+        </div>
+    </div>
+
+    <script>
+        let testIntervalId = null;
+        let dineroActual = 0;
+        const valeTotal = 700;
+        const incremento = 35; // Incrementar $35 cada vez
+        const intervalo = 500; // Esperar 500ms entre actualizaciones
+
+        function actualizarVales(dineroGastado, limite = 700) {
+            const porcentajeGastado = (dineroGastado / limite) * 100;
+            const dineroDisponible = limite - dineroGastado;
+            
+            // Actualizar textos
+            document.getElementById('dinero-gastado-vales').textContent = `$${dineroGastado.toFixed(2)}`;
+            document.getElementById('porcentaje-vales').textContent = `${porcentajeGastado.toFixed(1)}%`;
+            document.getElementById('dinero-disponible-vales').textContent = `$${dineroDisponible.toFixed(2)}`;
+            
+            // Actualizar color según porcentaje
+            let colorVales = '#2196F3'; // Azul por defecto
+            if (porcentajeGastado > 80) {
+                colorVales = '#F44336'; // Rojo si está casi agotado
+            } else if (porcentajeGastado > 50) {
+                colorVales = '#FFB800'; // Amarillo si está a mitad
+            }
+            
+            document.getElementById('dinero-gastado-vales').style.color = colorVales;
+            document.getElementById('porcentaje-vales').style.color = colorVales;
+            
+            // Actualizar gráfica
+            const ctxVales = document.getElementById('grafica-vales');
+            if (ctxVales && ctxVales.chart) {
+                ctxVales.chart.data.datasets[0].data = [porcentajeGastado, 100 - porcentajeGastado];
+                ctxVales.chart.data.datasets[0].backgroundColor = [colorVales, '#E0E0E0'];
+                ctxVales.chart.update();
+            }
+        }
+
+        function iniciarTest() {
+            if (testIntervalId) {
+                document.getElementById('estado').textContent = '❌ Test ya está en curso';
+                return;
+            }
+            
+            document.getElementById('estado').textContent = '▶ Test en ejecución...';
+            dineroActual = 0;
+            
+            testIntervalId = setInterval(() => {
+                actualizarVales(dineroActual, valeTotal);
+                document.getElementById('gastado').textContent = `$${dineroActual.toFixed(2)}`;
+                
+                dineroActual += incremento;
+                
+                // Si llegó al límite, reiniciar desde 0
+                if (dineroActual > valeTotal) {
+                    dineroActual = 0;
+                    console.log('🔄 Ciclo completado, reiniciando...\n');
+                }
+            }, intervalo);
+            
+            console.log('🎬 Iniciando prueba de vales...');
+            console.log(`💰 Incremento: $${incremento} cada ${intervalo}ms`);
+            console.log(`🎯 Límite: $${valeTotal}`);
+        }
+
+        function detenerTest() {
+            if (testIntervalId) {
+                clearInterval(testIntervalId);
+                testIntervalId = null;
+                document.getElementById('estado').textContent = '⏹ Test detenido';
+                console.log('⏹️ Prueba detenida');
+            }
+        }
+
+        function resetearVales() {
+            detenerTest();
+            dineroActual = 0;
+            actualizarVales(0, valeTotal);
+            document.getElementById('gastado').textContent = '$0';
+            document.getElementById('estado').textContent = 'Listo para iniciar';
+            console.log('🔄 Vales resetados a $0');
+        }
+
+        // Inicializar gráfica al cargar la página
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const ctx = document.getElementById('grafica-vales');
+                if (ctx) {
+                    ctx.chart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: [0, 100],
+                                backgroundColor: ['#2196F3', '#E0E0E0'],
+                                borderColor: ['#fff', '#fff'],
+                                borderWidth: 0,
+                                circumference: 180,
+                                rotation: 270
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            cutout: '80%',
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: false }
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

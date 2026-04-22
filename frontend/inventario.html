@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventario - LISA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/inventario.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+ <!-- <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+-->
+      <!-- Diseno -->
+       
+      <!-- <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div> -->
+      
+            
+      <!-- PM -->
+      <!-- <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+
+  <div class="main-content" style="width:100vw;max-width:100vw;padding:0;margin:0;">
+    <div class="admin-container" style="width:100vw;max-width:100vw;padding:0 0 0 0;margin:0;border-radius:0;box-shadow:none;background:transparent;">
+      <!-- <div class="admin-header" style="padding:24px 32px 0 32px;"> </div> -->
+            <!-- Tab switch-->
+          <div style="width: 100%; justify-content: center; display: flex;">
+            <div class="tab-switch">
+              <button class="tab-switch-button" data-tab="inicio">
+                <i class="fas fa-home"></i>
+              </button>
+              <button class="tab-switch-button active" data-tab="warehouse">
+                <i class="fas fa-list"></i> Warehouse
+              </button>
+              <button class="tab-switch-button" data-tab="warehouseanalytics">
+                <i class="fas fa-list"></i> Warehouse Analytics
+              </button>
+            </div>
+          </div>
+    
+      
+      <!-- Barra de búsqueda centrada -->
+      <div class="search-container-centered">
+        <div class="search-input-group-centered">
+          <i class="fas fa-search search-icon-centered"></i>
+          <input type="text" id="searchInput" class="search-input-centered" placeholder="Buscar en el inventario..." autocomplete="off">
+          <button class="search-clear-centered" id="searchClear" title="Limpiar búsqueda">
+            <i class="fas fa-times"></i>
+          </button>
+         </div>
+          <button class="filter-button-centered" id="filterButton" title="Filtros avanzados">
+          <i class="fas fa-sliders-h"></i>
+          </button>
+        </div>
+      
+      <!-- Filtros aplicados -->
+      <div class="applied-filters-container" id="appliedFiltersContainer" style="display: none;">
+        <div class="applied-filters-header">
+          <i class="fas fa-filter"></i>
+          <span>Filtros aplicados:</span>
+        </div>
+        <div class="applied-filters-list" id="appliedFiltersList">
+          <!-- Los filtros se mostrarán aquí dinámicamente -->
+        </div>
+        <button class="clear-all-filters-btn" id="clearAllFiltersBtn" title="Limpiar todos los filtros">
+          <i class="fas fa-times"></i>
+          Limpiar filtros
+        </button>
+      </div>
+      
+      <!-- Selector de categoría (oculto por defecto) -->
+      <div class="category-selector" id="categorySelector" style="display: none;">
+        <select id="filterCategory" class="filter-select">
+          <option value="">Todas las categorías</option>
+          <option value="nombre">Nombre</option>
+          <option value="codigo">Código</option>
+          <option value="stock">Stock</option>
+          <option value="estado">Estado</option>
+          <option value="precio">Precio MXN</option>
+        </select>
+      </div>
+      
+      <div class="table-wrapper" style="background-color: black; width:calc(100vw - 64px);max-width:calc(100vw - 64px);padding:0;margin:20px auto 0 auto;">
+        <table class="users-table modern-table" style="width:100%;margin:0 auto;">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre Completo</th>
+              <th>Stock</th>
+              <th>Estado</th>
+              <th>Precio MXN</th>
+              <th>Precio DLLS</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Los datos se cargarán dinámicamente desde la base de datos -->
+            <tr>
+              <td colspan="7" class="loading-row">
+                <div class="loading-spinner">
+                  <i class="fas fa-spinner fa-spin"></i>
+                  <span>Cargando inventario...</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <!-- Controles de paginación -->
+        <div id="paginationContainer" class="pagination-container">
+          <!-- Los controles se generarán dinámicamente -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottombar-total">
+    <div class="bottombar-content">
+      <div class="bottombar-left">
+        <button class="settings-fab-inline" title="Ajustes" id="openExchangeModal">
+          <i class="fas fa-cog"></i>
+        </button>
+        <div class="totals-container">
+          <div class="total-item">
+            <span class="total-label">Total de pesos:</span>
+            <span id="totalInventarioMXN">$0.00</span>
+          </div>
+          <div class="total-item">
+            <span class="total-label">Total de dólares:</span>
+            <span id="totalInventarioUSD">$0.00</span>
+          </div>
+          <div class="total-item grand-total">
+            <span class="total-label">Gran total USD:</span>
+            <span id="totalInventarioGrandUSD">$0.00</span>
+          </div>
+          <div class="total-item grand-total-mxn">
+            <span class="total-label">Gran total en pesos mexicanos:</span>
+            <span id="totalInventarioGrandMXN" style="color: #4CAF50;">$0.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="bottombar-right">
+        <label class="switch-currency-label">
+          <span class="switch-currency-text">Cambio a dólares</span>
+          <input type="checkbox" id="switchCurrency">
+          <span class="slider-currency"></span>
+        </label>
+      </div>
+    </div>
+    
+    <!-- Contenido expandido que aparece en hover -->
+    <div class="bottombar-expanded">
+      <div class="inventory-breakdown">
+        <div class="breakdown-section">
+          <div class="breakdown-header">
+            <i class="fas fa-warehouse"></i>
+            <h3>P1</h3>
+          </div>
+          <div class="breakdown-values">
+            <div class="currency-value">
+              <span class="currency-label">Pesos (MXN)</span>
+              <span class="currency-amount" id="p1-pesos">$0.00</span>
+            </div>
+            <div class="currency-value">
+              <span class="currency-label">Dólares (USD)</span>
+              <span class="currency-amount" id="p1-dolares">$0.00</span>
+            </div>
+            <div class="currency-value gran-total">
+              <span class="currency-label">Gran Total P1 (MXN)</span>
+              <span class="currency-amount" id="p1-gran-total-mxn">$0.00</span>
+            </div>
+            <div class="currency-value gran-total-usd">
+              <span class="currency-label">Gran Total P1 (USD)</span>
+              <span class="currency-amount" id="p1-gran-total-usd-convertido">$0.00</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="breakdown-divider"></div>
+        
+        <div class="breakdown-section">
+          <div class="breakdown-header">
+            <i class="fas fa-building"></i>
+            <h3>BA</h3>
+          </div>
+          <div class="breakdown-values">
+            <div class="currency-value">
+              <span class="currency-label">Pesos (MXN)</span>
+              <span class="currency-amount" id="ba-pesos">$0.00</span>
+            </div>
+            <div class="currency-value">
+              <span class="currency-label">Dólares (USD)</span>
+              <span class="currency-amount" id="ba-dolares">$0.00</span>
+            </div>
+            <div class="currency-value gran-total">
+              <span class="currency-label">Gran Total BA (MXN)</span>
+              <span class="currency-amount" id="ba-gran-total-mxn">$0.00</span>
+            </div>
+            <div class="currency-value gran-total-usd">
+              <span class="currency-label">Gran Total BA (USD)</span>
+              <span class="currency-amount" id="ba-gran-total-usd-convertido">$0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Tipo de Cambio -->
+  <div id="exchangeModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Configuración de Tipo de Cambio</h3>
+        <button class="modal-close" id="closeExchangeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="exchange-info">
+          <div class="info-row">
+            <span class="info-label">Tipo de cambio actual:</span>
+            <span class="info-value" id="currentRate">$17.00 MXN/USD</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Última actualización:</span>
+            <span class="info-value" id="lastUpdate">Hoy, 12:00 PM</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Fuente de datos:</span>
+            <span class="info-value source-info" id="dataSource">Cargando...</span>
+          </div>
+        </div>
+        
+        <div class="exchange-mode">
+          <h4>Modo de actualización:</h4>
+          <div class="mode-options">
+            <label class="mode-option">
+              <input type="radio" name="updateMode" value="automatic" id="autoMode" checked>
+              <span class="mode-text">Automático</span>
+              <span class="mode-description">Se actualiza automáticamente cada día (Recomendado)</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="updateMode" value="manual" id="manualMode">
+              <span class="mode-text">Manual</span>
+              <span class="mode-description">Ingresa el tipo de cambio manualmente (En desarrollo)</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="manual-input" id="manualInput" style="display: none;">
+          <label for="manualRate">Nuevo tipo de cambio (MXN/USD):</label>
+          <div class="input-group">
+            <span class="currency-symbol">$</span>
+            <input type="number" id="manualRate" placeholder="17.00" step="0.01" min="0.01">
+            <span class="currency-text">MXN/USD</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="cancelExchange">Cancelar</button>
+        <button class="btn-primary" id="saveExchange">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Edición Inventario -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Editar producto <span style="font-weight:500">#<span id="editId"></span></span></h3>
+        <button class="modal-close" id="closeEditModal" onclick="inventarioDB.cerrarModalEdicion()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label>Nombre completo</label>
+          <input type="text" id="editNombre" placeholder="Nombre del producto" />
+        </div>
+        <div class="form-row">
+          <label>Stock</label>
+          <input type="number" id="editStock" min="0" />
+        </div>
+        <div class="form-row">
+          <label>Precio en MXN</label>
+          <div class="price-input-group">
+            <span class="currency-symbol">$</span>
+            <input type="number" 
+                   id="editPrecio" 
+                   min="0" 
+                   step="0.01" 
+                   placeholder="0.00" 
+                   oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                   onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46"
+                   onpaste="return false"
+                   ondrop="return false" />
+            <span class="currency-text">MXN</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Precio en DLLS</label>
+          <div class="price-input-group">
+            <span class="currency-symbol">$</span>
+            <input type="number" 
+                   id="editPrecioDlls" 
+                   min="0" 
+                   step="0.01" 
+                   placeholder="0.00" 
+                   oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                   onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46"
+                   onpaste="return false"
+                   ondrop="return false" />
+            <span class="currency-text">USD</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Estado</label>
+          <select id="editEstado" class="estado-select">
+            <option value="Sin estado">Sin estado</option>
+            <option value="En Stock">En Stock</option>
+            <option value="Agotado">Agotado</option>
+            <option value="Pedido Realizado">Pedido Realizado</option>
+            <option value="En Tránsito">En Tránsito</option>
+            <option value="Reservado">Reservado</option>
+          </select>
+        </div>
+        <div class="form-row" style="display:flex;gap:16px;align-items:center;">
+          <label style="margin:0;">Activo</label>
+          <input type="checkbox" id="editActivo" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="inventarioDB.cerrarModalEdicion()">Cancelar</button>
+        <button class="btn-primary" onclick="inventarioDB.guardarEdicion()">Guardar</button>
+      </div>
+    </div>
+  </div>
+  <!-- Modal de Filtros Avanzados -->
+  <div id="filtersModal" class="modal-overlay">
+    <div class="modal-content filters-modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-filter"></i> Filtros Avanzados</h3>
+        <button class="modal-close" id="closeFiltersModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="filters-container">
+          <!-- Filtro por Ubicación (P1 / BA) -->
+          <div class="filter-group">
+            <label class="filter-label">
+              <i class="fas fa-warehouse"></i> Ubicación (P1/BA)
+            </label>
+            <select id="filterFamilia" class="filter-select">
+              <option value="">Todas las ubicaciones</option>
+              <option value="p1">P1</option>
+              <option value="ba">BA</option>
+            </select>
+          </div>
+
+          <!-- Filtro por Direct Material -->
+          <div class="filter-group">
+            <label class="filter-label">
+              <i class="fas fa-tags"></i> Direct Material
+            </label>
+            <div style="display:flex;gap:16px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" id="filterDM_P1" />
+                <label for="filterDM_P1" style="margin:0;cursor:pointer;">P1 Direct Material</label>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <input type="checkbox" id="filterDM_BA" />
+                <label for="filterDM_BA" style="margin:0;cursor:pointer;">BA Direct Material</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtro por Stock -->
+          <div class="filter-group">
+            <label class="filter-label">
+              <i class="fas fa-boxes"></i> Stock
+            </label>
+            <div class="filter-buttons">
+              <button type="button" class="stock-btn" data-stock="sin-stock">Sin Stock</button>
+              <button type="button" class="stock-btn" data-stock="por-agotar">Por agotarse</button>
+              <button type="button" class="stock-btn" data-stock="en-stock">En Stock</button>
+            </div>
+          </div>
+
+          <!-- Filtro por Precio -->
+          <div class="filter-group">
+            <label class="filter-label">
+              <i class="fas fa-dollar-sign"></i> Precio MXN
+            </label>
+            <div class="filter-range">
+              <div class="range-slider-container">
+                <div class="range-slider">
+                  <div class="range-track"></div>
+                  <div class="range-selected"></div>
+                  <input type="range" id="filterPrecioMin" class="range-input-min" min="1" max="10000" value="1" step="10">
+                  <input type="range" id="filterPrecioMax" class="range-input-max" min="0" max="10000" value="10000" step="10">
+                  <div class="range-handle range-handle-min"></div>
+                  <div class="range-handle range-handle-max"></div>
+                </div>
+                <div class="range-values">
+                  <span class="range-value-min">$1</span>
+                  <span class="range-value-max">$10,000</span>
+                </div>
+              </div>
+              <div class="range-presets">
+                <button type="button" class="preset-btn" data-min="1" data-max="100">$1 - $100</button>
+                <button type="button" class="preset-btn" data-min="101" data-max="500">$101 - $500</button>
+                <button type="button" class="preset-btn" data-min="501" data-max="1000">$501 - $1,000</button>
+                <button type="button" class="preset-btn" data-min="1001" data-max="999999">$1,000+</button>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="clearFiltersBtn">
+          <i class="fas fa-eraser"></i> Limpiar Filtros
+        </button>
+        <button class="btn-secondary" id="cancelFiltersBtn">Cancelar</button>
+        <button class="btn-primary" id="applyFiltersBtn">
+          <i class="fas fa-check"></i> Aplicar Filtros
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalles del Producto -->
+  <div id="detailsModal" class="modal-overlay">
+    <div class="modal-content details-modal">
+      <div class="modal-header">
+        <h3>Detalles del Producto <span style="font-weight:500">#<span id="detailsId"></span></span></h3>
+        <button class="modal-close" id="closeDetailsModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="details-layout">
+          <!-- Lado izquierdo: Información del producto -->
+          <div class="details-info">
+            <div class="details-grid">
+              <!-- Información Básica -->
+              <div class="detail-section">
+                <h4><i class="fas fa-info-circle"></i> Información Básica</h4>
+                <div class="detail-row">
+                  <span class="detail-label">ID del Producto:</span>
+                  <span class="detail-value" id="detailsIdValue"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Nombre Completo:</span>
+                  <span class="detail-value" id="detailsNombre"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Stock Actual:</span>
+                  <span class="detail-value" id="detailsStock"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Estado:</span>
+                  <span class="detail-value" id="detailsEstado"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Activo:</span>
+                  <span class="detail-value" id="detailsActivo"></span>
+                </div>
+              </div>
+
+              <!-- Información Financiera -->
+              <div class="detail-section">
+                <h4><i class="fas fa-dollar-sign"></i> Información Financiera</h4>
+                <div class="detail-row">
+                  <span class="detail-label">Precio MXN:</span>
+                  <span class="detail-value" id="detailsPrecioMXN"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Precio USD:</span>
+                  <span class="detail-value" id="detailsPrecioUSD"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Valor Total MXN:</span>
+                  <span class="detail-value" id="detailsValorTotalMXN"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Valor Total USD:</span>
+                  <span class="detail-value" id="detailsValorTotalUSD"></span>
+                </div>
+              </div>
+
+
+              <!-- Estadísticas -->
+              <div class="detail-section">
+                <h4><i class="fas fa-chart-bar"></i> Estadísticas</h4>
+                <div class="detail-row">
+                  <span class="detail-label">% del Inventario:</span>
+                  <span class="detail-value" id="detailsPorcentajeInventario"></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Categoría de Stock:</span>
+                  <span class="detail-value" id="detailsCategoriaStock"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lado derecho: Fotografía del producto -->
+          <div class="details-photo">
+            <div class="photo-section">
+              <h4><i class="fas fa-camera"></i> Fotografía del Producto</h4>
+              <div class="photo-container">
+                <div class="photo-placeholder" id="photoPlaceholder">
+                  <i class="fas fa-image"></i>
+                  <span>Sin imagen disponible</span>
+                </div>
+                <img id="productImage" class="product-image" style="display: none;" alt="Imagen del producto">
+              </div>
+              <div class="photo-actions">
+                <button class="btn-secondary btn-sm" onclick="inventarioDB.cambiarImagen()">
+                  <i class="fas fa-upload"></i> Cambiar Imagen
+                </button>
+                <button class="btn-secondary btn-sm" onclick="inventarioDB.eliminarImagen()" id="removeImageBtn" style="display: none;">
+                  <i class="fas fa-trash"></i> Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="inventarioDB.cerrarModalDetalles()">Cerrar</button>
+        <button class="btn-primary" onclick="inventarioDB.editarProductoDesdeDetalles()">
+          <i class="fas fa-edit"></i> Editar Producto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/inventario-db.js"></script>
+  <script src="js/topbar.js"></script>
+</body>
+<script>
+// Actualizar el tipo de cambio correcto
+let exchangeRate = 18.4076; // Tipo de cambio actual del API (actualizado)
+
+// Función para obtener el tipo de cambio de múltiples fuentes
+async function getExchangeRate() {
+  // Primera opción: API de ExchangeRate-API (más confiable)
+  try {
+    const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    if (response.ok) {
+      const data = await response.json();
+      const rate = data.rates.MXN;
+      // Validar que el tipo de cambio sea razonable (entre 15 y 25 MXN por USD)
+      if (rate >= 15 && rate <= 25) {
+        // Guardar la fuente de datos
+        localStorage.setItem('dataSource', 'ExchangeRate-API');
+        localStorage.setItem('sourceUrl', 'https://exchangerate-api.com');
+        return rate;
+      }
+    }
+  } catch (error) {
+    console.log('Error con ExchangeRate-API:', error);
+  }
+
+  // Segunda opción: API de Banxico (con validación)
+  try {
+    const response = await fetch('https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno');
+    if (response.ok) {
+      const data = await response.json();
+      const rate = parseFloat(data.bmx.series[0].datos[0].dato);
+      // Validar que el tipo de cambio sea razonable
+      if (rate >= 15 && rate <= 25) {
+        // Guardar la fuente de datos
+        localStorage.setItem('dataSource', 'Banco de México (Banxico)');
+        localStorage.setItem('sourceUrl', 'https://www.banxico.org.mx');
+        return rate;
+      } else {
+        console.log('Tipo de cambio de Banxico fuera de rango razonable:', rate);
+      }
+    }
+  } catch (error) {
+    console.log('Error con Banxico:', error);
+  }
+  // Si ninguna API funciona, usar valor por defecto
+  localStorage.setItem('dataSource', 'Valor por defecto');
+  localStorage.setItem('sourceUrl', '');
+  return exchangeRate;
+}
+
+// Función para actualizar el tipo de cambio automáticamente
+async function updateExchangeRate() {
+  try {
+    const newRate = await getExchangeRate();
+    if (newRate && newRate !== exchangeRate) {
+      exchangeRate = newRate;
+      localStorage.setItem('exchangeRate', exchangeRate.toString());
+      localStorage.setItem('lastUpdate', getCurrentDateTime());
+      
+      // Actualizar la tabla si está en modo dólares usando el sistema correcto
+      const isDollarMode = document.getElementById('switchCurrency').checked;
+      if (isDollarMode) {
+        inventarioDB.mostrarPreciosEnUSD();
+      }
+      
+      // Actualizar totales por departamento
+      if (typeof calcularTotalesPorDepartamento === 'function') {
+        calcularTotalesPorDepartamento();
+      }
+      
+      // Actualizar el modal si está abierto
+      if (document.getElementById('exchangeModal').classList.contains('active')) {
+        updateModalInfo();
+      }
+    }
+  } catch (error) {
+    console.error('Error actualizando tipo de cambio:', error);
+  }
+}
+
+// Función para obtener la fecha y hora actual formateada
+function getCurrentDateTime() {
+  const now = new Date();
+  const options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  return now.toLocaleDateString('es-ES', options);
+}
+
+// Función para actualizar la información del modal
+function updateModalInfo() {
+  document.getElementById('currentRate').textContent = `$${exchangeRate.toFixed(2)} MXN/USD`;
+  document.getElementById('lastUpdate').textContent = getCurrentDateTime();
+  
+  // Actualizar la fuente de datos
+  const dataSource = localStorage.getItem('dataSource') || 'Cargando...';
+  const sourceUrl = localStorage.getItem('sourceUrl') || '';
+  
+  if (sourceUrl) {
+    document.getElementById('dataSource').innerHTML = `<a href="${sourceUrl}" target="_blank" title="Visitar sitio web">${dataSource}</a>`;
+  } else {
+    document.getElementById('dataSource').textContent = dataSource;
+  }
+}
+
+// Función para mostrar/ocultar el modal
+function toggleModal() {
+  const modal = document.getElementById('exchangeModal');
+  modal.classList.toggle('active');
+  if (modal.classList.contains('active')) {
+    updateModalInfo();
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// Función para mostrar/ocultar el input manual
+function toggleManualInput() {
+  const manualInput = document.getElementById('manualInput');
+  const autoMode = document.getElementById('autoMode');
+  const manualMode = document.getElementById('manualMode');
+  
+  if (manualMode.checked) {
+    manualInput.style.display = 'block';
+    // Cuando se activa modo manual, usar inmediatamente el valor del input
+    const manualRate = document.getElementById('manualRate');
+    if (manualRate.value && !isNaN(parseFloat(manualRate.value))) {
+      exchangeRate = parseFloat(manualRate.value);
+      // Actualizar inmediatamente los precios si están en modo dólares
+      const isDollarMode = document.getElementById('switchCurrency').checked;
+      if (isDollarMode) {
+        inventarioDB.mostrarPreciosEnUSD();
+      }
+      // Actualizar el gran total siempre
+      inventarioDB.calcularTotalInventario();
+      // Actualizar la información del modal
+      updateModalInfo();
+    }
+  } else {
+    manualInput.style.display = 'none';
+    // Cuando se activa modo automático, usar el valor de la API
+    updateExchangeRate();
+  }
+}
+
+// Función para actualizar el tipo de cambio cuando se ingresa manualmente
+function updateManualRate() {
+  const manualMode = document.getElementById('manualMode');
+  if (manualMode.checked) {
+    const manualRate = document.getElementById('manualRate');
+    const newRate = parseFloat(manualRate.value);
+    if (!isNaN(newRate) && newRate > 0) {
+      exchangeRate = newRate;
+      // Actualizar inmediatamente los precios si están en modo dólares
+      const isDollarMode = document.getElementById('switchCurrency').checked;
+      if (isDollarMode) {
+        inventarioDB.mostrarPreciosEnUSD();
+      }
+      // Actualizar el gran total siempre
+      inventarioDB.calcularTotalInventario();
+      // Actualizar totales por departamento
+      if (typeof calcularTotalesPorDepartamento === 'function') {
+        calcularTotalesPorDepartamento();
+      }
+      // Actualizar la información del modal
+      updateModalInfo();
+    }
+  }
+}
+
+// Función para guardar los cambios
+function saveExchangeSettings() {
+  const manualMode = document.getElementById('manualMode');
+  const manualRate = document.getElementById('manualRate');
+  
+  if (manualMode.checked) {
+    const newRate = parseFloat(manualRate.value);
+    if (isNaN(newRate) || newRate <= 0) {
+      alert('Por favor ingresa un tipo de cambio válido mayor a 0');
+      return;
+    }
+    // Validar que el tipo de cambio sea razonable
+    if (newRate < 15 || newRate > 25) {
+      const confirmacion = confirm(`El tipo de cambio $${newRate} parece muy alto/bajo. ¿Estás seguro de que quieres continuar?`);
+      if (!confirmacion) return;
+    }
+    exchangeRate = newRate;
+  }
+  
+  // Guardar en localStorage
+  localStorage.setItem('exchangeRate', exchangeRate.toString());
+  localStorage.setItem('lastUpdate', getCurrentDateTime());
+  
+  // Actualizar los precios en la tabla usando el sistema correcto
+  const isDollarMode = document.getElementById('switchCurrency').checked;
+  if (isDollarMode) {
+    inventarioDB.mostrarPreciosEnUSD();
+  } else {
+    inventarioDB.mostrarPreciosEnMXN();
+  }
+  
+  // Actualizar el gran total siempre
+  inventarioDB.calcularTotalInventario();
+  
+  // Actualizar totales por departamento
+  if (typeof calcularTotalesPorDepartamento === 'function') {
+    calcularTotalesPorDepartamento();
+  }
+  
+  // Cerrar el modal
+  toggleModal();
+  
+  // Mostrar confirmación
+  showNotification('Tipo de cambio actualizado correctamente', 'success');
+}
+
+// Función para mostrar notificaciones
+function showNotification(message, type = 'info') {
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.className = `notification notification-${type}`;
+  notification.textContent = message;
+  
+  // Agregar estilos básicos
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'success' ? '#4CAF50' : '#2196F3'};
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 3000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Animar entrada
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Remover después de 3 segundos
+  setTimeout(() => {
+    notification.style.transform = 'translateX(400px)';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', async function() {
+  // Cargar tipo de cambio guardado
+  const savedRate = localStorage.getItem('exchangeRate');
+  if (savedRate) {
+    exchangeRate = parseFloat(savedRate);
+  }
+  
+  // Intentar obtener el tipo de cambio actual al cargar la página
+  await updateExchangeRate();
+  
+  // Botón para abrir modal
+  document.getElementById('openExchangeModal').addEventListener('click', toggleModal);
+  
+  // Botón para cerrar modal
+  document.getElementById('closeExchangeModal').addEventListener('click', toggleModal);
+  
+  // Botón cancelar
+  document.getElementById('cancelExchange').addEventListener('click', toggleModal);
+  
+  // Botón guardar
+  document.getElementById('saveExchange').addEventListener('click', saveExchangeSettings);
+  
+  // Cambio de modo de actualización
+  document.getElementById('autoMode').addEventListener('change', toggleManualInput);
+  document.getElementById('manualMode').addEventListener('change', toggleManualInput);
+  
+  // Input manual - actualizar en tiempo real
+  document.getElementById('manualRate').addEventListener('input', updateManualRate);
+  
+  // Cerrar modal al hacer clic fuera
+  document.getElementById('exchangeModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      toggleModal();
+    }
+  });
+  
+  // Cerrar modal con ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('exchangeModal');
+      if (modal.classList.contains('active')) {
+        toggleModal();
+      }
+    }
+  });
+  
+  // Inicializar estado del modal
+  toggleManualInput();
+  
+  // Actualizar tipo de cambio cada hora si está en modo automático
+  setInterval(() => {
+    const autoMode = document.getElementById('autoMode');
+    if (autoMode.checked) {
+      updateExchangeRate();
+    }
+  }, 3600000); // 1 hora en milisegundos
+});
+
+// Navegación del tab-switch de Warehouse
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'inicio.html',
+    warehouse: 'inventario.html',
+    warehouseanalytics: 'detalles_warehouse.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+
+// Funcionalidad de búsqueda en tiempo real
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const searchClear = document.getElementById('searchClear');
+  const filterCategory = document.getElementById('filterCategory');
+  const filterButton = document.getElementById('filterButton');
+  
+  // Función para buscar en tiempo real
+  function performSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const category = filterCategory.value;
+    
+    // Si no hay término de búsqueda, mostrar todos los productos
+    if (searchTerm === '') {
+      inventarioDB.inventarioFiltrado = [];
+      inventarioDB.resetearPaginacion();
+      inventarioDB.renderizarTabla();
+      updateSearchResults();
+      return;
+    }
+    
+    // Filtrar inventario basado en coincidencias parciales
+    inventarioDB.inventarioFiltrado = inventarioDB.inventario.filter(producto => {
+      // Buscar según la categoría seleccionada con coincidencia parcial
+      if (category === '' || category === 'nombre') {
+        const nombre = (producto.nombre_completo || '').toLowerCase();
+        if (nombre.includes(searchTerm)) return true;
+      }
+      
+      if (category === '' || category === 'stock') {
+        const stock = String(producto.stock || 0).toLowerCase();
+        if (stock.includes(searchTerm)) return true;
+      }
+      
+      if (category === '' || category === 'codigo') {
+        const codigo = (producto.codigo || '').toLowerCase();
+        if (codigo.includes(searchTerm)) return true;
+      }
+      
+      if (category === '' || category === 'estado') {
+        const stockValor = producto.stock || 0;
+        const estadoMostrar = stockValor === 0 ? 'Agotado' : 
+                             stockValor >= 1 && stockValor <= 15 ? 'Por agotarse' : 
+                             stockValor > 15 ? 'En stock' : 
+                             (producto.estado || 'Sin estado');
+        const estado = estadoMostrar.toLowerCase();
+        if (estado.includes(searchTerm)) return true;
+      }
+      
+      if (category === '' || category === 'precio') {
+        const precioUnitario = parseFloat(producto.precio_mxn) || 0;
+        const stock = parseInt(producto.stock) || 0;
+        const valorTotal = precioUnitario * stock;
+        const precio = String(valorTotal).toLowerCase();
+        if (precio.includes(searchTerm)) return true;
+      }
+      
+      // Si no hay categoría específica, buscar coincidencia parcial en cualquier campo
+      if (category === '') {
+        const stockValor = producto.stock || 0;
+        const estadoMostrar = stockValor === 0 ? 'Agotado' : 
+                             stockValor >= 1 && stockValor <= 15 ? 'Por agotarse' : 
+                             stockValor > 15 ? 'En stock' : 
+                             (producto.estado || 'Sin estado');
+        
+        const fields = [
+          producto.nombre_completo || '',
+          producto.codigo || '',
+          String(producto.stock || 0),
+          estadoMostrar,
+          String((parseFloat(producto.precio_mxn) || 0) * (parseInt(producto.stock) || 0))
+        ].map(field => field.toLowerCase());
+        
+        // Buscar coincidencia parcial en cualquier campo
+        if (fields.some(field => field.includes(searchTerm))) return true;
+      }
+      
+      return false;
+    });
+    
+    // Resetear paginación y renderizar
+    inventarioDB.resetearPaginacion();
+    inventarioDB.renderizarTabla();
+    
+    // Actualizar contador de resultados
+    updateSearchResults();
+  }
+  
+  // Función para actualizar contador de resultados
+  function updateSearchResults() {
+    const searchTerm = searchInput.value.trim();
+    
+    // Si no hay término de búsqueda, no mostrar contador
+    if (searchTerm === '') {
+      const resultsCounter = document.getElementById('searchResultsCounter');
+      if (resultsCounter) {
+        resultsCounter.style.display = 'none';
+      }
+      return;
+    }
+    
+    // Cuando hay término de búsqueda, el conteo debe reflejar el filtrado (aunque sea 0)
+    const totalProductos = inventarioDB.inventarioFiltrado.length;
+    
+    // Crear o actualizar el contador de resultados
+    let resultsCounter = document.getElementById('searchResultsCounter');
+    if (!resultsCounter) {
+      resultsCounter = document.createElement('div');
+      resultsCounter.id = 'searchResultsCounter';
+      resultsCounter.className = 'search-results-counter';
+      // Insertar después del contenedor de búsqueda en lugar de dentro
+      const searchContainer = document.querySelector('.search-container-centered');
+      searchContainer.parentNode.insertBefore(resultsCounter, searchContainer.nextSibling);
+    }
+    
+    resultsCounter.textContent = `${totalProductos} resultado${totalProductos !== 1 ? 's' : ''} encontrado${totalProductos !== 1 ? 's' : ''}`;
+    resultsCounter.style.display = 'block';
+  }
+  
+  // Búsqueda en tiempo real mientras se escribe
+  searchInput.addEventListener('input', function() {
+    // Mostrar/ocultar botón de limpiar
+    if (this.value.length > 0) {
+      searchClear.classList.add('visible');
+    } else {
+      searchClear.classList.remove('visible');
+    }
+    
+    // Realizar búsqueda en tiempo real
+    performSearch();
+  });
+  
+  // Limpiar búsqueda
+  searchClear.addEventListener('click', function() {
+    searchInput.value = '';
+    searchInput.focus();
+    searchClear.classList.remove('visible');
+    inventarioDB.inventarioFiltrado = []; // Limpiar filtros
+    inventarioDB.resetearPaginacion();
+    inventarioDB.renderizarTabla();
+    updateSearchResults();
+  });
+  
+  // Cambiar categoría de filtro
+  filterCategory.addEventListener('change', function() {
+    if (searchInput.value.trim()) {
+      performSearch(); // Re-buscar con nueva categoría
+    }
+  });
+  
+  // Aplicar filtros (botón)
+  filterButton.addEventListener('click', function() {
+    performSearch();
+  });
+  
+  // Búsqueda con Enter
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  });
+  
+  // Inicializar búsqueda
+  performSearch();
+});
+
+// ===== FUNCIONALIDAD DEL MODAL DE FILTROS AVANZADOS =====
+
+// Variables globales para los filtros
+let currentFilters = {
+  familia: '', // 'p1' | 'ba' | ''
+  stock: [],
+  precioMin: '',
+  precioMax: '',
+  dmP1: false,
+  dmBA: false
+};
+
+// Función para abrir el modal de filtros
+function openFiltersModal() {
+  const modal = document.getElementById('filtersModal');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  // Cargar filtros actuales en el modal
+  loadCurrentFilters();
+  
+  // Inicializar sliders
+  initializeRangeSliders();
+}
+
+// Función para cerrar el modal de filtros
+function closeFiltersModal() {
+  const modal = document.getElementById('filtersModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Función para cargar los filtros actuales en el modal
+function loadCurrentFilters() {
+  document.getElementById('filterFamilia').value = currentFilters.familia || '';
+  const dmP1Checkbox = document.getElementById('filterDM_P1');
+  const dmBACheckbox = document.getElementById('filterDM_BA');
+  if (dmP1Checkbox) dmP1Checkbox.checked = !!currentFilters.dmP1;
+  if (dmBACheckbox) dmBACheckbox.checked = !!currentFilters.dmBA;
+  
+  // Cargar valores de precio MXN solo si están definidos
+  const precioMinInput = document.getElementById('filterPrecioMin');
+  const precioMaxInput = document.getElementById('filterPrecioMax');
+  
+  if (currentFilters.precioMin) {
+    precioMinInput.value = currentFilters.precioMin;
+  } else {
+    precioMinInput.value = precioMinInput.min;
+  }
+  
+  if (currentFilters.precioMax) {
+    precioMaxInput.value = currentFilters.precioMax;
+  } else {
+    precioMaxInput.value = precioMaxInput.max;
+  }
+  
+  // Actualizar slider visualmente
+  updateRangeSlider(precioMinInput, precioMaxInput);
+  
+  // Limpiar botones de stock
+  document.querySelectorAll('.stock-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Marcar botones de stock seleccionados
+  if (currentFilters.stock && currentFilters.stock.length > 0) {
+    currentFilters.stock.forEach(stockValue => {
+      const button = document.querySelector(`.stock-btn[data-stock="${stockValue}"]`);
+      if (button) button.classList.add('active');
+    });
+  }
+}
+
+// Función para obtener los filtros del modal
+function getFiltersFromModal() {
+  const stockButtons = document.querySelectorAll('.stock-btn.active');
+  const stockValues = Array.from(stockButtons).map(btn => btn.dataset.stock);
+  
+  const precioMinInput = document.getElementById('filterPrecioMin');
+  const precioMaxInput = document.getElementById('filterPrecioMax');
+  
+  // Incluir filtros de precio si han sido modificados de sus valores por defecto
+  // O si el usuario ha interactuado con el slider (incluso si establece valores por defecto)
+  const precioMin = precioMinInput.value;
+  const precioMax = precioMaxInput.value;
+  
+  // Solo considerar como filtro activo si no están en los valores extremos por defecto
+  const precioMinFilter = precioMin !== precioMinInput.min ? precioMin : '';
+  const precioMaxFilter = precioMax !== precioMaxInput.max ? precioMax : '';
+
+
+  return {
+    familia: document.getElementById('filterFamilia').value,
+    stock: stockValues,
+    precioMin: precioMinFilter,
+    precioMax: precioMaxFilter,
+    dmP1: document.getElementById('filterDM_P1').checked,
+    dmBA: document.getElementById('filterDM_BA').checked
+  };
+}
+
+// Función para limpiar todos los filtros
+function clearAllFilters() {
+  // Resetear slider de precio a valores por defecto
+  const precioMin = document.getElementById('filterPrecioMin');
+  const precioMax = document.getElementById('filterPrecioMax');
+  
+  if (precioMin && precioMax) {
+    precioMin.value = precioMin.min;
+    precioMax.value = precioMax.max;
+    updateRangeSlider(precioMin, precioMax);
+  }
+  
+  // Limpiar selects
+  document.getElementById('filterFamilia').value = '';
+  const dmP1Checkbox = document.getElementById('filterDM_P1');
+  const dmBACheckbox = document.getElementById('filterDM_BA');
+  if (dmP1Checkbox) dmP1Checkbox.checked = false;
+  if (dmBACheckbox) dmBACheckbox.checked = false;
+  
+  // Limpiar botones de stock
+  document.querySelectorAll('.stock-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Limpiar presets activos de precio
+  document.querySelectorAll('.preset-btn.active').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Limpiar filtros en memoria y resetear paginación
+  currentFilters = {
+    familia: '',
+    stock: [],
+    precioMin: '',
+    precioMax: '',
+    dmP1: false,
+    dmBA: false
+  };
+  inventarioDB.inventarioFiltrado = [];
+  inventarioDB.resetearPaginacion();
+  inventarioDB.renderizarTabla();
+  updateSearchResults();
+  updateAppliedFiltersDisplay();
+  updateColumnHighlighting();
+}
+
+// Función para aplicar los filtros
+function applyFilters() {
+  currentFilters = getFiltersFromModal();
+  closeFiltersModal();
+  performAdvancedSearch();
+  updateAppliedFiltersDisplay();
+}
+
+// Función para realizar búsqueda avanzada con filtros
+function performAdvancedSearch() {
+  const inventarioParaFiltrar = inventarioDB.inventario;
+  
+  // Verificar si hay filtros activos
+  const hayFiltrosActivos = currentFilters.familia || 
+                            (currentFilters.stock && currentFilters.stock.length > 0) ||
+                            currentFilters.precioMin || 
+                            currentFilters.precioMax ||
+                            currentFilters.dmP1 ||
+                            currentFilters.dmBA;
+  
+  // Si no hay filtros activos, limpiar inventarioFiltrado
+  if (!hayFiltrosActivos) {
+    inventarioDB.inventarioFiltrado = [];
+    inventarioDB.resetearPaginacion();
+    inventarioDB.renderizarTabla();
+    updateSearchResults();
+    updateColumnHighlighting();
+    return;
+  }
+  
+  inventarioDB.inventarioFiltrado = inventarioParaFiltrar.filter(producto => {
+    let shouldShow = true;
+    
+    // Filtro por ubicación (P1 / BA) usando campo nave_industrial_p1
+    if (currentFilters.familia && shouldShow) {
+      const flag = producto.nave_industrial_p1; // true => P1, false => BA, null/undefined => P1
+      const esBA = flag === false;
+      const esP1 = flag === true || flag === null || flag === undefined;
+      if (currentFilters.familia === 'p1' && !esP1) shouldShow = false;
+      if (currentFilters.familia === 'ba' && !esBA) shouldShow = false;
+    }
+
+    // Filtros por Direct Material
+    if (shouldShow && (currentFilters.dmP1 || currentFilters.dmBA)) {
+      const categoria = (producto.categoria_pdm || producto.categoria || '').trim().toUpperCase();
+      
+      let categoriaValida = false;
+      
+      // Determinar qué categorías aceptar según los filtros activos
+      if (currentFilters.dmP1 && currentFilters.dmBA) {
+        // Ambos activos: aceptar cualquiera de los dos
+        categoriaValida = categoria === 'DIRECT MATERIAL' || categoria === 'BA DIRECT MATERIAL';
+      } else if (currentFilters.dmP1) {
+        // Solo P1 activo: solo DIRECT MATERIAL
+        categoriaValida = categoria === 'DIRECT MATERIAL';
+      } else if (currentFilters.dmBA) {
+        // Solo BA activo: solo BA DIRECT MATERIAL
+        categoriaValida = categoria === 'BA DIRECT MATERIAL';
+      }
+      
+      if (!categoriaValida) {
+        shouldShow = false;
+      }
+    }
+    
+    // Filtro por stock
+    if (shouldShow && currentFilters.stock && currentFilters.stock.length > 0) {
+      const stock = parseInt(producto.stock) || 0;
+      let stockCategory = '';
+      
+      if (stock === 0) {
+        stockCategory = 'sin-stock';
+      } else if (stock >= 1 && stock <= 15) {
+        stockCategory = 'por-agotar';
+      } else if (stock > 15) {
+        stockCategory = 'en-stock';
+      }
+      
+      if (!currentFilters.stock.includes(stockCategory)) {
+        shouldShow = false;
+      }
+    }
+    
+    // Filtro por precio (comparar valor total: precio unitario × stock)
+    if (shouldShow && (currentFilters.precioMin || currentFilters.precioMax)) {
+      const precioUnitario = parseFloat(producto.precio_mxn) || 0;
+      const stock = parseInt(producto.stock) || 0;
+      const valorTotal = precioUnitario * stock;
+      
+      if (currentFilters.precioMin && valorTotal < parseFloat(currentFilters.precioMin)) {
+        shouldShow = false;
+      }
+      if (currentFilters.precioMax && valorTotal > parseFloat(currentFilters.precioMax)) {
+        shouldShow = false;
+      }
+    }
+    
+    return shouldShow;
+  });
+  
+  // Resetear paginación y renderizar
+  inventarioDB.resetearPaginacion();
+  inventarioDB.renderizarTabla();
+  
+  // Actualizar contador de resultados
+  updateSearchResults();
+  
+  // Actualizar resaltado de columnas
+  updateColumnHighlighting();
+}
+
+// Función para actualizar el resaltado de columnas según los filtros activos
+function updateColumnHighlighting() {
+  console.log('Actualizando resaltado de columnas...');
+  console.log('Filtros actuales:', currentFilters);
+  
+  // Remover todas las clases de resaltado existentes
+  document.querySelectorAll('.column-highlighted').forEach(cell => {
+    cell.classList.remove('column-highlighted');
+  });
+  
+  // Resaltar columna de Stock si hay filtros de stock activos
+  if (currentFilters.stock && currentFilters.stock.length > 0) {
+    console.log('Resaltando columna Stock...');
+    highlightColumn(2); // Columna Stock (índice 2)
+  }
+  
+  // Resaltar columna de Precio MXN si hay filtros de precio activos
+  if (currentFilters.precioMin || currentFilters.precioMax) {
+    console.log('Resaltando columna Precio MXN...');
+    highlightColumn(4); // Columna Precio MXN (índice 4)
+  }
+}
+
+// Función para resaltar una columna completa por su índice
+function highlightColumn(index) {
+  const table = document.querySelector('.users-table');
+  if (!table) {
+    console.log('No se encontró la tabla .users-table');
+    return;
+  }
+  
+  console.log(`Resaltando columna ${index}...`);
+  
+  // Resaltar el encabezado de la columna
+  const headerCell = table.querySelector(`thead tr th:nth-child(${index + 1})`);
+  if (headerCell) {
+    headerCell.classList.add('column-highlighted');
+    console.log('Encabezado resaltado:', headerCell.textContent);
+  } else {
+    console.log('No se encontró el encabezado de la columna');
+  }
+  
+  // Resaltar todas las celdas de datos de la columna
+  const dataCells = table.querySelectorAll(`tbody tr td:nth-child(${index + 1})`);
+  console.log(`Encontradas ${dataCells.length} celdas de datos`);
+  dataCells.forEach(cell => {
+    cell.classList.add('column-highlighted');
+  });
+}
+
+
+// Función para actualizar el estado visual del botón de filtros
+function updateFilterButtonState() {
+  const filterButton = document.getElementById('filterButton');
+  
+  // Verificar si hay filtros activos
+  const hasActiveFilters = currentFilters.familia || 
+                          (currentFilters.stock && currentFilters.stock.length > 0) ||
+                          currentFilters.precioMin || 
+                          currentFilters.precioMax ||
+                          currentFilters.dmP1 ||
+                          currentFilters.dmBA;
+  
+  if (hasActiveFilters) {
+    filterButton.classList.add('has-active-filters');
+  } else {
+    filterButton.classList.remove('has-active-filters');
+  }
+}
+
+// Función para actualizar la visualización de filtros aplicados
+function updateAppliedFiltersDisplay() {
+  const container = document.getElementById('appliedFiltersContainer');
+  const list = document.getElementById('appliedFiltersList');
+  
+  if (!container || !list) return;
+  
+  // Limpiar lista actual
+  list.innerHTML = '';
+  
+  // Verificar si hay filtros aplicados
+  const hasFilters = currentFilters.familia || 
+                    (currentFilters.stock && currentFilters.stock.length > 0) ||
+                    currentFilters.precioMin || 
+                    currentFilters.precioMax ||
+                    currentFilters.dmP1 ||
+                    currentFilters.dmBA;
+  
+  if (!hasFilters) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  // Mostrar contenedor
+  container.style.display = 'flex';
+  
+  // Agregar filtro de ubicación si existe
+  if (currentFilters.familia) {
+    const label = currentFilters.familia === 'p1' ? 'P1' : 'BA';
+    const familiaTag = createFilterTag('Ubicación', label, 'familia');
+    list.appendChild(familiaTag);
+  }
+
+  // Agregar tags de Direct Material
+  if (currentFilters.dmP1) {
+    const dmP1Tag = createFilterTag('Direct Material', 'P1', 'dmP1');
+    list.appendChild(dmP1Tag);
+  }
+  if (currentFilters.dmBA) {
+    const dmBATag = createFilterTag('Direct Material', 'BA', 'dmBA');
+    list.appendChild(dmBATag);
+  }
+  
+  // Agregar filtros de stock si existen
+  if (currentFilters.stock && currentFilters.stock.length > 0) {
+    currentFilters.stock.forEach(stockValue => {
+      const stockLabel = getStockLabel(stockValue);
+      const stockTag = createFilterTag('Stock', stockLabel, 'stock', stockValue);
+      list.appendChild(stockTag);
+    });
+  }
+  
+  // Agregar filtro de precio si existe
+  if (currentFilters.precioMin || currentFilters.precioMax) {
+    const precioMin = currentFilters.precioMin || '1';
+    const precioMax = currentFilters.precioMax || '∞';
+    const precioLabel = `$${parseInt(precioMin).toLocaleString()} - $${precioMax === '∞' ? '∞' : parseInt(precioMax).toLocaleString()}`;
+    const precioTag = createFilterTag('Precio MXN', precioLabel, 'precio');
+    list.appendChild(precioTag);
+  }
+  
+  // Actualizar estado del botón de filtros
+  updateFilterButtonState();
+}
+
+
+// Función para crear un tag de filtro
+function createFilterTag(type, value, filterType, filterValue = null) {
+  const tag = document.createElement('div');
+  tag.className = 'applied-filter-tag';
+  
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'remove-filter';
+  removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+  removeBtn.onclick = () => removeFilter(filterType, filterValue);
+  
+  tag.innerHTML = `
+    <span>${type}: ${value}</span>
+  `;
+  tag.appendChild(removeBtn);
+  
+  return tag;
+}
+
+// Función para obtener la etiqueta del stock
+function getStockLabel(stockValue) {
+  const labels = {
+    'sin-stock': 'Sin Stock',
+    'por-agotar': 'Por agotarse',
+    'en-stock': 'En Stock'
+  };
+  return labels[stockValue] || stockValue;
+}
+
+// Función para remover un filtro específico
+function removeFilter(filterType, filterValue = null) {
+  if (filterType === 'familia') {
+    currentFilters.familia = '';
+    document.getElementById('filterFamilia').value = '';
+  } else if (filterType === 'stock') {
+    if (filterValue) {
+      currentFilters.stock = currentFilters.stock.filter(s => s !== filterValue);
+      const button = document.querySelector(`.stock-btn[data-stock="${filterValue}"]`);
+      if (button) button.classList.remove('active');
+    }
+  } else if (filterType === 'precio') {
+    currentFilters.precioMin = '';
+    currentFilters.precioMax = '';
+    const precioMin = document.getElementById('filterPrecioMin');
+    const precioMax = document.getElementById('filterPrecioMax');
+    if (precioMin && precioMax) {
+      precioMin.value = precioMin.min;
+      precioMax.value = precioMax.max;
+      updateRangeSlider(precioMin, precioMax);
+    }
+  } else if (filterType === 'dmP1') {
+    currentFilters.dmP1 = false;
+    const dmP1Checkbox = document.getElementById('filterDM_P1');
+    if (dmP1Checkbox) dmP1Checkbox.checked = false;
+  } else if (filterType === 'dmBA') {
+    currentFilters.dmBA = false;
+    const dmBACheckbox = document.getElementById('filterDM_BA');
+    if (dmBACheckbox) dmBACheckbox.checked = false;
+  }
+  
+  // Re-aplicar filtros
+  performAdvancedSearch();
+  updateAppliedFiltersDisplay();
+  updateColumnHighlighting();
+}
+
+// Función para manejar presets de rango
+function handleRangePreset(minInput, maxInput, minValue, maxValue) {
+  minInput.value = minValue;
+  maxInput.value = maxValue;
+  
+  // Actualizar sliders visualmente
+  updateRangeSlider(minInput, maxInput);
+  
+  // Actualizar estado visual de los presets
+  const presetButtons = minInput.closest('.filter-range').querySelectorAll('.preset-btn');
+  presetButtons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.min == minValue && btn.dataset.max == maxValue) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+// Función para actualizar el slider visualmente
+function updateRangeSlider(minInput, maxInput) {
+  const min = parseInt(minInput.value);
+  const max = parseInt(maxInput.value);
+  const minMax = parseInt(minInput.max);
+  const minMin = parseInt(minInput.min);
+  
+  const minPercent = ((min - minMin) / (minMax - minMin)) * 100;
+  const maxPercent = ((max - minMin) / (minMax - minMin)) * 100;
+  
+  const slider = minInput.closest('.range-slider');
+  const selectedRange = slider.querySelector('.range-selected');
+  const handleMin = slider.querySelector('.range-handle-min');
+  const handleMax = slider.querySelector('.range-handle-max');
+  const valueMin = slider.parentElement.querySelector('.range-value-min');
+  const valueMax = slider.parentElement.querySelector('.range-value-max');
+  
+  // Actualizar rango seleccionado
+  selectedRange.style.left = minPercent + '%';
+  selectedRange.style.width = (maxPercent - minPercent) + '%';
+  
+  // Actualizar handles
+  handleMin.style.left = minPercent + '%';
+  handleMax.style.left = maxPercent + '%';
+  
+  // Actualizar valores mostrados
+  if (minInput.id.includes('Precio')) {
+    valueMin.textContent = '$' + min.toLocaleString();
+    valueMax.textContent = '$' + max.toLocaleString();
+  } else {
+    valueMin.textContent = min;
+    valueMax.textContent = max;
+  }
+}
+
+// Función para inicializar sliders
+function initializeRangeSliders() {
+  // Solo slider de Precio MXN (el de Stock ya no existe)
+  const precioMin = document.getElementById('filterPrecioMin');
+  const precioMax = document.getElementById('filterPrecioMax');
+  
+  if (precioMin && precioMax) {
+    precioMin.addEventListener('input', function() {
+      const min = parseInt(this.value);
+      const max = parseInt(precioMax.value);
+      if (min > max) {
+        precioMax.value = min;
+      }
+      updateRangeSlider(precioMin, precioMax);
+    });
+    
+    precioMax.addEventListener('input', function() {
+      const min = parseInt(precioMin.value);
+      const max = parseInt(this.value);
+      if (max < min) {
+        precioMin.value = max;
+      }
+      updateRangeSlider(precioMin, precioMax);
+    });
+    
+    // Agregar funcionalidad de arrastre a los handles visuales
+    const slider = precioMin.closest('.range-slider');
+    const handleMin = slider.querySelector('.range-handle-min');
+    const handleMax = slider.querySelector('.range-handle-max');
+    
+    // Handle mínimo
+    handleMin.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      const sliderRect = slider.getBoundingClientRect();
+      const sliderWidth = sliderRect.width;
+      
+      function onMouseMove(e) {
+        const x = e.clientX - sliderRect.left;
+        const percent = Math.max(0, Math.min(100, (x / sliderWidth) * 100));
+        const value = Math.round((percent / 100) * (parseInt(precioMin.max) - parseInt(precioMin.min)) + parseInt(precioMin.min));
+        
+        if (value <= parseInt(precioMax.value)) {
+          precioMin.value = value;
+          updateRangeSlider(precioMin, precioMax);
+        }
+      }
+      
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+      
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+    
+    // Handle máximo
+    handleMax.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      const sliderRect = slider.getBoundingClientRect();
+      const sliderWidth = sliderRect.width;
+      
+      function onMouseMove(e) {
+        const x = e.clientX - sliderRect.left;
+        const percent = Math.max(0, Math.min(100, (x / sliderWidth) * 100));
+        const value = Math.round((percent / 100) * (parseInt(precioMax.max) - parseInt(precioMax.min)) + parseInt(precioMax.min));
+        
+        if (value >= parseInt(precioMin.value)) {
+          precioMax.value = value;
+          updateRangeSlider(precioMin, precioMax);
+        }
+      }
+      
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+      
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+    
+    // Agregar event listeners a los botones de preset de precio
+    const presetButtons = slider.closest('.filter-range').querySelectorAll('.preset-btn');
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const minValue = this.dataset.min;
+        const maxValue = this.dataset.max;
+        handleRangePreset(precioMin, precioMax, minValue, maxValue);
+      });
+    });
+    
+    // Inicializar slider
+    updateRangeSlider(precioMin, precioMax);
+  }
+}
+
+// Event listeners para el modal de filtros
+document.addEventListener('DOMContentLoaded', function() {
+  // Botón para abrir modal de filtros
+  document.getElementById('filterButton').addEventListener('click', openFiltersModal);
+  
+  // Inicializar sliders cuando se carga la página
+  initializeRangeSliders();
+  
+  // Event listeners para botones de stock
+  document.querySelectorAll('.stock-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('active');
+    });
+  });
+  
+  // Botones para cerrar modal
+  document.getElementById('closeFiltersModal').addEventListener('click', closeFiltersModal);
+  document.getElementById('cancelFiltersBtn').addEventListener('click', closeFiltersModal);
+  
+  // Botón para limpiar filtros
+  document.getElementById('clearFiltersBtn').addEventListener('click', clearAllFilters);
+  
+  // Botón para aplicar filtros
+  document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
+  
+  // Botón para limpiar todos los filtros desde la barra de filtros aplicados
+  document.getElementById('clearAllFiltersBtn').addEventListener('click', clearAllFilters);
+  
+  // Cerrar modal al hacer clic fuera
+  document.getElementById('filtersModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeFiltersModal();
+    }
+  });
+  
+  // Cerrar modal con ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const filtersModal = document.getElementById('filtersModal');
+      if (filtersModal && filtersModal.classList.contains('active')) {
+        closeFiltersModal();
+      }
+    }
+  });
+  
+  // Presets para stock
+  document.querySelectorAll('.filter-range').forEach(range => {
+    const presetButtons = range.querySelectorAll('.preset-btn');
+    presetButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const minInput = range.querySelector('input[placeholder="Mín"]');
+        const maxInput = range.querySelector('input[placeholder="Máx"]');
+        const minValue = this.dataset.min;
+        const maxValue = this.dataset.max;
+        
+        handleRangePreset(minInput, maxInput, minValue, maxValue);
+      });
+    });
+  });
+  
+  // Actualizar presets cuando se cambian los inputs manualmente
+  document.querySelectorAll('.range-input').forEach(input => {
+    input.addEventListener('input', function() {
+      const range = this.closest('.filter-range');
+      const presetButtons = range.querySelectorAll('.preset-btn');
+      presetButtons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+    });
+  });
+});
+
+// Event listeners para el modal de detalles
+document.addEventListener('DOMContentLoaded', function() {
+  // Cerrar modal de detalles al hacer clic fuera
+  document.getElementById('detailsModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      inventarioDB.cerrarModalDetalles();
+    }
+  });
+  
+  // Cerrar modal de detalles con ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const detailsModal = document.getElementById('detailsModal');
+      if (detailsModal && detailsModal.classList.contains('active')) {
+        inventarioDB.cerrarModalDetalles();
+      }
+    }
+  });
+  
+  // Botón para cerrar modal de detalles
+  document.getElementById('closeDetailsModal').addEventListener('click', function() {
+    inventarioDB.cerrarModalDetalles();
+  });
+});
+
+</script>
+</html>

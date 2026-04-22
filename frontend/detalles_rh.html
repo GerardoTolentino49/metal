@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Estadísticas RH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <link rel="stylesheet" href="styles/detalles_rh.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!--
+  <div class="topbar">
+        <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+     
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+    
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+  <!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+    <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button" data-tab="empleados">
+          <i class="fas fa-users"></i>Empleados
+        </button>
+        <button class="tab-switch-button" data-tab="apoyos">
+          <i class="fas fa-hand-holding-heart"></i>Apoyos
+        </button>
+        <button class="tab-switch-button" data-tab="amonestaciones">
+          <i class="fas fa-exclamation-triangle"></i>Amonestaciones
+        </button>
+        <button class="tab-switch-button" data-tab="vacaciones">
+          <i class="fas fa-umbrella-beach"></i>Vacaciones
+        </button>
+        <button class="tab-switch-button" data-tab="asistencias">
+          <i class="fas fa-calendar-check"></i>Asistencias
+        </button>
+        <button class="tab-switch-button" data-tab="comidas">
+          <i class="fas fa-utensils"></i>Comidas
+        </button>
+        <button class="tab-switch-button" data-tab="anuncios">
+          <i class="fas fa-bullhorn"></i>Anuncios
+        </button>
+        <button class="tab-switch-button active" data-tab="estadisticas">
+          <i class="fas fa-chart-bar"></i>Estadisticas
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    empleados: 'empleados_panel.html',
+    apoyos: 'apoyos.html',
+    amonestaciones: 'amonestaciones.html',
+    vacaciones: 'vacaciones_panel.html',
+    asistencias: 'asistencias.html',
+    comidas: 'comidas_panel.html',
+    anuncios: 'anuncios.html',
+    estadisticas: 'detalles_rh.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <main class="main-content">
+    <div class="rh-grid">
+      <section class="rh-card span-4" id="grafica1-card">
+        <h3 class="rh-card-title">Vacaciones solicitadas por mes (año actual)</h3>
+        <div class="chart-container">
+          <canvas id="graficaVacacionesMes"></canvas>
+        </div>
+      </section>
+
+      <!-- Espacios para futuras tarjetas (grid 4x4) -->
+      <section class="rh-card kpi-card" id="kpi-empleados-activos">
+        <h4 class="kpi-title">Empleados activos</h4>
+        <div class="kpi-value" id="kpiActivosValor">--</div>
+        <div class="kpi-subtext">Total actualmente en la empresa</div>
+      </section>
+      <section class="rh-card kpi-card" id="kpi-apoyos-total">
+        <h4 class="kpi-title">Apoyos totales</h4>
+        <div class="kpi-value" id="kpiApoyosValor">--</div>
+        <div class="kpi-subtext">Sin contar cancelados</div>
+      </section>
+      <section class="rh-card" id="grafica-apoyos-card">
+        <h3 class="rh-card-title">Meses con más apoyos (año actual)</h3>
+        <div class="chart-container">
+          <canvas id="graficaApoyosMes"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-top5-apoyos-card">
+        <h3 class="rh-card-title">Top 5: personas con más apoyos</h3>
+        <div class="chart-container" style="height: 320px;">
+          <canvas id="graficaTop5Apoyos"></canvas>
+        </div>
+      </section>
+      
+      <!-- Fila 2: 4 nuevas gráficas -->
+      <section class="rh-card" id="grafica-tallas-ropa-card">
+        <h3 class="rh-card-title">Distribución de tallas de ropa</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaTallasRopa"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-tallas-botas-card">
+        <h3 class="rh-card-title">Distribución de tallas de botas</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaTallasBotas"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-departamentos-card">
+        <h3 class="rh-card-title">Empleados por departamento</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaDepartamentos"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-areas-card">
+        <h3 class="rh-card-title">Empleados por área</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaAreas"></canvas>
+        </div>
+      </section>
+      
+      <!-- Fila 3: 4 nuevas gráficas -->
+      <section class="rh-card" id="grafica-tipos-apoyo-card">
+        <h3 class="rh-card-title">Distribución de tipos de apoyo</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaTiposApoyo"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-estado-apoyos-card">
+        <h3 class="rh-card-title">Estado de apoyos</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaEstadoApoyos"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-apoyos-supervisor-card">
+        <h3 class="rh-card-title">Apoyos por supervisor</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaApoyosSupervisor"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-apoyos-mes-tipo-card">
+        <h3 class="rh-card-title">Apoyos por mes y tipo</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaApoyosMesTipo"></canvas>
+        </div>
+      </section>
+      
+      <!-- Fila 4: 4 nuevas gráficas -->
+      <section class="rh-card" id="grafica-edad-promedio-card">
+        <h3 class="rh-card-title">Distribución por rangos de edad</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaEdadPromedio"></canvas>
+        </div>
+      </section>
+      <section class="rh-card" id="grafica-tipo-sangre-card">
+        <h3 class="rh-card-title">Distribución por tipo de sangre</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaTipoSangre"></canvas>
+        </div>
+      </section>
+      <section class="rh-card kpi-card" id="grafica-rotacion-empresa-card">
+        <h3 class="rh-card-title">Rotación de personal anual</h3>
+        <div class="kpi-value" id="kpiRotacionValor">--</div>
+        <div class="kpi-subtext" id="kpiRotacionDetalle">Cargando datos...</div>
+      </section>
+      <section class="rh-card" id="grafica-genero-card">
+        <h3 class="rh-card-title">Distribución por género</h3>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="graficaGenero"></canvas>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    // KPI: Empleados activos (usando /api/empleados)
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/empleados?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/empleados');
+        const empleados = await resp.json();
+        // Considerar activo si activo === true o activo es null/undefined (tratado como activo en endpoints existentes)
+        const activos = empleados.filter(e => e.activo === true || e.activo === null || typeof e.activo === 'undefined');
+        const valor = activos.length;
+        const el = document.getElementById('kpiActivosValor');
+        if (el) el.textContent = String(valor);
+      } catch (e) {
+        console.warn('Error cargando KPI empleados activos:', e);
+        const el = document.getElementById('kpiActivosValor');
+        if (el) el.textContent = '0';
+      }
+    });
+  </script>
+  <script>
+    // KPI: Total de apoyos (excluyendo cancelados)
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/apoyos/total?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/apoyos/total');
+        const data = await resp.json();
+        const valor = (data && typeof data.total === 'number') ? data.total : 0;
+        const el = document.getElementById('kpiApoyosValor');
+        if (el) el.textContent = String(valor);
+      } catch (e) {
+        console.warn('Error cargando KPI apoyos totales:', e);
+        const el = document.getElementById('kpiApoyosValor');
+        if (el) el.textContent = '0';
+      }
+    });
+  </script>
+  <script>
+    // Gráficas de distribución de tallas y agrupaciones
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/empleados?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/empleados');
+        const empleados = await resp.json();
+
+        // Tallas de ropa
+        const ordenRopa = ['XS','S','M','L','XL','XXL','3XL','4XL'];
+        const conteoRopa = Object.fromEntries(ordenRopa.map(t => [t, 0]));
+        conteoRopa['No especificado'] = 0;
+        empleados.forEach(e => {
+          const t = (e.talla_ropa || '').toUpperCase();
+          if (conteoRopa.hasOwnProperty(t)) conteoRopa[t]++;
+          else conteoRopa['No especificado']++;
+        });
+        const ropaLabels = [...ordenRopa, 'No especificado'];
+        const ropaData = ropaLabels.map(l => conteoRopa[l]);
+
+        // Calcular porcentajes para tallas de ropa
+        const totalRopa = ropaData.reduce((sum, value) => sum + value, 0);
+        const porcentajesRopa = ropaData.map(value => totalRopa > 0 ? ((value / totalRopa) * 100).toFixed(1) : 0);
+
+        const ctxRopa = document.getElementById('graficaTallasRopa');
+        if (ctxRopa) {
+          new Chart(ctxRopa, {
+            type: 'doughnut',
+            data: {
+              labels: ropaLabels,
+              datasets: [{
+                data: ropaData,
+                backgroundColor: ['#14b8a6','#60a5fa','#34d399','#f59e0b','#ef4444','#a78bfa','#f472b6','#22d3ee','#9ca3af'],
+                borderWidth: 1
+              }]
+            },
+            options: { 
+              responsive: true, 
+              plugins: { 
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajesRopa[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              } 
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajesRopa[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+
+        // Tallas de botas
+        const ordenBotas = ['24','25','26','27','28','29','30','31'];
+        const conteoBotas = Object.fromEntries(ordenBotas.map(t => [t, 0]));
+        conteoBotas['No especificado'] = 0;
+        empleados.forEach(e => {
+          const t = (e.talla_botas || '').toString();
+          if (conteoBotas.hasOwnProperty(t)) conteoBotas[t]++;
+          else conteoBotas['No especificado']++;
+        });
+        const botasLabels = [...ordenBotas, 'No especificado'];
+        const botasData = botasLabels.map(l => conteoBotas[l]);
+
+        // Calcular porcentajes para tallas de botas
+        const totalBotas = botasData.reduce((sum, value) => sum + value, 0);
+        const porcentajesBotas = botasData.map(value => totalBotas > 0 ? ((value / totalBotas) * 100).toFixed(1) : 0);
+
+        const ctxBotas = document.getElementById('graficaTallasBotas');
+        if (ctxBotas) {
+          new Chart(ctxBotas, {
+            type: 'doughnut',
+            data: {
+              labels: botasLabels,
+              datasets: [{
+                data: botasData,
+                backgroundColor: ['#a3e635','#f97316','#ef4444','#22c55e','#06b6d4','#3b82f6','#a78bfa','#f472b6','#9ca3af'],
+                borderWidth: 1
+              }]
+            },
+            options: { 
+              responsive: true, 
+              plugins: { 
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajesBotas[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              } 
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajesBotas[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+
+        // Empleados por departamento
+        const deptCounts = {};
+        empleados.forEach(e => {
+          const d = e.departamento || 'Sin depto';
+          deptCounts[d] = (deptCounts[d] || 0) + 1;
+        });
+        const deptLabels = Object.keys(deptCounts);
+        const deptData = deptLabels.map(l => deptCounts[l]);
+
+        // Calcular porcentajes para departamentos
+        const totalDept = deptData.reduce((sum, value) => sum + value, 0);
+        const porcentajesDept = deptData.map(value => totalDept > 0 ? ((value / totalDept) * 100).toFixed(1) : 0);
+
+        const ctxDept = document.getElementById('graficaDepartamentos');
+        if (ctxDept) {
+          new Chart(ctxDept, {
+            type: 'doughnut',
+            data: { 
+              labels: deptLabels, 
+              datasets: [{ 
+                data: deptData, 
+                backgroundColor: ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1 
+              }] 
+            },
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { 
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajesDept[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              } 
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajesDept[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+
+        // Empleados por área
+        const areaCounts = {};
+        empleados.forEach(e => {
+          const a = e.area || 'Sin área';
+          areaCounts[a] = (areaCounts[a] || 0) + 1;
+        });
+        const areaLabels = Object.keys(areaCounts);
+        const areaData = areaLabels.map(l => areaCounts[l]);
+
+        // Calcular porcentajes para áreas
+        const totalArea = areaData.reduce((sum, value) => sum + value, 0);
+        const porcentajesArea = areaData.map(value => totalArea > 0 ? ((value / totalArea) * 100).toFixed(1) : 0);
+
+        const ctxArea = document.getElementById('graficaAreas');
+        if (ctxArea) {
+          new Chart(ctxArea, {
+            type: 'doughnut',
+            data: { 
+              labels: areaLabels, 
+              datasets: [{ 
+                data: areaData, 
+                backgroundColor: ['#22c55e','#ef4444','#3b82f6','#f59e0b','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1 
+              }] 
+            },
+            options: { 
+              responsive: true, 
+              maintainAspectRatio: false, 
+              plugins: { 
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajesArea[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              } 
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajesArea[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+      } catch (e) {
+        console.warn('Error cargando gráficas de tallas/departamentos/áreas:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 1: Distribución de tipos de apoyo
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        console.log('Chart.js disponible:', typeof Chart !== 'undefined');
+        console.log('Cargando gráfica de tipos de apoyo...');
+        
+        // Datos de prueba primero
+        const testData = [
+          { tipo_apoyo: 'simple', cantidad: 7 },
+          { tipo_apoyo: 'mediano', cantidad: 4 },
+          { tipo_apoyo: 'unico', cantidad: 1 },
+          { tipo_apoyo: 'Herramienta', cantidad: 1 }
+        ];
+        
+        const resp = await fetch(`/api/apoyos/tipos?t=${Date.now()}`, { cache: 'no-store' });
+        let data;
+        if (resp.ok) {
+          data = await resp.json();
+          console.log('Datos recibidos del API:', data);
+        } else {
+          console.log('Usando datos de prueba');
+          data = testData;
+        }
+
+        const labels = data.map(item => {
+          const tipo = item.tipo_apoyo;
+          if (tipo === 'simple') return 'Sencillo';
+          if (tipo === 'mediano') return 'Mediano';
+          if (tipo === 'unico') return 'Único';
+          if (tipo === 'Herramienta') return 'Herramienta';
+          return tipo;
+        });
+        const values = data.map(item => item.cantidad);
+        console.log('Labels:', labels, 'Values:', values);
+
+        // Calcular porcentajes
+        const total = values.reduce((sum, value) => sum + value, 0);
+        const percentages = values.map(value => total > 0 ? ((value / total) * 100).toFixed(1) : 0);
+
+        const ctx = document.getElementById('graficaTiposApoyo');
+        console.log('Canvas encontrado:', ctx);
+        if (ctx && typeof Chart !== 'undefined') {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: values,
+                backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = percentages[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              }
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = percentages[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+          console.log('Gráfica creada exitosamente');
+        } else {
+          console.error('No se encontró el canvas graficaTiposApoyo o Chart.js no está disponible');
+        }
+      } catch (e) {
+        console.error('Error cargando gráfica de tipos de apoyo:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 2: Estado de apoyos
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        console.log('Cargando gráfica de estado de apoyos...');
+        
+        // Datos de prueba
+        const testData = [
+          { estado_apoyo: 'pendiente', cantidad: 19 },
+          { estado_apoyo: 'entregado', cantidad: 2 },
+          { estado_apoyo: 'cancelado', cantidad: 2 }
+        ];
+        
+        const resp = await fetch(`/api/apoyos/estados?t=${Date.now()}`, { cache: 'no-store' });
+        let data;
+        if (resp.ok) {
+          data = await resp.json();
+          console.log('Datos de estados recibidos:', data);
+        } else {
+          data = testData;
+        }
+
+        const labels = data.map(item => {
+          const estado = item.estado_apoyo;
+          if (estado === 'pendiente') return 'Pendiente';
+          if (estado === 'entregado') return 'Entregado';
+          if (estado === 'cancelado') return 'Cancelado';
+          return estado;
+        });
+        const values = data.map(item => item.cantidad);
+
+        // Calcular porcentajes
+        const total = values.reduce((sum, value) => sum + value, 0);
+        const percentages = values.map(value => total > 0 ? ((value / total) * 100).toFixed(1) : 0);
+
+        // Asignar colores específicos según el estado
+        const backgroundColors = labels.map(label => {
+          if (label === 'Pendiente') return '#f59e0b'; // Naranja
+          if (label === 'Entregado') return '#10b981'; // Verde
+          if (label === 'Cancelado') return '#ef4444'; // Rojo
+          return '#6b7280'; // Gris por defecto
+        });
+
+        const ctx = document.getElementById('graficaEstadoApoyos');
+        console.log('Canvas estado encontrado:', ctx);
+        if (ctx && typeof Chart !== 'undefined') {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: values,
+                backgroundColor: backgroundColors,
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = percentages[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                },
+                datalabels: {
+                  display: true,
+                  color: '#fff',
+                  font: {
+                    weight: 'bold',
+                    size: 12
+                  },
+                  formatter: function(value, context) {
+                    return percentages[context.dataIndex] + '%';
+                  }
+                }
+              }
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = percentages[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+          console.log('Gráfica de estados creada exitosamente');
+        }
+      } catch (e) {
+        console.error('Error cargando gráfica de estado de apoyos:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 3: Apoyos por supervisor
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        console.log('Cargando gráfica de apoyos por supervisor...');
+        
+        // Datos de prueba
+        const testData = [
+          { supervisor: 'test', cantidad: 10 },
+          { supervisor: 'Sin supervisor', cantidad: 6 },
+          { supervisor: 'Villa Jacome Joni', cantidad: 2 },
+          { supervisor: 'testeoxdxd', cantidad: 2 },
+          { supervisor: 'Silva Hernandez Ricardo', cantidad: 1 }
+        ];
+        
+        const resp = await fetch(`/api/apoyos/supervisores?t=${Date.now()}`, { cache: 'no-store' });
+        let data;
+        if (resp.ok) {
+          data = await resp.json();
+          console.log('Datos de supervisores recibidos:', data);
+        } else {
+          data = testData;
+        }
+
+        const labels = data.map(item => item.supervisor);
+        const values = data.map(item => item.cantidad);
+
+        const ctx = document.getElementById('graficaApoyosSupervisor');
+        console.log('Canvas supervisor encontrado:', ctx);
+        if (ctx && typeof Chart !== 'undefined') {
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Apoyos',
+                data: values,
+                backgroundColor: 'rgba(99, 102, 241, 0.5)',
+                borderColor: 'rgba(99, 102, 241, 1)',
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: 'y',
+              scales: {
+                x: { beginAtZero: true, ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.06)' } }
+              },
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw} apoyos` } }
+              }
+            }
+          });
+          console.log('Gráfica de supervisores creada exitosamente');
+        }
+      } catch (e) {
+        console.error('Error cargando gráfica de apoyos por supervisor:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 4: Apoyos por mes y tipo
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        console.log('Cargando gráfica de apoyos por mes y tipo...');
+        
+        const year = new Date().getFullYear();
+        const resp = await fetch(`/api/apoyos/mes-tipo?year=${year}&t=${Date.now()}`, { cache: 'no-store' });
+        let data;
+        if (resp.ok) {
+          data = await resp.json();
+          console.log('Datos de mes-tipo recibidos:', data);
+        } else {
+          // Datos de prueba
+          data = {
+            year: 2025,
+            datos: {
+              "Ene": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Feb": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Mar": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Abr": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "May": {"simple": 1, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Jun": {"simple": 4, "mediano": 1, "unico": 1, "Herramienta": 1},
+              "Jul": {"simple": 1, "mediano": 1, "unico": 0, "Herramienta": 0},
+              "Ago": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Sep": {"simple": 1, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Oct": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Nov": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0},
+              "Dic": {"simple": 0, "mediano": 0, "unico": 0, "Herramienta": 0}
+            }
+          };
+        }
+
+        const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        const tipos = ['simple', 'mediano', 'unico', 'Herramienta'];
+        const tipoLabels = ['Sencillo', 'Mediano', 'Único', 'Herramienta'];
+
+        const datasets = tipos.map((tipo, index) => ({
+          label: tipoLabels[index],
+          data: meses.map(mes => data.datos[mes] ? (data.datos[mes][tipo] || 0) : 0),
+          backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444'][index],
+          borderColor: ['#3b82f6','#10b981','#f59e0b','#ef4444'][index],
+          borderWidth: 1
+        }));
+
+        const ctx = document.getElementById('graficaApoyosMesTipo');
+        console.log('Canvas mes-tipo encontrado:', ctx);
+        if (ctx && typeof Chart !== 'undefined') {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: meses,
+              datasets: datasets
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: { color: '#fff' },
+                  grid: { color: 'rgba(255,255,255,0.1)' }
+                },
+                x: {
+                  ticks: { color: '#fff' },
+                  grid: { color: 'rgba(255,255,255,0.06)' }
+                }
+              },
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} apoyos` } }
+              }
+            }
+          });
+          console.log('Gráfica de mes-tipo creada exitosamente');
+        }
+      } catch (e) {
+        console.error('Error cargando gráfica de apoyos por mes y tipo:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 3: Top 5 personas con más apoyos
+    document.addEventListener('DOMContentLoaded', async function() {
+      const ctx = document.getElementById('graficaTop5Apoyos');
+      if (!ctx) return;
+      let labels = [];
+      let dataVals = [];
+      let apiOk = false;
+      try {
+        const year = new Date().getFullYear();
+        const resp = await fetch(`/api/apoyos/top?year=${year}&t=${Date.now()}`, { cache: 'no-store' });
+        if (resp.ok) {
+          const json = await resp.json();
+          labels = json.map(r => r.nombre_completo || `ID ${r.empleado_id}`);
+          dataVals = json.map(r => r.total || 0);
+          apiOk = true;
+        }
+      } catch (e) {
+        console.warn('Fallo API apoyos/top, se mostrará gráfico vacío:', e);
+      }
+
+      if (labels.length === 0) {
+        labels = ['—','—','—','—','—'];
+        dataVals = [0,0,0,0,0];
+      }
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Apoyos',
+            data: dataVals,
+            backgroundColor: 'rgba(99, 102, 241, 0.5)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          scales: {
+            x: { beginAtZero: true, ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+            y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.06)' } }
+          },
+          plugins: {
+            legend: { labels: { color: '#fff' } },
+            tooltip: { callbacks: { label: (ctx) => `${ctx.raw} apoyos` } }
+          }
+        }
+      });
+
+      if (!apiOk) {
+        const card = document.getElementById('grafica-top5-apoyos-card');
+        if (card && !card.querySelector('.chart-hint')) {
+          const hint = document.createElement('div');
+          hint.className = 'chart-hint';
+          hint.style.marginTop = '8px';
+          hint.style.fontSize = '12px';
+          hint.style.opacity = '0.8';
+          hint.textContent = 'Sin datos o error al cargar. Mostrando gráfico vacío.';
+          card.appendChild(hint);
+        }
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    // Gráfica: Distribución por rangos de edad
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/empleados?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/empleados');
+        const empleados = await resp.json();
+        
+        // Debug: verificar qué datos están llegando
+        console.log('Empleados obtenidos:', empleados.length);
+        console.log('Primeros 3 empleados:', empleados.slice(0, 3).map(emp => ({
+          id: emp.id,
+          nombre: emp.nombre_completo,
+          fecha_cumpleanos: emp.fecha_cumpleanos
+        })));
+
+        // Calcular edades basadas en fecha de nacimiento
+        const rangosEdad = {
+          '18-25': 0,
+          '26-35': 0,
+          '36-45': 0,
+          '46-55': 0,
+          '56-65': 0,
+          '65+': 0,
+          'Sin fecha': 0
+        };
+
+        empleados.forEach((emp, index) => {
+          if (!emp.fecha_cumpleanos) {
+            rangosEdad['Sin fecha']++;
+            if (index < 5) console.log(`Empleado ${index + 1} (${emp.nombre_completo}): Sin fecha de cumpleaños`);
+            return;
+          }
+
+          const fechaNac = new Date(emp.fecha_cumpleanos);
+          if (index < 5) console.log(`Empleado ${index + 1} (${emp.nombre_completo}): fecha_cumpleanos = ${emp.fecha_cumpleanos}, fechaNac = ${fechaNac}`);
+          const hoy = new Date();
+          let edad = hoy.getFullYear() - fechaNac.getFullYear();
+          const mes = hoy.getMonth() - fechaNac.getMonth();
+          
+          if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+            edad--;
+          }
+
+          if (edad >= 18 && edad <= 25) rangosEdad['18-25']++;
+          else if (edad >= 26 && edad <= 35) rangosEdad['26-35']++;
+          else if (edad >= 36 && edad <= 45) rangosEdad['36-45']++;
+          else if (edad >= 46 && edad <= 55) rangosEdad['46-55']++;
+          else if (edad >= 56 && edad <= 65) rangosEdad['56-65']++;
+          else if (edad > 65) rangosEdad['65+']++;
+          else rangosEdad['Sin fecha']++;
+        });
+
+        const labels = Object.keys(rangosEdad);
+        const data = Object.values(rangosEdad);
+        const total = data.reduce((sum, value) => sum + value, 0);
+        const porcentajes = data.map(value => total > 0 ? ((value / total) * 100).toFixed(1) : 0);
+        
+        // Debug: mostrar resultados
+        console.log('Rangos de edad calculados:', rangosEdad);
+        console.log('Total empleados:', total);
+        console.log('Porcentajes:', porcentajes);
+
+        const ctx = document.getElementById('graficaEdadPromedio');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: data,
+                backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajes[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              }
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajes[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+      } catch (e) {
+        console.warn('Error cargando gráfica de edades:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica: Distribución por tipo de sangre
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/empleados?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/empleados');
+        const empleados = await resp.json();
+
+        const tiposSangre = {};
+        empleados.forEach(emp => {
+          const tipo = emp.tipo_sangre || 'No especificado';
+          tiposSangre[tipo] = (tiposSangre[tipo] || 0) + 1;
+        });
+
+        const labels = Object.keys(tiposSangre);
+        const data = Object.values(tiposSangre);
+        const total = data.reduce((sum, value) => sum + value, 0);
+        const porcentajes = data.map(value => total > 0 ? ((value / total) * 100).toFixed(1) : 0);
+
+        const ctx = document.getElementById('graficaTipoSangre');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: data,
+                backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajes[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              }
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajes[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+      } catch (e) {
+        console.warn('Error cargando gráfica de tipos de sangre:', e);
+      }
+    });
+  </script>
+  <script>
+    // KPI: Rotación de personal (solo porcentaje)
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // Obtener datos de rotación del servidor
+        const response = await fetch('/api/empleados/rotacion?periodo=anual');
+        const data = await response.json();
+        
+        if (data.success && data.datos) {
+          const { totalActivos, totalInactivos, totalEmpleados, totalBajasPeriodo, tasaRotacion, tieneDatos } = data.datos;
+          
+          // Mostrar el porcentaje de rotación
+          const valorElement = document.getElementById('kpiRotacionValor');
+          const detalleElement = document.getElementById('kpiRotacionDetalle');
+          
+          if (valorElement && detalleElement) {
+            if (tieneDatos && totalBajasPeriodo > 0) {
+              // Mostrar tasa de rotación calculada
+              valorElement.textContent = `${tasaRotacion}%`;
+              detalleElement.innerHTML = `
+                <div>Total bajas en el año: ${totalBajasPeriodo}</div>
+                <div>Total empleados: ${totalEmpleados}</div>
+                <div style="font-size: 11px; margin-top: 4px; opacity: 0.7;">
+                  Fórmula: (Bajas / Promedio empleados) × 100
+                </div>
+              `;
+            } else {
+              // Sin bajas en el período
+              valorElement.textContent = '0%';
+              detalleElement.innerHTML = `
+                <div>Sin bajas en el período actual</div>
+                <div>Activos: ${totalActivos} | Inactivos: ${totalInactivos}</div>
+                <div>Total empleados: ${totalEmpleados}</div>
+              `;
+            }
+          }
+          
+        } else {
+          throw new Error('No se pudieron obtener los datos de rotación');
+        }
+        
+      } catch (error) {
+        console.error('Error cargando datos de rotación:', error);
+        
+        // Mostrar error
+        const valorElement = document.getElementById('kpiRotacionValor');
+        const detalleElement = document.getElementById('kpiRotacionDetalle');
+        
+        if (valorElement && detalleElement) {
+          valorElement.textContent = '--';
+          valorElement.style.color = '#ef4444';
+          detalleElement.textContent = 'Error al cargar datos de rotación';
+          detalleElement.style.color = '#ef4444';
+        }
+      }
+    });
+  </script>
+  <script>
+    // Gráfica: Distribución por género
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/empleados?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/empleados');
+        const empleados = await resp.json();
+
+        const generos = {};
+        empleados.forEach(emp => {
+          const genero = emp.genero || 'No especificado';
+          generos[genero] = (generos[genero] || 0) + 1;
+        });
+
+        const labels = Object.keys(generos);
+        const data = Object.values(generos);
+        const total = data.reduce((sum, value) => sum + value, 0);
+        const porcentajes = data.map(value => total > 0 ? ((value / total) * 100).toFixed(1) : 0);
+
+        const ctx = document.getElementById('graficaGenero');
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: [{
+                data: data,
+                backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#84cc16','#ec4899','#6b7280'],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.raw;
+                      const percentage = porcentajes[context.dataIndex];
+                      return `${label}: ${value} (${percentage}%)`;
+                    }
+                  }
+                }
+              }
+            },
+            plugins: [{
+              id: 'datalabels',
+              afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                const data = chart.data;
+                const meta = chart.getDatasetMeta(0);
+                
+                meta.data.forEach((element, index) => {
+                  const value = data.datasets[0].data[index];
+                  const percentage = porcentajes[index];
+                  
+                  if (value > 0 && percentage > 0) {
+                    const position = element.tooltipPosition();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(percentage + '%', position.x, position.y);
+                  }
+                });
+              }
+            }]
+          });
+        }
+      } catch (e) {
+        console.warn('Error cargando gráfica de géneros:', e);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 1: Vacaciones solicitadas por mes (año actual)
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        const resp = await fetch(`/api/vacaciones/todas?t=${Date.now()}`, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('No se pudo obtener /api/vacaciones/todas');
+        const data = await resp.json();
+
+        // Agregar por mes: contar solicitudes por mes del año actual
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const countsByMonth = Array(12).fill(0);
+
+        data.forEach(item => {
+          const fecha = item.fecha_solicitud || item.fecha_inicio || item.creado_en;
+          if (!fecha) return;
+          const d = new Date(fecha);
+          if (d.getFullYear() !== currentYear) return;
+          const m = d.getMonth();
+          countsByMonth[m] += 1; // cantidad de solicitudes en el mes
+        });
+
+        const ctx = document.getElementById('graficaVacacionesMes');
+        if (!ctx) return;
+        const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Jul','Ago','Sep','Oct','Nov','Dic'];
+        // Corregir duplicado de Jul -> usar ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+        const etiquetas = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: etiquetas,
+            datasets: [{
+              label: 'Solicitudes por mes',
+              data: countsByMonth,
+              backgroundColor: 'rgba(54, 162, 235, 0.5)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255,255,255,0.1)' }
+              },
+              x: {
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255,255,255,0.06)' }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: { color: '#fff' }
+              },
+              title: {
+                display: false
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    return `${context.raw} solicitudes`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      } catch (err) {
+        console.error('Error cargando gráfica de vacaciones:', err);
+      }
+    });
+  </script>
+  <script>
+    // Gráfica 2: Apoyos por mes (año actual)
+    document.addEventListener('DOMContentLoaded', async function() {
+      const ctx = document.getElementById('graficaApoyosMes');
+      if (!ctx) return;
+      const etiquetas = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      let counts = Array(12).fill(0);
+
+      let apiOk = false;
+      try {
+        const year = new Date().getFullYear();
+        const resp = await fetch(`/api/apoyos/por-mes?year=${year}&t=${Date.now()}`, { cache: 'no-store' });
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json && Array.isArray(json.counts)) {
+            counts = json.counts;
+            apiOk = true;
+          }
+        }
+      } catch (e) {
+        console.warn('Fallo API apoyos/por-mes, se mostrará gráfico vacío:', e);
+      }
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: etiquetas,
+          datasets: [{
+            label: 'Apoyos por mes',
+            data: counts,
+            backgroundColor: 'rgba(255, 159, 64, 0.5)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#fff' },
+              grid: { color: 'rgba(255,255,255,0.1)' }
+            },
+            x: {
+              ticks: { color: '#fff' },
+              grid: { color: 'rgba(255,255,255,0.06)' }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: '#fff' } },
+            tooltip: {
+              callbacks: {
+                label: function(context) { return `${context.raw} apoyos`; }
+              }
+            }
+          }
+        }
+      });
+
+      if (!apiOk) {
+        const card = document.getElementById('grafica-apoyos-card');
+        if (card && !card.querySelector('.chart-hint')) {
+          const hint = document.createElement('div');
+          hint.className = 'chart-hint';
+          hint.style.marginTop = '8px';
+          hint.style.fontSize = '12px';
+          hint.style.opacity = '0.8';
+          hint.textContent = 'Sin datos o error al cargar. Mostrando gráfico vacío.';
+          card.appendChild(hint);
+        }
+      }
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+    <script src="js/topbar.js"></script>
+</body>
+</html>

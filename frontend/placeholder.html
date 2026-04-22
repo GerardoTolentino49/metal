@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Placeholder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  
+  <style>
+    .topbar {
+      width: 100%;
+      height: 64px;
+      background: rgba(35, 36, 58, 0.18);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1001;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 2rem;
+      backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+      border: 1.5px solid rgba(255,255,255,0.22);
+      margin: 12px auto 0 auto;
+      max-width: 95vw;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: #f5f5f5;
+      --border-color: #e0e0e0;
+      --header-bg: #F5F5F5;
+    }
+    [data-theme="dark"] {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --card-bg: #1a1a1a;
+      --border-color: #333333;
+      --header-bg: #000000;
+    }
+    * {
+      font-family: 'Montserrat', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0; /*El fondo se aplicará automáticamente desde global-color.js */
+      color: #ffffff;
+      min-height: 100vh;
+    }
+    .main-content {
+      margin-left: 0;
+      transition: margin-left 0.3s ease;
+      padding: 20px;
+      margin-top: 60px; /* Espacio para la topbar */
+    }
+    .theme-switch-wrapper {
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .theme-switch-label {
+      color: var(--text-color);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .menu-item.has-submenu {
+      position: relative; /*Animacion de submenu*/
+    }
+    .submenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+      min-width: 180px;
+      background: rgba(35,40,70,1);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      padding: 0.3rem 0;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .submenu.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin: 0 10px;
+      vertical-align: middle;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .switch-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .menu-item.has-submenu .submenu.active {
+      display: block;
+    }
+
+    .menu-item.has-submenu .submenu.active ~ .submenu-arrow,
+    .menu-item.has-submenu .submenu.active + .submenu-arrow {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <!-- IT -->
+      <div class="menu-item has-submenu" id="itMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+        </div>
+      </div>
+      <!-- RH -->
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="faltas.html" class="submenu-item">Faltas</a>
+          <a href="retardos.html" class="submenu-item">Retardos</a>
+        </div>
+      </div>
+      <!-- Design -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Design
+        <div class="submenu" id="designSubmenu">
+          <a href="design.html" class="submenu-item">Design</a>
+        </div>
+      </div>
+      <!-- Warehouse -->
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Warehouse
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Inventario</a>
+        </div>
+      </div>
+      <!-- Maintenance -->
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Maintenance
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Mantenimiento</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      <!-- Administración -->
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Administración
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="passwordsLink">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon" title="Cerrar sesión" aria-label="Cerrar sesión">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+          <button class="logout-button" id="logoutButton">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+</body>
+</html>

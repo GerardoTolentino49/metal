@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>TV Diseño</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .page-title i {
+      font-size: 2rem;
+    }
+
+    .files-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .file-item {
+      background: rgba(102, 126, 234, 0.05);
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 15px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .file-item:hover {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .file-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-icon {
+      font-size: 2.5rem;
+      color: #667eea;
+    }
+
+    .file-icon.fa-file-image {
+      color: #4CAF50;
+    }
+
+    .file-icon.fa-file-pdf {
+      color: #d04423;
+    }
+
+    .file-icon.fa-file-powerpoint {
+      color: #d04423;
+    }
+
+    .file-info {
+      flex: 1;
+    }
+
+    .file-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+      word-break: break-word;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .file-detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-detail-item i {
+      color: #667eea;
+      width: 16px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 1.2rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #667eea;
+    }
+
+    .loading i {
+      font-size: 3rem;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .schedule-badge {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* Reloj en esquina superior derecha */
+    .clock-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 15px 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .clock-container:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .clock-icon {
+      font-size: 1.5rem;
+      color: #667eea;
+    }
+
+    .clock-time {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #333;
+      font-family: 'Courier New', monospace;
+    }
+
+    .clock-date {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    /* Modal de pantalla completa */
+    .fullscreen-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fullscreen-overlay.active {
+      display: flex;
+    }
+
+    .fullscreen-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .fullscreen-content img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .fullscreen-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-fullscreen {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .close-fullscreen:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .file-info-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      z-index: 10001;
+      text-align: center;
+    }
+
+    .file-info-overlay h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Ocultar toda la interfaz pero mantener la lógica - solo dejar visible el reloj */
+    .container,
+    .files-container,
+    .close-fullscreen,
+    .file-info-overlay {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    /* Mostrar solo el reloj */
+    .clock-container {
+      display: flex !important;
+      visibility: visible !important;
+    }
+
+    /* Asegurar que el overlay de pantalla completa ocupe toda la pantalla */
+    .fullscreen-overlay {
+      background: #000 !important;
+    }
+
+    body {
+      background: #000 !important;
+      padding: 0 !important;
+    }
+
+    /* Modal para ajustar hora */
+    .time-adjust-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 10001;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .time-adjust-modal.active {
+      display: flex;
+    }
+
+    .time-adjust-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .time-adjust-content h2 {
+      color: #667eea;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+    }
+
+    .time-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .time-input-group input {
+      font-size: 1.5rem;
+      padding: 15px;
+      border: 2px solid #667eea;
+      border-radius: 10px;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      width: 80px;
+      font-weight: 700;
+    }
+
+    .time-input-group span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .time-adjust-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .time-adjust-btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .time-adjust-btn.primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .time-adjust-btn.primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .time-adjust-btn.secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .time-adjust-btn.secondary:hover {
+      background: #d0d0d0;
+      transform: translateY(-2px);
+    }
+
+    .time-adjust-info {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <!-- Reloj en esquina superior derecha -->
+  <div class="clock-container" id="clockContainer">
+    <i class="fas fa-clock clock-icon" onclick="abrirModalAjusteHora()" style="cursor: pointer;"></i>
+    <div onclick="abrirModalAjusteHora()" style="cursor: pointer;">
+      <div class="clock-time" id="clockTime">00:00:00</div>
+      <div class="clock-date" id="clockDate">--/--/----</div>
+    </div>
+    <button onclick="reproducirSonidoImagen(); event.stopPropagation();" 
+            style="background: rgba(102, 126, 234, 0.2); border: 1px solid #667eea; border-radius: 8px; padding: 8px 12px; cursor: pointer; color: #667eea; font-size: 0.9rem; margin-left: 10px; transition: all 0.3s ease;"
+            onmouseover="this.style.background='rgba(102, 126, 234, 0.3)'"
+            onmouseout="this.style.background='rgba(102, 126, 234, 0.2)'"
+            title="Probar sonido">
+      <i class="fas fa-volume-up"></i>
+    </button>
+  </div>
+
+  <!-- Modal para ajustar hora y fecha manualmente -->
+  <div class="time-adjust-modal" id="timeAdjustModal" onclick="cerrarModalAlClicarFuera(event)">
+    <div class="time-adjust-content" onclick="event.stopPropagation()">
+      <h2><i class="fas fa-clock"></i> Ajustar Fecha y Hora</h2>
+      
+      <div class="input-section-label">
+        <i class="fas fa-calendar"></i> Fecha
+      </div>
+      <div class="date-input-group">
+        <input type="number" id="dayInput" min="1" max="31" value="01" placeholder="DD" oninput="validarInputFecha(this, 'day')">
+        <span>/</span>
+        <input type="number" id="monthInput" min="1" max="12" value="01" placeholder="MM" oninput="validarInputFecha(this, 'month')">
+        <span>/</span>
+        <input type="number" id="yearInput" min="2000" max="2100" value="2025" placeholder="YYYY" class="year-input" oninput="validarInputFecha(this, 'year')">
+      </div>
+
+      <div class="input-section-label">
+        <i class="fas fa-clock"></i> Hora
+      </div>
+      <div class="time-input-group">
+        <input type="number" id="hourInput" min="0" max="23" value="00" placeholder="00" oninput="validarInputHora(this, 0, 23)">
+        <span>:</span>
+        <input type="number" id="minuteInput" min="0" max="59" value="00" placeholder="00" oninput="validarInputHora(this, 0, 59)">
+        <span>:</span>
+        <input type="number" id="secondInput" min="0" max="59" value="00" placeholder="00" oninput="validarInputHora(this, 0, 59)">
+      </div>
+      
+      <div class="time-adjust-buttons">
+        <button class="time-adjust-btn primary" onclick="aplicarAjusteHora()">
+          <i class="fas fa-check"></i> Aplicar
+        </button>
+        <button class="time-adjust-btn secondary" onclick="cerrarModalAjusteHora()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+      <div class="time-adjust-info">
+        <i class="fas fa-info-circle"></i> La fecha y hora comenzarán a contar desde los valores ingresados
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de pantalla completa -->
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <div class="fullscreen-content" id="fullscreenContent">
+      <button class="close-fullscreen" id="closeFullscreen" onclick="cerrarPantallaCompleta()">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="file-info-overlay" id="fileInfoOverlay">
+        <h3 id="fileNameDisplay"></h3>
+      </div>
+    </div>
+  </div>
+
+
+    <div class="files-container">
+      <h2 class="section-title">
+        <i class="fas fa-list"></i>
+        Lista de Archivos
+      </h2>
+      <div id="filesGrid" class="files-grid">
+        <div class="loading">
+          <i class="fas fa-spinner"></i>
+          <p>Cargando archivos...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let archivosProgramados = [];
+    let archivoActualEnPantalla = null;
+    let intervaloVerificacion = null;
+    let offsetTiempo = 0; // Diferencia entre hora del servidor y hora del dispositivo
+    let horaManualAjustada = false; // Indica si se ajustó la hora manualmente
+    let horaBaseManual = null; // Timestamp objetivo de la hora ajustada manualmente
+    let timestampAjusteManual = null; // Timestamp del momento en que se hizo el ajuste manual
+    let audioNotificacion = null; // Elemento de audio para reproducir el sonido de notificación
+    let audioDesbloqueado = false; // Indica si el audio ya fue desbloqueado por interacción del usuario
+
+    const AUDIO_STORAGE_KEY = 'recordatorios_audio_imagen';
+
+    function obtenerRutaAudioConfigurada() {
+      try {
+        const saved = localStorage.getItem(AUDIO_STORAGE_KEY);
+        if (saved && typeof saved === 'string' && saved.trim() !== '') {
+          return saved;
+        }
+      } catch (e) {
+        console.warn('No se pudo leer configuración de audio desde localStorage en TV:', e);
+      }
+      // Ruta por defecto
+      return '/MEDIA/notificacion-audio1.mp3';
+    }
+
+    // Inicializar el elemento de audio con el archivo MP3
+    function inicializarAudioNotificacion() {
+      if (!audioNotificacion) {
+        const audioPath = obtenerRutaAudioConfigurada();
+        audioNotificacion = new Audio(audioPath);
+        audioNotificacion.volume = 0.5; // Volumen al 50% (puedes ajustar entre 0 y 1)
+        audioNotificacion.preload = 'auto'; // Precargar el audio
+        
+        // Manejar errores de carga
+        audioNotificacion.addEventListener('error', function(e) {
+          console.error('Error al cargar el archivo de audio:', e);
+          console.error('Ruta intentada:', audioNotificacion?.src);
+        });
+        
+        // Log cuando el audio esté listo
+        audioNotificacion.addEventListener('canplaythrough', function() {
+          console.log('Audio de notificación cargado y listo para reproducir. Ruta:', audioNotificacion?.src);
+        });
+      }
+    }
+
+    // Desbloquear audio con interacción del usuario
+    function desbloquearAudio() {
+      if (audioDesbloqueado) {
+        return Promise.resolve(true); // Ya está desbloqueado
+      }
+      
+      if (!audioNotificacion) {
+        inicializarAudioNotificacion();
+      }
+      
+      if (!audioNotificacion) {
+        return Promise.reject('Audio no inicializado');
+      }
+
+      // Intentar reproducir y pausar inmediatamente para desbloquear el autoplay
+      const volumenOriginal = audioNotificacion.volume;
+      audioNotificacion.volume = 0.01; // Volumen muy bajo para que no se note
+      audioNotificacion.currentTime = 0;
+      
+      const playPromise = audioNotificacion.play();
+      
+      if (playPromise !== undefined) {
+        return playPromise
+          .then(() => {
+            // Pausar inmediatamente después de iniciar
+            audioNotificacion.pause();
+            audioNotificacion.currentTime = 0;
+            audioNotificacion.volume = volumenOriginal; // Restaurar volumen original
+            audioDesbloqueado = true;
+            return true;
+          })
+          .catch(error => {
+            // Si falla, el audio no está desbloqueado aún
+            audioNotificacion.volume = volumenOriginal;
+            return false;
+          });
+      }
+      
+      return Promise.resolve(false);
+    }
+
+    // Reproducir sonido cuando se muestra una imagen
+    function reproducirSonidoImagen() {
+      // Inicializar el audio si no está inicializado
+      if (!audioNotificacion) {
+        inicializarAudioNotificacion();
+      }
+      
+      if (!audioNotificacion) {
+        return;
+      }
+
+      // Función interna para intentar reproducir
+      const intentarReproducir = () => {
+        try {
+          // Reiniciar el audio al inicio si ya estaba reproduciéndose
+          audioNotificacion.currentTime = 0;
+          
+          // Reproducir el sonido
+          const playPromise = audioNotificacion.play();
+          
+          // Manejar la promesa de reproducción (requerido por algunos navegadores)
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                // Sonido reproducido correctamente
+              })
+              .catch(error => {
+                // Si falla por política del navegador, el audio no está desbloqueado
+                if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                  // Marcar como no desbloqueado para intentar de nuevo en la próxima interacción
+                  audioDesbloqueado = false;
+                }
+              });
+          }
+        } catch (error) {
+          // Silenciar errores de autoplay
+          if (error.name !== 'NotAllowedError' && error.name !== 'NotSupportedError') {
+            console.warn('Error al reproducir sonido:', error);
+          }
+        }
+      };
+
+      // Si el audio no está desbloqueado, intentar desbloquearlo primero
+      if (!audioDesbloqueado) {
+        desbloquearAudio()
+          .then(desbloqueado => {
+            if (desbloqueado) {
+              // Si se desbloqueó correctamente, reproducir
+              intentarReproducir();
+            }
+            // Si no se pudo desbloquear, no reproducir (el usuario necesita interactuar primero)
+          })
+          .catch(() => {
+            // Si falla el desbloqueo, no reproducir
+          });
+      } else {
+        // Si ya está desbloqueado, reproducir directamente
+        intentarReproducir();
+      }
+    }
+
+    // Obtener hora del servidor y calcular offset
+    async function obtenerHoraServidor() {
+      try {
+        const response = await fetch('/api/server-time');
+        if (!response.ok) {
+          throw new Error('Error al obtener hora del servidor');
+        }
+        const serverTime = await response.json();
+        const serverTimestamp = serverTime.timestamp;
+        const clientTimestamp = Date.now();
+        offsetTiempo = serverTimestamp - clientTimestamp;
+        
+        // Actualizar reloj con hora del servidor
+        actualizarReloj();
+      } catch (error) {
+        console.error('Error al obtener hora del servidor:', error);
+        // Si falla, usar hora del dispositivo como respaldo
+        offsetTiempo = 0;
+        actualizarReloj();
+      }
+    }
+
+    // Actualizar reloj y verificar archivos en tiempo real
+    function actualizarReloj() {
+      let now;
+      
+      // Si se ajustó manualmente, usar la hora manual como base
+      if (horaManualAjustada && horaBaseManual !== null && timestampAjusteManual !== null) {
+        // Calcular el tiempo transcurrido desde que se hizo el ajuste
+        const tiempoTranscurrido = Date.now() - timestampAjusteManual;
+        // Sumar ese tiempo transcurrido a la hora base ajustada
+        now = new Date(horaBaseManual + tiempoTranscurrido);
+      } else {
+        // Usar hora del servidor (aplicando offset) en lugar de hora del dispositivo
+        now = new Date(Date.now() + offsetTiempo);
+      }
+      
+      const horas = String(now.getHours()).padStart(2, '0');
+      const minutos = String(now.getMinutes()).padStart(2, '0');
+      const segundos = String(now.getSeconds()).padStart(2, '0');
+      const fecha = now.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      document.getElementById('clockTime').textContent = `${horas}:${minutos}:${segundos}`;
+      document.getElementById('clockDate').textContent = fecha;
+      
+      // Verificar archivos programados en tiempo real (cada segundo)
+      verificarArchivosProgramados();
+    }
+
+    // Abrir modal para ajustar hora y fecha manualmente
+    function abrirModalAjusteHora() {
+      // Desbloquear audio cuando el usuario interactúa
+      desbloquearAudio();
+      
+      const modal = document.getElementById('timeAdjustModal');
+      let now;
+      
+      // Obtener la hora actual (manual o del servidor)
+      if (horaManualAjustada && horaBaseManual !== null && timestampAjusteManual !== null) {
+        const tiempoTranscurrido = Date.now() - timestampAjusteManual;
+        now = new Date(horaBaseManual + tiempoTranscurrido);
+      } else {
+        now = new Date(Date.now() + offsetTiempo);
+      }
+      
+      // Llenar los inputs con la fecha actual
+      document.getElementById('dayInput').value = String(now.getDate()).padStart(2, '0');
+      document.getElementById('monthInput').value = String(now.getMonth() + 1).padStart(2, '0'); // getMonth() devuelve 0-11
+      document.getElementById('yearInput').value = String(now.getFullYear());
+      
+      // Llenar los inputs con la hora actual
+      document.getElementById('hourInput').value = String(now.getHours()).padStart(2, '0');
+      document.getElementById('minuteInput').value = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('secondInput').value = String(now.getSeconds()).padStart(2, '0');
+      
+      modal.classList.add('active');
+    }
+
+    // Cerrar modal de ajuste de hora
+    function cerrarModalAjusteHora() {
+      const modal = document.getElementById('timeAdjustModal');
+      modal.classList.remove('active');
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    function cerrarModalAlClicarFuera(event) {
+      if (event.target.id === 'timeAdjustModal') {
+        cerrarModalAjusteHora();
+      }
+    }
+
+    // Validar input de hora
+    function validarInputHora(input, min, max) {
+      let valor = parseInt(input.value);
+      if (isNaN(valor)) {
+        input.value = '';
+        return;
+      }
+      if (valor < min) {
+        input.value = String(min).padStart(2, '0');
+      } else if (valor > max) {
+        input.value = String(max).padStart(2, '0');
+      } else {
+        input.value = String(valor).padStart(2, '0');
+      }
+    }
+
+    // Validar input de fecha
+    function validarInputFecha(input, tipo) {
+      let valor = parseInt(input.value);
+      if (isNaN(valor)) {
+        input.value = '';
+        return;
+      }
+      
+      if (tipo === 'day') {
+        const month = parseInt(document.getElementById('monthInput').value) || 1;
+        const year = parseInt(document.getElementById('yearInput').value) || new Date().getFullYear();
+        const maxDays = new Date(year, month, 0).getDate(); // 0 devuelve el último día del mes anterior
+        
+        if (valor < 1) {
+          input.value = '01';
+        } else if (valor > maxDays) {
+          input.value = String(maxDays).padStart(2, '0');
+        } else {
+          input.value = String(valor).padStart(2, '0');
+        }
+      } else if (tipo === 'month') {
+        if (valor < 1) {
+          input.value = '01';
+        } else if (valor > 12) {
+          input.value = '12';
+        } else {
+          input.value = String(valor).padStart(2, '0');
+        }
+        // Revalidar el día cuando cambia el mes
+        validarInputFecha(document.getElementById('dayInput'), 'day');
+      } else if (tipo === 'year') {
+        if (valor < 2000) {
+          input.value = '2000';
+        } else if (valor > 2100) {
+          input.value = '2100';
+        }
+        // Revalidar el día cuando cambia el año (por años bisiestos)
+        validarInputFecha(document.getElementById('dayInput'), 'day');
+      }
+    }
+
+    // Aplicar ajuste de fecha y hora manual
+    function aplicarAjusteHora() {
+      const dia = parseInt(document.getElementById('dayInput').value) || 1;
+      const mes = parseInt(document.getElementById('monthInput').value) || 1;
+      const año = parseInt(document.getElementById('yearInput').value) || new Date().getFullYear();
+      const horas = parseInt(document.getElementById('hourInput').value) || 0;
+      const minutos = parseInt(document.getElementById('minuteInput').value) || 0;
+      const segundos = parseInt(document.getElementById('secondInput').value) || 0;
+      
+      // Validar valores de fecha
+      const maxDays = new Date(año, mes, 0).getDate();
+      if (dia < 1 || dia > maxDays) {
+        alert(`Por favor ingresa un día válido para ${mes}/${año}:\nDía: 1-${maxDays}`);
+        return;
+      }
+      if (mes < 1 || mes > 12) {
+        alert('Por favor ingresa un mes válido:\nMes: 1-12');
+        return;
+      }
+      if (año < 2000 || año > 2100) {
+        alert('Por favor ingresa un año válido:\nAño: 2000-2100');
+        return;
+      }
+      
+      // Validar valores de hora
+      if (horas < 0 || horas > 23 || minutos < 0 || minutos > 59 || segundos < 0 || segundos > 59) {
+        alert('Por favor ingresa valores válidos:\nHoras: 0-23\nMinutos: 0-59\nSegundos: 0-59');
+        return;
+      }
+      
+      // Crear fecha base con la fecha y hora ingresadas
+      // Nota: mes - 1 porque Date usa 0-11 para los meses
+      const fechaAjustada = new Date(
+        año,
+        mes - 1,
+        dia,
+        horas,
+        minutos,
+        segundos
+      );
+      
+      // Validar que la fecha creada es válida
+      if (fechaAjustada.getFullYear() !== año || 
+          fechaAjustada.getMonth() !== (mes - 1) || 
+          fechaAjustada.getDate() !== dia) {
+        alert('La fecha ingresada no es válida. Por favor verifica los valores.');
+        return;
+      }
+      
+      // Guardar el timestamp objetivo de la fecha y hora ajustada
+      horaBaseManual = fechaAjustada.getTime();
+      // Guardar el timestamp del momento en que se hace el ajuste
+      timestampAjusteManual = Date.now();
+      horaManualAjustada = true;
+      
+      // Cerrar modal
+      cerrarModalAjusteHora();
+      
+      // Actualizar reloj inmediatamente
+      actualizarReloj();
+      
+      console.log(`Fecha y hora ajustadas manualmente a: ${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}/${año} ${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`);
+      console.log(`Timestamp base: ${horaBaseManual}, Timestamp ajuste: ${timestampAjusteManual}`);
+    }
+
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('timeAdjustModal');
+        if (modal.classList.contains('active')) {
+          cerrarModalAjusteHora();
+        } else {
+          cerrarPantallaCompleta();
+        }
+      }
+    });
+
+    // Obtener hora del servidor inicialmente y luego cada 30 segundos para mantener sincronización
+    // Solo si no se ha ajustado manualmente
+    obtenerHoraServidor();
+    setInterval(() => {
+      if (!horaManualAjustada) {
+        obtenerHoraServidor();
+      }
+    }, 30000);
+
+    // Actualizar reloj y verificar archivos cada segundo para tiempo real
+    setInterval(actualizarReloj, 1000);
+
+    // Convertir hora HH:MM a minutos totales para comparación precisa
+    function horaAMinutos(hora) {
+      if (!hora) return null;
+      const partes = String(hora).slice(0, 5).split(':');
+      if (partes.length !== 2) return null;
+      const horas = parseInt(partes[0], 10);
+      const minutos = parseInt(partes[1], 10);
+      if (isNaN(horas) || isNaN(minutos)) return null;
+      return horas * 60 + minutos;
+    }
+
+    // Verificar si la hora actual coincide con algún archivo programado (en tiempo real)
+    function verificarArchivosProgramados() {
+      // Si no hay archivos programados, no hacer nada
+      if (!archivosProgramados || archivosProgramados.length === 0) {
+        // Si hay un archivo en pantalla pero no hay archivos programados, cerrarlo
+        if (archivoActualEnPantalla !== null) {
+          console.log('Cerrando archivo: no hay archivos programados disponibles');
+          cerrarPantallaCompleta();
+          archivoActualEnPantalla = null;
+        }
+        return;
+      }
+
+      // Obtener hora actual (manual o del servidor)
+      let now;
+      if (horaManualAjustada && horaBaseManual !== null && timestampAjusteManual !== null) {
+        const tiempoTranscurrido = Date.now() - timestampAjusteManual;
+        now = new Date(horaBaseManual + tiempoTranscurrido);
+      } else {
+        // Usar hora del servidor (aplicando offset) en lugar de hora del dispositivo
+        now = new Date(Date.now() + offsetTiempo);
+      }
+      
+      const horaActualMinutos = now.getHours() * 60 + now.getMinutes();
+      const horaActualString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      
+      // Buscar archivo que coincida con la hora actual
+      let archivoCoincidente = null;
+      
+      for (const archivo of archivosProgramados) {
+        const activarAutomatico = archivo.activar_automatico === true || 
+                                archivo.activar_automatico === 'true' || 
+                                archivo.activar_automatico === 1 ||
+                                archivo.activar_automatico === '1';
+        
+        if (!activarAutomatico) continue;
+        
+        const tieneHoraInicio = archivo.hora_inicio && archivo.hora_inicio !== null && archivo.hora_inicio !== '';
+        const tieneHoraFin = archivo.hora_fin && archivo.hora_fin !== null && archivo.hora_fin !== '';
+        
+        if (!tieneHoraInicio || !tieneHoraFin) continue;
+        
+        const horaInicioMinutos = horaAMinutos(archivo.hora_inicio);
+        const horaFinMinutos = horaAMinutos(archivo.hora_fin);
+        
+        if (horaInicioMinutos === null || horaFinMinutos === null) continue;
+        
+        // Verificar si la hora actual está dentro del rango (comparación numérica)
+        // Incluye desde horaInicio hasta horaFin (inclusive)
+        // Si la hora actual es mayor que horaFin, ya no está en rango y se debe cerrar
+        const estaEnRango = horaActualMinutos >= horaInicioMinutos && horaActualMinutos <= horaFinMinutos;
+        
+        // Debug: mostrar información de comparación
+        if (archivoActualEnPantalla === parseInt(archivo.id) || estaEnRango) {
+          console.log(`[DEBUG] Archivo ${archivo.name}: Hora actual ${horaActualString} (${horaActualMinutos} min), Rango ${archivo.hora_inicio} (${horaInicioMinutos} min) - ${archivo.hora_fin} (${horaFinMinutos} min), En rango: ${estaEnRango}`);
+        }
+        
+        if (estaEnRango) {
+          archivoCoincidente = archivo;
+          break; // Encontrar el primero que coincida
+        }
+      }
+
+      // Si hay un archivo coincidente
+      if (archivoCoincidente) {
+        const archivoId = parseInt(archivoCoincidente.id);
+        
+        // Si no es el mismo archivo que está en pantalla, cambiarlo
+        if (archivoActualEnPantalla !== archivoId) {
+          console.log(`[${horaActualString}] Mostrando archivo: ${archivoCoincidente.name} (${archivoCoincidente.hora_inicio} - ${archivoCoincidente.hora_fin})`);
+          
+          // Verificar si el nuevo archivo es una imagen para reproducir sonido al cambiar
+          const fileExtension = archivoCoincidente.name.split('.').pop().toLowerCase();
+          const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+          const esImagen = imageExtensions.includes(fileExtension);
+          
+          // Si es un cambio de imagen (de cualquier tipo a imagen, o de imagen a otra imagen), reproducir sonido
+          if (esImagen) {
+            console.log(`[${horaActualString}] Cambiando a imagen: ${archivoCoincidente.name} - Reproduciendo sonido`);
+          }
+          
+          mostrarArchivoPantallaCompleta(archivoCoincidente);
+          archivoActualEnPantalla = archivoId;
+        }
+      }
+      // Si NO hay archivo coincidente pero hay uno en pantalla, cerrarlo inmediatamente
+      else {
+        if (archivoActualEnPantalla !== null) {
+          // Verificar específicamente si el archivo actual ya pasó su hora de fin
+          const archivoActual = archivosProgramados.find(a => parseInt(a.id) === archivoActualEnPantalla);
+          if (archivoActual) {
+            const horaFinMinutos = horaAMinutos(archivoActual.hora_fin);
+            if (horaFinMinutos !== null && horaActualMinutos > horaFinMinutos) {
+              console.log(`[${horaActualString}] Cerrando archivo: ${archivoActual.name} - La hora actual (${horaActualString}) pasó la hora de fin (${archivoActual.hora_fin})`);
+            } else {
+              console.log(`[${horaActualString}] Cerrando archivo: la hora actual (${horaActualString}) está fuera del rango programado`);
+            }
+          } else {
+            console.log(`[${horaActualString}] Cerrando archivo: no se encontró el archivo en la lista programada`);
+          }
+          cerrarPantallaCompleta();
+          archivoActualEnPantalla = null;
+        }
+      }
+    }
+
+    // Mostrar archivo en pantalla completa
+    function mostrarArchivoPantallaCompleta(archivo) {
+      const overlay = document.getElementById('fullscreenOverlay');
+      const content = document.getElementById('fullscreenContent');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      
+      // Limpiar contenido anterior
+      content.innerHTML = '';
+      
+      // Agregar botón de cerrar
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'close-fullscreen';
+      closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      closeBtn.onclick = cerrarPantallaCompleta;
+      content.appendChild(closeBtn);
+      
+      // Agregar información del archivo
+      const fileInfo = document.createElement('div');
+      fileInfo.className = 'file-info-overlay';
+      fileInfo.id = 'fileInfoOverlay';
+      const fileNameH3 = document.createElement('h3');
+      fileNameH3.id = 'fileNameDisplay';
+      fileNameH3.textContent = archivo.name;
+      fileInfo.appendChild(fileNameH3);
+      content.appendChild(fileInfo);
+      
+      // Determinar tipo de archivo y mostrarlo
+      const fileExtension = archivo.name.split('.').pop().toLowerCase();
+      const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+      
+      if (imageExtensions.includes(fileExtension)) {
+        // Reproducir sonido suave cuando se muestra una imagen
+        reproducirSonidoImagen();
+        
+        // Mostrar imagen
+        const img = document.createElement('img');
+        img.src = archivo.file_path;
+        img.alt = archivo.name;
+        img.onerror = function() {
+          content.innerHTML = `
+            <button class="close-fullscreen" onclick="cerrarPantallaCompleta()">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="file-info-overlay">
+              <h3>Error al cargar la imagen: ${archivo.name}</h3>
+            </div>
+          `;
+        };
+        content.insertBefore(img, closeBtn);
+      } else if (fileExtension === 'pdf') {
+        // Mostrar PDF
+        const iframe = document.createElement('iframe');
+        iframe.src = `${archivo.file_path}#view=Fit&zoom=page-fit`;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        content.insertBefore(iframe, closeBtn);
+      } else if (fileExtension === 'pptx' || fileExtension === 'ppt') {
+        // Para PowerPoint, intentar mostrar como PDF si está disponible
+        // O mostrar mensaje de que se necesita conversión
+        content.innerHTML = `
+          <button class="close-fullscreen" onclick="cerrarPantallaCompleta()">
+            <i class="fas fa-times"></i>
+          </button>
+          <div style="color: white; text-align: center; padding: 40px;">
+            <i class="fas fa-file-powerpoint" style="font-size: 4rem; margin-bottom: 20px;"></i>
+            <h2>${archivo.name}</h2>
+            <p style="margin-top: 20px; opacity: 0.8;">
+              Los archivos PowerPoint (.pptx, .ppt) requieren conversión para visualización.
+              <br>Por favor, conviértelo a PDF o imagen para visualización automática.
+            </p>
+            <a href="${archivo.file_path}" target="_blank" style="color: #4CAF50; margin-top: 20px; display: inline-block;">
+              <i class="fas fa-download"></i> Descargar archivo
+            </a>
+          </div>
+        `;
+      } else {
+        // Otro tipo de archivo
+        content.innerHTML = `
+          <button class="close-fullscreen" onclick="cerrarPantallaCompleta()">
+            <i class="fas fa-times"></i>
+          </button>
+          <div style="color: white; text-align: center; padding: 40px;">
+            <i class="fas fa-file" style="font-size: 4rem; margin-bottom: 20px;"></i>
+            <h2>${archivo.name}</h2>
+            <p style="margin-top: 20px; opacity: 0.8;">
+              Tipo de archivo no soportado para visualización automática.
+            </p>
+            <a href="${archivo.file_path}" target="_blank" style="color: #4CAF50; margin-top: 20px; display: inline-block;">
+              <i class="fas fa-download"></i> Descargar archivo
+            </a>
+          </div>
+        `;
+      }
+      
+      // Mostrar overlay
+      overlay.classList.add('active');
+      
+      // Nota: Los navegadores requieren un gesto del usuario para entrar en pantalla completa
+      // Por lo tanto, no podemos llamar requestFullscreen() automáticamente
+      // El overlay ya ocupa toda la pantalla visualmente con CSS
+      // Si el usuario quiere pantalla completa del navegador, puede usar F11 o el botón del navegador
+    }
+
+    // Cerrar pantalla completa
+    function cerrarPantallaCompleta() {
+      const overlay = document.getElementById('fullscreenOverlay');
+      const content = document.getElementById('fullscreenContent');
+      
+      // Limpiar completamente el contenido
+      if (content) {
+        content.innerHTML = '';
+      }
+      
+      // Ocultar overlay
+      overlay.classList.remove('active');
+      
+      // Salir de pantalla completa del navegador si está activa
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(err => {
+          console.log('Error al salir de pantalla completa:', err);
+        });
+      }
+      
+      // Limpiar referencia al archivo actual
+      archivoActualEnPantalla = null;
+      
+      console.log('Pantalla completa cerrada correctamente');
+    }
+
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        cerrarPantallaCompleta();
+      }
+    });
+
+    async function cargarArchivos() {
+      const filesGrid = document.getElementById('filesGrid');
+      
+      try {
+        const response = await fetch('/api/recordatorios/list');
+        if (!response.ok) {
+          throw new Error('Error al cargar los archivos');
+        }
+        
+        const archivos = await response.json();
+        
+        // Filtrar solo archivos con programación activa
+        archivosProgramados = archivos.filter(archivo => {
+          const activarAutomatico = archivo.activar_automatico === true || 
+                                    archivo.activar_automatico === 'true' || 
+                                    archivo.activar_automatico === 1 ||
+                                    archivo.activar_automatico === '1';
+          const tieneHoraInicio = archivo.hora_inicio && archivo.hora_inicio !== null && archivo.hora_inicio !== '';
+          const tieneHoraFin = archivo.hora_fin && archivo.hora_fin !== null && archivo.hora_fin !== '';
+          
+          return activarAutomatico && tieneHoraInicio && tieneHoraFin;
+        });
+        
+        mostrarArchivos(archivos);
+        
+        // La verificación ya se hace cada segundo en actualizarReloj()
+        // Verificar inmediatamente después de cargar
+        verificarArchivosProgramados();
+      } catch (error) {
+        console.error('Error:', error);
+        filesGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Error al cargar los archivos: ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function mostrarArchivos(archivos) {
+      const filesGrid = document.getElementById('filesGrid');
+      
+      if (archivos.length === 0) {
+        filesGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No hay archivos en la tabla recordatorios_presentaciones</p>
+          </div>
+        `;
+        return;
+      }
+
+      filesGrid.innerHTML = archivos.map(archivo => {
+        // Determinar icono según extensión del archivo
+        const fileExtension = archivo.name.split('.').pop().toLowerCase();
+        let iconClass = 'fas fa-file-powerpoint';
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'];
+        
+        if (imageExtensions.includes(fileExtension)) {
+          iconClass = 'fas fa-file-image';
+        } else if (fileExtension === 'pdf') {
+          iconClass = 'fas fa-file-pdf';
+        }
+
+        // Formatear tamaño del archivo
+        const fileSize = formatearTamaño(archivo.file_size || 0);
+
+        // Formatear fecha
+        const fecha = new Date(archivo.uploaded_at).toLocaleString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Mostrar programación si está activa
+        const activarAutomatico = archivo.activar_automatico === true || 
+                                  archivo.activar_automatico === 'true' || 
+                                  archivo.activar_automatico === 1 ||
+                                  archivo.activar_automatico === '1';
+        const tieneHoraInicio = archivo.hora_inicio && archivo.hora_inicio !== null && archivo.hora_inicio !== '';
+        const tieneHoraFin = archivo.hora_fin && archivo.hora_fin !== null && archivo.hora_fin !== '';
+        
+        let scheduleBadge = '';
+        if (activarAutomatico && tieneHoraInicio && tieneHoraFin) {
+          const horaInicio = String(archivo.hora_inicio).slice(0, 5);
+          const horaFin = String(archivo.hora_fin).slice(0, 5);
+          scheduleBadge = `<span class="schedule-badge"><i class="fas fa-clock"></i> Programado: ${horaInicio} - ${horaFin}</span>`;
+        }
+
+        return `
+          <div class="file-item">
+            <div class="file-header">
+              <i class="${iconClass} file-icon"></i>
+              <div class="file-info">
+                <div class="file-name">${archivo.name}</div>
+                ${scheduleBadge}
+              </div>
+            </div>
+            <div class="file-details">
+              <div class="file-detail-item">
+                <i class="fas fa-hashtag"></i>
+                <span><strong>ID:</strong> ${archivo.id}</span>
+              </div>
+              <div class="file-detail-item">
+                <i class="fas fa-file"></i>
+                <span><strong>Tamaño:</strong> ${fileSize}</span>
+              </div>
+              <div class="file-detail-item">
+                <i class="fas fa-calendar"></i>
+                <span><strong>Subido:</strong> ${fecha}</span>
+              </div>
+              <div class="file-detail-item">
+                <i class="fas fa-user"></i>
+                <span><strong>Usuario:</strong> ${archivo.uploaded_by || 'N/A'}</span>
+              </div>
+              <div class="file-detail-item">
+                <i class="fas fa-folder"></i>
+                <span><strong>Ruta:</strong> ${archivo.file_path || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatearTamaño(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    // Inicializar audio al cargar la página
+    // Precargar el archivo de audio para que esté listo cuando se necesite
+    inicializarAudioNotificacion();
+    
+    // Intentar desbloquear el audio cuando el usuario interactúa con la página
+    // Esto permite que el audio se reproduzca automáticamente después
+    // Usar múltiples eventos para mayor compatibilidad
+    const eventosDesbloqueo = ['click', 'touchstart', 'keydown', 'mousedown'];
+    
+    eventosDesbloqueo.forEach(evento => {
+      document.addEventListener(evento, function() {
+        if (!audioDesbloqueado) {
+          desbloquearAudio().then(desbloqueado => {
+            if (desbloqueado) {
+              console.log('Audio desbloqueado mediante:', evento);
+            }
+          });
+        }
+      }, { once: true, passive: true });
+    });
+
+    // Cargar archivos al iniciar
+    cargarArchivos();
+
+    // Recargar lista de archivos cada 30 segundos para mantener actualizado
+    // (esto actualiza la lista de archivos programados disponibles)
+    setInterval(cargarArchivos, 30000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Crear Ticket IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/heic2any"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link rel="stylesheet" href="styles/index_style.css">
+  <style>
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.1);
+    }
+    
+    .ticket-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+    }
+    
+    .ticket-modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 30px;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s ease;
+    }
+    
+    .close-modal:hover {
+      color: #333;
+    }
+    
+    .modal-title {
+      text-align: center;
+      color: #1976d2;
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    
+    .welcome-message {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    
+    .create-ticket-btn {
+      background: linear-gradient(135deg, #1976d2, #1565c0);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 20px;
+    }
+    
+    .create-ticket-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón de regreso -->
+  <button class="back-button" onclick="window.location.href='/selector.html'">←</button>
+
+  <!-- Modal principal de tickets -->
+  <div class="ticket-modal" id="ticketModal">
+    <div class="ticket-modal-content">
+      <button class="close-modal" onclick="closeTicketModal()">×</button>
+      <h1 class="modal-title">Soporte IT</h1>
+      <div class="welcome-message">
+        <p>Bienvenido al sistema de soporte IT de Phoenix Diseño y Manufactura.</p>
+        <p>Aquí puedes crear tickets para reportar problemas técnicos, solicitar asistencia o reportar incidencias.</p>
+      </div>
+      
+      <button class="create-ticket-btn" onclick="showTicketForm()">
+        �� Crear Nuevo Ticket
+      </button>
+    </div>
+  </div>
+
+  <!-- Formulario de ticket (inicialmente oculto) -->
+  <div class="container hidden" id="ticketFormContainer">
+    <h1>Crear Ticket IT</h1>
+    <form id="ticketForm" onsubmit="submitTicket(event)">
+      <div class="form-group">
+        <label for="name" class="required-field">Nombre Completo (Nombre, Apellido Paterno y Apellido Materno)</label>
+        <input type="text" id="name" name="name" placeholder="Juan Perez Garcia" required pattern="^[a-zA-ZÀ-ÿ\s]{3,}(?:\s[a-zA-ZÀ-ÿ\s]{3,}){2,9}$" title="Por favor ingresa tu nombre completo (mínimo 3 palabras, máximo 10 palabras)">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="department" class="required-field">Departamento al que perteneces</label>
+          <select id="department" name="department" required>
+            <option value="">Selecciona un departamento</option>
+            <option value="Recursos Humanos">Recursos Humanos</option>
+            <option value="Gerencia">Gerencia</option>
+            <option value="Planeación">Planeación</option>
+            <option value="Contabilidad">Contabilidad</option>
+            <option value="Producción P1">Producción P1</option>
+            <option value="Producción BA">Producción BA</option>
+            <option value="QC">QC</option>
+            <option value="Diseño">Diseño</option>
+            <option value="IT">IT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="required-field">Correo Electrónico</label>
+          <input type="email" id="email" name="email" placeholder="ejemplo@pdmmetal.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="issue" class="required-field">Descripción detallada del problema (agrega fotografías o videos para facilitar la identificación del problema)</label>
+        <textarea id="issue" name="issue" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="anydesk">AnyDesk (opcional):</label>
+        <div class="anydesk-input">
+          <input type="text" id="anydesk" name="anydesk" placeholder="123-456-7890">
+          <span class="anydesk-info" title="La clave de AnyDesk es útil para acceso remoto">ⓘ</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Archivos multimedia (opcional):</label>
+        <div class="file-input-container">
+          <label class="file-input-label">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            Seleccionar archivos
+            <input type="file" id="media" class="file-input" accept="image/*" multiple />
+          </label>
+          <div class="file-types">Formatos permitidos: JPG, PNG, GIF, WEBP, BMP, TIFF, HEIC</div>
+        </div>
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar" id="progressBar"></div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+        <div class="preview-title">Vista previa de archivos</div>
+        <div class="media-preview" id="mediaPreview">
+          <div class="no-files">No hay archivos seleccionados</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" onclick="showTicketModal()">Cancelar</button>
+        <button type="submit" class="submit-btn" id="submitBtn">Enviar Ticket</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal de éxito -->
+  <div class="overlay" id="overlay"></div>
+  <div class="success-message" id="successMessage">
+    <h2>¡Ticket Enviado!</h2>
+    <p>Tu ticket ha sido registrado correctamente.</p>
+    <p>Nos pondremos en contacto contigo pronto.</p>
+    <button onclick="showTicketModal()" class="submit-btn">Crear Otro Ticket</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+    const form = document.getElementById("ticketForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const mediaInput = document.getElementById("media");
+    const mediaPreview = document.getElementById("mediaPreview");
+    let selectedMedia = [];
+
+    // Mostrar modal al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      showTicketModal();
+    });
+
+    function showTicketModal() {
+      document.getElementById('ticketModal').style.display = 'flex';
+      document.getElementById('ticketFormContainer').classList.add('hidden');
+    }
+
+    function closeTicketModal() {
+      window.location.href = '/selector.html';
+    }
+
+    function showTicketForm() {
+      document.getElementById('ticketModal').style.display = 'none';
+      document.getElementById('ticketFormContainer').classList.remove('hidden');
+    }
+
+    function generateTicketId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function saveTicketToLocalStorage(ticketData) {
+      const tickets = JSON.parse(localStorage.getItem('tickets') || '[]');
+      tickets.push(ticketData);
+      localStorage.setItem('tickets', JSON.stringify(tickets));
+    }
+
+    async function convertHeicToJpg(file) {
+      try {
+        const blob = await heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.8
+        });
+        return new File([blob], file.name.replace(/\.heic$/i, '.jpg'), {
+          type: 'image/jpeg'
+        });
+      } catch (error) {
+        console.error('Error al convertir HEIC:', error);
+        throw error;
+      }
+    }
+
+    async function handleFileSelect(event) {
+      const files = event.target.files;
+      const preview = document.getElementById('mediaPreview');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      
+      if (files.length === 0) {
+        preview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+        return;
+      }
+
+      selectedMedia = [];
+      preview.innerHTML = '';
+      progressContainer.style.display = 'block';
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const progress = ((i + 1) / files.length) * 100;
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+        
+        try {
+          let processedFile = file;
+          if (file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) {
+            processedFile = await convertHeicToJpg(file);
+          }
+          
+          selectedMedia.push(processedFile);
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+              <img src="${e.target.result}" alt="Preview">
+              <span class="file-name">${processedFile.name}</span>
+            `;
+            preview.appendChild(previewItem);
+          };
+          reader.readAsDataURL(processedFile);
+        } catch (error) {
+          console.error('Error procesando archivo:', error);
+        }
+      }
+      
+      progressContainer.style.display = 'none';
+    }
+
+    mediaInput.addEventListener('change', handleFileSelect);
+
+    async function submitTicket(event) {
+      event.preventDefault();
+      
+      const formData = new FormData();
+      const ticketId = generateTicketId();
+      
+      formData.append('id', ticketId);
+      formData.append('name', document.getElementById('name').value);
+      formData.append('department', document.getElementById('department').value);
+      formData.append('email', document.getElementById('email').value);
+      formData.append('issue', document.getElementById('issue').value);
+      formData.append('anydesk', document.getElementById('anydesk').value);
+      formData.append('status', 'recibido');
+      formData.append('timestamp', new Date().toISOString());
+      
+      selectedMedia.forEach(file => {
+        formData.append('media', file);
+      });
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      try {
+        const response = await fetch('/api/tickets.ashx', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const ticketData = {
+            id: ticketId,
+            name: document.getElementById('name').value,
+            department: document.getElementById('department').value,
+            email: document.getElementById('email').value,
+            issue: document.getElementById('issue').value,
+            anydesk: document.getElementById('anydesk').value,
+            status: 'recibido',
+            timestamp: new Date().toISOString()
+          };
+          
+          saveTicketToLocalStorage(ticketData);
+          
+          document.getElementById('overlay').style.display = 'block';
+          document.getElementById('successMessage').style.display = 'block';
+          
+          // Limpiar formulario
+          form.reset();
+          selectedMedia = [];
+          mediaPreview.innerHTML = '<div class="no-files">No hay archivos seleccionados</div>';
+        } else {
+          throw new Error('Error en el servidor');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al enviar el ticket. Por favor, intenta de nuevo.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar Ticket';
+      }
+    }
+  </script>
+</body>
+</html> 

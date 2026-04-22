@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Vacaciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="js/global-color.js" defer></script>
+    <script src="js/tarjetas-guard.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/vacaciones.css">
+        <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+        <style>
+            :root { --bg-color: #abdbb285 !important; }
+            body { background: var(--bg-color) !important; }
+        </style>
+</head>
+<body>
+    <!--
+    <div class="back-button-container">
+      <a href="inicio.html" class="back-button">
+        <svg class="back-button-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>Menú principal</a>
+    </div>-->
+
+    <!--tab switch-->
+      <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+        <div class="tab-switch">
+
+          <button class="tab-switch-button" data-tab="inicio">
+            <i class="fas fa-house"></i>
+          </button>      
+
+          <button class="tab-switch-button active" data-tab="ticketm">
+            <i class="fas fa-plus-circle"></i> Nueva solicitud
+          </button>      
+
+        </div>
+      </div>
+    <script>
+          // Navegación del tab-switch de RH
+      document.addEventListener('DOMContentLoaded', function() {
+        const tabRoutes = {
+          inicio: 'nuevo-inicio.html',
+          ticketm: 'vacaciones.html'
+        };
+
+        const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+        document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+          button.addEventListener('click', function() {
+            const targetPage = tabRoutes[this.dataset.tab];
+            if (!targetPage || targetPage === currentPage) {
+              return;
+            }
+            window.location.href = targetPage;
+          });
+        });
+      });
+    </script>
+
+
+    <div class="container">
+        <h1>Solicitud de Vacaciones</h1>       
+        <form id="formVacaciones" style="margin-bottom: 30px; text-align: left;">
+            <label for="idEmpleado" style="font-weight:600; color:#333;">ID o nombre de empleado:</label><br>
+            <input type="number" id="idEmpleado" name="idEmpleado" required inputmode="numeric" step="1" pattern="\d+" style="width:100%;padding:10px;margin-bottom:15px;border-radius:30px;border:1px solid #000000;font-size:1rem;" oninput="this.value=this.value.replace(/\D/g,'')" onpaste="event.preventDefault();const text=(event.clipboardData||window.clipboardData).getData('text');this.value=text.replace(/\D/g,'')">
+            
+            <div id="mensajeFechasAutomaticas" class="fechas-automaticas" style="display:none;">
+                Los domingos no cuentan como días laborables.
+            </div>
+            
+            <div id="empleadoInfo" class="empleado-info">
+                <h4>Información del Empleado</h4>
+                <div id="empleadoContent"></div>
+            </div>
+
+            <div id="historialVacacionesInline" class="empleado-info" style="display:none; margin-top:10px;">
+                <h4>Historial de Vacaciones</h4>
+                <div id="historialVacacionesContent"></div>
+            </div>
+
+            <label style="font-weight:600; color:#333;">Fecha de inicio:</label><br>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:15px;">
+                <select id="diaInicio" required style="width:95px;padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+                <span style="font-size:1rem;">de</span>
+                <select id="mesInicio" class="input-vacaciones-mes" required style="padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+                <span style="font-size:1rem;">del</span>
+                <select id="anioInicio" required style="width:100px;padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+            </div>
+            <label style="font-weight:600; color:#333;">Fecha de fin:</label><br>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:15px;">
+                <select id="diaFin" required style="width:95px;padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+                <span style="font-size:1rem;">de</span>
+                <select id="mesFin" class="input-vacaciones-mes"required style="padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+                <span style="font-size:1rem;">del</span>
+                <select id="anioFin" required style="width:100px;padding:10px;border-radius:30px;border:1px solid #ccc;font-size:1rem;"></select>
+            </div>
+            
+            <div id="diasSeleccionados" class="dias-seleccionados" style="display:none;">
+                <div class="dias-info">
+                    <span class="dias-texto">
+                        <strong>Días laborables seleccionados:</strong> 
+                        <span id="contadorDias">0</span> día(s) 
+                    </span>
+                </div>
+            </div>
+            <button type="submit" id="btnSolicitar" class="back-button" disabled style="width:100%;margin-bottom:10px;background:#4CAF50;color:#fff;border:none;opacity:0.6;cursor:not-allowed;">Solicitar Vacaciones</button>
+            <div id="mensajeInhabilitado" class="mensaje-inhabilitado" style="display:none;"></div>
+        </form>
+    </div>
+
+
+
+    <script>
+        function llenarSelectsFecha(diaId, mesId, anioId) 
+        {
+            const dias = Array.from({length:31}, (_,i)=>i+1);
+            const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio', 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            const anios = Array.from({length:2100-2025+1}, (_,i)=>2025+i);
+            const diaSel = document.getElementById(diaId);
+            const mesSel = document.getElementById(mesId);
+            const anioSel = document.getElementById(anioId);
+            diaSel.innerHTML = dias.map(d=>`<option value="${d.toString().padStart(2,'0')}">${d}</option>`).join('');
+            mesSel.innerHTML = meses.map((m,i)=>`<option value="${(i+1).toString().padStart(2,'0')}">${m}</option>`).join('');
+            anioSel.innerHTML = anios.map(a=>`<option value="${a}">${a}</option>`).join('');
+        }
+        llenarSelectsFecha('diaInicio','mesInicio','anioInicio');
+        llenarSelectsFecha('diaFin','mesFin','anioFin');
+
+        function obtenerFechaHoySinHora() {
+            const hoy = new Date();
+            return new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+        }
+
+        function establecerFechasInicialesMinimas() {
+            const hoy = obtenerFechaHoySinHora();
+            const diaHoy = hoy.getDate().toString().padStart(2, '0');
+            const mesHoy = (hoy.getMonth() + 1).toString().padStart(2, '0');
+            const anioHoy = hoy.getFullYear().toString();
+
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+
+            diaInicio.value = diaHoy;
+            mesInicio.value = mesHoy;
+            anioInicio.value = anioHoy;
+
+            const fechaFinActual = new Date(parseInt(anioFin.value), parseInt(mesFin.value) - 1, parseInt(diaFin.value));
+            const fechaFinNormalizada = new Date(fechaFinActual.getFullYear(), fechaFinActual.getMonth(), fechaFinActual.getDate());
+            if (fechaFinNormalizada < hoy) {
+                diaFin.value = diaHoy;
+                mesFin.value = mesHoy;
+                anioFin.value = anioHoy;
+            }
+        }
+
+        establecerFechasInicialesMinimas();
+        
+
+        function fechaBonita(dia, mes, anio) 
+        {
+            const meses = ['enero','febrero','marzo','abril','mayo','junio', 'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+            return `${parseInt(dia)} de ${meses[parseInt(mes)-1]} del ${anio}`;
+        }
+
+        function diasEntreFechas(f1, f2) {
+            const [anio1, mes1, dia1] = f1.split('-').map(Number);
+            const [anio2, mes2, dia2] = f2.split('-').map(Number);
+            
+            // Crear fechas usando números para evitar problemas de zona horaria
+            const fechaInicio = new Date(anio1, mes1 - 1, dia1);
+            const fechaFin = new Date(anio2, mes2 - 1, dia2);
+            return calcularDiasLaborables(fechaInicio, fechaFin);
+        }
+
+        function calcularDiasVacaciones(aniosLaborados) 
+        {
+            if (aniosLaborados < 1) return 0;
+            if (aniosLaborados === 1) return 12;
+            if (aniosLaborados === 2) return 14;
+            if (aniosLaborados === 3) return 16;
+            if (aniosLaborados === 4) return 18;
+            if (aniosLaborados === 5) return 20;
+            if (aniosLaborados >= 6 && aniosLaborados <= 10) return 22;
+            if (aniosLaborados >= 11 && aniosLaborados <= 15) return 24;
+            if (aniosLaborados >= 16 && aniosLaborados <= 20) return 26;
+            if (aniosLaborados >= 21 && aniosLaborados <= 25) return 28;
+            if (aniosLaborados >= 26 && aniosLaborados <= 30) return 30;
+            if (aniosLaborados >= 31 && aniosLaborados <= 35) return 32;
+            return 32;
+        }
+        function calcularDiasLaborables(fechaInicio, fechaFin) {
+            let diasLaborables = 0;
+            const fechaActual = new Date(fechaInicio);
+            
+            while (fechaActual <= fechaFin) 
+            {
+                if (fechaActual.getDay() !== 0) // 0 = domingo, 1 = lunes, ..., 6 = sábado
+                { // Si no es domingo
+                    diasLaborables++;
+                }
+                fechaActual.setDate(fechaActual.getDate() + 1);
+            }
+            
+            return diasLaborables;
+        }
+
+        function calcularFechaFinalLaborable(fechaInicio, diasLaborablesNecesarios) 
+        {
+            const fechaFinal = new Date(fechaInicio);
+            let diasLaborablesContados = 0;
+            
+            if (fechaFinal.getDay() === 0) 
+            { // Domingo
+                fechaFinal.setDate(fechaFinal.getDate() + 1); // Avanzar al lunes
+            }
+
+            while (diasLaborablesContados < diasLaborablesNecesarios) // Contar días laborables hasta alcanzar el número necesario
+            {
+                if (fechaFinal.getDay() !== 0) 
+                {
+                    diasLaborablesContados++;
+                }
+                
+                if (diasLaborablesContados < diasLaborablesNecesarios) // Si aún no hemos alcanzado los días necesarios, avanzar al siguiente día
+                {
+                    fechaFinal.setDate(fechaFinal.getDate() + 1);
+                }
+            }
+            
+            return fechaFinal;
+        }
+
+        // Obtiene el lunes más próximo a partir de hoy (si hoy es lunes, toma el siguiente lunes)
+        function obtenerProximoLunes(desdeFecha = new Date()) {
+            const fecha = new Date(desdeFecha);
+            const diaSemana = fecha.getDay(); // 0=Domingo, 1=Lunes, ... 6=Sábado
+            let diasHastaLunes = (1 - diaSemana + 7) % 7;
+            if (diasHastaLunes === 0) diasHastaLunes = 7; // si hoy es lunes, usamos el siguiente lunes
+            fecha.setDate(fecha.getDate() + diasHastaLunes);
+            return fecha;
+        }
+
+        // Límite máximo: un día antes del aniversario que sigue al PRÓXIMO aniversario (≈ 1 año 11 meses 29 días)
+        // Requiere la fecha de ingreso del empleado. Si no existe, usa hoy + (2 años - 1 día)
+        function obtenerFechaLimiteProgramacion(fechaIngresoStr) {
+            const hoy = new Date();
+            if (fechaIngresoStr) {
+                const ingreso = new Date(fechaIngresoStr);
+                // Próximo aniversario a partir de hoy
+                let proximo = new Date(hoy.getFullYear(), ingreso.getMonth(), ingreso.getDate());
+                if (hoy >= new Date(proximo.getFullYear(), proximo.getMonth(), proximo.getDate())) {
+                    proximo.setFullYear(proximo.getFullYear() + 1);
+                }
+                // Aniversario que sigue al próximo (proximo + 1 año)
+                const siguienteAlProximo = new Date(proximo.getFullYear() + 1, proximo.getMonth(), proximo.getDate());
+                // Un día antes
+                siguienteAlProximo.setDate(siguienteAlProximo.getDate() - 1);
+                return siguienteAlProximo;
+            }
+            const limiteFallback = new Date(hoy);
+            limiteFallback.setFullYear(hoy.getFullYear() + 2);
+            limiteFallback.setDate(limiteFallback.getDate() - 1);
+            return limiteFallback;
+        }
+
+        function mostrarAvisoLimite(fechaMax) {
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            const fechaTxt = fechaMax.toLocaleDateString('es-ES', opciones);
+            mostrarErrorModal(' Límite de programación', `Solo puedes programar con máximo un aniversario de anticipación. La fecha más lejana permitida es ${fechaTxt}.`);
+        }
+
+        function mostrarAvisoFechaInicioMinima(fechaMinima) {
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            const fechaTxt = fechaMinima.toLocaleDateString('es-ES', opciones);
+            mostrarErrorModal('Fecha de inicio inválida', `No puedes seleccionar una fecha de inicio anterior al día de hoy (${fechaTxt}).`);
+        }
+
+        // Ajusta automáticamente la fecha final cuando cambia la fecha inicial
+        function ajustarFinSegunInicio() {
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+
+            if (!diaInicio.value || !mesInicio.value || !anioInicio.value) return;
+
+            let fechaInicio = new Date(parseInt(anioInicio.value), parseInt(mesInicio.value) - 1, parseInt(diaInicio.value));
+            const fechaMinimaInicio = obtenerFechaHoySinHora();
+
+            const inicioNormalizadoMin = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate());
+            if (inicioNormalizadoMin < fechaMinimaInicio) {
+                diaInicio.value = fechaMinimaInicio.getDate().toString().padStart(2, '0');
+                mesInicio.value = (fechaMinimaInicio.getMonth() + 1).toString().padStart(2, '0');
+                anioInicio.value = fechaMinimaInicio.getFullYear();
+                fechaInicio = fechaMinimaInicio;
+                if (!errorFechaInicioMostrado) {
+                    mostrarAvisoFechaInicioMinima(fechaMinimaInicio);
+                    errorFechaInicioMostrado = true;
+                }
+            } else {
+                errorFechaInicioMostrado = false;
+            }
+
+            // Enforce: máximo 1 aniversario (1 año) de anticipación desde hoy
+            const limite = obtenerFechaLimiteProgramacion(window.empleadoActual?.fecha_ingreso);
+            const inicioNormalizado = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate());
+            const limiteNormalizado = new Date(limite.getFullYear(), limite.getMonth(), limite.getDate());
+            if (inicioNormalizado > limiteNormalizado) {
+                // Ajustar selects al límite
+                diaInicio.value = limite.getDate().toString().padStart(2, '0');
+                mesInicio.value = (limite.getMonth() + 1).toString().padStart(2, '0');
+                anioInicio.value = limite.getFullYear();
+                fechaInicio = limite;
+                mostrarAvisoLimite(limite);
+            }
+
+            // Determinar cuántos días laborables debe abarcar
+            let diasNecesarios = 0;
+            if (diasPendientesActuales > 0) {
+                // Si hay pendientes, usamos exactamente los pendientes
+                diasNecesarios = diasPendientesActuales;
+            } else {
+                // Si no hay pendientes, mínimo 12 días o los que marque la ley, lo que sea mayor
+                const porLey = calcularDiasVacaciones(aniosLaboradosActuales || 0);
+                const limite = (typeof limiteDerechoSegunInicio === 'number') ? limiteDerechoSegunInicio : porLey;
+                diasNecesarios = Math.max(12, limite);
+            }
+            if (diasNecesarios <= 0) return;
+
+            const nuevaFechaFin = calcularFechaFinalLaborable(fechaInicio, diasNecesarios);
+            diaFin.value = nuevaFechaFin.getDate().toString().padStart(2, '0');
+            mesFin.value = (nuevaFechaFin.getMonth() + 1).toString().padStart(2, '0');
+            anioFin.value = nuevaFechaFin.getFullYear();
+
+            actualizarDiasSeleccionados();
+            validarFechas();
+        }
+
+        // Función para establecer fechas automáticamente
+        function establecerFechasVacaciones(aniosLaborados) 
+        {
+            const hoy = new Date();
+            const proximoLunes = obtenerProximoLunes(hoy); // Lunes más próximo
+            const limite = obtenerFechaLimiteProgramacion(window.empleadoActual?.fecha_ingreso);
+            const inicioAuto = proximoLunes > limite ? limite : proximoLunes; // respetar límite
+            
+            // Establecer fecha de inicio como el próximo lunes
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            
+            diaInicio.value = inicioAuto.getDate().toString().padStart(2, '0');
+            mesInicio.value = (inicioAuto.getMonth() + 1).toString().padStart(2, '0');
+            anioInicio.value = inicioAuto.getFullYear();
+            
+            // Calcular fecha final considerando días laborables (excluyendo domingos)
+            const diasVacaciones = Math.max(12, calcularDiasVacaciones(aniosLaborados));
+            const fechaFinal = calcularFechaFinalLaborable(inicioAuto, diasVacaciones);
+            
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+            
+            // Establecer fecha final
+            diaFin.value = fechaFinal.getDate().toString().padStart(2, '0');
+            mesFin.value = (fechaFinal.getMonth() + 1).toString().padStart(2, '0');
+            anioFin.value = fechaFinal.getFullYear();
+            
+            // Mantener ambas fechas habilitadas para que se puedan modificar
+            diaInicio.disabled = false;
+            mesInicio.disabled = false;
+            anioInicio.disabled = false;
+            diaFin.disabled = false;
+            mesFin.disabled = false;
+            anioFin.disabled = false;
+            
+            // Mostrar mensaje informativo
+            document.getElementById('mensajeFechasAutomaticas').innerHTML = 'Los domingos no cuentan como días laborables.';
+            document.getElementById('mensajeFechasAutomaticas').style.display = 'block';
+            
+            // Actualizar el recuadro de días seleccionados
+            actualizarDiasSeleccionados();
+        }
+
+        // Función para limpiar fechas
+        function limpiarFechas() 
+        {
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+            
+            // Habilitar los selects
+            diaInicio.disabled = false;
+            mesInicio.disabled = false;
+            anioInicio.disabled = false;
+            diaFin.disabled = false;
+            mesFin.disabled = false;
+            anioFin.disabled = false;
+            
+            // Ocultar mensaje informativo
+            document.getElementById('mensajeFechasAutomaticas').style.display = 'none';
+            
+            // Resetear días pendientes
+            diasPendientesActuales = 0;
+        }
+
+        // Función para habilitar/deshabilitar el botón de solicitar vacaciones
+        function controlarBotonVacaciones(diasTrabajados) 
+        {
+            const btnSolicitar = document.getElementById('btnSolicitar');
+            const mensajeInhabilitado = document.getElementById('mensajeInhabilitado');
+            
+            if (diasTrabajados < 365) 
+            {
+                btnSolicitar.disabled = true;
+                btnSolicitar.style.opacity = '0.6';
+                btnSolicitar.style.cursor = 'not-allowed';
+                const diasFaltantes = 365 - diasTrabajados;
+                mensajeInhabilitado.innerHTML = `❌ No puedes solicitar vacaciones. Te faltan ${diasFaltantes} día${diasFaltantes !== 1 ? 's' : ''} para cumplir 1 año de servicio.`;
+                mensajeInhabilitado.style.display = 'block';
+            } else 
+            {
+                // Habilitar el botón si cumple los requisitos mínimos
+                btnSolicitar.disabled = false;
+                btnSolicitar.style.opacity = '1';
+                btnSolicitar.style.cursor = 'pointer';
+                mensajeInhabilitado.style.display = 'none';
+            }
+        }
+
+        // Función para buscar empleado por ID
+        async function buscarEmpleado(empleadoId) {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const empleadoContent = document.getElementById('empleadoContent');
+            
+            // ===== LIMPIEZA AGRESIVA DE ESTADO ANTERIOR =====
+            // Remover TODOS los modales flotantes que pudieran quedar del empleado anterior
+            document.querySelectorAll('.modal-dias-pendientes').forEach(modal => modal.remove());
+            document.querySelectorAll('.modal-error-flotante').forEach(modal => modal.remove());
+            document.querySelectorAll('.modal-confirmacion').forEach(modal => modal.remove());
+            
+            // Limpiar historial inline
+            limpiarHistorialVacacionesInline();
+            
+            // Resetear las variables de control de errores y días pendientes
+            errorDiasExcedidosMostrado = false;
+            errorFechaInicioMostrado = false;
+            diasPendientesActuales = 0;
+            window.ultimoHistorialVacaciones = null;
+            
+            // ===== LIMPIEZA DE VARIABLES GLOBALES DE CICLO =====
+            // Esto es CRÍTICO: evita que validarFechas() use datos del empleado anterior
+            window.agotadoCicloActual = null;
+            window.siguienteAniversarioActual = null;
+            window.ultimoAniversarioActual = null;
+            window.restanteCicloActual = null;
+            limiteDerechoSegunInicio = null;
+            
+            // Asegurar que el parámetro sea una cadena antes de usar trim()
+            const empleadoIdStr = String(empleadoId ?? '').trim();
+            if (!empleadoIdStr) 
+            {
+                empleadoInfo.classList.remove('show');
+                limpiarHistorialVacacionesInline();
+                // Deshabilitar el botón cuando no hay empleado seleccionado
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').style.display = 'none';
+                limpiarFechas();
+                return;
+            }
+            
+            // Mostrar loading
+            empleadoInfo.classList.add('show');
+            empleadoContent.innerHTML = '<p class="loading">Buscando empleado...</p>';
+            
+            try {
+                const response = await fetch(`/api/empleados/${encodeURIComponent(empleadoIdStr)}`);
+                
+                if (!response.ok) 
+                {
+                    if (response.status === 404) 
+                    {
+                        empleadoContent.innerHTML = '<p class="error">❌ Empleado no encontrado</p>';
+                    } else 
+                    {
+                        empleadoContent.innerHTML = '<p class="error">❌ Error al buscar empleado</p>';
+                    }
+                    // Deshabilitar el botón cuando hay error
+                    limpiarHistorialVacacionesInline();
+                    document.getElementById('btnSolicitar').disabled = true;
+                    document.getElementById('mensajeInhabilitado').style.display = 'none';
+                    limpiarFechas();
+                    return;
+                }
+
+                const empleado = await response.json();
+                window.empleadoActual = empleado;
+                let diasTrabajados = 0;
+                let aniversarioInfo = '';
+                if (empleado.fecha_ingreso) 
+                {
+                    const fechaIngreso = new Date(empleado.fecha_ingreso);
+                    const hoy = new Date();
+                    const diffTime = Math.abs(hoy - fechaIngreso);
+                    diasTrabajados = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const aniosCompletados = hoy.getFullYear() - fechaIngreso.getFullYear();
+                    const mesActual = hoy.getMonth();
+                    const mesIngreso = fechaIngreso.getMonth();
+                    const diaActual = hoy.getDate();
+                    const diaIngreso = fechaIngreso.getDate();
+                    
+                    // Ajustar años si aún no ha llegado el aniversario este año
+                    aniosLaborados = (mesActual < mesIngreso) || (mesActual === mesIngreso && diaActual < diaIngreso) 
+                                         ? aniosCompletados - 1 : aniosCompletados;
+                    
+                    // Guardar en variable global para validaciones
+                    aniosLaboradosActuales = aniosLaborados;
+                    
+                    // Calcular días hasta el próximo aniversario
+                    const proximoAniversario = new Date(hoy.getFullYear(), mesIngreso, diaIngreso);
+                    if (hoy > proximoAniversario) 
+                    {
+                        proximoAniversario.setFullYear(hoy.getFullYear() + 1);
+                    }
+                    
+                    const diasHastaAniversario = Math.ceil((proximoAniversario - hoy) / (1000 * 60 * 60 * 24));
+
+                    const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const fechaIngresoFormateada = fechaIngreso.toLocaleDateString('es-ES', opciones);
+                    
+                    aniversarioInfo = `
+                        <p><strong>Fecha de ingreso:</strong> ${fechaIngresoFormateada}</p>
+                        <p><strong>Antigüedad:</strong> <span id="infoAniosServicio">${aniosLaborados} año${aniosLaborados !== 1 ? 's' : ''}</span></p>
+                        <p><strong>Días de vacaciones correspondientes:</strong> <span id="infoDiasDisponibles">${calcularDiasVacaciones(aniosLaborados)} días</span></p>
+                    `;
+                    
+                    // Establecer fechas automáticamente SIEMPRE al próximo lunes
+                    esConfiguracionAutomatica = true; // Marcar que es configuración automática
+                    establecerFechasVacaciones(aniosLaborados);
+                    document.getElementById('mensajeFechasAutomaticas').style.display = 'block';
+                    esConfiguracionAutomatica = false; // Resetear la bandera
+                    // Recalcular derechos usando la fecha de inicio propuesta
+                    recalcularDerechosSegunInicio();
+                } else 
+                { // Si no hay fecha de ingreso, deshabilitar el botón
+                    diasTrabajados = 0;
+                    document.getElementById('mensajeFechasAutomaticas').style.display = 'none';
+                }
+                controlarBotonVacaciones(diasTrabajados);
+                
+                // Mostrar información del empleado
+                empleadoContent.innerHTML = `
+                    <p><strong>Nombre:</strong> ${empleado.nombre_completo}</p>
+                    <p><strong>Jefe directo:</strong> ${empleado.supervisor}</p>
+                    ${aniversarioInfo}
+                `;
+
+                // Verificar si el empleado tiene días pendientes de vacaciones
+                await verificarDiasPendientes(empleadoId, empleado.nombre_completo);
+                
+            } catch (error) 
+            {
+                console.error('Error al buscar empleado:', error);
+                empleadoContent.innerHTML = '<p class="error">❌ Error de conexión</p>';
+                // Deshabilitar el botón cuando hay error
+                limpiarHistorialVacacionesInline();
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').style.display = 'none';
+                limpiarFechas();
+            }
+        }
+
+        // Función para verificar días pendientes de vacaciones
+        async function verificarDiasPendientes(empleadoId, nombreEmpleado) {
+            try 
+            {
+                // Obtener las solicitudes de vacaciones del empleado
+                const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+                
+                if (!response.ok) 
+                {
+                    console.error('Error al obtener solicitudes de vacaciones');
+                    return;
+                }
+
+                const solicitudes = await response.json();
+
+                // Guardar en memoria el historial completo para usarlo en el botón / modal "Historial de Vacaciones"
+                window.ultimoHistorialVacaciones = {
+                    nombre: nombreEmpleado,
+                    solicitudes: Array.isArray(solicitudes) ? solicitudes : []
+                };
+                // Mostrar automáticamente el modal de historial al terminar la búsqueda
+                try { mostrarHistorialVacacionesDesdeUltimo(false); } catch(_) {}
+
+                // Determinar ciclo vigente: [último aniversario, siguiente aniversario)
+                const hoy = new Date();
+                const fechaIngreso = new Date(window.empleadoActual?.fecha_ingreso);
+                const ultimoAniversario = new Date(hoy.getFullYear(), fechaIngreso.getMonth(), fechaIngreso.getDate());
+                if (hoy < ultimoAniversario) {
+                    ultimoAniversario.setFullYear(ultimoAniversario.getFullYear() - 1);
+                }
+                const siguienteAniversario = new Date(ultimoAniversario.getFullYear() + 1, ultimoAniversario.getMonth(), ultimoAniversario.getDate());
+
+                // Días disponibles por ley para el ciclo vigente
+                const totalDisponibles = calcularDiasVacaciones(aniosLaboradosActuales || 0);
+
+                // Filtrar y ordenar solo solicitudes dentro del ciclo vigente
+                const dentroCiclo = [...solicitudes]
+                    .filter(s => {
+                        const inicio = new Date(s.fecha_inicio || s.fecha_fin);
+                        return inicio >= ultimoAniversario && inicio < siguienteAniversario;
+                    })
+                    .sort((a,b)=> new Date(a.fecha_inicio||a.fecha_fin||0) - new Date(b.fecha_inicio||b.fecha_fin||0));
+
+                let usadosCiclo = 0;
+                const solicitudesConPendientes = [];
+                dentroCiclo.forEach(s => {
+                    const usados = parseInt(s.dias_solicitados || 0) || 0;
+                    usadosCiclo += usados;
+                    const restante = Math.max(0, totalDisponibles - usadosCiclo);
+                    if (restante > 0) {
+                        solicitudesConPendientes.push({
+                            ...s,
+                            dias_pendientes: restante
+                        });
+                    }
+                });
+
+                const restanteCiclo = Math.max(0, totalDisponibles - usadosCiclo);
+                diasPendientesActuales = restanteCiclo; // Variable global usada como límite cuando > 0
+                window.restanteCicloActual = restanteCiclo;
+                window.agotadoCicloActual = restanteCiclo === 0;
+                window.ultimoAniversarioActual = ultimoAniversario;
+                window.siguienteAniversarioActual = siguienteAniversario;
+                
+                // Si hay días pendientes realmente (verificar que existan solicitudes con pendientes), mostrar el modal
+                if (restanteCiclo > 0 && solicitudesConPendientes.length > 0) {
+                    mostrarModalDiasPendientes(nombreEmpleado, restanteCiclo, solicitudesConPendientes);
+                    // Configurar fechas automáticamente para los días pendientes
+                    esConfiguracionAutomatica = true; // Marcar que es configuración automática
+                    configurarFechasParaDiasPendientes(restanteCiclo);
+                    esConfiguracionAutomatica = false; // Resetear la bandera
+                }
+
+            } catch (error) {
+                console.error('Error al verificar días pendientes:', error);
+            }
+        }
+
+
+
+        // Función para mostrar el modal de días pendientes
+        function mostrarModalDiasPendientes(nombreEmpleado, totalDiasPendientes, solicitudesConPendientes) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-dias-pendientes';
+            
+            // Crear lista de solicitudes con días pendientes
+            const solicitudesLista = solicitudesConPendientes.map(solicitud => {
+                const fechaInicio = new Date(solicitud.fecha_inicio).toLocaleDateString('es-ES', 
+                {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                const fechaFin = new Date(solicitud.fecha_fin).toLocaleDateString('es-ES', 
+                {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div style="background: #f0f8f0; border-radius: 30px; padding: 10px; margin: 8px 0; text-align: left;">
+                        <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Período:</strong> ${fechaInicio} - ${fechaFin}</p>
+                        <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Días solicitados:</strong> ${solicitud.dias_solicitados}</p>
+                        <p style="margin: 5px 0; font-size: 0.9rem;"><strong>Días pendientes:</strong> <span style="color: #4CAF50; font-weight: bold;">${solicitud.dias_pendientes}</span></p>
+                    </div>
+                `;
+            }).join('');
+
+            modal.innerHTML = `
+                <h2> ¡Tienes días pendientes!</h2>
+                <div class="dato"><b>Empleado:</b> ${nombreEmpleado}</div>
+                <div class="dias-pendientes-info">
+                    <div class="dias-pendientes-numero">${totalDiasPendientes}</div>
+                    <p style="margin: 0; color: #2e7d32; font-weight: 600;">días pendientes de vacaciones</p>
+                </div>
+                <div class="dato">
+                    <p style="margin: 10px 0; font-size: 0.9rem; color: #666;">
+                        Tienes días de vacaciones que no has utilizado. <strong>Las fechas se han configurado automáticamente para solicitar exactamente ${totalDiasPendientes} día${totalDiasPendientes !== 1 ? 's' : ''} pendiente${totalDiasPendientes !== 1 ? 's' : ''}.</strong>
+                    </p>
+                </div>
+                ${solicitudesConPendientes.length > 0 ? `
+                    <div style="margin: 15px 0;">
+                        <p style="font-weight: 600; margin-bottom: 10px; color: #333;">Detalle de solicitudes con días pendientes:</p>
+                        ${solicitudesLista}
+                    </div>
+                ` : ''}
+                <button class="btn-verde">Entendido</button>
+            `;
+
+            document.body.appendChild(modal);
+            modal.querySelector('.btn-verde').onclick = function() 
+            {
+                modal.remove();
+            };
+        }
+
+        // Función para configurar fechas automáticamente para días pendientes
+        function configurarFechasParaDiasPendientes(diasPendientes) 
+        {
+            const hoy = new Date();
+            const proximoLunes = obtenerProximoLunes(hoy);
+            const limite = obtenerFechaLimiteProgramacion(window.empleadoActual?.fecha_ingreso);
+            const inicioAuto = proximoLunes > limite ? limite : proximoLunes; // respetar límite
+            
+            // Establecer fecha de inicio como el próximo lunes
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            
+            diaInicio.value = inicioAuto.getDate().toString().padStart(2, '0');
+            mesInicio.value = (inicioAuto.getMonth() + 1).toString().padStart(2, '0');
+            anioInicio.value = inicioAuto.getFullYear();
+            const fechaFinal = calcularFechaFinalParaDiasPendientes(inicioAuto, diasPendientes);
+            
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+            
+            diaFin.value = fechaFinal.getDate().toString().padStart(2, '0');
+            mesFin.value = (fechaFinal.getMonth() + 1).toString().padStart(2, '0');
+            anioFin.value = fechaFinal.getFullYear();
+            
+            // Mostrar mensaje informativo específico para días pendientes
+            const mensajeFechasAutomaticas = document.getElementById('mensajeFechasAutomaticas');
+            mensajeFechasAutomaticas.innerHTML = `
+                <strong>Configuración automática para días pendientes:</strong><br>
+                Se han configurado las fechas desde el próximo lunes para solicitar exactamente ${diasPendientes} día${diasPendientes !== 1 ? 's' : ''} pendiente${diasPendientes !== 1 ? 's' : ''}.
+                Los domingos no cuentan como días laborables.
+            `;
+            mensajeFechasAutomaticas.style.display = 'block';
+            actualizarDiasSeleccionados();
+        }
+
+        function calcularFechaFinalParaDiasPendientes(fechaInicio, diasPendientes) // Función para calcular la fecha final considerando solo los días pendientes - MODIFICADA
+        {
+            const fechaFinal = new Date(fechaInicio);
+            let diasLaborablesContados = 0;
+            
+            if (fechaFinal.getDay() === 0) // Si el día de inicio es domingo, empezar desde el lunes
+            {
+                fechaFinal.setDate(fechaFinal.getDate() + 1); // Avanzar al lunes
+            }
+
+            while (diasLaborablesContados < diasPendientes) //Si no es domingo, contar el día
+            {
+                if (fechaFinal.getDay() !== 0) {
+                    diasLaborablesContados++;
+                }
+                if (diasLaborablesContados < diasPendientes) 
+                {
+                    fechaFinal.setDate(fechaFinal.getDate() + 1);
+                }
+            }
+            
+            return fechaFinal;
+        }
+        function calcularFechaRegreso(fechaFin) 
+        {
+            const fechaRegreso = new Date(fechaFin);
+            fechaRegreso.setDate(fechaRegreso.getDate() + 1);
+            
+            if (fechaFin.getDay() === 6) 
+            {
+                fechaRegreso.setDate(fechaRegreso.getDate() + 1); // Avanzar al lunes
+            }
+            else if (fechaRegreso.getDay() === 0) 
+            {
+                fechaRegreso.setDate(fechaRegreso.getDate() + 1);
+            }
+            return fechaRegreso;
+        }
+
+        function formatearInformacionVacaciones(fechaInicio, fechaFin, diasLaborables) 
+        {
+            const fechaRegreso = calcularFechaRegreso(fechaFin);
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            const fechaInicioFormateada = fechaInicio.toLocaleDateString('es-ES', opciones);
+            const fechaFinFormateada = fechaFin.toLocaleDateString('es-ES', opciones);
+            const fechaRegresoFormateada = fechaRegreso.toLocaleDateString('es-ES', opciones);
+            
+            return {
+                fechaInicioBonita: fechaInicioFormateada,
+                fechaFinBonita: fechaFinFormateada,
+                fechaRegresoBonita: fechaRegresoFormateada,
+                fechaRegreso: fechaRegreso
+            };
+        }
+
+        // Calcula años de servicio y días trabajados tomando una fecha de referencia
+        function calcularAntiguedadAFecha(fechaIngreso, fechaReferencia) {
+            const ref = new Date(fechaReferencia.getFullYear(), fechaReferencia.getMonth(), fechaReferencia.getDate());
+            const ingreso = new Date(fechaIngreso.getFullYear(), fechaIngreso.getMonth(), fechaIngreso.getDate());
+            const diffMs = ref - ingreso;
+            const diasTrabajados = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            let aniosCompletados = ref.getFullYear() - ingreso.getFullYear();
+            const mesRef = ref.getMonth();
+            const mesIng = ingreso.getMonth();
+            const diaRef = ref.getDate();
+            const diaIng = ingreso.getDate();
+            if ((mesRef < mesIng) || (mesRef === mesIng && diaRef < diaIng)) {
+                aniosCompletados -= 1;
+            }
+            if (aniosCompletados < 0) aniosCompletados = 0;
+            return { anios: aniosCompletados, diasTrabajados };
+        }
+
+        // Recalcula derechos usando la fecha de inicio seleccionada o el próximo lunes
+        function recalcularDerechosSegunInicio() {
+            if (!window.empleadoActual || !window.empleadoActual.fecha_ingreso) return;
+            const ingreso = new Date(window.empleadoActual.fecha_ingreso);
+            const diaInicio = document.getElementById('diaInicio').value;
+            const mesInicio = document.getElementById('mesInicio').value;
+            const anioInicio = document.getElementById('anioInicio').value;
+            let fechaReferencia;
+            if (diaInicio && mesInicio && anioInicio) {
+                fechaReferencia = new Date(parseInt(anioInicio), parseInt(mesInicio) - 1, parseInt(diaInicio));
+            } else {
+                fechaReferencia = obtenerProximoLunes(new Date());
+            }
+            const { anios, diasTrabajados } = calcularAntiguedadAFecha(ingreso, fechaReferencia);
+            aniosLaboradosActuales = anios;
+            controlarBotonVacaciones(diasTrabajados);
+
+            // Actualizar UI de información del empleado conforme a la fecha de inicio
+            try {
+                const spanAnios = document.getElementById('infoAniosServicio');
+                if (spanAnios) {
+                    spanAnios.textContent = `${anios} año${anios !== 1 ? 's' : ''}`;
+                }
+                const spanDias = document.getElementById('infoDiasDisponibles');
+                if (spanDias) {
+                    const dias = calcularDiasVacaciones(anios);
+                    spanDias.textContent = `${dias} días`;
+                }
+            } catch(_) {}
+
+            // Recalcular límites efectivos según la fecha de inicio seleccionada
+            try{
+                const derecho = calcularDiasVacaciones(anios);
+
+                // Recalcular días pendientes vigentes según la fecha de inicio seleccionada
+                // Si la fecha de inicio está en el nuevo ciclo (>= siguiente aniversario calculado al cargar),
+                // entonces los pendientes se reinician al derecho completo.
+                if (window.siguienteAniversarioActual instanceof Date) {
+                    if (fechaReferencia >= window.siguienteAniversarioActual) {
+                        // Después del aniversario: el derecho se reinicia, pero NO modificar el restante del ciclo actual global
+                        limiteDerechoSegunInicio = derecho;
+                        // No hay pendientes en el nuevo ciclo por defecto
+                        diasPendientesActuales = 0;
+                    } else {
+                        // Antes del aniversario: usar el restante del ciclo actual si existe
+                        if (typeof window.restanteCicloActual === 'number') {
+                            diasPendientesActuales = window.restanteCicloActual;
+                            limiteDerechoSegunInicio = window.restanteCicloActual;
+                        } else {
+                            diasPendientesActuales = Math.max(12, derecho);
+                            limiteDerechoSegunInicio = diasPendientesActuales;
+                        }
+                    }
+                } else {
+                    // Si no se ha calculado aún el ciclo, usar el derecho (mínimo 12 si aplica)
+                    diasPendientesActuales = Math.max(12, derecho);
+                    limiteDerechoSegunInicio = diasPendientesActuales;
+                }
+
+                // Ajustar automáticamente la fecha de fin para que cumpla el nuevo límite
+                ajustarFinSegunInicio();
+            }catch(_){ }
+        }
+
+        document.getElementById('idEmpleado').addEventListener('blur', async function() 
+        {
+            const entrada = this.value.trim();
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const empleadoContent = document.getElementById('empleadoContent');
+
+            if (!entrada) { buscarEmpleado(''); return; }
+
+            if (/^\d+$/.test(entrada)) {
+                buscarEmpleado(entrada);
+                return;
+            }
+
+            // Buscar por nombre sin importar el orden (apellidos/nombres)
+            empleadoInfo.classList.add('show');
+            empleadoContent.innerHTML = '<p class="loading">Buscando por nombre...</p>';
+            try {
+                const listaResp = await fetch('/api/empleados');
+                const empleados = await listaResp.json();
+                const qTokens = tokensNombre(entrada);
+                const coincidencias = empleados.filter(e => tokensSubconjunto(qTokens, tokensNombre(e.nombre_completo || '')));
+
+                if (coincidencias.length === 1) {
+                    const unico = coincidencias[0];
+                    this.value = String(unico.id);
+                    buscarEmpleado(unico.id);
+                    return;
+                }
+
+                if (coincidencias.length > 1) {
+                    const modal = document.createElement('div');
+                    modal.className = 'modal-confirmacion';
+                    modal.innerHTML = `
+                        <h2>Selecciona al empleado</h2>
+                        <div class="dato">Se encontraron ${coincidencias.length} coincidencias:</div>
+                        <div style="max-height:300px;overflow:auto;text-align:left;margin:10px 0;">
+                            ${coincidencias.map(c => `
+                                <button class="opcion-emp" data-id="${c.id}" style="width:100%;text-align:left;padding:8px;border:1px solid #ddd;border-radius:8px;margin:6px 0;background:#fff;">
+                                    <b>${c.nombre_completo}</b> <span style=\"color:#666\">(ID ${c.id})</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <button class="close-btn">Cancelar</button>
+                    `;
+                    document.body.appendChild(modal);
+
+                    modal.querySelectorAll('.opcion-emp').forEach(btn => {
+                        btn.onclick = () => {
+                            const idSel = btn.getAttribute('data-id');
+                            this.value = String(idSel);
+                            modal.remove();
+                            buscarEmpleado(idSel);
+                        };
+                    });
+                    modal.querySelector('.close-btn').onclick = () => modal.remove();
+                    empleadoContent.innerHTML = '<p class="info">✅ Elige una opción de la lista.</p>';
+                    return;
+                }
+
+                empleadoContent.innerHTML = '<p class="error">❌ Empleado no encontrado por nombre</p>';
+            } catch (e) {
+                empleadoContent.innerHTML = '<p class="error">❌ Error al buscar por nombre</p>';
+            }
+        });
+
+        document.getElementById('idEmpleado').addEventListener('keydown', function(e) 
+        {
+            if (e.key === 'Enter') 
+            {
+                e.preventDefault();
+                e.stopPropagation();
+                this.blur(); // reutiliza el flujo anterior
+            }
+        });
+
+        let aniosLaboradosActuales = 0;
+        let diasPendientesActuales = 0;
+        let errorDiasExcedidosMostrado = false;
+        let ultimoDerechoDias = null;
+        let limiteDerechoSegunInicio = null; // Límite efectivo según la fecha de inicio seleccionada
+        let errorFechaInicioMostrado = false;
+        let esConfiguracionAutomatica = false;
+
+        const SUPERVISORES = [
+            { id: 17, nombre: "Zaragoza Mendoza Miguel Salvador"},
+            { id: 32, nombre: "Villa Jacome Joni"},
+            { id: 174, nombre: "Silva Hernandez Ricardo"},
+            { id: 341, nombre: "Maria del Rosario Valdez Oregel"},
+            { id: 41, nombre: "Jose Luis Rojas Silva"},
+            { id: 188, nombre: "Nahum Garcia Lazaro"},
+            { id: 474, nombre: "Carlos Jonathan Gonzalez"},
+            { id: 293, nombre: "Juan Manuel Quintana Villaseñor"},
+            { id: 22, nombre: "Jose Carmona Nila"},
+            { id: 236, nombre: "Aispuro Velazquez Jose Carlos"},
+            { id: 456, nombre: "Susana Estrada Lopez"},
+            { id: 100, nombre: "Salvador Magaña Cuevas"},
+            { id: 403, nombre: "Uzziel Uribe Garcia"},
+            { id: 29, nombre: "Ramiro Cortes Pereira"},
+            { id: 399, nombre: "tres"},
+            { id: 384, nombre: "Hugo Mercado Gutierrez"},];
+
+        // Normaliza un nombre: sin acentos, en minúsculas, tokens ordenados
+        function normalizarNombreOrdenLibre(nombre) {
+          if (!nombre) return '';
+          const sinAcentos = nombre
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .trim();
+          // separa por espacio y ordena las palabras para hacer la comparación sin importar el orden
+          return sinAcentos.split(' ').filter(Boolean).sort().join(' ');
+        }
+
+        function nombresEquivalentesOrdenLibre(a, b) {
+          return normalizarNombreOrdenLibre(a) === normalizarNombreOrdenLibre(b);
+        }
+
+        // Obtener tokens normalizados del nombre (sin acentos, minúsculas)
+        function tokensNombre(nombre) {
+          return normalizarNombreOrdenLibre(nombre).split(' ').filter(Boolean);
+        }
+
+        // Verificar si todos los tokens de A están contenidos en B
+        function tokensSubconjunto(tokensA, tokensB) {
+          const setB = new Set(tokensB);
+          return tokensA.every(t => setB.has(t));
+        }
+
+        // Función para validar fechas con todas las reglas (modificada para quitar validación de fecha de inicio)
+        function validarFechas() 
+        {
+            // NO validar mientras se está configurando automáticamente
+            if (esConfiguracionAutomatica) {
+                return true;
+            }
+            
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+            const btnSolicitar = document.getElementById('btnSolicitar');
+            limpiarEstilosError();
+            
+            // Verificar que todas las fechas estén seleccionadas
+            if (!diaInicio.value || !mesInicio.value || !anioInicio.value || !diaFin.value || !mesFin.value || !anioFin.value) 
+            {
+                deshabilitarBoton();
+                return false;
+            }
+            
+            const fechaInicio = new Date(`${anioInicio.value}-${mesInicio.value}-${diaInicio.value}`);
+            const fechaFin = new Date(`${anioFin.value}-${mesFin.value}-${diaFin.value}`);
+            
+            // Crear fechas sin tiempo para comparación
+            const fechaInicioSolo = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate());
+            const fechaFinSolo = new Date(fechaFin.getFullYear(), fechaFin.getMonth(), fechaFin.getDate());
+            const fechaMinimaInicio = obtenerFechaHoySinHora();
+
+            if (fechaInicioSolo < fechaMinimaInicio) {
+                aplicarEstilosError([diaInicio, mesInicio, anioInicio]);
+                deshabilitarBoton();
+                if (!errorFechaInicioMostrado) {
+                    mostrarAvisoFechaInicioMinima(fechaMinimaInicio);
+                    errorFechaInicioMostrado = true;
+                }
+                return false;
+            }
+            errorFechaInicioMostrado = false;
+            
+            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+            if (fechaFinSolo < fechaInicioSolo) {
+                aplicarEstilosError([diaFin, mesFin, anioFin]);
+                deshabilitarBoton();
+                return false;
+            }
+
+            const diasLaborables = calcularDiasLaborables(fechaInicioSolo, fechaFinSolo);
+            
+            // Validar que no exceda los días disponibles según la ley o días pendientes
+            if (aniosLaboradosActuales > 0) 
+            {
+                // Límite base por ley según años a la fecha de inicio seleccionada
+                let diasLimite = typeof limiteDerechoSegunInicio === 'number' ? limiteDerechoSegunInicio : calcularDiasVacaciones(aniosLaboradosActuales);
+                if (diasPendientesActuales > 0) 
+                {
+                    diasLimite = Math.min(diasPendientesActuales, diasLimite);
+                }
+                // Impone mínimo de 12 días laborables si no hay pendientes
+                if (diasPendientesActuales === 0) {
+                    diasLimite = Math.max(12, diasLimite);
+                }
+                
+                // VALIDACIÓN CORREGIDA: si el ciclo actual está agotado, solo bloquear si el inicio cae antes del siguiente aniversario
+                if (diasPendientesActuales === 0 && typeof window.agotadoCicloActual === 'boolean') {
+                    if (window.agotadoCicloActual) {
+                        const siguienteAniv = window.siguienteAniversarioActual;
+                        const hoy = new Date();
+                        const inicioNormalizado = new Date(fechaInicioSolo.getFullYear(), fechaInicioSolo.getMonth(), fechaInicioSolo.getDate());
+                        const siguienteNormalizado = new Date(siguienteAniv.getFullYear(), siguienteAniv.getMonth(), siguienteAniv.getDate());
+                        if (inicioNormalizado < siguienteNormalizado && hoy < siguienteAniv) {
+                            const diasFalt = Math.ceil((siguienteAniv - hoy) / (1000 * 60 * 60 * 24));
+                            mostrarErrorModal(
+                                'Días de vacaciones agotados',
+                                `Has agotado todos tus días de vacaciones del ciclo actual. Puedes volver a solicitar a partir de tu aniversario (${siguienteAniv.toLocaleDateString('es-ES')}). Te faltan ${diasFalt} días.`
+                            );
+                            deshabilitarBoton();
+                            return false;
+                        }
+                    }
+                }
+                
+                if (diasLaborables > diasLimite) 
+                {
+                    aplicarEstilosError([diaInicio, mesInicio, anioInicio, diaFin, mesFin, anioFin]);
+                    deshabilitarBoton();
+                    return false;
+                }
+                if (diasLaborables < 12 && diasPendientesActuales === 0) {
+                    aplicarEstilosError([diaFin, mesFin, anioFin]);
+                    deshabilitarBoton();
+                    return false;
+                }
+            }
+            habilitarBoton();
+            return true;
+        }
+
+        // Función para limpiar estilos de error (modificada para quitar estilos de fecha de inicio)
+        function limpiarEstilosError() {
+            const elementos = [ document.getElementById('diaInicio'), document.getElementById('mesInicio'), document.getElementById('anioInicio'), document.getElementById('diaFin'), document.getElementById('mesFin'), document.getElementById('anioFin')];
+        
+            elementos.forEach(elemento => 
+            {
+                if (elemento) 
+                {
+                    elemento.classList.remove('fecha-invalida');
+                }
+            });
+        }
+        function aplicarEstilosError(elementos) 
+        {
+            elementos.forEach(elemento => 
+            {
+                if (elemento) 
+                {
+                    elemento.classList.add('fecha-invalida');
+                }
+            });
+        }
+        function deshabilitarBoton() 
+        {
+            const btnSolicitar = document.getElementById('btnSolicitar');
+            if (btnSolicitar) 
+            {
+                btnSolicitar.disabled = true;
+                btnSolicitar.style.opacity = '0.6';
+                btnSolicitar.style.cursor = 'not-allowed';
+            }
+        }
+        function habilitarBoton() 
+        {
+            const btnSolicitar = document.getElementById('btnSolicitar');
+            if (btnSolicitar) 
+            {
+                btnSolicitar.disabled = false;
+                btnSolicitar.style.opacity = '1';
+                btnSolicitar.style.cursor = 'pointer';
+            }
+        }
+
+        document.getElementById('diaInicio').addEventListener('change', function(){ ajustarFinSegunInicio(); recalcularDerechosSegunInicio(); validarFechas(); });// Event listeners para validar fechas cuando se modifiquen (removidos los de validarFechaInicio)
+        document.getElementById('mesInicio').addEventListener('change', function(){ ajustarFinSegunInicio(); recalcularDerechosSegunInicio(); validarFechas(); });
+        document.getElementById('anioInicio').addEventListener('change', function(){ ajustarFinSegunInicio(); recalcularDerechosSegunInicio(); validarFechas(); });
+        document.getElementById('diaFin').addEventListener('change', validarFechas);
+        document.getElementById('mesFin').addEventListener('change', validarFechas);
+        document.getElementById('anioFin').addEventListener('change', validarFechas);
+
+        document.getElementById('diaInicio').addEventListener('change', actualizarDiasSeleccionados);// Event listeners para actualizar el recuadro de días
+        document.getElementById('mesInicio').addEventListener('change', actualizarDiasSeleccionados);
+        document.getElementById('anioInicio').addEventListener('change', actualizarDiasSeleccionados);
+        document.getElementById('diaFin').addEventListener('change', actualizarDiasSeleccionados);
+        document.getElementById('mesFin').addEventListener('change', actualizarDiasSeleccionados);
+        document.getElementById('anioFin').addEventListener('change', actualizarDiasSeleccionados);
+
+        // Función para calcular y mostrar días seleccionados
+        function actualizarDiasSeleccionados() {
+            const diaInicio = document.getElementById('diaInicio');
+            const mesInicio = document.getElementById('mesInicio');
+            const anioInicio = document.getElementById('anioInicio');
+            const diaFin = document.getElementById('diaFin');
+            const mesFin = document.getElementById('mesFin');
+            const anioFin = document.getElementById('anioFin');
+            const recuadroDias = document.getElementById('diasSeleccionados');
+            const contadorDias = document.getElementById('contadorDias');
+            
+            // Verificar que todas las fechas estén seleccionadas
+            if (diaInicio.value && mesInicio.value && anioInicio.value && 
+                diaFin.value && mesFin.value && anioFin.value) {
+                
+                // Construir fechas usando números en lugar de string para evitar problemas de zona horaria
+                const fechaInicio = new Date(parseInt(anioInicio.value), parseInt(mesInicio.value) - 1, parseInt(diaInicio.value));
+                const fechaFin = new Date(parseInt(anioFin.value), parseInt(mesFin.value) - 1, parseInt(diaFin.value));
+                const fechaInicioSolo = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), fechaInicio.getDate());
+                const fechaFinSolo = new Date(fechaFin.getFullYear(), fechaFin.getMonth(), fechaFin.getDate());
+                const diasLaborables = calcularDiasLaborables(fechaInicioSolo, fechaFinSolo);
+                const fechaRegreso = calcularFechaRegreso(fechaFinSolo);
+                const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+                const fechaRegresoFormateada = fechaRegreso.toLocaleDateString('es-ES', opciones);
+                
+                // Mostrar el recuadro con información de regreso
+                recuadroDias.style.display = 'block';
+                contadorDias.textContent = diasLaborables;
+                const badgeDerecho = recuadroDias.querySelector('.badge-derecho');
+                if (badgeDerecho) {
+                    badgeDerecho.remove();
+                }
+                
+                // Agregar información del día de regreso
+                const infoRegreso = document.createElement('div');
+                infoRegreso.className = 'info-regreso';
+                infoRegreso.innerHTML = `<strong>Día de regreso:</strong> ${fechaRegresoFormateada}`;
+                const infoRegresoAnterior = recuadroDias.querySelector('.info-regreso');
+                if (infoRegresoAnterior) 
+                {
+                    infoRegresoAnterior.remove();
+                }
+
+                recuadroDias.appendChild(infoRegreso);
+                if (aniosLaboradosActuales > 0) 
+                {
+                    const diasDisponibles = calcularDiasVacaciones(aniosLaboradosActuales);
+                    let diasLimite = diasDisponibles;
+                    let mensajeError = '';
+                    
+                    // Si hay días pendientes, usar esos como límite
+                    if (diasPendientesActuales > 0) 
+                    {
+                        diasLimite = diasPendientesActuales;
+                        mensajeError = `Has seleccionado ${diasLaborables} días laborables, pero solo puedes solicitar ${diasPendientesActuales} día${diasPendientesActuales !== 1 ? 's' : ''} pendiente${diasPendientesActuales !== 1 ? 's' : ''} de vacaciones.`;
+                    } else 
+                    {
+                        // Usar el límite efectivo calculado para esta fecha de inicio
+                        const derechoVigente = typeof limiteDerechoSegunInicio === 'number' ? limiteDerechoSegunInicio : diasDisponibles;
+                        mensajeError = `Has seleccionado ${diasLaborables} días laborables, pero según la ley laboral solo tienes derecho a ${derechoVigente} días por tus ${aniosLaboradosActuales} año${aniosLaboradosActuales !== 1 ? 's' : ''} de servicio.`;
+                    }
+                    
+                    if (diasLaborables > diasLimite) 
+                    {
+                        recuadroDias.style.background = '#ffebee';
+                        recuadroDias.style.borderColor = '#d32f2f';
+                        contadorDias.style.color = '#d32f2f';
+                        
+                        if (!errorDiasExcedidosMostrado && !esConfiguracionAutomatica) {
+                            mostrarErrorModal(
+                                '❌ Fecha inválida',
+                                mensajeError
+                            );
+                            errorDiasExcedidosMostrado = true;
+                        }
+                    } else 
+                    {
+                        recuadroDias.style.background = '#f0f8f0';
+                        recuadroDias.style.borderColor = '#4CAF50';
+                        contadorDias.style.color = '#333';
+                        errorDiasExcedidosMostrado = false; // Resetear la variable cuando los días están dentro del límite
+                    }
+                }
+            } else 
+            {
+                recuadroDias.style.display = 'none'; // Ocultar el recuadro si no están todas las fechas seleccionadas
+            }
+            document.getElementById('formVacaciones').onsubmit = function(e) 
+        {
+            e.preventDefault();      
+            const empleadoId = document.getElementById('idEmpleado').value.trim(); // Validar que haya un empleado seleccionado
+            if (!empleadoId) 
+            {
+                mostrarErrorModal(
+                    '❌ Empleado no seleccionado',
+                    'Por favor, ingresa el ID del empleado antes de solicitar vacaciones.'
+                );
+                return;
+            }
+            
+            if (!validarFechas()) 
+            {
+                return;
+            }
+
+            if (aniosLaboradosActuales < 1) 
+            {
+                mostrarErrorModal
+                (
+                    '❌ No puedes solicitar vacaciones',
+                    'Necesitas tener al menos 1 año de servicio para solicitar vacaciones.'
+                );
+                return;
+            }
+
+            // Ya no pedir clave secreta para solicitar vacaciones
+            (async function continuarSolicitudVacaciones() {
+                try 
+                {
+                    var container = document.querySelector('.container');
+                    container.classList.add('anim-out');
+                    // Construir fechas
+                    var diaI = document.getElementById('diaInicio').value;
+                    var mesI = document.getElementById('mesInicio').value;
+                    var anioI = document.getElementById('anioInicio').value;
+                    var diaF = document.getElementById('diaFin').value;
+                    var mesF = document.getElementById('mesFin').value;
+                    var anioF = document.getElementById('anioFin').value;
+                    
+                    const fechaInicioObj = new Date(parseInt(anioI), parseInt(mesI) - 1, parseInt(diaI));
+                    const fechaFinObj = new Date(parseInt(anioF), parseInt(mesF) - 1, parseInt(diaF));
+                    
+                    var fechaInicio = `${anioI}-${mesI}-${diaI}`;
+                    var fechaFin = `${anioF}-${mesF}-${diaF}`;
+                    
+                    const infoFechas = formatearInformacionVacaciones(fechaInicioObj, fechaFinObj, diasEntreFechas(fechaInicio, fechaFin));
+                    
+                    var dias = diasEntreFechas(fechaInicio, fechaFin);
+                    setTimeout(function() 
+                    {
+                        var modal = document.createElement('div');
+                        modal.className = 'modal-verifica';
+                        modal.innerHTML = `
+                            <h2>Verifica tu información antes de enviarla</h2>
+                            <div class="dato"><b>ID de empleado:</b> ${document.getElementById('idEmpleado').value}</div>
+                            <div class="dato"><b>Fecha de inicio (primer día de descanso):</b> ${infoFechas.fechaInicioBonita}</div>
+                            <div class="dato"><b>Fecha de fin (último día de vacaciones):</b> ${infoFechas.fechaFinBonita}</div>
+                            <div class="dato"><b>Día de regreso al trabajo:</b> ${infoFechas.fechaRegresoBonita}</div>
+                            <button class="btn-verde">Enviar solicitud</button>
+                            <button class="btn-cancelar">Cancelar</button>
+                        `;
+                        document.body.appendChild(modal);
+                        modal.querySelector('.btn-cancelar').onclick = function() 
+                        {
+                            modal.remove();
+                            container.classList.remove('anim-out');
+                        };
+                        modal.querySelector('.btn-verde').onclick = async function() 
+                        {
+                            modal.remove();
+                            
+                            try 
+                            {
+                                const response = await fetch('/api/vacaciones/solicitar', 
+                                {
+                                    method: 'POST',
+                                    headers: 
+                                    {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        empleado_id: document.getElementById('idEmpleado').value,
+                                        supervisor_id: 'administradorPDM',
+                                        fecha_inicio: fechaInicio,
+                                        fecha_fin: fechaFin,
+                                        dias_solicitados: dias
+                                    })
+                                });
+
+                                if (!response.ok) 
+                                {
+                                    const err = await response.json().catch(()=>({}));
+                                    
+                                    // Manejar el caso específico de días agotados
+                                    if (err.error === 'No puedes solicitar vacaciones' && err.proximo_aniversario) 
+                                    {
+                                        mostrarErrorModal(
+                                            'Días de vacaciones agotados',
+                                            err.message
+                                        );
+                                        return;
+                                    }
+                                    
+                                    throw new Error(err.message || 'Error al enviar la solicitud');
+                                }
+
+                                const result = await response.json();
+                                
+                                // Modal de confirmación final con información de regreso
+                                var modalConf = document.createElement('div');
+                                modalConf.className = 'modal-confirmacion';
+                                modalConf.innerHTML = `
+                                    <h2>¡Solicitud enviada!</h2>
+                                    <div class="dato"><b>ID de empleado:</b> ${document.getElementById('idEmpleado').value}</div>
+                                    <div class="dato"><b>Fecha de inicio (primer día de descanso):</b> ${infoFechas.fechaInicioBonita}</div>
+                                    <div class="dato"><b>Fecha de fin (último día de vacaciones):</b> ${infoFechas.fechaFinBonita}</div>
+                                    <div class="dato"><b>Día de regreso al trabajo:</b> ${infoFechas.fechaRegresoBonita}</div>
+                                    <button class="close-btn">Cerrar</button>
+                                `;
+                                document.body.appendChild(modalConf);
+                                modalConf.querySelector('.close-btn').onclick = function() {
+                                    modalConf.remove();
+                                    container.classList.remove('anim-out');
+                                    document.getElementById('formVacaciones').reset();
+                                    document.getElementById('empleadoInfo').classList.remove('show');
+                                };
+                            } catch (error) {
+                                console.error('Error:', error);
+                                // Mostrar modal de error
+                                var modalError = document.createElement('div');
+                                modalError.className = 'modal-confirmacion';
+                                modalError.innerHTML = `
+                                    <h2>Error al enviar solicitud</h2>
+                                    <div class="dato">${error.message || 'No se pudo enviar la solicitud. Inténtalo de nuevo.'}</div>
+                                    <button class="close-btn">Cerrar</button>
+                                `;
+                                document.body.appendChild(modalError);
+                                modalError.querySelector('.close-btn').onclick = function() {
+                                    modalError.remove();
+                                    container.classList.remove('anim-out');
+                                };
+                            }
+                        };
+                    }, 650);
+                } catch (err) 
+                {
+                    console.error(err);
+                    mostrarErrorModal('Error', 'No fue posible procesar la solicitud. Intenta de nuevo.');
+                }
+            })();
+        };
+        };
+
+        function limpiarHistorialVacacionesInline() {
+            const historialInline = document.getElementById('historialVacacionesInline');
+            const historialContent = document.getElementById('historialVacacionesContent');
+            if (historialContent) historialContent.innerHTML = '';
+            if (historialInline) historialInline.style.display = 'none';
+            window.ultimoHistorialVacaciones = null;
+        }
+
+        // Muestra el historial dentro del mismo panel de solicitud
+        function mostrarHistorialVacacionesDesdeUltimo(origenBoton = false) {
+            const idEmpleado = (document.getElementById('idEmpleado')?.value || '').trim();
+            const historialInline = document.getElementById('historialVacacionesInline');
+            const historialContent = document.getElementById('historialVacacionesContent');
+
+            if ((!idEmpleado || !window.ultimoHistorialVacaciones) && origenBoton) {
+                mostrarErrorModal(
+                    'Sin historial',
+                    'Primero busca un empleado para poder mostrar su historial de vacaciones.'
+                );
+                return;
+            }
+            if (!window.ultimoHistorialVacaciones || !historialInline || !historialContent) {
+                limpiarHistorialVacacionesInline();
+                return;
+            }
+
+            const { nombre, solicitudes } = window.ultimoHistorialVacaciones;
+            historialInline.style.display = 'block';
+
+            if (!Array.isArray(solicitudes) || solicitudes.length === 0) {
+                historialContent.innerHTML = `
+                    <div class="dato"><b>Empleado:</b> ${nombre}</div>
+                    <div class="dato">Este empleado no tiene solicitudes de vacaciones registradas.</div>
+                `;
+            } else {
+                const fmt = new Intl.DateTimeFormat('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: '2-digit'
+                });
+                const hoy = new Date();
+                const itemsHtml = [...solicitudes]
+                    .sort((a,b) => new Date(b.fecha_inicio || b.fecha_fin || 0) - new Date(a.fecha_inicio || a.fecha_fin || 0))
+                    .map(s => {
+                        const inicio = s.fecha_inicio ? new Date(s.fecha_inicio) : null;
+                        const fin = s.fecha_fin ? new Date(s.fecha_fin) : null;
+                        const dias = s.dias_solicitados || s.dias || 0;
+                        const estado = (s.estado || '').toString().toLowerCase();
+
+                        let etiquetaEstado = 'Sin estado';
+                        let claseEstado = 'estado-default';
+                        if (estado.includes('aprob') || estado === 'aprobada') {
+                            etiquetaEstado = 'Aprobada';
+                            claseEstado = 'estado-aprobada';
+                        } else if (estado.includes('pend') || estado === 'pendiente') {
+                            etiquetaEstado = 'Pendiente';
+                            claseEstado = 'estado-pendiente';
+                        } else if (estado.includes('rech') || estado === 'rechazada') {
+                            etiquetaEstado = 'Rechazada';
+                            claseEstado = 'estado-rechazada';
+                        }
+
+                        let etiquetaPeriodo = '';
+                        if (inicio && fin) {
+                            etiquetaPeriodo = `${fmt.format(inicio)} — ${fmt.format(fin)}`;
+                        } else if (inicio) {
+                            etiquetaPeriodo = `Desde ${fmt.format(inicio)}`;
+                        } else if (fin) {
+                            etiquetaPeriodo = `Hasta ${fmt.format(fin)}`;
+                        } else {
+                            etiquetaPeriodo = 'Sin fechas registradas';
+                        }
+
+                        let claseLineaTiempo = '';
+                        if (fin && fin < hoy) {
+                            claseLineaTiempo = 'item-pasado';
+                        } else if (inicio && inicio <= hoy && (!fin || fin >= hoy)) {
+                            claseLineaTiempo = 'item-actual';
+                        } else if (inicio && inicio > hoy) {
+                            claseLineaTiempo = 'item-futuro';
+                        }
+
+                        return `
+                            <div class="panel-item-vacacion ${claseLineaTiempo}">
+                                <div class="panel-item-principal">
+                                    <div class="panel-item-fechas">${etiquetaPeriodo}</div>
+                                    <span class="badge-estado ${claseEstado}">${etiquetaEstado}</span>
+                                </div>
+                                <div class="panel-item-detalle">
+                                    <span class="badge-dias">${dias || 0} día${dias === 1 ? '' : 's'}</span>
+                                    ${s.motivo ? `<span class="badge-motivo" title="${s.motivo}">${s.motivo}</span>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                historialContent.innerHTML = `
+                    <div class="dato"><b>Empleado:</b> ${nombre}</div>
+                    <div class="historial-vacaciones-lista">
+                        ${itemsHtml}
+                    </div>
+                `;
+            }
+        }
+
+        function mostrarErrorModal(titulo, mensaje) 
+        {
+            document.querySelectorAll('.modal-error-flotante').forEach(modal => modal.remove());
+
+            const modalError = document.createElement('div');
+            modalError.className = 'modal-confirmacion modal-error-flotante';
+            modalError.innerHTML = `
+                <h2>${titulo}</h2>
+                <div class="dato">${mensaje}</div>
+                <button class="close-btn">Entendido</button>
+            `;
+            document.body.appendChild(modalError);
+            
+            modalError.querySelector('.close-btn').onclick = function() 
+            {
+                modalError.remove();
+            };
+        }
+        </script>
+    </div>
+</body>
+</html>

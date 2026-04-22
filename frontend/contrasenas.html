@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administración de Usuarios - LISA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/contrasenas.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <script src="js/global-color.js"></script>
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+  <!--<div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+  <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button" data-tab="Ausuarios">
+      <i class="fas fa-users-cog"></i> Ajustes de usuarios
+    </button>        
+
+    <button class="tab-switch-button" data-tab="Adepartamentos">
+      <i class="fas fa-building"></i> Ajustes de departamentos
+    </button>
+
+    <button class="tab-switch-button active" data-tab="Acontraseñas">
+      <i class="fas fa-key"></i> Ajustes de permisos
+    </button>
+
+    <button class="tab-switch-button" data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes de ingeniería
+    </button>
+
+  </div>
+</div>
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Ausuarios: 'admin.html',
+    Adepartamentos: 'departamentos.html',
+    Acontraseñas: 'contrasenas.html',
+    Aingenieria: 'admin_it.html',
+
+
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) 
+        {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() 
+    {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+
+  <div class="main-content">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h2 class="admin-title">Administración de Contraseñas</h2>
+        <div class="search-bar-container">
+          <input 
+            type="text" 
+            id="buscarUsuario" 
+            class="search-input" 
+            placeholder="Buscar..."
+            autocomplete="off"
+          >
+        </div>
+      </div>
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+        </tbody>
+      </table>
+      <div id="paginationControls" class="pagination-controls" style="margin-top:12px; display:flex; justify-content:center; gap:8px;"></div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal para editar tarjetas disponibles -->
+  <div id="tarjetasDisponiblesModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Tarjetas Disponibles - <span id="tarjetasUsuarioNombre"></span></h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="tarjetasContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-height: 500px; overflow-y: auto;">
+        </div>
+        <div class="form-actions" style="margin-top: 20px;">
+          <button type="button" class="submit-button" id="guardarTarjetasButton">Guardar Cambios</button>
+          <button type="button" class="cancel-button" id="cerrarTarjetasButton">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje flotante de éxito -->
+  <div id="successMessage" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#4CAF50;color:#fff;padding:32px 48px;border-radius:16px;font-size:2em;z-index:2000;box-shadow:0 4px 32px rgba(0,0,0,0.2);text-align:center;transition:opacity 0.3s;opacity:0;"></div>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/utils.js"></script>
+  <script>
+    // Control de submenús desplegables
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      document.body.classList.add('sidebar-ready');
+      
+      const menuButtons = [
+        { btn: 'itMenuBtn', submenu: 'itSubmenu' },
+        { btn: 'rhMenuBtn', submenu: 'rhSubmenu' },
+        { btn: 'designMenuBtn', submenu: 'designSubmenu' },
+        { btn: 'warehouseMenuBtn', submenu: 'warehouseSubmenu' },
+        { btn: 'maintenanceMenuBtn', submenu: 'maintenanceSubmenu' },
+        { btn: 'adminMenuBtn', submenu: 'adminSubmenu' }
+      ];
+
+      menuButtons.forEach(({ btn, submenu }) => 
+      {
+        const button = document.getElementById(btn);
+        const submenuElement = document.getElementById(submenu);
+        
+        if (button && submenuElement) 
+        {
+          let isOpen = false;
+          let timeoutId = null;
+          
+          // Función para mostrar el submenú
+          function showSubmenu() 
+          {
+            submenuElement.style.display = 'block';
+            button.querySelector('.submenu-arrow').style.transform = 'rotate(180deg)';
+            // Agregar clase para animación después de un pequeño delay
+            setTimeout(() => 
+            {
+              submenuElement.classList.add('show');
+            }, 10);
+          }
+          
+          // Función para ocultar el submenú
+          function hideSubmenu() 
+          {
+            submenuElement.classList.remove('show');
+            setTimeout(() => 
+            {
+              if (!isOpen) 
+              {
+                submenuElement.style.display = 'none';
+                button.querySelector('.submenu-arrow').style.transform = 'rotate(0deg)';
+              }
+            }, 300);
+          }
+          
+          // Mostrar al hacer hover en el botón
+          button.addEventListener('mouseenter', function() 
+          {
+            if (!isOpen) 
+            {
+              clearTimeout(timeoutId);
+              showSubmenu();
+            }
+          });
+
+          button.addEventListener('mouseleave', function(e) 
+          {
+            if (!isOpen) 
+            {
+              timeoutId = setTimeout(() => 
+              {
+                hideSubmenu();
+              }, 100);
+            }
+          });
+          
+          // Mantener abierto cuando el mouse entra al submenú
+          submenuElement.addEventListener('mouseenter', function() 
+          {
+            clearTimeout(timeoutId);
+          });
+          
+          // Ocultar cuando el mouse sale del submenú
+          submenuElement.addEventListener('mouseleave', function() 
+          {
+            if (!isOpen) 
+            {
+              hideSubmenu();
+            }
+          });
+          button.addEventListener('click', function(e) 
+          {
+      e.preventDefault();
+            e.stopPropagation();
+            isOpen = !isOpen;
+      
+            if (isOpen) 
+            {
+              showSubmenu();
+            } else 
+            {
+              hideSubmenu();
+            }
+          });
+
+          document.addEventListener('click', function(e) 
+          {
+            if (!button.contains(e.target) && !submenuElement.contains(e.target)) 
+            {
+              isOpen = false;
+              hideSubmenu();
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <script>
+    let usuarioActualId = null;
+    let tarjetasDisponiblesActuales = {};
+    let todasLasTarjetas = [];
+
+    // Cargar usuarios y mostrar tabla
+    let usuariosLista = [];
+    let filteredUsuarios = [];
+    let currentPage = 1;
+    const pageSize = 10;
+
+    async function cargarUsuarios() {
+      try {
+        const response = await fetch('/api/usuarios');
+        if (!response.ok) throw new Error('Error al cargar usuarios');
+        const usuarios = await response.json();
+        usuariosLista = Array.isArray(usuarios) ? usuarios : [];
+        filteredUsuarios = usuariosLista.slice();
+        currentPage = 1;
+        renderPage(currentPage);
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">Error al cargar usuarios</td></tr>';
+      }
+    }
+
+    function escapeQuotes(str) {
+      return String(str || '').replace(/'/g, "\\'");
+    }
+
+    async function renderPage(page) {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '';
+      const start = (page - 1) * pageSize;
+      const pageItems = filteredUsuarios.slice(start, start + pageSize);
+
+      for (const usuario of pageItems) {
+        const estado = usuario.activo ? 'Activo' : 'Inactivo';
+        const estadoClase = usuario.activo ? 'activo' : 'inactivo';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${usuario.id}</td>
+          <td>${usuario.nombre_completo || ''}</td>
+          <td><span class="estado-badge ${estadoClase}">${estado}</span></td>
+          <td>
+            <button class="edit-tarjetas-btn" onclick="abrirModalTarjetas(${usuario.id}, '${escapeQuotes(usuario.nombre_completo)}')">
+              <span class="btn-text">Gestionar Tarjetas</span>
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      }
+
+      currentPage = page;
+      updatePaginationControls();
+    }
+
+    function updatePaginationControls() {
+      const totalPages = Math.max(1, Math.ceil(filteredUsuarios.length / pageSize));
+      const container = document.getElementById('paginationControls');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const prev = document.createElement('button');
+      prev.textContent = 'Anterior';
+      prev.disabled = currentPage === 1;
+      prev.addEventListener('click', () => renderPage(Math.max(1, currentPage - 1)));
+      container.appendChild(prev);
+
+      const maxButtons = 7;
+      let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+      let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+      if (endPage - startPage + 1 < maxButtons) {
+        startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+
+      for (let p = startPage; p <= endPage; p++) {
+        const btn = document.createElement('button');
+        btn.textContent = p;
+        if (p === currentPage) {
+          btn.disabled = true;
+          btn.style.fontWeight = '600';
+        }
+        btn.addEventListener('click', () => renderPage(p));
+        container.appendChild(btn);
+      }
+
+      const next = document.createElement('button');
+      next.textContent = 'Siguiente';
+      next.disabled = currentPage >= totalPages;
+      next.addEventListener('click', () => renderPage(Math.min(totalPages, currentPage + 1)));
+      container.appendChild(next);
+    }
+
+    // Obtener tarjetas disponibles de un usuario desde la tabla tarjetas_disponibles
+    async function obtenerTarjetasUsuario(usuarioId) 
+    {
+      try {
+        // El endpoint espera userId como query parameter
+        const response = await fetch(`/api/tarjetas-disponibles?userId=${usuarioId}`);
+        if (!response.ok) {
+          console.warn(`No se encontraron tarjetas para el usuario ${usuarioId}`);
+          return [];
+        }
+        const data = await response.json();
+        
+        // El endpoint retorna un objeto con tarjetas que contiene propiedades show_*
+        // Extraer las tarjetas que están habilitadas (true)
+        if (data.success && data.tarjetas) 
+        {
+          return Object.keys(data.tarjetas)
+            .filter(key => data.tarjetas[key] === true)
+            .map(key => key.replace('show_', '')); // Remover "show_" del nombre
+        }
+        return [];
+      } catch (error) 
+      {
+        console.error('Error al obtener tarjetas:', error);
+        return [];
+      }
+    }
+
+    async function cargarTodasLasTarjetas() {
+      // Columna 1
+      const columna1 = [
+        { id: 'show_tickets_it', nombre: 'Tickets IT' },
+        { id: 'show_tickets_mantenimiento', nombre: 'Tickets Mantenimiento' },
+        { id: 'show_vacaciones', nombre: 'Vacaciones' },
+        { id: 'show_permisos', nombre: 'Permisos Empleados' },
+        { id: 'show_amonestaciones', nombre: 'Amonestaciones' },
+        { id: 'show_comidas', nombre: 'Registro de Comidas' },
+        { id: 'show_requisicion', nombre: 'Requisicion de Compras' }
+      ];
+
+      // Columna 2
+      const columna2 = [
+        { id: 'show_it', nombre: 'IT' },
+        { id: 'show_rh', nombre: 'RH' },
+        { id: 'show_mantenimiento', nombre: 'Mantenimiento' }
+      ];
+
+      // Columna 3
+      const columna3 = [
+        { id: 'show_proyectos', nombre: 'Proyectos' },
+        { id: 'show_diseno', nombre: 'Diseño' },
+        { id: 'show_planeacion_compras', nombre: 'Planeación y Compras' },
+        { id: 'show_produccion', nombre: 'Producción' },
+        { id: 'show_calidad', nombre: 'Calidad' },
+        { id: 'show_importacion_exportacion', nombre: 'Importación y Exportación' },
+        { id: 'show_contabilidad', nombre: 'Contabilidad' },
+        { id: 'show_almacen', nombre: 'Almacén' }
+      ];
+
+      return { columna1, columna2, columna3 };
+    }
+
+    // Abrir modal para editar tarjetas
+    async function abrirModalTarjetas(usuarioId, nombreUsuario) 
+    {
+      usuarioActualId = usuarioId;
+      document.getElementById('tarjetasUsuarioNombre').textContent = nombreUsuario;
+      const tarjetasOrganizadas = await cargarTodasLasTarjetas();
+      
+      // Obtener tarjetas actuales del usuario desde tarjetas_disponibles
+      try 
+      {
+        const response = await fetch(`/api/tarjetas-disponibles?userId=${usuarioId}`);
+        if (!response.ok) throw new Error('Error al obtener tarjetas');
+        const data = await response.json();
+        
+        tarjetasDisponiblesActuales = {};
+        
+        // Crear contenedor para 3 columnas
+        const contenedor = document.getElementById('tarjetasContainer');
+        contenedor.innerHTML = '';
+        
+        // Función para crear columna
+        const crearColumna = (tarjetas) => {
+          const columnaDiv = document.createElement('div');
+          columnaDiv.style.cssText = 'display: flex; flex-direction: column; gap: 10px;';
+          
+          tarjetas.forEach(tarjeta => {
+            const tarjetaId = tarjeta.id;
+            const tarjetaNombre = tarjeta.nombre;
+            const esActiva = data.success && data.tarjetas && data.tarjetas[tarjetaId] === true;
+            
+            tarjetasDisponiblesActuales[tarjetaId] = esActiva;
+            
+            const switchDiv = document.createElement('div');
+            switchDiv.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);';
+            
+            switchDiv.innerHTML = `
+              <label class="switch" style="margin: 0;">
+                <input type="checkbox" id="tarjeta-${tarjetaId}" ${esActiva ? 'checked' : ''}>
+                <span class="switch-slider"></span>
+              </label>
+              <label for="tarjeta-${tarjetaId}" style="margin: 0; cursor: pointer; flex: 1; font-size: 0.9rem;">${tarjetaNombre}</label>
+            `;
+            
+            const checkbox = switchDiv.querySelector(`#tarjeta-${tarjetaId}`);
+            checkbox.addEventListener('change', (e) => {
+              tarjetasDisponiblesActuales[tarjetaId] = e.target.checked;
+            });
+            
+            columnaDiv.appendChild(switchDiv);
+          });
+          
+          return columnaDiv;
+        };
+        
+        //Crear y agregar las 3 columnas al contenedor
+        contenedor.appendChild(crearColumna(tarjetasOrganizadas.columna1));
+        contenedor.appendChild(crearColumna(tarjetasOrganizadas.columna2));
+        contenedor.appendChild(crearColumna(tarjetasOrganizadas.columna3));
+        document.getElementById('tarjetasDisponiblesModal').style.display = 'block';
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error al cargar tarjetas: ' + error.message);
+      }
+    }
+
+    // Guardar cambios de tarjetas
+    async function guardarTarjetas() 
+    {
+      try 
+      {
+        if (!usuarioActualId) throw new Error('Usuario no seleccionado');
+        
+        // Construir el objeto de tarjetas a actualizar
+        const tarjetasData = {};
+        Object.keys(tarjetasDisponiblesActuales).forEach(key => {
+          tarjetasData[key] = tarjetasDisponiblesActuales[key];
+        });
+
+        const response = await fetch(`/api/tarjetas-disponibles/${usuarioActualId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(tarjetasData)
+        });
+        
+        if (!response.ok) 
+        {
+          const errorData = await response.text();
+          console.error('Respuesta del servidor:', errorData);
+          throw new Error('Error al guardar tarjetas: ' + response.status);
+        }
+        
+        const result = await response.json();
+        console.log('Resultado:', result);
+        
+        mostrarMensajeExito('Tarjetas actualizadas correctamente');
+        cerrarModalTarjetas();
+        cargarUsuarios(); // Recargar tabla
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // Cerrar modal de tarjetas
+    function cerrarModalTarjetas() 
+    {
+      document.getElementById('tarjetasDisponiblesModal').style.display = 'none';
+      usuarioActualId = null;
+    }
+
+    // Mostrar mensaje de éxito
+    function mostrarMensajeExito(mensaje) 
+    {
+      const el = document.getElementById('successMessage');
+      el.textContent = mensaje;
+      el.style.display = 'block';
+      el.style.opacity = '1';
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.style.display = 'none', 300);
+      }, 2000);
+    }
+
+    // Event listeners para el modal de tarjetas
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const modal = document.getElementById('tarjetasDisponiblesModal');
+      const closeBtn = modal.querySelector('.close');
+      const cerrarBtn = document.getElementById('cerrarTarjetasButton');
+      const guardarBtn = document.getElementById('guardarTarjetasButton');
+      closeBtn.addEventListener('click', cerrarModalTarjetas);
+      cerrarBtn.addEventListener('click', cerrarModalTarjetas);
+      guardarBtn.addEventListener('click', guardarTarjetas);
+      
+      // Cerrar modal al hacer clic fuera
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) 
+        {
+          cerrarModalTarjetas();
+        }
+      });
+      
+      // Cargar usuarios al cargar la página
+      cargarUsuarios();
+      
+      // Funcionalidad de búsqueda (filtra la lista y recarga la paginación)
+      const buscarInput = document.getElementById('buscarUsuario');
+      if (buscarInput) {
+        buscarInput.addEventListener('input', (e) => {
+          const termino = e.target.value.toLowerCase().trim();
+          filteredUsuarios = usuariosLista.filter(u => {
+            const id = String(u.id || '').toLowerCase();
+            const nombre = String(u.nombre_completo || '').toLowerCase();
+            return id.includes(termino) || nombre.includes(termino);
+          });
+          currentPage = 1;
+          renderPage(currentPage);
+        });
+      }
+    });
+  </script>

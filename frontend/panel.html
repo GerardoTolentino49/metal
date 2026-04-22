@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel de Soporte IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/panel_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <style>
+    .main-content {
+      margin-top: 0 !important;
+    }
+
+    .home-nav-btn {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(35, 36, 58, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 1300;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .home-nav-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(35, 36, 58, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button active" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button " data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+  <div class="main-content">
+    <div class="container">
+      <div class="kanban-board" id="kanbanBoard">
+        <div class="kanban-column pending" data-status="pending">
+          <h2>Solicitudes Pendientes</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column critical" data-status="critical">
+          <h2>Crítico</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column high" data-status="high">
+          <h2>Alto</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column medium" data-status="medium">
+          <h2>Medio</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column low" data-status="low">
+          <h2>Bajo</h2>
+          <div class="tickets-container"></div>
+        </div>
+      </div>
+      <button class="completed-button" id="completedButton">
+        Terminados <span class="ticket-count">0</span>
+      </button>
+    </div>
+
+    <!-- Modal para detalles del ticket -->
+    <div class="ticket-modal" id="ticketModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-header">
+          <h2>Detalles del Ticket</h2>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- El contenido se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para actualizaciones del ticket -->
+    <div class="updates-modal" id="updatesModal">
+      <div class="updates-modal-content">
+        <button class="updates-modal-close" onclick="closeUpdatesModal()">×</button>
+        <div class="updates-modal-header">
+          <h3>Mensajes del Ticket</h3>
+          <p id="updatesTicketInfo" style="margin: 5px 0; color: #888; font-size: 14px;"></p>
+        </div>
+        <div class="updates-modal-body">
+          <div class="updates-thread" id="updatesThread">
+            <!-- Las actualizaciones se cargarán aquí -->
+          </div>
+          <div class="update-input-container">
+            <textarea 
+              id="updateInput" 
+              placeholder="Escribe un mensaje..."
+              rows="3"
+            ></textarea>
+            <button id="sendUpdateBtn" onclick="sendUpdate()">
+              <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visor de imagen completa -->
+    <div class="image-viewer" id="imageViewer">
+      <div class="image-viewer-content">
+        <button class="image-viewer-close" onclick="closeImageViewer()">×</button>
+        <img id="fullImage" src="" alt="Imagen completa">
+      </div>
+    </div>
+
+    <!-- Modal para tickets terminados -->
+    <div class="completed-modal" id="completedModal">
+      <div class="completed-modal-content">
+        <button class="completed-modal-close" onclick="closeCompletedModal()">×</button>
+        <div class="completed-modal-header">
+          <h2>Tickets Terminados</h2>
+        </div>
+        <div class="completed-tickets-grid" id="completedTicketsGrid">
+          <!-- Los tickets terminados se cargarán aquí -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón flotante para abrir/cerrar la lista de tickets -->
+    <div style="position: fixed; bottom: 20px; right: 100px; display: flex; gap: 15px; z-index: 1002;">
+      <div class="floating-button" id="uploadPdfButton" title="Subir PDF">
+        <i class="fas fa-plus"></i>
+        <input type="file" id="pdfInput" accept="application/pdf" style="display:none;">
+      </div>
+      <div class="floating-button" id="settingsButton" title="Ajustes">
+        <i class="fas fa-cog"></i>
+      </div>
+    </div>
+
+    <!-- Modal de tickets abiertos -->
+    <div class="messages-modal" id="messagesModal" style="display: none;">
+      <div class="messages-modal-content">
+        <div class="messages-header">
+          <h3>Tickets Abiertos</h3>
+          <button class="close-messages" id="closeMessages">&times;</button>
+        </div>
+        <div class="messages-list" id="ticketsList">
+          <!-- Los tickets se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Ventana de chat individual -->
+    <div class="chat-window" id="chatWindow" style="display: none;">
+      <div class="chat-window-content">
+        <div class="chat-header">
+          <h3 id="chatTitle">Chat con <span id="userName"></span></h3>
+          <button class="close-chat" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- Los mensajes se cargarán aquí -->
+        </div>
+        <div class="chat-input-container">
+          <input type="text" class="chat-input" id="messageInput" placeholder="Escribe un mensaje...">
+          <button class="send-message-btn" id="sendMessage">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pdfPreviewModal">
+      <div id="pdfPreviewContent">
+        <iframe id="pdfPreviewFrame"></iframe>
+        <div>
+          <button id="closePdfPreview">Cancelar</button>
+          <button id="uploadPdfConfirm">Subir PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de ajustes -->
+    <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:3000;background:rgba(0, 0, 0, 0);backdrop-filter:blur(0px);align-items:center;justify-content:center;">
+      <div style="background:rgba(255,255,255,0.95);border-radius:18px;padding:32px 24px;min-width:320px;max-width:90vw;box-shadow:0 8px 32px rgba(31,38,135,0.18);position:relative;">
+        <button onclick="closeSettingsModal()" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:28px;color:#888;cursor:pointer;">×</button>
+        <h3 style="margin:0 0 20px 0;color:#333;font-size:20px;">Ajustes</h3>
+        
+        <!-- Nuevo switch para mostrar PDF -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <label for="showPdfSwitch" style="color:#333;font-size:16px;">Mostrar PDF los tickets:</label>
+          <label class="switch" style="position:relative;display:inline-block;width:60px;height:34px;">
+            <input type="checkbox" id="showPdfSwitch" style="opacity:0;width:0;height:0;">
+            <span class="slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:34px;">
+              <span class="slider-thumb" style="position:absolute;content:'';height:26px;width:26px;left:4px;bottom:4px;background-color:white;transition:.4s;border-radius:50%;"></span>
+            </span>
+          </label>
+        </div>
+        
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+          <label for="pdfDuration" style="color:#333;font-size:16px;">Segundos de duración del PDF:</label>
+          <input type="number" id="pdfDuration" min="1" max="60" style="width:80px;padding:8px 12px;border-radius:8px;border:1px solid #ccc;font-size:16px;text-align:center;">
+          <span style="color:#333;font-size:16px;">segundos</span>
+        </div>
+        <button onclick="saveSettings()" style="background:#2196F3;color:#fff;border:none;border-radius:8px;padding:12px 24px;cursor:pointer;font-size:16px;width:100%;">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!--<button class="home-nav-btn" id="homeNavBtn" title="Ir a Inicio" onclick="window.location.href='inicio.html'">
+    <i class="fas fa-home"></i>
+  </button>-->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const response = await fetch('/api/auth/check-permissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else {
+          switch(currentPage) {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) 
+        {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+        document.body.classList.add('topbar-ready');
+      } catch (e) {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+    });
+
+    let draggedTicket = null;
+    let lastTicketCount = 0; // Para rastrear tickets nuevos
+
+    // Función para solicitar permiso de notificaciones
+    async function requestNotificationPermission() {
+      try {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+      } catch (error) {
+        console.error('Error al solicitar permiso de notificaciones:', error);
+        return false;
+      }
+    }
+
+    // Función para mostrar notificación de nuevo ticket
+    function showNewTicketNotification(ticket) {
+      if (Notification.permission === 'granted') {
+        const notification = new Notification('Nuevo Ticket Recibido', {
+          body: `${ticket.name} - ${ticket.department}\n${ticket.issue.substring(0, 50)}...`,
+          icon: '/img/logo.png', // Asegúrate de tener un ícono
+          badge: '/img/logo.png',
+          tag: 'new-ticket',
+          requireInteraction: true
+        });
+
+        // Reproducir un sonido de notificación
+        const audio = new Audio('/audios/notificacion-lisa.mp3');
+        audio.play().catch(e => console.log('Error al reproducir sonido:', e));
+      }
+    }
+
+    async function loadTickets() 
+    {
+
+      if (!window.containers) 
+      {
+        window.containers = {
+          pending: document.querySelector('.kanban-column.pending .tickets-container'),
+          critical: document.querySelector('.kanban-column.critical .tickets-container'),
+          high: document.querySelector('.kanban-column.high .tickets-container'),
+          medium: document.querySelector('.kanban-column.medium .tickets-container'),
+          low: document.querySelector('.kanban-column.low .tickets-container')
+        };
+      }
+      const { pending, critical, high, medium, low } = window.containers;    
+      if (!pending || !critical || !high || !medium || !low) 
+      {
+        console.error('Contenedores no encontrados en el DOM');
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch('/api/tickets', {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (!response.ok) 
+        {
+          throw new Error('Error al obtener tickets');
+        }
+        
+        const tickets = await response.json();
+        const ticketMap = new Map();
+        tickets.forEach(ticket => {
+          ticketMap.set(ticket.id, ticket);
+        });
+        const uniqueTickets = Array.from(ticketMap.values());
+
+        if (lastTicketCount > 0 && uniqueTickets.length > lastTicketCount) 
+        {
+          const newTickets = uniqueTickets.slice(lastTicketCount);
+          newTickets.forEach(ticket => {
+            if (document.hidden) 
+            {
+              showNewTicketNotification(ticket);
+            }
+          });
+        }
+        
+        lastTicketCount = uniqueTickets.length;
+        const currentTicketsStr = JSON.stringify(uniqueTickets);
+        if (window.lastTicketsStr === currentTicketsStr) 
+        {
+          return;
+        }
+        window.lastTicketsStr = currentTicketsStr;
+        [pending, critical, high, medium, low].forEach(container => {
+          container.innerHTML = '';
+        });
+
+        const completedCount = uniqueTickets.filter(ticket => ticket.urgency === 'completed').length;
+        const countSpan = document.querySelector('.completed-button .ticket-count');
+        if (countSpan) countSpan.textContent = completedCount;
+        if (!Array.isArray(uniqueTickets) || uniqueTickets.length === 0) 
+        {
+          return;
+        }
+
+        const fragments = {pending: document.createDocumentFragment(), critical: document.createDocumentFragment(), high: document.createDocumentFragment(), medium: document.createDocumentFragment(), low: document.createDocumentFragment()};
+
+        uniqueTickets.forEach(ticket => {
+          if (ticket.urgency === 'completed') return;
+          
+          const div = createTicketElement(ticket);
+          const targetFragment = fragments[ticket.urgency] || fragments.pending;
+          targetFragment.appendChild(div);
+        });
+
+        Object.entries(fragments).forEach(([urgency, fragment]) => {
+          const container = window.containers[urgency];
+          if (container) 
+          {
+            container.appendChild(fragment);
+          }
+        });
+
+      } catch (error) 
+      {
+        console.error('Error al cargar tickets:', error);
+      }
+    }
+
+    async function updateTicketUrgency(ticketId, newUrgency) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}/urgency`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ urgency: newUrgency })
+        });
+
+        if (!response.ok) throw new Error('Error al actualizar la urgencia del ticket');
+        const ticket = draggedTicket;
+        if (ticket) 
+        {
+          const urgencySpan = ticket.querySelector('span[style="color:#d00"]');
+          if (urgencySpan) 
+          {
+            urgencySpan.textContent = `[${newUrgency}]`;
+          }
+
+          const targetContainer = document.querySelector(`.kanban-column[data-status="${newUrgency}"] .tickets-container`);
+          if (targetContainer) 
+          {
+            if (ticket.parentNode) 
+            {
+              ticket.parentNode.removeChild(ticket);
+            }
+            targetContainer.appendChild(ticket);
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al actualizar el estado del ticket');
+      }
+    }
+
+    async function deleteTicket(ticketId) 
+    {
+      if (!confirm('¿Estás seguro de que deseas eliminar este ticket?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/tickets/${ticketId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el ticket');
+        }
+
+        loadTickets();
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error al eliminar el ticket');
+      }
+    }
+
+    function animateTicketEntry(element) 
+    {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(20px)';
+      requestAnimationFrame(() => {
+        element.style.transition = 'opacity 0.4s, transform 0.4s';
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      });
+    }
+
+    function createTicketElement(ticket) {
+      const div = document.createElement('div');
+      div.className = 'ticket';
+      div.draggable = true;
+      div.dataset.ticketId = ticket.id;
+      
+      const ticketTime = new Date(ticket.timestamp);
+      const now = new Date();
+      const timeDiff = now - ticketTime;
+      const hoursDiff = Math.floor(timeDiff / (1000 * 60 * 60));
+      const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      let timeColor = 'green';
+      if (hoursDiff >= 4) 
+      {
+        timeColor = 'red';
+      } else if (hoursDiff >= 2) 
+      {
+        timeColor = 'orange';
+      } else if (hoursDiff >= 1) 
+      {
+        timeColor = 'yellow';
+      }
+      
+      const problemPreview = ticket.issue.length > 50 ? ticket.issue.substring(0, 50) + '...' : ticket.issue;
+      
+      div.innerHTML = `
+        <div class="ticket-name" title="${ticket.name}">${ticket.name}</div>
+        <div class="problem-preview">
+          <b></b> ${problemPreview}
+        </div>
+        <div class="time-indicator ${timeColor}">
+          <b>Tiempo:</b> ${hoursDiff}h ${minutesDiff}m
+        </div>
+        ${ticket.assigned_user_id ? `<div class="assigned-user-badge">${ticket.assigned_user_name || 'Usuario IT'}</div>` : ''}
+        <button class="assign-button" onclick="showAssignModal('${ticket.id}')" title="Asignar ticket">
+          <i class="fas fa-plus"></i>
+        </button>
+      `;
+      div.addEventListener('dragstart', handleDragStart);
+      div.addEventListener('dragend', handleDragEnd);
+      div.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showTicketDetails(ticket);
+      });
+      animateTicketEntry(div);
+      return div;
+    }
+
+    function showProblemModal(ticketId, problem, userName) 
+    {
+      const modal = document.createElement('div');
+      modal.className = 'problem-modal';
+      modal.innerHTML = `
+        <div class="problem-modal-content">
+          <div class="problem-modal-header">
+            <h3>Problema - ${userName}</h3>
+            <button class="problem-modal-close" onclick="closeProblemModal()">×</button>
+          </div>
+          <div class="problem-modal-body">
+            <div class="problem-content">
+              ${problem}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      setTimeout(() => modal.classList.add('active'), 10);
+    }
+
+    function closeProblemModal() 
+    {
+      const modal = document.querySelector('.problem-modal');
+      if (modal) 
+      {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+      }
+    }
+
+    async function showAssignModal(ticketId) 
+    {
+      try 
+      {
+        const response = await fetch('/api/usuarios/it');
+        if (!response.ok) throw new Error('Error al obtener usuarios de IT');
+        
+        const users = await response.json();
+        
+        const modal = document.createElement('div');
+        modal.className = 'assign-modal';
+        modal.innerHTML = `
+          <div class="assign-modal-content">
+            <div class="assign-modal-header">
+              <h3>Asignar Ticket a:</h3>
+              <button class="assign-modal-close" onclick="closeAssignModal()">×</button>
+            </div>
+            <div class="assign-modal-body">
+              <div class="users-list">
+                ${users.map(user => `
+                  <div class="user-item" onclick="assignTicket('${ticketId}', ${user.id}, '${user.nombre_completo}')">
+                    <div class="user-info">
+                      <span class="user-name">${user.nombre_completo}</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('active'), 10);
+      } catch (error) {
+        console.error('Error al mostrar modal de asignación:', error);
+        alert('Error al cargar usuarios de IT');
+      }
+    }
+
+    async function assignTicket(ticketId, userId, userName) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}/assign`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ assigned_user_id: userId })
+        });
+
+        if (!response.ok) throw new Error('Error al asignar ticket');     
+        const result = await response.json();
+        const ticketElement = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+        if (ticketElement) 
+        {
+          const existingBadge = ticketElement.querySelector('.assigned-user-badge');
+          if (existingBadge) 
+          {
+            existingBadge.remove();
+          }
+
+          const newAssignedInfo = document.createElement('div');
+          newAssignedInfo.textContent = userName;
+          newAssignedInfo.className = 'assigned-user-badge';
+          ticketElement.appendChild(newAssignedInfo);
+        }
+        
+        closeAssignModal();
+      } catch (error) 
+      {
+        console.error('Error al asignar ticket:', error);
+        alert('Error al asignar el ticket');
+      }
+    }
+
+    function closeAssignModal() 
+    {
+      const modal = document.querySelector('.assign-modal');
+      if (modal) 
+      {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+      }
+    }
+
+    function handleDragStart(e) {
+      draggedTicket = this;
+      this.classList.add('dragging');
+      animateCompletedButton(1.2, 200);
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      animateCompletedButton(1, 300);
+      
+      draggedTicket = null;
+    }
+
+    document.querySelectorAll('.kanban-column').forEach(column => {
+      column.addEventListener('dragover', handleDragOver);
+      column.addEventListener('drop', handleDrop);
+    });
+
+    function handleDragOver(e) 
+    {
+      e.preventDefault();
+    }
+
+    function handleDrop(e) 
+    {
+      e.preventDefault();
+      if (!draggedTicket) return;
+
+      const newStatus = this.dataset.status;
+      const ticketId = draggedTicket.dataset.ticketId;
+
+      if (newStatus === 'completed') 
+      {
+        return;
+      }
+
+      const targetContainer = this.querySelector('.tickets-container');
+      if (targetContainer) 
+      {
+        if (draggedTicket.parentNode) 
+        {
+          draggedTicket.parentNode.removeChild(draggedTicket);
+        }
+        targetContainer.appendChild(draggedTicket);
+      }
+      updateTicketUrgency(ticketId, newStatus);
+    }
+
+    function showTicketDetails(ticket) 
+    {
+      const modal = document.getElementById('ticketModal');
+      const modalBody = document.getElementById('modalBody');
+      async function getEmployeePhoto(employeeName) 
+      {
+        try 
+        {
+          const response = await fetch(`/api/empleados/buscar/${encodeURIComponent(employeeName)}`);
+          const data = await response.json();
+          
+          if (data.success && data.empleado.foto_url) 
+          {
+            return data.empleado.foto_url;
+          }
+          return null;
+        } catch (error) 
+        {
+          console.error('Error al obtener foto del empleado:', error);
+          return null;
+        }
+      }
+
+      async function renderModal() 
+      {
+        const employeePhoto = await getEmployeePhoto(ticket.name);
+        
+        const avatarHtml = employeePhoto 
+          ? `<img src="${employeePhoto}" alt="Foto de ${ticket.name}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">`
+          : `<div class="user-avatar" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+               <i class="fas fa-user"></i>
+             </div>`;
+        
+        modalBody.innerHTML = `
+          <div class="ticket-info">
+            <div class="ticket-header-section" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+              <div class="ticket-user-info" style="flex: 1;">
+                <h3 style="margin: 0 0 10px 0; color: #ffffff; font-size: 18px;">${ticket.name}</h3>
+                <div class="user-avatar-container" style="display: flex; align-items: center; gap: 10px;">
+                  ${avatarHtml}
+                  <div class="user-details">
+                    <p style="margin: 0; color: #ffffff; font-size: 14px;"><strong>Usuario:</strong> ${ticket.name}</p>
+                    <p style="margin: 2px 0 0 0; color: #cccccc; font-size: 12px;">ID del ticket: ${ticket.id}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="ticket-details" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 30px; margin-bottom: 15px; overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; color: #ffffff;">
+                <tbody>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 10px; font-weight: bold; width: 30%;">Departamento</td>
+                    <td style="padding: 10px;">${ticket.department}</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 10px; font-weight: bold;">Problema</td>
+                    <td style="padding: 10px;">${ticket.issue}</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 10px; font-weight: bold;">Fecha</td>
+                    <td style="padding: 10px;">${new Date(ticket.timestamp).toLocaleString()}</td>
+                  </tr>
+                  ${ticket.anydesk ? `<tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 10px; font-weight: bold;">AnyDesk</td>
+                    <td style="padding: 10px;">${ticket.anydesk}</td>
+                  </tr>` : ''}
+                  ${ticket.email ? `<tr>
+                    <td style="padding: 10px; font-weight: bold;">Email</td>
+                    <td style="padding: 10px;">${ticket.email}</td>
+                  </tr>` : ''}
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="ticket-image-container" style="margin-top:18px; text-align:center;">
+              ${
+                ticket.image_path
+                  ? `<img src="${ticket.image_path}" alt="Imagen del ticket" style="max-width:320px; max-height:220px; border-radius:10px; box-shadow:0 2px 12px #0002; cursor:pointer;" onclick="showFullImage('${ticket.image_path}')">
+                     <div style="font-size:12px; color:#888; margin-top:4px;">Haz clic para ver en grande</div>`
+                  : `<div style="color:#888; font-size:14px; padding:40px 0;">Sin imagen adjunta</div>`
+              }
+            </div>
+            
+            <!-- Botón Empezar -->
+            <div class="ticket-actions" style="margin-top: 20px; text-align: center;">
+              <button class="start-ticket-btn" onclick="startTicket('${ticket.id}', '${ticket.name}')">
+                <i class="fas fa-play"></i> Chat
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      
+      const modalTitle = modal.querySelector('.modal-header h2');
+      modalTitle.textContent = 'Detalles del ticket';
+      modal.classList.add('active');
+
+      renderModal();
+
+      try 
+      {
+        if (ticket && ticket.id) {
+          startTicket(ticket.id, ticket.name || 'Usuario');
+        }
+      } catch (e) 
+      {
+        console.error('No se pudo abrir el chat automáticamente:', e);
+      }
+    }
+
+    function showFullImage(imageSrc) {
+      const viewer = document.getElementById('imageViewer');
+      const fullImage = document.getElementById('fullImage');
+      fullImage.src = imageSrc + '?t=' + Date.now();
+      fullImage.alt = 'Cargando imagen...';
+      fullImage.onerror = null;
+
+      fullImage.onerror = function() {
+        fullImage.alt = 'No se pudo cargar la imagen';
+        fullImage.src = '';
+        viewer.insertAdjacentHTML('beforeend', '<div id="imageErrorMsg" style="color:#fff;background:#d00;padding:10px 20px;border-radius:8px;position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:10;">No se pudo cargar la imagen</div>');
+        setTimeout(() => {
+          const msg = document.getElementById('imageErrorMsg');
+          if (msg) msg.remove();
+        }, 4000);
+      };
+
+      viewer.classList.add('active');
+      viewer.onclick = (e) => {
+        if (e.target === viewer) 
+        {
+          closeImageViewer();
+        }
+      };
+
+      function escListener(e) {
+        if (e.key === 'Escape') 
+        {
+          closeImageViewer();
+          document.removeEventListener('keydown', escListener);
+        }
+      }
+      document.addEventListener('keydown', escListener);
+    }
+
+    function closeImageViewer() 
+    {
+      const viewer = document.getElementById('imageViewer');
+      viewer.classList.remove('active');
+    }
+
+    function closeModal() 
+    {
+      const modal = document.getElementById('ticketModal');
+      modal.classList.remove('active');
+
+      try 
+      {
+        const updatesModal = document.getElementById('updatesModal');
+        if (updatesModal && updatesModal.classList.contains('active')) 
+        {
+          closeUpdatesModal();
+        }
+      } catch (e) 
+      {
+        console.error('Error al cerrar el panel de mensajes junto con el modal:', e);
+      }
+    }
+
+    document.getElementById('ticketModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      requestNotificationPermission();
+      loadTickets();
+
+      function updateTimeIndicators() 
+      {
+        const tickets = document.querySelectorAll('.ticket');
+        tickets.forEach(ticket => {
+          const timeIndicator = ticket.querySelector('.time-indicator');
+          if (timeIndicator) 
+          {
+            const ticketId = ticket.dataset.ticketId;
+            const currentText = timeIndicator.textContent;
+            const timeMatch = currentText.match(/(\d+)h (\d+)m/);
+            if (timeMatch) {
+              let hours = parseInt(timeMatch[1]);
+              let minutes = parseInt(timeMatch[2]);
+              minutes++;
+              if (minutes >= 60) {
+                hours++;
+                minutes = 0;
+              }
+              
+              // Actualizar color basado en el tiempo
+              let timeColor = 'green';
+              if (hours >= 4) 
+              {
+                timeColor = 'red';
+              } else if (hours >= 2) 
+              {
+                timeColor = 'orange';
+              } else if (hours >= 1) 
+              {
+                timeColor = 'yellow';
+              }
+              
+              timeIndicator.textContent = `Tiempo: ${hours}h ${minutes}m`;
+              timeIndicator.className = `time-indicator ${timeColor}`;
+            }
+          }
+        });
+      }
+
+      setInterval(updateTimeIndicators, 60000);
+      let isUpdating = false;
+      async function checkForUpdates() {
+        if (isUpdating) return;
+        
+        try 
+        {
+          isUpdating = true;
+          const response = await fetch('/api/tickets/check-updates', {
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
+          });
+          
+          if (!response.ok) 
+          {
+            throw new Error('Error al verificar actualizaciones');
+          }
+          
+          const { hasUpdates } = await response.json();
+          
+          if (hasUpdates) 
+          {
+            await loadTickets();
+          }
+        } catch (error) 
+        {
+          console.error('Error al verificar actualizaciones:', error);
+        } finally 
+        {
+          isUpdating = false;
+        }
+      }
+      
+      setInterval(checkForUpdates, 10000); // Verificar cada 10 segundos
+    });
+
+    document.addEventListener('visibilitychange', function() 
+    {
+      if (document.hidden) 
+      {
+        requestNotificationPermission();
+      } else 
+      {
+        loadTickets();
+      }
+    });
+
+    const completedButton = document.getElementById('completedButton');
+    function animateCompletedButton(scale = 1, duration = 300) 
+    {
+      const completedButton = document.getElementById('completedButton');
+      completedButton.style.transition = `all ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+      completedButton.style.transform = `translateX(-50%) scale(${scale})`;
+
+      if (scale > 1) 
+      {
+        completedButton.style.boxShadow = `
+          0 8px 32px rgba(33, 150, 243, 0.3), 
+          0 4px 16px rgba(0,0,0,0.15),
+          0 0 0 2px rgba(33, 150, 243, 0.2),
+          0 0 20px rgba(0,0,0,0.4)
+        `;
+        completedButton.style.background = 'rgba(33, 150, 243, 0.25)';
+        completedButton.style.filter = 'brightness(1.1)';
+      } else 
+      {
+        completedButton.style.boxShadow = `
+          0 4px 16px rgba(33, 150, 243, 0.18), 
+          0 2px 8px rgba(0,0,0,0.10)
+        `;
+        completedButton.style.background = 'rgba(33, 150, 243, 0.18)';
+        completedButton.style.filter = 'brightness(1)';
+      }
+    }
+
+    completedButton.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      completedButton.classList.add('drag-over');
+      
+      // Animar el botón a un tamaño más grande
+      animateCompletedButton(1.3, 150);
+      
+      if (draggedTicket) 
+      {
+        draggedTicket.classList.add('dragging-over-completed');
+      }
+    });
+
+    completedButton.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      animateCompletedButton(1.3, 150);
+    });
+
+    completedButton.addEventListener('dragleave', (e) => {
+      const rect = completedButton.getBoundingClientRect();
+      const x = e.clientX;
+      const y = e.clientY;
+      
+      if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) 
+      {
+        completedButton.classList.remove('drag-over');
+        animateCompletedButton(1.2, 200);
+        
+        if (draggedTicket) 
+        {
+          draggedTicket.classList.remove('dragging-over-completed');
+        }
+      }
+    });
+
+    completedButton.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      completedButton.classList.remove('drag-over');
+
+      animateCompletedButton(1, 300);
+      
+      const currentDraggedTicket = draggedTicket;
+      if (!currentDraggedTicket) return;
+      
+      const ticketId = currentDraggedTicket.dataset.ticketId;
+      if (!ticketId) return;
+
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}/urgency`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ urgency: 'completed' })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al completar el ticket');
+        }
+
+        const countSpan = completedButton.querySelector('.ticket-count');
+        let currentCount = parseInt(countSpan.textContent, 10) || 0;
+        countSpan.textContent = currentCount + 1;
+        await loadTickets();
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error al completar el ticket: ' + error.message);
+      } finally 
+      {
+        draggedTicket = null;
+      }
+    });
+
+    let allCompletedTickets = [];
+    let currentPage = 0;
+    const TICKETS_PER_PAGE = 10;
+    completedButton.addEventListener('click', async () => {
+      try 
+      {
+        const response = await fetch('/api/tickets');
+        if (!response.ok) throw new Error('Error al obtener tickets');
+        const tickets = await response.json();
+        allCompletedTickets = tickets.filter(ticket => ticket.urgency === 'completed');
+        allCompletedTickets.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        currentPage = 0;
+        loadCompletedTicketsPage();
+        
+        document.getElementById('completedModal').classList.add('active');
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error al cargar los tickets terminados: ' + error.message);
+      }
+    });
+
+    function loadCompletedTicketsPage() {
+      const completedTicketsGrid = document.getElementById('completedTicketsGrid');
+      if (currentPage === 0) 
+      {
+        completedTicketsGrid.innerHTML = '';
+      }
+      
+      const startIndex = currentPage * TICKETS_PER_PAGE;
+      const endIndex = startIndex + TICKETS_PER_PAGE;
+      const ticketsToShow = allCompletedTickets.slice(startIndex, endIndex);
+      
+      if (ticketsToShow.length === 0 && currentPage === 0) 
+      {
+        completedTicketsGrid.innerHTML = '<div class="no-tickets-message">No hay tickets terminados</div>';
+        return;
+      }
+
+      ticketsToShow.forEach(ticket => {
+        const ticketElement = document.createElement('div');
+        ticketElement.className = 'completed-ticket';
+        ticketElement.innerHTML = `
+          <button class="delete-completed-ticket" onclick="deleteCompletedTicket('${ticket.id}')">×</button>
+          <h3>${ticket.name}</h3>
+          <div class="completed-ticket-info">
+            <p><strong>Departamento</strong> ${ticket.department}</p>
+            <p><strong>Problema</strong> ${ticket.issue}</p>
+            <p><strong>Fecha de creación</strong> ${new Date(ticket.timestamp).toLocaleString()}</p>
+            ${ticket.anydesk ? `<p><strong>AnyDesk</strong> ${ticket.anydesk}</p>` : ''}
+            ${ticket.email ? `<p><strong>Email</strong> ${ticket.email}</p>` : ''}
+            ${ticket.image_path ? `
+              <div class="ticket-media">
+                <div class="media-item" onclick="showFullImage('${ticket.image_path}')">
+                  <img src="${ticket.image_path}" alt="${ticket.image_name || 'Imagen del ticket'}">
+                  <span class="media-type">Imagen</span>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        completedTicketsGrid.appendChild(ticketElement);
+      });
+      updateLoadMoreButton();
+    }
+
+    function updateLoadMoreButton() 
+    {
+      const completedTicketsGrid = document.getElementById('completedTicketsGrid');
+      const totalTickets = allCompletedTickets.length;
+      const loadedTickets = (currentPage + 1) * TICKETS_PER_PAGE;
+      
+      const existingButton = completedTicketsGrid.querySelector('.load-more-button');
+      if (existingButton) 
+      {
+        existingButton.remove();
+      }
+
+      if (loadedTickets < totalTickets) 
+      {
+        const loadMoreButton = document.createElement('div');
+        loadMoreButton.className = 'load-more-container';
+        loadMoreButton.innerHTML = `
+          <button class="load-more-button" onclick="loadMoreTickets()">
+            <i class="fas fa-plus"></i>
+            Cargar más tickets (${totalTickets - loadedTickets} restantes)
+          </button>
+        `;
+        completedTicketsGrid.appendChild(loadMoreButton);
+      }
+    }
+
+    function loadMoreTickets() 
+    {
+      currentPage++;
+      loadCompletedTicketsPage();
+    }
+
+    async function deleteCompletedTicket(ticketId) 
+    {
+      if (!confirm('¿Estás seguro de que deseas eliminar permanentemente este ticket?')) {
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) 
+        {
+          throw new Error('Error al eliminar el ticket');
+        }
+
+        allCompletedTickets = allCompletedTickets.filter(ticket => ticket.id !== ticketId);
+        const ticketElement = document.querySelector(`.completed-ticket button[onclick="deleteCompletedTicket('${ticketId}')"]`).parentElement;
+        ticketElement.remove();
+        const countSpan = completedButton.querySelector('.ticket-count');
+        let currentCount = parseInt(countSpan.textContent, 10) || 0;
+        countSpan.textContent = Math.max(0, currentCount - 1);
+        updateLoadMoreButton();
+        const completedTicketsGrid = document.getElementById('completedTicketsGrid');
+        if (allCompletedTickets.length === 0) 
+        {
+          completedTicketsGrid.innerHTML = '<div class="no-tickets-message">No hay tickets terminados</div>';
+        }
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert('Error al eliminar el ticket: ' + error.message);
+      }
+    }
+
+    function closeCompletedModal() {
+      const modal = document.getElementById('completedModal');
+      modal.classList.remove('active');
+      allCompletedTickets = [];
+      currentPage = 0;
+    }
+
+    document.getElementById('completedModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) 
+      {
+        closeCompletedModal();
+      }
+    });
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('completedModal');
+        if (modal.classList.contains('active')) {
+          closeCompletedModal();
+        }
+      }
+    });
+
+    // Agregar estilos para el botón de eliminar y badge de IT
+    const style = document.createElement('style');
+    style.textContent = `
+      .completed-ticket {
+      position: relative;
+      }
+      
+      .delete-completed-ticket {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 0, 0, 0.1);
+        border: 1px solid rgba(255, 0, 0, 0.2);
+      color: #ff4444;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      display: flex;
+        align-items: center;
+      justify-content: center;
+      cursor: pointer;
+        font-size: 20px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+      .delete-completed-ticket:hover {
+        background: rgba(255, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+
+      .delete-completed-ticket:active {
+      transform: scale(0.95);
+    }
+
+      .staff-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 10px;
+        margin-left: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .start-ticket-btn {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) 
+          {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) 
+        {
+          if (!e.target.closest('.menu-item.has-submenu')) 
+          {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        function moverHighlight() 
+        {
+          const topbar = document.querySelector('.topbar');
+          if (!topbar) return;
+          const highlight = topbar.querySelector('.glass-highlight');
+          if (!highlight) return;
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon');
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    // Control del modal de mensajes
+    const messagesModal = document.getElementById('messagesModal');
+    const closeMessages = document.getElementById('closeMessages');
+    const messagesList = document.getElementById('ticketsList');
+
+    closeMessages.addEventListener('click', function() 
+    {
+      messagesModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(event) 
+    {
+      if (event.target === messagesModal) {
+        messagesModal.style.display = 'none';
+    }
+    });
+
+    // Al cargar, obtener el estado actual del PDF y reflejarlo en el switch
+    fetch('/api/pdf_show')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('showPdfSwitch').checked = data.pdf_show;
+      });
+
+    // Al cambiar el switch, actualizar en el backend
+    document.getElementById('showPdfSwitch').addEventListener('change', function() {
+      fetch('/api/pdf_show', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ show: this.checked })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+        } else {
+          alert('Error al guardar el ajuste');
+        }
+      })
+      .catch(() => alert('Error de red o servidor'));
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+
+    async function startTicket(ticketId, userName) 
+    {
+      const updatesModal = document.getElementById('updatesModal');
+      const updatesTicketInfo = document.getElementById('updatesTicketInfo');
+      window.currentTicketId = ticketId;
+      window.currentTicketUserName = userName;
+      updatesTicketInfo.innerHTML = `Ticket: ${ticketId}<br>Usuario: ${userName}`;
+      await loadTicketUpdates(ticketId);
+      const updateInput = document.getElementById('updateInput');
+      updateInput.addEventListener('keydown', handleUpdateKeyPress);
+      updatesModal.classList.add('active');
+      startMessagePolling(ticketId);
+      setTimeout(() => updateInput.focus(), 300);
+    }
+    function closeUpdatesModal() 
+    {
+      const updatesModal = document.getElementById('updatesModal');
+      updatesModal.classList.remove('active');
+      stopMessagePolling();
+      const updateInput = document.getElementById('updateInput');
+      updateInput.value = '';
+      updateInput.removeEventListener('keydown', handleUpdateKeyPress);
+      document.getElementById('updatesThread').innerHTML = '';
+    }
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    async function loadTicketUpdates(ticketId) {
+      const updatesThread = document.getElementById('updatesThread');
+      
+      try {
+        const response = await fetch(`/api/tickets/${ticketId}/messages`);
+        if (!response.ok) {
+          throw new Error('Error al cargar mensajes');
+        }
+        
+        const updates = await response.json();
+        
+        if (updates.length === 0) {
+          updatesThread.innerHTML = `
+            <div class="no-updates">
+              <i class="fas fa-comments" style="font-size: 48px; color: #666; margin-bottom: 15px;"></i>
+              <p style="color: #888; text-align: center;">No hay mensajes aún.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        updatesThread.innerHTML = updates.map(update => {
+          let displaySender;
+          let badgeHtml = '';
+          
+          if (update.is_staff) 
+          {
+            displaySender = 'Usted';
+            badgeHtml = '<span class="staff-badge">IT</span>';
+          } else 
+          {
+            if (update.sender === 'Sistema') 
+            {
+              displaySender = window.currentTicketUserName || 'Usuario';
+            } else 
+            {
+              displaySender = update.sender;
+            }
+          }
+          
+          return `
+            <div class="update-item">
+              <div class="update-header">
+                <div class="update-author">
+                  <i class="fas fa-user-circle"></i>
+                  <span>${escapeHtml(displaySender)}</span>
+                  ${badgeHtml}
+                </div>
+                <div class="update-timestamp">${new Date(update.timestamp).toLocaleString()}</div>
+              </div>
+              <div class="update-content">${escapeHtml(update.content).replace(/\n/g, '<br>')}</div>
+            </div>
+          `;
+        }).join('');
+        
+        // Scroll al final
+        updatesThread.scrollTop = updatesThread.scrollHeight;
+      } catch (error) {
+        console.error('Error al cargar mensajes:', error);
+        updatesThread.innerHTML = `
+          <div class="no-updates">
+            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff6b6b; margin-bottom: 15px;"></i>
+            <p style="color: #ff6b6b; text-align: center;">Error al cargar mensajes</p>
+          </div>
+        `;
+      }
+    }
+
+    let messagePollingInterval = null;
+    let lastMessageCount = 0;
+    function startMessagePolling(ticketId) 
+    {
+      stopMessagePolling();
+      loadTicketUpdates(ticketId).then(() => {
+        const updatesThread = document.getElementById('updatesThread');
+        lastMessageCount = updatesThread.children.length;
+      });
+
+      messagePollingInterval = setInterval(async () => {
+        try 
+        {
+          const response = await fetch(`/api/tickets/${ticketId}/messages`);
+          if (!response.ok) return;
+          
+          const updates = await response.json();
+          
+          if (updates.length > lastMessageCount) 
+          {
+            await loadTicketUpdates(ticketId);
+            lastMessageCount = updates.length;
+          }
+        } catch (error) {
+          console.error('Error al verificar mensajes:', error);
+        }
+      }, 3000);
+    }
+
+    function stopMessagePolling() 
+    {
+      if (messagePollingInterval) 
+      {
+        clearInterval(messagePollingInterval);
+        messagePollingInterval = null;
+      }
+      lastMessageCount = 0;
+    }
+
+    async function sendUpdate() {
+      const updateInput = document.getElementById('updateInput');
+      const content = updateInput.value.trim();
+      
+      if (!content) {
+        alert('Por favor escribe un mensaje');
+        return;
+      }
+      
+      const ticketId = window.currentTicketId;
+      if (!ticketId) 
+      {
+        alert('Error: No se pudo identificar el ticket');
+        return;
+      }
+      
+      try 
+      {
+        const response = await fetch(`/api/tickets/${ticketId}/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            content: content,
+            is_staff: true
+          })
+        });
+        
+        if (!response.ok) 
+        {
+          throw new Error('Error al enviar mensaje');
+        }
+        updateInput.value = '';
+        await loadTicketUpdates(ticketId);
+        showNotification('Mensaje enviado correctamente', 'success');
+      } catch (error) 
+      {
+        console.error('Error al enviar mensaje:', error);
+        showNotification('Error al enviar mensaje', 'error');
+      }
+    }
+
+    function handleUpdateKeyPress(event) 
+    {
+      if (event.key === 'Enter' && !event.shiftKey) 
+      {
+        event.preventDefault();
+        sendUpdate();
+      }
+    }
+
+    function showNotification(message, type = 'info') 
+    {
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message; 
+      document.body.appendChild(notification);
+      setTimeout(() => notification.classList.add('show'), 100);
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    document.addEventListener('keydown', function(event) 
+    {
+      if (event.key === 'Escape') 
+      {
+        const updatesModal = document.getElementById('updatesModal');
+        if (updatesModal.classList.contains('active')) 
+        {
+          closeUpdatesModal();
+        }
+      }
+    });
+  </script>
+  <script src="js/permisos.js"></script>
+  <script src="js/topbar.js"></script>
+  <script src="js/floating-buttons.js"></script>
+</body>
+</html>

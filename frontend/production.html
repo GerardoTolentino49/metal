@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Production - Selección de Planta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="js/tarjetas-guard.js" defer></script>
+    <script src="js/global-color.js"></script>
+    <!-- CSS crítico inline para evitar parpadeos sin glass al cargar -->
+    <style>
+        html, body {
+            background-color: #0b1524;
+        }
+        .plant-button,
+        .area-button {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            transition: all 0.1s ease;
+        }
+        .employee-card {
+            /* Fondo más ligero sin blur para mejorar el rendimiento en scroll */
+            background: rgba(15, 23, 42, 0.78);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            color: #fff;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
+        }
+        .screen-title,
+        .screen-subtitle {
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        .screen-subtitle {
+            color: rgba(255,255,255,0.9);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+        /* Pagination controls for employees list */
+        .employees-pagination { display:flex; gap:8px; align-items:center; justify-content:center; margin:12px 0 22px; }
+        .employees-pagination button { padding:8px 12px; border-radius:30px; border:1px solid rgb(0, 0, 0); background: rgba(255,255,255,0.05); color: #fff; cursor:pointer; }
+        .employees-pagination button[disabled] { opacity:0.45; cursor:default; }
+        .employees-pagination .page-info { color: rgba(255,255,255,0.85); font-weight:600; }
+        /* Order selection: sutil fondo verde y texto de alto contraste */
+        .orders-list-item.order-selected {
+            background: rgba(139,245,203);
+            border-radius: 30px;
+        }
+
+        /* Asegurar que el botón interno sea transparente para que el contenedor coloreado destaque */
+        .orders-list-item.order-selected .order-item {
+            background: transparent;
+            color: #ffffff;
+        }
+
+        /* Forzar color legible en los elementos de texto de la orden */
+        .orders-list-item.order-selected .order-id,
+        .orders-list-item.order-selected .order-desc {
+            color: #000000;
+            font-weight: 600;
+        }
+        /* Orders modal buttons: Cancelar / Confirmar */
+        /* Anchors the footer to the bottom of the modal content */
+        #ordersModal .orders-modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: space-around;
+            padding: 16px 20px 20px;
+            margin-top: auto;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+        }
+        #ordersModal .orders-modal-cancel {
+            background: linear-gradient(135deg,#b91c1c,#ef4444);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(185,28,28,0.12);
+            transition: transform .14s ease, box-shadow .14s ease, opacity .14s ease;
+        }
+        #ordersModal .orders-modal-cancel:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(185,28,28,0.16); }
+        #ordersModal .orders-modal-confirm {
+            background: linear-gradient(135deg,#16a34a,#34d399);
+            color:#fff;
+            border:none;
+            padding: 10px 18px;
+            border-radius:999px;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow: 0 8px 20px rgba(16,163,74,0.12);
+            transition: transform .14s ease, box-shadow .14s ease, opacity .14s ease;
+        }
+        #ordersModal .orders-modal-confirm:disabled { opacity:0.55; cursor:not-allowed; transform:none; box-shadow:none; }
+        #ordersModal .orders-modal-confirm:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(16,163,74,0.16); }
+        
+        /* Layout "unmodal" de 2 columnas para órdenes / números de parte */
+        #ordersModal .orders-modal-body .orders-unmodal {
+            display:flex;
+            gap:16px;
+            align-items:stretch;
+            margin-top:8px;
+            flex-wrap:nowrap;
+        }
+        /* Forzar que las columnas puedan encoger correctamente dentro del flex container */
+        #ordersModal .orders-column {
+            flex: 1 1 50%;
+            min-width: 0;
+            overflow-y:auto;
+            max-height:50vh;
+            padding-right:8px;
+        }
+        #ordersModal .orders-column .orders-list-item { margin-bottom:8px; width:100%; box-sizing:border-box; }
+
+        #ordersModal .parts-column {
+            flex: 1 1 50%;
+            min-width: 0;
+            max-width: none;
+            background: rgba(255,255,255,0.02);
+            border-radius:12px;
+            overflow-y:auto;
+            max-height:50vh;
+        }
+        #ordersModal .parts-column .parts-header { font-weight:700; margin-bottom:8px; color:black; }
+        #ordersModal .parts-list { display:flex; flex-direction:column; gap:8px; }
+        /* Tarjetas para números de parte: bordes negros y esquinas ligeras */
+        #ordersModal .parts-list .part-btn {
+            width:100%;
+            height: 90px;
+            text-align:left;
+            padding:10px 12px;
+            background:#fff;
+            border:1px solid #000;
+            border-radius:30px;
+            cursor:pointer;
+            color:#000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        #ordersModal .parts-list .part-btn.selected {
+            background:rgba(139, 245, 203);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        #ordersModal .parts-list .part-btn .order-id,
+        #ordersModal .parts-list .part-btn .order-desc {
+            color: #000;
+        }
+        /* Mensaje cuando no hay orden seleccionada */
+        #ordersModal .parts-empty-message {
+            padding:12px;
+            text-align:center;
+            color: #000;
+            background: #fff;
+            border-radius:8px;
+            font-weight:600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        @media (max-width:640px) { #ordersModal .orders-modal-footer { flex-direction:column-reverse; gap:10px; } #ordersModal .orders-modal-footer button { width:100%; } }
+    </style>
+    <link rel="stylesheet" href="styles/production.css">
+</head>
+<body>
+    <div class="background-container" id="backgroundContainer"></div>
+    <div class="background-overlay"></div>
+    
+    <!-- Botón rojo para salir -->
+    <button class="exit-button" id="exitButton" onclick="showPasswordModal()">
+        <span class="material-symbols-rounded">exit_to_app</span>
+        <span>Salir</span>
+    </button>
+    
+    <!-- Modal de contraseña -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-modal-content">
+            <div class="password-modal-header">
+                <h2>Confirmar Salida</h2>
+                <button class="password-modal-close" onclick="closePasswordModal()">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="password-modal-body">
+                <p>Ingresa la contraseña para salir:</p>
+                <input type="password" id="exitPassword" class="password-input" placeholder="Contraseña" autocomplete="off">
+                <div class="password-error" id="passwordError"></div>
+            </div>
+            <div class="password-modal-footer">
+                <button class="password-btn cancel-btn" onclick="closePasswordModal()">Cancelar</button>
+                <button class="password-btn confirm-btn" onclick="validateExitPassword()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Pantalla de selección de planta -->
+        <div class="selection-screen" id="plantSelectionScreen">
+            <h1 class="screen-title">Selecciona tu Planta</h1>
+            <div class="buttons-grid plant-buttons">
+                <button class="plant-button" data-plant="P1" onclick="selectPlant('P1')" disabled>
+                    <span class="button-text">P1</span>
+                </button>
+                <button class="plant-button" data-plant="BA" onclick="selectPlant('BA')" disabled>
+                    <span class="button-text">BA</span>
+                </button>
+                <button class="plant-button" data-plant="WD" onclick="selectPlant('WD')" disabled>
+                    <span class="button-text">WD</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla de selección de área (para P1 y BA) -->
+        <div class="selection-screen hidden" id="areaSelectionScreen">
+            <button class="back-button" onclick="goBackToPlantSelection()">
+                <span class="material-symbols-rounded">arrow_back</span>
+                <span>Volver</span>
+            </button>
+            <h1 class="screen-title">Selecciona tu Área</h1>
+            <p class="screen-subtitle">Planta: <span id="selectedPlantDisplay">P1</span></p>
+            <div class="buttons-grid area-buttons" id="areaButtonsContainer">
+                <!-- Los botones se generan dinámicamente según la planta -->
+            </div>
+        </div>
+
+        <!-- Pantalla de lista de empleados -->
+        <div class="selection-screen hidden" id="employeesScreen">
+            <button class="back-button" onclick="goBackToAreaSelection()">
+                <span class="material-symbols-rounded">arrow_back</span>
+                <span>Volver</span>
+            </button>
+            
+            <div class="employees-layout" id="employeesLayout">
+                <div class="employees-list-panel" id="employeesListPanel">
+                            <!-- <h1 class="screen-title">Empleados</h1> -->
+                    <p class="screen-subtitle">
+                        Planta: <span id="employeesPlantDisplay">-</span> | 
+                        Área: <span id="employeesAreaDisplay">-</span>
+                    </p>
+                    <div class="search-container">
+                        <div class="search-box">
+                            <span class="material-symbols-rounded search-icon">search</span>
+                            <input 
+                                type="text" 
+                                id="employeeSearch" 
+                                class="search-input" 
+                                placeholder="Buscar empleado por nombre..."
+                                autocomplete="off"
+                            >
+                            <button class="search-clear-btn hidden" id="searchClearBtn" onclick="clearSearch()">
+                                <span class="material-symbols-rounded">close</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="employees-container" id="employeesContainer">
+                        <div class="loading-message" id="loadingMessage">Cargando empleados...</div>
+                        <div class="employees-grid" id="employeesGrid">
+                            <!-- Los empleados se cargarán dinámicamente -->
+                        </div>
+                        <div class="employees-pagination" id="employeesPagination" aria-hidden="true"></div>
+                        <div class="no-employees-message hidden" id="noEmployeesMessage">
+                            <span class="material-symbols-rounded">person_off</span>
+                            <p id="noEmployeesText">No se encontraron empleados en esta área</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timer-panel" id="timerPanel" aria-hidden="false" style="backdrop-filter: blur(20px);">
+                    <div class="timer-card" id="timerCard">
+                        <h2 class="card-title">Tiempo en Orden</h2>
+                        <div class="project-name-display" id="projectNameDisplay">Seleccionar Empleado</div>
+                        <div class="project-order-name-display" id="projectOrderNameDisplay" style="display: none;"></div>
+
+                        <div class="timer-display">
+                            <div class="timer-icon"></div>
+                            <div class="timer-value" id="timerValue">
+                                <div class="timer-segment">
+                                    <div class="timer-number" id="timerHours">00</div>
+                                    <div class="timer-label">Horas</div>
+                                </div>
+                                <div class="timer-separator">:</div>
+                                <div class="timer-segment">
+                                    <div class="timer-number" id="timerMinutes">00</div>
+                                    <div class="timer-label">Minutos</div>
+                                </div>
+                                <div class="timer-separator">:</div>
+                                <div class="timer-segment">
+                                    <div class="timer-number" id="timerSeconds">00</div>
+                                    <div class="timer-label">Segundos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-sections-container">
+                            <div class="status-section">
+                                <h3 class="status-title">Estado de Trabajo</h3>
+                                <div class="status-buttons">
+                                    <button class="status-btn" data-status="working" data-tipo="trabajo">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <span class="status-label">Trabajando en ello</span>
+                                        <span class="status-timer" data-timer="working">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="pendiente" data-tipo="trabajo">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        <span class="status-label">Pendiente de aprobación</span>
+                                        <span class="status-timer" data-timer="pendiente">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="cambios" data-tipo="trabajo">
+                                        <i class="fas fa-edit"></i>
+                                        <span class="status-label">Cambios</span>
+                                        <span class="status-timer" data-timer="cambios">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="meeting_trabajo" data-tipo="trabajo">
+                                        <i class="fas fa-users"></i>
+                                        <span class="status-label">Reunión</span>
+                                        <span class="status-timer" data-timer="meeting_trabajo">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="esperando_informacion" data-tipo="trabajo">
+                                        <i class="fas fa-clock"></i>
+                                        <span class="status-label">Esperando información</span>
+                                        <span class="status-timer" data-timer="esperando_informacion">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="buscando_informacion" data-tipo="trabajo">
+                                        <i class="fas fa-search"></i>
+                                        <span class="status-label">Analizando información</span>
+                                        <span class="status-timer" data-timer="buscando_informacion">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="revision_orden" data-tipo="trabajo">
+                                        <i class="fas fa-clipboard-check"></i>
+                                        <span class="status-label">Revisión de orden</span>
+                                        <span class="status-timer" data-timer="revision_orden">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="documentacion" data-tipo="trabajo">
+                                        <i class="fa-solid fa-file"></i>
+                                        <span class="status-label">Documentación</span>
+                                        <span class="status-timer" data-timer="documentacion">00:00:00</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="status-section">
+                                <h3 class="status-title">Estado de Ausencia</h3>
+                                <div class="status-buttons status-buttons-ausencia">
+                                    <button class="status-btn" data-status="pausa" data-tipo="ausencia">
+                                        <i class="fas fa-pause"></i>
+                                        <span class="status-label">Pausa</span>
+                                        <span class="status-timer" data-timer="pausa">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="comida" data-tipo="ausencia">
+                                        <i class="fas fa-utensils"></i>
+                                        <span class="status-label">Comida</span>
+                                        <span class="status-timer" data-timer="comida">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="5s" data-tipo="ausencia">
+                                        <i class="fas fa-broom"></i>
+                                        <span class="status-label">5S</span>
+                                        <span class="status-timer" data-timer="5s">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="meeting" data-tipo="ausencia">
+                                        <i class="fas fa-users"></i>
+                                        <span class="status-label">Reunión</span>
+                                        <span class="status-timer" data-timer="meeting">00:00:00</span>
+                                    </button>
+                                    <button class="status-btn" data-status="training" data-tipo="ausencia">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span class="status-label">Entrenamiento</span>
+                                        <span class="status-timer" data-timer="training">00:00:00</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timer-notes-section">
+                            <label class="timer-notes-label" for="timerNotesInput">Notas</label>
+                            <textarea id="timerNotesInput" class="timer-notes-input" rows="3" placeholder="Ingresa notas sobre el trabajo realizado..." autocomplete="off"></textarea>
+                        </div>
+
+                        <button class="finish-btn" id="finishBtn" type="button">
+                            <i class="fas fa-stop-circle"></i>
+                            Finalizar sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de órdenes -->
+    <div class="orders-modal" id="ordersModal">
+        <div class="orders-modal-content">
+            <div class="orders-modal-header">
+                <h2>Selecciona la orden</h2>
+                <button class="orders-modal-close" onclick="closeOrdersModal()">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="orders-modal-body">
+                <div style = "display:flex;justify-content:space-around;">
+                    <h1>Órdenes</h1>
+                    <h1># de Partes</h1>
+                </div>
+                <p class="orders-modal-subtitle">Elige la orden en la que vas a trabajar:</p>
+                <div class="orders-unmodal">
+                    <div class="orders-column" id="ordersList"></div>
+                    <div class="parts-column" id="partsColumn">
+                        <div class="parts-list" id="partsList"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="orders-modal-footer">
+                <button class="orders-modal-cancel" id="ordersModalCancelBtn">Cancelar</button>
+                <button class="orders-modal-confirm" id="ordersModalConfirmBtn" disabled>Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEBUG_MODE = false;
+        function log(message, type = 'log') {
+            if (DEBUG_MODE) {
+                switch(type) {
+                    case 'error':
+                        console.error(message); break;
+                    case 'warn':
+                        console.warn(message); break;
+                    default:
+                        console.log(message);
+                }
+            }
+        }
+
+        // Deshabilitado: quitar imágenes de fondo para que el script de color controle el fondo
+        const fotos = [];
+        let ultimaFoto = null;
+        let fotoActual = null;
+        
+        function seleccionarFotoAleatoria() {
+            if (fotos.length === 0) {
+                log('No hay fotos disponibles', 'error');
+                return null;
+            }
+            let fotoAleatoria;
+            do {
+                fotoAleatoria = fotos[Math.floor(Math.random() * fotos.length)];
+            } while (fotoAleatoria === ultimaFoto && fotos.length > 1);
+            ultimaFoto = fotoAleatoria;
+            return fotoAleatoria;
+        }
+
+        function aplicarFondo(fotoPath) {
+            // No aplicar imágenes de fondo — dejamos que el script de colores gestione el fondo del body.
+            log('Imágenes de fondo deshabilitadas; usando color del script.');
+            const backgroundContainer = document.getElementById('backgroundContainer');
+            if (backgroundContainer) {
+                backgroundContainer.style.backgroundImage = '';
+            }
+            // Asegurar que no haya imagen en el body
+            try {
+                document.body.style.backgroundImage = '';
+                document.body.style.backgroundSize = '';
+                document.body.style.backgroundPosition = '';
+                document.body.style.backgroundRepeat = '';
+            } catch (e) {
+                // Ignorar si body no está disponible aún
+            }
+            fotoActual = null;
+            return;
+        }
+
+        function inicializarFondo() {
+            const fotoSeleccionada = seleccionarFotoAleatoria();
+            if (fotoSeleccionada) {
+                aplicarFondo(fotoSeleccionada);
+            } else {
+                if (fotos.length > 0) {
+                    aplicarFondo(fotos[0]);
+                }
+            }
+            setTimeout(() => {
+                const backgroundContainer = document.getElementById('backgroundContainer');
+                if (backgroundContainer && fotoActual) {
+                    backgroundContainer.style.backgroundImage = `url('${fotoActual}')`;
+                }
+            }, 100);
+        }
+
+        let selectedPlant = null;
+        let allEmployees = []; // Almacenar todos los empleados para búsqueda
+        let selectedEmployeeForOrder = null;
+        let selectedEmployeeCardElement = null; // Referencia visual al empleado vinculado al timer
+        let selectedEmployeeIdForTimer = null; // Id del empleado actualmente vinculado al panel de tiempo
+        let usersStatusByName = null; // Cache con estado_trabajo y tiempo por usuario
+        let statusTimerInterval = null;
+        let statusTimerStartMs = null;
+        let statusTimerNodes = [];
+        let timerCardInterval = null;
+        let timerCardBaseSeconds = 0;
+        let timerCardStartedAtMs = null;
+        let timerCardCurrentStatus = null;
+
+        // Pagination and modal selection state
+        let employeesCurrentPage = 1;
+        const EMPLOYEES_PER_PAGE = 15;
+        let currentEmployeesList = [];
+
+        // Órdenes de prueba (incluyen números de parte)
+        const mockOrders = [
+            { id: 'ORD-001', descripcion: 'Orden de Producción 001 - Armado', part_numbers: ['PDM-1001','PDM-1002','PDM-1003', 'PDM-1004', 'PDM-1005', 'PDM-1006', 'PDM-1007', 'PDM-1008', 'PDM-1009', 'PDM-1010'] },
+            { id: 'ORD-002', descripcion: 'Orden de Producción 002 - Soldadura', part_numbers: ['PDM-2001'] },
+            { id: 'ORD-003', descripcion: 'Orden de Producción 003 - Control de Calidad', part_numbers: ['PDM-3001','PDM-3002','PDM-3003'] }
+        ];
+
+        // Estado del modal de órdenes
+        let ordersModalSelectedOrderId = null; // ya declarado arriba en caso de existir, pero reafirmamos
+        let ordersModalSelectedPartIndex = null;
+
+        // Renderiza la lista de órdenes en la columna izquierda y limpia la columna de partes
+        function renderOrdersList() {
+            const container = document.getElementById('ordersList');
+            const partsList = document.getElementById('partsList');
+            if (!container || !partsList) return;
+            container.innerHTML = '';
+            partsList.innerHTML = '';
+
+            // Mostrar mensaje inicial si no hay orden seleccionada
+            if (!ordersModalSelectedOrderId) {
+                const empty = document.createElement('div');
+                empty.className = 'parts-empty-message';
+                empty.textContent = 'Selecciona una orden para ver los números de parte';
+                partsList.appendChild(empty);
+            }
+
+            mockOrders.forEach((order) => {
+                const orderEl = document.createElement('div');
+                orderEl.className = 'orders-list-item';
+                orderEl.setAttribute('data-order-id', order.id);
+
+                const orderBtn = document.createElement('button');
+                orderBtn.type = 'button';
+                orderBtn.className = 'order-item';
+                orderBtn.setAttribute('data-order-id', order.id);
+                orderBtn.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;width:100%;">
+                        <div style="flex:1;">
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-desc">${order.descripcion}</div>
+                        </div>
+                        <div style="flex:0 0 34px; text-align:center; color: rgba(75,85,99,0.8); font-size:20px;"> 
+                            <i class="fas fa-check-circle" style="opacity:0.15"></i>
+                        </div>
+                    </div>
+                `;
+                orderBtn.onclick = () => {
+                    selectOrder(order.id);
+                };
+
+                orderEl.appendChild(orderBtn);
+                container.appendChild(orderEl);
+            });
+
+            updateOrdersModalConfirmState();
+        }
+
+        function toggleOrderExpansion(orderId) {
+            // No-op: la UI ahora usa una columna de partes separada
+            return;
+        }
+
+        function selectOrder(orderId) {
+            ordersModalSelectedOrderId = orderId;
+            // Resetear selección de parte al cambiar de orden
+            ordersModalSelectedPartIndex = null;
+
+            // marcar visualmente la orden seleccionada
+            document.querySelectorAll('.orders-list-item').forEach(item => {
+                const id = item.getAttribute('data-order-id');
+                if (id === orderId) item.classList.add('order-selected'); else item.classList.remove('order-selected');
+            });
+
+            // Poblar la columna de partes con los números de parte de la orden seleccionada
+            const partsList = document.getElementById('partsList');
+            if (!partsList) return;
+            partsList.innerHTML = '';
+            const order = mockOrders.find(o => o.id === orderId);
+            if (order && Array.isArray(order.part_numbers)) {
+                order.part_numbers.forEach((pn, idx) => {
+                    // Contenedor similar a la lista de órdenes
+                    const partEl = document.createElement('div');
+                    partEl.className = 'orders-list-item';
+                    partEl.setAttribute('data-order-id', order.id);
+                    partEl.setAttribute('data-part-index', String(idx));
+
+                    const partBtn = document.createElement('button');
+                    partBtn.type = 'button';
+                    partBtn.className = 'part-btn';
+                    partBtn.setAttribute('data-order-id', order.id);
+                    partBtn.setAttribute('data-part-index', String(idx));
+                    partBtn.innerHTML = `
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;">
+                            <div style="flex:1;">
+                                <div class="order-id">${pn}</div>
+                                <div class="order-desc">Número de parte</div>
+                            </div>
+                        </div>
+                    `;
+                    partBtn.onclick = (e) => { e.stopPropagation(); selectOrderPart(order.id, idx); };
+
+                    partEl.appendChild(partBtn);
+                    partsList.appendChild(partEl);
+                });
+            }
+
+            updateOrdersModalConfirmState();
+        }
+
+        function selectOrderPart(orderId, partIndex) {
+            if (ordersModalSelectedOrderId !== orderId) selectOrder(orderId);
+            ordersModalSelectedPartIndex = Number(partIndex);
+
+            // marcar visualmente la parte seleccionada en la columna derecha
+            document.querySelectorAll('#partsList .part-btn').forEach((btn, idx) => {
+                if (idx === ordersModalSelectedPartIndex) btn.classList.add('selected'); else btn.classList.remove('selected');
+            });
+
+            updateOrdersModalConfirmState();
+        }
+
+        function updateOrdersModalConfirmState() {
+            const confirmBtn = document.getElementById('ordersModalConfirmBtn');
+            if (!confirmBtn) return;
+            const enabled = ordersModalSelectedOrderId !== null && ordersModalSelectedPartIndex !== null;
+            confirmBtn.disabled = !enabled;
+        }
+
+        // Inicializar listeners del modal (cancel/confirm)
+        (function initOrdersModalButtons() {
+            document.addEventListener('DOMContentLoaded', () => {
+                renderOrdersList();
+
+                        // Habilitar botones de planta cuando termine su animación
+                        document.querySelectorAll('.plant-button').forEach(btn => {
+                            try {
+                                const cs = window.getComputedStyle(btn);
+                                const animName = cs.getPropertyValue('animation-name') || cs.animationName;
+                                const durStr = cs.getPropertyValue('animation-duration') || cs.animationDuration || '0s';
+                                const durSec = parseFloat(durStr) || 0;
+                                if (!animName || animName === 'none' || durSec === 0) {
+                                    btn.disabled = false;
+                                    return;
+                                }
+                            } catch (e) {
+                                btn.disabled = false;
+                                return;
+                            }
+                            const onEnd = () => { btn.disabled = false; btn.removeEventListener('animationend', onEnd); };
+                            btn.addEventListener('animationend', onEnd);
+                        });
+
+                        const cancelBtn = document.getElementById('ordersModalCancelBtn');
+                const confirmBtn = document.getElementById('ordersModalConfirmBtn');
+                const ordersModal = document.getElementById('ordersModal');
+
+                if (cancelBtn) cancelBtn.addEventListener('click', () => {
+                    // intentar llamar función existente para cerrar modal si existe
+                    if (typeof closeOrdersModal === 'function') return closeOrdersModal();
+                    if (ordersModal) ordersModal.classList.add('hidden');
+                    // limpiar selección
+                    ordersModalSelectedOrderId = null;
+                    ordersModalSelectedPartIndex = null;
+                    updateOrdersModalConfirmState();
+                });
+
+                if (confirmBtn) confirmBtn.addEventListener('click', () => {
+                    if (!ordersModalSelectedOrderId || ordersModalSelectedPartIndex === null || !selectedEmployeeForOrder) return;
+                    const order = mockOrders.find(o => o.id === ordersModalSelectedOrderId);
+                    const part = order?.part_numbers?.[ordersModalSelectedPartIndex] || null;
+
+                    // Asignar selección al empleado y persistir
+                    selectedEmployeeForOrder = selectedEmployeeForOrder || {};
+                    selectedEmployeeForOrder.selectedOrderId = ordersModalSelectedOrderId;
+                    selectedEmployeeForOrder.selectedPartNumber = part;
+
+                    selectedEmployeeIdForTimer = String(selectedEmployeeForOrder.id);
+                    const nombre = selectedEmployeeForOrder.nombre || selectedEmployeeForOrder.nombre_completo || '';
+                    try {
+                        localStorage.setItem('selectedEmployeeId', selectedEmployeeForOrder.id);
+                        localStorage.setItem('selectedEmployeeName', nombre);
+                        localStorage.setItem('productionPlant', selectedPlant || '');
+                        localStorage.setItem('productionArea', selectedArea || '');
+                        localStorage.setItem('selectedOrderId', ordersModalSelectedOrderId);
+                        localStorage.setItem('selectedPartNumber', part || '');
+                    } catch (e) {
+                        // ignore
+                    }
+
+                    // Cerrar modal
+                    if (typeof closeOrdersModal === 'function') closeOrdersModal();
+                    else if (ordersModal) ordersModal.classList.add('hidden');
+
+                    // Actualizar UI
+                    showEmployeeTimerPanel(selectedEmployeeForOrder);
+                    applySelectedEmployeeHighlight();
+                });
+            });
+        })();
+
+        // Áreas disponibles por planta
+        const plantAreas = {
+            'P1': [
+                { id: 'machining', name: 'Maquinado' },
+                { id: 'cut', name: 'Corte' },
+                { id: 'fab', name: 'Fab' },
+                { id: 'weld', name: 'Soldadura' },
+                { id: 'grinding', name: 'Pulido' },
+                { id: 'paint', name: 'Pintura' }
+            ],
+            'BA': [
+                { id: 'cut', name: 'Corte' },
+                { id: 'fab', name: 'Fab' },
+                { id: 'weld', name: 'Soldadura' },
+                { id: 'grinding', name: 'Pulido' },
+                { id: 'paint', name: 'Pintura' }
+            ]
+        };
+
+        function renderAreaButtons(plant) {
+            const areas = plantAreas[plant];
+            if (!areas) return;
+
+            const container = document.getElementById('areaButtonsContainer');
+            container.innerHTML = '';
+
+            areas.forEach((area, index) => {
+                const button = document.createElement('button');
+                button.className = 'area-button';
+                button.setAttribute('data-area', area.id);
+                        button.onclick = () => selectArea(area.id);
+                        // Deshabilitar hasta que termine la animación
+                        button.disabled = true;
+                
+                // Aplicar animación con delay escalonado
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(30px) scale(0.9)';
+                button.style.animation = `buttonFadeIn 0.6s ease forwards`;
+                button.style.animationDelay = `${1 + (index * 0.1)}s`;
+                const onEnd = () => { button.disabled = false; button.removeEventListener('animationend', onEnd); };
+                button.addEventListener('animationend', onEnd);
+                
+                const textSpan = document.createElement('span');
+                textSpan.className = 'button-text';
+                textSpan.textContent = area.name;
+                
+                button.appendChild(textSpan);
+                container.appendChild(button);
+            });
+        }
+
+        function selectPlant(plant) {
+            selectedPlant = plant;
+            log('Planta seleccionada: ' + plant);
+            
+            if (plant === 'P1' || plant === 'BA') {
+                // Mostrar pantalla de selección de área para P1 y BA
+                renderAreaButtons(plant);
+                document.getElementById('plantSelectionScreen').classList.add('hidden');
+                document.getElementById('areaSelectionScreen').classList.remove('hidden');
+                document.getElementById('selectedPlantDisplay').textContent = plant;
+                updateExitButtonVisibility();
+            } else {
+                // Para WD, redirigir o continuar con el flujo
+                log('Planta seleccionada (WD): ' + plant);
+                // Aquí puedes agregar la lógica para continuar con WD
+                // Por ejemplo: window.location.href = `/production-${plant.toLowerCase()}.html`;
+            }
+        }
+
+        let selectedArea = null;
+
+        function updateExitButtonVisibility() {
+            const exitButton = document.getElementById('exitButton');
+            const plantSelectionScreen = document.getElementById('plantSelectionScreen');
+            if (!exitButton || !plantSelectionScreen) return;
+
+            const isPlantSelectionVisible = !plantSelectionScreen.classList.contains('hidden');
+            exitButton.style.display = isPlantSelectionVisible ? 'inline-flex' : 'none';
+        }
+
+        // Mapeo de áreas a valores en la base de datos (puede variar según tu BD)
+        const areaMapping = {
+            'maquinado': ['Maquinado', 'maquinado', 'MAQUINADO'],
+            'corte': ['Corte', 'corte', 'Corte'],
+            'fab': ['Fab', 'fab', 'FAB'],
+            'soldadura': ['Soldadura', 'soldadura', 'SOLDADURA'],
+            'pulido': ['Pulido', 'pulido', 'PULIDO'],
+            'pintura': ['Pintura', 'pintura', 'PINTURA']
+        };
+
+        async function selectArea(area) {
+            selectedArea = area;
+            log('Área seleccionada: ' + area + ' en planta: ' + selectedPlant);
+            
+            // Guardar en localStorage
+            localStorage.setItem('productionPlant', selectedPlant);
+            localStorage.setItem('productionArea', area);
+            
+            // Mostrar pantalla de empleados
+            document.getElementById('areaSelectionScreen').classList.add('hidden');
+            document.getElementById('employeesScreen').classList.remove('hidden');
+            const employeesLayout = document.getElementById('employeesLayout');
+            if (employeesLayout) {
+                employeesLayout.classList.add('timer-visible');
+            }
+            document.getElementById('employeesPlantDisplay').textContent = selectedPlant;
+            document.getElementById('employeesAreaDisplay').textContent = 
+                plantAreas[selectedPlant].find(a => a.id === area)?.name || area;
+            hideEmployeeTimerPanel();
+            updateExitButtonVisibility();
+            
+            // Cargar empleados
+            await loadEmployees(area);
+        }
+
+        async function getUsersStatusMap() {
+            if (usersStatusByName) return usersStatusByName;
+
+            try {
+                const response = await fetch('/api/usuarios', { cache: 'no-store' });
+                if (!response.ok) {
+                    console.warn('No se pudieron obtener usuarios para estado de trabajo, status:', response.status);
+                    usersStatusByName = {};
+                    return usersStatusByName;
+                }
+
+                const data = await response.json();
+                const usersArray = Array.isArray(data) ? data : [data];
+                const map = {};
+
+                usersArray.forEach(user => {
+                    const key = String(user.nombre_completo || user.username || '').trim().toLowerCase();
+                    if (!key) return;
+                    map[key] = {
+                        estado_trabajo: (user.estado_trabajo || '').toString().trim().toLowerCase(),
+                        tiempo_en_orden_segundos: Number(user.tiempo_en_orden_segundos || 0)
+                    };
+                });
+
+                usersStatusByName = map;
+                return usersStatusByName;
+            } catch (error) {
+                console.error('Error al obtener usuarios para estado de trabajo:', error);
+                usersStatusByName = {};
+                return usersStatusByName;
+            }
+        }
+
+        function formatSecondsToClock(totalSeconds) {
+            const safeSeconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+            const hours = Math.floor(safeSeconds / 3600);
+            const minutes = Math.floor((safeSeconds % 3600) / 60);
+            const seconds = safeSeconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateTimerCardDisplay(totalSeconds) {
+            const safeSeconds = Math.max(0, Math.floor(Number(totalSeconds) || 0));
+            const hours = Math.floor(safeSeconds / 3600);
+            const minutes = Math.floor((safeSeconds % 3600) / 60);
+            const seconds = safeSeconds % 60;
+
+            const hoursEl = document.getElementById('timerHours');
+            const minutesEl = document.getElementById('timerMinutes');
+            const secondsEl = document.getElementById('timerSeconds');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        function setTimerCardStatus(statusKey, initialSeconds = 0) {
+            try {
+                const timerCard = document.getElementById('timerCard');
+                if (!timerCard) return;
+                // Limpiar estado previo y timers
+                document.querySelectorAll('#timerCard .status-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    const span = btn.querySelector('.status-timer[data-timer]');
+                    if (span) {
+                        span.dataset.initialSeconds = '0';
+                        span.dataset.active = '0';
+                        span.textContent = '00:00:00';
+                    }
+                });
+                timerCardCurrentStatus = null;
+                if (!statusKey) return;
+                const btn = timerCard.querySelector(`.status-btn[data-status="${statusKey}"]`);
+                if (!btn) return;
+                btn.classList.add('active');
+                const span = btn.querySelector('.status-timer[data-timer]');
+                if (span) {
+                    span.dataset.initialSeconds = String(Number(initialSeconds || 0));
+                    span.dataset.active = '1';
+                    span.textContent = formatSecondsToClock(Number(span.dataset.initialSeconds || 0));
+                }
+                timerCardCurrentStatus = statusKey;
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        function stopTimerCardCounter() {
+            if (timerCardInterval) {
+                clearInterval(timerCardInterval);
+                timerCardInterval = null;
+            }
+            timerCardStartedAtMs = null;
+        }
+
+        function startTimerCardCounter(baseSeconds = 0, initialStatus = null) {
+            stopTimerCardCounter();
+            timerCardBaseSeconds = Math.max(0, Math.floor(Number(baseSeconds) || 0));
+            timerCardStartedAtMs = Date.now();
+            updateTimerCardDisplay(timerCardBaseSeconds);
+
+            // Si viene un estado inicial explícito, aplicarlo (por ejemplo 'working' al asignar orden)
+            if (initialStatus) {
+                setTimerCardStatus(initialStatus, timerCardBaseSeconds);
+            }
+
+            timerCardInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - timerCardStartedAtMs) / 1000);
+                const total = timerCardBaseSeconds + elapsed;
+                updateTimerCardDisplay(total);
+
+                // Sincronizar el timer del estado activo dentro de la tarjeta
+                try {
+                    const activeBtn = document.querySelector('#timerCard .status-btn.active');
+                    if (activeBtn) {
+                        const span = activeBtn.querySelector('.status-timer[data-timer]');
+                        if (span) {
+                            const base = Number(span.dataset.initialSeconds || 0);
+                            span.textContent = formatSecondsToClock(base + elapsed);
+                        }
+                    }
+                } catch (e) {
+                    // ignorar errores de DOM en casos inesperados
+                }
+            }, 1000);
+        }
+
+        function showEmployeeTimerPanel(empleadoInfo) {
+            const timerPanel = document.getElementById('timerPanel');
+            const timerCard = document.getElementById('timerCard');
+            const projectNameDisplay = document.getElementById('projectNameDisplay');
+            const projectOrderNameDisplay = document.getElementById('projectOrderNameDisplay');
+            const employeesGrid = document.getElementById('employeesGrid');
+
+            if (!timerPanel || !timerCard) return;
+
+            const rawName = (empleadoInfo?.nombre || empleadoInfo?.nombre_completo || '').trim();
+            const storedName = (localStorage.getItem('selectedEmployeeName') || '').trim();
+            const employeeName = rawName || storedName;
+
+            if (projectNameDisplay) {
+                projectNameDisplay.textContent = employeeName || 'Seleccionar Empleado';
+            }
+
+            if (projectOrderNameDisplay) {
+                const puesto = (empleadoInfo?.puesto || '').trim();
+                if (puesto) {
+                    projectOrderNameDisplay.textContent = `Puesto: ${puesto}`;
+                    projectOrderNameDisplay.style.display = 'block';
+                } else {
+                    projectOrderNameDisplay.textContent = '';
+                    projectOrderNameDisplay.style.display = 'none';
+                }
+            }
+
+            // Marcar visualmente la tarjeta del empleado asociado al timer
+            if (employeesGrid && empleadoInfo && typeof empleadoInfo.id !== 'undefined') {
+                const card = employeesGrid.querySelector(`.employee-card[data-employee-id="${empleadoInfo.id}"]`);
+                if (selectedEmployeeCardElement && selectedEmployeeCardElement !== card) {
+                    selectedEmployeeCardElement.classList.remove('employee-card-active');
+                }
+                if (card) {
+                    card.classList.add('employee-card-active');
+                    selectedEmployeeCardElement = card;
+                }
+                // Persistir el id del empleado asociado al panel de tiempo para reusar el resaltado en re-renderizados
+                selectedEmployeeIdForTimer = String(empleadoInfo.id);
+            }
+
+            // Iniciar el contador principal y, si la vista viene con una orden/parte asignada,
+            // activar por defecto el estado 'working' para sincronizar ambos timers.
+            const baseSeconds = Number(empleadoInfo?.tiempoEstadoSegundos || 0);
+            const shouldActivateWorking = !!(empleadoInfo && (empleadoInfo.selectedOrderId || empleadoInfo.selectedPartNumber));
+            startTimerCardCounter(baseSeconds, shouldActivateWorking ? 'working' : null);
+        }
+
+        function hideEmployeeTimerPanel() {
+            const timerPanel = document.getElementById('timerPanel');
+            const timerCard = document.getElementById('timerCard');
+            const timerNotesInput = document.getElementById('timerNotesInput');
+            const projectNameDisplay = document.getElementById('projectNameDisplay');
+            const projectOrderNameDisplay = document.getElementById('projectOrderNameDisplay');
+            if (!timerPanel || !timerCard) return;
+            if (timerNotesInput) timerNotesInput.value = '';
+
+            // Limpiar selección visual del empleado asociado al timer
+            if (selectedEmployeeCardElement) {
+                selectedEmployeeCardElement.classList.remove('employee-card-active');
+                selectedEmployeeCardElement = null;
+            }
+
+            // Limpiar también el id del empleado asociado al panel de tiempo
+            selectedEmployeeIdForTimer = null;
+
+            if (projectNameDisplay) {
+                projectNameDisplay.textContent = 'Seleccionar Empleado';
+            }
+            if (projectOrderNameDisplay) {
+                projectOrderNameDisplay.textContent = '';
+                projectOrderNameDisplay.style.display = 'none';
+            }
+
+            // Limpiar estado y timers de la tarjeta
+            try { setTimerCardStatus(null); } catch (e) { /* ignore */ }
+            stopTimerCardCounter();
+            updateTimerCardDisplay(0);
+        }
+
+        function mapEstadoTrabajo(estado) {
+            const key = String(estado || '').trim().toLowerCase();
+            switch (key) {
+                case 'working':
+                case 'trabajando':
+                    return { label: 'Trabajando en ello', css: 'working' };
+                case 'comida':
+                    return { label: 'Comida', css: 'comida' };
+                case '5s':
+                    return { label: '5S', css: 'cinco-s' };
+                case 'pausa':
+                    return { label: 'Pausa', css: 'pausa' };
+                case 'meeting':
+                    return { label: 'Junta', css: 'meeting' };
+                case 'meeting_trabajo':
+                    return { label: 'Junta de trabajo', css: 'meeting-trabajo' };
+                case 'training':
+                    return { label: 'Capacitación', css: 'training' };
+                case 'pendiente':
+                    return { label: 'Pendiente', css: 'pendiente' };
+                case 'cambios':
+                    return { label: 'Cambios', css: 'cambios' };
+                case 'esperando_informacion':
+                    return { label: 'Esperando información', css: 'esperando-info' };
+                case 'buscando_informacion':
+                    return { label: 'Analizando información', css: 'buscando-info' };
+                case 'documentacion':
+                    return { label: 'Documentación', css: 'documentacion' };
+                default:
+                    return { label: 'Inactivo', css: 'inactivo' };
+            }
+        }
+
+        function startStatusTimers() {
+            if (statusTimerInterval) {
+                clearInterval(statusTimerInterval);
+                statusTimerInterval = null;
+            }
+            statusTimerStartMs = Date.now();
+            // Capturar los nodos una sola vez por render para evitar querySelectorAll en cada tick
+            statusTimerNodes = Array.from(document.querySelectorAll('.employee-status-time'));
+
+            if (!statusTimerNodes.length) {
+                return;
+            }
+
+            statusTimerInterval = setInterval(() => {
+                const now = Date.now();
+                const elapsedSeconds = Math.floor((now - statusTimerStartMs) / 1000);
+                statusTimerNodes.forEach(span => {
+                    const activeAttr = span.dataset.active;
+                    const isActive = (typeof activeAttr === 'undefined' || activeAttr === '')
+                        ? true
+                        : (String(activeAttr) === '1' || String(activeAttr).toLowerCase() === 'true');
+                    if (!isActive) return; // no avanzar timers para sesiones inactivas
+
+                    const base = Number(span.dataset.initialSeconds || 0);
+                    const total = base + elapsedSeconds;
+                    span.textContent = formatSecondsToClock(total);
+                });
+            }, 1000);
+        }
+
+        async function loadEmployees(area) {
+            const loadingMessage = document.getElementById('loadingMessage');
+            const employeesGrid = document.getElementById('employeesGrid');
+            const noEmployeesMessage = document.getElementById('noEmployeesMessage');
+            
+            loadingMessage.classList.remove('hidden');
+            employeesGrid.classList.add('is-preparing');
+            employeesGrid.innerHTML = '';
+            noEmployeesMessage.classList.add('hidden');
+            
+            try {
+                // Obtener todos los empleados
+                const response = await fetch('/api/empleados');
+                if (!response.ok) {
+                    throw new Error('Error al obtener empleados');
+                }
+                
+                const empleados = await response.json();
+                
+                // Obtener mapa de estados de trabajo desde usuarios
+                const usersStatusMap = await getUsersStatusMap();
+                
+                // Guardar todos los empleados activos para búsqueda e inyectar estado de trabajo
+                allEmployees = empleados
+                    .filter(emp => {
+                    // Solo mostrar empleados activos
+                    return emp.activo === true || emp.activo === null;
+                    })
+                    .map(emp => {
+                        const key = String(emp.nombre_completo || '').trim().toLowerCase();
+                        const statusInfo = usersStatusMap[key] || {};
+                        const estadoTrabajo = statusInfo.estado_trabajo || 'inactivo';
+                        const tiempoSegundos = Number(statusInfo.tiempo_en_orden_segundos || 0);
+                        return {
+                            ...emp,
+                            estado_trabajo: estadoTrabajo,
+                            tiempo_en_estado_segundos: tiempoSegundos
+                        };
+                });
+                
+                // Renderizar empleados iniciales (paginados)
+                renderEmployees(allEmployees, true);
+
+                if (allEmployees.length === 0) {
+                    loadingMessage.classList.add('hidden');
+                    employeesGrid.classList.remove('is-preparing');
+                    return;
+                }
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        employeesGrid.classList.remove('is-preparing');
+                        loadingMessage.classList.add('hidden');
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Error al cargar empleados:', error);
+                employeesGrid.classList.remove('is-preparing');
+                loadingMessage.textContent = 'Error al cargar empleados';
+                loadingMessage.classList.remove('hidden');
+            }
+        }
+
+        function renderEmployees(empleados, resetPage = true) {
+            const employeesGrid = document.getElementById('employeesGrid');
+            const paginationContainer = document.getElementById('employeesPagination');
+            const noEmployeesMessage = document.getElementById('noEmployeesMessage');
+            const noEmployeesText = document.getElementById('noEmployeesText');
+            const searchInput = document.getElementById('employeeSearch');
+            const searchTerm = searchInput ? searchInput.value.trim() : '';
+
+            if (!Array.isArray(empleados)) empleados = [];
+            currentEmployeesList = empleados;
+            if (resetPage) employeesCurrentPage = 1;
+
+            const total = empleados.length;
+            const totalPages = Math.max(1, Math.ceil(total / EMPLOYEES_PER_PAGE));
+            employeesCurrentPage = Math.min(Math.max(1, employeesCurrentPage), totalPages);
+            const start = (employeesCurrentPage - 1) * EMPLOYEES_PER_PAGE;
+            const pageItems = empleados.slice(start, start + EMPLOYEES_PER_PAGE);
+
+            employeesGrid.innerHTML = '';
+
+            if (empleados.length === 0) {
+                noEmployeesMessage.classList.remove('hidden');
+                if (searchTerm !== '') {
+                    noEmployeesText.textContent = `No se encontraron empleados que coincidan con "${searchTerm}"`;
+                } else {
+                    noEmployeesText.textContent = 'No se encontraron empleados en esta área';
+                }
+                if (paginationContainer) paginationContainer.setAttribute('aria-hidden', 'true');
+                return;
+            }
+
+            noEmployeesMessage.classList.add('hidden');
+
+            // Renderizar solo la página actual
+            pageItems.forEach(empleado => {
+                const employeeCard = createEmployeeCard(empleado);
+                employeesGrid.appendChild(employeeCard);
+            });
+
+            // Renderizar controles de paginación
+            renderEmployeesPagination(totalPages);
+
+            if (empleados.length > 0) {
+                startStatusTimers();
+                // Reaplicar resaltado en caso de que la lista haya sido re-renderizada
+                applySelectedEmployeeHighlight();
+            }
+        }
+
+        function renderEmployeesPagination(totalPages) {
+            const container = document.getElementById('employeesPagination');
+            if (!container) return;
+            container.innerHTML = '';
+            if (totalPages <= 1) {
+                container.setAttribute('aria-hidden', 'true');
+                return;
+            }
+            container.setAttribute('aria-hidden', 'false');
+
+            const prev = document.createElement('button');
+            prev.textContent = 'Anterior';
+            prev.disabled = employeesCurrentPage <= 1;
+            prev.onclick = () => { employeesCurrentPage = Math.max(1, employeesCurrentPage - 1); renderEmployees(currentEmployeesList, false); };
+            container.appendChild(prev);
+
+            const info = document.createElement('div');
+            info.className = 'page-info';
+            info.textContent = `Página ${employeesCurrentPage} de ${totalPages}`;
+            container.appendChild(info);
+
+            const next = document.createElement('button');
+            next.textContent = 'Siguiente';
+            next.disabled = employeesCurrentPage >= totalPages;
+            next.onclick = () => { employeesCurrentPage = Math.min(totalPages, employeesCurrentPage + 1); renderEmployees(currentEmployeesList, false); };
+            container.appendChild(next);
+        }
+
+        function filterEmployees(searchTerm) {
+            if (!searchTerm || searchTerm.trim() === '') {
+                renderEmployees(allEmployees);
+                return;
+            }
+            
+            const term = searchTerm.toLowerCase().trim();
+            const filtered = allEmployees.filter(empleado => {
+                const nombre = (empleado.nombre_completo || '').toLowerCase();
+                const puesto = (empleado.puesto || '').toLowerCase();
+                return nombre.includes(term) || puesto.includes(term);
+            });
+            
+            renderEmployees(filtered, true);
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('employeeSearch');
+            searchInput.value = '';
+            filterEmployees('');
+            updateClearButton();
+        }
+
+        function updateClearButton() {
+            const searchInput = document.getElementById('employeeSearch');
+            const clearBtn = document.getElementById('searchClearBtn');
+            if (searchInput.value.trim() !== '') {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+        }
+
+        function createEmployeeCard(empleado) {
+            const card = document.createElement('div');
+            card.className = 'employee-card';
+
+            const nombre = empleado.nombre_completo || empleado.nombre || empleado.username || 'Sin nombre';
+            const puesto = empleado.puesto || 'Sin puesto';
+            const id = empleado.id || '';
+
+            card.dataset.employeeId = id;
+            card.dataset.employeeName = nombre;
+
+            // Placeholder SVG para fotos faltantes
+            const placeholderSVG = `data:image/svg+xml,${encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+                    <rect width="200" height="200" fill="#e0e0e0"/>
+                    <circle cx="100" cy="80" r="40" fill="#bdbdbd"/>
+                    <path d="M 50 180 Q 50 140 100 140 Q 150 140 150 180" fill="#bdbdbd"/>
+                </svg>
+            `)}`;
+            
+            const fotoUrl = empleado.foto_url || placeholderSVG;
+            const estadoTrabajo = empleado.estado_trabajo || 'inactivo';
+            const tiempoEstadoSegundos = Number(empleado.tiempo_en_estado_segundos || 0);
+            const estadoInfo = mapEstadoTrabajo(estadoTrabajo);
+            
+            // Hacer toda la tarjeta clicable y accesible con teclado
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+            card.setAttribute('aria-label', `Iniciar sesión como ${nombre}`);
+
+            // Si este empleado es el que actualmente tiene una orden asignada al panel de tiempo,
+            // remarcar su tarjeta incluso después de re-renderizados (búsqueda, paginación, etc.)
+            if (selectedEmployeeIdForTimer !== null && String(id) === String(selectedEmployeeIdForTimer)) {
+                card.classList.add('employee-card-active');
+                selectedEmployeeCardElement = card;
+            }
+            
+            card.onclick = function(e) {
+                // Evitar que se dispare dos veces si se hace clic en el botón interno
+                if (e.target.closest('.employee-login-btn')) {
+                    return;
+                }
+                // Abrir modal de selección de orden antes de proceder
+                openOrdersModal({ id, nombre, puesto, tiempoEstadoSegundos });
+            };
+            
+            // Permitir activar con Enter o Espacio
+            card.onkeydown = function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openOrdersModal({ id, nombre, puesto, tiempoEstadoSegundos });
+                }
+            };
+            
+            card.innerHTML = `
+                <div class="employee-photo">
+                    <img src="${fotoUrl}" alt="${nombre}" onerror="this.src='${placeholderSVG}'">
+                </div>
+                <div class="employee-info">
+                    <h3 class="employee-name">${nombre}</h3>
+                </div>
+                <div class="employee-status-wrapper">
+                    <div class="employee-status-pill status-${estadoInfo.css}">
+                        <div class="employee-status-dot"></div>
+                        <div class="employee-status-text">
+                            <div class="employee-status-label">${estadoInfo.label}</div>
+                            <div 
+                                    class="employee-status-time" 
+                                    data-initial-seconds="${tiempoEstadoSegundos}"
+                                    data-active="${estadoInfo.css !== 'inactivo' ? '1' : '0'}"
+                                >
+                                    ${formatSecondsToClock(tiempoEstadoSegundos)}
+                                </div>
+                        </div>
+                </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Aplicar o limpiar el resaltado de empleado seleccionado de forma robusta
+        function applySelectedEmployeeHighlight() {
+            const employeesGrid = document.getElementById('employeesGrid');
+            if (!employeesGrid) return;
+
+            const cards = Array.from(employeesGrid.querySelectorAll('.employee-card'));
+            let found = false;
+
+            cards.forEach(c => {
+                try {
+                    if (String(c.dataset.employeeId) === String(selectedEmployeeIdForTimer)) {
+                        c.classList.add('employee-card-active');
+                        selectedEmployeeCardElement = c;
+                        found = true;
+                    } else {
+                        c.classList.remove('employee-card-active');
+                    }
+                } catch (e) {
+                    // Ignore
+                }
+            });
+
+            if (!found) {
+                // Si no encontramos la tarjeta, limpiar la referencia previa
+                selectedEmployeeCardElement = null;
+            }
+        }
+
+        function openOrdersModal(empleadoInfo) {
+            selectedEmployeeForOrder = empleadoInfo;
+            ordersModalSelectedOrderId = null;
+            ordersModalSelectedPartIndex = null;
+            const modal = document.getElementById('ordersModal');
+            const ordersList = document.getElementById('ordersList');
+            const confirmBtn = document.getElementById('ordersModalConfirmBtn');
+            const cancelBtn = document.getElementById('ordersModalCancelBtn');
+            // Renderizar la lista (cada orden incluirá su contenedor de partes)
+            if (ordersList) ordersList.innerHTML = '';
+            renderOrdersList();
+            if (confirmBtn) confirmBtn.disabled = true;
+            if (cancelBtn) cancelBtn.onclick = closeOrdersModal;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrdersModal() {
+            const modal = document.getElementById('ordersModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            selectedEmployeeForOrder = null;
+            ordersModalSelectedOrderId = null;
+            const confirmBtn = document.getElementById('ordersModalConfirmBtn');
+            if (confirmBtn) confirmBtn.disabled = true;
+            const ordersList = document.getElementById('ordersList');
+            if (ordersList) ordersList.innerHTML = '';
+        }
+
+        function loginAsEmployee(id, encodedName, orderId = null) {
+            const nombre = decodeURIComponent(encodedName);
+            // Guardar selección para usarla en login u otra página
+            localStorage.setItem('selectedEmployeeId', id);
+            localStorage.setItem('selectedEmployeeName', nombre);
+            localStorage.setItem('productionPlant', selectedPlant);
+            localStorage.setItem('productionArea', selectedArea);
+            if (orderId) {
+                localStorage.setItem('selectedOrderId', orderId);
+            } else {
+                localStorage.removeItem('selectedOrderId');
+            }
+            closeOrdersModal();
+            // Redirigir a login (ajusta si usas otra ruta)
+            window.location.href = '/login.html';
+        }
+
+        function goBackToPlantSelection() {
+            document.getElementById('areaSelectionScreen').classList.add('hidden');
+            document.getElementById('plantSelectionScreen').classList.remove('hidden');
+            selectedPlant = null;
+            selectedArea = null;
+            hideEmployeeTimerPanel();
+            updateExitButtonVisibility();
+        }
+
+        function goBackToAreaSelection() {
+            document.getElementById('employeesScreen').classList.add('hidden');
+            document.getElementById('areaSelectionScreen').classList.remove('hidden');
+            selectedArea = null;
+            hideEmployeeTimerPanel();
+            updateExitButtonVisibility();
+        }
+
+        // Funciones para el modal de contraseña
+        function showPasswordModal() {
+            const modal = document.getElementById('passwordModal');
+            modal.classList.add('active');
+            document.getElementById('exitPassword').focus();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePasswordModal() {
+            const modal = document.getElementById('passwordModal');
+            modal.classList.remove('active');
+            document.getElementById('exitPassword').value = '';
+            document.getElementById('passwordError').textContent = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function validateExitPassword() {
+            const password = document.getElementById('exitPassword').value;
+            const errorDiv = document.getElementById('passwordError');
+            
+            // Contraseña: administradorPDM (misma que se usa en otras partes del proyecto)
+            const correctPassword = 'administradorPDM';
+            
+            if (password === correctPassword) {
+                // Redirigir al selector
+                window.location.href = 'produccion-supervisor.html';
+            } else {
+                errorDiv.textContent = 'Contraseña incorrecta';
+                document.getElementById('exitPassword').value = '';
+                document.getElementById('exitPassword').focus();
+            }
+        }
+
+        // Cerrar modales al presionar ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const ordersModal = document.getElementById('ordersModal');
+                const passwordModal = document.getElementById('passwordModal');
+                if (ordersModal.classList.contains('active')) {
+                    closeOrdersModal();
+                } else if (passwordModal.classList.contains('active')) {
+                    closePasswordModal();
+                }
+            }
+        });
+
+        // Permitir enviar con Enter en el campo de contraseña
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('exitPassword');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        validateExitPassword();
+                    }
+                });
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera de él
+        document.getElementById('passwordModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closePasswordModal();
+            }
+        });
+
+        // Cerrar modal de órdenes al hacer clic fuera de él
+        document.getElementById('ordersModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeOrdersModal();
+            }
+        });
+
+        // Cerrar modal de órdenes con ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const ordersModal = document.getElementById('ordersModal');
+                if (ordersModal.classList.contains('active')) {
+                    closeOrdersModal();
+                }
+            }
+        });
+
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarFondo();
+            updateExitButtonVisibility();
+
+            // Rehidratar el empleado seleccionado previamente (si existe)
+            try {
+                const storedSelectedEmployeeId = localStorage.getItem('selectedEmployeeId');
+                if (storedSelectedEmployeeId) {
+                    selectedEmployeeIdForTimer = String(storedSelectedEmployeeId);
+                }
+            } catch (e) {
+                // Ignorar errores de localStorage
+            }
+
+            const finishBtn = document.getElementById('finishBtn');
+            if (finishBtn) {
+                finishBtn.addEventListener('click', hideEmployeeTimerPanel);
+            }
+
+            document.querySelectorAll('#timerCard .status-btn').forEach((btn) => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('#timerCard .status-btn').forEach((item) => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+            
+            // Configurar búsqueda de empleados
+            const searchInput = document.getElementById('employeeSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    filterEmployees(e.target.value);
+                    updateClearButton();
+                });
+                
+                searchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        clearSearch();
+                        searchInput.blur();
+                    }
+                });
+            }
+        });
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inicializarFondo);
+        } else {
+            inicializarFondo();
+        }
+    </script>
+</body>
+</html>
+

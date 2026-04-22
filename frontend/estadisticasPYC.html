@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estadísticas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles/estadisticasPYC.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="styles/planeacionycompras.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <div class="shell">
+        <!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+      <div class="tab-switch">
+
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i> 
+        </button>
+
+        <button class="tab-switch-button" data-tab="planeacion">
+          <i class="fas fa-tasks"></i> Planeación
+        </button>
+        <button class="tab-switch-button" data-tab="compras">
+          <i class="fas fa-shopping-cart"></i> Compras
+        </button>   
+        <button class="tab-switch-button active" data-tab="estadisticas">
+          <i class="fas fa-chart-bar"></i> Estadísticas
+        </button>      
+
+      </div>
+    </div>
+    <script>
+        // Navegación del tab-switch de Nuevo Equipo
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabRoutes = {
+        inicio: 'nuevo-inicio.html',
+        planeacion: 'planeacionycompras.html',
+        compras: 'comprasPYC.html',
+        estadisticas: 'estadisticasPYC.html'
+      };
+
+      const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+      document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+        button.addEventListener('click', function() {
+          const targetPage = tabRoutes[this.dataset.tab];
+          if (!targetPage || targetPage === currentPage) {
+            return;
+          }
+          window.location.href = targetPage;
+        });
+      });
+    });
+  </script>
+
+    <main class="bento-grid" aria-label="Vista bento de estadísticas">
+      <section class="bento-card card-hero tone-blue"></section>
+      <section class="bento-card card-side tone-violet"></section>
+      <section class="bento-card card-wide tone-cyan"></section>
+      <section class="bento-card card-wide tone-emerald"></section>
+      <section class="bento-card card-wide tone-amber"></section>
+      <section class="bento-card card-tall tone-violet"></section>
+      <section class="bento-card card-square tone-blue"></section>
+      <section class="bento-card card-square tone-cyan"></section>
+      <section class="bento-card card-square tone-emerald"></section>
+      <section class="bento-card card-banner tone-amber"></section>
+      <section class="bento-card card-banner tone-blue"></section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,3350 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1" rel="stylesheet" />
+	<title>Inicio</title>
+	<style>
+			:root{
+				--bg:#f3f6fb;
+				--fg:#0f172a;
+				--muted:#6b7280;
+				--accent-1:#5b86e5;
+				--accent-2:#cfe8ff;
+				--card:#ffffff;
+				--card-text:#0b1220;
+				--sidebar-width:220px;
+				--sidebar-toggle-gap:12px;
+				--accent-red:#c43a3a;
+				--composer-height:64px;
+				--messages-right-offset:160px;
+			}
+			/* Reserve scrollbar gutter to avoid layout shift when overlay toggles */
+			html{scrollbar-gutter:stable}
+		*{box-sizing:border-box}
+		html,body{height:100%}
+        body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+
+			/* Dark theme variables and some key overrides. applyTheme() sets data-theme on <html>. */
+			[data-theme="dark"] {
+				--bg: #071226;
+				--fg: #e6eef8;
+				--muted: #94a3b8;
+				--accent-1: #4f9ef8;
+				--accent-2: rgba(79,158,248,0.08);
+				--card: #0b1220;
+				--card-text: #e6eef8;
+				--accent-red: #ff6b6b;
+			}
+
+			[data-theme="dark"] .sidebar,
+			[data-theme="dark"] .right-sidebar { background-color: var(--card); }
+
+			[data-theme="dark"] #pill-logo { background: rgba(0,0,0,0.45); color: var(--fg); }
+
+			[data-theme="dark"] .user-menu,
+			[data-theme="dark"] .user-menu.open { background: var(--card); color: var(--fg); }
+
+			/* Wider dark-mode overrides to ensure visible contrast across the page */
+			[data-theme="dark"] body { background: var(--bg); color: var(--fg); }
+			[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] p, [data-theme="dark"] label { color: var(--fg); }
+			[data-theme="dark"] a { color: var(--accent-1); }
+			[data-theme="dark"] .sidebar, [data-theme="dark"] .right-sidebar { background: var(--card); color: var(--fg); box-shadow: none }
+			[data-theme="dark"] .sidebar-footer .name, [data-theme="dark"] .sidebar-footer .handle { color: var(--fg); }
+			[data-theme="dark"] .app-link { color: var(--muted); }
+			[data-theme="dark"] .app-link.active { background: rgba(255,255,255,0.03); color: var(--fg); }
+			[data-theme="dark"] .app-card, [data-theme="dark"] .ex-card, [data-theme="dark"] .small-card, [data-theme="dark"] .note-small, [data-theme="dark"] .news-composer, [data-theme="dark"] .news-post { background: var(--card); color: var(--card-text); box-shadow: 0 6px 18px rgba(2,6,23,0.25); }
+			[data-theme="dark"] .hero { background: linear-gradient(48deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12)); }
+			[data-theme="dark"] .chip { background: var(--card); border-color: rgba(255,255,255,0.03); color: var(--muted); }
+			[data-theme="dark"] .user-panel, [data-theme="dark"] .modal-dialog { background: var(--card); color: var(--card-text); }
+			[data-theme="dark"] .post-options-dropdown, [data-theme="dark"] .user-menu { background: var(--card); color: var(--fg); }
+			[data-theme="dark"] .slider { background: rgba(255,255,255,0.06) !important; }
+				.wrap{margin:auto; padding:0 22px;display:block;max-width:80%;}
+			/* Sidebar fixed to the left edge (narrower to give main more room) */
+			.sidebar{background-color: rgb(255, 255, 255);padding-top:10px;position:fixed;left:0;top:0;width:var(--sidebar-width);height:100vh;overflow:visible;z-index:30;padding-left:12px;padding-right:12px;font-size:12px;scrollbar-width: none;display:flex;flex-direction:column;transform:translateX(0);opacity:1;transition:transform .22s cubic-bezier(.2,.8,.2,1),opacity .22s cubic-bezier(.2,.8,.2,1);will-change:transform,opacity}
+			/* Toggle button to collapse/show sidebar */
+				#sidebar-toggle{position:fixed;top:36px;left:calc(var(--sidebar-width) + var(--sidebar-toggle-gap));width:40px;height:40px;border-radius:10px;display:none;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f6f8ff);box-shadow:0 10px 30px rgba(12,24,60,.08);border:none;cursor:pointer;z-index:10000;transition:left .18s ease,transform .18s ease;font-size:16px;color:#0b1f3a}
+			body.sidebar-hidden .sidebar{transform:translateX(calc(-1 * (var(--sidebar-width) + 8px)));opacity:0;pointer-events:none}
+			body.sidebar-hidden .main{margin-left:28px}
+			body.sidebar-hidden #sidebar-toggle{left:12px;transform:none}
+			#sidebar-toggle:focus{outline:2px solid rgba(91,134,229,.18)}
+		.brand{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:10px}
+		.sidebar .menu{margin-top:18px}
+			.sidebar-footer{margin-top:18px;padding:12px;border-radius:10px;background:transparent;display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:600;position:relative;padding-right:12px}
+			.sidebar-footer .avatar{width:36px;height:36px;border-radius:30px;background:linear-gradient(90deg,#4f8fe9,#a09df5);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+			.sidebar-footer .name{font-size:13px;color:#0f172a;font-weight:800}
+
+			/* Ensure avatar images are always square and cover the box */
+			.sidebar-footer .avatar img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+
+			/* Allow name to truncate to one line with ellipsis inside the sidebar */
+			.sidebar-footer > div{flex:1;min-width:0}
+			.sidebar-footer .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+
+			/* Single-line truncation for profile headings */
+			#userProfileName, .user-general-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+			.sidebar-footer .handle{font-size:12px;color:var(--muted);opacity:0.9;margin-top:2px}
+			.user-menu-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:8px;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px}
+			.user-menu-btn:hover{background:rgba(15,23,42,0.03);color:#0b1f3a}
+			.user-menu{position:absolute;right:8px;bottom:calc(100% + 8px);background:var(--card);border-radius:10px;box-shadow:0 10px 30px rgba(12,24,60,.08);min-width:180px;display:none;z-index:10001;overflow:hidden}
+			.user-menu.open{display:block}
+			.user-menu ul{list-style:none;margin:0;padding:6px 0}
+			.user-menu li{padding:10px 14px;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap}
+			.user-menu li:hover{background:rgba(15,23,42,0.04);color:#0b1f3a}
+			.user-menu li.danger{color:#dc2626;font-weight:700}
+			.apps-list{display:flex;flex-direction:column;flex:1;min-height:0;overflow:auto;padding-right:6px}
+			.sidebar-inner{display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:0}
+		.app-link{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;color:var(--muted);text-decoration:none;position:relative}
+		.app-link.active { background: rgba(15,23,42,0.06); color: #0b1220; font-weight:700; }
+		.app-link .icon{width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fff,#f2f5ff);box-shadow:0 4px 12px rgba(12,24,60,0.06)}
+		.app-link:hover{background:rgba(0,0,0,0.02);color:#111827}
+
+		/* Visual notification indicator (purely visual) */
+		.app-link.has-notif{color:#0b1220;font-weight:700}
+		.app-link.has-notif::after{
+			content: "1";
+			position:absolute;
+			right:12px;
+			top:50%;
+			transform:translateY(-50%);
+			background:#c43a3a; /* red badge */
+			color:#fff;
+			width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 4px 10px rgba(196,58,58,0.22)
+		}
+
+				.main{padding-top:60px;margin-left:calc(var(--sidebar-width) + 40px)}
+			.header-grid{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px;padding-left:18px}
+		.title{font-size:20px;font-weight:700}
+			.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;margin-bottom:28px}
+		.app-card{background:var(--card);padding:12px;border-radius:30px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(16,24,40,0.06);transition:transform .18s ease,box-shadow .18s ease}
+			.app-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(16,24,40,.12)}
+
+			/* Internal hover animation: sliding highlight + icon pop */
+			.app-card, .ex-card{position:relative;overflow:hidden}
+			.app-card::before, .ex-card::before{
+				content:"";
+				position:absolute;
+				inset:0;
+				background:linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 60%);
+				transform:translateX(-100%);
+				transition:transform .48s cubic-bezier(.2,.9,.2,1);
+				pointer-events:none;
+				mix-blend-mode:overlay;
+			}
+			.app-card:hover::before, .ex-card:hover::before{transform:translateX(0)}
+
+			.app-card .logo, .ex-card .thumb{transition:transform .25s cubic-bezier(.2,.9,.2,1),box-shadow .25s,background-color .25s;will-change:transform,box-shadow}
+			.app-card:hover .logo, .ex-card:hover .thumb{transform:translateX(-6px) scale(1.04);box-shadow:0 12px 28px rgba(12,24,60,0.08)}
+
+			.app-card > div > div:first-child, .ex-card > div > div:first-child{transition:color .2s ease, transform .2s ease}
+			.app-card:hover > div > div:first-child, .ex-card:hover > div > div:first-child{transform:translateX(4px);color:var(--card-text,inherit)}
+
+			.app-card .logo{width:44px;height:44px;border-radius:30px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent-red);box-shadow:0 6px 18px rgba(12,24,60,.06)}
+			.app-card, .ex-card{text-decoration:none;color:inherit}
+
+			/* Use CSS variables so each button can have its own color by class */
+			.app-card, .ex-card{background:linear-gradient(90deg, var(--card-start, var(--card)), var(--card-end, #fff));color:var(--card-text, inherit)}
+
+			/* Per-button color classes - edit these values to change a single button */
+			.card-ticket-it{--card-start:#cadaf7;--card-end:#cadaf7;--card-text:#000a5c}
+			.card-ticket-mantenimiento{--card-start:#ffdfb7;--card-end:#ffdfb7;--card-text:#7a3b00;}
+			.card-it{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#0b5a3a}
+			.card-rh{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#2e3a7a}
+			.card-mantenimiento{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#6a3a00}
+			.card-envios{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#0a6a50}
+			.card-pm{--card-start:#e7dcef;--card-end:#e7dcef;--card-text:#6a1a3b}
+			.card-diseno{--card-start:#f1dce7;--card-end:#f1dce7;--card-text:#6a0b1b}
+			.card-planeacion{--card-start:#ddd293b8;--card-end:#ddd293b8;--card-text:#0b3a66}
+			.card-produccion{--card-start:#4de5d957;--card-end:#4d64e557;--card-text:#025f6f}
+			.card-calidad{--card-start:#84e1b8b0;--card-end:#84e1b8b0;--card-text:#5a3a00}
+			.card-importacion{--card-start:#ebeed3;--card-end:#ebeed3;--card-text:#0b4b66}
+			.card-contabilidad{--card-start:#c5abf9b5;--card-end:#c5abf9b5;--card-text:#3d1f66}
+			.card-almacen{--card-start:#dfbfbf;--card-end:#dfbfbf;--card-text:#1b3a66}
+			.card-vacaciones{--card-start:#abdbb285;--card-end:#abdbb285;--card-text:#7a1640}
+			.card-permisos{--card-start:#71a7e5ab;--card-end:#71a7e5ab;--card-text:#11386b}
+			.card-amonestacion{--card-start:#e1383885;--card-end:#e1383885;--card-text:#681313}
+			.card-requisicion{--card-start:#dfe96f8c;--card-end:#dfe96f8c;--card-text:#0b5a3a}
+
+		.hero{background:linear-gradient(
+48deg, #fbfbfb38, #991b1e);border-radius:30px;padding:24px;display:grid;grid-template-columns:1fr 320px;gap:18px;box-shadow:0 14px 40px rgba(22,40,80,.06);align-items:center;margin-bottom:18px}
+		.hero h2{margin:0;font-size:22px}
+		.hero p{margin:6px 0 0;color: #27292d;}
+		.hero-cards{display:flex;flex-direction:column;gap:12px}
+		.small-card{background:var(--card);padding:12px;border-radius:30px;box-shadow:0 8px 24px rgba(12,24,60,.06);display:flex;flex-direction:column;gap:8px}
+		.small-card .k{font-weight:600}
+		.small-card .v{color:var(--muted);font-size:14px}
+
+		.usage{display:flex;gap:12px;margin-top:12px}
+		.usage .btn{background:linear-gradient(180deg,#fff,#f6f8ff);padding:8px 12px;border-radius:10px;box-shadow:0 8px 24px rgba(12,24,60,.04);font-weight:600;color:#0f172a}
+
+		.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+		.chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(15,23,42,0.04);color:var(--muted);cursor:pointer;transition:all .15s}
+		.chip.active{background:var(--accent-2);border-color:transparent;color:#0b1f3a;font-weight:700;box-shadow:0 8px 24px rgba(76,115,250,.08)}
+
+				.section{max-width:1200px;margin:28px auto;padding:0 12px}
+			.section + .section{margin-top:40px;}
+			.section-title{margin:0 0 12px 0;font-size:18px;font-weight:700}
+
+			.explore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px}
+			.ex-card{background:var(--card);padding:20px;border-radius:30px;box-shadow:0 8px 24px rgba(16,24,40,0.06);display:flex;gap:14px;align-items:center;transition:transform .18s ease,box-shadow .18s ease}
+			.ex-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(16,24,40,.12)}
+			.ex-card .thumb{width:44px;height:44px;border-radius:30px;display:flex;align-items:center;justify-content:center;color:var(--accent-red);font-weight:700}
+
+				/* Stronger pastel palette for quicker scanning */
+				:root{
+					--pastel-1:#ffeef3; /* pink */
+					--pastel-2:#eef2ff; /* lavender */
+					--pastel-3:#fff8e6; /* warm cream */
+					--pastel-4:#e6fff3; /* mint */
+					--pastel-5:#fff6ee; /* peach */
+					--pastel-6:#e6f7ff; /* sky */
+				}
+
+				/* Apply pastel tints to the grid items in a repeating pattern (more visible) */
+				.explore-grid .ex-card:nth-child(6n+1){background:linear-gradient(180deg,var(--pastel-1) 0%, var(--card) 100%);} 
+				.explore-grid .ex-card:nth-child(6n+2){background:linear-gradient(180deg,var(--pastel-2) 0%, var(--card) 100%);} 
+				.explore-grid .ex-card:nth-child(6n+3){background:linear-gradient(180deg,var(--pastel-3) 0%, var(--card) 100%);} 
+				.explore-grid .ex-card:nth-child(6n+4){background:linear-gradient(180deg,var(--pastel-4) 0%, var(--card) 100%);} 
+				.explore-grid .ex-card:nth-child(6n+5){background:linear-gradient(180deg,var(--pastel-5) 0%, var(--card) 100%);} 
+				.explore-grid .ex-card:nth-child(6n+6){background:linear-gradient(180deg,var(--pastel-6) 0%, var(--card) 100%);} 
+
+				/* Slightly tint app-cards and main cards too */
+				.apps-grid .app-card:nth-child(2n+1){background:linear-gradient(180deg,var(--pastel-6) 0%, var(--card) 100%);} 
+				.apps-grid .app-card:nth-child(2n){background:linear-gradient(180deg,var(--pastel-1) 0%, var(--card) 100%);} 
+
+				/* If a card has a dedicated "card-..." class, prefer its CSS variables
+				   so it overrides the nth-child pastel tints. Placed after the nth-child
+				   rules so cascade gives priority. */
+				.apps-grid .app-card[class*="card-"], .explore-grid .ex-card[class*="card-"] {
+					background: linear-gradient(90deg, var(--card-start, var(--card)), var(--card-end, #fff));
+					color: #171717;
+				}
+
+				/* Disabled / no-permission visual state: fully block interactions */
+				.no-perm{opacity:0.62;filter:grayscale(.12);cursor:not-allowed;pointer-events:none;}
+				.no-perm *{pointer-events:none !important}
+				.no-perm:hover{transform:none !important;box-shadow:none !important}
+				.no-perm .thumb{filter:grayscale(.18) brightness(.96)}
+
+			/* Updates panel */
+			.updates-panel{margin-bottom:26px}
+			.update-card{border-radius:20px;padding:20px;display:flex;gap:18px;align-items:stretch;background:linear-gradient(90deg,#fff1f1,#c43a3a);color:rgba(2,6,23,0.95);box-shadow:0 12px 30px rgba(16,24,40,.08)}
+			.update-card h3{margin:0;font-size:20px}
+			.update-badge{background:#b91c1c;color:white;padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px}
+			.update-badge.update-badge-minor{background:#f59e0b;color:#0b1220}
+			.note-small{background:var(--card);padding:12px;border-radius:30px;box-shadow:0 8px 24px rgba(12,24,60,.06);font-size:13px;color:var(--muted)}
+			.main.updates-visible > :not(#updates-panel){display:none}
+				/* When news view is active, hide everything else in main */
+				.main.news-visible > :not(#news-panel){display:none}
+				/* When messages view is active, hide everything else in main */
+				.main.messages-visible > :not(#messages-panel){display:none}
+				/* Modules embed: hidden by default; shown only when .main has modules-visible */
+				#modules-embed{display:none}
+				.main.modules-visible > #modules-embed{display:block}
+			/* Right sidebar for Mensajes (styled like left sidebar) */
+			.right-sidebar{background-color:#fff;padding-top:10px;position:fixed;right:0;top:0;width:260px;height:100vh;overflow-y:auto;z-index:30;padding-left:12px;padding-right:12px;font-size:12px;transition:transform .18s ease,visibility .18s ease;box-shadow:-8px 0 30px rgba(12,24,60,0.04)}
+			.right-sidebar .user-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:30px;color:var(--muted);cursor:pointer}
+			.right-sidebar .user-item:hover{background:rgba(0,0,0,0.02);color:#0b1220}
+			.right-sidebar .avatar{width:36px;height:36px;border-radius:8px;background:linear-gradient(90deg,#4f8fe9,#a09df5);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+			body.messages-right-open .main{margin-right:60px}
+
+			/* Noticias (feed) */
+			.news-panel{margin-bottom:26px}
+			.news-composer{padding:14px;border-radius:16px;background:var(--card);box-shadow:0 8px 24px rgba(12,24,60,0.06);border:1px solid #000;} 
+			.news-composer textarea{width:100%;min-height:88px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);padding:10px;font-size:14px;font-family:inherit;color:inherit;line-height:1.4}
+			.news-post{padding:14px;border-radius:14px;background:var(--card);box-shadow:0 8px 24px rgba(12,24,60,0.06);} 
+			/* Estilos mejorados para el botón "Publicar" */
+			#news-post-btn.btn.primary{
+				background: linear-gradient(180deg,#10b981,#047857);
+				color: #fff;
+				border: none;
+				padding: 10px 14px;
+				border-radius: 30px;
+				box-shadow: 0 8px 24px rgba(16,185,129,0.18);
+				font-weight:700;
+				cursor:pointer;
+				transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+			}
+			#news-post-btn.btn.primary:hover:not([disabled]){
+				transform:translateY(-3px);
+				box-shadow: 0 12px 36px rgba(16,185,129,0.22);
+			}
+			#news-post-btn.btn.primary[disabled]{
+				background: linear-gradient(180deg,#f3f4f6,#e5e7eb);
+				color: #9ca3af;
+				cursor: default;
+				box-shadow: none;
+				border: 1px solid rgba(15,23,42,0.04);
+				opacity: 1;
+			}
+			/* 16:9 embed container for previews (responsive) */
+			.embed-16-9{position:relative;width:100%;padding-top:56.25%;box-shadow:0 2px 8px rgba(63,69,81,0.16);margin-top:1.6em;margin-bottom:0.9em;overflow:hidden;border-radius:8px}
+			.embed-16-9 iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+			.news-post .post-actions{display:flex;gap:8px;align-items:center}
+			.news-like{border:1px solid rgba(15,23,42,0.06);background:transparent;padding:6px 10px;border-radius:30px;cursor:pointer}
+			.news-like.active{background:var(--accent-1);color:#fff;border-color:transparent}
+
+			/* Post options (three-dots) */
+			.post-actions{position:relative;display:flex;align-items:center;gap:8px}
+			.post-options{
+				display:inline-block;
+				position:relative;
+			}
+			.post-options-btn{
+				background:transparent;border:none;padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;display:inline-flex;align-items:center;justify-content:center
+			}
+			.post-options-dropdown{display:none;position:absolute;top:34px;right:0;background:var(--card);border-radius:10px;box-shadow:0 10px 30px rgba(12,24,60,0.08);min-width:140px;overflow:hidden;z-index:10001}
+			.post-options-dropdown.open{display:block}
+			.post-options-dropdown .post-option{padding:10px 14px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+			.post-options-dropdown .post-option:hover{background:rgba(15,23,42,0.04);color:#0b1f3a}
+			.post-options-dropdown .post-option.delete{color:#dc2626;font-weight:700}
+
+			/* Messages panel layout: composer fixed to bottom inside panel */
+			.messages-panel{display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 140px);padding-bottom:12px;max-width:calc(1200px + 160px);margin-left:-160px;box-sizing:border-box}
+			.messages-panel #messages-feed{flex:1;overflow:auto}
+			.messages-panel .news-composer{padding:12px;border-radius:60px;background:var(--card);box-shadow:0 8px 24px rgb(12 24 60 / 56%);}
+			.messages-panel .news-composer textarea{width:95%;min-height:40px;height:40px;max-height:160px;overflow-y:auto;border-radius:30px;border:1px solid rgb(0, 0, 0);padding:10px;font-size:14px;font-family:inherit;color:inherit;line-height:1.4;resize:none; scrollbar-width: none;}
+
+			/* Fixed composer at bottom when Mensajes is open */
+			.news-composer.fixed{
+				position:fixed;
+				background:#f7f2f3;
+				bottom:18px; /* overridden by JS when active */
+				/* left/right set by JS to align with feed */
+				z-index:2200;
+				max-width:none;
+				width:auto;
+				box-shadow:0 8px 24px rgb(12 24 60 / 56%);
+				border-radius:60px;
+			}
+
+			/* Hide number/search spinner arrows (WebKit / Blink) and normalize for Firefox */
+			input[type=number]::-webkit-outer-spin-button,
+			input[type=number]::-webkit-inner-spin-button,
+			input[type=search]::-webkit-outer-spin-button,
+			input[type=search]::-webkit-inner-spin-button{
+				-webkit-appearance:none;
+				margin:0;
+			}
+			input[type=number]{-moz-appearance:textfield}
+			input[type=search]{-moz-appearance:textfield}
+			/* Hide default webkit search decorations (clear icon/results) */
+			input[type=search]::-webkit-search-decoration,
+			input[type=search]::-webkit-search-cancel-button,
+			input[type=search]::-webkit-search-results-button,
+			input[type=search]::-webkit-search-results-decoration{ -webkit-appearance:none }
+			/* Send icon button for messages composer */
+			.message-send-btn{
+				display:inline-flex;
+				align-items:center;
+				justify-content:center;
+				width:44px;
+				height:40px;
+				border-radius:30px;
+				border:none;
+				background:linear-gradient(180deg,#2563eb,#1e40af);
+				color:#fff;
+				cursor:pointer;
+				font-size:16px;
+				padding:6px;
+				box-shadow:0 8px 24px rgba(16,24,40,0.12);
+				transition:transform .12s ease,opacity .12s ease;
+			}
+			.message-send-btn:hover{transform:translateY(-2px)}
+			.message-send-btn[disabled]{opacity:.5;cursor:default;transform:none;box-shadow:none}
+			.message-send-btn i{font-size:14px}
+
+			/* Layout for messages composer: textarea and send button on one line */
+			.messages-composer{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:12px;position:relative}
+			.messages-composer textarea{flex:1 1 auto;min-height:40px;height:40px;margin:0;resize:none;width:auto;min-width:0;font-family:inherit;color:inherit;line-height:1.4;font-size:14px;overflow-y:auto;max-height:160px}
+			.messages-composer > div{margin-top:0;display:flex;align-items:center}
+			/* place send button outside the input on the right (normal flow) */
+			.messages-composer .message-send-btn{position:static;margin-left:12px;flex:0 0 auto}
+
+			/* Make room for fixed composer so last messages are not covered */
+			.main.messages-visible #messages-panel #messages-feed{padding-bottom:30px}
+			@media (max-width:900px){
+				.main.messages-visible #messages-panel #messages-feed{padding-bottom:calc(var(--composer-height) + 8px)}
+			}
+			/* When right messages sidebar is open leave space for it */
+			/* body.messages-right-open .news-composer.fixed{ right:320px; } */
+			@media (max-width:900px){
+				.news-composer.fixed{ left:12px; right:12px; bottom:24px; }
+			}
+			.message-placeholder{padding:22px;border-radius:12px;background:#fbf3f3b0;text-align:center;color:var(--muted);font-weight:700;display:flex;align-items:center;justify-content:center;min-height:140px;margin-top:8px}
+			.right-sidebar .user-item.active{background:rgba(15,23,42,0.06);color:#0b1220;font-weight:700}
+
+			/* Message bubble styles for messages panel: align feed with fixed composer */
+			.messages-panel #messages-feed{
+				flex:1;
+				overflow:auto;
+				width:100%;
+				padding-right:50px; /* push feed left to align with composer */
+				display:flex;
+				flex-direction:column;
+				gap:12px;
+				align-items:flex-end;
+			}
+			/* body.messages-right-open .messages-panel #messages-feed{
+				padding-right:320px; /* when right sidebar open
+			} */
+			@media (max-width:900px){
+				.messages-panel #messages-feed{ width:100%; margin-left:0; padding-right:12px; }
+				.messages-panel{max-width:100%;margin-left:0;padding:0 12px}
+			}
+			.messages-panel #messages-feed .news-post{max-width:72%;padding:14px;border-radius:14px;box-shadow:0 8px 24px rgba(12,24,60,0.06);word-break:break-word;align-self:flex-end}
+			.messages-panel #messages-feed .news-post.message-incoming{align-self:flex-start;margin-left:12px;background:var(--card);color:inherit;text-align:left}
+			.messages-panel #messages-feed .news-post.message-outgoing{align-self:flex-end;margin-right:12px;background:linear-gradient(90deg, #aec0e7, #c3cce9);color:#000000;text-align:right}
+			.messages-panel #messages-feed .news-post.message-outgoing .avatar{background:rgba(255,255,255,0.12);color:#fff}
+			.messages-panel #messages-feed .news-post .post-actions{margin-top:8px}
+			/* Modal for update details */
+			.modal-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.55);-webkit-backdrop-filter:blur(10px) saturate(120%);backdrop-filter:blur(10px) saturate(120%);isolation:isolate;will-change:backdrop-filter,transform;z-index:var(--z-modal,100030);padding:20px;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden}
+			.modal-overlay.open{display:flex}
+			.modal-dialog{background:#fff;border-radius:30px;width:760px;max-width:100%;padding:22px;box-shadow:0 20px 60px rgba(2,6,23,.35);position:relative;color:#0b1f3a}
+			.modal-close{position:absolute;top:12px;right:12px;border:none;background:transparent;font-size:20px;cursor:pointer;color:#556}
+			.modal-dialog h3{margin:0 0 8px}
+			.modal-dialog h4{margin:14px 0 6px}
+			.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+			.modal-actions .btn{padding:8px 12px;border-radius:30px;border:1px solid rgba(15,23,42,0.06);background:#fff;cursor:pointer}
+			.modal-actions .btn.primary{background:#dc2626;color:#fff;border:none}
+			.details-btn{margin-top:12px;padding:8px 12px;border-radius:30px;background:transparent;border:1px solid rgba(15,23,42,0.06);color:#0b1f3a;cursor:pointer;align-self:flex-start}
+
+			/* Report modal styles */
+			.report-options-grid{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+			.report-option{display:flex;align-items:center;gap:12px;padding:12px;border-radius:30px;background:#fff;border:1px solid rgba(15,23,42,0.06);cursor:pointer;color:var(--muted);font-weight:700}
+			.report-option .icon{width:44px;height:44px;border-radius:30px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fff,#eef6ff);box-shadow:0 6px 18px rgba(12,24,60,.06);color:var(--accent-1);font-size:20px}
+			.report-option.selected{background:linear-gradient(90deg,#2563eb,#1e40af);color:#fff}
+			.report-option.selected .icon{background:transparent;color:#fff}
+			#report-description{width:100%;min-height:96px;margin-top:12px;padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);resize:vertical;font-size:14px}
+			.report-note{font-size:12px;color:var(--muted);margin-top:10px}
+			.report-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+			.report-actions .btn{padding:8px 12px;border-radius:30px;border:1px solid rgba(15,23,42,0.06);background:#fff;cursor:pointer}
+			.report-actions .btn.primary{background:#2563eb;color:#fff;border:none}
+			.report-actions .btn[disabled]{opacity:.5;cursor:default}
+
+			/* Grey out denied permission cards (use a solid pastel color, no gradients) */
+			[data-permission].no-perm,
+			.permiso-denegado,
+			.app-card.no-perm,
+			.ex-card.no-perm,
+			.principal-card.no-perm,
+			.bento-ticket-btn.no-perm,
+			[data-permission].permiso-denegado {
+				background-image: none !important;
+				background-color: #f3f4f6 !important;
+				color: #9aa0a6 !important;
+				box-shadow: none !important;
+				border: 1px solid rgba(15,23,42,0.04) !important;
+				pointer-events: none !important;
+				cursor: not-allowed !important;
+				opacity: 1 !important;
+			}
+
+			/* Make inner icon backgrounds neutral when disabled */
+			[data-permission].no-perm .icon,
+			.permiso-denegado .icon {
+				background: transparent !important;
+				box-shadow: none !important;
+			}
+
+			/* Icons and inner elements muted */
+			[data-permission].no-perm .icon,
+			.permiso-denegado .icon,
+			[data-permission].no-perm i,
+			.permiso-denegado i,
+			[data-permission].no-perm .material-symbols-rounded,
+			.permiso-denegado .material-symbols-rounded {
+				color: #9ca3af !important;
+				filter: grayscale(100%) !important;
+				opacity: 0.9 !important;
+			}
+
+			/* Ensure anchor text inside disabled cards is muted */
+			[data-permission].no-perm a,
+			.permiso-denegado a {
+				color: #9aa0a6 !important;
+				text-decoration: none !important;
+			}
+
+	/* Theme card color utilities (solid pastel backgrounds) */
+	.card-blue { background-color: #dbeeff !important; color: #08306b !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-orange { background-color: #fff2e0 !important; color: #7a3e00 !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-green { background-color: #dff6e6 !important; color: #0b5a43 !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-red { background-color: #ffdede !important; color: #7a1d1d !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-yellow { background-color: #fff8d6 !important; color: #7a5900 !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-purple { background-color: #efe1ff !important; color: #3a0f6f !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+	.card-brown { background-color: #efe6df !important; color: #5b3b2e !important; box-shadow: 0 8px 24px rgba(2,6,23,0.06); border: 1px solid rgba(2,6,23,0.06); }
+
+	.card-blue .thumb, .card-blue .logo, .card-orange .thumb, .card-orange .logo, .card-green .thumb, .card-green .logo, .card-red .thumb, .card-red .logo, .card-yellow .thumb, .card-yellow .logo, .card-purple .thumb, .card-purple .logo, .card-brown .thumb, .card-brown .logo { color: inherit !important; background: transparent !important; box-shadow: none !important; }
+
+	/* Override: Ensure disabled (.no-perm/.permiso-denegado) always win over color classes */
+	[data-permission].no-perm, .permiso-denegado, .app-card.no-perm, .ex-card.no-perm, .principal-card.no-perm, .bento-ticket-btn.no-perm {
+		background-image: none !important;
+		background-color: #f3f4f6 !important;
+		color: #9aa0a6 !important;
+		box-shadow: none !important;
+		border: 1px solid rgba(15,23,42,0.04) !important;
+		pointer-events: none !important;
+		cursor: not-allowed !important;
+		opacity: 1 !important;
+	}
+
+		.footer-space{height:80px}
+
+			@media (max-width:900px){
+				.wrap{max-width:960px;padding:18px}
+				.hero{grid-template-columns:1fr;padding:18px}
+				/* Mobile: keep sidebar off-canvas by default and animate it in */
+				.sidebar{display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;height:100vh;width:300px;max-width:85%;background:var(--card);z-index:var(--z-sidebar-mobile);padding:16px;box-shadow:0 30px 80px rgba(2,6,23,0.35);overflow:visible;transform:translateX(-110%);opacity:0;pointer-events:none;transition:transform .36s cubic-bezier(.22,.9,.33,1),opacity .28s ease;will-change:transform,opacity}
+				.main{margin-left:0}
+				#sidebar-toggle{display:block;position:fixed;left:12px;top:12px;z-index:100020;width:44px;height:44px;border-radius:30px;background:var(--card);border:1px solid rgba(15,23,42,0.06);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.08);font-size:20px}
+				/* Overlay (fades) */
+				body::before{content:'';position:fixed;inset:0;background:rgba(2,6,23,0.45);z-index:var(--z-overlay-mobile);opacity:0;pointer-events:none;transition:opacity .28s ease}
+				/* When sidebar is opened on mobile, slide it in and fade the overlay */
+				body:not(.sidebar-hidden) .sidebar{transform:translateX(0);opacity:1;pointer-events:auto}
+				body:not(.sidebar-hidden)::before{opacity:1;pointer-events:auto}
+
+				/* Prevent layout shift when mobile sidebar opens: lock background scrolling
+				   and avoid scrollbar disappearance that causes content reflow. */
+				body:not(.sidebar-hidden) {
+					overflow: hidden;
+					-webkit-overflow-scrolling: touch;
+				}
+
+				/* Ensure hiding the sidebar on mobile doesn't shift `.main` layout */
+				body.sidebar-hidden .main{margin-left:0 !important}
+				.right-sidebar{display:none}
+			}
+
+			/* Ensure dropdowns, popovers and composer appear above the mobile sidebar */
+			:root{
+				--z-sidebar-mobile:100019;
+				--z-overlay-mobile:100018;
+				--z-popover:100021;
+				--z-modal:100030;
+			}
+
+			@media (max-width:900px){
+				.user-menu,
+				.post-options-dropdown,
+				.post-options-dropdown.open,
+				.user-menu.open,
+				.report-options-grid,
+				.report-option,
+				.news-composer.fixed,
+				.post-options-dropdown .post-option {
+					z-index: var(--z-popover) !important;
+				}
+
+				.modal-overlay{z-index:var(--z-modal) !important}
+
+				/* Ensure interactive buttons float above popovers when needed */
+				#news-post-btn,
+				.message-send-btn,
+				.user-menu-btn,
+				#sidebar-toggle{
+					z-index: calc(var(--z-popover) + 1) !important;
+				}
+			}
+
+	/* Pill logo (fixed top) */
+	#pill-logo{
+		position:fixed;
+		top:14px;
+		left:50%;
+		transform:translateX(-50%);
+		z-index:20; /* lower than .sidebar (z-index:30) */
+		display:flex;
+		align-items:center;
+		gap:10px;
+		padding:8px 14px;
+		border-radius:999px;
+		background:rgba(255, 255, 255, 0.2);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(5px);
+		box-shadow:0 8px 30px rgba(2,6,23,0.12);
+		border:1px solid rgba(15,23,42,0.06);
+	}
+	#pill-logo img{height:44px;width:auto;display:block;border-radius:999px;object-fit:contain}
+	@media(max-width:900px){
+		#pill-logo{top:10px;padding:6px 10px}
+		#pill-logo img{height:28px}
+	}
+
+	/* When sidebar is visible on desktop, shift pill logo slightly to the right */
+	@media (min-width:901px) {
+		body:not(.sidebar-hidden) #pill-logo{
+			left: calc(50% + (var(--sidebar-width) / 2) + 12px);
+			/* keep translateX(-50%) so centering is preserved, plus offset */
+		}
+	}
+	</style>
+
+	<!-- Switch styles: hide native checkbox and animate slider knob -->
+	<style>
+	.switch { position: relative; display: inline-block; }
+	.switch input { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; left: -9999px; }
+	.switch .slider { display: inline-block; width: 44px; height: 24px; background: #ccc; border-radius: 24px; position: relative; cursor: pointer; transition: background .18s ease; vertical-align: middle; }
+	.switch .slider > span { position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .18s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+	/* When checked use black background with white knob as requested */
+	.switch input:checked + .slider { background: #000; }
+	.switch input:checked + .slider > span { transform: translateX(20px); }
+	</style>
+	</head>
+	<body>
+	<!-- Pill logo: fixed at top with backdrop blur -->
+	<div id="pill-logo" aria-hidden="false">
+		<img src="fotos/New-IMAGE.png" alt="New Logo" onerror="this.style.opacity=0.6;console.warn('Image load failed:', this.src)">
+	</div>
+	<button id="sidebar-toggle" aria-label="Alternar sidebar" aria-expanded="true">‹</button>
+	<div class="wrap">
+		<aside class="sidebar">
+
+			<div class="brand" style="display:flex;align-items:center;justify-content:center;padding:8px 0;">
+				<img src="fotos/LOGO%20ERP.png" alt="LOGO ERP" style="width:172px;height:42px;border-radius:12px;object-fit:cover;display:block;margin:0" />
+			</div>
+      
+	<div class="sidebar-inner">
+		<div class="apps-list">
+				<a id="nav-modulos" class="app-link" href="#">
+					<span class="fa-solid fa-puzzle-piece"></span> Módulos
+				</a>
+					<a id="nav-actualizacion" class="app-link" href="#">
+						<span class="fa-solid fa-rotate"></span> Actualizaciones
+					</a>
+
+					<a id="nav-personal" class="app-link" href="#">
+						<span class="fa-solid fa-user-tie"></span> Personal a cargo
+					</a>
+
+					<a id="nav-noticias" class="app-link" href="#" style="display:none" aria-hidden="true" tabindex="-1">
+						<span class="fa-regular fa-newspaper"></span> Noticias
+					</a>
+
+					<a id="nav-mensajeria" class="app-link has-notif" href="mensajeria.html" data-permission="show_mensajeria">
+						<span class="fa-regular fa-envelope"></span> Mensajería (BETA)
+					</a>
+
+		</div>
+				<div class="sidebar-footer">
+					<div style="display:flex;align-items:center;gap:8px">
+						<div class="avatar" id="sidebarUserAvatar">GJ</div>
+						<div style="display:flex;flex-direction:column;line-height:1">
+							<div class="name" id="sidebarUserName">Gerardo</div>
+							<div class="handle" id="sidebarUserHandle">@gerardo</div>
+						</div>
+					</div>
+					<button id="user-menu-toggle" class="user-menu-btn" aria-haspopup="true" aria-expanded="false" aria-label="Abrir opciones de usuario">⋯</button>
+					<div id="user-menu" class="user-menu" aria-hidden="true">
+						<ul>
+							<li id="test">Modo Entrenamiento (Beta)</li>
+							<li id="report-problem">Reportar un problema</li>
+							<li id="logout" class="danger">Cerrar sesión</li>
+						</ul>
+					</div>
+				</div>
+      </div>
+		</aside>
+
+		<main class="main">
+			<div id="modules-embed" style="margin-bottom:18px"></div>
+
+			<!-- Updates panel (hidden by default) -->
+			<section id="updates-panel" class="section updates-panel" style="display:none">
+					<div id="update-card-4" class="update-card" role="button" tabindex="0" style="margin-bottom:12px">
+						<div style="flex:1;display:flex;flex-direction:column;">
+							<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+								<h3>Versión 3.0</h3>
+								<span class="update-badge">Importante</span>
+							</div>
+							<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento inicial de la versión 3.0 — incluye mejoras, correcciones y cambios críticos.</p>
+							<button id="update-details-btn-3" class="details-btn" type="button">Ver detalles</button>
+						</div>
+					</div>
+				<div id="update-card-3" class="update-card" role="button" tabindex="0">
+					<div style="flex:1;display:flex;flex-direction:column;">
+						<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+							<h3>Versión 2.9.1</h3>
+							<span class="update-badge update-badge-minor">Menor</span>
+						</div>
+						<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento de la versión 2.9.1 — incluye mejoras y correcciones menores.</p>
+						<button id="update-details-btn" class="details-btn" type="button">Ver detalles</button>
+					</div>
+				</div>
+			</section>
+
+			<section id="news-panel" class="section news-panel" style="display:none">
+				<div class="news-composer small-card">
+					<textarea id="news-composer-text" placeholder="¿Qué hay de nuevo?"></textarea>
+					
+					<div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+						<label for="news-composer-image" class="btn" style="display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:30px;border:1px solid rgba(15,23,42,0.06);cursor:pointer;background:transparent;color:var(--muted);font-weight:600">Adjuntar imagen
+							<input id="news-composer-image" type="file" accept="image/*" style="display:none">
+						</label>
+						<div style="flex:1"></div>
+						<div><button id="news-post-btn" class="btn primary" disabled>Publicar</button></div>
+					</div>
+					<div id="news-composer-preview" style="margin-top:8px"></div>
+				</div>
+				<div id="news-feed" style="margin-top:14px;display:flex;flex-direction:column;gap:12px;"></div>
+			</section>
+			<section id="messages-panel" class="section news-panel messages-panel" style="display:none; margin-left:-160px; max-width:calc(1200px + 160px);">
+				<div id="messages-header" class="messages-header" style="display:none;margin-bottom:12px">
+					<div style="display:flex;align-items:center;gap:12px;background:center;width:100%">
+						<div id="messages-header-avatar" class="avatar" style="width:44px;height:44px;border-radius:30px;background:#6b7280;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center">GJ</div>
+						<div style="text-align:center;">
+							<div id="messages-header-name" style="font-weight:700;color:#0b1220">Usuario</div>
+						</div>
+					</div>
+				</div>
+				<div id="messages-placeholder" class="message-placeholder" style="display:flex">Selecciona a un usuario para mensajear</div>
+				<div id="messages-feed" style="margin-top:14px; max-height:77vh; scrollbar-width: none;"></div>
+				<div class="news-composer small-card messages-composer">
+					<textarea id="messages-composer-text" placeholder="" disabled></textarea>
+					<div style="display:flex;align-items:center;gap:8px">
+						<div class="attach-wrapper" style="position:relative;">
+							<button id="messages-attach-btn" type="button" class="btn" aria-label="Adjuntar" title="Adjuntar" style="width:40px;height:40px;border-radius:30px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#fff,#f6f8ff);box-shadow:0 8px 24px rgba(12,24,60,0.04);border:none;cursor:pointer"><i class="fa-solid fa-paperclip"></i></button>
+							<div id="messages-attach-menu" class="attach-menu" style="position:absolute;bottom:calc(100% + 8px);left:0;display:none;background:var(--card);border-radius:8px;box-shadow:0 10px 30px rgba(12,24,60,0.08);overflow:hidden;min-width:180px;z-index:10002">
+								<button id="attach-option-file" class="attach-option" type="button" style="display:block;width:100%;text-align:left;padding:10px 12px;border:none;background:transparent;cursor:pointer">Enviar archivo</button>
+								<button id="attach-option-gallery" class="attach-option" type="button" style="display:block;width:100%;text-align:left;padding:10px 12px;border:none;background:transparent;cursor:pointer">Enviar foto desde galería</button>
+								<button id="attach-option-camera" class="attach-option" type="button" style="display:block;width:100%;text-align:left;padding:10px 12px;border:none;background:transparent;cursor:pointer">Tomar foto</button>
+							</div>
+						</div>
+						<input id="messages-composer-file" type="file" style="display:none">
+						<button id="messages-post-btn" class="message-send-btn" disabled aria-label="Enviar mensaje"><i class="fa-solid fa-paper-plane"></i></button>
+					</div>
+				</div>
+			</section>
+			
+			<section class="hero" aria-label="PDMmetal ERP hero">
+				<div>
+					<h2>Gerardo, hemos trabajado con orgullo 2 días sin accidentes</h2>
+					<p>¡Continuemos así!</p>
+					<div style="height:14px"></div>
+					<div class="usage">
+
+					</div>
+					<div class="filter-row" style="margin-top:12px">
+					</div>
+				</div>
+			</section>
+
+			<section class = section>
+				<h3 class = section-title>Tickets</h3>
+				<!-- <div class="header-grid">
+					<div class="title">Tickets</div>
+				</div> -->
+
+				<div class="apps-grid" aria-hidden="true">
+					<a class="app-card card-ticket-it" href="index.html" data-permission="show_tickets_it">
+						<div class="logo"><span class="material-symbols-rounded" style="font-size:22px;">confirmation_number</span></div>
+						<div><div style="font-weight:700">Ticket de IT</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="app-card card-ticket-mantenimiento" href="index_mantenimiento.html" data-permission="show_tickets_mantenimiento">
+						<div class="logo"><span class="material-symbols-rounded" style="font-size:22px;">construction</span></div>
+						<div><div style="font-weight:700">Ticket de mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+				</div>
+			</section>
+			
+
+			<section class="section">
+				<h3 class="section-title">Departamentos de apoyo</h3>
+				<div class="explore-grid">
+					<a class="ex-card card-it" href="panel.html" data-permission="show_it">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">memory</span></div>
+						<div><div style="font-weight:700">IT</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-rh" href="empleados_panel.html" data-permission="show_rh">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">groups</span></div>
+						<div><div style="font-weight:700">Recursos Humanos</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-mantenimiento" href="mantenimiento.html" data-permission="show_mantenimiento">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">build</span></div>
+						<div><div style="font-weight:700">Mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-envios" href="enviosyrecibos.html" data-permission="show_enviosyrecibos">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">local_shipping</span></div>
+						<div><div style="font-weight:700">Envíos y recibos</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+				</div>
+			</section>
+
+			<section class="section">
+				<h3 class="section-title">Linea PDM</h3>
+				<div class="explore-grid">
+					<a class="ex-card card-pm" href="nuevo-equipo.html" data-permission="show_proyectos">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">folder</span></div>
+						<div><div style="font-weight:700">PM</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-diseno" href="logeo-diseno.html" data-permission="show_diseno">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">architecture</span></div>
+						<div><div style="font-weight:700">Diseño</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-planeacion" href="planeacionycompras.html" data-permission="show_planeacion_compras">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">event_note</span></div>
+						<div><div style="font-weight:700">Planeación y compras</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-produccion" href="produccion-supervisor.html" data-permission="show_produccion">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">engineering</span></div>
+						<div><div style="font-weight:700">Producción</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-calidad" href="calidad_qc.html" data-permission="show_calidad">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">fact_check</span></div>
+						<div><div style="font-weight:700">Calidad (QC)</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-importacion" href="importacion.html" data-permission="show_importacion_exportacion">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">import_export</span></div>
+						<div><div style="font-weight:700">Importación Exportación</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-contabilidad" href="cuentas-por-pagar.html" data-permission="show_contabilidad">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">account_balance</span></div>
+						<div><div style="font-weight:700">Contabilidad</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-almacen" href="almacen.html" data-permission="show_almacen">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">inventory_2</span></div>
+						<div><div style="font-weight:700">Almacén</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+				</div>
+			</section>
+
+
+			<section class="section">
+				<h3 class="section-title">Otras opciones</h3>
+				<div class="explore-grid">
+					<a class="ex-card card-vacaciones" href="vacaciones.html" data-permission="show_vacaciones">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">beach_access</span></div>
+						<div><div style="font-weight:700">Solicitar vacaciones</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-permisos" href="permisos.html" data-permission="show_permisos">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">event_available</span></div>
+						<div><div style="font-weight:700">Permisos</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-amonestacion" href="amonestacion_supervisor.html" data-permission="show_amonestaciones">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">warning</span></div>
+						<div><div style="font-weight:700">Amonestación</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-requisicion" href="requisicion.html" data-permission="show_requisicion">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">shopping_cart</span></div>
+						<div><div style="font-weight:700">Requisición de compra</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+				</div>
+			</section>
+
+			<div class="footer-space"></div>
+		</main>
+
+		<aside id="messages-right-sidebar" class="right-sidebar" style="display:none">
+			<div style="padding:12px;">
+				<div style="font-weight:700;margin-bottom:8px;color:#0b1220">Usuarios</div>
+				<div style="margin-bottom:10px">
+					<input id="messages-user-search" type="search" aria-label="Buscar usuarios" placeholder="Buscar usuarios..." style="width:100%;padding:8px;border-radius:30px;border:1px solid rgba(15,23,42,0.06);font-size:13px;font-family:inherit;color:inherit" />
+				</div>
+				<div id="messages-user-list" style="display:flex;flex-direction:column;gap:8px"></div>
+			</div>
+		</aside>
+	</div>
+
+		<!-- Report modal (centrado) -->
+		<div id="report-modal" class="modal-overlay" aria-hidden="true">
+			<div class="modal-dialog" role="dialog" aria-modal="true">
+				<button class="modal-close" id="report-modal-close" aria-label="Cerrar">✕</button>
+				<h3>Enviar comentarios a IT</h3>
+
+				<div class="report-options-grid">
+					<button class="report-option" type="button" data-value="praise">
+						<span class="icon"><span class="material-symbols-rounded">favorite</span></span>
+						<span>Hacer un halago</span>
+					</button>
+					<button class="report-option" type="button" data-value="problem">
+						<span class="icon"><span class="material-symbols-rounded">bug_report</span></span>
+						<span>Informar de un problema</span>
+					</button>
+					<button class="report-option" type="button" data-value="suggestion">
+						<span class="icon"><span class="material-symbols-rounded">lightbulb</span></span>
+						<span>Hacer una sugerencia</span>
+					</button>
+				</div>
+
+				<textarea id="report-description" placeholder="Describe brevemente tu experiencia o problema..."></textarea>
+				<p class="report-note">El departamento de IT puede ponerse en contacto con usted con el correo empresarial sobre sus comentarios. Al presionar Enviar, los comentarios se usarán para mejorar.</p>
+
+				<div class="modal-actions report-actions">
+					<button id="report-cancel-btn" class="btn">Cancelar</button>
+					<button id="report-send-btn" class="btn primary" disabled>Enviar</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Confirm deletion modal -->
+		<div id="confirm-modal" class="modal-overlay" aria-hidden="true">
+			<div class="modal-dialog" role="dialog" aria-modal="true" style="max-width:420px;">
+				<button class="modal-close" id="confirm-modal-close" aria-label="Cerrar">✕</button>
+				<h3>Confirmar eliminación</h3>
+				<p class="confirm-message" style="margin-top:8px">¿Eliminar esta publicación?</p>
+				<div class="modal-actions" style="margin-top:14px">
+					<button id="confirm-cancel-btn" class="btn">Cancelar</button>
+					<button id="confirm-ok-btn" class="btn primary delete">Eliminar</button>
+				</div>
+			</div>
+		</div>
+
+	<script>
+		document.addEventListener('click', function(e){
+			const chip = e.target.closest('.chip');
+			if(!chip) return;
+			document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+			chip.classList.add('active');
+		});
+
+		// Sidebar toggle behavior (persisted for mobile only). Always show sidebar on desktop (>900px)
+		(function(){
+			const toggle = document.getElementById('sidebar-toggle');
+			if(!toggle) return;
+			function setState(hidden){
+				document.body.classList.toggle('sidebar-hidden', hidden);
+				toggle.setAttribute('aria-expanded', String(!hidden));
+				// icon: menu when hidden, chevron when visible
+				toggle.textContent = hidden ? '☰' : '‹';
+			}
+
+			// Apply stored state only on mobile. On desktop always show the sidebar.
+			const isMobileOnLoad = window.innerWidth <= 900;
+			const stored = isMobileOnLoad && localStorage.getItem('sidebarHidden') === 'true';
+			setState(stored);
+
+			// Toggle button: only toggle for mobile widths. On desktop keep sidebar visible.
+			toggle.addEventListener('click', function(e){
+				e.stopPropagation();
+				if (window.innerWidth > 900) {
+					// ensure visible on desktop and do not persist a hidden state
+					setState(false);
+					localStorage.setItem('sidebarHidden', 'false');
+					return;
+				}
+				const nowHidden = !document.body.classList.contains('sidebar-hidden');
+				setState(nowHidden);
+				localStorage.setItem('sidebarHidden', String(nowHidden));
+			});
+
+			// Close the mobile sidebar when clicking outside or pressing ESC (mobile only)
+			document.addEventListener('click', function(e){
+				try {
+					if (window.innerWidth <= 900) {
+						const inside = Boolean(e.target.closest && (e.target.closest('.sidebar') || e.target.closest('#sidebar-toggle')));
+						if (!inside && !document.body.classList.contains('sidebar-hidden')) {
+							setState(true);
+							localStorage.setItem('sidebarHidden', 'true');
+						}
+					}
+				} catch (err) {}
+			});
+
+			document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && window.innerWidth <= 900 && !document.body.classList.contains('sidebar-hidden')) { setState(true); localStorage.setItem('sidebarHidden','true'); } });
+
+			// When resizing to desktop widths, always show the sidebar (don't rely on stored mobile state)
+			window.addEventListener('resize', function(){
+				try {
+					if (window.innerWidth > 900 && document.body.classList.contains('sidebar-hidden')) {
+						setState(false);
+					}
+				} catch (e) {}
+			});
+		})();
+
+			// User menu (footer) behavior
+			(function(){
+				const btn = document.getElementById('user-menu-toggle');
+				const menu = document.getElementById('user-menu');
+				const report = document.getElementById('report-problem');
+				const logout = document.getElementById('logout');
+				if(!btn || !menu) return;
+				function openMenu(v){
+					menu.classList.toggle('open', v);
+					btn.setAttribute('aria-expanded', String(v));
+					menu.setAttribute('aria-hidden', String(!v));
+				}
+				btn.addEventListener('click', function(e){
+					e.stopPropagation();
+					openMenu(!menu.classList.contains('open'));
+				});
+				document.addEventListener('click', function(e){
+					if(menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn){
+						openMenu(false);
+					}
+				});
+				document.addEventListener('keydown', function(e){ if(e.key === 'Escape') openMenu(false); });
+				if(report) report.addEventListener('click', function(e){ e.stopPropagation(); openMenu(false); const rm = document.getElementById('report-modal'); if(rm){ rm.classList.add('open'); rm.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; const focus = rm.querySelector('.report-option'); if(focus) focus.focus(); } });
+				if(logout) logout.addEventListener('click', async function(){
+					openMenu(false);
+					try {
+						const ok = (typeof window.showConfirm === 'function') ? await window.showConfirm('¿Cerrar sesión?', 'Cerrar sesión', { okText: 'Cerrar sesión', cancelText: 'Cancelar' }) : confirm('¿Cerrar sesión?');
+						if (!ok) return;
+					} catch (e) {
+						// fallback to native confirm if showConfirm fails
+						if (!confirm('¿Cerrar sesión?')) return;
+					}
+					// Clear local client state like in inicio.html
+					try {
+						localStorage.removeItem('isLoggedIn');
+						localStorage.removeItem('username');
+						localStorage.removeItem('sessionToken');
+						localStorage.removeItem('loggedInUser');
+						localStorage.removeItem('rol');
+						localStorage.removeItem('permissions');
+						localStorage.removeItem('userId');
+					} catch (e) { /* ignore */ }
+					window.location.href = 'login.html';
+				});
+			})();
+
+		// Report modal behavior: open/close, selection and send
+		(function(){
+			const modal = document.getElementById('report-modal');
+			if(!modal) return;
+			const overlay = modal;
+			const closeX = document.getElementById('report-modal-close');
+			const cancelBtn = document.getElementById('report-cancel-btn');
+			const sendBtn = document.getElementById('report-send-btn');
+			const options = Array.from(modal.querySelectorAll('.report-option'));
+			const textarea = document.getElementById('report-description');
+
+			function closeModal(){
+				overlay.classList.remove('open');
+				overlay.setAttribute('aria-hidden','true');
+				document.body.style.overflow = '';
+				options.forEach(o=>o.classList.remove('selected'));
+				if(textarea) textarea.value = '';
+				sendBtn.disabled = true;
+			}
+
+			function updateSendState(){
+				const anySelected = options.some(o=>o.classList.contains('selected'));
+				const hasText = textarea ? textarea.value.trim().length > 0 : true;
+				sendBtn.disabled = !(anySelected && hasText);
+			}
+
+			options.forEach(o=>{
+				o.tabIndex = 0;
+				o.addEventListener('click', function(){
+					options.forEach(x=>x.classList.remove('selected'));
+					o.classList.add('selected');
+					if(textarea) textarea.focus();
+					updateSendState();
+				});
+			});
+
+			if(textarea){
+				textarea.addEventListener('input', updateSendState);
+			}
+
+			overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+			document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+			if(closeX) closeX.addEventListener('click', closeModal);
+			if(cancelBtn) cancelBtn.addEventListener('click', closeModal);
+			if(sendBtn) sendBtn.addEventListener('click', function(){
+				const sel = modal.querySelector('.report-option.selected');
+				if(!sel){
+					if (typeof window.showAlert === 'function') {
+						window.showAlert('Selecciona una opción antes de enviar.');
+					} else {
+						alert('Selecciona una opción antes de enviar.');
+					}
+					return;
+				}
+
+				const mapping = { praise: 'halago', problem: 'problema', suggestion: 'sugerencia' };
+				const typeKey = sel.dataset.value;
+				const tipo = mapping[typeKey] || 'sugerencia';
+				const mensaje = textarea ? textarea.value.trim() : '';
+
+				if (!mensaje) {
+					if (typeof window.showAlert === 'function') {
+						window.showAlert('Escribe un mensaje antes de enviar.');
+					} else {
+						alert('Escribe un mensaje antes de enviar.');
+					}
+					return;
+				}
+
+				// Cerrar modal inmediatamente (la función limpia el textarea y el estado)
+				closeModal();
+
+				// Preparar payload para la API
+				const payload = { tipo: tipo, mensaje: mensaje };
+
+				// Intentar enviar al servidor; si falla, guardar en localStorage como fallback
+				(async function(){
+					try {
+						sendBtn.disabled = true;
+						const res = await fetch('/api/comunidad', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							credentials: 'include',
+							body: JSON.stringify(payload)
+						});
+
+						if (res.ok) {
+							if (typeof window.showAlert === 'function') {
+								window.showAlert('Gracias por tus comentarios.');
+							} else {
+								alert('Gracias por tus comentarios.');
+							}
+						} else {
+							// Guardar en localStorage como backup
+							const backup = { tipo: tipo, mensaje: mensaje, fecha_creacion: new Date().toISOString() };
+							try {
+								const list = JSON.parse(localStorage.getItem('pendingComunidad') || '[]');
+								list.push(backup);
+								localStorage.setItem('pendingComunidad', JSON.stringify(list));
+							} catch (e) {
+								// ignore storage errors
+							}
+							if (typeof window.showAlert === 'function') {
+								window.showAlert('No se pudo enviar al servidor. Se guardó localmente.');
+							} else {
+								alert('No se pudo enviar al servidor. Se guardó localmente.');
+							}
+						}
+					} catch (err) {
+						const backup = { tipo: tipo, mensaje: mensaje, fecha_creacion: new Date().toISOString() };
+						try {
+							const list = JSON.parse(localStorage.getItem('pendingComunidad') || '[]');
+							list.push(backup);
+							localStorage.setItem('pendingComunidad', JSON.stringify(list));
+						} catch (e) {}
+						if (typeof window.showAlert === 'function') {
+							window.showAlert('No se pudo conectar al servidor. Se guardó localmente.');
+						} else {
+							alert('No se pudo conectar al servidor. Se guardó localmente.');
+						}
+					} finally {
+						sendBtn.disabled = false;
+					}
+				})();
+			});
+		})();
+
+			// Open updates panel when clicking 'Actualización' in the sidebar
+			(function(){
+				const link = document.getElementById('nav-actualizacion');
+				const panel = document.getElementById('updates-panel');
+				const main = document.querySelector('.main');
+				if(!link || !panel || !main) return;
+				link.addEventListener('click', function(e){
+					e.preventDefault && e.preventDefault();
+					e.stopPropagation && e.stopPropagation();
+					// Always show updates panel; do not toggle off on repeated clicks
+					main.classList.add('updates-visible');
+					panel.style.display = 'block';
+					panel.scrollIntoView({behavior:'smooth',block:'start'});
+					// mark the sidebar active state
+					document.querySelectorAll('.app-link').forEach(a => a.classList.toggle('active', a === link));
+				});
+			})();
+
+			// Modal: details for the update
+				(function(){
+					const detailsBtn = document.getElementById('update-details-btn'); // 2.9.1 button (no detailed modal)
+					const detailsBtnMajor = document.getElementById('update-details-btn-3'); // 3.0 button
+					const cardMajor = document.getElementById('update-card-4'); // 3.0 card
+				// create modal markup
+				const overlay = document.createElement('div');
+				overlay.id = 'update-modal-overlay';
+				overlay.className = 'modal-overlay';
+				overlay.setAttribute('aria-hidden','true');
+				overlay.innerHTML = `
+				  <div class="modal-dialog" role="document">
+				    <button class="modal-close" aria-label="Cerrar">✕</button>
+				    <h3>Versión 3.0 —  de Abril del 2026</h3>
+				    <p>Esta actualización incluye mejoras de rendimiento, una nueva interfaz y parches de seguridad críticos.</p>
+				    <h4>Inicio</h4>
+				    <ul>
+				      <li>Nueva interfaz de inicio que concentra todos las funcionalidades ocultas.</li>
+				      <li>Se incluyó un nuevo botón de mensajería.</li>
+				      <li>Se removió la posibilidad de cambiar el color favorito.</li>
+				    </ul>
+					<h4>Diseño</h4>
+				    <ul>
+				      <li>Se corrigió el error que provocaba que se mostraran tiempos erróneos como el mostrar pausa cuando se refrescaba la página.</li>
+				      <li>Se mejoró la estabilidad del server al momento de calcular los milisegundos de deslogeo, previniendo un doble tiempo.</li>
+					  <li>Se reconstruyó el algoritmo de puntajes para obtener una mejor representación de los desempeños.</li>
+					  <li>Se agregó un checklist a todas las órdenes y submittals.</li>
+				    </ul>
+					<h4>RH</h4>
+				    <ul>
+				      <li>Se corrigió el error visual que hacía que se mostraran elementos con nada de contraste.</li>
+				      <li>Se agregó un submenú contextual para mejorar la navegación en los empleados.</li>
+					  <li>Se mejoró la visualización de las fotos de evidencia de los apoyos.</li>
+				    </ul>
+					<h4>Formularios (Vacaciones, tickets, amonestaciones, permisos y requisición de compra)</h4>
+				    <ul>
+				      <li>Se mejoró la barra de navegación para mejorar la experiencia del usuario.</li>
+				      <li>Se agregaron color únicos por tipo de formulario, dejando de usar la variable global del usuario.</li>
+				    </ul>
+				    <p>Se recomienda reiniciar sesión tras la actualización. No se esperan interrupciones significativas.</p>
+				    <div class="modal-actions">
+				      <button id="modal-close-btn" class="btn">Cerrar</button>
+				      <button id="modal-ack-btn" class="btn primary">Entendido</button>
+				    </div>
+				  </div>
+				`;
+				document.body.appendChild(overlay);
+
+				// create a separate, simpler modal for the 2.9.1 (minor) update
+				const overlay2 = document.createElement('div');
+				overlay2.id = 'update-modal-overlay-2';
+				overlay2.className = 'modal-overlay';
+				overlay2.setAttribute('aria-hidden','true');
+				overlay2.innerHTML = `
+				  <div class="modal-dialog" role="document">
+				    <button class="modal-close" aria-label="Cerrar">✕</button>
+				    <h3>Versión 2.9.1 — 10 de Abril del 2026</h3>
+				    <p>Incluye mejoras y correcciones menores.</p>
+				    <h4>Diseño</h4>
+				    <ul>
+				      <li>Mejoras en estabilidad y compatibilidad en los logeos.</li>
+				    </ul>
+				    <div class="modal-actions">
+				      <button id="modal-close-btn-2" class="btn">Cerrar</button>
+				      <button id="modal-ack-btn-2" class="btn primary">Entendido</button>
+				    </div>
+				  </div>
+				`;
+				document.body.appendChild(overlay2);
+
+				const modalClose = overlay.querySelector('.modal-close');
+				const modalCloseBtn = document.getElementById('modal-close-btn');
+				const modalAckBtn = document.getElementById('modal-ack-btn');
+
+				// minor modal controls (2.9.1)
+				const modalClose2 = overlay2.querySelector('.modal-close');
+				const modalCloseBtn2 = document.getElementById('modal-close-btn-2');
+				const modalAckBtn2 = document.getElementById('modal-ack-btn-2');
+				function openModal(){
+					overlay.classList.add('open');
+					overlay.setAttribute('aria-hidden','false');
+					document.body.style.overflow = 'hidden';
+				}
+				function closeModal(){
+					overlay.classList.remove('open');
+					overlay.setAttribute('aria-hidden','true');
+					document.body.style.overflow = '';
+				}
+
+				function openModal2(){
+					overlay2.classList.add('open');
+					overlay2.setAttribute('aria-hidden','false');
+					document.body.style.overflow = 'hidden';
+				}
+
+				function closeModal2(){
+					overlay2.classList.remove('open');
+					overlay2.setAttribute('aria-hidden','true');
+					document.body.style.overflow = '';
+				}
+					// 3.0 controls open the major modal
+					if(detailsBtnMajor) detailsBtnMajor.addEventListener('click', function(e){ e.stopPropagation(); openModal(); });
+					if(cardMajor) cardMajor.addEventListener('click', function(){ openModal(); });
+
+					// 2.9.1 controls open the minor modal
+					const cardMinor = document.getElementById('update-card-3');
+					if(detailsBtn) detailsBtn.addEventListener('click', function(e){ e.stopPropagation(); openModal2(); });
+					if(cardMinor) cardMinor.addEventListener('click', function(){ openModal2(); });
+				overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+				if(modalClose) modalClose.addEventListener('click', closeModal);
+				if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+				if(modalAckBtn) modalAckBtn.addEventListener('click', closeModal);
+
+				overlay2.addEventListener('click', function(e){ if(e.target === overlay2) closeModal2(); });
+				if(modalClose2) modalClose2.addEventListener('click', closeModal2);
+				if(modalCloseBtn2) modalCloseBtn2.addEventListener('click', closeModal2);
+				if(modalAckBtn2) modalAckBtn2.addEventListener('click', closeModal2);
+				document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); closeModal2(); } });
+			})();
+	</script>
+
+	<!-- Panel de perfil centrado — tema claro NO SE VA A USAR HASTA QUE LAS DEMAS FUNCIONES ESTEN IMPLEMENTADAS-->
+	<style>
+		.user-panel-overlay {
+			position: fixed;
+			inset: 0;
+			display: none;
+			z-index: 100021;
+			background: rgba(0,0,0,0.32);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(2px);
+			align-items: center;
+			justify-content: center;
+		}
+		.user-panel-overlay.open { display: flex; align-items: center; justify-content: center; }
+
+		.user-panel {
+			position: relative;
+			width: min(980px, 96%);
+			height: 560px;
+			display: flex;
+			border-radius: 30px;
+			overflow: hidden;
+			border: 3px solid #000;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+			background: #ffffff;
+			color: #0b1220;
+		}
+
+		.user-panel-nav {
+			width: 260px;
+			background: #f3f4f6;
+			padding: 18px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			color: #0b1220;
+		}
+		.user-panel-nav .nav-title { font-weight: 700; color: #0b1220; margin-bottom: 6px; }
+		.user-panel-nav .nav-item {
+			display: flex; align-items: center; gap: 10px;
+			padding: 10px 12px; border-radius: 8px; cursor: pointer; color: #0b1220; font-weight: 600; background: transparent; text-align:left; border: none;
+		}
+		.user-panel-nav .nav-item:hover { background: rgba(0,0,0,0.04); color: #0b1220; }
+		.user-panel-nav .nav-item.active { background: rgba(0,0,0,0.06); color: #0b1220; }
+
+		.user-panel-body { flex: 1; padding: 20px; overflow: auto; background: #fff; color: #0b1220; }
+		.user-panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+		.user-panel-close { background: transparent; border: none; color: #0b1220; font-size: 20px; cursor: pointer; }
+
+		/* Small links under user name (Acerca de / Política) */
+		.user-profile-links { margin-top:6px; font-size:11px; color:#6b7280; display:flex; gap:8px; align-items:center; }
+		.user-profile-links .small-link { color:#6b7280; text-decoration:none; font-weight:600; opacity:0.9 }
+		.user-profile-links .small-link:hover { text-decoration:underline; color:var(--user-accent); }
+		.user-profile-links .sep { opacity:0.36 }
+
+		.panel-section { background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; color: #0b1220; border: 1px solid #eef2f7; }
+		.panel-section h4 { margin: 0 0 8px 0; color: #0b1220; }
+
+		:root { --user-accent: #06b6d4; }
+
+		/* Color palette and language selector */
+		.color-palette { display:flex; gap:8px; flex-wrap:wrap; }
+		.color-swatch {
+			width:34px; height:34px; border-radius:8px; border:2px solid rgba(15,23,42,0.06); cursor:pointer; box-shadow: 0 6px 12px rgba(2,6,23,0.04);
+		}
+		.color-swatch.selected { outline: 3px solid rgba(6,182,212,0.16); transform: translateY(-2px); }
+
+		.language-toggle { display:flex; align-items:center; gap:12px; }
+		.language-toggle label { cursor:pointer; font-weight:600; color:#0b1220; }
+
+		/* Visual indicator for active nav using accent */
+		.user-panel-nav .nav-item.active { border-left: 4px solid var(--user-accent); padding-left:10px; background: rgba(0,0,0,0.02); }
+
+		/* General profile styles */
+		.user-general-profile { text-align: center; padding: 8px 12px 6px 12px; }
+		.user-general-avatar {
+			width: 110px; height: 110px; margin: 0 auto; border-radius: 14px;
+			display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 34px;
+			background: #6b7280; color: #fff; box-shadow: 0 8px 22px rgba(16,24,40,0.08);
+		}
+		.user-general-name { margin-top: 12px; font-size: 20px; font-weight: 800; color: #0b1220; }
+		.user-general-role { margin-top: 4px; color: #475569; font-weight: 600; }
+
+		.user-general-stats { display:flex; justify-content:center; gap:28px; margin-top:18px; }
+		.user-general-stats .stat { text-align:center; }
+		.user-general-stats .stat-value { font-size:20px; font-weight:800; color:#0b1220; }
+		.user-general-stats .stat-label { font-size:12px; color:#6b7280; margin-top:4px; }
+
+		@media (max-width: 800px) {
+			.user-panel {
+				width: calc(100% - 32px);
+				height: calc(100vh - 40px);
+				flex-direction: row;
+				max-height: calc(100vh - 40px);
+			}
+			.user-panel-nav {
+				width: 72px;
+				background: #f3f4f6;
+				padding: 8px;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				overflow: auto;
+				height: 100%;
+				box-sizing: border-box;
+			}
+			.user-panel-nav .nav-item {
+				flex: 0 0 auto;
+				white-space: normal;
+				display: flex; align-items: center; justify-content: center;
+				padding: 12px; border-radius: 10px; font-size: 0;
+			}
+			.user-panel-nav .nav-item i { font-size: 18px; color: #0b1220; }
+			.user-panel-nav .nav-item.active { background: rgba(0,0,0,0.06); border-left: none; padding-left: 0; }
+			/* Hide the 'Configuración' title on small screens to save space */
+			.user-panel-nav .nav-title { display: none; }
+			.user-panel-body { padding: 20px; }
+		}
+	</style>
+
+	<div id="userProfileModal" class="user-panel-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+		<div class="user-panel" role="document">
+			<nav class="user-panel-nav" aria-label="Navegación de perfil">
+				<div class="nav-title">Configuración</div>
+				<button class="nav-item active" data-section="general"><i class="fas fa-cog"></i> General</button>
+				<button class="nav-item" data-section="data"><i class="fas fa-database"></i> Controles de datos</button>
+					<button class="nav-item" data-section="personalizacion"><i class="fas fa-paint-roller"></i> Personalización</button>
+					<button class="nav-item" data-section="personal"><i class="fas fa-users"></i> Personal a cargo</button>
+			</nav>
+			<div class="user-panel-body">
+				<div class="user-panel-header">
+					<div style="display:flex;align-items:center;gap:12px;">
+						<div id="userProfileAvatar" class="avatar" style="width:48px;height:48px;border-radius:30px;display:flex;align-items:center;justify-content:center;background:#6b7280;color:#fff;font-weight:700;">GJ</div>
+						<div>
+							<div id="userProfileName" style="font-weight:700;color:#0b1220;">Gerardo</div>
+							<div id="userProfileEmail" style="color:#475569;font-size:13px;">gerardo@pdmmetal.com</div>
+							<div class="user-profile-links">
+								<a href="acerca.html" class="small-link">Acerca de</a>
+								<span class="sep">·</span>
+								<a href="privacidad.html" class="small-link">Política de privacidad</a>
+							</div>
+						</div>
+					</div>
+					<button id="userPanelCloseBtn" class="user-panel-close" aria-label="Cerrar">×</button>
+				</div>
+				<div id="userPanelContent">
+					<!-- Sección General: foto centrada, nombre, puesto, fecha de ingreso y años de servicio -->
+					<div class="panel-section user-general" data-section-content="general" data-joined="2018-06-15" data-role="IT">
+						<div class="user-general-profile">
+							<div id="userGeneralAvatar" class="user-general-avatar">GJ</div>
+							<div id="userGeneralName" class="user-general-name">Gerardo</div>
+							<div id="userGeneralRole" class="user-general-role">IT</div>
+						</div>
+						<div class="user-general-stats">
+							<div class="stat">
+								<div class="stat-value" id="user-joined-date">15/06/2018</div>
+								<div class="stat-label">Fecha de ingreso</div>
+							</div>
+							<div class="stat">
+								<div class="stat-value" id="user-years-service">8 años</div>
+								<div class="stat-label">Años de servicio</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-section" data-section-content="data" style="display:none;">
+						<h4>Controles de datos</h4>
+						<p style="margin:0;">Configuraciones relacionadas con datos y privacidad.</p>
+					</div>
+
+					<div class="panel-section" data-section-content="personalizacion" style="display:none;">
+						<h4>Personalización</h4>
+						<div style="margin-top:8px;">
+							<div style="font-weight:700; margin-bottom:6px;">Color</div>
+							<div id="colorPalette" class="color-palette">
+								<button class="color-swatch" data-color-key="teal" title="Teal" style="background:#06b6d4"></button>
+								<button class="color-swatch" data-color-key="red" title="Rojo" style="background:#ef4444"></button>
+								<button class="color-swatch" data-color-key="green" title="Verde" style="background:#10b981"></button>
+								<button class="color-swatch" data-color-key="purple" title="Morado" style="background:#7c3aed"></button>
+								<button class="color-swatch" data-color-key="amber" title="Ambar" style="background:#f59e0b"></button>
+							</div>
+						</div>
+						<div style="margin-top:14px;">
+							<div style="font-weight:700; margin-bottom:6px;">Idioma</div>
+							<div class="language-toggle">
+								<label><input type="radio" name="userLang" value="es"> Español</label>
+								<label><input type="radio" name="userLang" value="en"> English</label>
+							</div>
+						</div>
+						<div style="margin-top:14px;">
+							<div style="font-weight:700; margin-bottom:6px;">Tema</div>
+							<div style="display:flex;align-items:center;gap:12px;">
+								<label class="theme-switch-label">Claro</label>
+								<label class="switch" style="display:inline-block;">
+									<input id="themeSwitch" type="checkbox">
+									<span class="slider" style="display:inline-block;width:44px;height:24px;background:#ccc;border-radius:24px;position:relative;vertical-align:middle;cursor:pointer;transition:.18s">
+										<span style="position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 2px rgba(0,0,0,0.2)"></span>
+									</span>
+								</label>
+								<label class="theme-switch-label">Oscuro</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-section" data-section-content="personal" style="display:none;">
+						<!-- Contenido 'Personal a cargo' — se rellenará dinámicamente con el contenido de la vista de inicio -->
+						<div id="personal-content-placeholder">Cargando...</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Permisos: reutilizar el mismo script que usa inicio.html -->
+	<script src="js/permisos.js"></script>
+
+	<script>
+	// Aplicar visual y bloqueo de click a elementos con data-permission
+	(async function applyInicioPermissions(){
+		try {
+			// Intentar obtener datos via la función central si está disponible
+			let data = null;
+			if (typeof verificarPermisosCentral === 'function') {
+				data = await verificarPermisosCentral();
+			}
+
+			// Si no se obtuvo data, intentar usar localStorage
+			if (!data) {
+				const perms = JSON.parse(localStorage.getItem('permissions') || '[]');
+				data = { permissions: perms, user: { rol: localStorage.getItem('rol') || '' } };
+			}
+
+			const permissions = data.permissions || [];
+			const role = data.user && data.user.rol;
+
+			// Intentar cargar permisos de tarjetas (misma lógica que inicio.html)
+			let tarjetasPermisos = null;
+			try {
+				const tp = localStorage.getItem('tarjetasPermisos');
+				if (tp) {
+					tarjetasPermisos = JSON.parse(tp);
+				} else {
+					let username = localStorage.getItem('username');
+					if (!username) {
+						const lu = localStorage.getItem('loggedInUser');
+						if (lu) {
+							try { const u = JSON.parse(lu); username = u.employeeNumber || u.username || u.name; } catch(_){}
+						}
+					}
+					if (username) {
+						try {
+							const resp = await fetch(`/api/tarjetas-disponibles?username=${encodeURIComponent(username)}`);
+							if (resp.ok) {
+								const td = await resp.json();
+								if (td && td.tarjetas) {
+									tarjetasPermisos = td.tarjetas;
+									localStorage.setItem('tarjetasPermisos', JSON.stringify(tarjetasPermisos));
+								}
+							}
+						} catch(e) { console.warn('Error cargando tarjetasPermisos:', e); }
+					}
+				}
+			} catch (e) {
+				console.warn('Error parseando tarjetasPermisos:', e);
+			}
+
+			// Seleccionar todos los elementos que declaran data-permission
+			const nodes = Array.from(document.querySelectorAll('[data-permission]'));
+
+			function _stopEvt(e){
+				try{ e.preventDefault(); }catch(_){ }
+				try{ e.stopImmediatePropagation && e.stopImmediatePropagation(); }catch(_){ }
+				try{ e.stopPropagation && e.stopPropagation(); }catch(_){ }
+			}
+			function _stopKey(e){ if (e.key === 'Enter' || e.key === ' ') _stopEvt(e); }
+
+			nodes.forEach(node => {
+				const permAttr = node.getAttribute('data-permission') || '';
+				if (!permAttr) return;
+				const required = permAttr.split(',').map(s=>s.trim()).filter(Boolean);
+				const allowedByPermissions = (role === 'IT') || required.some(p => permissions.includes(p));
+				let allowed = Boolean(allowedByPermissions);
+				// Si existen permisos de tarjetas, resolver con la misma lógica de inicio.html
+				if (tarjetasPermisos) {
+					function isPermissionAllowed(val) {
+						if (val === true || val === 1) return true;
+						if (val === false || val === 0) return false;
+						if (typeof val === 'string') {
+							const v = val.trim().toLowerCase();
+							return v === '1' || v === 'true' || v === 'yes' || v === 'y';
+						}
+						return Boolean(val);
+					}
+					function normalizeKey(s) { return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+					const permiso = permAttr;
+					const permisoNorm = normalizeKey(permiso);
+					const allKeys = Object.keys(tarjetasPermisos || {});
+					const matchingKey = allKeys.find((k) => {
+						const kn = normalizeKey(k);
+						return kn === permisoNorm || kn.includes(permisoNorm) || permisoNorm.includes(kn);
+					});
+					const permisoValue = matchingKey ? tarjetasPermisos[matchingKey] : tarjetasPermisos[permiso];
+					const allowedByTarjeta = isPermissionAllowed(permisoValue);
+					if (allowedByTarjeta) allowed = true;
+					console.log('perm check:', permAttr, 'allowedByPermissions=', allowedByPermissions, 'allowedByTarjeta=', allowedByTarjeta);
+				}
+				// Elemento accionable (si está dentro de un wrapper)
+				const actionable = (node.tagName.toLowerCase() === 'a' || node.tagName.toLowerCase() === 'button') ? node : node.querySelector('a,button');
+				if (!allowed) {
+					node.classList.add('no-perm');
+					node.setAttribute('aria-disabled','true');
+					// Block pointer and keyboard interactions
+					try{ node.style.pointerEvents = 'none'; } catch(e){}
+					try{ node.setAttribute('tabindex','-1'); } catch(e){}
+
+					if (actionable) {
+						const tag = actionable.tagName.toLowerCase();
+						if (tag === 'a') {
+							if (actionable.hasAttribute('href')) {
+								actionable.dataset._href = actionable.getAttribute('href');
+								actionable.removeAttribute('href');
+							}
+							actionable.setAttribute('tabindex','-1');
+							actionable.style.pointerEvents = 'none';
+							actionable.style.cursor = 'not-allowed';
+							actionable.setAttribute('aria-disabled','true');
+						} else if (tag === 'button') {
+							actionable.disabled = true;
+							actionable.setAttribute('aria-disabled','true');
+							actionable.setAttribute('tabindex','-1');
+							actionable.style.pointerEvents = 'none';
+						}
+						// Attach blocking handlers (capture) so other listeners won't run
+						actionable.addEventListener('click', _stopEvt, true);
+						actionable.addEventListener('keydown', _stopKey, true);
+					} else {
+						node.addEventListener('click', _stopEvt, true);
+						node.addEventListener('keydown', _stopKey, true);
+					}
+
+				} else {
+					// restore visual state for permitted
+					node.classList.remove('no-perm');
+					node.removeAttribute('aria-disabled');
+					try{ node.style.pointerEvents = ''; } catch(e){}
+					try{ node.removeAttribute('tabindex'); } catch(e){}
+					if (actionable) {
+						const tag = actionable.tagName.toLowerCase();
+						if (tag === 'a') {
+							if (!actionable.hasAttribute('href') && actionable.dataset && actionable.dataset._href) {
+								actionable.setAttribute('href', actionable.dataset._href);
+								delete actionable.dataset._href;
+							}
+							actionable.removeAttribute('tabindex');
+							actionable.style.pointerEvents = '';
+							actionable.style.cursor = '';
+							actionable.removeAttribute('aria-disabled');
+						} else if (tag === 'button') {
+							actionable.disabled = false;
+							actionable.removeAttribute('aria-disabled');
+							actionable.removeAttribute('tabindex');
+							actionable.style.pointerEvents = '';
+						}
+						try{ actionable.removeEventListener('click', _stopEvt, true); actionable.removeEventListener('keydown', _stopKey, true); } catch(e){}
+					} else {
+						try{ node.removeEventListener('click', _stopEvt, true); node.removeEventListener('keydown', _stopKey, true); } catch(e){}
+					}
+				}
+			});
+		} catch (e) {
+			console.warn('applyInicioPermissions error:', e);
+		}
+	})();
+
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const sidebarUserArea = document.querySelector('.sidebar-footer > div');
+			const userModal = document.getElementById('userProfileModal');
+			const userPanelCloseBtn = document.getElementById('userPanelCloseBtn');
+			const sidebarToggle = document.getElementById('sidebar-toggle');
+			const userMenuToggle = document.getElementById('user-menu-toggle');
+			let _prevSidebarToggleDisplay = null;
+			let _prevUserMenuToggleDisplay = null;
+			if (!sidebarUserArea || !userModal) return;
+
+			// Close handlers: X button, click outside modal, Escape key
+			if (userPanelCloseBtn) {
+				userPanelCloseBtn.addEventListener('click', function (ev) {
+					ev.preventDefault();
+					try { closeUserModal(); } catch (e) { console.warn('closeUserModal error', e); }
+				});
+			}
+			try {
+				userModal.addEventListener('click', function (ev) {
+					if (ev.target === userModal) {
+						try { closeUserModal(); } catch (e) { console.warn('closeUserModal overlay error', e); }
+					}
+				});
+			} catch (e) { /* ignore if not available */ }
+			document.addEventListener('keydown', function (ev) {
+				if (ev.key === 'Escape') {
+					try { closeUserModal(); } catch (e) { /* ignore */ }
+				}
+			});
+			// populate footer user info from localStorage
+				try {
+					const storedStr = localStorage.getItem('loggedInUser');
+					const stored = storedStr ? JSON.parse(storedStr) : null;
+					const storedUsername = localStorage.getItem('username') || (stored && (stored.username || stored.employeeNumber || stored.email));
+					const avatarEl = document.getElementById('sidebarUserAvatar');
+					const nameEl = document.getElementById('sidebarUserName');
+					const handleEl = document.getElementById('sidebarUserHandle');
+					console.log('nuevo-inicio: loaded loggedInUser=', stored, 'username=', storedUsername);
+
+					// Prefer persisted employee profile when available
+					let userProfile = null;
+					try { userProfile = JSON.parse(localStorage.getItem('userProfile') || 'null'); } catch(_) { userProfile = null; }
+
+					// Prefer persisted employee profile when available
+					const displayNameFull = (userProfile && (userProfile.nombre_completo || userProfile.fullName || userProfile.fullname)) || (stored && (stored.nombre_completo || stored.name || stored.fullName)) || storedUsername || 'Invitado';
+					const firstName = String(displayNameFull || '').trim().split(/\s+/).filter(Boolean)[0] || displayNameFull;
+					const displayHandle = storedUsername ? '@' + storedUsername : '';
+
+					if (nameEl) nameEl.textContent = firstName;
+					if (handleEl) handleEl.textContent = displayHandle;
+
+					if (avatarEl) {
+						const photo = (userProfile && (userProfile.foto_url || userProfile.photo || userProfile.photo_url || userProfile.avatar)) || (stored && (stored.foto_url || stored.foto || stored.avatar)) || null;
+						if (photo) {
+							// Normalize relative paths to absolute URLs and handle load errors
+							let src = String(photo || '');
+							if (src && !/^https?:\/\//i.test(src)) {
+								if (!src.startsWith('/')) src = '/' + src;
+								try { src = window.location.origin + src; } catch (_) { /* ignore, keep root-relative */ }
+							}
+							avatarEl.innerHTML = '';
+							const img = document.createElement('img');
+							img.src = src;
+							img.alt = firstName || 'Usuario';
+							img.style.width = '100%';
+							img.style.height = '100%';
+							img.style.objectFit = 'cover';
+							img.style.borderRadius = 'inherit';
+							img.addEventListener('error', function () {
+								const seed = (stored && (stored.nombre_completo || stored.name || stored.username)) || storedUsername || displayNameFull || '';
+								const initials = seed.split(' ').filter(Boolean).map(s => s[0]).slice(0,2).join('').toUpperCase() || 'US';
+								avatarEl.innerHTML = initials;
+								avatarEl.style.background = '#6b7280';
+							});
+							avatarEl.appendChild(img);
+							avatarEl.style.background = '';
+						} else {
+							const seed = (stored && (stored.nombre_completo || stored.name || stored.username)) || storedUsername || displayNameFull || '';
+							const initials = seed.split(' ').filter(Boolean).map(s => s[0]).slice(0,2).join('').toUpperCase() || 'US';
+							avatarEl.textContent = initials;
+							avatarEl.style.background = '#6b7280';
+						}
+					}
+				} catch (err) {
+					console.log('nuevo-inicio: error reading user data', err);
+				}
+			// Hacer el área obviamente clicable
+			sidebarUserArea.style.cursor = 'pointer';
+			const navItems = Array.from(userModal.querySelectorAll('.nav-item'));
+			const contentSections = Array.from(userModal.querySelectorAll('[data-section-content]'));
+
+			function setActiveSection(name) {
+				navItems.forEach(n => n.classList.toggle('active', n.dataset.section === name));
+				contentSections.forEach(s => s.style.display = (s.dataset.sectionContent === name) ? '' : 'none');
+			}
+
+			// wire nav item clicks and keyboard activation (Enter / Space)
+			navItems.forEach(item => {
+				item.addEventListener('click', function(){ setActiveSection(this.dataset.section); });
+				item.addEventListener('keydown', function(e){
+					if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSection(this.dataset.section); }
+				});
+			});
+
+			// If user clicks the sidebar 'Personal a cargo' link, open the user modal and activate the 'personal' tab.
+			const sidebarPersonal = document.getElementById('nav-personal');
+			if (sidebarPersonal) {
+				sidebarPersonal.addEventListener('click', function(e){
+					e.preventDefault && e.preventDefault();
+					// open user modal and activate personal tab
+					try {
+						if (sidebarToggle) {
+							sidebarToggle.style.display = 'none';
+						}
+						if (userMenuToggle) userMenuToggle.style.display = 'none';
+						userModal.classList.add('open');
+						userModal.setAttribute('aria-hidden','false');
+						document.documentElement.classList.add('no-scroll');
+						try { if (typeof populateUserProfile === 'function') populateUserProfile(); } catch(_){}
+						// Activate section 'personal'
+						setActiveSection('personal');
+						// copy the main content into the personal panel if empty
+						const personalSec = userModal.querySelector('[data-section-content="personal"]');
+						if (personalSec) {
+							const placeholder = personalSec.querySelector('#personal-content-placeholder');
+							if (placeholder && placeholder.textContent.trim() === '') {
+								const mainContent = document.querySelector('.main');
+								if (mainContent) {
+									// clone main to avoid moving nodes
+									const clone = mainContent.cloneNode(true);
+									// remove any ids that could conflict
+									clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+									placeholder.innerHTML = '';
+									placeholder.appendChild(clone);
+								}
+							}
+						}
+					} catch (err) { console.error('Error opening personal panel', err); }
+				});
+			}
+
+			// Swipe gesture to change sections on touch devices
+			(function(){
+				const contentEl = userModal.querySelector('#userPanelContent');
+				if (!contentEl) return;
+				let startX = 0, startY = 0, isTouching = false;
+				const threshold = 40; // px
+
+				function getCurrentIndex(){
+					const active = navItems.find(n => n.classList.contains('active'));
+					const name = active ? active.dataset.section : (contentSections[0] && contentSections[0].dataset.sectionContent);
+					return contentSections.findIndex(s => s.dataset.sectionContent === name);
+				}
+
+				function activateIndex(idx){
+					if (idx < 0 || idx >= contentSections.length) return;
+					const name = contentSections[idx].dataset.sectionContent;
+					setActiveSection(name);
+				}
+
+				contentEl.addEventListener('touchstart', function(e){
+					if (!e.touches || e.touches.length > 1) return;
+					isTouching = true;
+					startX = e.touches[0].clientX;
+					startY = e.touches[0].clientY;
+				}, { passive: true });
+
+				contentEl.addEventListener('touchend', function(e){
+					if (!isTouching) return;
+					isTouching = false;
+					const touch = (e.changedTouches && e.changedTouches[0]) || null;
+					if (!touch) return;
+					const dx = touch.clientX - startX;
+					const dy = touch.clientY - startY;
+					if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy) * 1.5) {
+						const cur = getCurrentIndex();
+						if (dx < 0) activateIndex(cur + 1);
+						else activateIndex(cur - 1);
+					}
+				}, { passive: true });
+			})();
+
+			function updateUserGeneralInfo() {
+				const generalSection = userModal.querySelector('.panel-section.user-general');
+				if (!generalSection) return;
+				const joined = generalSection.dataset.joined;
+				const role = generalSection.dataset.role;
+				const nameHeader = document.getElementById('userProfileName')?.textContent?.trim() || '';
+				const nameEl = document.getElementById('userGeneralName');
+				const roleEl = document.getElementById('userGeneralRole');
+				const avatarEl = document.getElementById('userGeneralAvatar');
+				const joinedEl = document.getElementById('user-joined-date');
+				const yearsEl = document.getElementById('user-years-service');
+
+				// Prefer persisted userProfile (from server) when available
+				let storedProfile = null;
+				try { storedProfile = JSON.parse(localStorage.getItem('userProfile') || 'null'); } catch(e){ storedProfile = null; }
+
+				const effectiveName = (storedProfile && (storedProfile.nombre_completo || storedProfile.fullName || storedProfile.fullname)) || nameHeader || '';
+				const effectiveRole = (storedProfile && (storedProfile.puesto || storedProfile.position || storedProfile.cargo)) || role || '';
+				const effectiveJoined = (storedProfile && (storedProfile.fecha_ingreso || storedProfile.hire_date || storedProfile.fechaIngreso)) || joined || '';
+
+				if (effectiveName && nameEl) nameEl.textContent = effectiveName;
+				if (roleEl && effectiveRole) roleEl.textContent = effectiveRole;
+
+				if (avatarEl) {
+					if (storedProfile && (storedProfile.foto_url || storedProfile.photo || storedProfile.photo_url || storedProfile.avatar)) {
+						const src = storedProfile.foto_url || storedProfile.photo || storedProfile.photo_url || storedProfile.avatar;
+						avatarEl.innerHTML = `<img src="${_escapeHtml(src)}" alt="${_escapeHtml(effectiveName)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">`;
+						avatarEl.style.background = '';
+					} else if (effectiveName) {
+						const initials = effectiveName.split(' ').filter(Boolean).map(n => n[0]).slice(0,2).join('').toUpperCase();
+						avatarEl.textContent = initials;
+						avatarEl.style.background = '#6b7280';
+					}
+				}
+
+				if (effectiveJoined) {
+					const d = new Date(effectiveJoined);
+					if (!isNaN(d.getTime())) {
+						const formatted = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+						if (joinedEl) joinedEl.textContent = formatted;
+						const now = new Date();
+						let years = now.getFullYear() - d.getFullYear();
+						const m = now.getMonth() - d.getMonth();
+						if (m < 0 || (m === 0 && now.getDate() < d.getDate())) years--;
+						if (yearsEl) yearsEl.textContent = `${years} ${years === 1 ? 'año' : 'años'}`;
+					}
+				}
+			}
+
+			sidebarUserArea.addEventListener('click', async function(e) {
+				e.preventDefault();
+				try {
+					if (sidebarToggle) {
+						_prevSidebarToggleDisplay = sidebarToggle.style.display || '';
+						sidebarToggle.style.display = 'none';
+					}
+					if (userMenuToggle) {
+						_prevUserMenuToggleDisplay = userMenuToggle.style.display || '';
+						userMenuToggle.style.display = 'none';
+					}
+					userModal.classList.add('open');
+					userModal.setAttribute('aria-hidden','false');
+					document.documentElement.classList.add('no-scroll');
+					try { if (typeof populateUserProfile === 'function') await populateUserProfile(); } catch (e) { console.warn('populateUserProfile on modal open failed', e); }
+					updateUserGeneralInfo();
+					setActiveSection('general');
+					// Ensure personal section placeholder is ready
+					const personalSection = userModal.querySelector('[data-section-content="personal"]');
+					if (personalSection) {
+						const placeholder = personalSection.querySelector('#personal-content-placeholder');
+						if (placeholder) placeholder.textContent = '';
+					}
+				} catch (err) { console.error(err); }
+			});
+
+			function closeUserModal() {
+				if (sidebarToggle) sidebarToggle.style.display = _prevSidebarToggleDisplay || '';
+				if (userMenuToggle) userMenuToggle.style.display = _prevUserMenuToggleDisplay || '';
+				userModal.classList.remove('open');
+				userModal.setAttribute('aria-hidden','true');
+				document.documentElement.classList.remove('no-scroll');
+			}
+
+			// Inicializar info de la sección General
+			updateUserGeneralInfo();
+			function applyColorKey(key) {
+				const map = {
+					teal: '#06b6d4',
+					red: '#ef4444',
+					green: '#10b981',
+					purple: '#7c3aed',
+					amber: '#f59e0b'
+				};
+				const val = map[key] || map.teal;
+				document.documentElement.style.setProperty('--user-accent', val);
+				// mark selected
+				Array.from(userModal.querySelectorAll('.color-swatch')).forEach(s => s.classList.toggle('selected', s.dataset.colorKey === key));
+				localStorage.setItem('pdm.themeColor', key);
+			}
+
+			function setLang(lang) {
+				const labels = {
+					es: { general: 'General', data: 'Controles de datos', personalizacion: 'Personalización', generalDesc: 'Administre sus preferencias generales y la configuración.' },
+					en: { general: 'General', data: 'Data Controls', personalizacion: 'Personalization', generalDesc: 'Manage your general preferences and settings.' }
+				};
+				const L = labels[lang] || labels.es;
+				navItems.forEach(item => {
+					const icon = item.querySelector('i')?.className || '';
+					const key = item.dataset.section;
+					item.innerHTML = `<i class="${icon}"></i> ${L[key] || item.textContent}`;
+				});
+				// update section headings/descriptions
+				const generalSection = userModal.querySelector('[data-section-content="general"]');
+				if (generalSection) {
+					const h4 = generalSection.querySelector('h4');
+					if (h4) h4.textContent = L.general;
+					const p = generalSection.querySelector('p');
+					if (p) p.textContent = L.generalDesc;
+				}
+				localStorage.setItem('pdm.lang', lang);
+			}
+
+			// wire palette clicks
+			Array.from(userModal.querySelectorAll('.color-swatch')).forEach(btn => {
+				btn.addEventListener('click', function(){ applyColorKey(this.dataset.colorKey); });
+			});
+
+			// language radios
+			Array.from(userModal.querySelectorAll('input[name="userLang"]')).forEach(r => {
+				r.addEventListener('change', function(){ if (this.checked) setLang(this.value); });
+			});
+
+			// Theme toggle: light/dark
+			(function(){
+				const themeSwitch = document.getElementById('themeSwitch');
+				function applyTheme(theme){
+					// Primary: set attribute on <html>
+					document.documentElement.setAttribute('data-theme', theme);
+					// persist
+					localStorage.setItem('theme', theme);
+					console.log('applyTheme ->', theme, 'data-theme now:', document.documentElement.getAttribute('data-theme'));
+
+					// add/remove helper classes both on <html> and <body> to maximize compatibility
+					if(theme === 'dark'){
+						document.documentElement.classList.add('dark-mode');
+						document.documentElement.classList.add('dark');
+						document.body.classList.add('dark-mode');
+					} else {
+						document.documentElement.classList.remove('dark-mode');
+						document.documentElement.classList.remove('dark');
+						document.body.classList.remove('dark-mode');
+					}
+
+					// As a robust fallback, set key CSS variables inline on :root so pages that
+					// don't re-evaluate the attribute selectors still pick up the colors.
+					const root = document.documentElement;
+					if(theme === 'dark'){
+						root.style.setProperty('--bg', '#071226');
+						root.style.setProperty('--fg', '#e6eef8');
+						root.style.setProperty('--muted', '#94a3b8');
+						root.style.setProperty('--accent-1', '#4f9ef8');
+						root.style.setProperty('--accent-2', 'rgba(79,158,248,0.08)');
+						root.style.setProperty('--card', '#0b1220');
+						root.style.setProperty('--card-text', '#e6eef8');
+						root.style.setProperty('--accent-red', '#ff6b6b');
+					} else {
+						root.style.setProperty('--bg', '#f3f6fb');
+						root.style.setProperty('--fg', '#0f172a');
+						root.style.setProperty('--muted', '#6b7280');
+						root.style.setProperty('--accent-1', '#5b86e5');
+						root.style.setProperty('--accent-2', '#cfe8ff');
+						root.style.setProperty('--card', '#ffffff');
+						root.style.setProperty('--card-text', '#0b1220');
+						root.style.setProperty('--accent-red', '#c43a3a');
+					}
+
+					// update visual of slider if present (keep inline so it matches immediate state)
+					const slider = themeSwitch ? themeSwitch.closest('label')?.querySelector('.slider') : null;
+					if(slider){
+						const knob = slider.querySelector('span');
+						if(theme === 'dark'){ slider.style.background = '#000'; if(knob) knob.style.transform = 'translateX(20px)'; }
+						else { slider.style.background = '#ccc'; if(knob) knob.style.transform = 'translateX(0)'; }
+					}
+				}
+
+				// initialize (respect saved preference, data-theme attribute or OS setting)
+				const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const savedTheme = localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme') || (prefersDark ? 'dark' : 'light');
+				applyTheme(savedTheme);
+				if(themeSwitch){
+					themeSwitch.checked = (savedTheme === 'dark');
+					themeSwitch.addEventListener('change', function(){
+						applyTheme(this.checked ? 'dark' : 'light');
+					});
+				}
+
+				// expose small helper for debugging from console: `window.__pdm_applyTheme('dark')`
+				try{ window.__pdm_applyTheme = applyTheme; }catch(e){/* ignore */}
+			})();
+
+			// restore saved preferences
+			const savedColor = localStorage.getItem('pdm.themeColor') || 'teal';
+			applyColorKey(savedColor);
+			const savedLang = localStorage.getItem('pdm.lang') || 'es';
+			// set radio state
+			const radio = userModal.querySelector(`input[name="userLang"][value="${savedLang}"]`);
+			if (radio) radio.checked = true;
+			setLang(savedLang);
+
+			navItems.forEach(btn => btn.addEventListener('click', function(){ setActiveSection(this.dataset.section); }));
+			userPanelCloseBtn?.addEventListener('click', closeUserModal);
+			userModal.addEventListener('click', function(e) { if (e.target === userModal) closeUserModal(); });
+			document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeUserModal(); });
+		});
+	</script>
+
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+		  function setActiveLink(el){
+		    document.querySelectorAll('.app-link').forEach(a => a.classList.toggle('active', a === el));
+		  }
+		  var mod = document.getElementById('nav-modulos');
+		  var updatesPanel = document.getElementById('updates-panel');
+		  var newsPanel = document.getElementById('news-panel');
+		  var messagesPanel = document.getElementById('messages-panel');
+		  var rightSidebar = document.getElementById('messages-right-sidebar');
+		  var msgComposer = document.querySelector('#messages-panel .news-composer');
+		  var main = document.querySelector('.main');
+		  if (mod) setActiveLink(mod);
+
+		  document.querySelectorAll('.app-link').forEach(function(a){
+		    a.addEventListener('click', function(e){
+		      // prevent navigation for in-page anchors
+		      var href = a.getAttribute('href');
+		      if (href === '#') { e && e.preventDefault && e.preventDefault(); e && e.stopPropagation && e.stopPropagation(); }
+
+			setActiveLink(this);
+			// Hide sidebar only on mobile when selecting Módulos, Actualizaciones or Noticias
+			try {
+				if (['nav-modulos', 'nav-actualizacion', 'nav-noticias', 'nav-personal'].includes(this.id)) {
+					if (window.innerWidth <= 900) {
+						document.body.classList.add('sidebar-hidden');
+						const st = document.getElementById('sidebar-toggle');
+						if (st) { st.setAttribute('aria-expanded','false'); st.textContent = '☰'; }
+						try { localStorage.setItem('sidebarHidden','true'); } catch(_){ }
+					} else {
+						// Desktop: ensure sidebar remains visible and do not persist a hidden state
+						document.body.classList.remove('sidebar-hidden');
+						const st = document.getElementById('sidebar-toggle');
+						if (st) { st.setAttribute('aria-expanded','true'); st.textContent = '‹'; }
+						try { localStorage.setItem('sidebarHidden','false'); } catch(_){ }
+					}
+				}
+			} catch(_){ }
+			if (main) main.classList.remove('modules-visible');
+
+			// Manage panels
+			if (updatesPanel && newsPanel && main) {
+				if (this.id === 'nav-actualizacion') {
+					updatesPanel.style.display = 'block';
+					newsPanel.style.display = 'none';
+					if (messagesPanel) messagesPanel.style.display = 'none';
+					main.classList.remove('news-visible', 'messages-visible');
+					main.classList.add('updates-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+					try { updatesPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
+				} else if (this.id === 'nav-noticias') {
+					newsPanel.style.display = 'block';
+					updatesPanel.style.display = 'none';
+					if (messagesPanel) messagesPanel.style.display = 'none';
+					main.classList.remove('updates-visible', 'messages-visible');
+					main.classList.add('news-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+					try { newsPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
+				} else if (this.id === 'nav-personal') {
+					// Mostrar la vista principal (inicio) usando la misma lógica que inicio.html
+					updatesPanel.style.display = 'none';
+					newsPanel.style.display = 'none';
+					if (messagesPanel) messagesPanel.style.display = 'none';
+					main.classList.remove('updates-visible', 'news-visible', 'messages-visible', 'modules-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+					if (msgComposer) msgComposer.classList.remove('fixed');
+					try { if (main) main.scrollIntoView({behavior:'auto', block:'start'}); } catch(e) {}
+				} else if (this.id === 'nav-mensajes') {
+					if (messagesPanel) messagesPanel.style.display = 'block';
+					updatesPanel.style.display = 'none';
+					if (newsPanel) newsPanel.style.display = 'none';
+					main.classList.remove('updates-visible', 'news-visible');
+					main.classList.add('messages-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'block'; document.body.classList.add('messages-right-open'); }
+					if (msgComposer) msgComposer.classList.add('fixed');
+					try { messagesPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
+				} else if (this.id === 'nav-modulos') {
+					updatesPanel.style.display = 'none';
+					newsPanel.style.display = 'none';
+					if (messagesPanel) messagesPanel.style.display = 'none';
+					main.classList.remove('updates-visible','news-visible','messages-visible');
+					main.classList.add('modules-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+					if (msgComposer) msgComposer.classList.remove('fixed');
+					try { if (main) main.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+					if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
+				} else {
+					updatesPanel.style.display = 'none';
+					newsPanel.style.display = 'none';
+					if (messagesPanel) messagesPanel.style.display = 'none';
+					main.classList.remove('updates-visible','news-visible','messages-visible');
+					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+					if (msgComposer) msgComposer.classList.remove('fixed');
+				}
+			}
+		    });
+		  });
+		});
+		</script>
+	<script>
+	// Noticias feed: composer, persistence and likes
+	document.addEventListener('DOMContentLoaded', function(){
+	const composer = document.getElementById('news-composer-text');
+	const linkInput = document.getElementById('news-composer-link');
+	const preview = document.getElementById('news-composer-preview');
+	const imageInput = document.getElementById('news-composer-image');
+	let imageData = null;
+	let editingPostId = null;
+	let pendingDeleteId = null;
+	const postBtn = document.getElementById('news-post-btn');
+	const feed = document.getElementById('news-feed');
+	const STORAGE_KEY = 'pdm.news.posts.v1';
+	// Derivar usuario actual desde localStorage / userProfile / sesión, con fallback
+	const CURRENT_USER = (function(){
+		try {
+			const storedStr = localStorage.getItem('loggedInUser');
+			const stored = storedStr ? JSON.parse(storedStr) : null;
+			// posibles claves usadas por distintas páginas: 'username', 'userId', 'rol', etc.
+			const username = localStorage.getItem('username') || (stored && (stored.username || stored.employeeNumber || stored.email)) || null;
+			const userId = localStorage.getItem('userId') || (stored && (stored.id || stored.userId)) || username || null;
+			let profile = null;
+			try { profile = JSON.parse(localStorage.getItem('userProfile') || 'null'); } catch(_){ profile = null; }
+			const displayName = (profile && (profile.nombre_completo || profile.fullName || profile.fullname)) || (stored && (stored.nombre_completo || stored.name || stored.fullName)) || username || 'Invitado';
+			const initials = String(displayName || '').split(/\s+/).filter(Boolean).map(s=>s[0]).slice(0,2).join('').toUpperCase() || 'US';
+			return { id: String(userId || 'guest'), name: displayName, initials };
+		} catch (e) { return { id: 'guest', name: 'Invitado', initials: 'US' }; }
+	})();
+
+	// Server-backed posts cache
+	let POSTS_CACHE = [];
+
+	// Return current in-memory posts (populated by fetchPostsFromServer)
+	function loadPosts(){ return POSTS_CACHE; }
+
+	// Local stub kept for compatibility; updates in-memory cache
+	function savePosts(posts){ POSTS_CACHE = Array.isArray(posts) ? posts : []; return true; }
+
+	// Fetch posts from server and populate cache
+	async function fetchPostsFromServer(){
+		try {
+			const resp = await fetch('/api/publicaciones', { cache: 'no-store', credentials: 'include' });
+			if (!resp.ok) return [];
+			const j = await resp.json();
+			const rows = (j && j.publicaciones) ? j.publicaciones : (j && j.publicaciones === undefined && Array.isArray(j) ? j : []);
+				POSTS_CACHE = (rows||[]).map(r => ({
+				id: String(r.id),
+				author: r.usuario || 'PDM',
+				authorInitials: (r.usuario ? String(r.usuario).split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase() : 'PD'),
+				authorId: r.usuario || null,
+				content: r.texto || '',
+					ts: (r.created_at ? new Date(r.created_at).getTime() : (r.ts ? r.ts : Date.now())),
+					likes: (r.likes != null) ? Number(r.likes) : 0,
+				// If backend includes a per-user liked flag, honor it. Backward compatible.
+				liked: Boolean(r.liked || r.liked_by_current_user || r.liked_by_session || false),
+				embedUrl: null,
+				image: r.imagen_url || null
+			}));
+			return POSTS_CACHE;
+		} catch (e) {
+			console.error('Error fetching publicaciones from server', e);
+			return [];
+		}
+	}
+
+	  function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+	// Formatea timestamp a español humano: "15 de abril de 2026, 13:32"
+	function formatDateHuman(ts){
+		if(!ts) return '';
+		try{
+			const d = new Date(ts);
+			const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+			const day = d.getDate();
+			const month = months[d.getMonth()];
+			const year = d.getFullYear();
+			const hh = String(d.getHours()).padStart(2,'0');
+			const mm = String(d.getMinutes()).padStart(2,'0');
+			return `${day} de ${month} de ${year}, ${hh}:${mm}`;
+		}catch(e){ return new Date(ts).toLocaleString(); }
+	}
+
+		function renderPosts(){
+			const posts = loadPosts().slice().sort((a,b)=> (b.ts||0) - (a.ts||0));
+			feed.innerHTML = '';
+			posts.forEach(post => {
+				const div = document.createElement('div');
+				div.className = 'news-post';
+				div.dataset.postId = post.id;
+					const likedClass = post.liked ? 'active' : '';
+					const isOwn = (post.authorId && post.authorId === CURRENT_USER.id) || post.author === CURRENT_USER.name;
+					const optionsHtml = isOwn ? `
+						<div class="post-options" style="position:relative;display:inline-block">
+							<button class="post-options-btn" aria-haspopup="true" aria-expanded="false">⋯</button>
+							<div class="post-options-dropdown" aria-hidden="true">
+								<div class="post-option edit" data-post-id="${post.id}">Editar</div>
+								<div class="post-option delete" data-post-id="${post.id}">Eliminar</div>
+							</div>
+						</div>` : '';
+					const html = `
+					<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+						<div style="display:flex;gap:12px;align-items:center">
+							<div class="avatar" style="width:44px;height:44px;border-radius:30px;background:#6b7280;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center">${escapeHtml(post.authorInitials||'GJ')}</div>
+							<div>
+								<div style="font-weight:700">${escapeHtml(post.author||'Gerardo')}</div>
+								<div style="font-size:12px;color:var(--muted)">${formatDateHuman(post.ts)}</div>
+							</div>
+						</div>
+						<div class="post-actions">
+							${optionsHtml}
+							<button class="news-like ${likedClass}" data-post-id="${post.id}">${post.likes||0} ♥</button>
+						</div>
+					</div>
+					<div style="margin-top:10px;white-space:pre-wrap">${escapeHtml(post.content)}</div>
+				`;
+				div.innerHTML = html;
+				// If this post includes an image, append it
+				if (post.image) {
+					try {
+						const imgWrap = document.createElement('div');
+						imgWrap.style.marginTop = '10px';
+						const img = document.createElement('img');
+						img.src = post.image;
+						img.style.maxWidth = '100%';
+						img.style.borderRadius = '8px';
+						img.style.display = 'block';
+						img.style.objectFit = 'contain';
+						imgWrap.appendChild(img);
+						div.appendChild(imgWrap);
+					} catch(e){}
+				}
+				// If this post includes an embedUrl (Canva), append a responsive 16:9 iframe
+				// but avoid adding it if the same embed is already shown in modules (prevent duplicates)
+				(function(){
+					let postEmbed = post.embedUrl || null;
+					if (!postEmbed && post.content) postEmbed = getCanvaEmbedUrl(post.content) || null;
+					if (!postEmbed) return;
+					try {
+						const normalizedPostEmbed = getCanvaEmbedUrl(postEmbed) || String(postEmbed).trim();
+						if (window && window.latestCanvaEmbedUrl && window.latestCanvaEmbedUrl === normalizedPostEmbed) {
+							// skip duplicate embed (already shown in modules)
+							return;
+						}
+						const ew = document.createElement('div');
+						ew.className = 'embed-16-9';
+						const iframe = document.createElement('iframe');
+						iframe.loading = 'lazy';
+						iframe.src = normalizedPostEmbed;
+						iframe.setAttribute('allow','fullscreen');
+						iframe.setAttribute('referrerpolicy','no-referrer');
+						ew.appendChild(iframe);
+						div.appendChild(ew);
+					} catch(e){}
+				})();
+				feed.appendChild(div);
+			});
+		}
+
+			window.updateModulesEmbed = async function(){
+			try{
+				const container = document.getElementById('modules-embed');
+				if(!container) return;
+				container.innerHTML = '';
+				let embedUrl = null;
+
+				// Primero intentar cargar el último valor desde la BD
+				try{
+					const resp = await fetch('/api/canva', { cache: 'no-store' });
+					if (resp && resp.ok) {
+						const j = await resp.json();
+						const dbVal = j && j.url_canva ? String(j.url_canva).trim() : null;
+						if (dbVal) {
+							console.log('Importando canva desde BD:', dbVal);
+							// Normalizar si es necesario
+							const ext = getCanvaEmbedUrl(dbVal);
+							embedUrl = ext || dbVal;
+						}
+					}
+				} catch(err) {
+					console.error('Error al obtener canva desde BD:', err);
+				}
+
+				// Si no hay valor en BD, usar la lógica existente (posts locales)
+				if (!embedUrl) {
+					const posts = loadPosts().slice().sort((a,b)=>b.ts - a.ts);
+					for (let i=0;i<posts.length;i++){
+						const p = posts[i];
+						if (p && p.embedUrl) { embedUrl = p.embedUrl; break; }
+						// try to extract if user pasted iframe/html into the content
+						if (p && p.content) {
+							const ext = getCanvaEmbedUrl(p.content);
+							if (ext) { embedUrl = ext; break; }
+						}
+					}
+				}
+
+				// Store the normalized embed URL globally so other renderers can avoid duplicates
+				window.latestCanvaEmbedUrl = embedUrl ? (getCanvaEmbedUrl(embedUrl) || String(embedUrl).trim()) : null;
+
+				const ew = document.createElement('div');
+				ew.className = 'embed-16-9';
+				if (embedUrl) {
+					const normalized = getCanvaEmbedUrl(embedUrl) || String(embedUrl).trim();
+					// Remove other identical iframes across the page to avoid showing duplicates
+					try {
+						const frames = Array.from(document.querySelectorAll('iframe'));
+						for (const f of frames) {
+							try {
+								const srcAttr = f.getAttribute('src') || '';
+								const srcProp = f.src || '';
+								if (!srcAttr && !srcProp) continue;
+								const matches = (srcAttr === normalized) || (srcProp === normalized) || (srcProp.endsWith(normalized)) || (srcAttr.endsWith(normalized));
+								if (matches) {
+									const wrap = f.closest && f.closest('.embed-16-9');
+									if (wrap && wrap.parentElement) {
+										wrap.parentElement.removeChild(wrap);
+									} else if (f.parentElement) {
+									f.parentElement.removeChild(f);
+									}
+								}
+							} catch(_) {}
+						}
+					} catch(_) {}
+					const iframe = document.createElement('iframe');
+					iframe.loading = 'lazy';
+					iframe.src = normalized;
+					iframe.setAttribute('allow','fullscreen; encrypted-media; picture-in-picture');
+					iframe.setAttribute('allowfullscreen','');
+					ew.appendChild(iframe);
+				} else {
+					const ph = document.createElement('div');
+					ph.style.position = 'absolute';
+					ph.style.top = '0';
+					ph.style.left = '0';
+					ph.style.width = '100%';
+					ph.style.height = '100%';
+					ph.style.display = 'flex';
+					ph.style.alignItems = 'center';
+					ph.style.justifyContent = 'center';
+					ph.style.color = 'var(--muted)';
+					ph.style.fontWeight = '700';
+					ph.textContent = 'Sin contenido — publica un enlace de Canva en Noticias';
+					ew.appendChild(ph);
+				}
+				container.appendChild(ew);
+			}catch(e){}
+		}
+
+	  if (!composer || !postBtn || !feed) return;
+
+	// Helper to normalize Canva links and extract/embed iframe src
+	function getCanvaEmbedUrl(raw){
+		if(!raw) return null;
+		let s = String(raw).trim();
+		if(!s) return null;
+		// If the user pasted an iframe snippet, extract src
+		const ifr = s.match(/<iframe[^>]+src=["']([^"']+)["'][^>]*>/i);
+		if(ifr && ifr[1]) s = ifr[1];
+		if(s.indexOf('canva.com/design/') === -1) return null;
+		if(s.indexOf('embed') !== -1) return s;
+		return (s.indexOf('?') === -1) ? (s + '?embed') : (s + '&embed');
+	}
+
+
+	function updatePreview(){
+		if(!preview) return;
+		const embed = linkInput ? getCanvaEmbedUrl(linkInput.value||'') : null;
+		if(embed){
+			preview.innerHTML = '';
+			const wrapper = document.createElement('div');
+			wrapper.className = 'embed-16-9';
+			const iframe = document.createElement('iframe');
+			iframe.loading = 'lazy';
+			iframe.src = embed;
+			iframe.setAttribute('allow','fullscreen');
+			wrapper.appendChild(iframe);
+			preview.appendChild(wrapper);
+			return;
+		}
+		// If there's an attached image, show it
+		if(imageData){
+			preview.innerHTML = '';
+			const img = document.createElement('img');
+			img.src = imageData;
+			img.style.maxWidth = '100%';
+			img.style.borderRadius = '8px';
+			preview.appendChild(img);
+			return;
+		}
+		preview.innerHTML = '';
+	}
+
+
+	function updatePostBtnState(){
+		const hasText = composer && composer.value && composer.value.trim().length > 0;
+		const hasEmbed = linkInput && !!getCanvaEmbedUrl(linkInput.value||'');
+		const hasImage = !!imageData; // only true once FileReader has produced a data URL
+		postBtn.disabled = !(hasText || hasEmbed || hasImage);
+	}
+
+
+	composer.addEventListener('input', function(){ updatePostBtnState(); });
+	if (linkInput) linkInput.addEventListener('input', function(){ updatePreview(); updatePostBtnState(); });
+	if (imageInput){
+		imageInput.addEventListener('change', function(){
+			const f = imageInput.files && imageInput.files[0];
+			if(!f){ imageData = null; updatePreview(); updatePostBtnState(); return; }
+			// Max file size 10 MB
+			const MAX_BYTES = 10 * 1024 * 1024;
+			if (f.size > MAX_BYTES) {
+				try {
+					if (typeof window.showAlert === 'function') {
+						window.showAlert('La imagen excede el tamaño máximo de 10 MB. Elige un archivo más pequeño.');
+					} else {
+						alert('La imagen excede el tamaño máximo de 10 MB. Elige un archivo más pequeño.');
+					}
+				} catch (e) { /* ignore */ }
+				imageData = null;
+				imageInput.value = '';
+				updatePreview();
+				updatePostBtnState();
+				return;
+			}
+			const reader = new FileReader();
+			reader.onload = function(ev){ imageData = ev.target.result; updatePreview(); updatePostBtnState(); };
+			reader.readAsDataURL(f);
+		});
+	}
+
+	postBtn.addEventListener('click', function(){
+		const content = (composer.value||'').trim();
+		const embed = linkInput ? getCanvaEmbedUrl(linkInput.value||'') : null;
+		if (!content && !embed && !imageData) return;
+		const posts = loadPosts();
+			if (editingPostId) {
+					// Editing posts in DB is not supported by this endpoint; fallback to creating a new post
+					try { if (typeof window.showAlert === 'function') window.showAlert('Editar publicaciones no está disponible al usar el servidor. Se publicará una nueva entrada.'); else alert('Editar publicaciones no está disponible al usar el servidor. Se publicará una nueva entrada.'); } catch(e){}
+					editingPostId = null;
+					postBtn.textContent = 'Publicar';
+			}
+
+			// Create new publication on server
+			(async function(){
+				try {
+					const fd = new FormData();
+					fd.append('texto', content || '');
+					try { if (typeof CURRENT_USER !== 'undefined' && CURRENT_USER && CURRENT_USER.id) fd.append('usuario', CURRENT_USER.id); } catch(e){}
+					const file = imageInput && imageInput.files && imageInput.files[0] ? imageInput.files[0] : null;
+					if (file) fd.append('imagen', file);
+					const resp = await fetch('/api/publicaciones', { method: 'POST', credentials: 'include', body: fd });
+					const j = await resp.json();
+					if (!resp.ok || !j || !j.success) {
+						const msg = (j && j.error) ? j.error : 'Error al guardar la publicación en el servidor.';
+						try { if (typeof window.showAlert === 'function') window.showAlert(msg); else alert(msg); } catch(e){}
+						return;
+					}
+					// Refresh posts from server and render
+					await fetchPostsFromServer();
+					// Success: clear inputs and re-render
+					composer.value = '';
+					if (linkInput) linkInput.value = '';
+					if (imageInput) imageInput.value = '';
+					imageData = null;
+					if (preview) preview.innerHTML = '';
+					postBtn.disabled = true;
+					renderPosts();
+					if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
+				} catch (err) {
+					console.error('Error creating publication', err);
+					try { if (typeof window.showAlert === 'function') window.showAlert('Error al crear la publicación.'); else alert('Error al crear la publicación.'); } catch(e){}
+				}
+			})();
+	});
+
+	// Delegate likes — send to server to increment counter
+	feed.addEventListener('click', function(e){
+		const btn = e.target.closest('.news-like');
+		if (!btn) return;
+		const postId = btn.dataset.postId;
+		if (!postId) return;
+
+		(async function(){
+			try {
+				const resp = await fetch('/api/publicaciones/' + encodeURIComponent(postId) + '/like', { method: 'POST', credentials: 'include' });
+				const j = await resp.json().catch(()=>null);
+				if (!resp.ok || !j || !j.success) {
+					const msg = (j && j.error) ? j.error : 'No se pudo registrar el like en el servidor.';
+					try { if (typeof window.showAlert === 'function') window.showAlert(msg); else alert(msg); } catch(e){}
+					return;
+				}
+				// Update local cache with returned likes value
+				try {
+					const pub = j.publicacion || j;
+					const idStr = String(pub.id || postId);
+					const idx = POSTS_CACHE.findIndex(p => String(p.id) === idStr);
+					if (idx !== -1) {
+						POSTS_CACHE[idx].likes = (pub.likes != null) ? pub.likes : ((POSTS_CACHE[idx].likes||0) + 1);
+						POSTS_CACHE[idx].liked = true;
+					} else {
+						// If not in cache, refetch list
+						await fetchPostsFromServer();
+					}
+				} catch (e) {
+					console.warn('Error updating local likes cache', e);
+					await fetchPostsFromServer();
+				}
+				renderPosts();
+			} catch (err) {
+				console.error('Error al enviar like', err);
+			}
+		})();
+	});
+
+	  // Options menu: toggle, edit and delete (only for own posts)
+	  document.addEventListener('click', function(e){
+		// close any open dropdowns when clicking outside
+		if (!e.target.closest || !e.target.closest('.post-options')) {
+			document.querySelectorAll('.post-options-dropdown.open').forEach(d=>d.classList.remove('open'));
+		}
+	  });
+
+	  feed.addEventListener('click', function(e){
+		const optBtn = e.target.closest('.post-options-btn');
+		if (optBtn) {
+			e.stopPropagation();
+			const dropdown = optBtn.parentElement && optBtn.parentElement.querySelector('.post-options-dropdown');
+			if (!dropdown) return;
+			// close others
+			document.querySelectorAll('.post-options-dropdown.open').forEach(d=>{ if(d!==dropdown) d.classList.remove('open'); });
+			dropdown.classList.toggle('open');
+			return;
+		}
+
+		const opt = e.target.closest('.post-option');
+		if(!opt) return;
+		const pid = opt.dataset.postId;
+		if(opt.classList.contains('delete')){
+			// Open custom confirm modal instead of browser confirm
+			pendingDeleteId = pid;
+			const cm = document.getElementById('confirm-modal');
+			if (cm) {
+				const msg = cm.querySelector('.confirm-message');
+				if (msg) msg.textContent = '¿Eliminar esta publicación?';
+				cm.classList.add('open');
+				cm.setAttribute('aria-hidden','false');
+				document.body.style.overflow = 'hidden';
+				const ok = document.getElementById('confirm-ok-btn'); if(ok) ok.focus();
+			} else {
+				// fallback to native confirm
+				if(!confirm('¿Eliminar esta publicación?')) return;
+				const posts = loadPosts();
+				const idx = posts.findIndex(p=>p.id === pid);
+				if(idx !== -1){ posts.splice(idx,1); savePosts(posts); renderPosts(); if (typeof updateModulesEmbed === 'function') updateModulesEmbed(); }
+			}
+			return;
+		}
+		if(opt.classList.contains('edit')){
+			const posts = loadPosts();
+			const p = posts.find(x=>x.id === pid);
+			if(!p) return;
+			composer.value = p.content || '';
+			if (linkInput) linkInput.value = p.embedUrl || '';
+			imageData = p.image || null;
+			updatePreview();
+			editingPostId = pid;
+			postBtn.textContent = 'Guardar';
+			updatePostBtnState();
+			// close dropdowns
+			document.querySelectorAll('.post-options-dropdown.open').forEach(d=>d.classList.remove('open'));
+			try{ composer.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){}
+			return;
+		}
+	  });
+
+	// Confirm modal handlers (Aceptar/Cancelar)
+	const confirmModal = document.getElementById('confirm-modal');
+	const confirmOkBtn = document.getElementById('confirm-ok-btn');
+	const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
+	const confirmCloseBtn = document.getElementById('confirm-modal-close');
+	// Resolver usado por window.showConfirm
+	let confirmCompletionResolver = null;
+
+	function closeConfirmModal(){
+		if(confirmModal){
+			confirmModal.classList.remove('open');
+			confirmModal.setAttribute('aria-hidden','true');
+			document.body.style.overflow = '';
+			// restore original OK button text if we changed it
+			try {
+				if (confirmModal.dataset && confirmModal.dataset._okText && confirmOkBtn) {
+					confirmOkBtn.textContent = confirmModal.dataset._okText || '';
+					delete confirmModal.dataset._okText;
+				}
+			} catch(_){}
+		}
+		// If a generic confirm was awaiting resolution, resolve as false (cancel)
+		try {
+			if (confirmCompletionResolver) {
+				try { confirmCompletionResolver(false); } catch(_){}
+				confirmCompletionResolver = null;
+			}
+		} catch(_){}
+		pendingDeleteId = null;
+	}
+	if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', function(){ closeConfirmModal(); });
+	if (confirmCloseBtn) confirmCloseBtn.addEventListener('click', function(){ closeConfirmModal(); });
+	if (confirmOkBtn) confirmOkBtn.addEventListener('click', function(){
+		// If a generic confirm is awaiting, resolve true and close
+		if (confirmCompletionResolver) {
+			try { confirmCompletionResolver(true); } catch(_){}
+			confirmCompletionResolver = null;
+			closeConfirmModal();
+			return;
+		}
+		// Otherwise, handle pending deletion (existing behavior)
+		if(!pendingDeleteId){ closeConfirmModal(); return; }
+		const posts = loadPosts();
+		const idx = posts.findIndex(p=>p.id === pendingDeleteId);
+		if (idx !== -1) { posts.splice(idx,1); savePosts(posts); renderPosts(); if (typeof updateModulesEmbed === 'function') updateModulesEmbed(); }
+		closeConfirmModal();
+	});
+	if (confirmModal) confirmModal.addEventListener('click', function(e){ if(e.target === confirmModal) closeConfirmModal(); });
+	document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeConfirmModal(); });
+
+	// Reusable showConfirm API using the existing modal. Returns Promise<boolean>.
+	window.showConfirm = function showConfirm(message, title, options) {
+		options = options || {};
+		return new Promise((resolve) => {
+			try {
+				if (!confirmModal) { resolve(window.confirm(message)); return; }
+				const titleEl = confirmModal.querySelector('h3');
+				const msgEl = confirmModal.querySelector('.confirm-message');
+				if (titleEl) titleEl.textContent = title || 'Confirmar';
+				if (msgEl) msgEl.textContent = message || '';
+				// Preserve original OK text if provided
+				try {
+					if (confirmOkBtn) {
+						if (!confirmModal.dataset._okText) confirmModal.dataset._okText = confirmOkBtn.textContent || '';
+						if (options.okText) confirmOkBtn.textContent = options.okText;
+					}
+				} catch(_){}
+
+				confirmCompletionResolver = function(result) { try{ resolve(Boolean(result)); } catch(e){ resolve(Boolean(result)); } };
+				confirmModal.classList.add('open');
+				confirmModal.setAttribute('aria-hidden','false');
+				document.body.style.overflow = 'hidden';
+				setTimeout(()=>{ try{ if (confirmOkBtn) confirmOkBtn.focus(); }catch(_){} },50);
+			} catch (err) {
+				console.error('showConfirm error', err);
+				resolve(window.confirm(message));
+			}
+		});
+	};
+
+	// showAlert: show a UI-styled message modal (returns Promise resolved when closed)
+	window.showAlert = function showAlert(message, title, options) {
+		options = options || {};
+		return new Promise((resolve) => {
+			try {
+				let alertModal = document.getElementById('alert-modal');
+				if (!alertModal) {
+					alertModal = document.createElement('div');
+					alertModal.id = 'alert-modal';
+					alertModal.className = 'modal-overlay';
+					alertModal.setAttribute('aria-hidden','true');
+					alertModal.innerHTML = `
+					  <div class="modal-dialog" role="dialog" aria-modal="true" style="max-width:480px;">
+						<button class="modal-close" aria-label="Cerrar">✕</button>
+						<h3>${title ? title.replace(/</g,'&lt;') : (options.title || 'Aviso')}</h3>
+						<p class="alert-message" style="margin-top:8px;color:rgba(2,6,23,0.8)">${message ? message.replace(/</g,'&lt;') : ''}</p>
+						<div class="modal-actions" style="margin-top:14px">
+							<button id="alert-ok-btn" class="btn primary">${options.okText || 'Aceptar'}</button>
+						</div>
+					  </div>`;
+					document.body.appendChild(alertModal);
+				}
+				const okBtn = alertModal.querySelector('#alert-ok-btn');
+				const closeBtn = alertModal.querySelector('.modal-close');
+
+				function close() {
+					try { alertModal.classList.remove('open'); alertModal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; } catch(_){}
+					resolve();
+				}
+
+				if (okBtn) okBtn.addEventListener('click', close, { once: true });
+				if (closeBtn) closeBtn.addEventListener('click', close, { once: true });
+				alertModal.addEventListener('click', function(e){ if (e.target === alertModal) close(); });
+				// open
+				alertModal.classList.add('open');
+				alertModal.setAttribute('aria-hidden','false');
+				document.body.style.overflow = 'hidden';
+				setTimeout(()=>{ try{ if (okBtn) okBtn.focus(); }catch(_){} },50);
+			} catch (err) {
+				console.error('showAlert error', err);
+				try { alert(message); } catch(_){}
+				resolve();
+			}
+		});
+	};
+
+	// Seed a welcome post if empty
+	if (loadPosts().length === 0) {
+		savePosts([{ id: 'p' + Date.now(), author: 'PDM', authorInitials: 'PD', content: 'Bienvenido al feed de Noticias. Puedes publicar actualizaciones y dar like a las publicaciones.', ts: Date.now(), likes: 0, liked: false }]);
+	}
+	// Load posts from server and render
+	(async function(){
+		await fetchPostsFromServer();
+		renderPosts();
+		if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
+	})();
+	// If the page opened with the "Módulos" tab active, ensure the embed is visible
+	try {
+		var modNav = document.getElementById('nav-modulos');
+		var mainEl = document.querySelector('.main');
+		if (modNav && modNav.classList && modNav.classList.contains('active') && mainEl) {
+			mainEl.classList.add('modules-visible');
+			if (typeof window.updateModulesEmbed === 'function') window.updateModulesEmbed();
+		}
+	} catch(e) {}
+	});
+	</script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			const composer = document.getElementById('messages-composer-text');
+			const postBtn = document.getElementById('messages-post-btn');
+			const feed = document.getElementById('messages-feed');
+			const placeholder = document.getElementById('messages-placeholder');
+			const header = document.getElementById('messages-header');
+			const headerName = document.getElementById('messages-header-name');
+			const headerAvatar = document.getElementById('messages-header-avatar');
+			const headerSub = document.getElementById('messages-header-sub');
+		const STORAGE_KEY = 'pdm.messages.posts.v1';
+		const currentUser = { id: 'me', name: 'Gerardo', initials: 'GJ' };
+		let selectedUser = null;
+
+		function loadPosts(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; } }
+		function savePosts(posts){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(posts)); } catch(e){} }
+		function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+		// Attachment support for messages (file / gallery / camera)
+		const fileInput = document.getElementById('messages-composer-file');
+		const attachBtn = document.getElementById('messages-attach-btn');
+		const attachMenu = document.getElementById('messages-attach-menu');
+		let selectedAttachment = null; // { type: 'image'|'file', dataUrl, name, size, mime }
+		// Create composer preview container (insert before send button)
+		try {
+			const composerContainer = composer && composer.parentElement;
+			if (composerContainer) {
+				let previewEl = composerContainer.querySelector('#messages-composer-file-preview');
+				if (!previewEl) {
+					previewEl = document.createElement('div');
+					previewEl.id = 'messages-composer-file-preview';
+					previewEl.style.cssText = 'margin-top:8px;display:flex;gap:8px;align-items:center;';
+					composerContainer.insertBefore(previewEl, postBtn);
+				}
+			}
+		} catch (e) {}
+
+		function updatePostBtnState(){
+			if (!postBtn) return;
+			const hasText = composer && composer.value && composer.value.trim();
+			postBtn.disabled = !(hasText || selectedAttachment);
+		}
+
+		// Attach button: toggle menu or open file dialog
+		if (attachBtn) {
+			attachBtn.addEventListener('click', function(e){
+				e.stopPropagation();
+				if (attachMenu) {
+					attachMenu.style.display = (attachMenu.style.display === 'block') ? 'none' : 'block';
+				} else if (fileInput) {
+					fileInput.click();
+				}
+			});
+			// close menu on outside click
+			document.addEventListener('click', function(ev){ if (attachMenu && ev.target !== attachBtn && !attachMenu.contains(ev.target)) attachMenu.style.display = 'none'; });
+			const optFile = document.getElementById('attach-option-file');
+			const optGallery = document.getElementById('attach-option-gallery');
+			const optCamera = document.getElementById('attach-option-camera');
+			if (optFile) optFile.addEventListener('click', function(e){ e.stopPropagation(); if (fileInput){ fileInput.removeAttribute('accept'); fileInput.removeAttribute('capture'); fileInput.click(); } attachMenu.style.display='none'; });
+			if (optGallery) optGallery.addEventListener('click', function(e){ e.stopPropagation(); if (fileInput){ fileInput.setAttribute('accept','image/*'); fileInput.removeAttribute('capture'); fileInput.click(); } attachMenu.style.display='none'; });
+			if (optCamera) optCamera.addEventListener('click', function(e){ e.stopPropagation(); if (fileInput){ fileInput.setAttribute('accept','image/*'); fileInput.setAttribute('capture','environment'); fileInput.click(); } attachMenu.style.display='none'; });
+		}
+
+		if (fileInput) {
+			fileInput.addEventListener('change', async function(){
+				const file = this.files && this.files[0];
+				if (!file) return;
+				const isImage = file.type && file.type.indexOf('image') !== -1;
+				const maxSizeImage = 2 * 1024 * 1024; // 2MB
+				const maxSizeFile = 5 * 1024 * 1024; // 5MB
+				if (isImage && file.size > maxSizeImage) { alert('Imagen demasiado grande. Máx 2MB.'); fileInput.value = ''; return; }
+				if (!isImage && file.size > maxSizeFile) {
+					const proceed = (typeof window.showConfirm === 'function') ? await window.showConfirm('Archivo mayor a 5MB. ¿Continuar?', 'Archivo grande') : confirm('Archivo mayor a 5MB. ¿Continuar?');
+					if (!proceed) { fileInput.value = ''; return; }
+				}
+				const reader = new FileReader();
+				reader.onload = function(evt){
+					selectedAttachment = { type: isImage ? 'image' : 'file', dataUrl: evt.target.result, name: file.name, size: file.size, mime: file.type };
+					const previewEl = document.getElementById('messages-composer-file-preview');
+					if (previewEl) {
+						if (isImage) {
+							previewEl.innerHTML = '<div style="position:relative;display:inline-block"><img src="'+selectedAttachment.dataUrl+'" style="max-width:160px;max-height:120px;border-radius:8px;object-fit:cover;display:block" /><button type="button" id="messages-composer-remove-img" title="Eliminar" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:12px;padding:2px 6px;cursor:pointer">✕</button></div>';
+						} else {
+							previewEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:linear-gradient(180deg,#fff,#f6f8ff);border:1px solid rgba(15,23,42,0.04)"><div style="width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#eef2f7">📎</div><div style="flex:1"><div style="font-weight:700">'+escapeHtml(selectedAttachment.name)+'</div><div style="font-size:12px;color:var(--muted)">'+Math.round(selectedAttachment.size/1024)+' KB</div></div><button type="button" id="messages-composer-remove-img" title="Eliminar" style="background:transparent;border:none;color:var(--muted);cursor:pointer">✕</button></div>';
+						}
+						const removeBtn = document.getElementById('messages-composer-remove-img');
+						if (removeBtn) removeBtn.addEventListener('click', function(){ selectedAttachment = null; fileInput.value = ''; previewEl.innerHTML = ''; updatePostBtnState(); });
+					}
+					updatePostBtnState();
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+
+		if (composer) {
+			composer.addEventListener('input', updatePostBtnState);
+			composer.addEventListener('keydown', function(e){ if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); updatePostBtnState(); if (!postBtn.disabled) postBtn.click(); } });
+				// Handle paste from clipboard: if an image is pasted, preview it and enable send
+				composer.addEventListener('paste', function(e){
+					try {
+						const items = (e.clipboardData || (window.clipboardData && window.clipboardData.items));
+						if (!items) return;
+						for (let i = 0; i < items.length; i++) {
+							const it = items[i];
+							// When using DataTransferItemList, the items have type and getAsFile()
+							if (it.type && it.type.indexOf('image') !== -1) {
+								const file = it.getAsFile ? it.getAsFile() : null;
+								if (!file) continue;
+								e.preventDefault();
+								const maxSize = 2 * 1024 * 1024;
+								if (file.size > maxSize) { alert('Imagen demasiado grande. Máx 2MB.'); return; }
+								const reader = new FileReader();
+								reader.onload = function(evt){
+									selectedAttachment = { type: 'image', dataUrl: evt.target.result, name: file.name, size: file.size, mime: file.type };
+									const previewEl = document.getElementById('messages-composer-file-preview');
+									if (previewEl) {
+										previewEl.innerHTML = '<div style="position:relative;display:inline-block"><img src="' + selectedAttachment.dataUrl + '" style="max-width:160px;max-height:120px;border-radius:8px;object-fit:cover;display:block" /><button type="button" id="messages-composer-remove-img" title="Eliminar" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:12px;padding:2px 6px;cursor:pointer">✕</button></div>';
+										const removeBtn = document.getElementById('messages-composer-remove-img');
+										if (removeBtn) removeBtn.addEventListener('click', function(){ selectedAttachment = null; if (fileInput) fileInput.value = ''; previewEl.innerHTML = ''; updatePostBtnState(); });
+									} else {
+										const composerContainer = composer && composer.parentElement;
+										if (composerContainer) {
+											const newPreview = document.createElement('div');
+											newPreview.id = 'messages-composer-file-preview';
+											newPreview.style.cssText = 'margin-top:8px;display:flex;gap:8px;align-items:center;';
+											newPreview.innerHTML = '<div style="position:relative;display:inline-block"><img src="' + selectedAttachment.dataUrl + '" style="max-width:160px;max-height:120px;border-radius:8px;object-fit:cover;display:block" /><button type="button" id="messages-composer-remove-img" title="Eliminar" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:12px;padding:2px 6px;cursor:pointer">✕</button></div>';
+											composerContainer.insertBefore(newPreview, postBtn);
+											const removeBtn2 = document.getElementById('messages-composer-remove-img');
+											if (removeBtn2) removeBtn2.addEventListener('click', function(){ selectedAttachment = null; if (fileInput) fileInput.value = ''; newPreview.innerHTML = ''; updatePostBtnState(); });
+										}
+									}
+								updatePostBtnState();
+							};
+							reader.readAsDataURL(file);
+							break;
+						}
+						}
+					} catch (err) { console.error('paste image error', err); }
+				});
+		}
+
+		if (postBtn) {
+			postBtn.addEventListener('click', function(){
+				if (!selectedUser) { alert('Selecciona un usuario para mensajear'); return; }
+				const content = (composer.value||'').trim();
+				if (!content && !selectedAttachment) return;
+				const posts = loadPosts();
+				const newPost = { id: 'm'+Date.now(), authorId: currentUser.id, author: currentUser.name, authorInitials: currentUser.initials, to: selectedUser ? selectedUser.id : null, content: content, ts: Date.now(), attachment: selectedAttachment || null };
+				posts.push(newPost);
+				savePosts(posts);
+				composer.value = '';
+				if (fileInput) fileInput.value = '';
+				selectedAttachment = null;
+				const previewEl = document.getElementById('messages-composer-file-preview'); if (previewEl) previewEl.innerHTML = '';
+				updatePostBtnState();
+				renderPosts();
+			});
+		}
+
+			function renderPosts(){
+				if (!selectedUser) {
+					if (placeholder) placeholder.style.display = 'flex';
+					if (feed) feed.style.display = 'none';
+					if (composer) composer.disabled = true;
+					if (postBtn) postBtn.disabled = true;
+					if (header) { header.style.display = 'none'; if (headerName) headerName.textContent = ''; if (headerAvatar) headerAvatar.textContent = ''; if (headerSub) headerSub.textContent = ''; }
+					return;
+				}
+			if (placeholder) placeholder.style.display = 'none';
+			if (feed) feed.style.display = 'flex';
+			if (composer) composer.disabled = false;
+
+			const posts = loadPosts().slice().sort((a,b)=>b.ts - a.ts);
+			// show only conversation between current user and selectedUser
+			const conv = posts.filter(p => (p.to === selectedUser.id && p.authorId === currentUser.id) || (p.authorId === selectedUser.id && p.to === currentUser.id));
+			feed.innerHTML = '';
+			// Ensure messages are ordered ascending (oldest first, newest last)
+			conv.sort((a,b) => (a.ts||0) - (b.ts||0));
+
+			conv.forEach(post=>{
+				const isOutgoing = String(post.authorId) === String(currentUser.id);
+				const div = document.createElement('div');
+				div.className = 'news-post ' + (isOutgoing ? 'message-outgoing' : 'message-incoming');
+				div.dataset.postId = post.id;
+				// Render attachment (image or file) if present, then the message text
+				if (post.attachment) {
+					if (post.attachment.type === 'image' && post.attachment.dataUrl) {
+						const imgWrap = document.createElement('div');
+						imgWrap.style.marginBottom = '6px';
+						const img = document.createElement('img');
+						img.src = post.attachment.dataUrl;
+						img.style.maxWidth = '360px';
+						img.style.maxHeight = '360px';
+						img.style.borderRadius = '8px';
+						img.style.display = 'block';
+						img.style.objectFit = 'cover';
+						imgWrap.appendChild(img);
+						div.appendChild(imgWrap);
+					} else if (post.attachment.type === 'file' && post.attachment.dataUrl) {
+						const fileWrap = document.createElement('div');
+						fileWrap.style.marginBottom = '6px';
+						fileWrap.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:linear-gradient(180deg,#fff,#f6f8ff);border:1px solid rgba(15,23,42,0.04)"><div style="width:42px;height:42px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#eef2f7">📎</div><div style="flex:1"><div style="font-weight:700">'+escapeHtml(post.attachment.name)+'</div><div style="font-size:12px;color:var(--muted)">'+Math.round((post.attachment.size||0)/1024)+' KB</div></div><div><a href="'+post.attachment.dataUrl+'" download="'+escapeHtml(post.attachment.name)+'" style="color:var(--muted);text-decoration:none">Descargar</a></div></div>';
+						div.appendChild(fileWrap);
+					}
+				}
+				if (post.content) {
+					const txt = document.createElement('div');
+					txt.style.whiteSpace = 'pre-wrap';
+					txt.textContent = post.content;
+					div.appendChild(txt);
+				}
+				feed.appendChild(div);
+			});
+
+			// Auto-scroll to the bottom (newest messages)
+			try {
+				if (feed) {
+					feed.scrollTop = feed.scrollHeight;
+					const last = feed.lastElementChild;
+					if (last && typeof last.scrollIntoView === 'function') last.scrollIntoView({ block: 'end' });
+				}
+			} catch (e) { /* ignore scrolling errors */ }
+		}
+
+			function setSelectedUser(u){
+				selectedUser = u;
+				// highlight active user in right sidebar
+				document.querySelectorAll('#messages-user-list .user-item').forEach(el=> el.classList.toggle('active', el.dataset.userId === String(u.id)));
+				// update header
+				if (headerName) headerName.textContent = u.name || '';
+				if (headerAvatar) headerAvatar.textContent = u.initials || (u.name||'').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+				if (headerSub) headerSub.textContent = u.email || '';
+				if (header) header.style.display = 'block';
+				if (placeholder) placeholder.style.display = 'none';
+				if (feed) feed.style.display = 'flex';
+				if (composer) { composer.disabled = false; composer.placeholder = ''; composer.focus(); }
+				if (postBtn) updatePostBtnState();
+				// Ocultar el icono de adjuntar pero mantener su espacio para no mover el input
+				try {
+					if (typeof attachBtn !== 'undefined' && attachBtn) {
+						if (selectedUser) {
+							if (!attachBtn.dataset.origWidth) attachBtn.dataset.origWidth = attachBtn.offsetWidth;
+							attachBtn.style.width = attachBtn.dataset.origWidth + 'px';
+							attachBtn.style.visibility = 'hidden';
+						} else {
+							attachBtn.style.visibility = 'visible';
+							if (attachBtn.dataset.origWidth) { attachBtn.style.width = ''; delete attachBtn.dataset.origWidth; }
+						}
+					}
+				} catch(e) {}
+				renderPosts();
+			}
+		window.selectMessageUser = setSelectedUser;
+
+
+
+		// (likes removed for messages — messages are plain text bubbles)
+
+		// Seed a welcome post (not tied to a user) if empty — it will be hidden until a user is selected
+		if (loadPosts().length === 0) {
+			savePosts([{ id: 'm' + Date.now(), author: 'PDM', authorInitials: 'PD', content: 'Bienvenido a Mensajes. Usa este espacio para comunicaciones privadas o internas.', ts: Date.now(), likes: 0, liked: false }]);
+		}
+		renderPosts();
+	});
+
+
+// Populate users list for the right sidebar
+document.addEventListener('DOMContentLoaded', function(){
+	function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+	const container = document.getElementById('messages-user-list');
+	if (!container) return;
+	function renderUsers(users){
+		container.innerHTML = '';
+		users.forEach(u=>{
+			const div = document.createElement('div');
+			div.className = 'user-item';
+			div.dataset.userId = u.id;
+			const initials = (u.initials) ? u.initials : (u.name||'').split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+			const bg = u.color || '#6b7280';
+			let avatarHtml = '';
+			if (u.foto_url) {
+				// Mostrar solo la imagen cuando exista foto_url. No mostrar iniciales encima.
+				avatarHtml = `<div class="avatar" style="width:36px;height:36px;border-radius:30px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:${bg};color:#fff;font-weight:700;">` +
+					`<img src="${escapeHtml(u.foto_url)}" alt="${escapeHtml(u.name)}" style="width:36px;height:36px;object-fit:cover;display:block;border:0" onerror="this.style.display='none';">` +
+					`</div>`;
+			} else {
+				avatarHtml = `<div class="avatar" style="width:36px;height:36px;border-radius:30px;display:flex;align-items:center;justify-content:center;background:${bg};color:#fff;font-weight:700">${escapeHtml(initials)}</div>`;
+			}
+			div.innerHTML = avatarHtml + `<div style="flex:1"><div style="font-weight:700">${escapeHtml(u.name)}</div></div>`;
+			div.addEventListener('click', function(){ if (window.selectMessageUser) window.selectMessageUser(u); });
+			container.appendChild(div);
+		});
+	}
+
+		// Search input filtering for users list
+		(function(){
+			const search = document.getElementById('messages-user-search');
+			if (!search) return;
+			search.addEventListener('input', function(){
+				const q = (this.value || '').trim().toLowerCase();
+				container.querySelectorAll('.user-item').forEach(it=>{
+					const text = (it.textContent||'').toLowerCase();
+					it.style.display = q ? (text.indexOf(q) === -1 ? 'none' : '') : '';
+				});
+			});
+		})();
+
+	function fetchUsers(){
+		// Obtener usuarios reales desde la API local (/api/usuarios)
+		// Si falla, cae al fallback ya existente.
+		fetch('/api/usuarios').then(r=>r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status))).then(data=>{
+			if (Array.isArray(data) && data.length) {
+				// Filtrar usuarios inactivos y normalizar campos devueltos por el servidor
+				const users = data
+					.filter(u => (typeof u.activo === 'undefined') ? true : (u.activo === true))
+					.map((u,i)=>({
+						id: u.id || ('u'+i),
+						name: u.nombre_completo || u.name || u.username || u.full_name || 'Usuario',
+						initials: ((u.nombre_completo || u.name || u.username || 'U').toString().split(' ').map(x=>x[0]).slice(0,2).join('')).toUpperCase(),
+						email: u.username || u.email || '',
+						foto_url: u.foto_url || null
+					}));
+				renderUsers(users);
+			} else throw new Error('empty');
+		}).catch(err=>{
+			const fallback = [
+				{id:'u1',name:'Gerardo',initials:'GJ',email:'gerardo@pdmmetal.com'},
+				{id:'u2',name:'María López',initials:'ML',email:'maria.lopez@pdmmetal.com'},
+				{id:'u3',name:'Carlos Ruiz',initials:'CR',email:'carlos.ruiz@pdmmetal.com'},
+				{id:'u4',name:'Ana Pérez',initials:'AP',email:'ana.perez@pdmmetal.com'},
+				{id:'u5',name:'Luis Gómez',initials:'LG',email:'luis.gomez@pdmmetal.com'}
+			];
+			renderUsers(fallback);
+		});
+	}
+	fetchUsers();
+});
+</script>
+
+<!-- Composer positioning: keep messages composer fixed to viewport bottom and aligned with feed -->
+<script>
+(function(){
+	function debounce(fn, wait){ let t; return function(){ const args=arguments; clearTimeout(t); t=setTimeout(()=>fn.apply(null,args), wait); }; }
+
+	function updateComposerPosition(){
+		try{
+			const messagesPanel = document.getElementById('messages-panel');
+			const feed = document.getElementById('messages-feed');
+			const composer = document.querySelector('#messages-panel .news-composer');
+			const main = document.querySelector('.main');
+			if(!messagesPanel || !feed || !composer) return;
+
+			const panelVisible = window.getComputedStyle(messagesPanel).display !== 'none' && main && main.classList.contains('messages-visible');
+			if(panelVisible){
+					// Decide which container to align to: prefer the visible feed, fallback to the messages panel
+					const feedStyle = window.getComputedStyle(feed || document.body);
+					const feedRect = feed.getBoundingClientRect();
+					const useFeed = (feedStyle.display !== 'none') && (feedRect.width > 48);
+					const containerRect = useFeed ? feedRect : messagesPanel.getBoundingClientRect();
+
+					const isMobile = window.matchMedia('(max-width:900px)').matches;
+					if (isMobile) {
+						// On small screens, keep composer inset from viewport sides
+						const margin = 16;
+						composer.style.left = margin + 'px';
+						composer.style.right = margin + 'px';
+						composer.style.width = 'auto';
+					} else {
+						// Align with the feed or messages panel on desktop
+						composer.style.left = Math.max(8, containerRect.left) + 'px';
+						composer.style.width = Math.max(280, Math.min(containerRect.width, window.innerWidth - 40)) + 'px';
+						composer.style.right = 'auto';
+					}
+
+					// choose bottom offset
+					const bottomOffset = isMobile ? 24 : 18;
+					composer.style.bottom = bottomOffset + 'px';
+					composer.style.position = 'fixed';
+
+					// set CSS var so feed padding-bottom matches actual height
+					requestAnimationFrame(()=>{
+						const h = composer.offsetHeight || 0;
+						document.documentElement.style.setProperty('--composer-height', (h) + 'px');
+					});
+			} else {
+				// restore
+				composer.style.position = '';
+				composer.style.left = '';
+				composer.style.width = '';
+				composer.style.right = '';
+				composer.style.bottom = '';
+				document.documentElement.style.removeProperty('--composer-height');
+			}
+		}catch(e){ console.error('composer position error', e); }
+	}
+
+	const debouncedUpdate = debounce(updateComposerPosition, 60);
+	window.addEventListener('resize', debouncedUpdate);
+	window.addEventListener('orientationchange', debouncedUpdate);
+	window.addEventListener('scroll', updateComposerPosition, true);
+	document.addEventListener('click', function(){ setTimeout(updateComposerPosition, 50); });
+
+	// observe main class changes (messages-visible) and feed size changes
+	const mainEl = document.querySelector('.main');
+	if(mainEl){
+		new MutationObserver(debouncedUpdate).observe(mainEl, { attributes: true, attributeFilter: ['class'] });
+	}
+	const feedEl = document.getElementById('messages-feed');
+	if(window.ResizeObserver && feedEl){
+		new ResizeObserver(debouncedUpdate).observe(feedEl);
+	}
+
+	// initial call
+	document.addEventListener('DOMContentLoaded', function(){ setTimeout(updateComposerPosition, 120); });
+	// also run shortly on load
+	setTimeout(updateComposerPosition, 300);
+})();
+</script>
+</script>
+<script>
+	(function () {
+		function _escapeHtml(s) { return String(s === null || s === undefined ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+		async function populateUserProfile() {
+			try {
+				const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('username');
+				let obj = null;
+				if (!raw) obj = null;
+				else {
+					try { obj = typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (e) { obj = { username: raw }; }
+				}
+
+				const name = (obj && (obj.nombre_completo || obj.name || obj.fullname || obj.username)) || localStorage.getItem('username') || 'Mi cuenta';
+				const usernameCandidate = (obj && (obj.username || obj.user)) || localStorage.getItem('username') || (obj && obj.email ? String(obj.email).split('@')[0] : null) || null;
+				let foto = obj && (obj.foto_url || obj.foto || obj.photo_url || obj.photo || obj.avatar_url || obj.avatar) ? (obj.foto_url || obj.foto || obj.photo_url || obj.photo || obj.avatar_url || obj.avatar) : null;
+
+				try { window.currentUserId = obj && (obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) ? String(obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) : null; } catch(_) { window.currentUserId = null; }
+				try { window.currentUsername = usernameCandidate ? String(usernameCandidate) : null; } catch(_) { window.currentUsername = null; }
+
+				const profileAvatar = document.getElementById('userProfileAvatar');
+				const profileName = document.getElementById('userProfileName');
+				const profileEmail = document.getElementById('userProfileEmail');
+				const generalAvatar = document.getElementById('userGeneralAvatar');
+				const generalName = document.getElementById('userGeneralName');
+				const generalRole = document.getElementById('userGeneralRole');
+				const joinedDateEl = document.getElementById('user-joined-date');
+				const yearsEl = document.getElementById('user-years-service');
+
+				function setAvatar(el, src, displayName) {
+					if (!el) return;
+					if (src) {
+						el.innerHTML = '<img src="' + _escapeHtml(src) + '" alt="' + _escapeHtml(displayName || '') + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+						el.style.background = '';
+					} else {
+						const initials = (displayName || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+						el.textContent = initials;
+						el.style.background = '#6b7280';
+					}
+				}
+
+				// Initial render from localStorage object
+				if (profileName) profileName.textContent = name;
+				if (generalName) generalName.textContent = name;
+				if (profileEmail) profileEmail.textContent = usernameCandidate ? ('@' + usernameCandidate) : (obj && obj.email ? obj.email : '');
+				setAvatar(profileAvatar, foto, name);
+				setAvatar(generalAvatar, foto, name);
+
+				// candidate employee id fields
+				let empleadoId = null;
+				const candidateFields = ['empleado_id','idEmpleado','id_empleado','numero_empleado','numeroEmpleado','employeeNumber','employee_id','id'];
+				for (const f of candidateFields) {
+					if (obj && Object.prototype.hasOwnProperty.call(obj, f) && obj[f]) { empleadoId = String(obj[f]); break; }
+				}
+
+				function isNumericEmployeeId(value) {
+					return /^\d+$/.test(String(value || '').trim());
+				}
+
+				async function resolveEmployeeNumberFromUsername(username) {
+					const cleanUsername = String(username || '').trim();
+					if (!cleanUsername) return '';
+					try {
+						const response = await fetch(`/api/usuarios/numero-empleado/${encodeURIComponent(cleanUsername)}`, { cache: 'no-store' });
+						if (!response.ok) return '';
+						const data = await response.json();
+						const numeroEmpleado = String(data?.numero_empleado || '').trim();
+						return isNumericEmployeeId(numeroEmpleado) ? numeroEmpleado : '';
+					} catch (error) { console.warn('resolveEmployeeNumberFromUsername error', error); return ''; }
+				}
+
+				async function fetchEmployeeById(employeeId) {
+					try {
+						const response = await fetch(`/api/empleados/${encodeURIComponent(employeeId)}`, { cache: 'no-store' });
+						if (!response.ok) return null;
+						const data = await response.json();
+						return data && typeof data === 'object' ? data : null;
+					} catch (error) { console.warn('fetchEmployeeById error', error); return null; }
+				}
+
+				async function fetchEmployeeFromMe(token) {
+					try {
+						const headers = { 'Content-Type': 'application/json' };
+						if (token) headers['Authorization'] = `Bearer ${token}`;
+						const response = await fetch('/api/employees/me', { headers });
+						if (!response.ok) return null;
+						const data = await response.json();
+						return data && data.success && data.employee ? data.employee : null;
+					} catch (error) { console.warn('fetchEmployeeFromMe error', error); return null; }
+				}
+
+				// Try to get employee record (token -> by id -> by username -> by name)
+				let employee = null;
+				const token = localStorage.getItem('sessionToken') || localStorage.getItem('authToken') || null;
+				if (token) {
+					employee = await fetchEmployeeFromMe(token);
+				}
+
+				if (!employee) {
+					if (empleadoId && isNumericEmployeeId(empleadoId)) {
+						employee = await fetchEmployeeById(empleadoId);
+					} else if (usernameCandidate) {
+						const resolved = await resolveEmployeeNumberFromUsername(usernameCandidate);
+						if (resolved) employee = await fetchEmployeeById(resolved);
+					}
+				}
+
+				if (!employee) {
+					try {
+						const resp = await fetch('/api/empleados?nombre=' + encodeURIComponent(name), { cache: 'no-store' });
+						if (resp && resp.ok) {
+							const emp = await resp.json();
+							if (emp && typeof emp === 'object') employee = emp;
+						}
+					} catch (e) { /* ignore */ }
+				}
+
+				if (employee) {
+					// prefer foto_url
+					const empPhoto = employee.foto_url || employee.photo || employee.photo_url || employee.avatar || null;
+					if (empPhoto) {
+						foto = empPhoto;
+						setAvatar(profileAvatar, foto, employee.nombre_completo || name);
+						setAvatar(generalAvatar, foto, employee.nombre_completo || name);
+					}
+					if (generalRole && (employee.puesto || employee.position || employee.cargo)) {
+						generalRole.textContent = employee.puesto || employee.position || employee.cargo;
+					}
+					if (employee.fecha_ingreso) {
+						try {
+							const d = new Date(employee.fecha_ingreso);
+							if (!isNaN(d.getTime())) {
+								const dd = String(d.getDate()).padStart(2,'0');
+								const mm = String(d.getMonth()+1).padStart(2,'0');
+								const yyyy = d.getFullYear();
+								if (joinedDateEl) joinedDateEl.textContent = dd + '/' + mm + '/' + yyyy;
+
+								const now = new Date();
+								let years = now.getFullYear() - d.getFullYear();
+								const mDiff = now.getMonth() - d.getMonth();
+								if (mDiff < 0 || (mDiff === 0 && now.getDate() < d.getDate())) years--;
+								if (years < 0) years = 0;
+								if (yearsEl) yearsEl.textContent = years + (years === 1 ? ' año' : ' años');
+							}
+						} catch (e) { console.warn('parse fecha_ingreso', e); }
+					}
+
+					// Persist a lightweight userProfile for other pages to consume
+					try {
+						const storedProfile = {
+							...employee,
+							fullName: employee.nombre_completo || name,
+							photo: empPhoto || ''
+						};
+						localStorage.setItem('userProfile', JSON.stringify(storedProfile));
+					} catch (e) { console.warn('could not persist userProfile', e); }
+				}
+
+			} catch (err) { console.warn('populateUserProfile error', err); }
+		}
+		// expose for other scripts (modal open) and run on load
+		try { window.populateUserProfile = populateUserProfile; } catch(e) { /* ignore */ }
+		if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', populateUserProfile); else populateUserProfile();
+	})();
+</script>
+</body>
+</html>

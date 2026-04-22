@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Estadisticas de IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/detalles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!-- <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+<!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button active" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button" data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html'
+  };
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <div class="main-content">
+    <div class="stats-container">
+      <h2 class="stats-title">Estadísticas de Tickets</h2>
+      <div class="year-slider">
+        <button class="carousel-nav prev" id="prevYear">❮</button>
+        <div class="year-carousel" id="yearCarousel">
+        </div>
+        <button class="carousel-nav next" id="nextYear">❯</button>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; justify-content:center; margin:12px 0 4px 0; flex-wrap:wrap;">
+        <label for="reportMonth" style="font-size:14px; opacity:.9;">Mes del informe:</label>
+        <select id="reportMonth" style="background:#111; color:#fff; border:1px solid var(--border-color); border-radius:8px; padding:8px 10px;">
+          <option value="0">Enero</option>
+          <option value="1">Febrero</option>
+          <option value="2">Marzo</option>
+          <option value="3">Abril</option>
+          <option value="4">Mayo</option>
+          <option value="5">Junio</option>
+          <option value="6">Julio</option>
+          <option value="7">Agosto</option>
+          <option value="8">Septiembre</option>
+          <option value="9">Octubre</option>
+          <option value="10">Noviembre</option>
+          <option value="11">Diciembre</option>
+        </select>
+        <button id="downloadMonthlyReportBtn" style="background:#2e7d32; color:#fff; border:none; border-radius:999px; padding:10px 16px; cursor:pointer;">
+          Descargar informe PDF
+        </button>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-section">
+          <h2>Tickets Terminados por Mes</h2>
+          <div class="chart-container">
+            <canvas id="ticketsChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-section">
+          <h2>Tickets por Departamento</h2>
+          <div class="chart-container">
+            <canvas id="departmentsChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="rankings-container">
+        <div class="ranking-section">
+          <h2>Usuarios con más Tickets</h2>
+          <div id="userRanking">
+            <!-- Contenido del ranking de usuarios -->
+          </div>
+        </div>
+        <div class="ranking-section">
+          <h2>Tiempos de Resolución por Urgencia</h2>
+          <div id="urgencyTimes">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar los tickets del usuario -->
+  <div id="userTicketsModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; color:#000; border-radius:10px; max-width:600px; width:90%; max-height:80vh; overflow:auto; padding:30px; position:relative;">
+      <button id="closeUserTicketsModal" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+      <h2 id="modalUserName" style="margin-top:0;"></h2>
+      <ul id="modalUserTickets" style="list-style:none; padding:0;"></ul>
+    </div>
+  </div>
+
+  <!-- Modal para mostrar los tickets por urgencia -->
+  <div id="urgencyTicketsModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; color:#000; border-radius:10px; max-width:800px; width:90%; max-height:80vh; overflow:auto; padding:30px; position:relative;">
+      <button id="closeUrgencyTicketsModal" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+      <h2 id="modalUrgencyTitle" style="margin-top:0;"></h2>
+      <div id="modalUrgencyStats" style="margin-bottom:20px; padding:15px; background:#f5f5f5; border-radius:8px;"></div>
+      <ul id="modalUrgencyTickets" style="list-style:none; padding:0;"></ul>
+    </div>
+  </div>
+
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) 
+          {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) 
+        {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) 
+          {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    let ticketsChart = null;
+    let departmentsChart = null;
+    let currentDeptChartType = 'bar';
+    let currentTicketsChartType = 'bar';
+
+    function initThemeSwitch() 
+    {
+      const themeSwitch = document.getElementById('themeSwitch');
+      const themeLabel = document.querySelector('.theme-switch-label');
+
+      function updateChartsColors() 
+      {
+        const textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000';
+        if (ticketsChart) 
+        {
+          if (ticketsChart.options.scales?.x) ticketsChart.options.scales.x.ticks.color = textColor;
+          if (ticketsChart.options.scales?.y) ticketsChart.options.scales.y.ticks.color = textColor;
+          ticketsChart.options.plugins.legend.labels.color = textColor;
+          ticketsChart.update();
+        }
+        if (departmentsChart) 
+        {
+          if (departmentsChart.options.scales?.x) departmentsChart.options.scales.x.ticks.color = textColor;
+          if (departmentsChart.options.scales?.y) departmentsChart.options.scales.y.ticks.color = textColor;
+          departmentsChart.options.plugins.legend.labels.color = textColor;
+          departmentsChart.update();
+        }
+      }
+
+      if (themeSwitch) 
+      {
+        themeSwitch.addEventListener('change', function() 
+        {
+          if (this.checked) 
+          {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+          } else 
+          {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+          }
+          updateChartsColors();
+        });
+      }
+    }
+
+    function generateYearButtons() {
+      const yearCarousel = document.getElementById('yearCarousel');
+      const firstYear = 2025;
+      const lastYear = 2040;
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let y = firstYear; y <= lastYear; y++) years.push(y);
+      yearCarousel.innerHTML = years.map(year => `
+        <button class="year-button" data-year="${year}">
+          ${year}
+        </button>
+      `).join('');
+
+      // Evento click a los botones
+      yearCarousel.querySelectorAll('.year-button').forEach(button => {
+        button.addEventListener('click', function() {
+          yearCarousel.querySelectorAll('.year-button').forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          loadTicketStats(this.dataset.year);
+          loadDepartmentStats(this.dataset.year);
+          loadUrgencyTimes(this.dataset.year);
+        });
+      });
+
+      // Activar el botón del año actual por defecto
+      const defaultYearButton = yearCarousel.querySelector(`[data-year="${currentYear}"]`);
+      if (defaultYearButton) 
+      {
+        defaultYearButton.classList.add('active');
+      }
+
+      const prevButton = document.getElementById('prevYear');
+      const nextButton = document.getElementById('nextYear');
+      prevButton.addEventListener('click', () => {
+        yearCarousel.scrollBy({ left: -200, behavior: 'smooth' });
+      });
+      nextButton.addEventListener('click', () => {
+        yearCarousel.scrollBy({ left: 200, behavior: 'smooth' });
+      });
+
+      loadTicketStats(currentYear);
+      loadDepartmentStats(currentYear);
+      loadUrgencyTimes(currentYear);
+    }
+
+    window.addEventListener('load', function() {
+      initThemeSwitch();
+      generateYearButtons();
+      currentTicketsChartType = 'bar';
+      currentDeptChartType = 'bar';
+      const mSel = document.getElementById('reportMonth');
+      if (mSel) mSel.value = String(new Date().getMonth());
+    });
+
+    async function loadTicketStats(selectedYear) 
+    {
+      const response = await fetch('/api/tickets');
+      if (!response.ok) return;
+      const tickets = (await response.json())
+        .filter(ticket => ticket.urgency === 'completed')
+        .filter(ticket => new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear));
+      const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      
+      const resolvedTickets = new Array(12).fill(0);
+      
+      tickets.forEach(ticket => {
+        const date = new Date(ticket.timestamp);
+        const month = date.getMonth();
+        resolvedTickets[month]++;
+      });
+
+      if (ticketsChart) 
+      {
+        ticketsChart.destroy();
+      }
+
+      const ctx = document.getElementById('ticketsChart').getContext('2d');
+      ticketsChart = new Chart(ctx, {
+        type: currentTicketsChartType,
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Tickets Terminados',
+            data: resolvedTickets,
+            backgroundColor: currentTicketsChartType === 'bar' ? '#43a047' : 'rgba(67, 160, 71, 0.2)', // Verde
+            borderColor: '#43a047',
+            borderWidth: 1,
+            pointBackgroundColor: 'rgba(67, 160, 71, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(67, 160, 71, 1)'
+          }]
+        },
+        options: currentTicketsChartType === 'bar'
+          ? {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1,
+                    color: '#fff' // Cambia el color de los ticks a blanco
+                  },
+                  grid: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                  }
+                },
+                x: {
+                  ticks: {
+                    color: '#fff' // Cambia el color de los ticks a blanco
+                  },
+                  grid: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: '#fff' // Cambia el color de la leyenda a blanco
+                  }
+                }
+              }
+            }
+          : {
+              responsive: true,
+              plugins: {
+                legend: {
+                  labels: {
+                    color: '#fff' // Cambia el color de la leyenda a blanco
+                  }
+                }
+              },
+              scales: {
+                r: {
+                  angleLines: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color') },
+                  grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color') },
+                  pointLabels: { color: '#fff' }, // Cambia el color de las etiquetas radiales a blanco
+                  ticks: { display: false }
+                }
+              }
+            }
+      });
+
+      const userCounts = {};
+      tickets.forEach(ticket => {
+        const user = ticket.name || 'Desconocido';
+        userCounts[user] = (userCounts[user] || 0) + 1;
+      });
+      const sortedUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+      const rankingDiv = document.getElementById('userRanking');
+      if (rankingDiv) 
+      {
+        rankingDiv.innerHTML = sortedUsers.length === 0 ? 
+          '<div style="text-align:center;color:#888;">No hay tickets terminados.</div>' :
+          '<ul class="users-list">' +
+            sortedUsers.map(([user, count], idx) => `
+              <li class="user-item" data-username="${user}" style="cursor:pointer;">
+                <div class="user-info">
+                  <span class="user-rank">#${idx+1}</span>
+                  <div class="user-details">
+                    <span class="user-name">${user}</span>
+                    <span class="user-department">${tickets.find(t => t.name === user)?.department || 'Departamento no especificado'}</span>
+                  </div>
+                </div>
+                <span class="ticket-count">${count} tickets</span>
+              </li>
+            `).join('') +
+          '</ul>';
+      }
+    }
+
+    async function loadUrgencyTimes(selectedYear) {
+      const response = await fetch('/api/tickets');
+      if (!response.ok) return;
+      
+      const allTickets = await response.json();
+      
+      const tickets = allTickets
+        .filter(ticket => ticket.urgency === 'completed' && ticket.time_end && ticket.last_urgency)
+        .filter(ticket => new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear))
+        .filter(ticket => {
+          const startTime = new Date(ticket.timestamp);
+          const endTime = new Date(ticket.time_end);
+          return endTime > startTime && !isNaN(endTime.getTime()) && !isNaN(startTime.getTime());
+        });
+
+      const urgencyData = {'Crítico': { tickets: [], totalTime: 0 }, 'Alto': { tickets: [], totalTime: 0 }, 'Medio': { tickets: [], totalTime: 0 }, 'Bajo': { tickets: [], totalTime: 0 }};
+
+      // Mapeo de valores de urgencia de inglés a español
+      const urgencyMapping = {'critical': 'Crítico', 'high': 'Alto', 'medium': 'Medio', 'low': 'Bajo'};
+
+      tickets.forEach(ticket => {
+        const startTime = new Date(ticket.timestamp);
+        const endTime = new Date(ticket.time_end);
+        const resolutionTime = (endTime - startTime) / (1000 * 60 * 60); // en horas
+        
+        const urgency = urgencyMapping[ticket.last_urgency] || ticket.last_urgency;
+        
+        if (urgencyData[urgency]) 
+        {
+          urgencyData[urgency].tickets.push(resolutionTime);
+          urgencyData[urgency].totalTime += resolutionTime;
+        }
+      });
+
+      const urgencyStats = {};
+      let maxAverage = 0;
+
+      Object.keys(urgencyData).forEach(urgency => {
+        const tickets = urgencyData[urgency].tickets;
+        if (tickets.length > 0) {
+          const average = urgencyData[urgency].totalTime / tickets.length;
+          urgencyStats[urgency] = {
+            count: tickets.length,
+            average: average
+          };
+          if (average > maxAverage) 
+          {
+            maxAverage = average;
+          }
+        } else 
+        {
+          urgencyStats[urgency] = 
+          {
+            count: 0,
+            average: 0
+          }
+        }
+      });
+
+      // Mostrar en el DOM
+      const urgencyTimesDiv = document.getElementById('urgencyTimes');
+      if (urgencyTimesDiv) 
+      {
+        urgencyTimesDiv.innerHTML = Object.keys(urgencyStats).map(urgency => {
+          const stats = urgencyStats[urgency];
+          const percentage = maxAverage > 0 ? (stats.average / maxAverage) * 100 : 0;
+          
+          let urgencyClass = '';
+          switch(urgency) 
+          {
+            case 'Crítico': urgencyClass = 'critical'; break;
+            case 'Alto': urgencyClass = 'high'; break;
+            case 'Medio': urgencyClass = 'medium'; break;
+            case 'Bajo': urgencyClass = 'low'; break;
+          }
+
+          // Mostrar información diferente según la cantidad de tickets
+          let timeDisplay = '';
+          let infoText = '';
+          
+          if (stats.count === 0) 
+          {
+            timeDisplay = 'Sin datos';
+            infoText = '';
+          } else if (stats.count === 1) 
+          {
+            timeDisplay = `${stats.average.toFixed(1)} horas`;
+            infoText = 'Tiempo de resolución (1 ticket)';
+          } else 
+          {
+            timeDisplay = `${stats.average.toFixed(1)} horas promedio`;
+            infoText = `Basado en ${stats.count} tickets`;
+          }
+
+          return `
+            <div class="urgency-time-item" data-urgency="${urgency}" style="cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+              <div class="urgency-header">
+                <span class="urgency-label">${urgency}</span>
+                <span class="urgency-count">${stats.count} ticket${stats.count !== 1 ? 's' : ''}</span>
+              </div>
+              <div class="time-bar-container">
+                <div class="time-bar">
+                  <div class="time-bar-fill ${urgencyClass}" style="width: ${percentage}%"></div>
+                </div>
+                <div class="time-value">
+                  ${timeDisplay}
+                </div>
+              </div>
+              ${infoText ? `<div class="urgency-info">${infoText}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      setTimeout(() => {
+        document.querySelectorAll('.urgency-time-item').forEach(item => {
+          item.addEventListener('click', function() 
+          {
+            const urgency = this.getAttribute('data-urgency');
+            const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+            showUrgencyTicketsModalForUrgency(urgency, year);
+          });
+        });
+      }, 100);
+    }
+
+    async function showUrgencyTicketsModalForUrgency(urgency, selectedYear) 
+    {
+      try 
+      {
+        const response = await fetch('/api/tickets');
+        if (!response.ok) return;
+        
+        const allTickets = await response.json();
+        const urgencyMapping = {'Crítico': 'critical', 'Alto': 'high', 'Medio': 'medium', 'Bajo': 'low'};
+        
+        const urgencyInEnglish = urgencyMapping[urgency] || urgency.toLowerCase();
+        const urgencyTickets = allTickets.filter(ticket => {
+          const ticketYear = new Date(ticket.timestamp).getFullYear();
+          const ticketUrgency = ticket.last_urgency || ticket.urgency;
+          return ticketUrgency === urgencyInEnglish && ticketYear === parseInt(selectedYear) && ticket.urgency === 'completed' && ticket.time_end;
+        });
+        
+        // Calcular estadísticas
+        let totalTime = 0;
+        urgencyTickets.forEach(ticket => {
+          const startTime = new Date(ticket.timestamp);
+          const endTime = new Date(ticket.time_end);
+          const resolutionTime = (endTime - startTime) / (1000 * 60 * 60); // en horas
+          totalTime += resolutionTime;
+        });
+        
+        const stats = {
+          count: urgencyTickets.length,
+          average: urgencyTickets.length > 0 ? totalTime / urgencyTickets.length : 0
+        };
+        
+        showUrgencyTicketsModal(urgency, urgencyTickets, stats);
+      } catch (error) 
+      {
+        console.error('Error al cargar tickets por urgencia:', error);
+      }
+    }
+
+    function showUrgencyTicketsModal(urgency, tickets, stats) 
+    {
+      const modal = document.getElementById('urgencyTicketsModal');
+      const modalTitle = document.getElementById('modalUrgencyTitle');
+      const modalStats = document.getElementById('modalUrgencyStats');
+      const modalTickets = document.getElementById('modalUrgencyTickets');
+      
+      modalTitle.textContent = `Tickets con urgencia: ${urgency}`;
+      modalStats.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong>Total de tickets:</strong> <span style="color: #2e7d32; font-weight: bold;">${stats.count}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <strong>Tiempo promedio de resolución:</strong> 
+          <span style="color: #1976d2; font-weight: bold;">${stats.average.toFixed(1)} horas</span>
+        </div>
+      `;
+      
+      if (tickets.length === 0) 
+      {
+        modalTickets.innerHTML = '<li style="text-align: center; color: #888; padding: 20px;">No hay tickets para esta urgencia.</li>';
+      } else {
+        modalTickets.innerHTML = tickets.map(ticket => {
+          let resolutionTime = 'Sin datos de tiempo';
+          if (ticket.time_end) 
+          {
+            const startTime = new Date(ticket.timestamp);
+            const endTime = new Date(ticket.time_end);
+            const duration = endTime - startTime;
+            
+            const hours = Math.floor(duration / (1000 * 60 * 60));
+            const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (hours > 0) 
+            {
+              resolutionTime = `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+              resolutionTime = `${minutes}m`;
+            } else 
+            {
+              resolutionTime = '< 1m';
+            }
+          }
+          
+          // Obtener la urgencia original
+          const originalUrgency = ticket.last_urgency || ticket.urgency || 'Sin especificar';
+          const urgencyLabels = {'critical': 'Crítico', 'high': 'Alto', 'medium': 'Medio', 'low': 'Bajo', 'completed': 'Completado'};
+          
+          return `
+            <li class="urgency-ticket-item" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 10px; background: #fafafa;">
+              <div class="ticket-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                <div class="ticket-problem" style="flex: 1; margin-right: 15px;">
+                  <strong>Problema:</strong> ${ticket.problem || ticket.description || ticket.issue || 'Sin descripción'}
+                </div>
+                <div>
+                  <span class="urgency-badge ${originalUrgency}" style="padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; background: #e3f2fd; color: #1976d2;">
+                    ${urgencyLabels[originalUrgency] || originalUrgency}
+                  </span>
+                </div>
+              </div>
+              <div class="ticket-details" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                <div>
+                  <strong>Usuario:</strong> ${ticket.name || 'Desconocido'}
+                </div>
+                <div>
+                  <strong>Departamento:</strong> ${ticket.department || 'No especificado'}
+                </div>
+                <div>
+                  <strong>Fecha de creación:</strong> ${new Date(ticket.timestamp).toLocaleString()}
+                </div>
+                <div>
+                  <strong>Tiempo de resolución:</strong> 
+                  <span class="resolution-time" style="color: #2e7d32; font-weight: bold;">${resolutionTime}</span>
+                </div>
+              </div>
+            </li>
+          `;
+        }).join('');
+      }
+      
+      modal.style.display = 'flex';
+    }
+
+    function showUserTicketsModal(user, tickets) 
+    {
+      const modal = document.getElementById('userTicketsModal');
+      const modalUserName = document.getElementById('modalUserName');
+      const modalUserTickets = document.getElementById('modalUserTickets');
+      modalUserName.textContent = `Tickets de ${user}`;
+      
+      if (tickets.length === 0) 
+      {
+        modalUserTickets.innerHTML = '<li>No hay tickets para este usuario.</li>';
+      } else 
+      {
+        const completedTickets = tickets.filter(ticket => ticket.urgency === 'completed' && ticket.time_end);
+        
+        modalUserTickets.innerHTML = completedTickets.map(ticket => {
+          let resolutionTime = 'Sin datos de tiempo';
+          if (ticket.time_end) {
+            const startTime = new Date(ticket.timestamp);
+            const endTime = new Date(ticket.time_end);
+            const duration = endTime - startTime;
+            
+            const hours = Math.floor(duration / (1000 * 60 * 60));
+            const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (hours > 0) 
+            {
+              resolutionTime = `${hours}h ${minutes}m`;
+            } else if (minutes > 0) 
+            {
+              resolutionTime = `${minutes}m`;
+            } else 
+            {
+              resolutionTime = '< 1m';
+            }
+          }
+
+          const originalUrgency = ticket.last_urgency || ticket.urgency || 'Sin especificar';
+          const urgencyLabels = {'critical': 'Crítico', 'high': 'Alto', 'medium': 'Medio', 'low': 'Bajo', 'completed': 'Completado'};
+          
+          return `
+            <li class="user-ticket-item">
+              <div class="ticket-header">
+                <div class="ticket-problem">
+            <strong>Problema:</strong> ${ticket.problem || ticket.description || ticket.issue || 'Sin descripción'}
+                </div>
+                <div>
+                  <span class="urgency-badge ${originalUrgency}">
+                    ${urgencyLabels[originalUrgency] || originalUrgency}
+                  </span>
+                </div>
+              </div>
+              <div class="ticket-details">
+                <div>
+                  <strong>Fecha de creación:</strong> ${new Date(ticket.timestamp).toLocaleString()}
+                </div>
+                <div>
+                  <strong>Tiempo de resolución:</strong> 
+                  <span class="resolution-time">${resolutionTime}</span>
+                </div>
+              </div>
+              ${ticket.department ? `<div class="ticket-department"><strong>Departamento:</strong> ${ticket.department}</div>` : ''}
+          </li>
+          `;
+        }).join('');
+        if (completedTickets.length === 0) {
+          modalUserTickets.innerHTML = '<li>Este usuario no tiene tickets completados con tiempo de resolución.</li>';
+        }
+      }
+      modal.style.display = 'flex';
+    }
+
+    document.getElementById('closeUserTicketsModal').onclick = function() 
+    {
+      document.getElementById('userTicketsModal').style.display = 'none';
+    };
+    document.getElementById('userTicketsModal').onclick = function(e) 
+    {
+      if (e.target === this) this.style.display = 'none';
+    };
+
+    document.getElementById('closeUrgencyTicketsModal').onclick = function() 
+    {
+      document.getElementById('urgencyTicketsModal').style.display = 'none';
+    };
+    document.getElementById('urgencyTicketsModal').onclick = function(e) 
+    {
+      if (e.target === this) this.style.display = 'none';
+    };
+
+    async function loadDepartmentStats(selectedYear) 
+    {
+      const response = await fetch('/api/tickets');
+      if (!response.ok) return;
+      const tickets = (await response.json())
+        .filter(ticket => ticket.urgency === 'completed')
+        .filter(ticket => new Date(ticket.timestamp).getFullYear() === parseInt(selectedYear));
+      const departments = [ 'Recursos Humanos', 'Gerencia', 'Planeación', 'Contabilidad', 'Producción P1', 'Producción BA', 'QC', 'Diseño', 'IT'];
+
+      const departmentCounts = {};
+      departments.forEach(dept => {
+        departmentCounts[dept] = 0;
+      });
+      
+      tickets.forEach(ticket => {
+        if (departmentCounts.hasOwnProperty(ticket.department)) 
+        {
+          departmentCounts[ticket.department]++;
+        }
+      });
+
+      if (departmentsChart) 
+      {
+        departmentsChart.destroy();
+      }
+
+      const ctx = document.getElementById('departmentsChart').getContext('2d');
+      departmentsChart = new Chart(ctx, {
+        type: currentDeptChartType,
+        data: {
+          labels: departments,
+          datasets: [{
+            label: 'Tickets Terminados',
+            data: departments.map(dept => departmentCounts[dept]),
+            backgroundColor: currentDeptChartType === 'bar' ? '#43a047' : 'rgba(67, 160, 71, 0.2)', // Verde
+            borderColor: '#43a047',
+            borderWidth: 1,
+            pointBackgroundColor: 'rgba(67, 160, 71, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(67, 160, 71, 1)'
+          }]
+        },
+        options: currentDeptChartType === 'bar'
+          ? {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1,
+                    color: '#fff' // Cambia el color de los ticks a blanco
+                  },
+                  grid: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                  }
+                },
+                x: {
+                  ticks: {
+                    color: '#fff', // Cambia el color de los ticks a blanco
+                    maxRotation: 45,
+                    minRotation: 45
+                  },
+                  grid: {
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
+                  }
+                }
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: '#fff' // Cambia el color de la leyenda a blanco
+                  }
+                }
+              }
+            }
+          : {
+              responsive: true,
+              plugins: {
+                legend: {
+                  labels: {
+                    color: '#fff' // Cambia el color de la leyenda a blanco
+                  }
+                }
+              },
+              scales: {
+                r: {
+                  angleLines: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color') },
+                  grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--border-color') },
+                  pointLabels: { color: '#fff' }, // Cambia el color de las etiquetas radiales a blanco
+                  ticks: { display: false }
+                }
+              }
+            }
+      });
+    }
+    document.getElementById('adminMenuBtn').addEventListener('click', function() {
+      const submenu = document.getElementById('adminSubmenu');
+      if (submenu.style.display === 'block') {
+        submenu.style.display = 'none';
+      } else 
+      {
+        submenu.style.display = 'block';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+
+    document.getElementById('userRanking').addEventListener('click', function(e) {
+      const item = e.target.closest('.user-item');
+      if (item) {
+        const username = item.getAttribute('data-username');
+        fetch('/api/tickets')
+          .then(res => res.json())
+          .then(allTickets => {
+            const userTickets = allTickets.filter(t => t.name === username);
+            showUserTicketsModal(username, userTickets);
+          });
+      }
+    });
+  </script>
+
+  <script>
+    function getActiveYear() //Informe en PDF
+    {
+      const active = document.querySelector('.year-button.active');
+      return active ? parseInt(active.dataset.year) : new Date().getFullYear();
+    }
+
+    function formatNumber(num) 
+    {
+      return new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(num);
+    }
+
+    async function computeMonthlyStats(year, monthIndex) 
+    {
+      const response = await fetch('/api/tickets');
+      if (!response.ok) return null;
+      const all = await response.json();
+
+      const sameMonth = all.filter(t => {
+        const d = new Date(t.timestamp);
+        return d.getFullYear() === year && d.getMonth() === monthIndex && t.urgency === 'completed';
+      });
+
+      const departments = [ 'Recursos Humanos', 'Gerencia', 'Planeación', 'Contabilidad', 'Producción P1', 'Producción BA', 'QC', 'Diseño', 'IT'];
+      const departmentCounts = Object.fromEntries(departments.map(d => [d, 0]));
+      const userCounts = {};
+
+      sameMonth.forEach(t => {
+        if (t.department && departmentCounts.hasOwnProperty(t.department)) departmentCounts[t.department]++;
+        const user = t.name || 'Desconocido';
+        userCounts[user] = (userCounts[user] || 0) + 1;
+      });
+
+      const urgencyMap = { critical: 'Crítico', high: 'Alto', medium: 'Medio', low: 'Bajo' };
+      const urgencyAgg = { 'Crítico': [], 'Alto': [], 'Medio': [], 'Bajo': [] };
+
+      sameMonth.forEach(t => {
+        if (!t.time_end) return;
+        const startTime = new Date(t.timestamp);
+        const endTime = new Date(t.time_end);
+        if (!(endTime > startTime)) return;
+        const hours = (endTime - startTime) / (1000 * 60 * 60);
+        const u = urgencyMap[t.last_urgency] || urgencyMap[t.urgency] || t.last_urgency || t.urgency;
+        if (urgencyAgg[u]) urgencyAgg[u].push(hours);
+      });
+
+      const urgencyStats = Object.fromEntries(Object.entries(urgencyAgg).map(([k, arr]) => {
+        const total = arr.reduce((a, b) => a + b, 0);
+        const avg = arr.length ? total / arr.length : 0;
+        return [k, { count: arr.length, average: avg }];
+      }));
+
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      const perDay = new Array(daysInMonth).fill(0);
+      sameMonth.forEach(t => {
+        const d = new Date(t.timestamp);
+        perDay[d.getDate() - 1]++;
+      });
+
+      const totalCompleted = sameMonth.length;
+      const topUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+      return { totalCompleted, departmentCounts, topUsers, urgencyStats, perDay };
+    }
+
+    async function renderMiniChartToDataUrl(labels, data, title) 
+    {
+      return new Promise(resolve => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 900; // mayor resolución para PDF
+        canvas.height = 400;
+        canvas.style.position = 'fixed';
+        canvas.style.left = '-20000px';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        const chart = new Chart(ctx, {
+          type: 'bar',
+          data: { labels, datasets: [{ label: title, data, backgroundColor: '#43a047', borderColor: '#1b5e20', borderWidth: 1 }] },
+          options: { responsive: false, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+        });
+        setTimeout(() => {
+          const url = canvas.toDataURL('image/png');
+          chart.destroy();
+          canvas.remove();
+          resolve(url);
+        }, 150);
+      });
+    }
+
+    async function generateMonthlyReportPDF() 
+    {
+      const { jsPDF } = window.jspdf;
+      const monthIndex = parseInt(document.getElementById('reportMonth').value);
+      const year = getActiveYear();
+
+      const stats = await computeMonthlyStats(year, monthIndex);
+      if (!stats) return;
+
+      const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+      const deptLabels = Object.keys(stats.departmentCounts);
+      const deptData = deptLabels.map(k => stats.departmentCounts[k]);
+      const deptUrl = await renderMiniChartToDataUrl(deptLabels, deptData, 'Tickets por Departamento');
+
+      const days = Array.from({ length: stats.perDay.length }, (_, i) => String(i + 1));
+      const perDayUrl = await renderMiniChartToDataUrl(days, stats.perDay, 'Tickets Terminados por Día');
+
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+      let y = 40;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text(`Informe mensual de tickets • ${monthNames[monthIndex]} ${year}`, 40, y);
+      y += 22;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      doc.text(`Generado: ${new Date().toLocaleString('es-MX')}`, 40, y);
+      y += 20;
+      doc.setLineWidth(0.5); doc.line(40, y, 555, y); y += 14;
+
+      doc.setFont('helvetica', 'bold'); doc.text('Resumen', 40, y); y += 14; doc.setFont('helvetica', 'normal');
+      doc.text(`Tickets completados: ${formatNumber(stats.totalCompleted)}`, 40, y); y += 14;
+
+      doc.setFont('helvetica', 'bold'); doc.text('Tiempos de resolución por urgencia (promedio horas)', 40, y); y += 14; doc.setFont('helvetica', 'normal');
+      Object.entries(stats.urgencyStats).forEach(([k, v]) => {
+        doc.text(`${k}: ${formatNumber(v.average)} h • ${v.count} ticket(s)`, 50, y);
+        y += 14;
+      });
+      y += 4; doc.setLineWidth(0.2); doc.line(40, y, 555, y); y += 10;
+
+      doc.setFont('helvetica', 'bold'); doc.text('Usuarios con más tickets', 40, y); y += 14; doc.setFont('helvetica', 'normal');
+      if (stats.topUsers.length === 0) 
+      {
+        doc.text('Sin datos', 50, y); y += 14;
+      } else 
+      {
+        stats.topUsers.forEach(([u, c], i) => { doc.text(`#${i+1} ${u}: ${c}`, 50, y); y += 14; });
+      }
+
+      y += 8;
+      const imgW = 515; const imgH = 230;
+      doc.addImage(deptUrl, 'PNG', 40, y, imgW, imgH, undefined, 'FAST'); y += imgH + 14;
+      doc.addImage(perDayUrl, 'PNG', 40, y, imgW, imgH, undefined, 'FAST'); y += imgH + 14;
+
+      doc.save(`informe_tickets_${year}_${String(monthIndex+1).padStart(2,'0')}.pdf`);
+    }
+
+    document.getElementById('downloadMonthlyReportBtn').addEventListener('click', generateMonthlyReportPDF);
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) 
+          {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) 
+        {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) 
+          {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() 
+          {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon');
+        if (userIcon) 
+        {
+          userIcon.addEventListener('click', function() 
+          {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+
+  <script>
+    function getContrastYIQ(hexcolor) //Contraste automatico para el topbar
+    {
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() 
+    {
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      function rgb2hex(rgb) 
+      {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+<script src="js/topbar.js"></script>
+</body>
+</html>

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reports - Xen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="styles/theme.css">
+  <link rel="stylesheet" href="styles/reportes.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/theme.js"></script>
+  <script src="js/permissions.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Topbar con estilo glass -->
+  <nav class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-left">
+        <h1 class="logo">Xen</h1>
+      </div>
+      <div class="topbar-center">
+        <a href="inicio.html" class="nav-item">
+          <span>Home</span>
+        </a>
+        <a href="tareas.html" class="nav-item">
+          <span>Tasks</span>
+        </a>
+        <a href="equipo.html" class="nav-item">
+          <span>Team</span>
+        </a>
+        <a href="diseno.html" class="nav-item">
+          <span>Design</span>
+        </a>
+        <a href="reportes.html" class="nav-item active">
+          <span>Reports</span>
+        </a>
+        <a href="ajustes.html" class="nav-item">
+          <span>Settings</span>
+        </a>
+      </div>
+      <div class="topbar-right">
+        <div class="user-menu">
+          <div class="user-avatar">
+            <div class="avatar-initials"></div>
+            <i class="fas fa-user"></i>
+          </div>
+          <a href="perfil.html" class="username" id="username">User</a>
+          <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <div class="filters-panel glass-card">
+        <div class="filter-group">
+          <label for="reportMonth">Month</label>
+          <select id="reportMonth" class="filter-select">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11" selected>November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="reportYear">Year</label>
+          <input type="number" id="reportYear" class="filter-select" min="2020" max="2100" value="2025">
+        </div>
+        <div class="filter-group">
+          <label for="timeRange">Period</label>
+          <select id="timeRange" class="filter-select">
+            <option value="week">This Week</option>
+            <option value="month" selected>This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="filter-meta">
+          <i class="fas fa-info-circle"></i>
+          Real-time updated data
+        </div>
+      </div>
+
+      <!-- Sección de Exportación de Reportes -->
+      <div class="export-hero glass-card">
+        <div class="export-copy">
+          <span class="export-badge">
+            <i class="fas fa-file-arrow-down"></i>
+            PDF ready to share
+          </span>
+          <h3>Generate a complete report with one click</h3>
+          <p>
+            Includes key metrics, summary cards and detailed tables optimized
+            for printing or email sending.
+          </p>
+          <ul class="export-highlights">
+            <li><i class="fas fa-check"></i> Always up to date</li>
+          </ul>
+        </div>
+        <div class="export-action">
+          <button id="exportAllBtn" class="export-btn">
+            <i class="fas fa-file-pdf"></i>
+            Export Complete Report (PDF)
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjetas de resumen -->
+      <div class="summary-cards">
+        <div class="summary-card glass-card">
+          <div class="card-icon tasks">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <div class="card-content">
+            <h3>Total Tasks</h3>
+            <p class="card-value" id="totalTasks">0</p>
+            <span class="card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              +12% vs previous month
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-card glass-card">
+          <div class="card-icon completed">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="card-content">
+            <h3>Completed Tasks</h3>
+            <p class="card-value" id="completedTasks">0</p>
+            <span class="card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              +8% vs previous month
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-card glass-card">
+          <div class="card-icon productivity">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="card-content">
+            <h3>Productivity</h3>
+            <p class="card-value" id="productivity">0%</p>
+            <span class="card-change positive">
+              <i class="fas fa-arrow-up"></i>
+              +5% vs previous month
+            </span>
+          </div>
+        </div>
+
+        <div class="summary-card glass-card">
+          <div class="card-icon events">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="card-content">
+            <h3>Scheduled Events</h3>
+            <p class="card-value" id="scheduledEvents">0</p>
+            <span class="card-change neutral">
+              <i class="fas fa-minus"></i>
+              No changes
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficas de tiempo por estado de orden -->
+      <div class="charts-container">
+        <div class="chart-card glass-card">
+          <div class="chart-header">
+            <h3>Average Time by Status</h3>
+            <p class="chart-subtitle">Average time spent in each status across all orders</p>
+          </div>
+          <div class="chart-content">
+            <canvas id="avgTimeByStatusChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card glass-card">
+          <div class="chart-header">
+            <h3>Order Analysis</h3>
+            <p class="chart-subtitle">Detailed time analysis for a specific order</p>
+          </div>
+          <div class="order-selector-container">
+            <label for="orderSelector">Select Order:</label>
+            <select id="orderSelector" class="order-select">
+              <option value="">-- Select an order --</option>
+            </select>
+          </div>
+          <div class="chart-content">
+            <canvas id="orderDetailChart"></canvas>
+          </div>
+          <div id="orderAnalysis" class="order-analysis"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Verificar autenticación
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('username');
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+      if (!isLoggedIn || isLoggedIn !== 'true') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Ocultar pestañas según el rol del usuario
+      const rol = localStorage.getItem('rol');
+      if (rol === 'diseñador') {
+        // Ocultar todas las pestañas excepto Inicio y Diseño
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          if (text !== 'home' && text !== 'design') {
+            item.style.display = 'none';
+          }
+        });
+      }
+      if (rol === 'pm') {
+        // Ocultar todas las pestañas excepto Home y PM
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          const href = item.getAttribute('href') || '';
+          if (text !== 'home' && !href.includes('pm.html')) {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      if (username) {
+        loadEmployeeNameAndPhoto(username);
+      }
+      
+      // Función para cargar nombre del empleado (solo primer nombre) y foto
+      async function loadEmployeeNameAndPhoto(username) {
+        try {
+          // Buscar el usuario en la lista de empleados
+          const responseDesign = await fetch('/api/employees/design');
+          const responseIT = await fetch('/api/employees/it');
+          
+          let employee = null;
+          
+          if (responseDesign.ok) {
+            const data = await responseDesign.json();
+            if (data.success && data.employees) {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || 
+                       (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (!employee && responseIT.ok) {
+            const data = await responseIT.json();
+            if (data.success && data.employees) {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || 
+                       (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (employee) {
+            const fullName = employee.nombre_completo || employee.nombre || username;
+            const firstName = fullName.split(' ')[0];
+            document.getElementById('username').textContent = firstName;
+            
+            if (employee.foto_url) {
+              updateTopbarPhoto(employee.foto_url);
+            } else {
+              const avatar = document.querySelector('.user-avatar');
+              if (avatar) {
+                // Ocultar ícono cuando se muestran iniciales
+                const icon = avatar.querySelector('i.fa-user');
+                if (icon) {
+                  icon.style.display = 'none';
+                }
+                const initialsDiv = avatar.querySelector('.avatar-initials');
+                if (initialsDiv) {
+                  const initials = firstName.substring(0, 2).toUpperCase();
+                  initialsDiv.textContent = initials;
+                  initialsDiv.style.display = 'flex';
+                }
+              }
+            }
+          } else {
+            const firstName = username.split(' ')[0];
+            document.getElementById('username').textContent = firstName;
+            const avatar = document.querySelector('.user-avatar');
+            if (avatar) {
+              // Ocultar ícono cuando se muestran iniciales
+              const icon = avatar.querySelector('i.fa-user');
+              if (icon) {
+                icon.style.display = 'none';
+              }
+              const initialsDiv = avatar.querySelector('.avatar-initials');
+              if (initialsDiv) {
+                const initials = firstName.substring(0, 2).toUpperCase();
+                initialsDiv.textContent = initials;
+                initialsDiv.style.display = 'flex';
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error al cargar información del empleado:', error);
+          const firstName = username.split(' ')[0];
+          document.getElementById('username').textContent = firstName;
+        }
+      }
+      
+      // Función para actualizar foto en topbar
+      function updateTopbarPhoto(photoUrl) {
+        const avatar = document.querySelector('.user-avatar');
+        if (avatar) {
+          // Ocultar iniciales
+          const initials = avatar.querySelector('.avatar-initials');
+          if (initials) {
+            initials.style.display = 'none';
+          }
+          
+          // Ocultar ícono de usuario
+          const icon = avatar.querySelector('i.fa-user');
+          if (icon) {
+            icon.style.display = 'none';
+          }
+          
+          // Crear o actualizar imagen
+          let img = avatar.querySelector('img');
+          if (!img) {
+            img = document.createElement('img');
+            img.style.cssText = 'width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: absolute; top: 0; left: 0;';
+            img.alt = 'User';
+            avatar.appendChild(img);
+          }
+          img.src = photoUrl;
+          img.style.display = 'block';
+          img.onerror = function() {
+            this.style.display = 'none';
+            if (icon) icon.style.display = 'block';
+            if (initials) initials.style.display = 'flex';
+          };
+        }
+      }
+
+      // Función para verificar si hay una orden activa
+      function hasActiveOrder() {
+        const activeSession = localStorage.getItem('activeSession');
+        if (activeSession) {
+          try {
+            const session = JSON.parse(activeSession);
+            if (session.orderNumber && session.startTime) {
+              return true;
+            }
+          } catch (e) {
+            console.error('Error al parsear activeSession:', e);
+          }
+        }
+        return false;
+      }
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        // Verificar si hay una orden activa
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          alert('You cannot log out while you have an active order. Please go to the Design page and finish the order first.');
+          return;
+        }
+
+        localStorage.clear();
+        window.location.href = 'login.html';
+      });
+
+      // Prevenir cerrar la pestaña si hay una orden activa
+      window.addEventListener('beforeunload', function(e) {
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          e.returnValue = 'Tienes una orden activa. ¿Estás seguro de que quieres cerrar la pestaña? Debes finalizar la orden primero desde la página de Diseño.';
+          return e.returnValue;
+        }
+      });
+
+      // Establecer mes y año actual
+      const now = new Date();
+      document.getElementById('reportMonth').value = (now.getMonth() + 1).toString();
+      document.getElementById('reportYear').value = now.getFullYear();
+
+      // Cargar datos
+      loadReportsData();
+      loadOrderStatusCharts();
+
+      // Cambiar rango de tiempo
+      document.getElementById('timeRange').addEventListener('change', function() {
+        loadReportsData();
+        loadOrderStatusCharts();
+      });
+
+      // Botón de exportación completo
+      document.getElementById('exportAllBtn').addEventListener('click', exportAllReports);
+    });
+
+    function loadReportsData() {
+      // Obtener tareas del localStorage
+      const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+      const events = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
+
+      // Calcular estadísticas
+      const totalTasks = tasks.length;
+      const completedTasks = tasks.filter(t => t.status === 'completed').length;
+
+      // Calcular productividad
+      const productivity = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+      // Tareas de hoy
+      const today = new Date().toISOString().split('T')[0];
+      const todayTasks = tasks.filter(t => {
+        if (t.dueDate) {
+          return t.dueDate === today && t.status === 'completed';
+        }
+        return false;
+      }).length;
+
+      // Actualizar valores
+      document.getElementById('totalTasks').textContent = totalTasks;
+      document.getElementById('completedTasks').textContent = completedTasks;
+      document.getElementById('productivity').textContent = productivity + '%';
+      document.getElementById('scheduledEvents').textContent = events.length;
+      document.getElementById('todayTasks').textContent = todayTasks;
+    }
+
+    // Función para exportar todos los reportes en un solo PDF con múltiples hojas
+    async function exportAllReports() {
+      const mes = parseInt(document.getElementById('reportMonth').value);
+      const año = parseInt(document.getElementById('reportYear').value);
+      
+      if (!mes || !año) {
+        alert('Please select a valid month and year');
+        return;
+      }
+
+      const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      const nombreMes = meses[mes - 1];
+
+      try {
+        // Obtener todos los reportes
+        const [clientesRes, ordenesRes, empleadosRes] = await Promise.all([
+          fetch(`/api/reportes/horas-por-cliente?mes=${mes}&año=${año}`),
+          fetch(`/api/reportes/horas-por-orden?mes=${mes}&año=${año}`),
+          fetch(`/api/reportes/horas-por-empleado?mes=${mes}&año=${año}`)
+        ]);
+
+        const clientesData = await clientesRes.json();
+        const ordenesData = await ordenesRes.json();
+        const empleadosData = await empleadosRes.json();
+
+        // Crear PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // ========== HOJA 1: HORAS POR CLIENTE ==========
+        doc.setFontSize(20);
+        doc.setTextColor(99, 102, 241);
+        doc.text('Xen - Management System', 14, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(31, 41, 55);
+        doc.text(`Hours by Client Report - ${nombreMes} ${año}`, 14, 30);
+
+        doc.setFontSize(10);
+        doc.setTextColor(107, 114, 128);
+        doc.text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}`, 14, 38);
+
+        if (clientesData.success && clientesData.reporte && clientesData.reporte.length > 0) {
+          const datosClientes = clientesData.reporte.map(item => [
+            item.cliente_nombre_completo || item.cliente,
+            item.total_formateado,
+            item.total_ordenes.toString(),
+            item.total_sesiones.toString()
+          ]);
+
+          doc.autoTable({
+            startY: 45,
+            head: [['Client', 'Total Hours', 'Orders', 'Sessions']],
+            body: datosClientes,
+            theme: 'striped',
+            headStyles: {
+              fillColor: [99, 102, 241],
+              textColor: 255,
+              fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+              fillColor: [249, 250, 251]
+            },
+            styles: {
+              fontSize: 9,
+              cellPadding: 3
+            },
+            margin: { top: 45 }
+          });
+
+          const totalClientes = clientesData.reporte.reduce((sum, item) => {
+            return sum + item.total_horas * 3600 + item.total_minutos * 60 + item.total_segundos;
+          }, 0);
+          const totalClientesFormateado = Math.floor(totalClientes / 3600) + ':' + 
+            String(Math.floor((totalClientes % 3600) / 60)).padStart(2, '0') + ':' + 
+            String(Math.floor(totalClientes % 60)).padStart(2, '0');
+
+          const finalY = doc.lastAutoTable.finalY + 10;
+          doc.setFontSize(12);
+          doc.setTextColor(31, 41, 55);
+          doc.setFont(undefined, 'bold');
+          doc.text(`Total: ${totalClientesFormateado}`, 14, finalY);
+        } else {
+          doc.text('No data available', 14, 50);
+        }
+
+        // ========== SHEET 2: HOURS BY ORDER ==========
+        doc.addPage();
+        doc.setFontSize(20);
+        doc.setTextColor(99, 102, 241);
+        doc.text('Xen - Management System', 14, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(31, 41, 55);
+        doc.text(`Hours by Order Report - ${nombreMes} ${año}`, 14, 30);
+
+        doc.setFontSize(10);
+        doc.setTextColor(107, 114, 128);
+        doc.text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}`, 14, 38);
+
+        if (ordenesData.success && ordenesData.reporte && ordenesData.reporte.length > 0) {
+          const datosOrdenes = ordenesData.reporte.map(item => [
+            item.orden,
+            item.cliente_nombre_completo || item.cliente,
+            item.total_formateado,
+            item.total_sesiones.toString(),
+            item.total_empleados.toString()
+          ]);
+
+          doc.autoTable({
+            startY: 45,
+            head: [['Order', 'Client', 'Total Hours', 'Sessions', 'Employees']],
+            body: datosOrdenes,
+            theme: 'striped',
+            headStyles: {
+              fillColor: [139, 92, 246],
+              textColor: 255,
+              fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+              fillColor: [249, 250, 251]
+            },
+            styles: {
+              fontSize: 9,
+              cellPadding: 3
+            },
+            margin: { top: 45 }
+          });
+
+          const totalOrdenes = ordenesData.reporte.reduce((sum, item) => {
+            return sum + item.total_horas * 3600 + item.total_minutos * 60 + item.total_segundos;
+          }, 0);
+          const totalOrdenesFormateado = Math.floor(totalOrdenes / 3600) + ':' + 
+            String(Math.floor((totalOrdenes % 3600) / 60)).padStart(2, '0') + ':' + 
+            String(Math.floor(totalOrdenes % 60)).padStart(2, '0');
+
+          const finalY = doc.lastAutoTable.finalY + 10;
+          doc.setFontSize(12);
+          doc.setTextColor(31, 41, 55);
+          doc.setFont(undefined, 'bold');
+          doc.text(`Total: ${totalOrdenesFormateado}`, 14, finalY);
+        } else {
+          doc.text('No data available', 14, 50);
+        }
+
+        // ========== SHEET 3: HOURS BY EMPLOYEE ==========
+        doc.addPage();
+        doc.setFontSize(20);
+        doc.setTextColor(99, 102, 241);
+        doc.text('Xen - Management System', 14, 20);
+        
+        doc.setFontSize(16);
+        doc.setTextColor(31, 41, 55);
+        doc.text(`Hours by Employee Report - ${nombreMes} ${año}`, 14, 30);
+
+        doc.setFontSize(10);
+        doc.setTextColor(107, 114, 128);
+        doc.text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}`, 14, 38);
+
+        if (empleadosData.success && empleadosData.reporte && empleadosData.reporte.length > 0) {
+          const datosEmpleados = empleadosData.reporte.map(item => [
+            item.empleado,
+            item.tiempo_trabajando_formateado, // Tiempo real trabajado (total - actividades)
+            item.total_formateado, // Total incluyendo actividades
+            item.total_ordenes.toString(),
+            item.total_sesiones.toString()
+          ]);
+
+          doc.autoTable({
+            startY: 45,
+            head: [['Employee', 'Working Time', 'Total Hours', 'Orders', 'Sessions']],
+            body: datosEmpleados,
+            theme: 'striped',
+            headStyles: {
+              fillColor: [236, 72, 153],
+              textColor: 255,
+              fontStyle: 'bold'
+            },
+            alternateRowStyles: {
+              fillColor: [249, 250, 251]
+            },
+            styles: {
+              fontSize: 9,
+              cellPadding: 3
+            },
+            margin: { top: 45 }
+          });
+
+          const totalEmpleados = empleadosData.reporte.reduce((sum, item) => {
+            return sum + item.total_horas * 3600 + item.total_minutos * 60 + item.total_segundos;
+          }, 0);
+          const totalEmpleadosFormateado = Math.floor(totalEmpleados / 3600) + ':' + 
+            String(Math.floor((totalEmpleados % 3600) / 60)).padStart(2, '0') + ':' + 
+            String(Math.floor(totalEmpleados % 60)).padStart(2, '0');
+
+          const finalY = doc.lastAutoTable.finalY + 10;
+          doc.setFontSize(12);
+          doc.setTextColor(31, 41, 55);
+          doc.setFont(undefined, 'bold');
+          doc.text(`Total: ${totalEmpleadosFormateado}`, 14, finalY);
+          
+          // Agregar desglose detallado por empleado y sesión
+          let currentY = finalY + 20;
+          
+          empleadosData.reporte.forEach((empleadoItem, index) => {
+            // Si no es el primer empleado, agregar nueva página
+            if (index > 0) {
+              doc.addPage();
+              currentY = 20;
+            }
+            
+            // Título del empleado
+            doc.setFontSize(14);
+            doc.setTextColor(236, 72, 153);
+            doc.setFont(undefined, 'bold');
+            doc.text(`${empleadoItem.empleado} - Total: ${empleadoItem.total_formateado}`, 14, currentY);
+            
+            currentY += 10;
+            
+            // Desglose de sesiones del empleado
+            const desglose = empleadoItem.desglose || [];
+            
+            if (desglose.length > 0) {
+              const datosSesiones = desglose.map(sesion => {
+                const fechaInicio = new Date(sesion.fecha_inicio);
+                const fechaFin = sesion.fecha_fin ? new Date(sesion.fecha_fin) : null;
+                const fechaInicioStr = fechaInicio.toLocaleDateString('es-ES', { 
+                  day: '2-digit', 
+                  month: '2-digit', 
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                });
+                const fechaFinStr = fechaFin ? fechaFin.toLocaleDateString('es-ES', { 
+                  day: '2-digit', 
+                  month: '2-digit', 
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                }) : 'En curso';
+                
+                return [
+                  sesion.cliente_nombre_completo || sesion.cliente,
+                  sesion.orden_nombre,
+                  fechaInicioStr,
+                  fechaFinStr,
+                  sesion.duracion_formateada
+                ];
+              });
+              
+              doc.autoTable({
+                startY: currentY,
+                head: [['Cliente', 'Orden', 'Inicio', 'Fin', 'Duración']],
+                body: datosSesiones,
+                theme: 'striped',
+                headStyles: {
+                  fillColor: [236, 72, 153],
+                  textColor: 255,
+                  fontStyle: 'bold',
+                  fontSize: 8
+                },
+                alternateRowStyles: {
+                  fillColor: [249, 250, 251]
+                },
+                styles: {
+                  fontSize: 7,
+                  cellPadding: 2
+                },
+                margin: { left: 14, right: 14 }
+              });
+              
+              currentY = doc.lastAutoTable.finalY + 10;
+              
+              // Verificar si necesitamos nueva página
+              if (currentY > 250) {
+                doc.addPage();
+                currentY = 20;
+              }
+            } else {
+              doc.setFontSize(9);
+              doc.setTextColor(107, 114, 128);
+              doc.setFont(undefined, 'normal');
+              doc.text('No hay sesiones registradas', 14, currentY);
+              currentY += 10;
+            }
+          });
+        } else {
+          doc.text('No hay datos disponibles', 14, 50);
+        }
+
+        // Guardar PDF
+        const nombreArchivo = `Reporte_Completo_${nombreMes}_${año}.pdf`;
+        doc.save(nombreArchivo);
+
+      } catch (error) {
+        console.error('Error al exportar reporte:', error);
+        alert('Error generating PDF. Please try again.');
+      }
+    }
+
+    // Variables globales para las gráficas
+    let avgTimeByStatusChart = null;
+    let orderDetailChart = null;
+    let allOrders = [];
+
+    // Función para convertir tiempo HH:MM:SS a segundos
+    function timeToSeconds(timeString) {
+      if (!timeString || timeString === '00:00:00') return 0;
+      const parts = timeString.split(':');
+      if (parts.length !== 3) return 0;
+      const hours = parseInt(parts[0]) || 0;
+      const minutes = parseInt(parts[1]) || 0;
+      const seconds = parseInt(parts[2]) || 0;
+      return hours * 3600 + minutes * 60 + seconds;
+    }
+
+    // Función para convertir segundos a formato HH:MM:SS
+    function secondsToTime(totalSeconds) {
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // Función para formatear tiempo para mostrar en gráficas
+    function formatTimeForDisplay(totalSeconds) {
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+      return `${minutes}m`;
+    }
+
+    // Función para cargar y mostrar gráficas de tiempo por estado
+    async function loadOrderStatusCharts() {
+      try {
+        const response = await fetch('/api/orders');
+        if (!response.ok) {
+          throw new Error('Error al cargar órdenes');
+        }
+
+        const data = await response.json();
+        allOrders = data.success && data.orders ? data.orders : [];
+
+        if (allOrders.length === 0) {
+          renderEmptyCharts();
+          return;
+        }
+
+        // Calcular promedios por estado
+        const statusKeys = ['revision', 'trabajando en ella', 'en espera de aprobacion', 'aprobada', 'cambios', 'issues'];
+        const statusLabels = {
+          'revision': 'Review',
+          'trabajando en ella': 'Working on it',
+          'en espera de aprobacion': 'Pending Approval',
+          'aprobada': 'Approved',
+          'cambios': 'Changes',
+          'issues': 'Issues'
+        };
+
+        const statusTotals = {};
+        const statusCounts = {};
+
+        statusKeys.forEach(key => {
+          statusTotals[key] = 0;
+          statusCounts[key] = 0;
+        });
+
+        allOrders.forEach(order => {
+          statusKeys.forEach(key => {
+            const fieldMap = {
+              'revision': 'tiempo_revision',
+              'trabajando en ella': 'tiempo_trabajando_en_ella',
+              'en espera de aprobacion': 'tiempo_en_espera_de_aprobacion',
+              'aprobada': 'tiempo_aprobada',
+              'cambios': 'tiempo_cambios'
+            };
+            const field = fieldMap[key];
+            if (order[field]) {
+              const seconds = timeToSeconds(order[field]);
+              statusTotals[key] += seconds;
+              if (seconds > 0) statusCounts[key]++;
+            }
+          });
+        });
+
+        // Calcular promedios
+        const avgData = statusKeys.map(key => {
+          const count = statusCounts[key];
+          return count > 0 ? statusTotals[key] / count : 0;
+        });
+
+        const labels = statusKeys.map(key => statusLabels[key]);
+
+        // Renderizar gráfica de promedios
+        renderAvgTimeChart(labels, avgData);
+
+        // Poblar selector de órdenes
+        populateOrderSelector();
+
+        // Event listener para el selector
+        document.getElementById('orderSelector').addEventListener('change', function() {
+          const orderId = this.value;
+          if (orderId) {
+            const order = allOrders.find(o => o.id.toString() === orderId);
+            if (order) {
+              renderOrderDetailChart(order, avgData, statusKeys, statusLabels);
+              analyzeOrder(order, avgData, statusKeys, statusLabels);
+            }
+          } else {
+            clearOrderDetail();
+          }
+        });
+
+      } catch (error) {
+        console.error('Error al cargar gráficas de estado:', error);
+        renderEmptyCharts();
+      }
+    }
+
+    // Función para poblar el selector de órdenes
+    function populateOrderSelector() {
+      const selector = document.getElementById('orderSelector');
+      selector.innerHTML = '<option value="">-- Select an order --</option>';
+      
+      allOrders.forEach(order => {
+        const option = document.createElement('option');
+        option.value = order.id;
+        option.textContent = order.nombre || `Order ${order.id}`;
+        selector.appendChild(option);
+      });
+    }
+
+    // Función para renderizar gráfica de promedios
+    function renderAvgTimeChart(labels, data) {
+      const ctx = document.getElementById('avgTimeByStatusChart');
+      if (!ctx) return;
+
+      if (avgTimeByStatusChart) {
+        avgTimeByStatusChart.destroy();
+      }
+
+      avgTimeByStatusChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Average Time',
+            data: data,
+            backgroundColor: [
+              'rgba(99, 102, 241, 0.7)',
+              'rgba(236, 72, 153, 0.7)',
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)'
+            ],
+            borderColor: [
+              'rgba(99, 102, 241, 1)',
+              'rgba(236, 72, 153, 1)',
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)'
+            ],
+            borderWidth: 2,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const seconds = context.parsed.y;
+                  const hours = Math.floor(seconds / 3600);
+                  const minutes = Math.floor((seconds % 3600) / 60);
+                  return `Average: ${hours}h ${minutes}m`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  const hours = Math.floor(value / 3600);
+                  const minutes = Math.floor((value % 3600) / 60);
+                  if (hours > 0) {
+                    return `${hours}h ${minutes}m`;
+                  }
+                  return `${minutes}m`;
+                }
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Función para renderizar gráfica de detalle de orden
+    function renderOrderDetailChart(order, avgData, statusKeys, statusLabels) {
+      const ctx = document.getElementById('orderDetailChart');
+      if (!ctx) return;
+
+      if (orderDetailChart) {
+        orderDetailChart.destroy();
+      }
+
+      const fieldMap = {
+        'revision': 'tiempo_revision',
+        'trabajando en ella': 'tiempo_trabajando_en_ella',
+        'en espera de aprobacion': 'tiempo_en_espera_de_aprobacion',
+        'aprobada': 'tiempo_aprobada',
+        'cambios': 'tiempo_cambios'
+      };
+
+      const orderData = statusKeys.map(key => {
+        const field = fieldMap[key];
+        return timeToSeconds(order[field] || '00:00:00');
+      });
+
+      const labels = statusKeys.map(key => statusLabels[key]);
+
+      orderDetailChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'This Order',
+              data: orderData,
+              backgroundColor: [
+                'rgba(99, 102, 241, 0.7)',
+                'rgba(236, 72, 153, 0.7)',
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(245, 158, 11, 0.7)',
+                'rgba(239, 68, 68, 0.7)'
+              ],
+              borderColor: [
+                'rgba(99, 102, 241, 1)',
+                'rgba(236, 72, 153, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(239, 68, 68, 1)'
+              ],
+              borderWidth: 2,
+              borderRadius: 8
+            },
+            {
+              label: 'Average',
+              data: avgData,
+              backgroundColor: 'rgba(156, 163, 175, 0.3)',
+              borderColor: 'rgba(156, 163, 175, 0.8)',
+              borderWidth: 2,
+              borderRadius: 8,
+              borderDash: [5, 5]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const seconds = context.parsed.y;
+                  const hours = Math.floor(seconds / 3600);
+                  const minutes = Math.floor((seconds % 3600) / 60);
+                  const label = context.dataset.label || '';
+                  return `${label}: ${hours}h ${minutes}m`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  const hours = Math.floor(value / 3600);
+                  const minutes = Math.floor((value % 3600) / 60);
+                  if (hours > 0) {
+                    return `${hours}h ${minutes}m`;
+                  }
+                  return `${minutes}m`;
+                }
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Función para analizar una orden y generar mensajes descriptivos
+    function analyzeOrder(order, avgData, statusKeys, statusLabels) {
+      const analysisContainer = document.getElementById('orderAnalysis');
+      analysisContainer.innerHTML = '';
+
+      const fieldMap = {
+        'revision': 'tiempo_revision',
+        'trabajando en ella': 'tiempo_trabajando_en_ella',
+        'en espera de aprobacion': 'tiempo_en_espera_de_aprobacion',
+        'aprobada': 'tiempo_aprobada',
+        'cambios': 'tiempo_cambios'
+      };
+
+      const messages = [];
+
+      statusKeys.forEach((key, index) => {
+        const field = fieldMap[key];
+        const orderTime = timeToSeconds(order[field] || '00:00:00');
+        const avgTime = avgData[index];
+
+        if (orderTime > 0) {
+          const hours = Math.floor(orderTime / 3600);
+          const minutes = Math.floor((orderTime % 3600) / 60);
+          const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+
+          if (avgTime > 0) {
+            const ratio = orderTime / avgTime;
+            const statusLabel = statusLabels[key];
+
+            if (ratio > 1.5) {
+              // Más del 50% por encima del promedio
+              messages.push({
+                type: 'warning',
+                text: `This order took longer than normal in ${statusLabel} (${timeStr}). It's ${(ratio * 100).toFixed(0)}% above the average.`
+              });
+            } else if (ratio < 0.5) {
+              // Menos del 50% del promedio
+              messages.push({
+                type: 'success',
+                text: `This order was faster than normal in ${statusLabel} (${timeStr}). It's ${((1 - ratio) * 100).toFixed(0)}% below the average.`
+              });
+            } else {
+              messages.push({
+                type: 'info',
+                text: `Time in ${statusLabel}: ${timeStr} (close to average).`
+              });
+            }
+          } else {
+            messages.push({
+              type: 'info',
+              text: `Time in ${statusLabels[key]}: ${timeStr}.`
+            });
+          }
+        }
+      });
+
+      if (messages.length === 0) {
+        analysisContainer.innerHTML = '<p class="analysis-message info">No time data available for this order.</p>';
+        return;
+      }
+
+      messages.forEach(msg => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `analysis-message ${msg.type}`;
+        messageDiv.textContent = msg.text;
+        analysisContainer.appendChild(messageDiv);
+      });
+    }
+
+    // Función para limpiar el detalle de orden
+    function clearOrderDetail() {
+      if (orderDetailChart) {
+        orderDetailChart.destroy();
+        orderDetailChart = null;
+      }
+      document.getElementById('orderAnalysis').innerHTML = '';
+    }
+
+    // Función para renderizar gráficas vacías
+    function renderEmptyCharts() {
+      const emptyLabels = ['Review', 'Working on it', 'Pending Approval', 'Approved', 'Changes', 'Issues'];
+      const emptyData = [0, 0, 0, 0, 0, 0];
+      renderAvgTimeChart(emptyLabels, emptyData);
+      document.getElementById('orderSelector').innerHTML = '<option value="">-- No orders available --</option>';
+    }
+  </script>
+</body>
+</html>
+

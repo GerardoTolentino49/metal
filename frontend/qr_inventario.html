@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>QR Inventario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    .page-container { max-width: 1200px; margin: 110px auto 24px; padding: 0 16px; font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .card { background: var(--card-bg, #ffffffaa); backdrop-filter: blur(6px); border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.08); padding: 18px; margin-bottom: 16px; }
+    .card h2 { margin: 4px 0 12px; font-size: 18px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .label { border: 1px solid rgba(0,0,0,.08); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; }
+    .label small { color: #555; display: block; text-align: center; font-size: 12px; padding: 6px 8px 0; word-break: break-all; overflow-wrap: anywhere; white-space: normal; max-width: 100%; }
+    .label b { margin-top: 6px; font-size: 14px; }
+    .controls { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; align-items: end; }
+    .controls .field { display: flex; flex-direction: column; gap: 6px; }
+    .controls label { font-size: 12px; color: #444; }
+    .controls input, .controls select { border: 1px solid rgba(0,0,0,.12); border-radius: 10px; padding: 10px 12px; font-size: 14px; background: #fff; }
+    .btn { padding: 10px 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
+    .btn.primary { background: #0d6efd; color: white; }
+    .btn.ghost { background: transparent; border: 1px solid rgba(0,0,0,.2); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .divider { height: 1px; background: rgba(0,0,0,.08); margin: 14px 0; }
+    .muted { color: #666; font-size: 13px; }
+    .detail-layout { display: grid; grid-template-columns: 260px 1fr; gap: 16px; }
+    .detail-row { display: grid; grid-template-columns: 200px 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,.08); }
+    .detail-row span { color: #555; }
+    .qr-preview { display: flex; align-items: center; justify-content: center; padding: 10px; border: 1px dashed rgba(0,0,0,.2); border-radius: 12px; background: #fff; }
+    /* Forzar texto negro en toda el área de la app */
+    #qrApp, #qrApp * { color: #111 !important; }
+    /* Modal estilo sistema */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: center; justify-content: center; z-index: 3000; }
+    .modal { width: min(520px, 92vw); border-radius: 16px; background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.3); overflow: hidden; border: 1px solid #e0e0e0; }
+    .modal header { padding: 20px 24px 12px; font-weight: 700; font-size: 20px; color: #1a1a1a; border-bottom: 1px solid #f0f0f0; }
+    .modal main { padding: 20px 24px; color: #333; }
+    .modal .field { padding: 0 0 16px; display: grid; gap: 8px; }
+    .modal label { font-size: 14px; color: #555; font-weight: 600; }
+    .modal input, .modal textarea { 
+      width: 100%; 
+      border: 2px solid #ddd; 
+      outline: none; 
+      border-radius: 12px; 
+      padding: 14px 16px; 
+      font-size: 16px; 
+      background: #fff; 
+      color: #333;
+      transition: border-color 0.2s ease;
+      box-sizing: border-box;
+    }
+    .modal input:focus, .modal textarea:focus { 
+      border-color: #4CAF50; 
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+    .modal textarea { min-height: 100px; resize: vertical; font-family: inherit; }
+    .modal footer { 
+      display: flex; 
+      justify-content: flex-end; 
+      gap: 12px; 
+      padding: 20px 24px; 
+      background: #f8f9fa; 
+      border-top: 1px solid #e0e0e0;
+    }
+    .btn.secondary { 
+      background: #f8f9fa; 
+      color: #333; 
+      border: 2px solid #ddd;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn.secondary:hover { 
+      background: #e9ecef; 
+      border-color: #adb5bd;
+    }
+    .btn.success { 
+      background: #4CAF50; 
+      color: #fff; 
+      border: 2px solid #4CAF50;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn.success:hover { 
+      background: #45a049; 
+      border-color: #45a049;
+    }
+    .modal-backdrop.active { display: flex; }
+    /* Estilos para controles de paginación */
+    #paginationControls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    #paginationControls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    #paginationControls button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+    @media print {
+      /* Ocultar UI y dejar visible el generador con el grid completo */
+      .topbar, body.topbar-ready .topbar, .topbar *, .actions, .controls, .muted, .card h2, #modeSelector, #detalleCard, #paginationControls { display: none !important; visibility: hidden !important; }
+      .topbar { position: static !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; }
+      body, html { background: #fff !important; }
+      .page-container { max-width: none; margin: 0; padding: 0; }
+      html, body, #qrApp, .card, #generatorCard, #labelsGrid { overflow: visible !important; height: auto !important; }
+      #generatorCard { display: block !important; }
+      #labelsGrid { display: grid !important; }
+      .label { page-break-inside: avoid; box-shadow: none !important; background: #fff !important; }
+      .label small { display: none !important; }
+      .card { box-shadow: none; background: #fff; padding: 0; margin: 0; }
+      .grid { gap: 10px; grid-template-columns: repeat(3, 1fr) !important; }
+      #labelsGrid > .label { height: 240px; }
+      .page-break { break-before: page; }
+    }
+  </style>
+</head>
+<body>
+  <!--<div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+
+ <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button active" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button" data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <div class="page-container" id="qrApp">
+    <div class="card" id="modeSelector">
+      <div class="actions">
+        <button class="btn primary" id="openGenerator"><i class="fa fa-qrcode"></i>&nbsp;Generar etiquetas QR</button>
+        <button class="btn ghost" id="openScanner"><i class="fa fa-circle-info"></i>&nbsp;Ver detalle por ID</button>
+        <button class="btn ghost" id="showAllQrs"><i class="fa fa-list"></i>&nbsp;Mostrar todos</button>
+      </div>
+    </div>
+
+    <div class="card" id="generatorCard" style="display:none;">
+      <h2>Generador masivo de QR para equipos de IT</h2>
+      <div class="controls">
+        <div class="field"><label>Prefijo</label><input id="prefijo" value="PC" /></div>
+        <div class="field"><label>Desde</label><input id="desde" type="number" value="1" min="1" /></div>
+        <div class="field"><label>Hasta</label><input id="hasta" type="number" value="1000" min="1" /></div>
+        <div class="field"><label>Dígitos (padding)</label><input id="digitos" type="number" value="4" min="1" max="10" /></div>
+        <div class="field"><label>Por página</label><input id="porPagina" type="number" value="200" min="1" max="200" /></div>
+        <div class="field"><label>URL base</label><input id="urlBase" placeholder="Automático" /></div>
+      </div>
+      <div class="actions" style="margin-top:10px;">
+        <button class="btn primary" id="generarBtn">Generar</button>
+        <button class="btn ghost" id="imprimirBtn" disabled>Imprimir etiquetas</button>
+        <span class="muted">Se generarán códigos tipo: <code>PC0001</code>, <code>PC0002</code> ...</span>
+      </div>
+      <div class="divider"></div>
+      <div class="grid" id="labelsGrid"></div>
+    </div>
+
+    <div class="card" id="detalleCard" style="display:none;">
+      <h2>Detalle del equipo</h2>
+      <div class="detail-layout">
+        <div>
+          <div class="qr-preview" id="qrDetalle"></div>
+          <div style="text-align:center; margin-top:8px;">
+            <div id="assetHuman"></div>
+          </div>
+        </div>
+        <div>
+          <div class="detail-row"><span>ID del equipo</span><b id="assetId">-</b></div>
+          <div class="detail-row"><span>Área / Ubicación</span><b id="assetArea">-</b></div>
+          <div class="detail-row"><span>Usuario asignado</span><b id="assetUser">-</b></div>
+          <div class="detail-row"><span>Último preventivo</span><b id="lastPM">-</b></div>
+          <div class="detail-row"><span>Último correctivo</span><b id="lastCM">-</b></div>
+          <div class="detail-row"><span>Próximo preventivo</span><b id="nextPM">-</b></div>
+          <div class="detail-row"><span>Observaciones</span><b id="assetNotes">-</b></div>
+          <div class="actions" style="margin-top:8px;">
+            <a class="btn primary" id="registrarPM" href="#">Registrar preventivo</a>
+            <a class="btn ghost" id="registrarCM" href="#">Registrar correctivo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal personalizado para ingresar ID -->
+  <div class="modal-backdrop" id="idModal">
+    <div class="modal">
+      <header>Ingresa el ID del equipo (ej. PC0001)</header>
+      <div class="field">
+        <input id="modalAssetId" placeholder="PC0001" autocomplete="off" />
+      </div>
+      <footer>
+        <button class="btn secondary" id="idCancel">Cancelar</button>
+        <button class="btn success" id="idOk">OK</button>
+      </footer>
+    </div>
+  </div>
+  <!-- Modal para registrar mantenimiento -->
+  <div class="modal-backdrop" id="mntModal">
+    <div class="modal">
+      <header id="mntTitle">Registrar mantenimiento</header>
+      <main>
+        <div class="field">
+          <label>Fecha</label>
+          <input id="mntFecha" type="date" />
+        </div>
+        <div class="field">
+          <label>Notas</label>
+          <textarea id="mntNotas" placeholder="Detalles del mantenimiento..."></textarea>
+        </div>
+      </main>
+      <footer>
+        <button class="btn secondary" id="mntCancel">Cancelar</button>
+        <button class="btn success" id="mntSave">Guardar</button>
+      </footer>
+    </div>
+  </div>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    // Utilidades
+    function padLeft(num, size) {
+      const s = String(num);
+      return s.length >= size ? s : '0'.repeat(size - s.length) + s;
+    }
+
+    function formatDateLong(value) {
+      if (!value) return '-';
+      const date = new Date(value);
+      if (isNaN(date)) return '-';
+      const day = date.getDate();
+      const month = date.toLocaleString('es-ES', { month: 'long' });
+      const year = date.getFullYear();
+      return `${day} de ${month} del ${year}`;
+    }
+
+    function buildTargetUrl(id) {
+      const baseInput = document.getElementById('urlBase');
+      const base = (baseInput && baseInput.value.trim()) ? baseInput.value.trim() : (location.origin + location.pathname);
+      const hasQuery = base.includes('?');
+      if (hasQuery) {
+        const url = new URL(base);
+        url.searchParams.set('id', id);
+        return url.toString();
+      }
+      return `${base}?id=${encodeURIComponent(id)}`;
+    }
+
+    function renderGenerator() {
+      document.getElementById('generatorCard').style.display = 'block';
+      document.getElementById('detalleCard').style.display = 'none';
+    }
+
+    function renderDetalle() {
+      document.getElementById('generatorCard').style.display = 'none';
+      document.getElementById('detalleCard').style.display = 'block';
+    }
+
+    // Variables de paginación
+    let currentPage = 1;
+    let itemsPerPage = 10;
+    let allItems = [];
+    let totalPages = 1;
+
+    async function renderAllFromDB(page = 1) {
+      document.getElementById('generatorCard').style.display = 'block';
+      document.getElementById('detalleCard').style.display = 'none';
+      const labelsGrid = document.getElementById('labelsGrid');
+      labelsGrid.innerHTML = '';
+      
+      try {
+        const res = await fetch('/api/mantenimiento_qr');
+        if (!res.ok) throw new Error('Error al obtener IDs');
+        const data = await res.json();
+        allItems = data.items || [];
+        
+        if (allItems.length === 0) {
+          labelsGrid.innerHTML = '<div class="muted">No hay QR registrados en la base de datos.</div>';
+          return;
+        }
+
+        // Calcular paginación
+        totalPages = Math.ceil(allItems.length / itemsPerPage);
+        currentPage = Math.min(page, totalPages);
+        
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const itemsToShow = allItems.slice(startIndex, endIndex);
+
+        // Configurar layout para impresión (3 columnas)
+        const grid = document.getElementById('labelsGrid');
+        const prevCols = grid.style.gridTemplateColumns;
+        grid.style.gridTemplateColumns = 'repeat(3, minmax(180px, 1fr))';
+        
+        // Renderizar solo los items de la página actual
+        for (const row of itemsToShow) {
+          const human = row.id;
+          const label = document.createElement('div');
+          label.className = 'label';
+          const qrDiv = document.createElement('div');
+          qrDiv.style.width = '120px';
+          qrDiv.style.height = '120px';
+          const humanEl = document.createElement('b');
+          humanEl.textContent = human;
+          const target = buildTargetUrl(human);
+          label.appendChild(qrDiv);
+          label.appendChild(humanEl);
+          labelsGrid.appendChild(label);
+          new QRCode(qrDiv, { text: target, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M });
+        }
+        
+        // Restaurar columnas si fue modificado
+        grid.style.gridTemplateColumns = prevCols;
+        
+        // Renderizar controles de paginación
+        renderPaginationControls();
+        
+      } catch (e) {
+        console.error(e);
+        labelsGrid.innerHTML = '<div class="muted">Error al cargar los QR.</div>';
+      }
+    }
+
+    function renderPaginationControls() {
+      // Eliminar controles anteriores si existen
+      const existingControls = document.getElementById('paginationControls');
+      if (existingControls) {
+        existingControls.remove();
+      }
+
+      // Solo crear controles si hay más de una página
+      if (totalPages <= 1) return;
+
+      const controls = document.createElement('div');
+      controls.id = 'paginationControls';
+      
+      // Botón anterior
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'btn ghost';
+      prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i> Anterior';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) renderAllFromDB(currentPage - 1);
+      });
+      controls.appendChild(prevBtn);
+
+      // Indicador de página
+      const pageInfo = document.createElement('span');
+      pageInfo.className = 'muted';
+      pageInfo.innerHTML = `Página ${currentPage} de ${totalPages} (${allItems.length} total)`;
+      controls.appendChild(pageInfo);
+
+      // Botón siguiente
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'btn ghost';
+      nextBtn.innerHTML = 'Siguiente <i class="fa fa-chevron-right"></i>';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) renderAllFromDB(currentPage + 1);
+      });
+      controls.appendChild(nextBtn);
+
+      // Insertar controles después de labelsGrid
+      const generatorCard = document.getElementById('generatorCard');
+      generatorCard.appendChild(controls);
+    }
+
+    function setupEvents() {
+      const openGen = document.getElementById('openGenerator');
+      const openScan = document.getElementById('openScanner');
+      const showAll = document.getElementById('showAllQrs');
+      if (openGen) openGen.addEventListener('click', renderGenerator);
+      if (openScan) openScan.addEventListener('click', () => openIdModal());
+      if (showAll) showAll.addEventListener('click', () => renderAllFromDB(1));
+
+      const imprimirBtn = document.getElementById('imprimirBtn');
+      if (imprimirBtn) imprimirBtn.addEventListener('click', async () => {
+        // Espera a que el navegador pinte todos los QR antes de imprimir
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        await new Promise(r => setTimeout(r, 150));
+        window.scrollTo(0, 0);
+        window.print();
+      });
+
+      const generarBtn = document.getElementById('generarBtn');
+      if (generarBtn) generarBtn.addEventListener('click', () => {
+        const prefijo = document.getElementById('prefijo').value.trim() || 'PC';
+        const desde = Math.max(1, parseInt(document.getElementById('desde').value, 10) || 1);
+        const hasta = Math.max(desde, parseInt(document.getElementById('hasta').value, 10) || desde);
+        const digitos = Math.min(10, Math.max(1, parseInt(document.getElementById('digitos').value, 10) || 4));
+        const labelsGrid = document.getElementById('labelsGrid');
+        labelsGrid.innerHTML = '';
+
+        const idsGenerados = [];
+        for (let n = desde; n <= hasta; n++) {
+          const human = `${prefijo}${padLeft(n, digitos)}`;
+          idsGenerados.push(human);
+          const label = document.createElement('div');
+          label.className = 'label';
+          const qrDiv = document.createElement('div');
+          qrDiv.style.width = '120px';
+          qrDiv.style.height = '120px';
+          const humanEl = document.createElement('b');
+          humanEl.textContent = human;
+          const target = buildTargetUrl(human);
+          label.appendChild(qrDiv);
+          label.appendChild(humanEl);
+          labelsGrid.appendChild(label);
+          new QRCode(qrDiv, { text: target, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M });
+        }
+
+        document.getElementById('imprimirBtn').disabled = false;
+
+        // Registrar IDs generados en backend (batch)
+        fetch('/api/mantenimiento_qr/batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: idsGenerados })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(`Se registraron ${data.inserted} de ${data.total} IDs en la base de datos`);
+          }
+        })
+        .catch(error => {
+          console.error(' Error enviando IDs:', error);
+          alert('Error al registrar IDs en la base de datos');
+        });
+      });
+    }
+
+    async function loadAssetDetails(id) {
+      const idEl = document.getElementById('assetId');
+      const nameEl = document.getElementById('assetName');
+      const areaEl = document.getElementById('assetArea');
+      const userEl = document.getElementById('assetUser');
+      const lastPMEl = document.getElementById('lastPM');
+      const lastCMEl = document.getElementById('lastCM');
+      const nextPMEl = document.getElementById('nextPM');
+      const notesEl = document.getElementById('assetNotes');
+      const humanEl = document.getElementById('assetHuman');
+      const qrDiv = document.getElementById('qrDetalle');
+
+      // Verificar primero si el ID existe exactamente en la base de datos
+      try {
+        const mRes = await fetch(`/api/mantenimiento_qr/${encodeURIComponent(id)}`);
+        if (!mRes.ok) {
+          // ID no encontrado, mostrar mensaje y redirigir
+          alert(`El ID "${id}" no existe en la base de datos. Solo se puede acceder a equipos registrados.`);
+          window.location.href = 'qr_inventario.html';
+          return;
+        }
+        
+        // ID encontrado, continuar con la carga
+        const m = await mRes.json();
+        const item = m.item || m;
+        
+        // Mostrar datos del equipo
+        idEl.textContent = id;
+        humanEl.textContent = id;
+        qrDiv.innerHTML = '';
+        new QRCode(qrDiv, { text: buildTargetUrl(id), width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+
+        // Configurar botones de mantenimiento
+        const registrarPM = document.getElementById('registrarPM');
+        const registrarCM = document.getElementById('registrarCM');
+        if (registrarPM) {
+          registrarPM.href = '#';
+          registrarPM.onclick = (e) => { e.preventDefault(); openMntModal('preventivo', id); };
+        }
+        if (registrarCM) {
+          registrarCM.href = '#';
+          registrarCM.onclick = (e) => { e.preventDefault(); openMntModal('correctivo', id); };
+        }
+
+        // Cargar datos de mantenimiento
+        lastPMEl.textContent = formatDateLong(item.ultimo_preventivo);
+        lastCMEl.textContent = formatDateLong(item.ultimo_correctivo);
+        nextPMEl.textContent = formatDateLong(item.proximo_preventivo);
+        notesEl.textContent = item.notas || '-';
+
+        // Intentar cargar datos adicionales del inventario (opcional)
+        try {
+          const iRes = await fetch(`/api/inventario/${encodeURIComponent(id)}`);
+          if (iRes.ok) {
+            const data = await iRes.json();
+            const invItem = data.item || data;
+            nameEl.textContent = invItem.nombre_completo || invItem.hostname || '-';
+            areaEl.textContent = invItem.area || invItem.departamento || '-';
+            userEl.textContent = invItem.usuario_asignado || invItem.asignado_a || '-';
+            if (!notesEl.textContent || notesEl.textContent === '-') notesEl.textContent = invItem.notas || '-';
+          }
+        } catch (e) {
+          // Si no hay datos de inventario, mostrar guiones
+          nameEl.textContent = '-';
+          areaEl.textContent = '-';
+          userEl.textContent = '-';
+        }
+
+      } catch (error) {
+        console.error('Error verificando ID:', error);
+        alert('❌ Error al verificar el ID del equipo. Intenta nuevamente.');
+        window.location.href = 'qr_inventario.html';
+      }
+    }
+
+    // Modal de ID
+    function openIdModal() {
+      const modal = document.getElementById('idModal');
+      const input = document.getElementById('modalAssetId');
+      modal.classList.add('active');
+      setTimeout(() => { input.focus(); }, 50);
+    }
+    function closeIdModal() {
+      const modal = document.getElementById('idModal');
+      modal.classList.remove('active');
+    }
+    function confirmIdModal() {
+      const val = (document.getElementById('modalAssetId').value || '').trim();
+      if (!val) return;
+      const url = buildTargetUrl(val);
+      closeIdModal();
+      window.location.href = url;
+    }
+
+    // Modal mantenimiento
+    let currentMnt = { tipo: 'preventivo', id: null };
+    function openMntModal(tipo, id) {
+      currentMnt = { tipo, id };
+      const title = document.getElementById('mntTitle');
+      const fecha = document.getElementById('mntFecha');
+      const notas = document.getElementById('mntNotas');
+      title.textContent = `Registrar ${tipo}`;
+      const today = new Date();
+      fecha.value = today.toISOString().slice(0,10);
+      notas.value = '';
+      document.getElementById('mntModal').classList.add('active');
+      setTimeout(() => fecha.focus(), 50);
+    }
+    function closeMntModal() {
+      document.getElementById('mntModal').classList.remove('active');
+    }
+    async function saveMntModal() {
+      const fecha = document.getElementById('mntFecha').value;
+      const notas = document.getElementById('mntNotas').value.trim();
+      const payload = { id: currentMnt.id };
+      if (currentMnt.tipo === 'preventivo') payload.ultimo_preventivo = fecha ? new Date(fecha).toISOString() : null;
+      if (currentMnt.tipo === 'correctivo') payload.ultimo_correctivo = fecha ? new Date(fecha).toISOString() : null;
+      if (notas) payload.notas = notas;
+      try {
+        const res = await fetch('/api/mantenimiento_qr', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const item = data.item || {};
+          // Refrescar campos visibles
+          if (item.ultimo_preventivo) document.getElementById('lastPM').textContent = formatDateLong(item.ultimo_preventivo);
+          if (item.ultimo_correctivo) document.getElementById('lastCM').textContent = formatDateLong(item.ultimo_correctivo);
+          if (item.notas) document.getElementById('assetNotes').textContent = item.notas;
+          closeMntModal();
+        } else {
+          alert('Error al guardar el mantenimiento');
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Error de red al guardar');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupEvents();
+      const idCancel = document.getElementById('idCancel');
+      const idOk = document.getElementById('idOk');
+      const idInput = document.getElementById('modalAssetId');
+      if (idCancel) idCancel.addEventListener('click', closeIdModal);
+      if (idOk) idOk.addEventListener('click', confirmIdModal);
+      if (idInput) idInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') confirmIdModal();
+        if (e.key === 'Escape') closeIdModal();
+      });
+      const mntCancel = document.getElementById('mntCancel');
+      const mntSave = document.getElementById('mntSave');
+      if (mntCancel) mntCancel.addEventListener('click', closeMntModal);
+      if (mntSave) mntSave.addEventListener('click', saveMntModal);
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      if (id) {
+        renderDetalle();
+        loadAssetDetails(id);
+      } else {
+        renderGenerator();
+      }
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+<script src="js/topbar.js"></script>
+</body>
+</html>

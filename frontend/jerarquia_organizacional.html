@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jerarquía Organizacional</title>
+    <link rel="stylesheet" href="/styles/jerarquia.css">
+    <link rel="icon" href="/favicon.png" type="image/png">  
+</head>
+<body>
+
+    <!-- Contenido principal -->
+    <div class="container">
+        <!-- Jerarquía -->
+        <div class="hierarchy-container">
+            <div id="hierarchyTree" class="hierarchy-tree">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando jerarquía organizacional...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalles del empleado -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detalles del Empleado</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="employee-details">
+                    <div class="detail-row">
+                        <label>Nombre:</label>
+                        <span id="modalNombre"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Puesto:</label>
+                        <span id="modalPuesto"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Área:</label>
+                        <span id="modalArea"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Departamento:</label>
+                        <span id="modalDepartamento"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Supervisor:</label>
+                        <span id="modalSupervisor"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Es Supervisor:</label>
+                        <span id="modalEsSupervisor"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Nivel Jerárquico:</label>
+                        <span id="modalNivel"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Subordinados:</label>
+                        <span id="modalSubordinados"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/topbar.js"></script>
+    <script src="/js/global-color.js"></script>
+    <script>
+        let jerarquiaData = null;
+        let filteredData = null;
+
+        // Cargar jerarquía al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHierarchy();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Modal
+            document.querySelector('.close').addEventListener('click', closeModal);
+            document.getElementById('employeeModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+
+        // Cargar jerarquía desde el servidor
+        async function loadHierarchy() {
+            try {
+                showLoading(true);
+                const response = await fetch('/api/empleados/jerarquia');
+                const data = await response.json();
+                
+                if (data.success) {
+                    jerarquiaData = data.jerarquia;
+                    filteredData = jerarquiaData;
+                    renderHierarchy();
+                } else {
+                    throw new Error(data.error || 'Error al cargar jerarquía');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al cargar la jerarquía organizacional: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Mostrar/ocultar loading
+        function showLoading(show) {
+            const loading = document.querySelector('.loading');
+            const tree = document.getElementById('hierarchyTree');
+            
+            if (show) {
+                loading.style.display = 'block';
+                tree.innerHTML = '';
+                tree.appendChild(loading);
+            } else {
+                loading.style.display = 'none';
+            }
+        }
+
+        // Mostrar error
+        function showError(message) {
+            const tree = document.getElementById('hierarchyTree');
+            tree.innerHTML = `
+                <div class="error-message">
+                    <i class="icon-error"></i>
+                    <p>${message}</p>
+                    <button onclick="loadHierarchy()" class="btn btn-primary">Reintentar</button>
+                </div>
+            `;
+        }
+
+
+        // Renderizar jerarquía
+        function renderHierarchy() {
+            const tree = document.getElementById('hierarchyTree');
+            tree.innerHTML = '';
+            
+            if (filteredData.length === 0) {
+                tree.innerHTML = '<div class="no-results">No se encontraron empleados con los filtros aplicados.</div>';
+                return;
+            }
+            
+            filteredData.forEach(node => {
+                const nodeElement = createNodeElement(node);
+                tree.appendChild(nodeElement);
+            });
+        }
+
+        // Crear elemento de nodo
+        function createNodeElement(node) {
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = `hierarchy-node level-${node.nivel}`;
+            
+            const isSupervisor = node.es_supervisor;
+            const hasSubordinates = node.subordinados.length > 0;
+            
+            nodeDiv.innerHTML = `
+                <div class="node-content ${isSupervisor ? 'supervisor' : ''}" onclick="showEmployeeDetails(${node.id})">
+                    <div class="node-name">${node.nombre}</div>
+                    <div class="node-position">${node.puesto || 'Sin puesto'}</div>
+                    <div class="node-department">${node.departamento || 'Sin departamento'}</div>
+                    ${hasSubordinates ? `<div class="subordinates-count">${node.subordinados.length} subordinado(s)</div>` : ''}
+                </div>
+                ${hasSubordinates ? `
+                    <div class="node-children" id="children-${node.id}">
+                        ${node.subordinados.map(child => createNodeElement(child).outerHTML).join('')}
+                    </div>
+                ` : ''}
+            `;
+            
+            return nodeDiv;
+        }
+
+
+        // Mostrar detalles del empleado
+        function showEmployeeDetails(employeeId) {
+            const employee = findEmployeeById(jerarquiaData, employeeId);
+            if (!employee) return;
+            
+            document.getElementById('modalNombre').textContent = employee.nombre;
+            document.getElementById('modalPuesto').textContent = employee.puesto || 'Sin puesto';
+            document.getElementById('modalArea').textContent = employee.area || 'Sin área';
+            document.getElementById('modalDepartamento').textContent = employee.departamento || 'Sin departamento';
+            document.getElementById('modalSupervisor').textContent = employee.supervisor || 'Sin supervisor';
+            document.getElementById('modalEsSupervisor').textContent = employee.es_supervisor ? 'Sí' : 'No';
+            document.getElementById('modalNivel').textContent = employee.nivel;
+            document.getElementById('modalSubordinados').textContent = employee.subordinados.length;
+            
+            document.getElementById('employeeModal').style.display = 'block';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('employeeModal').style.display = 'none';
+        }
+
+        // Buscar empleado por ID
+        function findEmployeeById(nodes, id) {
+            for (const node of nodes) {
+                if (node.id === id) return node;
+                const found = findEmployeeById(node.subordinados, id);
+                if (found) return found;
+            }
+            return null;
+        }
+
+    </script>
+</body>
+</html>

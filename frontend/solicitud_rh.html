@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="styles/solicitud_rh.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Documentos - RH</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Solicitudes</h1>
+            <p>Recursos Humanos</p>
+        </div>    
+        <div class="form-container">
+            <form id="solicitudForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo <span class="required">*</span></label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre completo">
+                </div>    
+                <div class="form-group">
+                    <label for="tipoDocumento">Tipo de Documento</label>
+                    <select id="tipoDocumento" name="tipoDocumento">
+                        <option value="">Selecciona el tipo de documento</option>
+                        <option value="constancia_vacaciones">Constancia de Vacaciones</option>
+                        <option value="constancia_sueldo">Constancia de Sueldo</option>
+                        <option value="constancia_trabajo">Constancia de Trabajo</option>
+                        <option value="carta_recomendacion">Carta de Recomendación</option>
+                        <option value="certificado_laboral">Certificado Laboral</option>
+                        <option value="finiquito">Finiquito</option>
+                        <option value="otro">Otro (especificar en descripción)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numeroEmpleado">Número de Empleado</label>
+                    <input type="text" id="numeroEmpleado" name="numeroEmpleado" placeholder="Ejemplo: 123">
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefono">Número de Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Ejemplo: 664 123 4567">
+                </div>
+                
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="correo" placeholder="tu_correo@gmail.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="peticion">Descripción de la Petición <span class="required">*</span></label>
+                    <textarea id="peticion" name="peticion" required placeholder="Describe detalladamente qué documento necesitas y el motivo de tu solicitud..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    Enviar Solicitud
+                </button>
+            </form>
+            
+            <div id="successMessage" class="success-message">
+                Tu solicitud ha sido enviada exitosamente. Te contactaremos pronto.
+            </div>
+            
+            <div id="errorMessage" class="error-message">
+                Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo.
+            </div>
+        </div>
+    </div>
+    <!-- Modal de éxito con animación -->
+    <div id="successModal" class="success-modal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                </svg>
+            </div>
+            <h2>¡Solicitud Enviada!</h2>
+            <p>Tu solicitud ha sido recibida exitosamente. Recursos Humanos se pondrá en contacto contigo pronto.</p>
+            <button id="nuevaSolicitudBtn" class="nueva-solicitud-btn">Nueva Solicitud</button>
+        </div>
+    </div>
+    <script>
+        function capitalizeWords(str) 
+        {
+            return str.replace(/\b\w/g, function(char) 
+            {
+                return char.toUpperCase();
+            });
+        }
+        // Validación para solo letras y espacios en el nombre
+        document.getElementById('nombre').addEventListener('input', function(e) 
+        {
+            // Remover números y caracteres especiales, mantener solo letras y espacios
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+            const cursorPosition = this.selectionStart;
+            const originalLength = this.value.length; 
+            this.value = capitalizeWords(this.value);
+            const newLength = this.value.length;
+            if (newLength > originalLength) 
+            {
+                this.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+            } else 
+            {
+                this.setSelectionRange(cursorPosition, cursorPosition);
+            }
+        });
+        // Validación para solo números en número de empleado
+        document.getElementById('numeroEmpleado').addEventListener('input', function(e) 
+        {
+            // Remover todo excepto números
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        document.getElementById('telefono').addEventListener('input', function(e) 
+        {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        document.getElementById('nombre').addEventListener('blur', function(e) 
+        {
+            this.value = capitalizeWords(this.value);
+        });
+
+        // Función para mostrar el modal de éxito
+        function showSuccessModal() 
+        {
+            const modal = document.getElementById('successModal');
+            modal.style.display = 'flex';
+            setTimeout(() => 
+            {
+                modal.classList.add('show');
+            }, 10);
+        }
+        function hideSuccessModal() 
+        {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('show');
+            setTimeout(() => 
+            {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Evento para el botón de nueva solicitud
+        document.getElementById('nuevaSolicitudBtn').addEventListener('click', function() 
+        {
+            hideSuccessModal();
+            document.getElementById('solicitudForm').reset();
+            hideMessages();
+        });
+
+        document.getElementById('solicitudForm').addEventListener('submit', async function(e) 
+        {
+            e.preventDefault();
+            console.log('Formulario enviado, iniciando validación...');
+            
+            // Validar campos obligatorios
+            const nombre = document.getElementById('nombre').value.trim();
+            const peticion = document.getElementById('peticion').value.trim();
+            
+            console.log('Datos del formulario:', {
+                nombre: nombre,
+                peticion: peticion,
+                tipo_documento: document.getElementById('tipoDocumento').value,
+                numero_empleado: document.getElementById('numeroEmpleado').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                correo: document.getElementById('correo').value.trim()
+            });
+            
+            if (!nombre || !peticion) 
+            {
+                console.log('Validación fallida: campos obligatorios vacíos');
+                showMessage('error', 'Por favor, completa los campos obligatorios (Nombre y Descripción).');
+                return;
+            }
+            
+            // Validar correo si se proporciona
+            const correo = document.getElementById('correo').value.trim();
+            if (correo) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(correo)) {
+                    console.log('Validación fallida: correo inválido');
+                    showMessage('error', 'Por favor, ingresa un correo electrónico válido.');
+                    return;
+                }
+            }
+            
+            console.log('Validación exitosa, preparando envío...');
+            
+            // Mostrar indicador de carga
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+            
+            try 
+            {
+                const formData = 
+                {
+                    nombre: nombre,
+                    tipo_documento: document.getElementById('tipoDocumento').value,
+                    numero_empleado: document.getElementById('numeroEmpleado').value.trim(),
+                    telefono: document.getElementById('telefono').value.trim(),
+                    correo: correo,
+                    peticion: peticion
+                };
+                
+                console.log('Datos a enviar:', formData);
+                console.log('URL de la API:', '/api/solicitudes-rh');
+                
+                // Enviar datos al servidor
+                const response = await fetch('/api/solicitudes-rh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Respuesta del servidor recibida:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    ok: response.ok
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Solicitud enviada exitosamente:', result);
+                    showSuccessModal();
+                    document.getElementById('solicitudForm').reset();
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error del servidor:', errorData);
+                    throw new Error(errorData.error || 'Error al enviar la solicitud');
+                }
+            } catch (error) {
+                console.error('Error al enviar solicitud:', error);
+                console.error('Stack trace:', error.stack);
+                showMessage('error', 'Error al enviar la solicitud: ' + error.message);
+            } finally {
+                // Restaurar botón
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        function showMessage(type, message) {
+            hideMessages();
+            
+            if (type === 'success') 
+            {
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').textContent = message;
+            } else 
+            {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorMessage').textContent = message;
+            }
+        }
+        function hideMessages() 
+        {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => 
+        {
+            input.addEventListener('blur', function() 
+            {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.parentElement.classList.add('error');
+                    if (!this.parentElement.querySelector('.error-text')) 
+                    {
+                        const errorText = document.createElement('div');
+                        errorText.className = 'error-text';
+                        errorText.textContent = 'Este campo es requerido';
+                        this.parentElement.appendChild(errorText);
+                    }
+                } else 
+                {
+                    this.parentElement.classList.remove('error');
+                    const errorText = this.parentElement.querySelector('.error-text');
+                    if (errorText) 
+                    {
+                        errorText.remove();
+                    }
+                }
+            });
+            input.addEventListener('input', function() 
+            {
+                if (this.value.trim()) 
+                {
+                    this.parentElement.classList.remove('error');
+                    const errorText = this.parentElement.querySelector('.error-text');
+                    if (errorText) 
+                    {
+                        errorText.remove();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

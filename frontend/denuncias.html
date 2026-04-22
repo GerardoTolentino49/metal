@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Denuncias Anónimas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Preconnect para mejorar velocidad de carga -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  
+  <!-- CSS crítico primero -->
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/denuncias.css">
+  
+  <!-- Fuentes y iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Scripts críticos -->
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <!-- IT -->
+      <div class="menu-item has-submenu" id="itMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+      
+      <!-- RH -->
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="denuncias.html" class="submenu-item">Denuncias anónimas</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+      <!-- Design -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Design
+        <div class="submenu" id="designSubmenu">
+          <a href="design.html" class="submenu-item">Design</a>
+        </div>
+      </div>
+      
+      <!-- Warehouse -->
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Warehouse
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics</a>
+        </div>
+      </div>
+      
+      <!-- Maintenance -->
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Maintenance
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+      
+      <!-- Administración -->
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Administración
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="passwordsLink">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+          <button class="logout-button" id="logoutButton">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    <!-- Filtros y controles -->
+    <div class="denuncias-controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar denuncias...">
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">
+          <i class="fas fa-list"></i> Todas
+        </button>
+        <button class="filter-btn" data-filter="pending">
+          <i class="fas fa-clock"></i> Pendientes
+        </button>
+        <button class="filter-btn" data-filter="resolved">
+          <i class="fas fa-check-circle"></i> Resueltas
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de denuncias -->
+    <div class="denuncias-container" id="denunciasContainer">
+      <!-- Las denuncias se cargarán dinámicamente aquí -->
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Cargando denuncias...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de detalles de denuncia -->
+  <div id="denunciaModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Detalles de la Denuncia</h2>
+        <button class="modal-close" onclick="closeDenunciaModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- El contenido se cargará dinámicamente -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeDenunciaModal()">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
+        <button class="btn-resolve-modal" id="resolveModalBtn" style="display: none;">
+          <i class="fas fa-check"></i> Marcar como Resuelta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación personalizado -->
+  <div id="confirmModal" class="confirm-modal">
+    <div class="confirm-modal-content">
+      <h3 id="confirmMessage">¿Estás seguro de que quieres marcar esta denuncia como resuelta?</h3>
+      <div class="confirm-modal-buttons">
+        <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">
+          <i class="fas fa-times"></i> No, cancelar
+        </button>
+        <button class="confirm-btn confirm-btn-ok" id="confirmOkBtn">
+          <i class="fas fa-check"></i> Si, confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUEVO: Modal de vista previa de imagen -->
+  <div id="imagePreviewModal" class="image-preview-modal">
+    <div class="image-preview-content">
+      <div class="image-preview-header">
+        <button class="image-preview-close" onclick="closeImagePreview()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="image-preview-controls">
+          <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">
+            <i class="fas fa-search-plus"></i>
+          </button>
+          <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">
+            <i class="fas fa-search-minus"></i>
+          </button>
+          <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="image-preview-body">
+        <img id="previewImage" src="" alt="Vista previa de imagen" 
+             loading="lazy" draggable="false">
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts no críticos con defer -->
+  <script src="js/permisos.js" defer></script>
+  <script src="js/floating-buttons.js" defer></script>
+  
+  <!-- Script para manejar denuncias -->
+  <script>
+    // Variables globales para el zoom de imagen
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+
+    // Funcionalidad para denuncias
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDenuncias();
+      setupEventListeners();
+      setupImagePreviewEvents();
+    });
+
+    function setupEventListeners() {
+      // Búsqueda
+      document.getElementById('searchInput').addEventListener('input', function(e) {
+        filterDenuncias(e.target.value);
+      });
+
+      // Filtros
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          filterDenuncias(document.getElementById('searchInput').value, this.dataset.filter);
+        });
+      });
+    }
+
+    async function loadDenuncias() {
+      try {
+        const response = await fetch('/api/denuncias-anonimas');
+        const data = await response.json();
+        
+        if (data.success) {
+          displayDenuncias(data.denuncias);
+        } else {
+          showError('Error al cargar las denuncias');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showError('Error de conexión');
+      }
+    }
+
+    function displayDenuncias(denuncias) {
+      const container = document.getElementById('denunciasContainer');
+      
+      if (denuncias.length === 0) {
+        container.innerHTML = `
+          <div class="no-denuncias">
+            <i class="fas fa-inbox"></i>
+            <h3>No hay denuncias</h3>
+            <p>No se han reportado denuncias anónimas aún.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = denuncias.map(denuncia => `
+        <div class="denuncia-card" data-id="${denuncia.id}" data-status="${denuncia.time_end ? 'resolved' : 'pending'}">
+          <div class="denuncia-header">
+            <div class="denuncia-id">
+              <i class="fas fa-hashtag"></i>
+              ${denuncia.id.substring(0, 20)}...
+            </div>
+            <div class="denuncia-status ${denuncia.time_end ? 'resolved' : 'pending'}">
+              <i class="fas fa-${denuncia.time_end ? 'check-circle' : 'clock'}"></i>
+              ${denuncia.time_end ? 'Resuelta' : 'Pendiente'}
+            </div>
+          </div>
+          
+          <div class="denuncia-content">
+            <p class="denuncia-text">${denuncia.issue || 'Sin descripción'}</p>
+            ${denuncia.image_path ? `
+              <div class="denuncia-image">
+                <img src="${denuncia.image_path}" alt="Evidencia" 
+                     loading="lazy" onclick="openImagePreview('${denuncia.image_path}')"
+                     draggable="false">
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="denuncia-footer">
+            <div class="denuncia-timestamp">
+              <i class="fas fa-calendar-alt"></i>
+              ${formatDate(denuncia.timestamp)}
+            </div>
+            <div class="denuncia-actions">
+              <button class="btn-view" onclick="viewDenuncia('${denuncia.id}')">
+                <i class="fas fa-eye"></i> Ver
+              </button>
+              ${!denuncia.time_end ? `
+                <button class="btn-resolve" onclick="resolveDenuncia('${denuncia.id}')">
+                  <i class="fas fa-check"></i> Resolver
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterDenuncias(searchTerm = '', filter = 'all') {
+      const cards = document.querySelectorAll('.denuncia-card');
+      const searchLower = searchTerm.toLowerCase();
+      
+      cards.forEach(card => {
+        const text = card.querySelector('.denuncia-text').textContent.toLowerCase();
+        const status = card.dataset.status;
+        const matchesSearch = text.includes(searchLower);
+        const matchesFilter = filter === 'all' || status === filter;
+        
+        card.style.display = matchesSearch && matchesFilter ? 'block' : 'none';
+      });
+    }
+
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function viewDenuncia(id) {
+      // Buscar la denuncia en el DOM
+      const denunciaCard = document.querySelector(`[data-id="${id}"]`);
+      if (!denunciaCard) return;
+      
+      // Obtener los datos de la denuncia
+      const denunciaData = {
+        id: id,
+        status: denunciaCard.dataset.status,
+        text: denunciaCard.querySelector('.denuncia-text').textContent,
+        timestamp: denunciaCard.querySelector('.denuncia-timestamp').textContent,
+        imagePath: denunciaCard.querySelector('.denuncia-image img')?.src || null,
+        isResolved: denunciaCard.dataset.status === 'resolved'
+      };
+      
+      // Mostrar el modal con los datos
+      showDenunciaModal(denunciaData);
+    }
+
+    function showDenunciaModal(denunciaData) {
+      const modal = document.getElementById('denunciaModal');
+      const modalBody = document.getElementById('modalBody');
+      const resolveBtn = document.getElementById('resolveModalBtn');
+      
+      // Configurar el contenido del modal
+      modalBody.innerHTML = `
+        <div class="denuncia-detail-section">
+          <div class="detail-header">
+            <div class="detail-id">
+              <i class="fas fa-hashtag"></i>
+              ID: ${denunciaData.id.substring(0, 20)}...
+            </div>
+            <div class="detail-status ${denunciaData.status}">
+              <i class="fas fa-${denunciaData.isResolved ? 'check-circle' : 'clock'}"></i>
+              ${denunciaData.isResolved ? 'Resuelta' : 'Pendiente'}
+            </div>
+          </div>
+          
+          <div class="detail-content">
+            <h3>Descripción del Problema</h3>
+            <p class="detail-text">${denunciaData.text}</p>
+            
+            ${denunciaData.imagePath ? `
+              <div class="detail-image-section">
+                <h3>Evidencia</h3>
+                <div class="detail-image">
+                  <img src="${denunciaData.imagePath}" alt="Evidencia de la denuncia" 
+                       loading="lazy" onclick="openImagePreview('${denunciaData.imagePath}')"
+                       draggable="false">
+                </div>
+              </div>
+            ` : ''}
+            
+            <div class="detail-timestamp">
+              <h3>Fecha y Hora de Reporte</h3>
+              <p>${denunciaData.timestamp}</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Mostrar/ocultar botón de resolver
+      if (!denunciaData.isResolved) {
+        resolveBtn.style.display = 'inline-flex';
+        resolveBtn.onclick = () => {
+          resolveDenuncia(denunciaData.id);
+          closeDenunciaModal();
+        };
+      } else {
+        resolveBtn.style.display = 'none';
+      }
+      
+      // Mostrar el modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDenunciaModal() {
+      const modal = document.getElementById('denunciaModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeDenunciaModal();
+      }
+    });
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('denunciaModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeDenunciaModal();
+      }
+    });
+
+    function resolveDenuncia(id) {
+      showConfirmModal(
+        '¿Estás seguro de que quieres marcar esta denuncia como resuelta?',
+        () => {
+          // Función que se ejecuta al confirmar
+          fetch(`/api/denuncias-anonimas/${id}/resolver`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Recargar las denuncias para mostrar el cambio
+              loadDenuncias();
+              // Mostrar mensaje de éxito
+              showSuccess('Denuncia marcada como resuelta exitosamente');
+            } else {
+              showError('Error al resolver la denuncia: ' + data.error);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showError('Error de conexión al resolver la denuncia');
+          });
+        }
+      );
+    }
+
+    function showConfirmModal(message, onConfirm) {
+      const modal = document.getElementById('confirmModal');
+      const messageEl = document.getElementById('confirmMessage');
+      const okBtn = document.getElementById('confirmOkBtn');
+      
+      messageEl.textContent = message;
+      
+      // Configurar el botón de confirmación
+      okBtn.onclick = () => {
+        onConfirm();
+        closeConfirmModal();
+      };
+      
+      // Mostrar el modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirmModal() {
+      const modal = document.getElementById('confirmModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cerrar modal de confirmación con Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeDenunciaModal();
+        closeConfirmModal();
+      }
+    });
+
+    // Cerrar modal de confirmación al hacer clic fuera
+    document.getElementById('confirmModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeConfirmModal();
+      }
+    });
+
+    function showSuccess(message) {
+      // Crear un toast de éxito
+      const toast = document.createElement('div');
+      toast.className = 'toast-success';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      // Remover después de 3 segundos
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function showError(message) {
+      // Crear un toast de error
+      const toast = document.createElement('div');
+      toast.className = 'toast-error';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      // Remover después de 3 segundos
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // Scripts existentes del topbar
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+
+    // NUEVAS FUNCIONES PARA VISTA PREVIA DE IMAGEN
+    function openImagePreview(imageSrc) {
+      const modal = document.getElementById('imagePreviewModal');
+      const image = document.getElementById('previewImage');
+      
+      // Resetear zoom y posición
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      
+      // Configurar imagen
+      image.src = imageSrc;
+      image.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+      
+      // Mostrar modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImagePreview() {
+      const modal = document.getElementById('imagePreviewModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function zoomIn() {
+      if (currentZoom < 3) {
+        currentZoom += 0.5;
+        updateImageTransform();
+      }
+    }
+
+    function zoomOut() {
+      if (currentZoom > 0.5) {
+        currentZoom -= 0.5;
+        updateImageTransform();
+      }
+    }
+
+    function resetZoom() {
+      currentZoom = 1;
+      translateX = 0;
+      translateY = 0;
+      updateImageTransform();
+    }
+
+    function updateImageTransform() {
+      const image = document.getElementById('previewImage');
+      image.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    function setupImagePreviewEvents() {
+      const modal = document.getElementById('imagePreviewModal');
+      const image = document.getElementById('previewImage');
+
+      // Cerrar con Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeImagePreview();
+        }
+      });
+
+      // Cerrar al hacer clic fuera
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeImagePreview();
+        }
+      });
+
+      // Zoom con rueda del mouse
+      image.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          zoomIn();
+        } else {
+          zoomOut();
+        }
+      });
+
+      // Drag para mover imagen
+      image.addEventListener('mousedown', function(e) {
+        if (currentZoom > 1) {
+          isDragging = true;
+          startX = e.clientX - translateX;
+          startY = e.clientY - translateY;
+          image.style.cursor = 'grabbing';
+        }
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (isDragging && currentZoom > 1) {
+          translateX = e.clientX - startX;
+          translateY = e.clientY - startY;
+          updateImageTransform();
+        }
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (isDragging) {
+          isDragging = false;
+          image.style.cursor = 'grab';
+        }
+      });
+
+      // Touch events para dispositivos móviles
+      let touchStartX, touchStartY;
+      
+      image.addEventListener('touchstart', function(e) {
+        if (currentZoom > 1) {
+          touchStartX = e.touches[0].clientX - translateX;
+          touchStartY = e.touches[0].clientY - translateY;
+        }
+      });
+
+      image.addEventListener('touchmove', function(e) {
+        if (currentZoom > 1) {
+          e.preventDefault();
+          translateX = e.touches[0].clientX - touchStartX;
+          translateY = e.touches[0].clientY - touchStartY;
+          updateImageTransform();
+        }
+      });
+
+      // Pinch zoom
+      let initialDistance = 0;
+      let initialZoom = 1;
+
+      image.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+          initialDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          initialZoom = currentZoom;
+        }
+      });
+
+      image.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          const currentDistance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          
+          const scale = currentDistance / initialDistance;
+          currentZoom = Math.max(0.5, Math.min(3, initialZoom * scale));
+          updateImageTransform();
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Solicitud RH</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Test de Solicitud RH</h1>
+    
+    <form id="testForm">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required value="Test Usuario">
+        </div>
+        
+        <div class="form-group">
+            <label for="peticion">Petición:</label>
+            <textarea id="peticion" name="peticion" required>Test de petición</textarea>
+        </div>
+        
+        <button type="submit">Enviar Test</button>
+    </form>
+    
+    <div id="result" class="result" style="display: none;"></div>
+    
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = 'Enviando...';
+            
+            try {
+                const formData = {
+                    nombre: document.getElementById('nombre').value,
+                    peticion: document.getElementById('peticion').value,
+                    tipo_documento: 'test',
+                    numero_empleado: '999',
+                    telefono: '1234567890',
+                    correo: 'test@test.com'
+                };
+                
+                console.log('Enviando datos:', formData);
+                
+                const response = await fetch('/api/solicitudes-rh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Respuesta:', response);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Resultado:', result);
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Éxito!</h3>
+                        <p><strong>ID:</strong> ${result.solicitud.id}</p>
+                        <p><strong>Nombre:</strong> ${result.solicitud.nombre}</p>
+                        <p><strong>Estado:</strong> ${result.solicitud.estado}</p>
+                        <p><strong>Timestamp:</strong> ${result.solicitud.timestamp}</p>
+                    `;
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ Error!</h3>
+                        <p><strong>Status:</strong> ${response.status}</p>
+                        <p><strong>Error:</strong> ${errorData.error || 'Error desconocido'}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Error de Red!</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        });
+        
+        // Test de conexión simple
+        console.log('Página cargada, probando conexión...');
+        fetch('/api/solicitudes-rh')
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Conexión exitosa a la API:', data);
+            })
+            .catch(error => {
+                console.error('❌ Error de conexión:', error);
+            });
+    </script>
+</body>
+</html>

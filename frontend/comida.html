@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro de Comidas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/comida.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!-- Botón para regresar al menú principal -->
+  <button id="btnRegresar" class="btn-regresar" title="Regresar al menú principal" style="display: none;">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <div class="comida-container">
+    <div class="page-header">
+      <h1 class="page-title">Registro de Comidas</h1>
+      <p class="page-subtitle">Ingresa tu número de empleado para registrar tus comidas</p>
+    </div>
+    <div class="layout-grid">
+      <div class="left-column">
+        <!-- Input para número de empleado -->
+        <div class="input-section glass-card">
+          <div class="input-wrapper">
+            <i class="fas fa-id-card input-icon"></i>
+            <input 
+              type="text" 
+              id="numeroEmpleado" 
+              class="numero-input" 
+              placeholder="Ingresa tu número de empleado"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Botón para limpiar nombre del usuario -->
+        <div class="limpiar-row">
+          <button id="btnLimpiarNombre" class="btn-accion btn-otro-empleado-grande">
+            <i class="fas fa-eraser"></i>
+            <span>OTRO EMPLEADO</span>
+          </button>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div id="mensajeError" class="mensaje-error glass-card hidden">
+          <i class="fas fa-exclamation-circle"></i>
+          <p id="textoError"></p>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <!-- Menú de la semana (visible cuando no hay empleado seleccionado) -->
+        <div id="menuSemana" class="menu-semana glass-card">
+          <div id="menuSemanaLoader" style="text-align: center; padding: 40px; color: #aaa;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 32px;"></i>
+            <p>Cargando menú...</p>
+          </div>
+          <img id="menuSemanaImg" src="" alt="Menú de la semana" style="display: none;" />
+          <div id="menuSemanaError" style="display: none; text-align: center; padding: 40px; color: #ffffff;">
+            <i class="fas fa-utensils" style="font-size: 32px; margin-bottom: 10px;"></i>
+            <p>No hay menú de la semana disponible</p>
+          </div>
+        </div>
+
+        <!-- Canva embebido (presentación dinámica) -->
+        <div id="menuCanvaCard" class="glass-card" style="margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); display: none;">
+          <h3 style="color:#fff; margin: 0 0 10px 0; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-play-circle"></i> Presentación Canva
+          </h3>
+          <div style="position: relative; width: 100%; height: 0; padding-top: 56.25%; overflow: hidden; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.35);">
+            <iframe
+              id="menuCanvaFrame"
+              title="Presentación Canva"
+              loading="lazy"
+              style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none;"
+              src=""
+              allow="fullscreen">
+            </iframe>
+          </div>
+          <a id="menuCanvaLink" href="#" target="_blank" rel="noopener" style="display: inline-block; margin-top: 10px; color: #8ec5ff; text-decoration: none; font-weight: 600;">
+            Abrir en Canva ↗
+          </a>
+        </div>
+        <!-- Sección de información del empleado (oculta inicialmente) -->
+        <div id="empleadoInfo" class="empleado-info glass-card hidden">
+          <!-- Loading indicator -->
+          <div id="loadingIndicator" class="loading-indicator hidden">
+            <div class="loading-spinner"></div>
+            <p>Buscando empleado...</p>
+          </div>
+
+          <!-- Contenido del empleado -->
+          <div id="empleadoContenido" class="hidden">
+          <div class="empleado-header">
+            <div class="empleado-foto-container">
+              <img id="empleadoFoto" src="" alt="Foto del empleado" class="empleado-foto" />
+            </div>
+            <div class="empleado-datos">
+              <h2 id="empleadoNombre" class="empleado-nombre"></h2>
+              <p id="empleadoNumero" class="empleado-numero"></p>
+            </div>
+          </div>
+
+          <!-- Comidas registradas de la semana -->
+          <div class="comidas-semana">
+            <h3 class="comidas-titulo">
+              Comidas Registradas Esta Semana
+            </h3>
+            <!-- Total de comidas en número grande -->
+            <div class="total-comidas-display">
+              <span class="total-numero" id="totalComidasNumero">0</span>
+              <span class="total-label">Comidas</span>
+            </div>
+            <div id="comidasLista" class="comidas-lista">
+              <!-- Las comidas se mostrarán aquí dinámicamente -->
+            </div>
+            <div id="sinComidas" class="sin-comidas hidden">
+              <i class="fas fa-inbox"></i>
+              <p>No hay comidas registradas esta semana</p>
+            </div>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="acciones-botones">
+            <button id="btnRegistrarUna" class="btn-accion btn-una">
+              <i class="fas fa-utensils"></i>
+              <span>Registrar 1 Comida</span>
+            </button>
+            <button id="btnRegistrarDos" class="btn-accion btn-dos">
+              <i class="fas fa-utensils"></i>
+              <span>Registrar 2+ Comidas</span>
+            </button>
+          </div>
+
+          <!-- Sección inline para registrar 2+ comidas -->
+          <div id="registroInline" class="registro-inline">
+            <label for="cantidadComidasInline">Cantidad de Comidas</label>
+            <select id="cantidadComidasInline" class="form-input">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <button id="btnRegistrarInline" class="btn-accion btn-confirmar">
+              <i class="fas fa-check"></i>
+              <span>REGISTRAR</span>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+    let empleadoActual = null;
+    const API_BASE_URL = window.location.origin;
+
+    const numeroEmpleadoInput = document.getElementById('numeroEmpleado');
+    const empleadoInfo = document.getElementById('empleadoInfo');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const empleadoContenido = document.getElementById('empleadoContenido');
+    const mensajeError = document.getElementById('mensajeError');
+    const textoError = document.getElementById('textoError');
+    const empleadoFoto = document.getElementById('empleadoFoto');
+    const empleadoNombre = document.getElementById('empleadoNombre');
+    const empleadoNumero = document.getElementById('empleadoNumero');
+    const comidasLista = document.getElementById('comidasLista');
+    const sinComidas = document.getElementById('sinComidas');
+    const btnRegistrarUna = document.getElementById('btnRegistrarUna');
+    const btnRegistrarDos = document.getElementById('btnRegistrarDos');
+    const registroInline = document.getElementById('registroInline');
+    const cantidadComidasInline = document.getElementById('cantidadComidasInline');
+    const btnRegistrarInline = document.getElementById('btnRegistrarInline');
+    const btnLimpiarNombre = document.getElementById('btnLimpiarNombre');
+    const menuSemana = document.getElementById('menuSemana');
+    const menuSemanaImg = document.getElementById('menuSemanaImg');
+    const menuSemanaLoader = document.getElementById('menuSemanaLoader');
+    const menuSemanaError = document.getElementById('menuSemanaError');
+    const menuCanvaCard = document.getElementById('menuCanvaCard');
+    const menuCanvaFrame = document.getElementById('menuCanvaFrame');
+    const menuCanvaLink = document.getElementById('menuCanvaLink');
+    const MENU_REFRESH_MS = 10000;
+
+    let menuRefreshIntervalId = null;
+    let menuAnunciosETag = '';
+    let ultimaHuellaMenu = '';
+
+    let usuarioRegistrador = 'Sistema';
+
+    function obtenerFechaLocalISO(fecha = new Date()) {
+      const anio = fecha.getFullYear();
+      const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+      const dia = String(fecha.getDate()).padStart(2, '0');
+      return `${anio}-${mes}-${dia}`;
+    }
+
+    async function obtenerUsuarioActual() 
+    {
+      try 
+      {
+        const response = await fetch(`${API_BASE_URL}/api/usuario-actual`);
+        if (response.ok) 
+        {
+          const data = await response.json();
+          if (data.usuario) 
+          {
+            usuarioRegistrador = data.usuario;
+          }
+        }
+      } catch (error) 
+      {
+        console.error('Error al obtener usuario:', error);
+        usuarioRegistrador = 'Sistema';
+      }
+    }
+
+    numeroEmpleadoInput.addEventListener('keypress', async (e) => {
+      if (e.key === 'Enter') 
+      {
+        e.preventDefault();
+        const numero = numeroEmpleadoInput.value.trim();
+        if (numero) 
+        {
+          await buscarEmpleado(numero);
+        }
+      }
+    });
+
+    btnRegistrarUna.addEventListener('click', async () => {
+      await registrarUnaComida();
+    });
+
+    btnRegistrarDos.addEventListener('click', () => {
+      registroInline.classList.toggle('visible');
+    });
+
+    btnRegistrarInline.addEventListener('click', async () => {
+      await registrarComidasInline();
+    });
+
+    btnLimpiarNombre.addEventListener('click', () => {
+      empleadoNombre.textContent = '';
+      numeroEmpleadoInput.value = '';
+      ocultarEmpleado();
+    });
+
+    async function buscarEmpleado(numero) 
+    {
+      try 
+      {
+        ocultarError();
+        mostrarCargando();
+        const response = await fetch(`${API_BASE_URL}/api/empleados/${numero}`);
+        
+        if (!response.ok) 
+        {
+          throw new Error('Empleado no encontrado');
+        }
+
+        const empleado = await response.json();
+        
+        if (!empleado || !empleado.id) 
+        {
+          throw new Error('Empleado no encontrado');
+        }
+
+        empleadoActual = empleado;
+        mostrarEmpleado(empleado);
+        await cargarComidasSemana(empleado.id);
+
+      } catch (error) 
+      {
+        console.error('Error al buscar empleado:', error);
+        mostrarError('No se encontró un empleado con ese número. Por favor, verifica e intenta de nuevo.');
+        ocultarEmpleado();
+      }
+    }
+
+    function mostrarEmpleado(empleado) 
+    {
+      loadingIndicator.classList.add('hidden');
+      empleadoContenido.classList.remove('hidden');
+      
+      empleadoNombre.textContent = empleado.nombre_completo || 'Sin nombre';
+      empleadoNumero.textContent = `No. Empleado: ${empleado.id}`;
+
+      if (empleado.foto_url) 
+      {
+        empleadoFoto.src = empleado.foto_url;
+        empleadoFoto.onerror = () => {
+          empleadoFoto.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" fill="%23F0F0F0"/><circle cx="64" cy="44" r="22" fill="%23BDBDBD"/><path d="M24 100c0-20 18-36 40-36s40 16 40 36v8H24z" fill="%23BDBDBD"/></svg>';
+        };
+      } else 
+      {
+        empleadoFoto.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" fill="%23F0F0F0"/><circle cx="64" cy="44" r="22" fill="%23BDBDBD"/><path d="M24 100c0-20 18-36 40-36s40 16 40 36v8H24z" fill="%23BDBDBD"/></svg>';
+      }
+
+      empleadoInfo.classList.remove('hidden');
+      if (menuSemana) menuSemana.classList.add('hidden');
+    }
+
+    function ocultarEmpleado() 
+    {
+      empleadoInfo.classList.add('hidden');
+      loadingIndicator.classList.add('hidden');
+      empleadoContenido.classList.add('hidden');
+      empleadoActual = null;
+      if (menuSemana) menuSemana.classList.remove('hidden');
+    }
+
+    async function cargarComidasSemana(empleadoId) 
+    {
+      try 
+      {
+        const hoyLocal = obtenerFechaLocalISO();
+        const {inicioStr, finStr} = calcularRangoSemana(hoyLocal);
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/comidas/empleado/${empleadoId}?inicio=${inicioStr}&fin=${finStr}`
+        );
+
+        if (!response.ok) 
+        {
+          throw new Error('Error al cargar comidas');
+        }
+
+        const comidas = await response.json();
+        mostrarComidas(comidas);
+
+      } catch (error) 
+      {
+        console.error('Error al cargar comidas:', error);
+        mostrarComidas([]);
+      }
+    }
+
+    function mostrarComidas(comidas) 
+    {
+      comidasLista.innerHTML = '';
+      
+      if (!comidas || comidas.length === 0) 
+      {
+        sinComidas.classList.remove('hidden');
+        const totalNumero = document.getElementById('totalComidasNumero');
+        if (totalNumero) totalNumero.textContent = '0';
+        return;
+      }
+
+      sinComidas.classList.add('hidden');
+
+      let totalComidas = 0;
+      comidas.forEach(comida => {
+        const cantidad = parseInt(comida.cantidad, 10) || 0;
+        totalComidas += cantidad;
+      });
+
+      const totalNumero = document.getElementById('totalComidasNumero');
+      if (totalNumero) totalNumero.textContent = totalComidas;
+      
+      // Debug: mostrar valores en consola
+      console.log('Comidas mostradas:', {
+        registros: comidas.length,
+        totalComidas: totalComidas,
+        comidas: comidas.map(c => ({ fecha: c.fecha, cantidad: c.cantidad }))
+      });
+
+      comidas.forEach(comida => {
+        const comidaItem = document.createElement('div');
+        comidaItem.className = 'comida-item';
+        
+        const fecha = new Date(comida.fecha);
+        const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        comidaItem.innerHTML = `
+          <div class="comida-fecha">
+            <i class="fas fa-calendar-day"></i>
+            <span>${fechaFormateada}</span>
+          </div>
+          <div class="comida-cantidad">
+            <i class="fas fa-utensils"></i>
+            <span>${comida.cantidad} ${comida.cantidad === 1 ? 'comida' : 'comidas'}</span>
+          </div>
+          ${comida.observaciones ? `
+            <div class="comida-observaciones">
+              <i class="fas fa-comment"></i>
+              <span>${comida.observaciones}</span>
+            </div>
+          ` : ''}
+        `;
+
+        comidasLista.appendChild(comidaItem);
+      });
+    }
+
+
+
+    // Calcular inicio/fin de semana para una fecha dada (lunes a domingo)
+    // Usa fecha local para evitar problemas de zona horaria
+    function calcularRangoSemana(fechaStr)
+    {
+      // Parsear la fecha como fecha local (no UTC)
+      const partes = fechaStr.split('-');
+      const base = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+      
+      const diaSemana = base.getDay(); // 0=Dom, 1=Lun, ...
+      const diasDesdeLunes = diaSemana === 0 ? 6 : diaSemana - 1;
+      
+      const inicioSemana = new Date(base);
+      inicioSemana.setDate(base.getDate() - diasDesdeLunes);
+      inicioSemana.setHours(0, 0, 0, 0);
+      
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6);
+      finSemana.setHours(23, 59, 59, 999);
+      
+      // Formatear como YYYY-MM-DD usando fecha local
+      const formatoFecha = (fecha) => {
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const día = String(fecha.getDate()).padStart(2, '0');
+        return `${año}-${mes}-${día}`;
+      };
+      
+      return {
+        inicioStr: formatoFecha(inicioSemana),
+        finStr: formatoFecha(finSemana)
+      };
+    }
+
+    // Obtener detalle semanal de comidas para aplicar reglas:
+    // - Lun–Vie: máximo 5 en total
+    // - Sábado: máximo 1
+    // - Domingo: 0
+    // - Total semanal: máximo 6 (5 + 1)
+    async function obtenerDetalleSemana(empleadoId, fechaStr)
+    {
+      try
+      {
+        const {inicioStr, finStr} = calcularRangoSemana(fechaStr);
+        const r = await fetch(`${API_BASE_URL}/api/comidas/empleado/${empleadoId}?inicio=${inicioStr}&fin=${finStr}`);
+        if(!r.ok) {
+          return { totalSemana: 0, totalLunVie: 0, totalSabado: 0, totalDomingo: 0 };
+        }
+        const lista = await r.json();
+        if(!Array.isArray(lista)) {
+          return { totalSemana: 0, totalLunVie: 0, totalSabado: 0, totalDomingo: 0 };
+        }
+
+        let totalSemana = 0;
+        let totalLunVie = 0;
+        let totalSabado = 0;
+        let totalDomingo = 0;
+
+        lista.forEach(c => {
+          const cantidad = parseInt(c.cantidad, 10) || 0;
+          totalSemana += cantidad;
+
+          // Interpretar fecha como local (si viene YYYY-MM-DD o ISO)
+          const fechaRaw = (c.fecha || '').toString();
+          const fechaSolo = fechaRaw.includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
+          const partes = fechaSolo.split('-');
+          if (partes.length === 3) {
+            const d = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+            const dow = d.getDay(); // 0 Dom, 6 Sab
+            if (dow >= 1 && dow <= 5) totalLunVie += cantidad;
+            else if (dow === 6) totalSabado += cantidad;
+            else if (dow === 0) totalDomingo += cantidad;
+          }
+        });
+
+        return { totalSemana, totalLunVie, totalSabado, totalDomingo };
+      }catch(_){
+        return { totalSemana: 0, totalLunVie: 0, totalSabado: 0, totalDomingo: 0 };
+      }
+    }
+
+    // Obtener total de comidas para un día específico
+    async function obtenerTotalDia(empleadoId, fechaStr)
+    {
+      try{
+        const r = await fetch(`${API_BASE_URL}/api/comidas/empleado/${empleadoId}?inicio=${fechaStr}&fin=${fechaStr}`);
+        if(!r.ok) return 0;
+        const lista = await r.json();
+        if(!Array.isArray(lista)) return 0;
+        return lista.reduce((sum, c) => sum + (parseInt(c.cantidad, 10) || 0), 0);
+      }catch(_){ return 0; }
+    }
+
+    // Validar límites diarios y semanales de comidas
+    async function validarLimitesComidas(empleadoId, cantidad, fechaStr) {
+      // Parsear la fecha como fecha local para evitar problemas de zona horaria
+      const partes = fechaStr.split('-');
+      const fecha = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+      const diaSemana = fecha.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      
+      const totalDia = await obtenerTotalDia(empleadoId, fechaStr);
+      const detalleSemana = await obtenerDetalleSemana(empleadoId, fechaStr);
+      const totalSemana = detalleSemana.totalSemana;
+      const totalLunVie = detalleSemana.totalLunVie;
+      const totalSabado = detalleSemana.totalSabado;
+      const totalDomingo = detalleSemana.totalDomingo;
+      
+      // Debug: mostrar valores en consola
+      console.log('Validación de límites:', {
+        fecha: fechaStr,
+        diaSemana: diaSemana,
+        totalDia: totalDia,
+        totalSemana: totalSemana,
+        totalLunVie: totalLunVie,
+        totalSabado: totalSabado,
+        totalDomingo: totalDomingo,
+        cantidad: cantidad
+      });
+      
+      // Domingo: 0 comidas
+      if (diaSemana === 0) {
+        return {
+          valido: false,
+          mensaje: 'No se pueden registrar comidas en domingo.'
+        };
+      }
+      
+      // Validar límite diario según el día de la semana
+      if (diaSemana >= 1 && diaSemana <= 5) { // Lunes a viernes (1-5)
+        // Máximo 5 por día (regla ya existente)
+        if ((totalDia + cantidad) > 5) {
+          return {
+            valido: false,
+            mensaje: `Límite de comidas excedido para hoy. Máximo 5 por día de lunes a viernes. Ya tienes ${totalDia}.`
+          };
+        }
+
+        // Máximo 5 en total entre semana (lunes a viernes)
+        if ((totalLunVie + cantidad) > 5) {
+          return {
+            valido: false,
+            mensaje: `Límite entre semana excedido. Máximo 5 comidas de lunes a viernes. Ya tienes ${totalLunVie}.`
+          };
+        }
+      } else if (diaSemana === 6) { // Sábado
+        // Máximo 1 el sábado (y por lo tanto en el día)
+        if ((totalSabado + cantidad) > 1) {
+          return {
+            valido: false,
+            mensaje: `Límite excedido. Máximo 1 comida el sábado. Ya tienes ${totalSabado}.`
+          };
+        }
+      }
+      
+      // Validar límite semanal
+      if ((totalSemana + cantidad) > 6) {
+        return {
+          valido: false,
+          mensaje: `Límite semanal excedido. Máximo 6 comidas por semana. Ya tienes ${totalSemana}.`
+        };
+      }
+      
+      return { valido: true, mensaje: '' };
+    }
+
+    // Función para registrar comidas desde dropdown inline
+    async function registrarComidasInline() {
+      if (!empleadoActual) return;
+
+      const cantidad = parseInt(cantidadComidasInline.value);
+      const fecha = obtenerFechaLocalISO();
+
+      if (!cantidad || cantidad < 2 || cantidad > 5) {
+        mostrarError('Por favor, selecciona una cantidad válida (2-5).');
+        return;
+      }
+
+      // Validar límites diarios y semanales
+      const validacion = await validarLimitesComidas(empleadoActual.id, cantidad, fecha);
+      if (!validacion.valido) {
+        mostrarError(validacion.mensaje);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/comidas`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            empleado_id: empleadoActual.id,
+            cantidad: cantidad,
+            fecha: fecha,
+            observaciones: null,
+            usuario_registro: usuarioRegistrador
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al registrar la comida');
+        }
+
+        // Recargar comidas de la semana
+        await cargarComidasSemana(empleadoActual.id);
+        
+        // Ocultar sección inline
+        registroInline.classList.remove('visible');
+        mostrarExito('Comidas registradas exitosamente');
+
+      } catch (error) {
+        console.error('Error al registrar comida:', error);
+        mostrarError(error.message || 'Error al registrar la comida. Por favor, intenta de nuevo.');
+      }
+    }
+
+    // Registro directo de 1 comida sin modal
+    async function registrarUnaComida() {
+      if (!empleadoActual) return;
+      try {
+        const hoy = obtenerFechaLocalISO();
+        
+        // Validar límites diarios y semanales
+        const validacion = await validarLimitesComidas(empleadoActual.id, 1, hoy);
+        if (!validacion.valido) {
+          mostrarError(validacion.mensaje);
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/comidas`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            empleado_id: empleadoActual.id,
+            cantidad: 1,
+            fecha: hoy,
+            observaciones: null,
+            usuario_registro: usuarioRegistrador
+          })
+        });
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Error al registrar la comida');
+        }
+        await cargarComidasSemana(empleadoActual.id);
+        mostrarExito('Comida registrada exitosamente');
+      } catch (error) {
+        console.error('Error al registrar comida:', error);
+        mostrarError(error.message || 'Error al registrar la comida. Por favor, intenta de nuevo.');
+      }
+    }
+
+    // Función para mostrar error
+    function mostrarError(mensaje) 
+    {
+      textoError.textContent = mensaje;
+      mensajeError.classList.remove('hidden');
+      setTimeout(() => {
+        ocultarError();
+      }, 5000);
+    }
+
+    function ocultarError() {
+      mensajeError.classList.add('hidden');
+    }
+
+    function mostrarExito(mensaje) 
+    {
+      const exito = document.createElement('div');
+      exito.className = 'mensaje-exito glass-card';
+      exito.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <p>${mensaje}</p>
+      `;
+      document.querySelector('.comida-container').appendChild(exito);
+      
+      setTimeout(() => {
+        exito.remove();
+      }, 3000);
+    }
+
+    function mostrarCargando() 
+    {
+      empleadoInfo.classList.remove('hidden');
+      loadingIndicator.classList.remove('hidden');
+      empleadoContenido.classList.add('hidden');
+    }
+
+    // Protección del botón regresar con contraseña
+    const btnRegresar = document.getElementById('btnRegresar');
+    if (btnRegresar) {
+      btnRegresar.addEventListener('click', () => {
+        const password = prompt('Ingresa la contraseña para regresar:');
+        if (password === 'phoenix123') {
+          window.location.href = 'selector.html';
+        } else if (password !== null) {
+          alert('Contraseña incorrecta');
+        }
+      });
+    }
+
+    function agregarParametroNoCache(url) {
+      const separador = url.includes('?') ? '&' : '?';
+      return `${url}${separador}t=${Date.now()}`;
+    }
+
+    function construirHuellaMenu(menuAnuncio) {
+      if (!menuAnuncio) return 'sin-menu';
+
+      return JSON.stringify({
+        id: menuAnuncio.id || '',
+        activo: !!menuAnuncio.activo,
+        menu_semana: !!menuAnuncio.menu_semana,
+        imagen_url: menuAnuncio.imagen_url || '',
+        canva: menuAnuncio.canva || '',
+        updated_at: menuAnuncio.updated_at || menuAnuncio.fecha_actualizacion || ''
+      });
+    }
+
+    // Cargar menú de la semana desde API
+    async function cargarMenuSemana(opciones = {}) {
+      const { silencioso = false } = opciones;
+      try {
+        if (!silencioso) {
+          menuSemanaLoader.style.display = 'block';
+          menuSemanaImg.style.display = 'none';
+          menuSemanaError.style.display = 'none';
+          if (menuCanvaCard) menuCanvaCard.style.display = 'none';
+          if (menuCanvaFrame) menuCanvaFrame.src = '';
+        }
+
+        const headers = {};
+        if (menuAnunciosETag) {
+          headers['If-None-Match'] = menuAnunciosETag;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/anuncios`, {
+          headers,
+          cache: 'no-cache'
+        });
+
+        if (response.status === 304) {
+          return;
+        }
+
+        if (!response.ok) throw new Error('Error al cargar anuncios');
+
+        const etagRecibido = response.headers.get('etag') || response.headers.get('ETag');
+        if (etagRecibido) {
+          menuAnunciosETag = etagRecibido;
+        }
+        
+        const data = await response.json();
+        
+        // Buscar un anuncio marcado como menú de la semana y activo
+        const menuAnuncio = data.anuncios && Array.isArray(data.anuncios) 
+          ? data.anuncios.find(a => {
+              return a.menu_semana && a.activo;
+            })
+          : null;
+
+        const huellaMenuActual = construirHuellaMenu(menuAnuncio);
+        if (silencioso && huellaMenuActual === ultimaHuellaMenu) {
+          return;
+        }
+
+        ultimaHuellaMenu = huellaMenuActual;
+      
+        
+        if (menuAnuncio && menuAnuncio.canva) {
+          if (menuCanvaFrame) menuCanvaFrame.src = menuAnuncio.canva;
+          if (menuCanvaLink) menuCanvaLink.href = menuAnuncio.canva;
+          if (menuCanvaCard) menuCanvaCard.style.display = 'block';
+          menuSemanaLoader.style.display = 'none';
+          menuSemanaImg.style.display = 'none';
+        } else if (menuAnuncio && menuAnuncio.imagen_url) {
+          const imagenUrl = menuAnuncio.imagen_url.startsWith('http') 
+            ? menuAnuncio.imagen_url 
+            : `${API_BASE_URL}${menuAnuncio.imagen_url}`;
+
+          menuSemanaImg.src = agregarParametroNoCache(imagenUrl);
+          menuSemanaImg.onload = () => {
+            menuSemanaLoader.style.display = 'none';
+            menuSemanaImg.style.display = 'block';
+            menuSemanaError.style.display = 'none';
+            if (menuCanvaCard) menuCanvaCard.style.display = 'none';
+          };
+          menuSemanaImg.onerror = (e) => {
+            console.error('Error al cargar imagen:', e);
+            menuSemanaLoader.style.display = 'none';
+            menuSemanaError.style.display = 'block';
+          };
+        } else {
+          menuSemanaLoader.style.display = 'none';
+          menuSemanaError.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error al cargar menú de la semana:', error);
+        menuSemanaLoader.style.display = 'none';
+        menuSemanaError.style.display = 'block';
+      }
+    }
+
+    function iniciarAutoActualizacionMenu() {
+      if (menuRefreshIntervalId) {
+        clearInterval(menuRefreshIntervalId);
+      }
+
+      menuRefreshIntervalId = setInterval(() => {
+        cargarMenuSemana({ silencioso: true });
+      }, MENU_REFRESH_MS);
+    }
+
+    window.addEventListener('load', () => {
+      numeroEmpleadoInput.focus();
+      cargarMenuSemana();
+      iniciarAutoActualizacionMenu();
+      obtenerUsuarioActual();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        cargarMenuSemana({ silencioso: true });
+      }
+    });
+
+    // Advertencia al intentar cerrar la pestaña
+    window.addEventListener('beforeunload', (e) => {
+      e.preventDefault();
+      e.returnValue = '¿Estás seguro de que deseas salir? Podrías perder el progreso de tus comidas registradas.';
+      return e.returnValue;
+    });
+  </script>
+</body>
+</html>

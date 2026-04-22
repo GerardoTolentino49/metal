@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de INSERT desde Excel</title>
+  <link rel="icon" href="favicon.png">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 24px; background:#0f172a; color:#e5e7eb; }
+    h1 { font-size: 20px; margin: 0 0 16px; }
+    .card { background:#111827; border:1px solid #1f2937; border-radius:12px; padding:16px; max-width:1100px; }
+    .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .row > * { margin: 6px 0; }
+    input[type="file"] { background:#0b1220; color:#e5e7eb; border:1px dashed #374151; padding:10px; border-radius:8px; }
+    select, input[type="text"], button { background:#0b1220; color:#e5e7eb; border:1px solid #374151; padding:10px 12px; border-radius:8px; }
+    button { cursor:pointer; }
+    button.primary { background:#2563eb; border-color:#2563eb; }
+    button.ghost { background:transparent; }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; }
+    .field { display:flex; flex-direction:column; gap:6px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; }
+    textarea { width:100%; min-height:320px; resize:vertical; background:#0b1220; color:#d1d5db; border:1px solid #374151; border-radius:8px; padding:12px; }
+    small { color:#9ca3af; }
+    .pill { font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #374151; color:#9ca3af; }
+    .table-preview { max-height:260px; overflow:auto; border:1px solid #1f2937; border-radius:8px; }
+    table { width:100%; border-collapse: collapse; }
+    th, td { padding:6px 8px; border-bottom:1px solid #1f2937; white-space:nowrap; }
+    th { position:sticky; top:0; background:#0b1220; }
+  </style>
+  <!-- SheetJS (XLSX) desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <h1>Generador de INSERT para tabla <span class="pill mono">inventario</span> desde Excel</h1>
+  <div class="card">
+    <div class="row">
+      <input id="file" type="file" accept=".xlsx,.xls,.csv" />
+      <label class="pill">Primera fila: encabezados</label>
+      <button id="btnParse" class="primary">Procesar archivo</button>
+      <button id="btnCopy" class="ghost">Copiar SQL</button>
+      <button id="btnDownload" class="ghost">Descargar .sql</button>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="grid">
+      <div class="field">
+        <label>Vista previa (primeras filas)</label>
+        <div id="preview" class="table-preview mono"></div>
+      </div>
+      <div class="field">
+        <label>Resultado SQL</label>
+        <textarea id="output" class="mono" placeholder="Aquí aparecerá el INSERT ..." spellcheck="false"></textarea>
+        <small>Se generan valores para columnas: nombre_completo, stock, pedido_abierto, piezas_pedidas, activo, codigo, po, categoria, descripcion, factura, proveedor, costo_unitario_mxn, costo_unitario_dlls, stock_inicial, entradas, salidas, uom, categoria_pdm, locacion.</small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Mapeo esperado de encabezados -> campos
+    const headerToField = {
+      codigo: 'codigo',
+      nombre_completo: 'nombre_completo',
+      stock_inicial: 'stock_inicial',
+      entradas: 'entradas',
+      salidas: 'salidas',
+      stock: 'stock',
+      uom: 'uom',
+      'costo unit': 'costo_unit', // tolerante a espacios
+      'costo_unit': 'costo_unit',
+      'costo unitario': 'costo_unit',
+      moneda: 'moneda',
+      categoria_pdm: 'categoria_pdm',
+      proveedor: 'proveedor',
+      locacion: 'locacion'
+    };
+
+    function normalizeHeader(h){
+      return String(h||'').toLowerCase().trim().replace(/\s+/g,' ');
+    }
+
+    function esc(text){
+      if(text === null || text === undefined) return null;
+      return String(text).replace(/'/g, "''");
+    }
+
+    function toNumber(v){
+      if(v===null || v===undefined || v==='') return null;
+      const n = Number(String(v).toString().replace(/,/g,'.'));
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function buildInsert(rows){
+      if(!rows.length) return '';
+      const values = [];
+      for(const r of rows){
+        const nombre = esc(r.nombre_completo);
+        const stock = toNumber(r.stock) ?? 0;
+        const codigo = esc(r.codigo);
+        const proveedor = esc(r.proveedor);
+        const uom = esc(r.uom);
+        const categoria_pdm = esc(r.categoria_pdm);
+        const locacion = esc(r.locacion);
+        const stock_inicial = toNumber(r.stock_inicial) ?? 0;
+        const entradas = toNumber(r.entradas) ?? 0;
+        const salidas = toNumber(r.salidas) ?? 0;
+        const precio = toNumber(r.costo_unit);
+        const moneda = String(r.moneda||'').toUpperCase().trim();
+        const precio_mxn = moneda==='MXN' ? (precio ?? 'NULL') : 'NULL';
+        const precio_usd = moneda==='USD' ? (precio ?? 'NULL') : 'NULL';
+
+        // Generar id_ingreso único similar al backend: ING-{timestamp}-{random}
+        const idIngreso = `ING-${Date.now()}-${Math.random().toString(36).substr(2,9)}`;
+
+        values.push(
+          "("+
+          `'${nombre}',`+ // nombre_completo
+          `${stock},`+     // stock
+          `FALSE,0,TRUE,`+ // pedido_abierto, piezas_pedidas, activo
+          `'${codigo}',`+  // codigo
+          `NULL, NULL, `+  // po, categoria
+          `'${nombre}',`+  // descripcion
+          `NULL,`+         // factura
+          `'${proveedor}',`+ // proveedor
+          `${precio_mxn=== 'NULL'? 'NULL' : String(precio_mxn)},`+
+          `${precio_usd=== 'NULL'? 'NULL' : String(precio_usd)},`+
+          `${stock_inicial},${entradas},${salidas},`+
+          `'${uom}',`+
+          `'${categoria_pdm}',`+
+          `'${locacion}',`+
+          `'${idIngreso}'`+
+          ")"
+        );
+      }
+
+      const sql = `INSERT INTO inventario (nombre_completo, stock, pedido_abierto, piezas_pedidas, activo, codigo, po, categoria, descripcion, factura, proveedor, costo_unitario_mxn, costo_unitario_dlls, stock_inicial, entradas, salidas, uom, categoria_pdm, locacion, id_ingreso) VALUES\n`+
+        values.join(',\n')+`;`;
+      return sql;
+    }
+
+    function renderPreview(rows){
+      const container = document.getElementById('preview');
+      if(!rows.length){ container.innerHTML = '<small>No hay filas</small>'; return; }
+      const keys = Object.keys(rows[0]);
+      const max = Math.min(10, rows.length);
+      let html = '<table class="mono"><thead><tr>' + keys.map(k=>`<th>${k}</th>`).join('') + '</tr></thead><tbody>';
+      for(let i=0;i<max;i++){
+        html += '<tr>'+keys.map(k=>`<td>${rows[i][k] ?? ''}</td>`).join('')+'</tr>';
+      }
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    async function parseFile(file){
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data, { type: 'array' });
+      const sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const raw = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false });
+      if(!raw.length) return [];
+      // mapear encabezados flexibles
+      const mapped = raw.map(row => {
+        const obj = {};
+        for(const [k,v] of Object.entries(row)){
+          const key = headerToField[normalizeHeader(k)] || normalizeHeader(k);
+          obj[key] = v;
+        }
+        return obj;
+      });
+      return mapped;
+    }
+
+    document.getElementById('btnParse').addEventListener('click', async () => {
+      const input = document.getElementById('file');
+      if(!input.files || !input.files[0]){ alert('Selecciona un archivo .xlsx/.xls/.csv'); return; }
+      try{
+        const rows = await parseFile(input.files[0]);
+        if(!rows.length){ alert('No se encontraron filas.'); return; }
+        renderPreview(rows);
+        const sql = buildInsert(rows);
+        document.getElementById('output').value = sql;
+      }catch(err){
+        console.error(err);
+        alert('Error al procesar el archivo: '+ err.message);
+      }
+    });
+
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+      const sql = document.getElementById('output').value;
+      if(!sql) { alert('No hay SQL para copiar'); return; }
+      await navigator.clipboard.writeText(sql);
+      alert('SQL copiado al portapapeles');
+    });
+
+    document.getElementById('btnDownload').addEventListener('click', () => {
+      const sql = document.getElementById('output').value;
+      if(!sql) { alert('No hay SQL para descargar'); return; }
+      const blob = new Blob([sql], { type: 'text/sql;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'inventario_insert.sql';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
+
+

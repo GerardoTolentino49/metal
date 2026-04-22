@@ -1,0 +1,117 @@
+<link rel="stylesheet" href="styles/topbar-completo.css">
+
+<!-- Barra superior -->
+<div class="topbar">
+  <div class="glass-highlight"></div>
+  <div class="topbar-header">
+    <button class="lisa-btn-cromatica">TILIN</button>
+  </div>
+  <div class="topbar-menu">
+    <!-- IT -->
+    <div class="menu-item has-submenu" id="itMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+      </svg>
+      IT
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="itSubmenu">
+        <a href="panel.html" class="submenu-item">Tickets</a>
+        <a href="detalles.html" class="submenu-item">Estadísticas</a>
+        <a href="it_inventario.html" class="submenu-item">Inventario</a>
+        <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+        <a href="boveda.html" class="submenu-item">Bóveda</a>
+      </div>
+    </div>
+    
+    <!-- RH -->
+    <div class="menu-item has-submenu" id="rhMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+      RH
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="rhSubmenu">
+        <a href="apoyos.html" class="submenu-item">Apoyosaaaaapapu</a>
+        <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+        <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+      </div>
+    </div>
+    
+    <!-- Design -->
+    <div class="menu-item has-submenu" id="designMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+      </svg>
+      Design
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="designSubmenu">
+        <a href="design.html" class="submenu-item">Design</a>
+      </div>
+    </div>
+    
+    <!-- Warehouse -->
+    <div class="menu-item has-submenu" id="warehouseMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+      </svg>
+      Warehouse
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="warehouseSubmenu">
+        <a href="inventario.html" class="submenu-item">Inventario</a>
+      </div>
+    </div>
+    
+    <!-- Maintenance -->
+    <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+      </svg>
+      Maintenance
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="maintenanceSubmenu">
+        <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+        <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+        <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+        <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+      </div>
+    </div>
+    
+    <!-- Administración -->
+    <div class="menu-item has-submenu" id="adminMenuBtn">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+      Administración
+      <span class="submenu-arrow">▼</span>
+      <div class="submenu" id="adminSubmenu">
+        <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+        <a href="contrasenas.html" class="submenu-item" id="passwordsLink">Administración de Contraseñas</a>
+        <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+        <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+      </div>
+    </div>
+  </div>
+  <div class="topbar-controls">
+    <div class="user-menu-item">
+      <a href="usuario.html" class="user-icon-link">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+      </a>
+      <!-- Botón visible al lado de la foto -->
+      <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+      <div class="user-submenu" id="userSubmenu">
+        <div class="user-info" id="userInfo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón hamburguesa para móviles -->
+<div class="hamburger-menu" id="hamburgerMenu">
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+
+<script src="js/topbar-completo.js"></script>
+

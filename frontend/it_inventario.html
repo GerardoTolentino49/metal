@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventario de IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/global-color.js"></script>
+  <link rel="stylesheet" href="styles/it_inventario.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <!-- Diseno -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <!-- PM -->
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+
+  <script> //Color del topbar en los botones
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        // Efecto cromático al icono de usuario
+        const userIcon = document.getElementById('userIcon');
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+
+  <script>
+    // --- CONTRASTE AUTOMÁTICO PARA EL TEXTO DEL TOPBAR ---
+    function getContrastYIQ(hexcolor) {
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+
+<!-- CONTENEDOR DE LOS MODALES PRINCIPALES EN FILA -->
+<div class="zona-modales" style="display: flex; flex-direction: row; align-items: stretch; height: calc(100vh - 80px - 40px);">
+  <div class="modales-principales-row" style="flex: 1 1 0; display: flex; flex-direction: row; gap: 32px; align-items: stretch; width: 100%;">
+    <!-- Recuadro Software -->
+    <div id="modal-software" class="glass-modal-center glass-modal-software">
+      <div class="recuadro-titulo">
+        <span>Software</span>
+      </div>
+      <div id="software-content">
+        <!-- Aquí va el contenido dinámico -->
+      </div>
+      <button onclick="agregarSoftware()" class="btn-mas btn-mas-bottom" id="btnAgregarSoftware" style="display:none;">+</button>
+    </div>
+    <!-- Recuadro Hardware -->
+    <div id="modal-hardware" class="glass-modal-center glass-modal-hardware">
+      <div class="hardware-toggle">
+        <button id="btnHardwarePersonal" class="toggle-btn active">Hardware del personal</button>
+        <button id="btnHardwareEmpresa" class="toggle-btn">Hardware de la empresa</button>
+        <button onclick="mostrarTodasLasPersonas()" class="toggle-btn btn-todas-personas" style="background: linear-gradient(135deg, #43a047, #388e3c); margin-left: 12px;">
+          <i class="fas fa-users"></i>
+          Ver todas las personas
+        </button>
+      </div>
+      <div id="hardware-content">
+        <!-- Aquí va el contenido dinámico -->
+      </div>
+      <button onclick="agregarHardware()" class="btn-mas btn-mas-bottom" id="btnAgregarHardware" style="display:none;">+</button>
+    </div>
+  </div>
+</div>
+<script>
+  // --- MODALES DE PRUEBA PARA SOFTWARE Y HARDWARE ---
+  function crearModalItem(titulo, datos, tipo, id, updated_at) {
+    return `
+      <div class="modal-item-inventario" 
+        style="width: 100%; margin: 18px 0; background: rgba(227, 232, 255, 0.38); border-radius: 18px; box-shadow: 0 2px 8px rgba(31,38,135,0.10); padding: 0; display: flex; flex-direction: column; border: 2px solid #c3d0ff; cursor: pointer; transition: box-shadow 0.2s;"
+        data-detalles='${JSON.stringify({titulo, datos})}'
+        data-tipo="${tipo}"
+        data-id="${id}"
+      >
+        <div style="background: #c3d0ff; border-radius: 18px 18px 0 0; padding: 16px 24px; font-weight: bold; font-size: 18px; color: #222; display: flex; align-items: center; justify-content: space-between;">
+          <span>${titulo}</span>
+          <span style="font-size: 12px; color: #888; margin-left: 12px;">${updated_at ? 'Última modificación: ' + new Date(updated_at).toLocaleString() : ''}</span>
+        </div>
+        <div style="padding: 18px 24px; display: flex; flex-wrap: wrap; gap: 24px; font-size: 16px;">
+          ${Object.entries(datos).map(([key, value]) => `
+            <div style="min-width: 160px;">
+              <span style="font-weight: 600; color: #3a3a3a;">${key}:</span>
+              <span style="margin-left: 6px; color: #222;">${value !== null && value !== undefined && value !== '' ? value : (key.toLowerCase() === 'caducidad' ? 'Sin caducidad' : '')}</span>
+            </div>
+          `).join('')}
+        </div>
+        ${tipo === 'hardware' ? `
+          <button class="btn-cambiar-dueno" data-id="${id}" style="margin: 12px 24px 18px 24px; background: #43a047; color: #fff; border: none; border-radius: 12px; padding: 8px 18px; font-size: 15px; cursor: pointer;">
+            Cambiar dueño
+          </button>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  // Variable global para almacenar el ID del empleado actual
+  let currentEmployeeId = '';
+
+  async function mostrarModalesInventario(employeeId = null) {
+    const id = employeeId || currentEmployeeId;
+    if (!id) return;
+
+    currentEmployeeId = id; // Guardar el ID actual
+
+    try {
+      // Obtener inventario IT
+      const API_BASE = location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "http://172.168.10.11:3000";
+      
+      const resp = await fetch(`${API_BASE}/api/inventario_it/${id}`);
+      const data = await resp.json();
+
+      // Renderizar modales de software
+      const softwareContent = document.getElementById('software-content');
+      if (data.software && data.software.length > 0) {
+        softwareContent.innerHTML = data.software.map(item => crearModalItem(
+          item.nombre,
+          {
+            "Nombre": item.nombre,
+            "Versión": item.version,
+            "Licencia": item.licencia,
+            "Estado": item.estado,
+            ...(item.caducidad !== undefined ? {"Caducidad": item.caducidad} : {}),
+            ...(item.contrasenia !== undefined ? {"Contraseña": item.contrasenia} : {})
+          },
+          "software",
+          item.id_software,
+          item.updated_at
+        )).join('');
+      } else {
+        softwareContent.innerHTML = `<p style="text-align: center; color: #bfc4e0; font-style: italic; margin: 20px;">No hay software registrado para este empleado.</p>`;
+      }
+
+      // Renderizar modales de hardware
+      const hardwareContent = document.getElementById('hardware-content');
+      if (data.hardware && data.hardware.length > 0) {
+        hardwareContent.innerHTML = data.hardware.map(item => crearModalItem(
+          item.tipo,
+          {
+            "Tipo": item.tipo,
+            "Modelo": item.modelo,
+            "Capacidad": item.capacidad,
+            "Procesador": item.procesador,
+            "Estado": item.estado,
+            ...(item.serie !== undefined ? {"Serie": item.serie} : {}),
+            ...(item.contrasenia !== undefined ? {"Contraseña": item.contrasenia} : {})
+          },
+          "hardware",
+          item.id_hardware,
+          item.updated_at
+        )).join('');
+      } else {
+        hardwareContent.innerHTML = `<p style="text-align: center; color: #bfc4e0; font-style: italic; margin: 20px;">No hay hardware registrado para este empleado.</p>`;
+      }
+
+      // Mostrar botones de agregar
+      document.getElementById('btnAgregarSoftware').style.display = 'block';
+      document.getElementById('btnAgregarHardware').style.display = 'block';
+
+    } catch (err) {
+      console.error('Error al consultar el inventario:', err);
+      alert('Error al consultar el inventario');
+    }
+  }
+
+  // Evento para el botón de flecha (mantener para compatibilidad)
+  document.addEventListener('DOMContentLoaded', function() {
+    // Crear un input oculto para mantener compatibilidad
+    const hiddenInput = document.createElement('input');
+    hiddenInput.id = 'input-id-empleado';
+    hiddenInput.type = 'hidden';
+    hiddenInput.value = '';
+    document.body.appendChild(hiddenInput);
+  });
+</script>
+<!-- Modal de pantalla completa para detalles -->
+<div id="modal-detalle-full" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100vw; height:100vh; background:rgba(35,36,58,0.95); color:#fff; align-items:center; justify-content:center;">
+  <div id="modal-detalle-content" style="background:#000000; border-radius:2rem; max-width:600px; width:90vw; margin:auto; padding:40px 32px 80px 32px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18); position:relative;">
+    <!-- Aquí se insertan los detalles -->
+    <button id="cerrar-modal-detalle" style="position:absolute; top:18px; right:18px; background:#ff4444; color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:22px; cursor:pointer;">&times;</button>
+    <div id="modal-detalle-body"></div>
+    <button id="editar-modal-detalle" style="position:absolute; bottom:24px; right:32px; background:#2196F3; color:#fff; border:none; border-radius:16px; padding:10px 32px; font-size:28px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+      <i id="icono-editar-guardar" class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+</div>
+<script>
+  // Función para mostrar el modal de detalle en pantalla completa
+  function mostrarModalDetalle(detalles) {
+    const modal = document.getElementById('modal-detalle-full');
+    const body = document.getElementById('modal-detalle-body');
+    let html = '';
+    if (detalles.titulo) {
+      html += `<h2 style=\"margin-bottom: 18px;\">${detalles.titulo}</h2>`;
+    }
+    html += '<form id="form-editar-detalle" style="display:flex; flex-direction:column; gap:16px;">';
+    for (const [key, value] of Object.entries(detalles.datos || {})) {
+      // El campo 'Nombre' (software) o 'Tipo' (hardware) debe ser editable igual que los demás campos
+      html += `<label style="display:flex; flex-direction:column; font-weight:700; color:#fff; font-size:1.35rem; margin-bottom:8px;">
+        ${key}:
+        <input type="text" name="${key}" value="${value !== null && value !== undefined ? value : ''}" disabled style="margin-top:4px; padding:12px; border-radius:12px; border:none; background:#23243a; color:#fff; font-weight:500; font-size:1.15rem;" />
+      </label>`;
+    }
+    html += '</form>';
+    body.innerHTML = html;
+    modal.style.display = 'flex';
+
+    // Configurar el botón de editar/guardar
+    const btnEditar = document.getElementById('editar-modal-detalle');
+    const icono = document.getElementById('icono-editar-guardar');
+    let editMode = false;
+    icono.className = 'fas fa-pencil-alt';
+    btnEditar.style.background = '#2196F3';
+    btnEditar.onclick = function() {
+      const form = document.getElementById('form-editar-detalle');
+      const inputs = form.querySelectorAll('input');
+      if (!editMode) {
+        // Activar edición
+        inputs.forEach(inp => inp.disabled = false);
+        icono.className = 'fas fa-save';
+        btnEditar.style.background = '#43a047'; // verde
+        editMode = true;
+      } else {
+        // Guardar cambios (por ahora solo alert)
+        // Mapeo de campos del formulario a los nombres esperados por el backend
+        const mapFields = {
+          "Nombre": "nombre",
+          "Versión": "version",
+          "Licencia": "licencia",
+          "Estado": "estado",
+          "Caducidad": "caducidad",
+          "Contraseña": "contrasenia",
+          "Modelo": "modelo",
+          "Capacidad": "capacidad",
+          "Procesador": "procesador",
+          "Tipo": "tipo",
+          "Serie": "serie"
+        };
+        const newData = {};
+        inputs.forEach(inp => {
+          const backendKey = mapFields[inp.name] || inp.name;
+          newData[backendKey] = inp.value;
+        });
+        newData.id = modalDetalleId; // Por si el backend lo requiere
+
+        // Determina el endpoint según el tipo
+        let endpoint = '';
+        if (modalDetalleTipo === 'software') {
+          endpoint = `/api/software/${modalDetalleId}`;
+        } else if (modalDetalleTipo === 'hardware') {
+          endpoint = `/api/hardware/${modalDetalleId}`;
+        } else {
+          alert('Tipo desconocido');
+          return;
+        }
+
+        fetch(endpoint, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newData)
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Error al guardar');
+          return res.json();
+        })
+        .then(data => {
+          alert('¡Guardado correctamente!');
+          // Opcional: cerrar modal y refrescar datos
+          document.getElementById('modal-detalle-full').style.display = 'none';
+          mostrarModalesInventario();
+        })
+        .catch(err => {
+          alert('Error al guardar: ' + err.message);
+        });
+        inputs.forEach(inp => inp.disabled = true);
+        icono.className = 'fas fa-pencil-alt';
+        btnEditar.style.background = '#2196F3';
+        editMode = false;
+      }
+    };
+  }
+
+  // Cerrar el modal
+  document.getElementById('cerrar-modal-detalle').onclick = function() {
+    document.getElementById('modal-detalle-full').style.display = 'none';
+  };
+
+  // Delegación de eventos para las tarjetas
+  let modalDetalleTipo = null;
+  let modalDetalleId = null;
+
+  document.addEventListener('click', function(e) {
+    const item = e.target.closest('.modal-item-inventario');
+    if (item) {
+      const detalles = item.getAttribute('data-detalles');
+      modalDetalleTipo = item.getAttribute('data-tipo');
+      modalDetalleId = item.getAttribute('data-id');
+      if (detalles) {
+        mostrarModalDetalle(JSON.parse(detalles));
+      }
+    }
+  });
+</script>
+<!-- MODAL PARA AGREGAR SOFTWARE -->
+<div id="modalAgregarSoftware" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100vw; height:100vh; background:rgba(35,36,58,0.85); color:#fff; align-items:center; justify-content:center;">
+  <div style="background:#23243a; border-radius:2rem; max-width:400px; width:90vw; margin:auto; padding:32px 24px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18); position:relative;">
+    <button onclick="cerrarModalAgregarSoftware()" style="position:absolute; top:18px; right:18px; background:#ff4444; color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:22px; cursor:pointer;">&times;</button>
+    <h2 style="margin-bottom:18px;">Agregar Software</h2>
+    <form id="formAgregarSoftware">
+      <div style="margin-bottom:12px;">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Versión:</label>
+        <input type="text" name="version" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Licencia:</label>
+        <input type="text" name="licencia" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Estado:</label>
+        <input type="text" name="estado" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <label>Caducidad:</label>
+        <input type="date" name="caducidad" style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Contraseña:</label>
+        <input type="text" name="contrasenia" style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <button type="submit" style="background:#2196F3;color:#fff;padding:10px 24px;border:none;border-radius:12px;font-size:16px;cursor:pointer;">Guardar</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL PARA AGREGAR HARDWARE -->
+<div id="modalAgregarHardware" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100vw; height:100vh; background:rgba(35,36,58,0.85); color:#fff; align-items:center; justify-content:center;">
+  <div style="background:#23243a; border-radius:2rem; max-width:400px; width:90vw; margin:auto; padding:32px 24px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18); position:relative;">
+    <button onclick="cerrarModalAgregarHardware()" style="position:absolute; top:18px; right:18px; background:#ff4444; color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:22px; cursor:pointer;">&times;</button>
+    <h2 style="margin-bottom:18px;">Agregar Hardware</h2>
+    <form id="formAgregarHardware">
+      <div style="margin-bottom:12px;">
+        <label>Tipo:</label>
+        <input type="text" name="tipo" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Modelo:</label>
+        <input type="text" name="modelo" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Capacidad:</label>
+        <input type="text" name="capacidad" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Procesador:</label>
+        <input type="text" name="procesador" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:18px;">
+        <label>Estado:</label>
+        <input type="text" name="estado" required style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Contraseña:</label>
+        <input type="text" name="contrasenia" style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Serie:</label>
+        <input type="text" name="serie" style="width:100%;padding:8px;border-radius:8px;border:none;">
+      </div>
+      <button type="submit" style="background:#2196F3;color:#fff;padding:10px 24px;border:none;border-radius:12px;font-size:16px;cursor:pointer;">Guardar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function agregarSoftware() {
+  document.getElementById('modalAgregarSoftware').style.display = 'flex';
+}
+function cerrarModalAgregarSoftware() {
+  document.getElementById('modalAgregarSoftware').style.display = 'none';
+}
+function agregarHardware() {
+  document.getElementById('modalAgregarHardware').style.display = 'flex';
+}
+function cerrarModalAgregarHardware() {
+  document.getElementById('modalAgregarHardware').style.display = 'none';
+}
+
+// --- CONEXIÓN DE FORMULARIOS CON BACKEND ---
+document.getElementById('formAgregarSoftware').onsubmit = async function(e) {
+  e.preventDefault();
+  const id_empleado = currentEmployeeId; // Usar la variable global en lugar del input
+  if (!id_empleado) {
+    alert('Primero busca y selecciona un empleado.');
+    return;
+  }
+  const form = e.target;
+  const data = {
+    id_empleado,
+    nombre: form.nombre.value,
+    version: form.version.value,
+    licencia: form.licencia.value,
+    estado: form.estado.value,
+    caducidad: form.caducidad.value || null,
+    contrasenia: form.contrasenia.value || null
+  };
+  try {
+    const res = await fetch('/api/software', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Error al guardar software');
+    cerrarModalAgregarSoftware();
+    form.reset();
+    alert('Software guardado correctamente');
+    mostrarModalesInventario(); // Esto usará currentEmployeeId automáticamente
+  } catch (err) {
+    alert('Error al guardar software: ' + err.message);
+  }
+};
+
+document.getElementById('formAgregarHardware').onsubmit = async function(e) {
+  e.preventDefault();
+  const id_empleado = currentEmployeeId; // Usar la variable global en lugar del input
+  if (!id_empleado) {
+    alert('Primero busca y selecciona un empleado.');
+    return;
+  }
+  const form = e.target;
+  const data = {
+    id_empleado,
+    tipo: form.tipo.value,
+    modelo: form.modelo.value,
+    capacidad: form.capacidad.value,
+    procesador: form.procesador.value,
+    estado: form.estado.value,
+    serie: form.serie.value || null,
+    contrasenia: form.contrasenia.value || null
+  };
+  try {
+    const res = await fetch('/api/hardware', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Error al guardar hardware');
+    cerrarModalAgregarHardware();
+    form.reset();
+    alert('Hardware guardado correctamente');
+    mostrarModalesInventario(); // Esto usará currentEmployeeId automáticamente
+  } catch (err) {
+    alert('Error al guardar hardware: ' + err.message);
+  }
+};
+
+document.getElementById('btnHardwarePersonal').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('btnHardwareEmpresa').classList.remove('active');
+  // Aquí puedes cargar el contenido de hardware del personal
+  document.getElementById('hardware-content').innerHTML = '<p>Contenido relacionado con hardware del personal.</p>';
+};
+
+document.getElementById('btnHardwareEmpresa').onclick = function() {
+  this.classList.add('active');
+  document.getElementById('btnHardwarePersonal').classList.remove('active');
+  // Aquí puedes cargar el contenido de hardware de la empresa
+  document.getElementById('hardware-content').innerHTML = '<p>Contenido relacionado con hardware de la empresa.</p>';
+};
+
+document.getElementById('btnAgregarSoftware').style.display = 'none';
+document.getElementById('btnAgregarHardware').style.display = 'none';
+</script>
+
+<div id="modalCambiarDueno" style="display:none; position:fixed; z-index:4000; top:0; left:0; width:100vw; height:100vh; background:rgba(35,36,58,0.85); color:#fff; align-items:center; justify-content:center;">
+  <div style="background:#23243a; border-radius:2rem; max-width:400px; width:90vw; margin:auto; padding:32px 24px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18); position:relative;">
+    <button onclick="cerrarModalCambiarDueno()" style="position:absolute; top:18px; right:18px; background:#ff4444; color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:22px; cursor:pointer;">&times;</button>
+    <h2 style="margin-bottom:18px;">Selecciona el nuevo dueño</h2>
+    <select id="selectNuevoDueno" style="width:100%;padding:10px;border-radius:8px;font-size:16px;margin-bottom:18px;"></select>
+    <button id="btnConfirmarCambioDueno" style="background:#43a047;color:#fff;padding:10px 24px;border:none;border-radius:12px;font-size:16px;cursor:pointer;">Confirmar</button>
+  </div>
+</div>
+
+<script>
+let hardwareIdParaCambio = null;
+
+// Abrir modal al hacer clic en "Cambiar dueño"
+document.addEventListener('click', async function(e) {
+  if (e.target.classList.contains('btn-cambiar-dueno')) {
+    hardwareIdParaCambio = e.target.getAttribute('data-id');
+    // Obtener lista de empleados
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    const resp = await fetch(`${API_BASE}/api/empleados`);
+    const empleados = await resp.json();
+    const select = document.getElementById('selectNuevoDueno');
+    select.innerHTML = empleados.map(emp => 
+      `<option value="${emp.id}">${emp.id} - ${emp.nombre || emp.nombre_completo || ''}</option>`
+    ).join('');
+    document.getElementById('modalCambiarDueno').style.display = 'flex';
+  }
+});
+
+// Cerrar modal
+function cerrarModalCambiarDueno() {
+  document.getElementById('modalCambiarDueno').style.display = 'none';
+}
+
+// Confirmar cambio de dueño
+document.getElementById('btnConfirmarCambioDueno').onclick = async function() {
+  const nuevoId = document.getElementById('selectNuevoDueno').value;
+  if (!hardwareIdParaCambio || !nuevoId) return;
+  try {
+    const res = await fetch(`/api/hardware/${hardwareIdParaCambio}/cambiar_dueno`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_empleado: nuevoId })
+    });
+    if (!res.ok) throw new Error('Error al cambiar dueño');
+    alert('¡Dueño cambiado correctamente!');
+    cerrarModalCambiarDueno();
+    mostrarModalesInventario();
+  } catch (err) {
+    alert('Error al cambiar dueño: ' + err.message);
+  }
+};
+</script>
+
+<!-- Botón de búsqueda flotante -->
+<div id="search-button" class="search-button">
+  <i class="fas fa-search"></i>
+</div>
+
+<!-- Modal de búsqueda -->
+<div id="search-modal" class="search-modal">
+  <div class="search-modal-content">
+    <div class="search-header">
+      <h2>Búsqueda Avanzada</h2>
+      <button id="close-search-modal" class="close-search-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <!-- Pestañas de búsqueda -->
+    <div class="search-tabs">
+      <button class="search-tab active" data-tab="empleado">
+        <i class="fas fa-user"></i>
+        Empleado
+      </button>
+      <button class="search-tab" data-tab="software">
+        <i class="fas fa-desktop"></i>
+        Software
+      </button>
+      <button class="search-tab" data-tab="hardware">
+        <i class="fas fa-laptop"></i>
+        Hardware
+      </button>
+    </div>
+
+    <!-- Contenido de pestaña Empleado -->
+    <div id="tab-empleado" class="search-tab-content active">
+      <div class="employee-search-section">
+        <div class="search-input-group">
+          <label>ID del empleado:</label>
+          <div class="search-input-with-icon">
+            <input type="text" id="search-employee-id" class="search-input" placeholder="Escribe el ID">
+            <button id="btn-search-employee" class="search-icon-btn">
+              <i class="fas fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Información del empleado -->
+        <div id="employee-info" class="employee-info" style="display: none;">
+          <div class="employee-photo-section">
+            <div id="employee-photo" class="employee-photo">
+              <div class="photo-placeholder">Sin foto</div>
+            </div>
+          </div>
+          <div class="employee-details">
+            <div class="employee-field">
+              <label>Nombre:</label>
+              <div id="employee-name" class="employee-value">-</div>
+            </div>
+            <div class="employee-field">
+              <label>Supervisor:</label>
+              <div id="employee-supervisor" class="employee-value">-</div>
+            </div>
+            <div class="employee-field">
+              <label>Fecha de ingreso:</label>
+              <div id="employee-date" class="employee-value">-</div>
+            </div>
+          </div>
+          <button id="btn-view-inventory" class="view-inventory-btn">
+            <i class="fas fa-boxes"></i>
+            Ver Inventario
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido de pestaña Software -->
+    <div id="tab-software" class="search-tab-content">
+      <div class="search-input-group">
+        <label>Buscar software:</label>
+        <input type="text" id="search-software-term" class="search-input" placeholder="Nombre del software...">
+      </div>
+      <div class="search-filters">
+        <div class="filter-group">
+          <label>Estado:</label>
+          <select id="search-software-status" class="search-select">
+            <option value="">Todos</option>
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+            <option value="caducado">Caducado</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Versión:</label>
+          <input type="text" id="search-software-version" class="search-input" placeholder="Versión específica...">
+        </div>
+      </div>
+      <button id="execute-software-search" class="search-execute-btn">
+        <i class="fas fa-search"></i>
+        Buscar Software
+      </button>
+    </div>
+
+    <!-- Contenido de pestaña Hardware -->
+    <div id="tab-hardware" class="search-tab-content">
+      <div class="search-input-group">
+        <label>Buscar hardware:</label>
+        <input type="text" id="search-hardware-term" class="search-input" placeholder="Tipo o modelo...">
+      </div>
+      <div class="search-input-group">
+        <label>Número de serie:</label>
+        <input type="text" id="search-hardware-serial" class="search-input" placeholder="Buscar por número de serie...">
+      </div>
+      <div class="search-filters">
+        <div class="filter-group">
+          <label>Tipo:</label>
+          <select id="search-hardware-type" class="search-select">
+            <option value="">Todos</option>
+            <option value="laptop">Laptop</option>
+            <option value="desktop">Desktop</option>
+            <option value="monitor">Monitor</option>
+            <option value="periferico">Periférico</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Estado:</label>
+          <select id="search-hardware-status" class="search-select">
+            <option value="">Todos</option>
+            <option value="activo">Activo</option>
+            <option value="mantenimiento">En mantenimiento</option>
+            <option value="retirado">Retirado</option>
+          </select>
+        </div>
+      </div>
+      <button id="execute-hardware-search" class="search-execute-btn">
+        <i class="fas fa-search"></i>
+        Buscar Hardware
+      </button>
+    </div>
+
+    <!-- Resultados de búsqueda -->
+    <div id="search-results" class="search-results">
+      <!-- Los resultados se mostrarán aquí -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Funcionalidad del botón de búsqueda
+document.addEventListener('DOMContentLoaded', function() {
+  const searchButton = document.getElementById('search-button');
+  const searchModal = document.getElementById('search-modal');
+  const closeSearchModal = document.getElementById('close-search-modal');
+
+  // Abrir modal de búsqueda
+  searchButton.addEventListener('click', function() {
+    searchModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Cerrar modal de búsqueda
+  closeSearchModal.addEventListener('click', function() {
+    searchModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  });
+
+  // Cerrar modal al hacer clic fuera
+  searchModal.addEventListener('click', function(e) {
+    if (e.target === searchModal) {
+      searchModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+  });
+
+  // Funcionalidad de pestañas
+  const tabs = document.querySelectorAll('.search-tab');
+  const tabContents = document.querySelectorAll('.search-tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetTab = this.getAttribute('data-tab');
+      
+      // Remover clase active de todas las pestañas
+      tabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      
+      // Agregar clase active a la pestaña seleccionada
+      this.classList.add('active');
+      document.getElementById(`tab-${targetTab}`).classList.add('active');
+    });
+  });
+
+  // Búsqueda de empleado
+  const btnSearchEmployee = document.getElementById('btn-search-employee');
+  const searchEmployeeId = document.getElementById('search-employee-id');
+
+  btnSearchEmployee.addEventListener('click', function() {
+    searchEmployee(searchEmployeeId.value.trim());
+  });
+
+  searchEmployeeId.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      searchEmployee(this.value.trim());
+    }
+  });
+
+  // Búsqueda de software
+  document.getElementById('execute-software-search').addEventListener('click', function() {
+    const term = document.getElementById('search-software-term').value.trim();
+    const status = document.getElementById('search-software-status').value;
+    const version = document.getElementById('search-software-version').value.trim();
+    
+    if (!term) {
+      alert('Por favor ingresa un término de búsqueda');
+      return;
+    }
+    
+    searchSoftware(term, status, version);
+  });
+
+  // Búsqueda en tiempo real para software
+  const searchSoftwareInput = document.getElementById('search-software-term');
+  let searchTimeout;
+
+  searchSoftwareInput.addEventListener('input', function() {
+    const searchTerm = this.value.trim();
+    
+    // Limpiar el timeout anterior
+    clearTimeout(searchTimeout);
+    
+    // Si el campo está vacío, limpiar resultados
+    if (!searchTerm) {
+      document.getElementById('search-results').innerHTML = '';
+      return;
+    }
+    
+    // Esperar 500ms después de que el usuario deje de escribir
+    searchTimeout = setTimeout(() => {
+      if (searchTerm.length >= 2) { // Solo buscar si hay al menos 2 caracteres
+        searchSoftware(searchTerm, '', '');
+      }
+    }, 500);
+  });
+
+  // Búsqueda de hardware
+  document.getElementById('execute-hardware-search').addEventListener('click', function() {
+    const term = document.getElementById('search-hardware-term').value.trim();
+    const serial = document.getElementById('search-hardware-serial').value.trim();
+    const type = document.getElementById('search-hardware-type').value;
+    const status = document.getElementById('search-hardware-status').value;
+    
+    if (!term && !serial) {
+      alert('Por favor ingresa un término de búsqueda o número de serie');
+      return;
+    }
+    
+    searchHardware(term, type, status, serial);
+  });
+
+  // Búsqueda en tiempo real para hardware
+  const searchHardwareInput = document.getElementById('search-hardware-term');
+  const searchHardwareSerialInput = document.getElementById('search-hardware-serial');
+  let hardwareSearchTimeout;
+
+  searchHardwareInput.addEventListener('input', function() {
+    const searchTerm = this.value.trim();
+    const serialTerm = searchHardwareSerialInput.value.trim();
+    
+    // Limpiar el timeout anterior
+    clearTimeout(hardwareSearchTimeout);
+    
+    // Si ambos campos están vacíos, limpiar resultados
+    if (!searchTerm && !serialTerm) {
+      document.getElementById('search-results').innerHTML = '';
+      return;
+    }
+    
+    // Esperar 500ms después de que el usuario deje de escribir
+    hardwareSearchTimeout = setTimeout(() => {
+      if (searchTerm.length >= 2 || serialTerm.length >= 2) {
+        searchHardware(searchTerm, '', '', serialTerm);
+      }
+    }, 500);
+  });
+
+  // Búsqueda en tiempo real para número de serie
+  searchHardwareSerialInput.addEventListener('input', function() {
+    const searchTerm = searchHardwareInput.value.trim();
+    const serialTerm = this.value.trim();
+    
+    // Limpiar el timeout anterior
+    clearTimeout(hardwareSearchTimeout);
+    
+    // Si ambos campos están vacíos, limpiar resultados
+    if (!searchTerm && !serialTerm) {
+      document.getElementById('search-results').innerHTML = '';
+      return;
+    }
+    
+    // Esperar 500ms después de que el usuario deje de escribir
+    hardwareSearchTimeout = setTimeout(() => {
+      if (searchTerm.length >= 2 || serialTerm.length >= 2) {
+        searchHardware(searchTerm, '', '', serialTerm);
+      }
+    }, 500);
+  });
+
+  // Botón para ver inventario del empleado
+  document.getElementById('btn-view-inventory').addEventListener('click', function() {
+    const employeeId = document.getElementById('search-employee-id').value.trim();
+    if (employeeId) {
+      // Cerrar modal y cargar inventario
+      searchModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+      
+      // Llamar directamente a mostrarModalesInventario con el ID
+      mostrarModalesInventario(employeeId);
+    }
+  });
+});
+
+async function searchEmployee(employeeId) {
+  if (!employeeId) {
+    alert('Por favor ingresa un ID de empleado');
+    return;
+  }
+
+  const employeeInfo = document.getElementById('employee-info');
+  const resultsContainer = document.getElementById('search-results');
+  
+  // Mostrar loading
+  employeeInfo.style.display = 'none';
+  resultsContainer.innerHTML = '<div class="search-loading"><i class="fas fa-spinner fa-spin"></i> Buscando empleado...</div>';
+
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    const response = await fetch(`${API_BASE}/api/empleados/${employeeId}`);
+    
+    if (!response.ok) {
+      throw new Error('Empleado no encontrado');
+    }
+    
+    const employee = await response.json();
+    
+    // Función para formatear la fecha
+    function formatearFecha(fechaString) {
+      if (!fechaString) return 'No disponible';
+      
+      try {
+        const fecha = new Date(fechaString);
+        if (isNaN(fecha.getTime())) return 'Fecha inválida';
+        
+        const opciones = { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        };
+        
+        return fecha.toLocaleDateString('es-ES', opciones);
+      } catch (error) {
+        return 'Fecha inválida';
+      }
+    }
+    
+    // Actualizar información del empleado
+    document.getElementById('employee-name').textContent = employee.nombre || employee.nombre_completo || 'Sin nombre';
+    document.getElementById('employee-supervisor').textContent = employee.supervisor || 'No asignado';
+    document.getElementById('employee-date').textContent = formatearFecha(employee.fecha_ingreso);
+    
+    // Actualizar foto
+    const photoContainer = document.getElementById('employee-photo');
+    if (employee.foto_url) {
+      photoContainer.innerHTML = `<img src="${employee.foto_url}" alt="Foto del empleado" class="employee-photo-img">`;
+    } else {
+      photoContainer.innerHTML = '<div class="photo-placeholder">Sin foto</div>';
+    }
+    
+    // Mostrar información del empleado
+    employeeInfo.style.display = 'block';
+    resultsContainer.innerHTML = '';
+    
+  } catch (error) {
+    resultsContainer.innerHTML = '<div class="search-error">Empleado no encontrado</div>';
+    console.error('Error al buscar empleado:', error);
+  }
+}
+
+async function searchSoftware(term, status, version) {
+  const resultsContainer = document.getElementById('search-results');
+  resultsContainer.innerHTML = '<div class="search-loading"><i class="fas fa-spinner fa-spin"></i> Buscando software...</div>';
+
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    let params = new URLSearchParams({ q: term });
+    if (status) params.append('status', status);
+    if (version) params.append('version', version);
+    
+    const response = await fetch(`${API_BASE}/api/software/search?${params}`);
+    const data = await response.json();
+
+    // Validar que data sea un array
+    if (!Array.isArray(data)) {
+      console.error('Respuesta inesperada del servidor:', data);
+      resultsContainer.innerHTML = '<div class="search-error">Error: Respuesta inesperada del servidor</div>';
+      return;
+    }
+
+    if (data.length === 0) {
+      resultsContainer.innerHTML = '<div class="search-no-results">No se encontró software</div>';
+      return;
+    }
+
+    let resultsHTML = '<div class="search-results-header">Software encontrado:</div>';
+    
+    data.forEach(item => {
+      // Validar que item tenga las propiedades necesarias
+      if (!item || typeof item !== 'object') {
+        console.warn('Item inválido:', item);
+        return;
+      }
+
+      const id_software = item.id_software || item.id || '';
+      const nombre = item.nombre || 'Sin nombre';
+      const version = item.version || 'Sin versión';
+      const licencia = item.licencia || 'Sin licencia';
+      const estado = item.estado || 'Sin estado';
+
+      resultsHTML += `
+        <div class="search-result-item" onclick="selectSoftwareForEmployee('${id_software}', '${nombre}', '${version}', '${licencia}', '${estado}')">
+          <div class="result-icon"><i class="fas fa-desktop"></i></div>
+          <div class="result-content">
+            <div class="result-title">${nombre}</div>
+            <div class="result-subtitle">Versión: ${version} | Estado: ${estado}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    resultsContainer.innerHTML = resultsHTML;
+
+  } catch (error) {
+    console.error('Error completo:', error);
+    resultsContainer.innerHTML = '<div class="search-error">Error al buscar software</div>';
+  }
+}
+
+// Función para seleccionar software y agregarlo al empleado
+function selectSoftwareForEmployee(softwareId, nombre, version, licencia, estado) {
+  if (!currentEmployeeId) {
+    alert('Primero busca y selecciona un empleado.');
+    return;
+  }
+
+  // Confirmar si quiere agregar este software al empleado
+  if (confirm(`¿Deseas agregar "${nombre}" al empleado seleccionado?`)) {
+    addSoftwareToEmployee(softwareId, currentEmployeeId);
+  }
+}
+
+// Función para agregar software existente a un empleado
+async function addSoftwareToEmployee(softwareId, employeeId) {
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    const response = await fetch(`${API_BASE}/api/software/${softwareId}/assign`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_empleado: employeeId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al asignar software');
+    }
+
+    alert('Software asignado correctamente al empleado');
+    
+    // Cerrar modal de búsqueda
+    document.getElementById('search-modal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    // Actualizar inventario
+    mostrarModalesInventario();
+
+  } catch (error) {
+    alert('Error al asignar software: ' + error.message);
+    console.error('Error:', error);
+  }
+}
+
+async function searchHardware(term, type, status, serial = '') {
+  const resultsContainer = document.getElementById('search-results');
+  resultsContainer.innerHTML = '<div class="search-loading"><i class="fas fa-spinner fa-spin"></i> Buscando hardware...</div>';
+
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    // Intentar obtener hardware de un empleado específico o usar un endpoint alternativo
+    // Por ahora, vamos a mostrar un mensaje informativo
+    resultsContainer.innerHTML = `
+      <div class="search-info">
+        <h3>Búsqueda de Hardware</h3>
+        <p>Buscando: ${term || 'N/A'}</p>
+        ${serial ? `<p>Número de serie: ${serial}</p>` : ''}
+        ${type ? `<p>Tipo: ${type}</p>` : ''}
+        ${status ? `<p>Estado: ${status}</p>` : ''}
+        <p style="color: #ff9800; margin-top: 10px;">
+          <i class="fas fa-info-circle"></i>
+          El endpoint de búsqueda de hardware no está disponible en este momento.
+          Por favor, usa la búsqueda de empleados para ver el hardware asignado.
+        </p>
+      </div>
+    `;
+
+  } catch (error) {
+    console.error('Error completo:', error);
+    resultsContainer.innerHTML = '<div class="search-error">Error al buscar hardware. El endpoint no está disponible.</div>';
+  }
+}
+
+// Función para seleccionar hardware y agregarlo al empleado
+function selectHardwareForEmployee(hardwareId, tipo, modelo, serie) {
+  if (!currentEmployeeId) {
+    alert('Primero busca y selecciona un empleado.');
+    return;
+  }
+
+  // Confirmar si quiere agregar este hardware al empleado
+  if (confirm(`¿Deseas agregar "${tipo} - ${modelo}" al empleado seleccionado?`)) {
+    addHardwareToEmployee(hardwareId, currentEmployeeId);
+  }
+}
+
+// Función para agregar hardware existente a un empleado
+async function addHardwareToEmployee(hardwareId, employeeId) {
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    const response = await fetch(`${API_BASE}/api/hardware/${hardwareId}/assign`, 
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_empleado: employeeId })
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al asignar hardware');
+    }
+
+    alert('Hardware asignado correctamente al empleado');
+    
+    // Cerrar modal de búsqueda
+    document.getElementById('search-modal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    // Actualizar inventario
+    mostrarModalesInventario();
+
+  } catch (error) {
+    alert('Error al asignar hardware: ' + error.message);
+    console.error('Error:', error);
+  }
+}
+
+function viewSoftware(softwareId) {
+  // Implementar vista de software específico
+  alert('Vista de software: ' + softwareId);
+}
+
+function viewHardware(hardwareId) {
+  // Implementar vista de hardware específico
+  alert('Vista de hardware: ' + hardwareId);
+}
+</script>
+
+<!-- MODAL PARA MOSTRAR TODAS LAS PERSONAS CON SOFTWARE O HARDWARE -->
+<div id="modalTodasLasPersonas" style="display:none; position:fixed; z-index:3000; top:0; left:0; width:100vw; height:100vh; background:rgba(35,36,58,0.95); color:#fff; align-items:center; justify-content:center;">
+  <div style="background:#23243a; border-radius:2rem; max-width:800px; width:90vw; margin:auto; padding:32px 24px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.18); position:relative; max-height:80vh; overflow:hidden; display:flex; flex-direction:column;">
+    <button onclick="cerrarModalTodasLasPersonas()" style="position:absolute; top:18px; right:18px; background:#ff4444; color:#fff; border:none; border-radius:50%; width:36px; height:36px; font-size:22px; cursor:pointer;">&times;</button>
+    <h2 style="margin-bottom:18px; text-align:center;">Personas con Software o Hardware</h2>
+    
+    <!-- Filtros -->
+    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+      <select id="filtroTipo" style="padding:8px 12px; border-radius:8px; border:none; background:#333; color:#fff; flex:1; min-width:150px;">
+        <option value="">Todos los tipos</option>
+        <option value="software">Solo Software</option>
+        <option value="hardware">Solo Hardware</option>
+        <option value="ambos">Software y Hardware</option>
+      </select>
+      <input type="text" id="buscarPersona" placeholder="Buscar por nombre..." style="padding:8px 12px; border-radius:8px; border:none; background:#333; color:#fff; flex:2; min-width:200px;">
+    </div>
+    
+    <!-- Lista de personas -->
+    <div id="listaPersonas" style="flex:1; overflow-y:auto; padding-right:8px;">
+      <!-- Aquí se cargarán las personas -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Función para mostrar todas las personas con software o hardware
+async function mostrarTodasLasPersonas() {
+  document.getElementById('modalTodasLasPersonas').style.display = 'flex';
+  await cargarTodasLasPersonas();
+}
+
+// Función para cerrar el modal
+function cerrarModalTodasLasPersonas() {
+  document.getElementById('modalTodasLasPersonas').style.display = 'none';
+}
+
+// Función para cargar todas las personas
+async function cargarTodasLasPersonas() {
+  const listaPersonas = document.getElementById('listaPersonas');
+  listaPersonas.innerHTML = '<div style="text-align:center; padding:40px; color:#bfc4e0;"><i class="fas fa-spinner fa-spin" style="font-size:24px; margin-bottom:10px;"></i><br>Cargando personas...</div>';
+
+  try {
+    const API_BASE = location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "http://172.168.10.11:3000";
+    
+    // Obtener todas las personas con software o hardware
+    const response = await fetch(`${API_BASE}/api/personas-con-inventario`);
+    const personas = await response.json();
+
+    if (!Array.isArray(personas)) {
+      throw new Error('Respuesta inesperada del servidor');
+    }
+
+    if (personas.length === 0) {
+      listaPersonas.innerHTML = '<div style="text-align:center; padding:40px; color:#bfc4e0;">No se encontraron personas con inventario</div>';
+      return;
+    }
+
+    // Crear HTML para cada persona
+    let html = '';
+    personas.forEach(persona => {
+      const tieneSoftware = persona.software_count > 0;
+      const tieneHardware = persona.hardware_count > 0;
+      const tipoInventario = tieneSoftware && tieneHardware ? 'ambos' : (tieneSoftware ? 'software' : 'hardware');
+      
+      html += `
+        <div class="persona-item" data-tipo="${tipoInventario}" data-nombre="${persona.nombre.toLowerCase()}">
+          <div style="display:flex; align-items:center; gap:16px; padding:16px; background:rgba(255,255,255,0.05); border-radius:12px; margin-bottom:12px; cursor:pointer; transition:all 0.2s; border:1px solid rgba(255,255,255,0.1);" onclick="verInventarioPersona('${persona.id}')">
+            <div style="width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg, #2196F3, #1976D2); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:18px;">
+              ${persona.nombre.charAt(0).toUpperCase()}
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600; color:#fff; margin-bottom:4px;">${persona.nombre}</div>
+              <div style="font-size:14px; color:#bfc4e0;">ID: ${persona.id}</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              ${tieneSoftware ? '<span style="background:#2196F3; color:#fff; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:500;"><i class="fas fa-desktop"></i> Software (${persona.software_count})</span>' : ''}
+              ${tieneHardware ? '<span style="background:#43a047; color:#fff; padding:4px 8px; border-radius:6px; font-size:12px; font-weight:500;"><i class="fas fa-laptop"></i> Hardware (${persona.hardware_count})</span>' : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    listaPersonas.innerHTML = html;
+
+    // Configurar filtros
+    configurarFiltros();
+
+  } catch (error) {
+    console.error('Error al cargar personas:', error);
+    listaPersonas.innerHTML = '<div style="text-align:center; padding:40px; color:#ff4444;">Error al cargar las personas</div>';
+  }
+}
+
+// Función para configurar los filtros
+function configurarFiltros() {
+  const filtroTipo = document.getElementById('filtroTipo');
+  const buscarPersona = document.getElementById('buscarPersona');
+  const personas = document.querySelectorAll('.persona-item');
+
+  function aplicarFiltros() {
+    const tipoSeleccionado = filtroTipo.value;
+    const textoBusqueda = buscarPersona.value.toLowerCase();
+
+    personas.forEach(persona => {
+      const tipo = persona.getAttribute('data-tipo');
+      const nombre = persona.getAttribute('data-nombre');
+      
+      const cumpleTipo = !tipoSeleccionado || tipo === tipoSeleccionado;
+      const cumpleBusqueda = !textoBusqueda || nombre.includes(textoBusqueda);
+      
+      if (cumpleTipo && cumpleBusqueda) {
+        persona.style.display = 'block';
+      } else {
+        persona.style.display = 'none';
+      }
+    });
+  }
+
+  filtroTipo.addEventListener('change', aplicarFiltros);
+  buscarPersona.addEventListener('input', aplicarFiltros);
+}
+
+// Función para ver el inventario de una persona específica
+function verInventarioPersona(personaId) {
+  cerrarModalTodasLasPersonas();
+  mostrarModalesInventario(personaId);
+}
+</script>
+<script src="js/topbar.js"></script>
+</body>
+</html>

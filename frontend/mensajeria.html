@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mensajería</title>
+  <link rel="stylesheet" href="styles/mensajeria.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .sidebar-footer{ position: relative; }
+    .user-menu{
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 8px;
+      min-width: 180px;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      padding: 6px 0;
+      display: none;
+      z-index: 60;
+      font-size: 14px;
+    }
+    .user-menu.active{ display: block; }
+    .user-menu button{ display:block; width:100%; text-align:left; padding:8px 12px; border:none; background:transparent; cursor:pointer; }
+    .user-menu button:hover{ background:rgba(0,0,0,0.04); }
+    .user-menu .logout{ color: #b91c1c; }
+    @media (max-width: 800px) {
+      #backHomeBtn { display: none !important; }
+    }
+    /* Preview overlay styles: full-screen centered modal with safe margins and dark theme */
+    .preview-overlay{
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.95);
+      z-index: 9999;
+      padding: 24px; /* safe margins so image never touches screen edges */
+    }
+    .preview-inner{
+      width: 80vw;
+      max-height: 80vh;
+      max-width: calc(100vw - 48px);
+      background: transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+    }
+    #previewImage{
+      display:block;
+      width: auto;
+      max-width: 100%;
+      max-height: 100%;
+      margin: 0;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #000;
+    }
+    .preview-actions{
+      display:flex;
+      gap:12px;
+      padding: 0 16px;
+      box-sizing:border-box;
+    }
+    .preview-actions button{
+      min-width:140px;
+      padding:12px 18px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-size:15px;
+      font-weight:600;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+    .preview-action-confirm{ background:#10b981; color:#fff; }
+    .preview-action-cancel{ background:transparent; color:#fff; border:2px solid rgba(255,255,255,0.12); }
+    .preview-action-cancel:hover{ background: rgba(255,255,255,0.04); }
+    @media (max-width: 520px) {
+      .preview-inner { padding-bottom: 110px; border-radius: 8px; }
+      .preview-actions button { min-width: 120px; padding:10px 14px; font-size:14px; }
+    }
+    /* Search: show full input on desktop, only a magnifier icon on small screens */
+    .search { display:flex; align-items:center; gap:8px; }
+    .search input[type="search"] { flex:1; min-width:0; padding:8px 10px; border-radius:30px; border:1px solid rgba(0,0,0,0.08); }
+    .search .search-toggle { display:none; align-items:center; justify-content:center; width:44px; height:44px; border-radius:50%; border:none; background:#ffffff; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,0.08); font-size:16px; }
+    .search .search-toggle i { font-size:18px; color:inherit; }
+    @media (max-width:800px) {
+      .search input[type="search"] { display:none; }
+      .search .search-toggle { display:inline-flex; }
+    }
+
+    /* Mobile search overlay */
+    .search-overlay{ position:fixed; inset:0; display:none; align-items:flex-start; justify-content:center; background:rgba(0,0,0,0.5); z-index:9998; padding:12px; }
+    .search-overlay.active{ display:flex; }
+    .search-overlay-inner{ width:100%; max-width:720px; margin-top:10vh; background:#fff; border-radius:12px; padding:12px; box-shadow:0 12px 30px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px; }
+    .search-overlay-inner input[type="search"]{ flex:1; font-size:16px; padding:12px 14px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); }
+    .search-overlay-close{ background:transparent; border:none; width:44px; height:44px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+    /* Chat header call button */
+    .chat-actions{ display:flex; align-items:center; gap:8px; }
+    .call-btn{ background:#10b981; border:none; color:#fff; width:44px; height:44px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,0.08); }
+    .call-btn i{ font-size:16px; }
+  </style>
+</head>
+<body>
+  <div class="chat-app">
+    <aside class="sidebar">
+      <header class="sidebar-header" style="display:none;">
+        <h2>Mensajería</h2>
+      </header>
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="Buscar usuarios o grupos..." />
+        <button id="searchToggle" type="button" class="search-toggle" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        </button>
+      </div>
+      <ul id="usersList" class="users"></ul>
+
+      <!-- Sidebar footer: usuario activo + volver al inicio -->
+      <div class="sidebar-footer" role="toolbar" aria-label="Acciones de usuario">
+        <button id="currentUserBtn" class="user-footer-btn" type="button" title="Tu sesión" aria-label="Tu sesión">
+          <div class="avatar" id="currentUserAvatar">U</div>
+          <div class="user-footer-info">
+            <div class="user-footer-name" id="currentUserName">Mi cuenta</div>
+            <div class="user-footer-handle" id="currentUserHandle">@usuario</div>
+          </div>
+        </button>
+        <div id="currentUserMenu" class="user-menu" role="menu" aria-hidden="true">
+          <button type="button" id="currentUserMenuHome" role="menuitem">Volver al Inicio</button>
+          <button type="button" id="currentUserMenuLogout" role="menuitem" class="logout">Cerrar Sesión</button>
+        </div>
+
+        <button id="backHomeBtn" class="icon-btn" type="button" title="Volver al inicio" aria-label="Volver al inicio">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
+        </button>
+      </div>
+    </aside>
+
+    <main class="chat">
+      <header id="chatHeader" class="chat-header"></header>
+
+      <div id="messages" class="messages" aria-live="polite"></div>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <div style="display:flex;align-items:center;gap:6px;width:100%">
+          <textarea id="messageInput" placeholder="Escribe un mensaje." aria-label="Escribir mensaje" style="flex:1"></textarea>
+          <button type="button" id="attachBtn" class="attach-btn" title="Adjuntar" aria-label="Adjuntar">
+            <i class="fa-solid fa-paperclip" aria-hidden="true" style="font-size:18px;color:inherit"></i>
+          </button>
+          <button type="submit" id="sendBtn" class="attach-btn">
+            <i class="fa-regular fa-paper-plane" aria-hidden="true" style="font-size:18px;color:inherit"></i>
+          </button>
+        </div>
+
+        <!-- hidden file inputs -->
+        <input id="fileInput" type="file" style="display:none" />
+        <input id="photoInput" type="file" accept="image/png,image/jpeg" style="display:none" />
+
+        <!-- modal and camera elements -->
+        <div id="attachBackdrop" class="attach-backdrop" tabindex="-1"></div>
+        <div id="attachModal" class="attach-modal" role="dialog" aria-modal="true" aria-label="Adjuntar">
+          <div class="attach-option" id="optFile">Enviar Archivo</div>
+          <div class="attach-option" id="optPhoto">Enviar Foto</div>
+          <div class="attach-option" id="optCamera">Tomar Foto</div>
+          <div id="cameraContainer" style="display:none;margin-top:8px">
+            <div class="camera-view">
+              <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+              <canvas id="captureCanvas" style="display:none"></canvas>
+              <div class="camera-controls">
+                <button type="button" id="cancelCameraBtn" style="background: #dc2626;color: #ffffff;border: none;padding: 8px 10px;border-radius: 30px;cursor: pointer;">Cancelar</button>
+                <button type="button" id="captureBtn" style="background: #10b981;color: #ffffff;border: none;padding: 8px 10px;border-radius: 30px;cursor: pointer;">Tomar foto</button>
+              </div>
+            </div>
+            </div>
+
+            <!-- preview overlay removed from here and relocated to body end so it can be fullscreen -->
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Mobile viewport fix: set CSS variable --vh to window.innerHeight * 0.01
+  function setVh() {
+    try {
+      document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+    } catch (e) { /* ignore */ }
+  }
+
+  // Cargar mensajes de una conversación DM entre el usuario actual y otro usuario
+  async function loadConversationMessages(withUserId) {
+    try {
+      if (!withUserId) return;
+      const me = window.currentUserId || null;
+      if (!me) return; // no tenemos info de usuario
+      const resp = await fetch('/api/conversations/dm?user1=' + encodeURIComponent(me) + '&user2=' + encodeURIComponent(withUserId), { cache: 'no-store' });
+      if (!resp.ok) return;
+      const j = await resp.json();
+      if (!j || !j.success || !j.conversation_id) return;
+      const convId = j.conversation_id;
+      const msgsResp = await fetch('/api/conversations/' + encodeURIComponent(convId) + '/messages', { cache: 'no-store' });
+      if (!msgsResp.ok) return;
+      const mj = await msgsResp.json();
+      if (!mj || !mj.success) return;
+      const arr = (mj.messages || []).map(m => {
+        const from = (String(m.sender_id) === String(me)) ? 'me' : 'them';
+        const time = m.created_at ? new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        if (m.content_type && m.content_type !== 'text') {
+          return { from, type: m.content_type, text: '', time, attachments: m.attachments };
+        }
+        return { from, text: m.content || '', time };
+      });
+      messages[withUserId] = arr;
+      renderMessages();
+    } catch (err) {
+      console.warn('loadConversationMessages error', err);
+    }
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+  window.addEventListener('fullscreenchange', setVh);
+
+  // Users will be loaded from the backend. Keep a small static fallback.
+  let users = [];
+  const staticUsers = [
+    { id: 'u1', name: 'María Pérez', status: '', initials: 'MP', color: '#6C5CE7' },
+    { id: 'u2', name: 'Juan Gómez', status: '', initials: 'JG', color: '#00B894' },
+    { id: 'u3', name: 'Ana Ruiz', status: '', initials: 'AR', color: '#0984E3' },
+    { id: 'u4', name: 'Carlos López', status: '', initials: 'CL', color: '#D63031' }
+  ];
+
+  const messages = {
+    u1: [
+      { from: 'them', text: 'Hola, ¿puedes revisar el documento?', time: '09:24' },
+      { from: 'me', text: 'Sí, le echo un vistazo ahora.', time: '09:26' }
+    ],
+    u2: [
+      { from: 'them', text: '¿Listo para la reunión?', time: '08:15' }
+    ],
+    u3: [],
+    u4: []
+  };
+
+  let selectedUserId = null;
+
+  const usersList = document.getElementById('usersList');
+  const chatHeader = document.getElementById('chatHeader');
+  const messagesEl = document.getElementById('messages');
+  const composer = document.getElementById('composer');
+  const textarea = document.getElementById('messageInput');
+  const searchInput = document.getElementById('searchInput');
+  const searchToggle = document.getElementById('searchToggle');
+  const searchContainer = searchInput ? searchInput.closest('.search') : null;
+  const searchOverlay = document.createElement('div');
+  searchOverlay.id = 'searchOverlay';
+  searchOverlay.className = 'search-overlay';
+  searchOverlay.innerHTML = `
+    <div class="search-overlay-inner">
+      <input id="searchOverlayInput" type="search" placeholder="Buscar usuarios o grupos..." aria-label="Buscar usuarios" />
+      <button id="searchOverlayClose" class="search-overlay-close" aria-label="Cerrar búsqueda"><i class="fa-solid fa-xmark"></i></button>
+    </div>`;
+  document.body.appendChild(searchOverlay);
+
+  const searchOverlayInput = document.getElementById('searchOverlayInput');
+  const searchOverlayClose = document.getElementById('searchOverlayClose');
+
+  function filterUsers(q) {
+    try {
+      const items = usersList.querySelectorAll('.user-item');
+      const low = (q || '').toLowerCase();
+      items.forEach(function (item) {
+        const name = (item.querySelector('.user-name') && item.querySelector('.user-name').textContent) ? item.querySelector('.user-name').textContent.toLowerCase() : '';
+        item.style.display = name.includes(low) ? '' : 'none';
+      });
+    } catch (err) { /* ignore */ }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () { filterUsers(searchInput.value); });
+  }
+  if (searchOverlayInput) {
+    searchOverlayInput.addEventListener('input', function () { filterUsers(searchOverlayInput.value); });
+  }
+
+  if (searchToggle) {
+    searchToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // open overlay on mobile so users have a focused search experience
+      searchOverlay.classList.add('active');
+      try { searchOverlayInput.focus(); } catch (_) {}
+    });
+  }
+
+  // Close overlay handlers
+  searchOverlayClose && searchOverlayClose.addEventListener('click', function (e) { e.stopPropagation(); searchOverlay.classList.remove('active'); });
+  searchOverlay.addEventListener('click', function (ev) { if (ev.target === searchOverlay) searchOverlay.classList.remove('active'); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') searchOverlay.classList.remove('active'); });
+
+  // Attachment elements
+  const attachBtn = document.getElementById('attachBtn');
+  const attachModal = document.getElementById('attachModal');
+  const attachBackdrop = document.getElementById('attachBackdrop');
+  const optFile = document.getElementById('optFile');
+  const optPhoto = document.getElementById('optPhoto');
+  const optCamera = document.getElementById('optCamera');
+  const fileInput = document.getElementById('fileInput');
+  const photoInput = document.getElementById('photoInput');
+  const cameraContainer = document.getElementById('cameraContainer');
+  const cameraVideo = document.getElementById('cameraVideo');
+  const captureCanvas = document.getElementById('captureCanvas');
+  const captureBtn = document.getElementById('captureBtn');
+  const cancelCameraBtn = document.getElementById('cancelCameraBtn');
+  let cameraStream = null;
+  // Preview elements
+  const previewOverlay = document.getElementById('previewOverlay');
+  const previewImage = document.getElementById('previewImage');
+  const previewConfirmBtn = document.getElementById('previewConfirmBtn');
+  const previewCancelBtn = document.getElementById('previewCancelBtn');
+
+  async function startCamera() {
+    try {
+      if (cameraContainer) cameraContainer.style.display = '';
+      cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      cameraVideo.srcObject = cameraStream;
+      await cameraVideo.play();
+    } catch (err) {
+      console.warn('startCamera failed', err);
+      if (cameraContainer) cameraContainer.style.display = 'none';
+    }
+  }
+
+  function createUserElement(user) {
+    const li = document.createElement('li');
+    li.className = 'user-item';
+    li.dataset.userId = user.id;
+    const initials = user.initials || (user.name || '').split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+    let avatarHtml = '';
+    if (user.foto_url) {
+      avatarHtml = `<div class="avatar"><img src="${escapeHtml(user.foto_url)}" alt="${escapeHtml(user.name)}"></div>`;
+    } else {
+      avatarHtml = `<div class="avatar" style="background:${user.color || '#6C5CE7'}">${escapeHtml(initials)}</div>`;
+    }
+    li.innerHTML = avatarHtml + `
+      <div class="user-info">
+        <div class="user-name">${escapeHtml(user.name)}</div>
+        <div class="user-status">${escapeHtml(user.status || '')}</div>
+      </div>
+    `;
+    li.addEventListener('click', function () {
+      selectUser(user.id);
+    });
+    return li;
+  }
+
+  function renderUsers() {
+    usersList.innerHTML = '';
+    users.forEach(function (user) {
+      usersList.appendChild(createUserElement(user));
+    });
+    markActiveUser();
+  }
+
+  // Apply profile photos from users array to any avatar elements in the DOM
+  function applyProfilePhotos(usersArray) {
+    try {
+      if (!Array.isArray(usersArray)) return;
+      usersArray.forEach(function (u) {
+        const id = String(u.id);
+        let foto = u.foto_url || null;
+        const name = u.name || '';
+        const initials = u.initials || (name || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase() || 'U';
+
+        // Normalize foto URL: ensure absolute or root-relative so <img> can load
+        if (foto && !/^https?:\/\//i.test(foto) && foto.indexOf('/') !== 0) {
+          foto = '/' + foto;
+        }
+
+        // Common places: user list items, avatar elements with data attributes, and known ids
+        const selectors = [
+          `.user-item[data-user-id="${id}"] .avatar`,
+          `.avatar[data-user-id="${id}"]`,
+          `.avatar[data-username="${(u.username||'').toString()}"]`
+        ];
+
+        selectors.forEach(function (sel) {
+          const els = document.querySelectorAll(sel);
+          els.forEach(function (el) {
+            if (foto) {
+              el.innerHTML = '<img src="' + escapeHtml(foto) + '" alt="' + escapeHtml(name) + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+              el.style.background = '';
+              const img = el.querySelector('img');
+              if (img) {
+                img.addEventListener('error', function () {
+                  el.innerHTML = initials;
+                  el.style.background = '#6C5CE7';
+                });
+              }
+            } else {
+              el.textContent = initials;
+              if (!el.style.background) el.style.background = '#6C5CE7';
+            }
+          });
+        });
+      });
+    } catch (err) { console.warn('applyProfilePhotos error', err); }
+  }
+
+  function markActiveUser() {
+    const items = usersList.querySelectorAll('.user-item');
+    items.forEach(function (item) {
+      item.classList.toggle('active', item.dataset.userId === selectedUserId);
+    });
+  }
+
+  function selectUser(userId) {
+    selectedUserId = userId;
+    const user = users.find(function (u) { return String(u.id) === String(userId); });
+    if (!user) return;
+    const avatarHtml = user.foto_url
+      ? `<div class="avatar"><img src="${escapeHtml(user.foto_url)}" alt="${escapeHtml(user.name)}"></div>`
+      : `<div class="avatar" style="background:${user.color}">${escapeHtml(user.initials || (user.name||'').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase())}</div>`;
+
+    chatHeader.innerHTML = `
+      <div class="chat-user">
+        ${avatarHtml}
+        <div>
+          <div class="chat-user-name">${escapeHtml(user.name)}</div>
+          <div class="chat-user-status">${escapeHtml(user.status || '')}</div>
+        </div>
+      </div>
+      <div class="chat-actions">
+        <button type="button" id="callBtn" class="call-btn" title="Llamar" aria-label="Llamar">
+          <i class="fa-solid fa-phone" aria-hidden="true"></i>
+        </button>
+        <button type="button" id="fullscreenBtn" class="fullscreen-btn" title="Pantalla completa" aria-label="Pantalla completa">
+          <i class="fa-solid fa-expand" aria-hidden="true"></i>
+        </button>
+      </div>
+    `;
+
+    // Fullscreen toggle (user gesture required)
+    const fsBtn = document.getElementById('fullscreenBtn');
+    if (fsBtn) {
+      fsBtn.addEventListener('click', async function () {
+        try {
+          if (!document.fullscreenElement) {
+            if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+            else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
+            fsBtn.title = 'Salir de pantalla completa';
+            const ic = fsBtn.querySelector('i'); if (ic) ic.className = 'fa-solid fa-compress';
+          } else {
+            if (document.exitFullscreen) await document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            fsBtn.title = 'Pantalla completa';
+            const ic = fsBtn.querySelector('i'); if (ic) ic.className = 'fa-solid fa-expand';
+          }
+        } catch (err) { console.warn('Fullscreen error', err); }
+      });
+    }
+
+    // Call button (opens Jitsi Meet in new window)
+    const callBtn = document.getElementById('callBtn');
+    if (callBtn) {
+      callBtn.addEventListener('click', function () {
+        try { startCall(user); } catch (err) { console.warn('callBtn click error', err); }
+      });
+    }
+
+    document.addEventListener('fullscreenchange', function () {
+      const btn = document.getElementById('fullscreenBtn');
+      if (!btn) return;
+      const icon = btn.querySelector('i');
+      if (document.fullscreenElement) { btn.title = 'Salir de pantalla completa'; if (icon) icon.className = 'fa-solid fa-compress'; }
+      else { btn.title = 'Pantalla completa'; if (icon) icon.className = 'fa-solid fa-expand'; }
+    });
+
+    renderMessages();
+    markActiveUser();
+    // Cargar mensajes desde la BD para esta conversación (si está disponible el usuario actual)
+    try { if (window && window.currentUserId) loadConversationMessages(String(user.id)); } catch(_) {}
+  }
+
+  function renderMessages() {
+    const list = messages[selectedUserId] || [];
+    messagesEl.innerHTML = '';
+    list.forEach(function (msg) {
+      const div = document.createElement('div');
+      div.className = 'message ' + (msg.from === 'me' ? 'outgoing' : 'incoming');
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      // Attachments: images and generic files
+      if (msg.type === 'image' && (msg.imageData || msg.fileUrl)) {
+        const url = msg.imageData || msg.fileUrl;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'attachment';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = msg.alt || msg.fileName || 'Imagen enviada';
+        wrapper.appendChild(img);
+
+        // If the image fails to load (e.g., it's actually a PDF), replace with a file placeholder
+        img.addEventListener('error', function () {
+          const fallbackUrl = msg.imageData || msg.fileUrl || url;
+          const fileName = msg.alt || msg.fileName || 'archivo';
+          wrapper.innerHTML = '';
+          wrapper.className = 'attachment file-attachment';
+          const icon = document.createElement('div');
+          icon.className = 'file-icon';
+          icon.innerHTML = '<i class="fa-regular fa-file"></i>';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'file-name';
+          nameEl.textContent = fileName;
+          wrapper.appendChild(icon);
+          wrapper.appendChild(nameEl);
+          const controlsFallback = document.createElement('div');
+          controlsFallback.className = 'controls';
+          const prevBtn = document.createElement('button');
+          prevBtn.type = 'button';
+          prevBtn.title = 'Previsualizar';
+          prevBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+          prevBtn.addEventListener('click', function (ev) { ev.stopPropagation(); window.open(fallbackUrl); });
+          const dl = document.createElement('a');
+          dl.href = fallbackUrl;
+          dl.download = fileName;
+          dl.title = 'Descargar';
+          dl.innerHTML = '<i class="fa-solid fa-download"></i>';
+          controlsFallback.appendChild(prevBtn);
+          controlsFallback.appendChild(dl);
+          wrapper.appendChild(controlsFallback);
+        });
+
+        const controls = document.createElement('div');
+        controls.className = 'controls';
+        const previewBtn = document.createElement('button');
+        previewBtn.type = 'button';
+        previewBtn.title = 'Previsualizar';
+        previewBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+        previewBtn.addEventListener('click', function (ev) { ev.stopPropagation(); window.open(url); });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = msg.fileName || (msg.alt ? msg.alt : 'imagen');
+        downloadLink.title = 'Descargar';
+        downloadLink.innerHTML = '<i class="fa-solid fa-download"></i>';
+        controls.appendChild(previewBtn);
+        controls.appendChild(downloadLink);
+        wrapper.appendChild(controls);
+        bubble.appendChild(wrapper);
+      } else if (msg.type === 'file' && msg.fileUrl) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'attachment file-attachment';
+        const icon = document.createElement('div');
+        icon.className = 'file-icon';
+        icon.innerHTML = '<i class="fa-regular fa-file"></i>';
+        const name = document.createElement('div');
+        name.className = 'file-name';
+        name.textContent = msg.fileName || 'archivo';
+        wrapper.appendChild(icon);
+        wrapper.appendChild(name);
+
+        const controls = document.createElement('div');
+        controls.className = 'controls';
+        const previewBtn = document.createElement('button');
+        previewBtn.type = 'button';
+        previewBtn.title = 'Previsualizar';
+        previewBtn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+        previewBtn.addEventListener('click', function (ev) { ev.stopPropagation(); window.open(msg.fileUrl); });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = msg.fileUrl;
+        downloadLink.download = msg.fileName || 'archivo';
+        downloadLink.title = 'Descargar';
+        downloadLink.innerHTML = '<i class="fa-solid fa-download"></i>';
+        controls.appendChild(previewBtn);
+        controls.appendChild(downloadLink);
+        wrapper.appendChild(controls);
+        bubble.appendChild(wrapper);
+      } else {
+        // Render text safely, but turn URLs (including relative call.html links) into clickable anchors
+        try {
+          let txt = escapeHtml(msg.text || '');
+          // Full http(s) links
+          txt = txt.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+          // Relative call links like call.html?...
+          txt = txt.replace(/(call\.html\?[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+          bubble.innerHTML = txt;
+        } catch (err) { bubble.innerHTML = escapeHtml(msg.text || ''); }
+      }
+      div.appendChild(bubble);
+      const timeEl = document.createElement('div');
+      timeEl.className = 'time';
+      timeEl.textContent = msg.time || '';
+      div.appendChild(timeEl);
+      messagesEl.appendChild(div);
+    });
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/[&<>\"'`]/g, function (s) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;', '`': '&#96;' })[s];
+    });
+  }
+
+  function formatTime(date) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Start a simple P2P call using `call.html` (WebRTC + simple-peer). No server install required.
+  function startCall(userObj) {
+    try {
+      const me = String(window.currentUserId || window.currentUsername || 'anon');
+      const other = String((userObj && (userObj.id || userObj.name)) || selectedUserId || 'guest');
+      function sanitize(s){ return String(s || '').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_-]/g,''); }
+      const rnd = Math.random().toString(36).slice(2,9);
+      const callId = 'pdmcall_' + sanitize(me).slice(0,20) + '_' + sanitize(other).slice(0,20) + '_' + rnd;
+      const url = 'call.html?call=' + encodeURIComponent(callId) + '&target=' + encodeURIComponent(other) + '&role=caller';
+
+      // Open window centered (caller)
+      const w = Math.min(1000, Math.floor(screen.width * 0.85));
+      const h = Math.min(700, Math.floor(screen.height * 0.85));
+      const left = Math.max(0, Math.floor((screen.width - w) / 2));
+      const top = Math.max(0, Math.floor((screen.height - h) / 2));
+      const specs = `toolbar=0,menubar=0,location=0,resizable=1,scrollbars=1,status=0,width=${w},height=${h},top=${top},left=${left}`;
+      const win = window.open(url, callId, specs);
+
+      // copy link to clipboard
+      try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(()=>{}); } catch(e){}
+
+      // Post the call link into the chat so the other user can join
+      (async function(){
+        try {
+          const payload = { content: 'Llamada: ' + url, content_type: 'text' };
+          if (window && window.currentUserId) payload.sender_id = window.currentUserId;
+          else if (window && window.currentUsername) payload.sender_username = window.currentUsername;
+          if (selectedUserId) payload.target_user_id = selectedUserId;
+          const resp = await fetch('/api/mensajes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          const j = await resp.json().catch(()=>null);
+          // append locally for immediacy
+          messages[selectedUserId] = messages[selectedUserId] || [];
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          messages[selectedUserId].push({ from: 'me', text: 'Llamada: ' + url, time: time });
+          renderMessages();
+        } catch (err) { console.warn('failed to send call link', err); }
+      })();
+
+      if (!win) {
+        try { if (window.showAlert) window.showAlert('Enlace de llamada copiado. Pégalo para que la otra persona se una.'); else alert('Enlace de llamada copiado. Pégalo para que la otra persona se una.'); } catch(e){}
+      } else {
+        try { if (window.showAlert) window.showAlert('Llamada iniciada. Enlace copiado al portapapeles.'); else alert('Llamada iniciada. Enlace copiado al portapapeles.'); } catch(e){}
+      }
+    } catch (err) { console.warn('startCall error', err); try{ alert('Error iniciando llamada: ' + (err && err.message || String(err))); }catch(_){}}
+  }
+
+  composer.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const text = textarea.value.trim();
+    if (!text) return;
+    const timeNow = formatTime(new Date());
+    // Prepare payload for server
+    const payload = { content: text, content_type: 'text' };
+    if (window && window.currentUserId) payload.sender_id = window.currentUserId;
+    else if (window && window.currentUsername) payload.sender_username = window.currentUsername;
+    if (selectedUserId) payload.target_user_id = selectedUserId;
+
+    try {
+      const resp = await fetch('/api/mensajes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const j = await resp.json();
+      if (resp.ok && j && j.success) {
+        // Append locally for immediate UI
+        messages[selectedUserId] = messages[selectedUserId] || [];
+        const createdAt = j.created_at || new Date().toISOString();
+        const time = new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messages[selectedUserId].push({ from: 'me', text: text, time: time });
+        textarea.value = '';
+        renderMessages();
+        return;
+      }
+      console.warn('POST /api/mensajes response', j);
+    } catch (err) {
+      console.error('Error enviando mensaje al servidor', err);
+    }
+
+    // Fallback local push if server failed
+    messages[selectedUserId] = messages[selectedUserId] || [];
+    messages[selectedUserId].push({ from: 'me', text: text, time: timeNow });
+    textarea.value = '';
+    renderMessages();
+  });
+
+  // Attachment modal handlers
+  function openAttach() {
+    try {
+      if (attachModal) { attachModal.classList.add('active'); attachModal.style.display = 'block'; }
+      if (attachBackdrop) { attachBackdrop.classList.add('active'); attachBackdrop.style.display = 'block'; }
+    } catch (err) { console.error('openAttach error', err); }
+  }
+  function closeAttach() {
+    try {
+      if (attachModal) { attachModal.classList.remove('active'); attachModal.style.display = 'none'; }
+      if (attachBackdrop) { attachBackdrop.classList.remove('active'); attachBackdrop.style.display = 'none'; }
+    } catch (err) { console.error('closeAttach error', err); }
+    stopCamera();
+    if (cameraContainer) cameraContainer.style.display = 'none';
+    // Reset hidden file inputs so the same file can be selected again reliably
+    try {
+      if (fileInput) fileInput.value = '';
+      if (photoInput) photoInput.value = '';
+    } catch (err) { /* ignore */ }
+  }
+
+  if (attachBtn) {
+    attachBtn.addEventListener('click', function(e){ console.log('attachBtn clicked'); openAttach(); });
+  } else {
+    console.warn('attachBtn not found');
+  }
+  attachBackdrop.addEventListener('click', closeAttach);
+
+  optFile.addEventListener('click', function () {
+    try { if (fileInput) fileInput.value = ''; } catch (err) { console.warn('clear fileInput', err); }
+    try { if (fileInput) fileInput.click(); } catch (err) { console.warn('fileInput click error', err); }
+  });
+
+  optPhoto.addEventListener('click', function () {
+    try { if (photoInput) photoInput.value = ''; } catch (err) { console.warn('clear photoInput', err); }
+    try { if (photoInput) photoInput.click(); } catch (err) { console.warn('photoInput click error', err); }
+  });
+
+  optCamera.addEventListener('click', async function () {
+    await startCamera();
+  });
+
+  function stopCamera() {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(t => t.stop());
+      cameraStream = null;
+      cameraVideo.srcObject = null;
+    }
+  }
+
+  captureBtn.addEventListener('click', function () {
+    const w = cameraVideo.videoWidth;
+    const h = cameraVideo.videoHeight;
+    captureCanvas.width = w;
+    captureCanvas.height = h;
+    const ctx = captureCanvas.getContext('2d');
+    ctx.drawImage(cameraVideo, 0, 0, w, h);
+    const dataUrl = captureCanvas.toDataURL('image/jpeg');
+    // Show preview before adding message
+    showPreview(dataUrl, { alt: 'Foto tomada', fileName: 'foto.jpg', mime: 'image/jpeg', source: 'camera' });
+  });
+
+  cancelCameraBtn.addEventListener('click', function () { closeAttach(); });
+
+  fileInput.addEventListener('change', function (e) {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return closeAttach();
+    const url = URL.createObjectURL(f);
+    const time = formatTime(new Date());
+    messages[selectedUserId] = messages[selectedUserId] || [];
+    if (/^image\//.test(f.type)) {
+      // Show preview for images
+      showPreview(url, { alt: f.name, fileName: f.name, mime: f.type, size: f.size, fileObj: f, source: 'file' });
+    } else {
+      messages[selectedUserId].push({ from: 'me', type: 'file', fileName: f.name, fileUrl: url, mime: f.type, size: f.size, time: time });
+      renderMessages();
+      closeAttach();
+    }
+    // Reset the input so selecting the same file again will fire a change event
+    try { e.target.value = ''; } catch (err) { /* ignore */ }
+  });
+
+  photoInput.addEventListener('change', function (e) {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return closeAttach();
+    if (!/^image\/(png|jpeg|jpg)$/.test(f.type)) {
+      alert('Por favor seleccione una imagen PNG o JPG');
+      return;
+    }
+    const url = URL.createObjectURL(f);
+    const time = formatTime(new Date());
+    messages[selectedUserId] = messages[selectedUserId] || [];
+    // Show preview before adding
+    showPreview(url, { alt: f.name, fileName: f.name, mime: f.type, size: f.size, fileObj: f, source: 'photo' });
+    try { e.target.value = ''; } catch (err) { /* ignore */ }
+  });
+
+  // Preview control handlers
+  previewCancelBtn && previewCancelBtn.addEventListener('click', function () {
+    if (previewOverlay) previewOverlay.style.display = 'none';
+    // If the preview came from the camera, try to reopen the camera view
+    try {
+      if (previewImage && previewImage.dataset && previewImage.dataset.source === 'camera') {
+        startCamera();
+      }
+    } catch (err) { /* ignore */ }
+  });
+  previewConfirmBtn && previewConfirmBtn.addEventListener('click', function () {
+    if (!previewImage || !previewImage.src) return;
+    const dataUrl = previewImage.src;
+    const time = formatTime(new Date());
+    messages[selectedUserId] = messages[selectedUserId] || [];
+    messages[selectedUserId].push({ from: 'me', type: 'image', imageData: dataUrl, time: time, alt: previewImage.alt || '', fileName: previewImage.dataset.filename || '' });
+    renderMessages();
+    if (previewOverlay) previewOverlay.style.display = 'none';
+    closeAttach();
+  });
+
+  function showPreview(dataUrl, meta) {
+    if (!previewOverlay || !previewImage) {
+      // Fallback: directly add
+      const time = formatTime(new Date());
+      messages[selectedUserId] = messages[selectedUserId] || [];
+      messages[selectedUserId].push({ from: 'me', type: 'image', imageData: dataUrl, time: time });
+      renderMessages();
+      closeAttach();
+      return;
+    }
+    previewImage.src = dataUrl;
+    previewImage.alt = meta && meta.alt ? meta.alt : 'Previsualización';
+    previewImage.dataset.filename = meta && meta.fileName ? meta.fileName : '';
+    previewImage.dataset.source = meta && meta.source ? meta.source : '';
+    // If this preview comes from the camera we should stop the live stream
+    // so the camera is deactivated while the user reviews the photo.
+    if (meta && meta.source === 'camera') {
+      try { stopCamera(); } catch (err) { /* ignore */ }
+      if (cameraContainer) cameraContainer.style.display = 'none';
+    }
+    previewOverlay.style.display = 'flex';
+  }
+
+  textarea.addEventListener('keydown', function (e) {
+    // Press Enter to send (unless Shift is held); Shift+Enter inserts newline
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (composer.requestSubmit) composer.requestSubmit(); else composer.submit();
+    }
+  });
+
+  searchInput.addEventListener('input', function () {
+    const q = searchInput.value.toLowerCase();
+    const items = usersList.querySelectorAll('.user-item');
+    items.forEach(function (item) {
+      const name = item.querySelector('.user-name').textContent.toLowerCase();
+      item.style.display = name.includes(q) ? '' : 'none';
+    });
+  });
+
+  // Try to load users from backend; fall back to static list on error
+  async function fetchUsersFromApi() {
+    try {
+      const resp = await fetch('/api/empleados', { cache: 'no-store' });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const data = await resp.json();
+      if (!Array.isArray(data) || data.length === 0) throw new Error('Empty response');
+      users = data.map((u, idx) => {
+        const name = u.nombre_completo || u.username || ('Usuario ' + (u.id || idx));
+        const initials = (u.nombre_completo || u.username || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase() || 'U';
+        return {
+          id: String(u.id),
+          name: name,
+          initials: initials,
+          color: '#6C5CE7',
+          status: u.rol || '',
+          foto_url: u.foto_url || null
+        };
+      });
+    } catch (err) {
+      console.warn('No se pudo obtener usuarios desde /api/usuarios:', err);
+      users = staticUsers.slice();
+    }
+    if (users.length) selectedUserId = users[0].id;
+    renderUsers();
+    // After rendering user list, ensure avatar elements receive foto_url where available
+    applyProfilePhotos(users);
+    if (selectedUserId) selectUser(selectedUserId);
+  }
+
+  fetchUsersFromApi();
+
+  // Sidebar footer: populate current user & back button
+  try {
+    const currentUserBtn = document.getElementById('currentUserBtn');
+    const backHomeBtn = document.getElementById('backHomeBtn');
+
+    async function populateCurrentUser() {
+      try {
+        const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('username');
+        let obj = null;
+        if (!raw) obj = null;
+        else {
+          try { obj = typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (e) { obj = { username: raw }; }
+        }
+
+        // Also support a persisted `userProfile` object saved separately (used by other pages)
+        let storedProfile = null;
+        try { storedProfile = JSON.parse(localStorage.getItem('userProfile') || 'null'); } catch(_) { storedProfile = null; }
+
+        const name = (obj && (obj.nombre_completo || obj.name || obj.fullname || obj.username)) || (storedProfile && (storedProfile.nombre_completo || storedProfile.fullName || storedProfile.fullname)) || localStorage.getItem('username') || 'Mi cuenta';
+        const usernameCandidate = (obj && (obj.username || obj.user)) || (storedProfile && (storedProfile.username || storedProfile.user || storedProfile.email && String(storedProfile.email).split('@')[0])) || localStorage.getItem('username') || (obj && obj.email ? String(obj.email).split('@')[0] : null) || null;
+        let foto = (obj && (obj.foto_url || obj.foto || obj.photo_url || obj.photo || obj.avatar_url || obj.avatar)) || (storedProfile && (storedProfile.foto_url || storedProfile.photo || storedProfile.photo_url || storedProfile.avatar)) || null;
+
+        // Exponer identificador de usuario para el frontend (si existe) — prefer `obj`, fallback to storedProfile
+        try {
+          const idFromObj = obj && (obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber) ? String(obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber) : null;
+          const idFromProfile = storedProfile && (storedProfile.id || storedProfile.idEmpleado || storedProfile.employeeNumber) ? String(storedProfile.id || storedProfile.idEmpleado || storedProfile.employeeNumber) : null;
+          window.currentUserId = idFromObj || idFromProfile || null;
+        } catch(_) { window.currentUserId = null; }
+        try { window.currentUsername = usernameCandidate ? String(usernameCandidate) : null; } catch(_) { window.currentUsername = null; }
+
+        const avatarEl = document.getElementById('currentUserAvatar');
+        const nameEl = document.getElementById('currentUserName');
+        const handleEl = document.getElementById('currentUserHandle');
+        // If we don't have a foto in localStorage, try fetching from the empleados API by currentUserId
+        if (!foto && window.currentUserId) {
+          try {
+            const resp = await fetch('/api/empleados/' + encodeURIComponent(window.currentUserId), { cache: 'no-store' });
+            if (resp && resp.ok) {
+              let emp = await resp.json();
+              // Support wrapped responses like { success: true, data: {...} } or { empleado: {...} }
+              if (emp && emp.data) emp = emp.data;
+              if (emp && emp.empleado) emp = emp.empleado;
+              const remoteCandidate = emp && (emp.foto_url || emp.foto || emp.photo_url || emp.photo || emp.avatar_url || emp.avatar)
+                ? (emp.foto_url || emp.foto || emp.photo_url || emp.photo || emp.avatar_url || emp.avatar)
+                : null;
+              if (remoteCandidate) {
+                let remote = remoteCandidate;
+                // Normalize to absolute URL when necessary
+                if (remote && !/^https?:\/\//i.test(remote)) {
+                  if (!remote.startsWith('/')) remote = '/' + remote;
+                  try { remote = window.location.origin + remote; } catch (_) { /* fall back to root-relative */ }
+                }
+                if (remote) foto = remote;
+              }
+            }
+          } catch (err) { console.warn('Error fetching current user foto from /api/empleados:', err); }
+        }
+        if (avatarEl) {
+          if (foto) {
+            // Normalize relative foto paths to absolute so <img> can load on mobile/desktop
+            let src = String(foto || '');
+            if (src && !/^https?:\/\//i.test(src)) {
+              if (!src.startsWith('/')) src = '/' + src;
+              try { src = window.location.origin + src; } catch (_) { /* keep root-relative */ }
+            }
+            avatarEl.innerHTML = '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(name) + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+            avatarEl.style.background = '';
+            const img = avatarEl.querySelector('img');
+            if (img) {
+              img.addEventListener('error', function () {
+                const initials = (name || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+                avatarEl.innerHTML = initials;
+                avatarEl.style.background = '#6C5CE7';
+              });
+            }
+          } else {
+            const initials = (name || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+            avatarEl.textContent = initials;
+            avatarEl.style.background = '#6C5CE7';
+          }
+        }
+        if (nameEl) nameEl.textContent = name;
+        if (handleEl) handleEl.textContent = usernameCandidate ? ('@' + usernameCandidate) : '';
+      } catch (err) { console.warn('populateCurrentUser error', err); }
+    }
+
+    populateCurrentUser();
+
+    if (currentUserBtn) {
+      const userMenu = document.getElementById('currentUserMenu');
+      const menuHome = document.getElementById('currentUserMenuHome');
+      const menuLogout = document.getElementById('currentUserMenuLogout');
+
+      currentUserBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!userMenu) return;
+        const active = userMenu.classList.toggle('active');
+        userMenu.setAttribute('aria-hidden', String(!active));
+      });
+
+      menuHome && menuHome.addEventListener('click', function () {
+        if (userMenu) { userMenu.classList.remove('active'); userMenu.setAttribute('aria-hidden', 'true'); }
+        window.location.href = 'nuevo-inicio.html';
+      });
+
+      menuLogout && menuLogout.addEventListener('click', function () {
+        try {
+          try { localStorage.removeItem('loggedInUser'); localStorage.removeItem('userInfo'); localStorage.removeItem('username'); } catch(_) {}
+          fetch('/logout', { method: 'POST', credentials: 'same-origin' }).catch(()=>{});
+        } catch(_) {}
+        if (userMenu) { userMenu.classList.remove('active'); userMenu.setAttribute('aria-hidden', 'true'); }
+        window.location.href = '/login.html';
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function (ev) {
+        if (!userMenu) return;
+        if (!userMenu.contains(ev.target) && ev.target !== currentUserBtn) {
+          userMenu.classList.remove('active');
+          userMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && userMenu && userMenu.classList.contains('active')) {
+          userMenu.classList.remove('active');
+          userMenu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    if (backHomeBtn) {
+      backHomeBtn.addEventListener('click', function () { window.location.href = 'nuevo-inicio.html'; });
+    }
+  } catch (err) { console.warn('sidebar footer init error', err); }
+});
+  </script>
+
+  <!-- full-screen preview overlay moved outside attachModal so it can cover the viewport -->
+  <div id="previewOverlay" class="preview-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Previsualización de imagen">
+    <div class="preview-inner">
+      <img id="previewImage" src="" alt="Previsualización" />
+      <div class="preview-actions" aria-hidden="false">
+        <button style="background-color: red;" id="previewCancelBtn" type="button" class="preview-action-cancel" aria-label="Volver a tomar foto">X</button>
+        <button style = "background-color: #10b981;" id="previewConfirmBtn" type="button" class="preview-action-confirm" aria-label="Usar foto">✓</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

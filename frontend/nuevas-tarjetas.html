@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas de Opciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link rel="stylesheet" href="styles/nuevas-tarajetas.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400');
+    </style>
+</head>
+<body>
+    <div class="switch-container">
+        <button class="switch-option active" id="mostFrequentBtn" onclick="showMostFrequent()">
+            Opciones más usadas
+        </button>
+        <button class="switch-option" id="pdmLineBtn" onclick="showPDMLine()">
+            Línea PDM
+        </button>
+    </div>
+    
+    <ul>
+        <!-- Opciones más frecuentes -->
+        <li class="most-frequent">
+            <a href="/index.html">
+                <span class="material-symbols-rounded">confirmation_number</span>
+                <span> - Ticket de IT</span>
+            </a>
+        </li>
+        <li class="most-frequent">
+            <a href="/index_mantenimiento.html">
+                <span class="material-symbols-rounded">confirmation_number</span>
+                <span> - Ticket de Mantenimiento</span>
+            </a>
+        </li>
+        <li class="most-frequent">
+            <a href="/vacaciones.html">
+                <span class="material-symbols-rounded">beach_access</span>
+                <span> - Vacaciones</span>
+            </a>
+        </li>
+        <li class="most-frequent">
+            <a href="/amonestacion_supervisor.html">
+                <span class="material-symbols-rounded">warning</span>
+                <span> - Amonestaciones</span>
+            </a>
+        </li>
+        
+        <!-- Línea PDM -->
+        <li class="pdm-line" style="display: none;">
+            <a href="http://172.168.10.11:3001/login.html">
+                <span class="material-symbols-rounded">folder</span>
+                <span> - Proyectos</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="http://172.168.10.11:3001/login.html">
+                <span class="material-symbols-rounded">palette</span>
+                <span> - Diseño</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/planning.html">
+                <span class="material-symbols-rounded">event_note</span>
+                <span> - Planeación y Compras</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/production.html">
+                <span class="material-symbols-rounded">precision_manufacturing</span>
+                <span> - Producción</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/qc.html">
+                <span class="material-symbols-rounded">fact_check</span>
+                <span> - Calidad (QC)</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/import_export.html">
+                <span class="material-symbols-rounded">import_export</span>
+                <span> - Importación y Exportación</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/accounting.html">
+                <span class="material-symbols-rounded">account_balance</span>
+                <span> - Contabilidad</span>
+            </a>
+        </li>
+        <li class="pdm-line" style="display: none;">
+            <a href="/almacen.html">
+                <span class="material-symbols-rounded">inventory_2</span>
+                <span> - Almacén</span>
+            </a>
+        </li>
+    </ul>
+    
+    <script>
+        function showMostFrequent() {
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            
+            // Mostrar Opciones más usadas, ocultar Línea PDM
+            mostFrequent.forEach(item => {
+                item.style.display = 'block';
+            });
+            pdmLine.forEach(item => {
+                item.style.display = 'none';
+            });
+            
+            // Actualizar estados de los botones
+            mostFrequentBtn.classList.add('active');
+            pdmLineBtn.classList.remove('active');
+        }
+        
+        function showPDMLine() {
+            const mostFrequent = document.querySelectorAll('.most-frequent');
+            const pdmLine = document.querySelectorAll('.pdm-line');
+            const mostFrequentBtn = document.getElementById('mostFrequentBtn');
+            const pdmLineBtn = document.getElementById('pdmLineBtn');
+            
+            // Mostrar Línea PDM, ocultar Opciones más usadas
+            mostFrequent.forEach(item => {
+                item.style.display = 'none';
+            });
+            pdmLine.forEach(item => {
+                item.style.display = 'block';
+            });
+            
+            // Actualizar estados de los botones
+            mostFrequentBtn.classList.remove('active');
+            pdmLineBtn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

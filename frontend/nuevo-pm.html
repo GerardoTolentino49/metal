@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>PM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <link rel="stylesheet" href="styles/nuevo-pm.css">
+</head>
+<body>
+
+  <!-- Orders/Users Interface -->
+  <div class="orders-interface">
+    <div class="interface-header">
+      <!-- Tab Switch -->
+      <div class="tab-switch">
+        <button class="tab-switch-button active" data-tab="orders" disabled aria-disabled="true">
+          <i class="fas fa-list"></i> Proyectos
+        </button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrapper">
+        <input type="text" class="search-bar" placeholder="Buscar proyecto....">
+      </div>
+
+      <!-- Add Order Button -->
+      <button class="add-order-btn">
+        <i class="fas fa-plus"></i> Agregar Proyecto
+      </button>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="table-wrapper">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;"></th>
+            <th class="col-client">Cliente</th>
+            <th class="col-order-number">Número de proyecto</th>
+            <th class="col-project-name">Nombre del proyecto</th>
+            <th class="col-status">Estatus</th>
+            <th class="col-time-worked">Tiempo trabajado</th>
+            <th class="col-price">Precio (USD/MXN)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="empty-row">
+            <td colspan="7">
+              <div class="error-message">
+                <div class="error-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="error-text">Error al cargar proyectos</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+  <div class="topbar">
+        <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <!-- Diseno -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <!-- PM -->
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+
+
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Ajustes
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hamburger-menu" id="hamburgerMenu">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    
+    <div class="mobile-menu-content">
+      <div class="mobile-menu-item has-submenu" data-submenu="it">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileItSubmenu">
+          <a href="panel.html" class="mobile-submenu-item">Tickets</a>
+          <a href="detalles.html" class="mobile-submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="mobile-submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="mobile-submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="mobile-submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="mobile-submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="rh">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileRhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="warehouse">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileWarehouseSubmenu">
+          <a href="inventario.html" class="mobile-submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="mobile-submenu-item">Warehouse Analytics</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="maintenance">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileMaintenanceSubmenu">
+          <a href="mantenimiento.html" class="mobile-submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="mobile-submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="mobile-submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="mobile-submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="design">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Diseño
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileDesignSubmenu">
+          <a href="logeo-diseno.html" class="mobile-submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="pm">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        PM
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobilePmSubmenu">
+          <a href="nuevo-pm.html" class="mobile-submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="mobile-submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="mobile-submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="admin">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Ajustes
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileAdminSubmenu">
+          <a href="admin.html" class="mobile-submenu-item">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="mobile-submenu-item">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="mobile-submenu-item">Administración de Departamentos</a>
+          <a href="admin_design.html" class="mobile-submenu-item">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mobile-user-info">
+      <div id="mobileUserInfo">Usuario</div>
+      <button class="mobile-logout-btn" id="mobileLogoutBtn">Cerrar Sesión</button>
+    </div>
+    
+    <div class="mobile-menu-close" id="mobileMenuClose">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+  <script src="js/topbar.js"></script>
+  <script src="js/mobile-menu.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const tabButtons = document.querySelectorAll('.tab-switch-button');
+      const searchBar = document.querySelector('.search-bar');
+      const addOrderBtn = document.querySelector('.add-order-btn');
+      const tableHeadings = document.querySelectorAll('.orders-table th');
+      const tableBody = document.querySelector('.orders-table tbody');
+
+      const ordersHeaders = [
+        'Client',
+        'Order Number',
+        'Project Name',
+        'Status',
+        'Time Worked',
+        'Price (USD/MXN)'
+      ];
+
+      const usersHeaders = [
+        'User',
+        'Order Number',
+        'Customer Job',
+        'Client',
+        'Status',
+        'Order State',
+        'Time In Order'
+      ];
+
+      let currentTab = 'orders';
+
+      // Lista de clientes provista (valores por defecto)
+      let CLIENTS_LIST = ['SMD','PDM','RS','CREW','SPOONERS','LEVEL-23','GD','MXC','IH','SSW','CSM','WM','OCS'];
+
+      // Nombres completos de los clientes para desplegar (valores por defecto)
+      let clientNames = {
+        'SMD': 'SKYHOOK',
+        'PDM': 'PHOENIX DISEÑO Y MANUFACTURA',
+        'RS': 'ROSSIN STEEL INC',
+        'CREW': 'CREW METAL',
+        'SPOONERS': 'SW SPOONERS WOODWORKS INC',
+        'LEVEL-23': 'LEVEL-23 FAB',
+        'GD': 'GREEN DREAMS',
+        'MXC': 'MEXICAN CUSTOMERS',
+        'IH': 'IMPACT HOUSING',
+        'SSW': 'SKYHOOK STAIRWORKS INC',
+        'CSM': 'CALIFORNIA SHEET METAL',
+        'WM': 'WEST MODULAR',
+        'OCS': 'OCCASSIONAL CUSTOMER SERVICE'
+      };
+
+      // Cargar clientes desde el backend
+      async function loadClientsFromBackend() {
+        try {
+          const response = await fetch('/api/clientes');
+          if (!response.ok) {
+            console.warn('No se pudieron cargar clientes desde el backend');
+            return;
+          }
+          const clients = await response.json();
+          
+          // Agregar clientes del backend a las listas (sin duplicar)
+          clients.forEach(client => {
+            const nomenclatura = client.nomenclatura;
+            if (!CLIENTS_LIST.includes(nomenclatura)) {
+              CLIENTS_LIST.push(nomenclatura);
+            }
+            clientNames[nomenclatura] = client.nombre_completo;
+          });
+        } catch (error) {
+          console.error('Error al cargar clientes desde el backend:', error);
+        }
+      }
+
+      // Obtener foto del empleado por numero_empleado (sin placeholders externos)
+      async function getEmployeePhoto(numeroEmpleado) 
+      {
+        try 
+        {
+          const response = await fetch(`/api/empleados/${numeroEmpleado}`);
+          if (!response.ok) return null;
+          const employee = await response.json();
+          return employee.foto_url || null;
+        } catch (error) 
+        {
+          console.error('Error al obtener foto del empleado:', error);
+          return null;
+        }
+      }
+
+      // Fallback local inline SVG para avatar por defecto (correctamente URL-encoded)
+      const DEFAULT_AVATAR_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' rx='20' fill='#e0e0e0'/><circle cx='20' cy='14' r='6' fill='#bdbdbd'/><path d='M6 34c0-7 6.5-12 14-12s14 5 14 12' fill='#bdbdbd'/></svg>";
+      const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,' + encodeURIComponent(DEFAULT_AVATAR_SVG);
+
+      // Toast helper
+      function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type === 'error' ? 'error' : 'success'}`;
+        toast.innerHTML = `<span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(8px) translateY(8px)';
+          setTimeout(() => toast.remove(), 200);
+        }, 2500);
+      }
+
+      // Función para cargar usuarios de diseño
+      async function loadDesignUsers() {
+        try {
+          const response = await fetch('/api/usuarios/diseno');
+          const users = await response.json();
+
+          if (users.length === 0) {
+            tableBody.innerHTML = `
+              <tr class="empty-row">
+                <td colspan="7">
+                  <div class="error-message">
+                    <div class="error-icon">
+                      <i class="fas fa-users"></i>
+                    </div>
+                    <div class="error-text">No hay empleados en el departamento de Diseño</div>
+                  </div>
+                </td>
+              </tr>
+            `;
+          } else {
+            // Render con foto al lado del nombre dentro de la primera columna
+            const rows = await Promise.all(users.map(async (user) => {
+              let fotoUrl = user.foto_url || null;
+              if (!fotoUrl && user.numero_empleado) {
+                fotoUrl = await getEmployeePhoto(user.numero_empleado);
+              }
+              if (!fotoUrl) {
+                fotoUrl = DEFAULT_AVATAR;
+              }
+              const safeName = user.nombre || user.usuario || '-';
+              return `
+              <tr>
+                <td class="user-with-photo"><img src="${fotoUrl}" alt="${safeName}" class="employee-photo" onerror="this.onerror=null;this.src='${DEFAULT_AVATAR}'"> ${safeName}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>${user.activo ? 'Activo' : 'Inactivo'}</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              `;
+            }));
+            tableBody.innerHTML = rows.join('');
+          }
+        } catch (error) {
+          console.error('Error al cargar usuarios:', error);
+          tableBody.innerHTML = `
+            <tr class="empty-row">
+              <td colspan="7">
+                <div class="error-message">
+                  <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </div>
+                  <div class="error-text">Error al cargar usuarios del departamento de Diseño</div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      // Función para formatear tiempo trabajado (ms, segundos, minutos u horas)
+      function formatTimeWorked(value) 
+      {
+        if (value == null) return '-';
+        // Acepta: milisegundos numéricos, segundos/minutos/horas como número, o cadenas tipo '02:15:00'
+        if (typeof value === 'string') 
+        {
+          return value; // Asumir ya formateado
+        }
+        const ms = Number(value);
+        if (Number.isNaN(ms)) return '-';
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+      }
+
+      // Función para cargar proyectos LOCALMENTEEEE
+      function renderOrdersList(project) {
+        const orders = project.orders || [];
+        if (!orders.length) 
+        {
+          return '<p style="font-size: 12px; color: #666;">No hay órdenes en este proyecto</p>';
+        }
+        return orders.map(order => `
+          <div class="order-item" data-order-id="${order.id}" style="cursor: pointer; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 30px; margin-bottom: 8px; border-left: 3px solid #2a8f4b; transition: background 0.2s; display: flex; justify-content: space-between; align-items: center;">
+            <div style="flex: 1;">
+              <strong style="font-size: 12px;">${order.project_name || order.nombre || order.order_name || order.order_number || 'Orden sin número'}</strong>
+              <div style="font-size: 11px; color: #666; margin-top: 4px;">
+                <span>${order.customer_job || '-'}</span> | 
+                <span>${formatTimeWorked(order.time_worked || 0)}</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span style="font-size: 11px; background: #e8f5e9; padding: 4px 8px; border-radius: 30px; font-weight: 600;">${order.estado || order.status || 'activa'}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Funciones para modales personalizados
+      function showErrorModal(title, message) {
+        const modal = document.getElementById('errorModal');
+        const titleEl = document.getElementById('errorModalTitle');
+        const messageEl = document.getElementById('errorModalMessage');
+        
+        if (titleEl) titleEl.textContent = title;
+        if (messageEl) {
+          // Convertir saltos de línea en <br>
+          messageEl.innerHTML = message.replace(/\n/g, '<br>');
+        }
+        if (modal) modal.style.display = 'flex';
+        
+        return new Promise((resolve) => {
+          const closeModal = () => {
+            if (modal) modal.style.display = 'none';
+            resolve();
+          };
+          
+          const okBtn = document.getElementById('errorModalOkBtn');
+          const closeBtn = document.getElementById('errorModalCloseBtn');
+          
+          if (okBtn) {
+            okBtn.onclick = closeModal;
+          }
+          if (closeBtn) {
+            closeBtn.onclick = closeModal;
+          }
+          
+          // Cerrar al hacer clic fuera del modal
+          modal.onclick = (e) => {
+            if (e.target === modal) closeModal();
+          };
+        });
+      }
+
+      function showConfirmModal(title, message) {
+        const modal = document.getElementById('confirmModal');
+        const titleEl = document.getElementById('confirmModalTitle');
+        const messageEl = document.getElementById('confirmModalMessage');
+        
+        if (titleEl) titleEl.textContent = title;
+        if (messageEl) messageEl.textContent = message;
+        if (modal) modal.style.display = 'flex';
+        
+        return new Promise((resolve) => {
+          const closeModal = (result) => {
+            if (modal) modal.style.display = 'none';
+            resolve(result);
+          };
+          
+          const acceptBtn = document.getElementById('confirmModalAcceptBtn');
+          const cancelBtn = document.getElementById('confirmModalCancelBtn');
+          const closeBtn = document.getElementById('confirmModalCloseBtn');
+          
+          if (acceptBtn) {
+            acceptBtn.onclick = () => closeModal(true);
+          }
+          if (cancelBtn) {
+            cancelBtn.onclick = () => closeModal(false);
+          }
+          if (closeBtn) {
+            closeBtn.onclick = () => closeModal(false);
+          }
+          
+          // Cerrar al hacer clic fuera del modal
+          modal.onclick = (e) => {
+            if (e.target === modal) closeModal(false);
+          };
+        });
+      }
+
+      // Función para aprobar una orden o submittal (definir antes de loadOrdersForProject)
+      if (!window.aprobarOrden) {
+        window.aprobarOrden = async function(orderId, projectId, type = 'order') {
+          const isSubmittal = type === 'submittal';
+          const itemName = isSubmittal ? 'submittal' : 'orden';
+          console.log(`Aprobando ${itemName}:`, orderId, 'Proyecto:', projectId);
+          
+          const confirmed = await showConfirmModal(
+            'Confirmar aprobación',
+            `¿Estás seguro de que deseas aprobar este ${itemName}?`
+          );
+          
+          if (!confirmed) {
+            return;
+          }
+          
+          try {
+            const endpoint = isSubmittal ? `/api/submittals/${orderId}/aprobar` : `/api/ordenes/${orderId}/aprobar`;
+            const response = await fetch(endpoint, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+              throw new Error(data.error || data.message || `Error al aprobar el ${itemName}`);
+            }
+            
+            // Mostrar mensaje de éxito
+            showToast(`${itemName.charAt(0).toUpperCase() + itemName.slice(1)} aprobado exitosamente`, 'success');
+            
+            // Recargar las órdenes del proyecto
+            if (projectId) {
+              loadOrdersForProject(projectId);
+            } else {
+              // Si no hay projectId, recargar todos los proyectos
+              if (typeof loadProjects === 'function') {
+                loadProjects();
+              }
+            }
+          } catch (error) {
+            console.error(`Error al aprobar ${itemName}:`, error);
+            await showErrorModal('Error', `Error al aprobar el ${itemName}: ${error.message || 'Error desconocido'}`);
+          }
+        };
+      }
+
+      // Función para cargar y mostrar órdenes de un proyecto
+      function loadOrdersForProject(projectId) 
+      {
+        const ordersSection = document.querySelector(`.orders-section[data-project-id="${projectId}"]`);
+        if (!ordersSection) return;
+        
+        const ordersList = ordersSection.querySelector('.orders-list');
+        
+        // Cargar órdenes y submittals en paralelo
+        Promise.all([
+          fetch(`/api/ordenes?project_id=${projectId}`)
+            .then(response => {
+              if (!response.ok) throw new Error('Error al cargar órdenes');
+              return response.json();
+            }),
+          fetch(`/api/submittals?project_id=${projectId}`)
+            .then(response => {
+              if (!response.ok) throw new Error('Error al cargar submittals');
+              return response.json();
+            })
+        ])
+          .then(([ordenes, submittals]) => {
+            // Convertir submittals al formato de órdenes para renderizar
+            const submittalsAsOrders = (submittals || []).map(sub => ({
+              ...sub,
+              order_number: sub.submittal_number,
+              order_name: sub.submittal_name,
+              is_submittal: true,
+              type: 'submittal'
+            }));
+            
+            // Combinar órdenes y submittals
+            const allItems = [...(ordenes || []), ...submittalsAsOrders];
+            
+            if (!Array.isArray(allItems) || allItems.length === 0) {
+              ordersList.innerHTML = `
+                <div style="text-align: center; color: #999; font-size: 12px; padding: 20px;">
+                  <i class="fas fa-inbox"></i> No hay órdenes ni submittals en este proyecto
+                </div>
+              `;
+              return;
+            }
+            
+            ordersList.innerHTML = allItems.map(order => {
+              const estatus = order.estatus || order.status || 'activa';
+              const isPendiente = estatus === 'pendiente';
+              const statusColor = isPendiente ? '#ff9800' : (estatus === 'aprobado' ? '#4caf50' : '#2a8f4b');
+              const statusBg = isPendiente ? '#fff3e0' : (estatus === 'aprobado' ? '#e8f5e9' : '#e8f5e9');
+              const orderNumber = order.order_number || '';
+              const orderName = order.project_name || order.order_name || order.nombre || order.customer_job || '';
+              const typeValue = (order.tipo || order.type || order.order_type || '').toString().toLowerCase();
+              const isSubmittal = Boolean(order.is_submittal || order.es_submittal || order.submittal || typeValue === 'submittal');
+              const buttonClass = isSubmittal ? 'submittal' : 'order';
+              const displayName = orderNumber || 'Sin numero';
+              
+              // Colores diferentes para órdenes y submittals
+              // Verde degradado para órdenes, morado degradado para submittals
+              const borderColor = isSubmittal ? '#8b5cf6' : '#10b981'; // Morado para submittals, Verde para órdenes
+              const backgroundColor = isSubmittal ? 'rgba(139, 92, 246, 0.1)' : 'rgba(16, 185, 129, 0.1)'; // Fondo sutil según tipo
+              const cardBackground = isSubmittal 
+                ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(167, 139, 250, 0.1) 100%)' 
+                : 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.1) 100%)'; // Fondo degradado de la tarjeta
+              
+              return `
+              <div style="padding: 12px; background: ${cardBackground}; border-radius: 30px; border-left: 4px solid ${borderColor}; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                      <strong style="font-size: 13px; color: #333;">${displayName}</strong>
+                      <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 12px; background: ${isSubmittal ? 'rgba(139, 92, 246, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; color: ${isSubmittal ? '#8b5cf6' : '#10b981'};">
+                        ${isSubmittal ? 'Submittal' : 'Orden'}
+                      </span>
+                    </div>
+                    <div style="font-size: 11px; color: #666; margin-top: 4px;">
+                      <div><strong>Nombre:</strong> ${orderName || '-'}</div>
+                    </div>
+                  </div>
+                  <div style="text-align: right; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                    <span style="font-size: 11px; background: ${statusBg}; padding: 4px 10px; border-radius: 20px; font-weight: 600; color: ${statusColor};">
+                      ${estatus === 'pendiente' ? 'Pendiente de aprobación' : (estatus === 'aprobado' ? 'Aprobado' : estatus)}
+                    </span>
+                    <button class="order-edit-btn ${buttonClass} btn-edit-order" 
+                            data-order-id="${order.id}" 
+                            data-project-id="${projectId}"
+                            data-order-number="${escapeAttr(orderNumber)}"
+                            data-order-name="${escapeAttr(orderName)}"
+                            data-order-type="${isSubmittal ? 'submittal' : 'order'}"
+                            style="background: ${isSubmittal ? 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)' : 'linear-gradient(135deg, #10b981 0%, #34d399 100%)'}; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px;"
+                            onmouseover="this.style.background='${isSubmittal ? 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)' : 'linear-gradient(135deg, #059669 0%, #10b981 100%)'}'" 
+                            onmouseout="this.style.background='${isSubmittal ? 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)' : 'linear-gradient(135deg, #10b981 0%, #34d399 100%)'}'">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    ${isPendiente ? `
+                      <button class="btn-aprobar-orden" 
+                              data-order-id="${order.id}" 
+                              data-project-id="${projectId}"
+                              data-order-type="${isSubmittal ? 'submittal' : 'order'}"
+                              onclick="if(window.aprobarOrden){window.aprobarOrden(${order.id}, ${projectId}, '${isSubmittal ? 'submittal' : 'order'}');}else{console.error('Función aprobarOrden no disponible');}"
+                              style="background: #4caf50; color: white; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px;"
+                              onmouseover="this.style.background='#45a049'" 
+                              onmouseout="this.style.background='#4caf50'">
+                        <i class="fas fa-check"></i> Aprobar
+                      </button>
+                    ` : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+            }).join('');
+            
+            // Agregar event listeners a los botones de aprobar usando event delegation
+            ordersList.addEventListener('click', function(e) {
+              const btnEdit = e.target.closest('.btn-edit-order');
+              if (btnEdit) {
+                e.preventDefault();
+                e.stopPropagation();
+                const orderId = parseInt(btnEdit.getAttribute('data-order-id'));
+                const projectId = parseInt(btnEdit.getAttribute('data-project-id'));
+                const orderNumber = btnEdit.getAttribute('data-order-number') || '';
+                const orderName = btnEdit.getAttribute('data-order-name') || '';
+                const orderType = btnEdit.getAttribute('data-order-type') || 'order';
+                openEditOrderModal({
+                  id: orderId,
+                  projectId: projectId,
+                  order_number: orderNumber,
+                  order_name: orderName,
+                  type: orderType
+                });
+                return;
+              }
+
+              const btnAprobar = e.target.closest('.btn-aprobar-orden');
+              if (btnAprobar) {
+                e.preventDefault();
+                e.stopPropagation();
+                const orderId = parseInt(btnAprobar.getAttribute('data-order-id'));
+                const projectId = parseInt(btnAprobar.getAttribute('data-project-id'));
+                const orderType = btnAprobar.getAttribute('data-order-type') || 'order';
+                if (orderId && window.aprobarOrden) {
+                  window.aprobarOrden(orderId, projectId, orderType);
+                } else {
+                  console.error('Error: orderId o función aprobarOrden no disponible', { orderId, aprobarOrden: typeof window.aprobarOrden });
+                }
+              }
+            });
+          })
+          .catch(error => {
+            console.error('Error al cargar órdenes:', error);
+            ordersList.innerHTML = `
+              <div style="text-align: center; color: #ff7675; font-size: 12px; padding: 20px;">
+                <i class="fas fa-exclamation-circle"></i> Error al cargar órdenes
+              </div>
+            `;
+          });
+      }
+
+      function escapeAttr(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+      
+      function loadProjects(searchTerm = '') {
+        const term = (searchTerm || '').trim().toLowerCase();
+
+        // Cargar proyectos y órdenes para permitir búsqueda por ordenes
+        Promise.all([
+          fetch('/api/proyectos').then(res => {
+            if (!res.ok) throw new Error('Error al cargar proyectos');
+            return res.json();
+          }),
+          fetch('/api/ordenes').then(res => {
+            if (!res.ok) throw new Error('Error al cargar órdenes');
+            return res.json();
+          })
+        ])
+          .then(([projects, ordenes]) => {
+
+            // Agrupar órdenes por proyecto para filtrado
+            const ordersByProject = new Map();
+            ordenes?.forEach(order => {
+              const pid = order.project_id;
+              if (!ordersByProject.has(pid)) ordersByProject.set(pid, []);
+              ordersByProject.get(pid).push(order);
+            });
+            
+            // Filtrar según término de búsqueda
+            const filtered = Array.isArray(projects) ? projects.filter(project => {
+              if (!term) return true;
+              const clientCode = project.client || '';
+              const clientFullName = clientNames[clientCode] || clientCode;
+              const haystack = [
+                project.order_number,
+                project.project_name,
+                project.client,
+                clientFullName
+              ].filter(Boolean).join(' ').toLowerCase();
+
+              const matchProject = haystack.includes(term);
+
+              const projectOrders = ordersByProject.get(project.id) || [];
+              const matchOrders = projectOrders.some(o => {
+                const otext = [o.order_number, o.project_name, o.client]
+                  .filter(Boolean).join(' ').toLowerCase();
+                return otext.includes(term);
+              });
+
+              return matchProject || matchOrders;
+            }) : [];
+            
+            if (!Array.isArray(filtered) || filtered.length === 0) {
+              tableBody.innerHTML = `
+                <tr class="empty-row">
+                  <td colspan="7">
+                    <div class="error-message">
+                      <div class="error-icon">
+                        <i class="fas fa-project-diagram"></i>
+                      </div>
+                      <div class="error-text">No hay proyectos</div>
+                    </div>
+                  </td>
+                </tr>
+              `;
+              return;
+            }
+
+            // Limpiar tabla
+            tableBody.innerHTML = '';
+
+            // Renderizar cada proyecto como fila expandible
+            filtered.forEach((project, idx) => {
+              const projectId = project.id || `project_${idx}`;
+              const clientCode = project.client || '-';
+              const client = clientNames[clientCode] || clientCode;
+              const orderNumber = project.order_number || '-';
+              const projectName = project.project_name || '-';
+              const status = project.status || '-';
+              const timeWorked = formatTimeWorked(project.time_worked || 0);
+              const priceUSD = project.price_usd || 0;
+              const priceMXN = project.price_mxn || 0;
+              const priceDisplay = `$${priceUSD}/$${priceMXN}`;
+              
+              // Fila del proyecto
+              const projectRow = document.createElement('tr');
+              projectRow.className = 'project-row';
+              projectRow.innerHTML = `
+                <td class="expand-cell">
+                  <button class="expand-btn" data-project-id="${projectId}" title="Expandir">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </td>
+                <td class="col-client">${client}</td>
+                <td class="col-order-number">${orderNumber}</td>
+                <td class="col-project-name">${projectName}</td>
+                <td class="col-status">${status}</td>
+                <td class="col-time-worked">${timeWorked}</td>
+                <td class="col-price">${priceDisplay}</td>
+              `;
+              tableBody.appendChild(projectRow);
+              
+              // Fila expandida (inicialmente oculta)
+              const expandedRow = document.createElement('tr');
+              expandedRow.className = 'project-expanded-row';
+              expandedRow.style.display = 'none';
+              expandedRow.innerHTML = `
+                <td colspan="7" class="expanded-content">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <!-- Sección de Órdenes -->
+                    <div class="orders-section" data-project-id="${projectId}">
+                      <h4 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 700; color: #333;">Órdenes del Proyecto</h4>
+                      <div class="orders-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto;">
+                        <div style="text-align: center; color: #999; font-size: 12px; padding: 20px;">
+                          <i class="fas fa-spinner fa-spin"></i> Cargando órdenes...
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Sección de Botones -->
+                    <div class="project-buttons">
+                      <h4 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 700; color: #333;">Acciones</h4>
+                      <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="btn-project" data-action="new-submittal" data-project-id="${projectId}">
+                          <i class="fas fa-folder-plus"></i> Nuevo submittal
+                        </button>
+                        <button class="btn-project" data-action="new-order" data-project-id="${projectId}">
+                          <i class="fas fa-plus"></i> Nueva Orden
+                        </button>
+                        <button class="btn-project" data-action="view-summary" data-project-id="${projectId}">
+                          <i class="fas fa-chart-bar"></i> Ver Resumen
+                        </button>
+                        <button class="btn-project" data-action="po" data-project-id="${projectId}">
+                          <i class="fas fa-file-invoice-dollar"></i> PO
+                        </button>
+                        <button class="btn-project" data-action="cotizacion" data-project-id="${projectId}">
+                          <i class="fas fa-file-signature"></i> Cotizacion
+                        </button>
+                        <button class="btn-project" data-action="edit" data-project-id="${projectId}">
+                          <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-project btn-danger" data-action="delete" data-project-id="${projectId}">
+                          <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              `;
+              tableBody.appendChild(expandedRow);
+            });
+
+            // Cierra todas las filas expandidas excepto la indicada
+            function collapseAllExpanded(exceptRow) 
+            {
+              document.querySelectorAll('.project-expanded-row').forEach(row => {
+                if (row !== exceptRow) 
+                {
+                  row.style.display = 'none';
+                  const toggleIcon = row.previousElementSibling?.querySelector('.expand-btn i');
+                  if (toggleIcon) 
+                  {
+                    toggleIcon.classList.remove('fa-chevron-down');
+                    toggleIcon.classList.add('fa-chevron-right');
+                  }
+                }
+              });
+            }
+
+            // Event listeners para botones de expansión
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const projectId = this.dataset.projectId;
+                const projectRow = this.closest('tr');
+                const expandedRow = projectRow?.nextElementSibling;
+                const icon = this.querySelector('i');
+
+                if (!expandedRow) return;
+
+                const isClosed = expandedRow.style.display === 'none';
+
+                if (isClosed) {
+                  // Cierra cualquier otra expandida antes de abrir
+                  collapseAllExpanded(expandedRow);
+                  expandedRow.style.display = 'table-row';
+                  if (icon) {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                  }
+                  // Cargar órdenes del proyecto
+                  loadOrdersForProject(projectId);
+                } else {
+                  expandedRow.style.display = 'none';
+                  if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                  }
+                }
+              });
+            });
+
+            // Event listeners para botones de acciones
+            document.querySelectorAll('.btn-project').forEach(btn => {
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const action = this.dataset.action;
+                const projectId = this.dataset.projectId;
+                handleProjectAction(action, projectId);
+              });
+            });
+          })
+          .catch(error => {
+            console.error('Error al cargar proyectos:', error);
+            tableBody.innerHTML = `
+              <tr class="empty-row">
+                <td colspan="7">
+                  <div class="error-message">
+                    <div class="error-icon">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="error-text">Error al cargar proyectos</div>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+      }
+
+      function handleProjectAction(action, projectId) {
+        // Validar projectId
+        if (!projectId || projectId === 'undefined' || projectId === 'null') {
+          console.error('Error: projectId inválido:', projectId);
+          alert('Error: No se pudo obtener el ID del proyecto. Por favor, intenta nuevamente.');
+          return;
+        }
+        
+        console.log('handleProjectAction:', { action, projectId });
+        
+        // Cargar el proyecto desde la API
+        fetch(`/api/proyectos/${projectId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al cargar el proyecto');
+            }
+            return response.json();
+          })
+          .then(project => {
+            console.log('Proyecto cargado:', project);
+            
+            if (action === 'new-order') 
+            {
+              openNewOrderModal(project);
+            } else if (action === 'new-submittal') 
+            {
+              openNewSubmittalModal(project);
+            } else if (action === 'view-summary') 
+            {
+              openSummaryModal(project);
+            } else if (action === 'po') 
+            {
+              alert('PO no implementado aún');
+            } else if (action === 'cotizacion') 
+            {
+              alert('Cotizacion no implementada aún');
+            } else if (action === 'edit') 
+            {
+              openEditProjectModal(project);
+            } else if (action === 'delete') 
+            {
+              openDeleteProjectModal(project);
+            }
+          })
+          .catch(error => {
+            console.error('Error al cargar proyecto:', error);
+            alert('Error al cargar el proyecto');
+          });
+      }
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          currentTab = this.dataset.tab;
+
+          // Update table headers and load data
+          if (currentTab === 'orders') {
+            tableHeadings.forEach((th, index) => {
+              if (index === 0) return; // Saltar el botón de expandir
+              th.textContent = ordersHeaders[index - 1];
+            });
+            addOrderBtn.innerHTML = '<i class="fas fa-plus"></i> Agregar Proyecto';
+            addOrderBtn.classList.remove('danger');
+            loadProjects();
+          } else if (currentTab === 'users') 
+          {
+            tableHeadings.forEach((th, index) => {
+              if (index === 0) return; // Saltar el botón de expandir
+              th.textContent = usersHeaders[index - 1];
+            });
+            addOrderBtn.innerHTML = '<i class="fas fa-times"></i> Cerrar Sesiones Atascadas';
+            addOrderBtn.classList.add('danger');
+            loadDesignUsers();
+          }
+        });
+      });
+
+      // Cargar clientes y proyectos al iniciar
+      loadClientsFromBackend().then(() => {
+        loadProjects();
+      });
+
+      // Search functionality
+      if (searchBar) 
+      {
+        searchBar.addEventListener('input', function(e) {
+          const searchTerm = e.target.value;
+          loadProjects(searchTerm);
+        });
+      }
+
+      // Add Project / Close Stuck Sessions button
+      if (addOrderBtn) {
+        addOrderBtn.addEventListener('click', function() 
+        {
+          if (currentTab === 'orders') 
+          {
+            openNewProjectModal();
+          } else if (currentTab === 'users') 
+          {
+            alert('Funcionalidad de cerrar sesiones atascadas aún no implementada');
+          }
+        });
+      }
+
+      // Estado para edición/eliminación
+      let projectBeingEdited = null;
+      let projectBeingDeleted = null;
+
+      // ===== Modal Nuevo Proyecto =====
+      function populateClientsSelect(select) {
+        select.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = ''; placeholder.textContent = 'Seleccione un cliente';
+        select.appendChild(placeholder);
+        CLIENTS_LIST.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c; opt.textContent = c; select.appendChild(opt);
+        });
+        // Agregar opción para nuevo cliente al final
+        const addNewOption = document.createElement('option');
+        addNewOption.value = '__ADD_NEW_CLIENT__';
+        addNewOption.textContent = '+ Agregar nuevo cliente';
+        addNewOption.style.fontWeight = '600';
+        addNewOption.style.color = '#2a8f4b';
+        select.appendChild(addNewOption);
+      }
+
+      function openNewProjectModal() 
+      {
+        const overlay = document.getElementById('newProjectModal');
+        const clientSel = document.getElementById('clientSelect');
+        const nameInput = document.getElementById('projectNameInput');
+        const orderNumberInput = document.getElementById('projectOrderNumberInput');
+        if (!overlay || !clientSel || !nameInput) return;
+        populateClientsSelect(clientSel);
+        nameInput.value = '';
+        if (orderNumberInput) orderNumberInput.value = '';
+        
+        // Event listener para detectar cuando se selecciona "Agregar nuevo cliente"
+        clientSel.onchange = function() {
+          if (this.value === '__ADD_NEW_CLIENT__') {
+            this.value = ''; // Resetear el select
+            openNewClientModal();
+          }
+        };
+        
+        overlay.style.display = 'flex';
+      }
+
+      function closeNewProjectModal() 
+      {
+        const overlay = document.getElementById('newProjectModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      // ===== Modal Nuevo Cliente =====
+      function openNewClientModal() {
+        const overlay = document.getElementById('newClientModal');
+        const nomenclaturaInput = document.getElementById('clientNomenclaturaInput');
+        const nombreInput = document.getElementById('clientNombreInput');
+        if (!overlay || !nomenclaturaInput || !nombreInput) return;
+        nomenclaturaInput.value = '';
+        nombreInput.value = '';
+        overlay.style.display = 'flex';
+      }
+
+      function closeNewClientModal() {
+        const overlay = document.getElementById('newClientModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      async function saveNewClient() {
+        const nomenclaturaInput = document.getElementById('clientNomenclaturaInput');
+        const nombreInput = document.getElementById('clientNombreInput');
+        const nomenclatura = nomenclaturaInput?.value?.trim() || '';
+        const nombre = nombreInput?.value?.trim() || '';
+        
+        if (!nomenclatura || !nombre) {
+          alert('Por favor completa ambos campos: Nomenclatura y Nombre.');
+          return;
+        }
+        
+        // Validar que la nomenclatura no exista ya
+        if (CLIENTS_LIST.includes(nomenclatura.toUpperCase())) {
+          alert('Ya existe un cliente con esa nomenclatura.');
+          return;
+        }
+        
+        try {
+          const resp = await fetch('/api/clientes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              nomenclatura: nomenclatura.toUpperCase(),
+              nombre_completo: nombre
+            })
+          });
+          
+          if (!resp.ok) {
+            const errorData = await resp.json();
+            throw new Error(errorData.error || 'Error al guardar cliente');
+          }
+          
+          const newClient = await resp.json();
+          
+          // Actualizar la lista de clientes localmente
+          CLIENTS_LIST.push(newClient.nomenclatura);
+          clientNames[newClient.nomenclatura] = newClient.nombre_completo;
+          
+          // Actualizar el select de clientes en el modal de nuevo proyecto
+          const clientSel = document.getElementById('clientSelect');
+          if (clientSel) {
+            populateClientsSelect(clientSel);
+            clientSel.value = newClient.nomenclatura; // Seleccionar el nuevo cliente
+          }
+          
+          closeNewClientModal();
+          showToast('Cliente agregado exitosamente', 'success');
+        } catch (error) {
+          console.error('Error al guardar cliente:', error);
+          alert('Error al guardar el cliente: ' + error.message);
+        }
+      }
+
+      // ===== Modal Nueva Orden =====
+      function openNewOrderModal(project) {
+        const overlay = document.getElementById('newOrderModal');
+        if (!overlay) {
+          console.error('Modal de nueva orden no encontrado');
+          return;
+        }
+        const orderNumberInput = document.getElementById('orderNumberInput');
+        const orderNameInput = document.getElementById('orderNameInput');
+        if (orderNumberInput) {
+          orderNumberInput.value = '';
+        }
+        if (orderNameInput) {
+          orderNameInput.value = '';
+        }
+        overlay.setAttribute('data-project-id', project?.id || 'local');
+        overlay.style.display = 'flex';
+      }
+
+      function closeNewOrderModal() 
+      {
+        const overlay = document.getElementById('newOrderModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      // ===== Modal Nuevo Submittal =====
+      function openNewSubmittalModal(project) {
+        const overlay = document.getElementById('newSubmittalModal');
+        if (!overlay) {
+          console.error('Modal de nuevo submittal no encontrado');
+          return;
+        }
+        
+        // Validar que el proyecto tenga un ID válido
+        if (!project || !project.id) {
+          console.error('Error: El proyecto no tiene un ID válido:', project);
+          alert('Error: No se pudo obtener el ID del proyecto. Por favor, intenta nuevamente.');
+          return;
+        }
+        
+        console.log('Abriendo modal de nuevo submittal para proyecto:', project.id, project.project_name);
+        
+        const numberInput = document.getElementById('submittalNumberInput');
+        const nameInput = document.getElementById('submittalNameInput');
+        if (numberInput) {
+          numberInput.value = '';
+        }
+        if (nameInput) {
+          nameInput.value = '';
+        }
+        overlay.setAttribute('data-project-id', project.id);
+        overlay.style.display = 'flex';
+      }
+
+      function closeNewSubmittalModal() {
+        const overlay = document.getElementById('newSubmittalModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      function openSummaryModal(project) {
+        const overlay = document.getElementById('summaryModal');
+        if (!overlay) {
+          console.error('Modal de resumen no encontrado');
+          return;
+        }
+        const title = document.getElementById('summaryTitle');
+        if (title) {
+          title.textContent = `Summary - ${project?.project_name || 'Proyecto'}`;
+        }
+        overlay.style.display = 'flex';
+      }
+
+      function closeSummaryModal() {
+        const overlay = document.getElementById('summaryModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      function openEditOrderModal(order) {
+        const overlay = document.getElementById('editOrderModal');
+        if (!overlay) return;
+        const title = document.getElementById('editOrderModalTitle');
+        const numberInput = document.getElementById('editOrderNumberInput');
+        const nameInput = document.getElementById('editOrderNameInput');
+        const isSubmittal = (order?.type || '').toString().toLowerCase() === 'submittal';
+
+        if (title) {
+          title.textContent = isSubmittal ? 'Editar submittal' : 'Editar orden';
+        }
+        if (numberInput) numberInput.value = order?.order_number || '';
+        if (nameInput) nameInput.value = order?.order_name || '';
+        overlay.setAttribute('data-order-id', order?.id || '');
+        overlay.setAttribute('data-project-id', order?.projectId || '');
+        overlay.setAttribute('data-order-type', order?.type || 'order');
+        overlay.style.display = 'flex';
+      }
+
+      function closeEditOrderModal() {
+        const overlay = document.getElementById('editOrderModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      function saveEditOrder() {
+        const overlay = document.getElementById('editOrderModal');
+        if (!overlay) return;
+        const orderId = overlay.getAttribute('data-order-id');
+        const projectId = overlay.getAttribute('data-project-id');
+        const numberInput = document.getElementById('editOrderNumberInput');
+        const nameInput = document.getElementById('editOrderNameInput');
+        const orderNumber = numberInput?.value?.trim() || '';
+        const orderName = nameInput?.value?.trim() || '';
+
+        if (!orderNumber) {
+          alert('Por favor ingresa el Numero de Orden');
+          numberInput?.focus();
+          return;
+        }
+        if (!orderName) {
+          alert('Por favor ingresa el Nombre de la Orden');
+          nameInput?.focus();
+          return;
+        }
+
+        fetch(`/api/ordenes/${orderId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_number: orderNumber,
+            order_name: orderName
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || 'Error al actualizar la orden'); });
+          }
+          return response.json();
+        })
+        .then(() => {
+          closeEditOrderModal();
+          showToast('Orden actualizada exitosamente', 'success');
+          if (projectId) {
+            loadOrdersForProject(projectId);
+          } else {
+            loadProjects();
+          }
+        })
+        .catch(error => {
+          console.error('Error al actualizar orden:', error);
+          showToast('Error al actualizar la orden: ' + error.message, 'error');
+        });
+      }
+
+      // ===== Modal Detalles de Orden =====
+      function openOrderDetailsModal(order) {
+        const overlay = document.getElementById('orderDetailsModal');
+        if (!overlay) 
+        {
+          console.error('Modal de detalles de orden no encontrado');
+          return;
+        }
+        
+        const title = document.getElementById('orderDetailsTitle');
+        const content = document.getElementById('orderDetailsContent');
+        
+        if (title) 
+        {
+          title.textContent = order.project_name || order.nombre || order.order_name || order.order_number || 'Orden';
+        }
+        
+        if (content) 
+        {
+          content.innerHTML = `
+            <div style="display: grid; gap: 12px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <label style="font-size: 11px; color: #666; font-weight: 600;">Order Number</label>
+                  <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">${order.project_name || order.nombre || order.order_name || order.order_number || '-'}</div>
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: #666; font-weight: 600;">Status</label>
+                  <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">${order.estado || order.status || '-'}</div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <label style="font-size: 11px; color: #666; font-weight: 600;">Customer Job</label>
+                  <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">${order.customer_job || '-'}</div>
+                </div>
+                <div>
+                  <label style="font-size: 11px; color: #666; font-weight: 600;">Time Worked</label>
+                  <div style="font-size: 14px; font-weight: 600; margin-top: 4px;">${formatTimeWorked(order.time_worked || 0)}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        overlay.style.display = 'flex';
+      }
+
+      function closeOrderDetailsModal() {
+        const overlay = document.getElementById('orderDetailsModal');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      function openEditProjectModal(project) 
+      {
+        projectBeingEdited = project;
+        const overlay = document.getElementById('editProjectModal');
+        const input = document.getElementById('editProjectNameInput');
+        if (!overlay || !input) return;
+        overlay.setAttribute('data-project-id', project?.id || '');
+        input.value = project?.project_name || '';
+        overlay.style.display = 'flex';
+      }
+
+      function closeEditProjectModal() 
+      {
+        const overlay = document.getElementById('editProjectModal');
+        if (overlay) overlay.style.display = 'none';
+        projectBeingEdited = null;
+      }
+
+      function saveEditProject() 
+      {
+        if (!projectBeingEdited) return;
+        const input = document.getElementById('editProjectNameInput');
+        const newName = input?.value?.trim();
+        if (!newName) 
+        {
+          alert('Escribe el nombre del proyecto');
+          return;
+        }
+
+        const projectId = projectBeingEdited.id;
+        
+        // Actualizar en la base de datos
+        fetch(`/api/proyectos/${projectId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            project_name: newName
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al actualizar proyecto');
+          }
+          return response.json();
+        })
+        .then(data => {
+          closeEditProjectModal();
+          loadProjects();
+        })
+        .catch(error => {
+          console.error('Error al actualizar proyecto:', error);
+          alert('Error al actualizar el proyecto');
+        });
+      }
+
+      // ===== Modal Eliminar Proyecto =====
+      function openDeleteProjectModal(project) {
+        projectBeingDeleted = project;
+        const overlay = document.getElementById('deleteProjectModal');
+        const nameSpan = document.getElementById('deleteProjectName');
+        if (!overlay) return;
+        if (nameSpan) {
+          nameSpan.textContent = project?.project_name || 'este proyecto';
+        }
+        overlay.setAttribute('data-project-id', project?.id || '');
+        overlay.style.display = 'flex';
+      }
+
+      function closeDeleteProjectModal() {
+        const overlay = document.getElementById('deleteProjectModal');
+        if (overlay) overlay.style.display = 'none';
+        projectBeingDeleted = null;
+      }
+
+      function confirmDeleteProject() {
+        if (!projectBeingDeleted) return;
+        const projectId = projectBeingDeleted.id;
+
+        // Eliminar de la base de datos
+        fetch(`/api/proyectos/${projectId}`, {
+          method: 'DELETE'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al eliminar proyecto');
+          }
+          return response.json();
+        })
+        .then(data => {
+          closeDeleteProjectModal();
+          loadProjects();
+        })
+        .catch(error => {
+          console.error('Error al eliminar proyecto:', error);
+          alert('Error al eliminar el proyecto');
+        });
+      }
+
+      async function saveNewProject() {
+        const clientSel = document.getElementById('clientSelect');
+        const nameInput = document.getElementById('projectNameInput');
+        const orderNumberInput = document.getElementById('projectOrderNumberInput');
+        const client = clientSel?.value || '';
+        const project_name = nameInput?.value?.trim() || '';
+        const order_number = orderNumberInput?.value?.trim() || null;
+        
+        if (!client || !project_name) {
+          alert('Por favor selecciona un cliente y escribe el nombre del proyecto.');
+          return;
+        }
+        
+        try {
+          const resp = await fetch('/api/proyectos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              client, 
+              order_number: order_number || undefined,
+              project_name,
+              status: 'activo',
+              time_worked: 0,
+              price_usd: 0,
+              price_mxn: 0
+            })
+          });
+          
+          if (!resp.ok) {
+            const errorData = await resp.json();
+            throw new Error(errorData.error || 'Error al guardar proyecto');
+          }
+          
+          const newProject = await resp.json();
+          
+          closeNewProjectModal();
+          loadProjects();
+        } catch (error) 
+        {
+          console.error('Error al guardar proyecto:', error);
+          alert('Error al guardar el proyecto: ' + error.message);
+        }
+      }
+
+      // ===== Modal Nueva Orden =====
+
+      // ===== Modal Nueva Orden =====
+      // Eventos del modal Nuevo Proyecto
+      document.addEventListener('click', function(e) 
+      {
+        if (e.target?.id === 'modalCloseBtn') closeNewProjectModal();
+        if (e.target?.id === 'modalCancelBtn') closeNewProjectModal();
+        if (e.target?.id === 'modalSaveBtn') saveNewProject();
+        if (e.target?.id === 'newProjectModal' && e.target.classList.contains('modal-overlay')) {
+          closeNewProjectModal();
+        }
+        
+        // Eventos del modal Nuevo Cliente
+        if (e.target?.id === 'newClientModalCloseBtn') closeNewClientModal();
+        if (e.target?.id === 'newClientModalCancelBtn') closeNewClientModal();
+        if (e.target?.id === 'newClientModalSaveBtn') saveNewClient();
+        if (e.target?.id === 'newClientModal' && e.target.classList.contains('modal-overlay')) {
+          closeNewClientModal();
+        }
+        
+        // Eventos del modal Nueva Orden
+        if (e.target?.id === 'orderModalCloseBtn') closeNewOrderModal();
+        if (e.target?.id === 'orderModalCancelBtn') closeNewOrderModal();
+        if (e.target?.id === 'orderModalSaveBtn') {
+          const orderNumberInput = document.getElementById('orderNumberInput');
+          const orderNameInput = document.getElementById('orderNameInput');
+          const orderNumber = orderNumberInput?.value?.trim() || '';
+          const orderName = orderNameInput?.value?.trim() || '';
+          
+          // Validar que todos los campos estén llenos
+          if (!orderNumber) {
+            alert('Por favor ingresa el Número de Orden');
+            orderNumberInput?.focus();
+            return;
+          }
+          if (!orderName) {
+            alert('Por favor ingresa el Nombre de la Orden');
+            orderNameInput?.focus();
+            return;
+          }
+          
+          const modal = document.getElementById('newOrderModal');
+          const projectId = modal?.getAttribute('data-project-id');
+          
+          // Guardar en la base de datos
+          fetch('/api/ordenes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              project_id: projectId,
+              order_number: orderNumber,
+              order_name: orderName,
+              status: 'activa',
+              customer_job: '',
+              time_worked: 0
+            })
+          })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(err => {
+                // Mostrar mensaje más claro si es un error de duplicado
+                const errorMessage = err.message || err.error || 'Error al guardar la orden';
+                if (errorMessage.includes('ya existe') || errorMessage.includes('ya está registrado')) {
+                  throw new Error(' ' + errorMessage + '\n\nPor favor verifique el número de orden e intente con otro número.');
+                } else {
+                  throw new Error(errorMessage);
+                }
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+            closeNewOrderModal();
+            showToast('Orden guardada exitosamente', 'success');
+            loadProjects();
+          })
+          .catch(async error => {
+            console.error('Error al guardar orden:', error);
+            await showErrorModal('Error', 'Error al guardar la orden: ' + error.message);
+          });
+        }
+        if (e.target?.id === 'newOrderModal' && e.target.classList.contains('modal-overlay')) {
+          closeNewOrderModal();
+        }
+        
+        // Eventos del modal Summary
+        if (e.target?.id === 'summaryModalCloseBtn') closeSummaryModal();
+        if (e.target?.id === 'summaryModal' && e.target.classList.contains('modal-overlay')) {
+          closeSummaryModal();
+        }
+        
+        // Eventos del modal Detalles de Orden
+        if (e.target?.id === 'orderDetailsCloseBtn') closeOrderDetailsModal();
+        if (e.target?.id === 'orderDetailsModal' && e.target.classList.contains('modal-overlay')) 
+        {
+          closeOrderDetailsModal();
+        }
+        if (e.target?.id === 'orderDetailsNewBtn') 
+        {
+          closeOrderDetailsModal();
+          alert('Crear nueva orden desde esta orden no implementado');
+        }
+        if (e.target?.id === 'orderDetailsSummaryBtn') 
+        {
+          closeOrderDetailsModal();
+          alert('Ver resumen de esta orden no implementado');
+        }
+        if (e.target?.id === 'orderDetailsEditBtn') 
+        {
+          closeOrderDetailsModal();
+          alert('Editar orden no implementado');
+        }
+        if (e.target?.id === 'orderDetailsDeleteBtn') 
+        {
+          closeOrderDetailsModal();
+          alert('Eliminar orden no implementado');
+        }
+        
+        // Eventos del modal Nuevo Submittal
+        if (e.target?.id === 'submittalModalCloseBtn') closeNewSubmittalModal();
+        if (e.target?.id === 'submittalModalCancelBtn') closeNewSubmittalModal();
+        if (e.target?.id === 'submittalModalSaveBtn') {
+          const numberInput = document.getElementById('submittalNumberInput');
+          const nameInput = document.getElementById('submittalNameInput');
+          const number = numberInput?.value?.trim() || '';
+          const name = nameInput?.value?.trim() || '';
+          
+          // Validar que todos los campos estén llenos
+          if (!number) {
+            alert('Por favor ingresa el Número de Orden');
+            numberInput?.focus();
+            return;
+          }
+          if (!name) {
+            alert('Por favor ingresa el Nombre del submittal');
+            nameInput?.focus();
+            return;
+          }
+          
+          const modal = document.getElementById('newSubmittalModal');
+          const projectIdRaw = modal?.getAttribute('data-project-id');
+          
+          // Validar que projectId sea un número válido
+          if (!projectIdRaw || projectIdRaw === 'local' || projectIdRaw === 'undefined') {
+            alert('Error: No se pudo obtener el ID del proyecto. Por favor, cierra el modal y vuelve a intentarlo.');
+            console.error('ProjectId inválido:', projectIdRaw);
+            return;
+          }
+          
+          const projectId = parseInt(projectIdRaw);
+          if (isNaN(projectId) || projectId <= 0) {
+            alert('Error: El ID del proyecto no es válido. Por favor, cierra el modal y vuelve a intentarlo.');
+            console.error('ProjectId no es un número válido:', projectIdRaw);
+            return;
+          }
+          
+          console.log('Guardando submittal:', { project_id: projectId, submittal_number: number, submittal_name: name });
+          
+          // Guardar en la base de datos
+          fetch('/api/submittals', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              project_id: projectId,
+              submittal_number: number,
+              submittal_name: name
+            })
+          })
+          .then(response => {
+            console.log('Respuesta del servidor:', response.status, response.statusText);
+            if (!response.ok) {
+              return response.json().then(data => {
+                console.error('Error del servidor:', data);
+                // Mostrar mensaje más claro si es un error de duplicado
+                const errorMessage = data.message || data.error || 'Error al crear el submittal';
+                if (errorMessage.includes('ya existe') || errorMessage.includes('ya está registrado')) {
+                  throw new Error('⚠️ ' + errorMessage + '\n\nPor favor verifique el número de submittal e intente con otro número.');
+                } else {
+                  throw new Error(errorMessage);
+                }
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Submittal creado exitosamente:', data);
+            closeNewSubmittalModal();
+            showToast('Submittal creado exitosamente', 'success');
+            // Recargar proyectos para ver el nuevo submittal
+            loadOrdersForProject(projectId);
+          })
+          .catch(async error => {
+            console.error('Error al crear submittal:', error);
+            await showErrorModal('Error', 'Error al crear el submittal: ' + error.message);
+          });
+        }
+        if (e.target?.id === 'newSubmittalModal' && e.target.classList.contains('modal-overlay')) {
+          closeNewSubmittalModal();
+        }
+        
+        // Cerrar modales de error y confirmación
+        if (e.target?.id === 'errorModalCloseBtn' || e.target?.id === 'errorModalOkBtn') {
+          const errorModal = document.getElementById('errorModal');
+          if (errorModal) errorModal.style.display = 'none';
+        }
+        if (e.target?.id === 'errorModal' && e.target.classList.contains('modal-overlay')) {
+          e.target.style.display = 'none';
+        }
+        
+        if (e.target?.id === 'confirmModalCloseBtn' || e.target?.id === 'confirmModalCancelBtn') {
+          const confirmModal = document.getElementById('confirmModal');
+          if (confirmModal) confirmModal.style.display = 'none';
+        }
+        if (e.target?.id === 'confirmModal' && e.target.classList.contains('modal-overlay')) {
+          e.target.style.display = 'none';
+        }
+
+        // Eventos modal Editar Proyecto
+        if (e.target?.id === 'editProjectModalCloseBtn') closeEditProjectModal();
+        if (e.target?.id === 'editProjectCancelBtn') closeEditProjectModal();
+        if (e.target?.id === 'editProjectSaveBtn') saveEditProject();
+        if (e.target?.id === 'editProjectModal' && e.target.classList.contains('modal-overlay')) {
+          closeEditProjectModal();
+        }
+
+        // Eventos modal Editar Orden
+        if (e.target?.id === 'editOrderModalCloseBtn') closeEditOrderModal();
+        if (e.target?.id === 'editOrderCancelBtn') closeEditOrderModal();
+        if (e.target?.id === 'editOrderSaveBtn') saveEditOrder();
+        if (e.target?.id === 'editOrderModal' && e.target.classList.contains('modal-overlay')) {
+          closeEditOrderModal();
+        }
+
+        // Eventos modal Eliminar Proyecto
+        if (e.target?.id === 'deleteProjectModalCloseBtn') closeDeleteProjectModal();
+        if (e.target?.id === 'deleteProjectCancelBtn') closeDeleteProjectModal();
+        if (e.target?.id === 'deleteProjectConfirmBtn') confirmDeleteProject();
+        if (e.target?.id === 'deleteProjectModal' && e.target.classList.contains('modal-overlay')) 
+        {
+          closeDeleteProjectModal();
+        }
+      });
+
+      // Enter para guardar la nueva orden
+      document.addEventListener('keydown', function(e) 
+      {
+        if (e.key !== 'Enter') return;
+        const modal = document.getElementById('newOrderModal');
+        if (!modal || modal.style.display !== 'flex') return;
+        e.preventDefault();
+        const saveBtn = document.getElementById('orderModalSaveBtn');
+        if (saveBtn) saveBtn.click();
+      });
+    });
+  </script>
+  <div class="modal-overlay" id="newProjectModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Nuevo Proyecto</div>
+        <button class="modal-close" id="modalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="clientSelect">Cliente *</label>
+        <select id="clientSelect" class="modal-select"></select>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="projectOrderNumberInput">Número de Proyecto *</label>
+        <input id="projectOrderNumberInput" class="modal-input" type="text" placeholder="Ejemplo: 182024">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="projectNameInput">Nombre del Proyecto *</label>
+        <input id="projectNameInput" class="modal-input" type="text" placeholder="Ejemplo: ECON 10th & Robinson">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="modalCancelBtn">Cancelar</button>
+        <button class="btn-save" id="modalSaveBtn">Guardar Proyecto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Cliente -->
+  <div class="modal-overlay" id="newClientModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Agregar Nuevo Cliente</div>
+        <button class="modal-close" id="newClientModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="clientNomenclaturaInput">Abreviatura *</label>
+        <input id="clientNomenclaturaInput" class="modal-input" type="text" placeholder="Ejemplo: SMD, PDM, RS" maxlength="20">
+        <small style="font-size: 11px; color: #666; margin-top: 4px; display: block;">Código corto del cliente (máximo 20 caracteres)</small>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="clientNombreInput">Nombre Completo *</label>
+        <input id="clientNombreInput" class="modal-input" type="text" placeholder="Ejemplo: SKYHOOK, PHOENIX DISEÑO Y MANUFACTURA">
+        <small style="font-size: 11px; color: #666; margin-top: 4px; display: block;">Nombre completo del cliente</small>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="newClientModalCancelBtn">Cancelar</button>
+        <button class="btn-save" id="newClientModalSaveBtn">Guardar Cliente</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="newOrderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Nueva orden</div>
+        <button class="modal-close" id="orderModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="orderNumberInput">Número de Orden *</label>
+        <input id="orderNumberInput" class="modal-input" type="text" placeholder="Ejemplo: 5004.A" required>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="orderNameInput">Nombre de la Orden *</label>
+        <input id="orderNameInput" class="modal-input" type="text" placeholder="Ejemplo: ECON 10th & Robinson- Balcony Rails" required>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="orderModalCancelBtn">Cancelar</button>
+        <button class="btn-save" id="orderModalSaveBtn">Guardar orden</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editOrderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="editOrderModalTitle">Editar orden</div>
+        <button class="modal-close" id="editOrderModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="editOrderNumberInput">Numero de Orden *</label>
+        <input id="editOrderNumberInput" class="modal-input" type="text" placeholder="Ejemplo: 5004.A" required>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="editOrderNameInput">Nombre de la Orden *</label>
+        <input id="editOrderNameInput" class="modal-input" type="text" placeholder="Ejemplo: ECON 10th & Robinson- Balcony Rails" required>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="editOrderCancelBtn">Cancelar</button>
+        <button class="btn-save" id="editOrderSaveBtn">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Error/Advertencia -->
+  <div class="modal-overlay" id="errorModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="errorModalTitle">Error</div>
+        <button class="modal-close" id="errorModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <p id="errorModalMessage" style="color: #333; font-size: 14px; line-height: 1.6; margin: 0;"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="errorModalOkBtn" style="width: 100%;">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación -->
+  <div class="modal-overlay" id="confirmModal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="confirmModalTitle">Confirmar</div>
+        <button class="modal-close" id="confirmModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <p id="confirmModalMessage" style="color: #333; font-size: 14px; line-height: 1.6; margin: 0;"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="confirmModalCancelBtn">Cancelar</button>
+        <button class="btn-save" id="confirmModalAcceptBtn">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Submittal -->
+  <div class="modal-overlay" id="newSubmittalModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Nuevo submittal</div>
+        <button class="modal-close" id="submittalModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="submittalNumberInput">Número de Submittal *</label>
+        <input id="submittalNumberInput" class="modal-input" type="text" placeholder="Ejemplo: 81.5B-B" required>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="submittalNameInput">Nombre del submittal *</label>
+        <input id="submittalNameInput" class="modal-input" type="text" placeholder="Ejemplo: Flora & Fauna - Bldg B Balcony rails R&R" required>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="submittalModalCancelBtn">Cancelar</button>
+        <button class="btn-save" id="submittalModalSaveBtn">Guardar submittal</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editProjectModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Editar Proyecto</div>
+        <button class="modal-close" id="editProjectModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" for="editProjectNameInput">Nombre del Proyecto *</label>
+        <input id="editProjectNameInput" class="modal-input" type="text" placeholder="Nuevo nombre del proyecto">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="editProjectCancelBtn">Cancelar</button>
+        <button class="btn-save" id="editProjectSaveBtn">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteProjectModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Eliminar Proyecto</div>
+        <button class="modal-close" id="deleteProjectModalCloseBtn">×</button>
+      </div>
+      <div class="modal-field">
+        <p style="margin: 0; font-size: 14px; color: #333; line-height: 1.5;">
+          ¿Seguro que deseas eliminar <strong id="deleteProjectName">este proyecto</strong>? Esta acción no se puede deshacer.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="deleteProjectCancelBtn">No, Cancelar</button>
+        <button class="btn-save" style="background: linear-gradient(135deg, #d63031 0%, #ff7675 100%);" id="deleteProjectConfirmBtn">Si, Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="summaryModal">
+    <div class="summary-card">
+      <div class="summary-header">
+        <h2 id="summaryTitle" style="margin: 0; font-size: 1.25rem;">Resumen</h2>
+        <button class="modal-close" id="summaryModalCloseBtn">×</button>
+      </div>
+      <div class="summary-columns">
+        <div class="summary-col quantities">
+          <h3>Cantidades cotizadas</h3>
+          <div class="summary-item">
+            <span class="summary-label">LF (Linear Feet):</span>
+            <span class="summary-value">1,250</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">SF (Square Feet):</span>
+            <span class="summary-value">850</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">RS (Riser):</span>
+            <span class="summary-value">45</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">EA (Each):</span>
+            <span class="summary-value">120</span>
+          </div>
+          <div style="border-top: 1px solid rgba(0,0,0,0.1); margin-top: 10px; padding-top: 10px;">
+            <div class="summary-item">
+              <span class="summary-label">Horas de diseño:</span>
+              <span class="summary-value">120.50</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Horas de producción:</span>
+              <span class="summary-value">85.25</span>
+            </div>
+          </div>
+          <div class="summary-total">
+            Total Cotizado<br>
+            <span style="color: #6c5ce7;">$45,000.00</span>
+          </div>
+        </div>
+
+        <div class="summary-col real">
+          <h3>Órdenes Reales</h3>
+          <div class="summary-item">
+            <span class="summary-label">LF (Linear Feet):</span>
+            <span class="summary-value">1,100</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">SF (Square Feet):</span>
+            <span class="summary-value">780</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">RS (Riser):</span>
+            <span class="summary-value">42</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">EA (Each):</span>
+            <span class="summary-value">115</span>
+          </div>
+          <div style="border-top: 1px solid rgba(0,0,0,0.1); margin-top: 10px; padding-top: 10px;">
+            <div class="summary-item">
+              <span class="summary-label">Horas de diseño:</span>
+              <span class="summary-value">105.75</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Horas de producción:</span>
+              <span class="summary-value">78.50</span>
+            </div>
+          </div>
+          <div class="summary-total">
+            Monto Actual<br>
+            <span style="color: #00b894;">$12,500.00</span>
+          </div>
+        </div>
+
+        <div class="summary-col discrepancies">
+          <h3>Discrepancies</h3>
+          <div class="summary-item">
+            <span class="summary-label">LF (Linear Feet):</span>
+            <span class="summary-value" style="color: #ff7675;">-150</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">SF (Square Feet):</span>
+            <span class="summary-value" style="color: #ff7675;">-70</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">RS (Riser):</span>
+            <span class="summary-value" style="color: #ff7675;">-3</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">EA (Each):</span>
+            <span class="summary-value" style="color: #ff7675;">-5</span>
+          </div>
+          <div style="border-top: 1px solid rgba(0,0,0,0.1); margin-top: 10px; padding-top: 10px;">
+            <div class="summary-item">
+              <span class="summary-label">Horas de diseño:</span>
+              <span class="summary-value" style="color: #ff7675;">-14.75</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Horas de producción:</span>
+              <span class="summary-value" style="color: #ff7675;">-6.75</span>
+            </div>
+          </div>
+          <div class="summary-total">
+            Diferencia<br>
+            <span style="color: #ff7675;">-$32,500.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="orderDetailsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="orderDetailsTitle">Order Details</div>
+        <button class="modal-close" id="orderDetailsCloseBtn">×</button>
+      </div>
+      <div id="orderDetailsContent" style="margin-bottom: 16px;">
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+        <button class="btn-project" id="orderDetailsNewBtn" style="width: 100%; background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+          <i class="fas fa-plus"></i> New Order
+        </button>
+        <button class="btn-project" id="orderDetailsSummaryBtn" style="width: 100%; background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+          <i class="fas fa-chart-bar"></i> Resumen
+        </button>
+        <button class="btn-project" id="orderDetailsEditBtn" style="width: 100%; background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button class="btn-project" id="orderDetailsDeleteBtn" style="width: 100%; background: linear-gradient(135deg, #d63031 0%, #ff7675 100%); color: white; border: none; border-radius: 8px; padding: 10px; font-weight: 600; cursor: pointer;">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

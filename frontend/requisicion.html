@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Requisición de Compra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/index_mantenimiento_style.css">
+  <link rel="stylesheet" href="styles/requisicion.css">
+  <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+  <style>
+    :root { --bg-color: #dfe96f8c !important; }
+    body { background: var(--bg-color) !important; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="js/global-color.js"></script>
+  <style>
+    .container { max-width: 980px; margin: 28px auto; }
+    .form-group label { display:block; font-weight:700; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+    .full-width { grid-column: 1 / -1; }
+    .preview-grid { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .preview-grid img { width:120px; height:80px; object-fit:cover; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+    .preview-grid .no-files { display:flex; align-items:center; justify-content:center; width:100%; height:80px; color:rgba(255,255,255,0.85); font-style:italic; padding:6px 8px; }
+    :root[data-theme='light'] .preview-grid .no-files { color:#000000; }
+    /* Toggle switch styles */
+    .switch { position: relative; display: inline-block; width:46px; height:24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: .18s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; top: 3px; background: #fff; transition: .18s; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .switch input:checked + .slider { background: #4caf50; }
+    .switch input:checked + .slider:before { transform: translateX(22px); }
+    .switch input:focus + .slider { box-shadow: 0 0 0 3px rgba(76,175,80,0.12); }
+    /* Historial styles */
+    .history-wrapper { display:flex; flex-direction:column; gap:12px; padding:10px 6px; }
+    .history-card {
+      display: grid;
+      grid-template-columns: 170px 1fr 160px;
+      gap: 12px;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      border: 1px solid rgba(255,255,255,0.04);
+      padding:12px 14px;
+      border-radius:30px;
+      box-shadow: 0 6px 14px rgba(5,10,15,0.06);
+      backdrop-filter: blur(4px);
+    }
+    .history-date { width:160px; color:rgba(255,255,255,0.85); font-weight:600; font-size:0.92rem; }
+    .history-body { color:rgba(255,255,255,0.95); }
+    .history-desc { font-weight:700; margin-bottom:6px; }
+    .history-meta { display:flex; gap:14px; color:rgba(255,255,255,0.75); font-size:0.92rem; }
+    .history-right { text-align: right; color:rgba(255,255,255,0.85); font-size:0.9rem; display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+    .history-status { font-weight:700; padding:6px 10px; border-radius:14px; background: rgb(0, 0, 0); }
+    .history-assigned { color:rgba(255,255,255,0.85); font-size:0.9rem; }
+      .history-qty { display:none; }
+      .history-assigned { color:#111; font-size:0.95rem; font-weight:600; }
+    /* Light theme overrides */
+    :root[data-theme='light'] .history-card { background: linear-gradient(180deg,#fff,#f6f7f9); border:1px solid rgb(0, 0, 0); }
+    :root[data-theme='light'] .history-date { color:#333; }
+    :root[data-theme='light'] .history-body { color:#111; }
+    :root[data-theme='light'] .history-meta { color:#555; }
+    #historyContainer { padding:12px; }
+    /* Autocomplete users */
+    .suggestions { position:relative; max-width:100%; }
+    #userSuggestions { position: absolute; left:0; right:0; background: #fff; border:1px solid rgba(0,0,0,0.08); border-radius:6px; box-shadow:0 6px 16px rgba(0,0,0,0.08); z-index:30; max-height:260px; overflow:auto; }
+    #userSuggestions .suggestion { padding:8px 10px; cursor:pointer; border-bottom:1px solid rgba(0,0,0,0.04); }
+    #userSuggestions .suggestion:last-child { border-bottom: none; }
+    #userSuggestions .suggestion:hover, #userSuggestions .suggestion.active { background: #f2f6fb; }
+    :root[data-theme='light'] #userSuggestions { background:#fff; }
+    /* Make form columns collapse on small screens */
+    @media (max-width: 860px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .column-fieldset { margin-top: 8px; }
+    }
+    /* Debug borders to show limits of each element */
+    .column-fieldset { border: 1px solid #000 !important; }
+    .column-fieldset legend {
+      display: inline-block;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0.25rem 12px;
+      font-weight:700;
+      background: rgba(255, 255, 255, 0);
+      transform: translateY(8px);
+      position: relative;
+      z-index: 2;
+      border-radius: 6px;
+    }
+    .form-group { padding: 8px; border-radius: 10px; }
+    .form-group.full-width { border: none; padding: 0; }
+    .form-group input, .form-group select, .form-group textarea { background-clip: padding-box; }
+    .preview-grid { border: 1px solid #000; padding: 8px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <!--<div class="back-button-container"><a href="inicio.html" class="back-button">← Menú principal</a></div>
+  <div class="main-flex-container">-->
+
+    <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i>
+    </button>
+
+    <button class="tab-switch-button active" data-tab="compra">
+      <i class="fas fa-file-invoice-dollar"></i> Requisición de compra
+    </button>
+
+  </div>
+</div>
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    compra: 'requisicion.html'
+  };
+
+
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+    <div class="container">
+      <h1>Requisición de compra</h1>
+
+      <div class="tabbar" role="tablist" aria-label="Pestañas requisición">
+        <button class="tab active" role="tab" aria-selected="true" data-target="tab-requisicion">Nueva Requisición</button>
+        <button class="tab" role="tab" aria-selected="false" data-target="tab-historial">Historial de Requisiones</button>
+      </div>
+
+      <div id="tab-requisicion" class="tab-content active">
+      <div id="userBox" style="display:none;margin-top:12px;padding:14px 12px 16px 12px;border-radius:30px;background:#e6f7ea;border:1px solid #b6e6bd;color:#054d18;font-weight:600;margin-bottom:18px;text-align:center;">
+        <div id="userBoxName" style="font-weight:700;line-height:1.1;font-size:1.02rem;">&nbsp;</div>
+      </div>
+      <form id="requisicionForm">
+        <div class="form-grid">
+          <fieldset class="column-fieldset" style="border:1px solid rgba(255,255,255,0.06); padding:12px 14px; border-radius:30px;">
+            <legend style="font-weight:700; padding:0 8px;">Detalles del producto</legend>
+            <div class="form-grid" style="margin-top:6px;">
+              <div class="form-group full-width">
+                <label for="productDescription" class="required-field">Descripción del producto</label>
+                <textarea id="productDescription" name="productDescription" rows="3" placeholder="Describe el producto que necesitas de forma muy detallada" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="productLink">URL del producto</label>
+                <input type="url" id="productLink" name="productLink" placeholder="https://..."/>
+              </div>
+
+              <div class="form-group">
+                <label for="quantity">Cantidad<span class="required-asterisk">*</span></label>
+                <input type="number" id="quantity" name="quantity" min="1" value="1" required />
+              </div>
+
+              <div class="form-group full-width">
+                <label for="referencePhoto">Imagen de referencia</label>
+                <input type="file" id="referencePhoto" name="referencePhoto" accept="image/*" />
+                <div class="preview-grid" id="photoPreview"><div class="no-files">No hay foto seleccionada</div></div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="alternatives">Alternativas (opcional)</label>
+                <textarea id="alternatives" name="alternatives" rows="3" placeholder="En caso de que este producto no esté disponible, indica un sustituto"></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="column-fieldset" style="border:1px solid rgba(255,255,255,0.06); padding:12px 14px; border-radius:30px; margin-top:0;">
+            <legend style="font-weight:700; padding:0 8px;">Destino / Para quién va dirigido</legend>
+            <div class="form-grid" style="margin-top:6px;">
+              <div class="form-group">
+                <label for="targetType">¿Es para un empleado o para un departamento?</label>
+                <select id="targetType" name="targetType" required>
+                  <option value="usuario">Usuario</option>
+                  <option value="departamento">Departamento</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="naCheckbox">Es para mí</label>
+                <label class="switch" aria-label="Marcar como N/A">
+                  <input type="checkbox" id="naCheckbox" name="naCheckbox" />
+                  <span class="slider"></span>
+                </label>
+                <input type="hidden" id="forRequester" name="forRequester" value="false" />
+              </div>
+
+              <div class="form-group" id="departmentGroup" style="display:none;">
+                <label for="departmentSelect">Selecciona un departamento</label>
+                <select id="departmentSelect" name="departmentSelect">
+                  <option value="">Selecciona un departamento</option>
+                  <option value="Recursos Humanos">Recursos Humanos</option>
+                  <option value="Gerencia">Gerencia</option>
+                  <option value="Planeacion / Compras">Planeación / Compras</option>
+                  <option value="Contabilidad">Contabilidad</option>
+                  <option value="Produccion P1">Producción P1</option>
+                  <option value="Produccion BA">Producción BA</option>
+                  <option value="Produccion WD">Producción WD</option>
+                  <option value="Almacen">Almacén</option>
+                  <option value="Import / Export">Import / Export</option>
+                  <option value="QC">QC</option>
+                  <option value="Diseno">Diseño</option>
+                  <option value="IT">IT</option>
+                  <option value="Mantenimiento">Mantenimiento</option>
+                  <option value="Intendencia">Intendencia</option>
+                </select>
+              </div>
+
+              <div class="form-group" id="userGroup" style="display:none;">
+                <label for="userSearch">Selecciona un usuario</label>
+                <input type="text" id="userSearch" name="userSearch" placeholder="Buscar usuario..." autocomplete="off" />
+                <input type="hidden" id="selectedUserId" name="selectedUserId" value="" />
+                <div id="userSuggestions" class="suggestions" style="display:none;"></div>
+              </div>
+
+              <div class="form-group" id="areaGroup" style="display:none;">
+                <label for="areaSpecific">Área específica</label>
+                <select id="areaSpecific" name="areaSpecific">
+                  <option value="">Selecciona un área</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div style="margin-top:18px;">
+            <button type="submit" class="submit-btn" id="requisicionSubmit">Enviar requisición</button>
+        </div>
+      </form>
+      </div>
+      <!-- Other tabs placeholders -->
+      <div id="tab-historial" class="tab-content">
+        <div id="historyContainer" style="padding:8px;color:#222;">
+          <div id="historyEmpty">No hay requisiciones registradas.</div>
+          <div id="historyList" style="display:none;"></div>
+        </div>
+      </div>
+      <div id="tab-otros" class="tab-content">
+        <div style="padding:8px;color:#222;">Otros contenidos</div>
+      </div>
+        <!-- Modal de confirmación -->
+        <div id="reqOverlay">
+          <div id="reqModal" role="dialog" aria-modal="true" aria-labelledby="reqTitle">
+            <h2 id="reqTitle">Confirmar requisición</h2>
+            <div class="summary" id="reqSummary">Revisa los datos antes de enviar.</div>
+            <div class="actions">
+              <button class="btn cancel" id="reqCancel">Cancelar</button>
+              <button class="btn confirm" id="reqConfirm">Confirmar y enviar</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('referencePhoto');
+    const preview = document.getElementById('photoPreview');
+    // Max allowed image size (bytes). Change as needed.
+    const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
+    const MAX_IMAGE_MB = (MAX_IMAGE_BYTES / (1024 * 1024)).toFixed(1);
+    const naCheckbox = document.getElementById('naCheckbox');
+    const forRequester = document.getElementById('forRequester');
+    const targetType = document.getElementById('targetType');
+
+    function clearPreview() {
+      preview.innerHTML = '<div class="no-files">No hay foto seleccionada</div>';
+    }
+
+    input.addEventListener('change', function(e) {
+      const file = (e.target.files && e.target.files[0]);
+      if (!file) { clearPreview(); return; }
+      if (!file.type.startsWith('image/')) { clearPreview(); alert('El archivo seleccionado no es una imagen.'); input.value = ''; return; }
+      if (file.size > MAX_IMAGE_BYTES) {
+        clearPreview();
+        alert('La imagen excede el tamaño máximo permitido de ' + MAX_IMAGE_MB + ' MB. Selecciona otra imagen.');
+        input.value = '';
+        return;
+      }
+      preview.innerHTML = '';
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.alt = file.name;
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    naCheckbox.addEventListener('change', function() {
+      if (naCheckbox.checked) {
+        forRequester.value = 'true';
+        targetType.disabled = true;
+      } else {
+        forRequester.value = 'false';
+        targetType.disabled = false;
+      }
+      updateDepartmentVisibility();
+    });
+
+    const departmentGroup = document.getElementById('departmentGroup');
+    const departmentSelect = document.getElementById('departmentSelect');
+    const areaGroup = document.getElementById('areaGroup');
+    const areaSelect = document.getElementById('areaSpecific');
+
+    function updateDepartmentVisibility(){
+      if (naCheckbox.checked) {
+        departmentGroup.style.display = 'none';
+        departmentSelect.required = false;
+        departmentSelect.disabled = true;
+        // hide area as well
+        if (areaGroup) { areaGroup.style.display = 'none'; areaSelect.required = false; }
+        return;
+      }
+      if (targetType && targetType.value === 'departamento'){
+        departmentGroup.style.display = '';
+        departmentSelect.required = true;
+        departmentSelect.disabled = false;
+      } else {
+        departmentGroup.style.display = 'none';
+        departmentSelect.required = false;
+        departmentSelect.disabled = true;
+        if (areaGroup) { areaGroup.style.display = 'none'; areaSelect.required = false; }
+      }
+    }
+
+    targetType.addEventListener('change', updateDepartmentVisibility);
+    // inicializar visibilidad al cargar
+    updateDepartmentVisibility();
+
+    // Mostrar/ocultar userGroup cuando el destino sea 'usuario'
+    const userGroup = document.getElementById('userGroup');
+    const userSearch = document.getElementById('userSearch');
+    const userSuggestions = document.getElementById('userSuggestions');
+    const selectedUserId = document.getElementById('selectedUserId');
+
+    function updateUserVisibility(){
+      if (!naCheckbox.checked && targetType && targetType.value === 'usuario'){
+        userGroup.style.display = '';
+        userSearch.required = true;
+      } else {
+        userGroup.style.display = 'none';
+        userSearch.required = false;
+        userSearch.value = '';
+        selectedUserId.value = '';
+        userSuggestions.style.display = 'none';
+      }
+    }
+    // Integrar a la función previa y re-bind del listener para usar la nueva función
+    const _oldUpdateDepartmentVisibility = updateDepartmentVisibility;
+    updateDepartmentVisibility = function(){ _oldUpdateDepartmentVisibility(); updateUserVisibility(); };
+    // Reemplazar el listener anterior para que invoque la nueva función combinada
+    try {
+      targetType.removeEventListener('change', _oldUpdateDepartmentVisibility);
+    } catch (e) {
+      // ignore if it wasn't attached
+    }
+    targetType.addEventListener('change', updateDepartmentVisibility);
+    // Sincronizar estado inicial usando la función combinada
+    updateDepartmentVisibility();
+
+    // Autocomplete: debounce helper
+    function debounce(fn, wait){ let t; return function(...args){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,args), wait); }; }
+
+    async function fetchUsers(term){
+      if (!term || term.trim().length === 0) return [];
+      try {
+        const res = await fetch('/api/empleados/buscar/' + encodeURIComponent(term));
+        const data = await res.json();
+        if (data && data.empleados) return data.empleados;
+        if (data && data.empleado) return [data.empleado];
+        return [];
+      } catch (e){ return []; }
+    }
+
+    function renderSuggestions(list){
+      userSuggestions.innerHTML = '';
+      if (!list || !list.length){ userSuggestions.style.display = 'none'; return; }
+      list.forEach(u => {
+        const div = document.createElement('div');
+        div.className = 'suggestion';
+        div.dataset.id = u.id;
+        div.textContent = u.nombre_completo || (u.username || 'Sin nombre');
+        div.addEventListener('click', () => {
+          userSearch.value = div.textContent;
+          selectedUserId.value = div.dataset.id;
+          userSuggestions.style.display = 'none';
+        });
+        userSuggestions.appendChild(div);
+      });
+      userSuggestions.style.display = 'block';
+    }
+
+    const debouncedSearch = debounce(async function(e){
+      const term = e.target.value;
+      selectedUserId.value = '';
+      if (!term || term.trim().length === 0){ userSuggestions.style.display = 'none'; return; }
+      const list = await fetchUsers(term);
+      renderSuggestions(list);
+    }, 220);
+
+    userSearch && userSearch.addEventListener('input', debouncedSearch);
+    // cerrar si hace click fuera
+    document.addEventListener('click', (e) => { if (!userGroup.contains(e.target)) userSuggestions.style.display = 'none'; });
+
+    // Areas mapping (copiado de index_mantenimiento.html)
+    const productionAreas = {
+      'Produccion P1': [
+        'Corte P1',
+        'Armado P1',
+        'Soldadura P1',
+        'Pulido',
+        'Pintura',
+        'Envíos y Recibos',
+        'Maquinado'
+      ],
+      'Produccion BA': [
+        'Corte BA',
+        'Armado BA',
+        'Soldadura BA'
+      ],
+      'Produccion WD': [
+        'Área General'
+      ]
+    };
+
+    // Mostrar áreas específicas cuando se selecciona un departamento de producción
+    departmentSelect.addEventListener('change', function() {
+      const val = this.value;
+      const areas = productionAreas[val] || [];
+      if (areas.length > 0 && !naCheckbox.checked && targetType.value === 'departamento') {
+        // poblar select
+        areaSelect.innerHTML = '<option value="">Selecciona un área</option>';
+        areas.forEach(a => {
+          const opt = document.createElement('option'); opt.value = a; opt.textContent = a; areaSelect.appendChild(opt);
+        });
+        areaGroup.style.display = '';
+        areaSelect.required = true;
+        areaSelect.disabled = false;
+      } else {
+        areaGroup.style.display = 'none';
+        areaSelect.required = false;
+        areaSelect.disabled = true;
+        areaSelect.value = '';
+      }
+    });
+
+    // Mostrar información de usuario logeado (tomada de login.html -> localStorage.loggedInUser/userInfo)
+    function populateUserBox(){
+      const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('user');
+      const box = document.getElementById('userBox');
+      const nameEl = document.getElementById('userBoxName');
+      if (!raw) { box.style.display = 'none'; return; }
+      let obj = null;
+      try { obj = JSON.parse(raw); } catch(e) { obj = { username: raw }; }
+      const displayName = (obj && (obj.name || obj.nombre_completo || obj.username || obj.employeeNumber)) || raw;
+      nameEl.textContent = displayName;
+      box.style.display = 'block';
+    }
+
+    // inicializar user box
+    populateUserBox();
+
+    // Interceptar submit para mostrar modal de confirmación
+    const form = document.getElementById('requisicionForm');
+    const submitBtn = document.getElementById('requisicionSubmit');
+    const reqOverlay = document.getElementById('reqOverlay');
+    const reqSummary = document.getElementById('reqSummary');
+    const reqCancel = document.getElementById('reqCancel');
+    const reqConfirm = document.getElementById('reqConfirm');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // Validaciones adicionales: descripción, cantidad y target (o "Es para mí")
+      const desc = document.getElementById('productDescription');
+      const qty = document.getElementById('quantity');
+      const target = document.getElementById('targetType');
+
+      if (!desc || !desc.value.trim()) {
+        alert('La descripción del producto es obligatoria.');
+        desc.focus();
+        return;
+      }
+
+      if (!qty || !qty.value || Number(qty.value) < 1) {
+        alert('La cantidad es obligatoria y debe ser al menos 1.');
+        qty.focus();
+        return;
+      }
+
+      if (!naCheckbox.checked) {
+        if (!target || target.disabled || !target.value) {
+          alert('Selecciona si es para usuario o departamento, o marca "Es para mí".');
+          if (target && !target.disabled) target.focus();
+          return;
+        }
+      }
+
+      // Poblar resumen en la modal
+      const link = document.getElementById('productLink').value || '-';
+      const descShort = desc.value.trim().slice(0,400);
+      const area = (areaSelect && areaSelect.value) ? areaSelect.value : '';
+      const dep = (departmentSelect && departmentSelect.value) ? departmentSelect.value : '';
+      const targetText = naCheckbox.checked ? 'Solicitante (Es para mí)' : (target ? target.value : '');
+
+      reqSummary.innerHTML = `
+        <strong>Descripción:</strong> <div style="margin-top:6px;">${escapeHtml(descShort)}</div>
+        <div style="margin-top:8px;"><strong>Cantidad:</strong> ${qty.value} &nbsp;&nbsp; <strong>URL:</strong> ${escapeHtml(link)}</div>
+        <div style="margin-top:8px;"><strong>Destino:</strong> ${escapeHtml(targetText)} ${dep ? ' / ' + escapeHtml(dep) : ''} ${area ? ' / ' + escapeHtml(area) : ''}</div>
+      `;
+
+      // Mostrar modal
+      reqOverlay.style.display = 'flex';
+    });
+
+    // Cancelar modal
+    reqCancel.addEventListener('click', function(){ reqOverlay.style.display='none'; });
+
+    // Confirmar y enviar: enviar al endpoint /api/requisiciones (multipart/form-data)
+    reqConfirm.addEventListener('click', async function(){
+      reqOverlay.style.display = 'none';
+      submitBtn.disabled = true; submitBtn.textContent = 'Enviando...';
+
+      const desc = document.getElementById('productDescription').value.trim();
+      const qty = document.getElementById('quantity').value;
+      const link = document.getElementById('productLink').value || '';
+      const target = naCheckbox.checked ? 'Solicitante (Es para mí)' : (document.getElementById('targetType').value || '');
+      const department = departmentSelect && departmentSelect.value ? departmentSelect.value : '';
+      const area = areaSelect && areaSelect.value ? areaSelect.value : '';
+      const alternatives = document.getElementById('alternatives').value || '';
+      const createdBy = getCurrentUserId();
+      const createdAt = Date.now();
+
+      const file = (document.getElementById('referencePhoto').files && document.getElementById('referencePhoto').files[0]);
+      if (file && typeof MAX_IMAGE_BYTES !== 'undefined' && file.size > MAX_IMAGE_BYTES) {
+        alert('La imagen seleccionada excede el tamaño máximo de ' + MAX_IMAGE_MB + ' MB. No se enviará la requisición.');
+        submitBtn.disabled = false; submitBtn.textContent = 'Enviar requisición';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('productDescription', desc);
+      formData.append('quantity', String(qty));
+      formData.append('productLink', link);
+      formData.append('targetType', document.getElementById('targetType').value || '');
+      formData.append('forRequester', forRequester.value || 'false');
+      formData.append('departmentSelect', department || '');
+      formData.append('areaSpecific', area || '');
+      formData.append('alternatives', alternatives || '');
+      if (createdBy) formData.append('createdBy', createdBy);
+      if (selectedUserId && selectedUserId.value) formData.append('selectedUserId', selectedUserId.value);
+      if (file) formData.append('referencePhoto', file);
+
+      try {
+        const resp = await fetch('/api/requisiciones', { method: 'POST', body: formData, credentials: 'include' });
+        if (resp.ok) {
+          const data = await resp.json().catch(()=>({}));
+          const obj = { id: data.id ? ('req_' + data.id) : ('req_' + createdAt), description: desc, quantity: qty, link, target, department, area, alternatives, createdBy, createdAt, usuarioDestino: (selectedUserId? selectedUserId.value : null), imageData: data.url_imagen || null };
+          saveRequisition(obj);
+          alert('Requisición registrada en la base de datos.');
+          form.reset(); updateDepartmentVisibility(); populateUserBox();
+        } else {
+          const err = await resp.json().catch(()=>({ error: resp.statusText }));
+          const obj = { id: 'req_' + createdAt, description: desc, quantity: qty, link, target, department, area, alternatives, createdBy, createdAt, usuarioDestino: (selectedUserId? selectedUserId.value : null), imageData: null };
+          saveRequisition(obj);
+          alert('No se pudo guardar en la base de datos: ' + (err.error || resp.statusText) + '. Se guardó localmente.');
+          form.reset(); updateDepartmentVisibility(); populateUserBox();
+        }
+      } catch (e) {
+        const obj = { id: 'req_' + createdAt, description: desc, quantity: qty, link, target, department, area, alternatives, createdBy, createdAt, usuarioDestino: (selectedUserId? selectedUserId.value : null), imageData: null };
+        saveRequisition(obj);
+        alert('Error de conexión. Requisición guardada localmente.');
+        form.reset(); updateDepartmentVisibility(); populateUserBox();
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = 'Enviar requisición';
+      }
+    });
+
+    // Helper para escapar HTML
+    function escapeHtml(str){
+      if (!str) return '';
+      return String(str).replace(/[&<>"]/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]); });
+    }
+
+    // Tab switching logic
+    (function setupTabs(){
+      const tabs = Array.from(document.querySelectorAll('.tab'));
+      const contents = Array.from(document.querySelectorAll('.tab-content'));
+      function activate(targetId){
+        tabs.forEach(t => {
+          const is = t.dataset.target === targetId;
+          t.classList.toggle('active', is);
+          t.setAttribute('aria-selected', is ? 'true' : 'false');
+        });
+        contents.forEach(c => c.classList.toggle('active', c.id === targetId));
+        // If historial tab activated, render history
+        if (targetId === 'tab-historial') renderHistory();
+      }
+      tabs.forEach(t => {
+        t.addEventListener('click', () => activate(t.dataset.target));
+      });
+      // keyboard navigation
+      tabs.forEach((t,i) => t.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { tabs[(i+1)%tabs.length].focus(); }
+        if (e.key === 'ArrowLeft') { tabs[(i-1+tabs.length)%tabs.length].focus(); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t.click(); }
+      }));
+    })();
+
+    // Get current user identifier from storage
+    function getCurrentUserId(){
+      const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('user');
+      if (!raw) return null;
+      try{
+        const obj = JSON.parse(raw);
+        return (obj && (obj.username || obj.employeeNumber || obj.employee_number || obj.name || obj.nombre_completo)) || null;
+      } catch(e){ return raw; }
+    }
+
+    // Save a requisition to localStorage
+    function saveRequisition(obj){
+      const list = JSON.parse(localStorage.getItem('requisitions') || '[]');
+      list.push(obj);
+      localStorage.setItem('requisitions', JSON.stringify(list));
+    }
+
+    // Render history for current user
+    const _employeeNameCache = new Map();
+    async function renderHistory(){
+      const container = document.getElementById('historyList');
+      const empty = document.getElementById('historyEmpty');
+      container.innerHTML = '';
+      const userId = getCurrentUserId();
+      const all = JSON.parse(localStorage.getItem('requisitions') || '[]');
+      const mine = all.filter(r => r.createdBy === userId);
+      if (!mine.length){ empty.style.display='block'; container.style.display='none'; return; }
+      empty.style.display='none'; container.style.display='block';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'history-wrapper';
+
+      for (const r of mine.slice().reverse()) {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+
+        const date = document.createElement('div');
+        date.className = 'history-date';
+        date.textContent = new Date(r.createdAt).toLocaleString();
+
+        const body = document.createElement('div');
+        body.className = 'history-body';
+        const desc = document.createElement('div');
+        desc.className = 'history-desc';
+        desc.textContent = r.description ? r.description.slice(0,200) : '';
+        const meta = document.createElement('div');
+        meta.className = 'history-meta';
+        meta.innerHTML = `<span>Destino: ${escapeHtml(r.target || '')}${r.department? ' / '+escapeHtml(r.department):''}${r.area? ' / '+escapeHtml(r.area):''}</span>`;
+        body.appendChild(desc);
+        body.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.className = 'history-right';
+
+        const assigned = document.createElement('div');
+        assigned.className = 'history-assigned';
+        assigned.style.display = 'none';
+        // Prefer explicit usuarios_asignados (from DB), then assignedTo, then usuarioDestino id
+        let assignedName = '';
+        try {
+          if (Array.isArray(r.usuarios_asignados) && r.usuarios_asignados.length > 0) {
+            assignedName = r.usuarios_asignados.map(u => (u.nombre_completo || u.nombre || u.name || u.username)).filter(Boolean).join(', ');
+          } else if (typeof r.usuarios_asignados === 'string' && r.usuarios_asignados.trim()) {
+            // could be JSON or comma-separated
+            try {
+              const parsed = JSON.parse(r.usuarios_asignados);
+              if (Array.isArray(parsed)) {
+                assignedName = parsed.map(u => (u.nombre_completo || u.nombre || u.name || u.username || String(u))).filter(Boolean).join(', ');
+              } else if (typeof parsed === 'object' && parsed) {
+                assignedName = parsed.nombre_completo || parsed.nombre || parsed.name || parsed.username || String(parsed);
+              } else {
+                assignedName = String(parsed);
+              }
+            } catch (e) {
+              const parts = r.usuarios_asignados.split(',').map(s => s.trim()).filter(Boolean);
+              assignedName = parts.join(', ');
+            }
+          } else if (r.assignedTo) {
+            assignedName = r.assignedTo;
+          } else {
+            // Some records use different keys for the selected user. Check several
+            // possible properties and normalize to a string. Prefer explicit
+            // usuarios_asignados / assignedTo earlier; here handle usuarioDestino
+            // variants and selectedUserId fields saved by the form.
+            const udRaw = r.usuarioDestino || r.usuario_destino || r.selectedUserId || r.selected_userId || r.selected_user || r.selected || r.usuario_destino_id || '';
+            const ud = String(udRaw || '').trim();
+            const targetText = String(r.target || '').trim();
+            const deptText = String(r.department || '').trim();
+            const areaText = String(r.area || '').trim();
+            const isSolicitante = /^Solicitante/i.test(ud) || /Es para mi/i.test(ud);
+            const isSameAsTarget = ud && (ud === targetText || ud === deptText || ud === areaText || ud.toLowerCase() === 'usuario' || ud.toLowerCase() === 'departamento' || isSolicitante);
+            if (isSameAsTarget) {
+              assignedName = '';
+            } else {
+              const maybeId = ud;
+              if (/^\d+$/.test(maybeId)) {
+                if (_employeeNameCache.has(maybeId)) {
+                  assignedName = _employeeNameCache.get(maybeId);
+                } else {
+                  assignedName = '';
+                  try {
+                    const resp = await fetch('/api/empleados/' + encodeURIComponent(maybeId));
+                    if (resp.ok) {
+                      const data = await resp.json();
+                      const name = (data && (data.nombre_completo || data.name || data.username)) || '';
+                      if (name) {
+                        _employeeNameCache.set(maybeId, name);
+                        assignedName = name;
+                      }
+                    }
+                  } catch (e) {
+                    // ignore fetch errors
+                  }
+                }
+              } else {
+                assignedName = ud;
+              }
+            }
+          }
+        } catch (err) {
+          assignedName = '';
+        }
+        assigned.textContent = assignedName || 'Sin asignar';
+
+        const status = document.createElement('div');
+        status.className = 'history-status';
+        status.textContent = (r.status || r.estado || 'Pendiente');
+
+        right.appendChild(assigned);
+        right.appendChild(status);
+
+        card.appendChild(date);
+        card.appendChild(body);
+        card.appendChild(right);
+
+        wrapper.appendChild(card);
+      };
+      container.appendChild(wrapper);
+    }
+  </script>
+</body>
+</html>

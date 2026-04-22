@@ -1,0 +1,4086 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inicio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/inicio.css">
+  <script>document.documentElement.setAttribute('data-permisos-loading','true');</script>
+  <style>
+    /* Mientras se cargan permisos, mostrar los recuadros en estado neutro para evitar parpadeo */
+    html[data-permisos-loading="true"] .inicio-bento-grid [data-permission] {
+      filter: grayscale(1) brightness(0.95) !important;
+      opacity: 0.9 !important;
+      transition: filter .18s ease, opacity .18s ease !important;
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+    html[data-permisos-loading="true"] .inicio-bento-grid [data-permission] a {
+      pointer-events: none !important;
+      cursor: default !important;
+    }
+  </style>
+  <script src="js/permisos.js"></script>
+  <script src="js/global-color.js"></script>
+  <script src="js/floating-buttons.js"></script>
+</head>
+<body>
+  <div style="position:absolute; top:5px; right:5px; display: flex; gap: 5px;">
+      <button class="inicio-notifications-btn" id="notificationsButton" title="Notificaciones">
+        <i class="fas fa-bell" style="font-size:20px;"></i>
+        <span class="notification-badge" style="display:none;"></span>
+      </button>
+
+      <a class="inicio-profile-btn" id="profileButton" href="perfil.html" title="Perfil" aria-label="Ir a perfil">
+        <i class="fas fa-user"></i>
+      </a>
+    
+      <button class="inicio-logout-btn" id="logoutButton" title="Cerrar sesión">
+        <i class="fas fa-right-from-bracket" style="margin-left: 7px"></i>
+      </button>
+  </div> 
+  
+
+  <div class="notifications-panel" id="notificationsPanel" aria-hidden="true">
+    <div class="notifications-header">
+      <span class="notifications-title">Notificaciones</span>
+      <div class="notifications-tabs">
+        <button class="notifications-tab-btn active" data-tab="todos" id="notificationsTabTodos" aria-selected="true">
+          Todos
+          <span class="notifications-badge" id="badgeTodos">0</span>
+        </button>
+        <button class="notifications-tab-btn" data-tab="diseno" id="notificationsTabDiseno" aria-selected="false">
+          Diseño
+          <span class="notifications-badge" id="badgeDiseno">0</span>
+        </button>
+      </div>
+    </div>
+    
+    <ul class="notifications-list active" id="notificationsList-todos" data-tab="todos" role="tabpanel" aria-labelledby="notificationsTabTodos">
+    </ul>
+    
+    <ul class="notifications-list" id="notificationsList-diseno" data-tab="diseno" role="tabpanel" aria-labelledby="notificationsTabDiseno">
+    </ul>
+  </div>
+
+  <div class="notification-detail-modal" id="notificationDetailModal" aria-hidden="true">
+    <div class="notification-detail-content" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
+      <div class="notification-detail-header">
+        <h3 id="notificationDetailTitle">Notificación</h3>
+        <button class="close-notification-detail" id="closeNotificationDetail" aria-label="Cerrar detalle">&times;</button>
+      </div>
+      <div style="justify-content: center; display: flex;">
+        <img class="notification-detail-image" id="notificationDetailImage" alt="Imagen de la notificacion" style="display:none;" />
+      </div>
+      
+      <div class="notification-detail-message" id="notificationDetailMessage"></div>
+    </div>
+  </div>
+
+
+  <div class="main-content">
+    <div class="welcome-section">
+      <div class="welcome-message" id="welcomeMessage">Hola,&nbsp;</div>
+    </div>
+
+    <div class="inicio-tableros-switch" aria-label="Cambiar entre tableros">
+      <button type="button" class="inicio-tablero-option active" id="tableroPersonalLink" aria-current="page">
+        <i class="fas fa-user"></i>
+        <span>Tablero personal</span>
+      </button>
+      <button type="button" class="inicio-tablero-option" id="tableroPersonalCargoLink">
+        <i class="fas fa-users"></i>
+        <span>Personal a cargo</span>
+      </button>
+    </div>
+
+    <div id="tableroPersonalSection" class="inicio-tablero-view is-active">
+    <section class="inicio-bento-grid" aria-label="Panel bento de inicio">
+      <article class="bento-item bento-1 bento-ticket-actions">
+        <a href="index.html" class="bento-ticket-btn ticket-it-btn" data-permission="show_tickets_it">
+          <span class="material-symbols-rounded bento-ticket-icon">confirmation_number</span>
+          <span class="bento-ticket-label">Ticket de IT</span>
+        </a>
+        <a href="index_mantenimiento.html" class="bento-ticket-btn ticket-mantenimiento-btn" data-permission="show_tickets_mantenimiento">
+          <span class="material-symbols-rounded bento-ticket-icon">construction</span>
+          <span class="bento-ticket-label">Ticket de Mantenimiento</span>
+        </a>
+      </article>
+      <article class="bento-item bento-2 bento-soporte-calendar">
+        <div class="soporte-calendar">
+          <!--
+            Calendario (comentado de forma temporal). Se conserva el HTML original
+            para futura referencia — NO BORRAR, sólo descomentar si se requiere.
+
+          <div class="soporte-calendar-title">
+            <button type="button" class="soporte-cal-nav" id="soporteCalPrev" aria-label="Mes anterior">&#8249;</button>
+            <span id="soporteCalendarMonthLabel">Calendario</span>
+            <button type="button" class="soporte-cal-nav" id="soporteCalNext" aria-label="Mes siguiente">&#8250;</button>
+          </div>
+          <div class="soporte-calendar-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="soporte-calendar-grid" id="soporteCalendarGrid"></div>
+          <div class="soporte-calendar-tooltip" id="soporteCalendarTooltip" role="tooltip" aria-hidden="true"></div>
+          <div class="soporte-calendar-legend">
+            <span><i class="dot vac"></i>Vacaciones</span>
+            <span><i class="dot perm"></i>Permisos</span>
+            <span><i class="dot amon"></i>Amonestaciones</span>
+          </div>
+
+          -->
+
+          <!-- Anuncios RH insertados en el recuadro del calendario -->
+            <div class="anuncios-home-in-calendar" style="border-radius:30px; overflow:hidden; height:100%;">
+              <div id="inicioAnunciosList" style="display:block; width:100%; height:100%; overflow:hidden; padding:0; margin:0; box-sizing:border-box; position:relative;">
+              </div>
+            </div>
+        </div>
+      </article>
+      <article class="bento-item bento-3 bento-reportes-actions" style=" grid-template-rows: repeat(2, 110px); gap:12px; align-items:stretch;">
+        <a href="panel.html" class="bento-ticket-btn departamento-apoyo-btn" data-permission="show_it" style="display:flex; align-items:center; justify-content:center; height:100%; box-sizing:border-box; padding:8px 12px;">
+          <span class="material-symbols-rounded bento-ticket-icon">memory</span>
+          <span class="bento-ticket-label" style="font-size:18px;">IT</span>
+        </a>
+        <a href="empleados_panel.html" class="bento-ticket-btn departamento-apoyo-btn" data-permission="show_rh" style="display:flex; align-items:center; justify-content:center; height:100%; box-sizing:border-box; padding:8px 12px;">
+          <span class="material-symbols-rounded bento-ticket-icon">groups</span>
+          <span class="bento-ticket-label" style="font-size:18px;">RH</span>
+        </a>
+        <a href="mantenimiento.html" class="bento-ticket-btn departamento-apoyo-btn" data-permission="show_mantenimiento" style="display:flex; align-items:center; justify-content:center; height:100%; box-sizing:border-box; padding:8px 12px;">
+          <span class="material-symbols-rounded bento-ticket-icon">build</span>
+          <span class="bento-ticket-label" style="font-size:18px;">Mantenimiento</span>
+        </a>
+        <a href="enviosyrecibos.html" class="bento-ticket-btn departamento-apoyo-btn" data-permission="show_enviosyrecibos" style="display:flex; align-items:center; justify-content:center; height:100%; box-sizing:border-box; padding:8px 12px;">
+          <span class="material-symbols-rounded bento-ticket-icon">local_shipping</span>
+          <span class="bento-ticket-label" style="font-size:18px;">Envíos y recibos</span>
+        </a>
+      </article>
+      <article class="bento-item bento-4 bento-indicadores-actions">
+        <a href="vacaciones.html" class="bento-ticket-btn indicador-vacaciones" data-permission="show_vacaciones">
+          <span class="material-symbols-rounded bento-ticket-icon">beach_access</span>
+          <span class="bento-ticket-label"> Solicitar vacaciones</span>
+        </a>
+        <a href="permisos.html" class="bento-ticket-btn indicador-permisos" data-permission="show_permisos">
+          <span class="material-symbols-rounded bento-ticket-icon">event_available</span>
+          <span class="bento-ticket-label">Permisos</span>
+        </a>
+        <a href="amonestacion_supervisor.html" class="bento-ticket-btn indicador-amonestacion" data-permission="show_amonestaciones">
+          <span class="material-symbols-rounded bento-ticket-icon">warning</span>
+          <span class="bento-ticket-label">Amonestación</span>
+        </a>
+        <a href="requisicion.html" class="bento-ticket-btn indicador-adquisicion" data-permission="show_requisicion">
+          <span class="material-symbols-rounded bento-ticket-icon">shopping_cart</span>
+          <span class="bento-ticket-label">Requisición de compra</span>
+        </a>
+      </article>
+      <article class="bento-item bento-principal">
+        <div class="principal-cards-grid">
+          <a href="nuevo-equipo.html" class="principal-card selector-proyectos" data-permission="show_proyectos">
+            <span class="material-symbols-rounded principal-card-icon">folder</span>
+            <span class="principal-card-label">PM</span>
+          </a>
+          <a href="logeo-diseno.html" class="principal-card selector-diseno" data-permission="show_diseno">
+            <span class="material-symbols-rounded principal-card-icon">architecture</span>
+            <span class="principal-card-label">Diseño</span>
+          </a>
+          <a href="planeacionycompras.html" class="principal-card selector-planeacion" data-permission="show_planeacion_compras">
+            <span class="material-symbols-rounded principal-card-icon">event_note</span>
+            <span class="principal-card-label">Planeación y Compras</span>
+          </a>
+          <a href="produccion-supervisor.html" class="principal-card selector-produccion" data-permission="show_produccion">
+            <span class="material-symbols-rounded principal-card-icon">engineering</span>
+            <span class="principal-card-label">Producción</span>
+          </a>
+          <a href="calidad_qc.html" class="principal-card selector-calidad" data-permission="show_calidad">
+            <span class="material-symbols-rounded principal-card-icon">fact_check</span>
+            <span class="principal-card-label">Calidad (QC)</span>
+          </a>
+          <a href="importacion.html" class="principal-card selector-importacion" data-permission="show_importacion_exportacion">
+            <span class="material-symbols-rounded principal-card-icon">import_export</span>
+            <span class="principal-card-label">Importación y Exportación</span>
+          </a>
+          <a href="cuentas-por-pagar.html" class="principal-card selector-contabilidad" data-permission="show_contabilidad">
+            <span class="material-symbols-rounded principal-card-icon">account_balance</span>
+            <span class="principal-card-label">Contabilidad</span>
+          </a>
+          <a href="almacen.html" class="principal-card selector-almacen" data-permission="show_almacen">
+            <span class="material-symbols-rounded principal-card-icon">inventory_2</span>
+            <span class="principal-card-label">Almacén</span>
+          </a>
+        </div>
+      </article>
+      <a href="comida.html" class="bento-6-mobile bento-item bento-6 bento-agenda-resumen" style="background: linear-gradient(45deg,#971b1b,transparent); text-decoration: none;" data-permission="show_comidas">
+        <span class="agenda-title" >Comidas registradas esta semana</span>
+        <span class="agenda-count" id="weeklyMealsCount">0</span>
+      </a>
+      
+    </section>
+    </div>
+
+    <div id="tableroCargoSection" class="inicio-tablero-view" aria-hidden="true" hidden>
+      <section class="inicio-cargo-grid" aria-label="Tablero de personal a cargo">
+        <article class="cargo-resumen-card" id="cargoResumenCard" role="button" tabindex="0" aria-label="Ver lista de empleados">
+          <h3 style="color: black;">Empleados asignados</h3>
+          <p class="cargo-resumen-total" id="cargoEmpleadosTotal">0</p>
+          <p>Total en mi equipo</p>
+        </article>
+
+        <article class="cargo-accidente-card" aria-live="polite">
+          <div class="cargo-accidente-header">
+            <i class="fas fa-triangle-exclamation cargo-accidente-icon"></i>
+            <h4>Hemos trabajado con orgullo</h4>
+          </div>
+          <p class="cargo-accidente-total"><span id="cargoSinAccidentesDias">0</span></p>
+          <p class="cargo-accidente-total">días sin accidentes</p>
+          <div class="cargo-racha-wrap">
+            <p class="cargo-racha-historica">Racha histórica: <strong id="cargoRachaHistoricaDias">0</strong> días</p>
+            <!--<span class="cargo-racha-label">Últimos 10 días</span>
+            <div class="cargo-racha-grid" id="cargoRachaDias">
+              <span class="cargo-racha-dia">-</span>
+            </div>-->
+          </div>
+        </article>
+
+        <div class="cargo-metricas-grid">
+          <article class="cargo-metrica-card">
+            <h4>Ausentismo General</h4>
+            <div class="cargo-gauge gauge-warn">
+              <span id="cargoAusentismoPorcentaje">0.0%</span>
+            </div>
+            <p id="cargoAusentismoTotal">Total de ausencias: 0</p>
+          </article>
+
+          <article class="cargo-metrica-card">
+            <h4>Desempeño General</h4>
+            <div class="cargo-gauge gauge-success">
+              <span id="cargoDesempenoPorcentaje">100.0%</span>
+            </div>
+            <p id="cargoDesempenoTotal">Incidentes totales: 0</p>
+          </article>
+
+          <article class="cargo-metrica-card is-muted">
+            <h4>Vales ($700)</h4>
+            <div class="cargo-gauge gauge-muted">
+              <span>$0</span>
+            </div>
+            <p>Próximamente disponible</p>
+          </article>
+
+          <article class="cargo-metrica-card is-muted">
+            <h4>Órdenes</h4>
+            <div class="cargo-gauge gauge-muted">
+              <span>0</span>
+            </div>
+            <p>Próximamente disponible</p>
+          </article>
+        </div>
+
+        <h3 class="cargo-calendario-title">Calendario Semanal</h3>
+
+        <div class="cargo-semana-grid" id="cargoSemanaGrid">
+          <article class="cargo-dia-card">
+            <h5>Cargando...</h5>
+            <p class="cargo-dia-numero">-</p>
+            <p class="cargo-dia-mes">---</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="cargo-empleados-modal" id="cargoEmpleadosModal" aria-hidden="true">
+    <div class="cargo-empleados-content" role="dialog" aria-modal="true" aria-labelledby="cargoEmpleadosTitle">
+      <button class="cargo-empleados-close" id="cargoEmpleadosClose" aria-label="Cerrar">&times;</button>
+      <h3 id="cargoEmpleadosTitle">Información de Empleado</h3>
+      <div class="cargo-empleados-field">
+        <label for="cargoEmpleadoSearch">Selecciona un empleado:</label>
+        <input type="text" id="cargoEmpleadoSearch" placeholder="Buscar empleado..." autocomplete="off" />
+        <div class="cargo-empleados-nav">
+          <button type="button" id="cargoNivelBackBtn" class="cargo-nivel-back-btn" disabled>← Regresar</button>
+          <span id="cargoNivelActualLabel" class="cargo-nivel-actual">Mi equipo</span>
+        </div>
+        <div id="cargoEmpleadoCards" class="cargo-empleado-cards" aria-live="polite">
+          <div class="cargo-tab-empty">Cargando empleados...</div>
+        </div>
+        <select id="cargoEmpleadoIdSelect" class="cargo-empleado-select-hidden" onchange="cargarEmpleadoCargoSeleccionado()" aria-hidden="true" tabindex="-1">
+          <option value="">-- Selecciona un empleado --</option>
+        </select>
+        <button type="button" id="cargoVerJerarquiaBtn" class="cargo-ver-jerarquia-btn">Ver jerarquía organizacional</button>
+      </div>
+
+      <div class="cargo-empleado-tabs" id="cargoEmpleadoTabs" style="display: none;">
+        <div class="cargo-tabs-header">
+          <button class="cargo-tab-btn active" data-cargo-tab="apoyos" onclick="cambiarCargoTab('apoyos')">Apoyos</button>
+          <button class="cargo-tab-btn" data-cargo-tab="amonestaciones" onclick="cambiarCargoTab('amonestaciones')">Amonestaciones</button>
+          <button class="cargo-tab-btn" data-cargo-tab="faltas" onclick="cambiarCargoTab('faltas')">Faltas</button>
+          <button class="cargo-tab-btn" data-cargo-tab="permisos" onclick="cambiarCargoTab('permisos')">Permisos</button>
+          <button class="cargo-tab-btn" data-cargo-tab="retardos" onclick="cambiarCargoTab('retardos')">Retardos</button>
+          <button class="cargo-tab-btn" data-cargo-tab="vacaciones" onclick="cambiarCargoTab('vacaciones')">Vacaciones</button>
+        </div>
+
+        <div class="cargo-tabs-content">
+          <div id="cargo-tab-apoyos" class="cargo-tab-pane active"></div>
+          <div id="cargo-tab-amonestaciones" class="cargo-tab-pane"></div>
+          <div id="cargo-tab-faltas" class="cargo-tab-pane"></div>
+          <div id="cargo-tab-permisos" class="cargo-tab-pane"></div>
+          <div id="cargo-tab-retardos" class="cargo-tab-pane"></div>
+          <div id="cargo-tab-vacaciones" class="cargo-tab-pane"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cargo-jerarquia-modal" id="cargoJerarquiaModal" aria-hidden="true">
+    <div class="cargo-jerarquia-content" role="dialog" aria-modal="true" aria-labelledby="cargoJerarquiaTitle">
+      <button class="cargo-jerarquia-close" id="cargoJerarquiaClose" aria-label="Cerrar">&times;</button>
+      <h3 id="cargoJerarquiaTitle">Jerarquía Organizacional</h3>
+      <div class="cargo-jerarquia-actions">
+        <button type="button" id="cargoJerarquiaDownload" class="cargo-jerarquia-download-btn">
+          <i class="fas fa-download"></i>
+          <span>Descargar imagen</span>
+        </button>
+      </div>
+      <div class="cargo-jerarquia-tree" id="cargoJerarquiaTree">
+        <p class="cargo-tab-empty">Cargando jerarquía...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cargo-incidente-modal" id="cargoIncidenteModal" aria-hidden="true">
+    <div class="cargo-incidente-content" role="dialog" aria-modal="true" aria-labelledby="cargoIncidenteTitle">
+      <button class="cargo-incidente-close" id="cargoIncidenteClose" aria-label="Cerrar">&times;</button>
+      <h3 id="cargoIncidenteTitle">Detalle de accidente</h3>
+      <p class="cargo-incidente-fecha" id="cargoIncidenteFecha">Fecha: -</p>
+      <div class="cargo-incidente-list" id="cargoIncidenteList">
+        <p class="cargo-tab-empty">Sin detalles disponibles.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="favorite-color-button" id="favoriteColorBtn">
+    <div class="button-glass-effect"></div>
+    <i class="fas fa-palette button-icon fa-2x"></i>
+  </div>
+
+  <div class="social-media-bar" aria-label="Redes sociales">
+    <a href="https://www.facebook.com/p/Phoenix-Dise%C3%B1o-y-Manufactura-100075787393304/?locale=es_LA" class="social-media-link" aria-label="Facebook" title="Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="#" class="social-media-link" aria-label="Instagram" title="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://mx.linkedin.com/company/phoenix-dise%C3%B1o-y-manufactura" class="social-media-link" aria-label="LinkedIn" title="LinkedIn">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+    <a href="https://www.pdmmetal.com" class="social-media-link" aria-label="Página web" title="Página web">
+      <i class="fas fa-globe"></i>
+    </a>
+  </div>
+
+  <div class="color-modal" id="colorModal">
+    <div class="color-modal-content">
+      <div class="color-modal-header">
+        <h3>Personaliza tu Inicio</h3>
+        <button class="close-color-modal" id="closeColorModal">&times;</button>
+      </div>
+      
+      <div class="color-customization-container" style="margin:10%"">
+        <div class="color-wheel-section">
+          <h4>Rueda de Color RGB</h4>
+          <div class="color-wheel-wrapper">
+            <canvas id="colorWheel" width="200" height="200"></canvas>
+            <div class="color-picker-circle" id="colorPickerCircle"></div>
+          </div>
+        </div>
+
+        <div class="rgb-sliders-section">
+          <h4>Ajusta RGB</h4>
+          <div class="rgb-slider-group">
+            <label>Rojo:</label>
+            <input type="range" id="redSlider" min="0" max="255" value="0">
+            <span id="redValue">0</span>
+          </div>
+          <div class="rgb-slider-group">
+            <label>Verde:</label>
+            <input type="range" id="greenSlider" min="0" max="255" value="0">
+            <span id="greenValue">0</span>
+          </div>
+          <div class="rgb-slider-group">
+            <label>Azul:</label>
+            <input type="range" id="blueSlider" min="0" max="255" value="0">
+            <span id="blueValue">0</span>
+          </div>
+          <div class="rgb-slider-group">
+            <label>Intensidad:</label>
+            <input type="range" id="intensitySlider" min="0" max="100" value="100">
+            <span id="intensityValue">100%</span>
+          </div>
+        </div>
+
+        <div class="color-preview-section">
+          <h4>Vista Previa</h4>
+          <div class="selected-color-display" id="selectedColorDisplay"></div>
+          <div class="color-hex-input">
+            <input type="text" id="colorHexInput" placeholder="#000000" maxlength="7">
+          </div>
+        </div>
+
+        <div class="color-modal-footer">
+          <button class="apply-color-btn" id="applyColorBtn">Aplicar Cambios</button>
+          <button class="cancel-color-btn" id="cancelColorBtn">Cancelar</button>
+        </div>
+      </div>
+
+      
+
+      
+    </div>
+  </div>
+
+  <div class="card-options-modal" id="cardOptionsModal" aria-hidden="true">
+    <div class="card-options-content" role="dialog" aria-modal="true" aria-labelledby="cardOptionsTitle">
+      <div class="card-options-header">
+        <h3 id="cardOptionsTitle">Opciones</h3>
+        <button class="close-card-options" id="closeCardOptions" aria-label="Cerrar opciones">&times;</button>
+      </div>
+      <div class="card-options-actions">
+        <a id="cardOptionGo" class="card-option-action" href="#">Ir al módulo</a>
+        <button type="button" class="card-option-action card-option-demo">Ver resumen (demo)</button>
+        <button type="button" class="card-option-action card-option-demo">Crear registro (demo)</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Gestión de tabs de notificaciones
+    function initializeNotificationsTabSwitcher() {
+      const tabBtnTodos = document.getElementById('notificationsTabTodos');
+      const tabBtnDiseno = document.getElementById('notificationsTabDiseno');
+      const listTodos = document.getElementById('notificationsList-todos');
+      const listDiseno = document.getElementById('notificationsList-diseno');
+
+      if (!tabBtnTodos || !tabBtnDiseno || !listTodos || !listDiseno) return;
+
+      // Función para cambiar de tab
+      function switchTab(tabName) {
+        const isAllTab = tabName === 'todos';
+
+        // Actualizar botones
+        tabBtnTodos.classList.toggle('active', isAllTab);
+        tabBtnTodos.setAttribute('aria-selected', isAllTab ? 'true' : 'false');
+        
+        tabBtnDiseno.classList.toggle('active', !isAllTab);
+        tabBtnDiseno.setAttribute('aria-selected', !isAllTab ? 'true' : 'false');
+
+        // Mostrar/ocultar listas
+        listTodos.classList.toggle('active', isAllTab);
+        listDiseno.classList.toggle('active', !isAllTab);
+      }
+
+      // Listeners para los botones de tab
+      tabBtnTodos.addEventListener('click', () => switchTab('todos'));
+      tabBtnDiseno.addEventListener('click', () => switchTab('diseno'));
+
+      // Actualizar contadores
+      updateNotificationsCount();
+    }
+
+    function updateNotificationsCount() {
+      const listTodos = document.getElementById('notificationsList-todos');
+      const listDiseno = document.getElementById('notificationsList-diseno');
+      const badgeTodos = document.getElementById('badgeTodos');
+      const badgeDiseno = document.getElementById('badgeDiseno');
+
+      if (!listTodos || !listDiseno || !badgeTodos || !badgeDiseno) return;
+
+      // Contar notificaciones de cada tipo
+      const todosCount = listTodos.querySelectorAll('li.notification-item').length;
+      const disenoCount = listDiseno.querySelectorAll('li.notification-item').length;
+
+      badgeTodos.textContent = todosCount;
+      badgeDiseno.textContent = disenoCount;
+    }
+
+    // Función para agregar una notificación al panel
+    function addNotificationToPanel(title, message, type = 'general') {
+      const listId = type === 'diseno' ? 'notificationsList-diseno' : 'notificationsList-todos';
+      const list = document.getElementById(listId);
+      
+      if (!list) return;
+
+      const li = document.createElement('li');
+      li.className = 'notification-item';
+      li.setAttribute('data-title', title);
+      li.setAttribute('data-full-message', message);
+      li.setAttribute('data-type', type);
+
+      li.innerHTML = `
+        <span class="notification-dot"></span>
+        <div class="notification-content">
+          <strong>${title}</strong>
+          <span>${message}</span>
+        </div>
+      `;
+
+      list.appendChild(li);
+
+      // Actualizar contadores
+      updateNotificationsCount();
+
+      // Agregar evento de click si es necesario
+      li.addEventListener('click', function() {
+        const title = this.getAttribute('data-title');
+        const message = this.getAttribute('data-full-message');
+        // Asumir que hay una función para mostrar el modal de detalle
+        if (typeof showNotificationDetail === 'function') {
+          showNotificationDetail(title, message);
+        }
+      });
+    }
+  </script>
+  <script>
+    async function aplicarPermisosTarjetasInicio() {
+      const cardsWithPermission = document.querySelectorAll('.inicio-bento-grid [data-permission]');
+
+      let username = localStorage.getItem('username');
+      if (!username) {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+          try {
+            const user = JSON.parse(loggedInUser);
+            username = user.employeeNumber || user.name || user.username;
+          } catch (error) {
+            console.error('Error al parsear loggedInUser en inicio:', error);
+          }
+        }
+      }
+
+      if (!username) {
+        console.warn('No se pudo obtener username para permisos en inicio');
+        document.documentElement.removeAttribute('data-permisos-loading');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/tarjetas-disponibles?username=${encodeURIComponent(username)}`);
+        if (!response.ok) {
+          throw new Error('Error al obtener permisos de tarjetas');
+        }
+
+        const data = await response.json();
+        if (!data.success || !data.tarjetas) {
+          throw new Error('Respuesta inválida al obtener permisos de tarjetas');
+        }
+
+        const permisos = data.tarjetas;
+        window.tarjetasPermisosInicio = permisos;
+
+        console.log('Permisos recibidos en inicio:', permisos);
+
+        function isPermissionAllowed(val) {
+          if (val === true || val === 1) return true;
+          if (val === false || val === 0) return false;
+          if (typeof val === 'string') {
+            const v = val.trim().toLowerCase();
+            return v === '1' || v === 'true' || v === 'yes' || v === 'y';
+          }
+          return Boolean(val);
+        }
+
+        cardsWithPermission.forEach((card) => {
+          const permiso = card.getAttribute('data-permission');
+
+          function normalizeKey(s) {
+            return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          }
+
+          const permisoNorm = normalizeKey(permiso);
+          const allKeys = Object.keys(permisos || {});
+          const matchingKey = allKeys.find((k) => {
+            const kn = normalizeKey(k);
+            return kn === permisoNorm || kn.includes(permisoNorm) || permisoNorm.includes(kn);
+          });
+
+          const permisoValue = matchingKey ? permisos[matchingKey] : permisos[permiso];
+          const allowed = isPermissionAllowed(permisoValue);
+          console.log('Permiso tarjeta:', permiso, 'resolvedKey:', matchingKey || permiso, 'valor:', permisoValue, 'allowed:', allowed);
+
+          if (allowed) {
+            card.classList.remove('permiso-denegado');
+            card.removeAttribute('aria-disabled');
+            card.setAttribute('data-has-permission', 'true');
+            if (card.tagName === 'A' && card.dataset.originalHref) {
+              card.setAttribute('href', card.dataset.originalHref);
+              card.removeAttribute('tabindex');
+              delete card.dataset.originalHref;
+            }
+          } else {
+            card.classList.add('permiso-denegado');
+            card.setAttribute('aria-disabled', 'true');
+            card.setAttribute('data-has-permission', 'false');
+            if (card.tagName === 'A') {
+              if (!card.dataset.originalHref) {
+                card.dataset.originalHref = card.getAttribute('href') || '';
+              }
+              card.removeAttribute('href');
+              card.setAttribute('tabindex', '-1');
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error al aplicar permisos en inicio:', error);
+      } finally {
+        // Quitar la marca de carga de permisos sin importar el resultado
+        try { document.documentElement.removeAttribute('data-permisos-loading'); } catch (_) {}
+      }
+    }
+
+    let soporteCalendarCurrentMonth = new Date();
+    soporteCalendarCurrentMonth.setDate(1);
+    soporteCalendarCurrentMonth.setHours(0, 0, 0, 0);
+    let soporteCalendarEmpleadoId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        if (typeof applyFavoriteColor === 'function') {
+          await applyFavoriteColor();
+        }
+      await checkPermissions();
+      await aplicarPermisosTarjetasInicio();
+      
+      // Limpiar artefactos visuales en botones departamento-apoyo-btn al hacer mouseleave
+      document.querySelectorAll('.departamento-apoyo-btn').forEach((btn) => {
+        btn.addEventListener('mouseleave', () => {
+          btn.blur();
+          // Forzar repintado para limpiar artefactos de box-shadow
+          btn.style.boxShadow = 'none';
+          // Devolver el shadow al estado hover si es necesario (aunque no debería después de leave)
+          setTimeout(() => {
+            btn.style.boxShadow = '';
+          }, 10);
+        });
+      });
+      
+      await cargarComidasSemana();
+      // Inicialización del calendario comentada porque el calendario está oculto en el diseño
+      // initializeCalendarioSoporteNavigation();
+      // await cargarCalendarioSoporte(soporteCalendarCurrentMonth);
+      setTimeout(() => {
+        aplicarPermisosTarjetasInicio();
+      }, 500);
+      initializePrincipalCardOptions();
+      initializeNotificationsDropdown();
+      initializeNotificationsTabSwitcher();
+      
+      // Asegurar que el botón de notificaciones siempre esté visible
+      const notificationsButton = document.getElementById('notificationsButton');
+      const notificationsPanel = document.getElementById('notificationsPanel');
+      if (notificationsButton) {
+        notificationsButton.style.display = '';
+      }
+      if (notificationsPanel) {
+        notificationsPanel.style.display = '';
+      }
+      
+      initializeInicioTablerosSwitch();
+      initializeCargoEmployeesModal();
+      initializeCargoIncidentModal();
+      initializeCargoWeekRetardoOverlay();
+
+      const logoutButton = document.getElementById('logoutButton');
+      if (logoutButton && logoutButton.dataset.logoutBound !== '1') {
+        logoutButton.dataset.logoutBound = '1';
+        logoutButton.addEventListener('click', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('username');
+          localStorage.removeItem('sessionToken');
+          localStorage.removeItem('loggedInUser');
+          localStorage.removeItem('rol');
+          localStorage.removeItem('permissions');
+          localStorage.removeItem('userId');
+          window.location.href = 'login.html';
+        });
+      }
+
+      setTimeout(typeWriter, 180);
+    });
+
+    function initializeInicioTablerosSwitch() {
+      const personalBtn = document.getElementById('tableroPersonalLink');
+      const personalCargoBtn = document.getElementById('tableroPersonalCargoLink');
+      const personalSection = document.getElementById('tableroPersonalSection');
+      const cargoSection = document.getElementById('tableroCargoSection');
+
+      if (!personalBtn || !personalCargoBtn || !personalSection || !cargoSection) {
+        return;
+      }
+
+      const setActiveView = (viewName) => {
+        const isCargo = viewName === 'cargo';
+
+        if (isCargo && personalCargoBtn.disabled) {
+          return;
+        }
+
+        personalBtn.classList.toggle('active', !isCargo);
+        personalCargoBtn.classList.toggle('active', isCargo);
+
+        personalBtn.setAttribute('aria-current', !isCargo ? 'page' : 'false');
+        personalCargoBtn.setAttribute('aria-current', isCargo ? 'page' : 'false');
+
+        personalSection.classList.toggle('is-active', !isCargo);
+        cargoSection.classList.toggle('is-active', isCargo);
+        personalSection.hidden = isCargo;
+        cargoSection.hidden = !isCargo;
+        personalSection.setAttribute('aria-hidden', isCargo ? 'true' : 'false');
+        cargoSection.setAttribute('aria-hidden', isCargo ? 'false' : 'true');
+
+        if (isCargo) {
+          cargarTableroPersonalCargo().catch((error) => {
+            console.error('Error al cargar tablero de personal a cargo:', error);
+          });
+        }
+      };
+
+      if (personalBtn.dataset.bound !== '1') {
+        personalBtn.dataset.bound = '1';
+        personalBtn.addEventListener('click', () => setActiveView('personal'));
+      }
+
+      if (personalCargoBtn.dataset.bound !== '1') {
+        personalCargoBtn.dataset.bound = '1';
+        personalCargoBtn.addEventListener('click', () => setActiveView('cargo'));
+      }
+
+      setActiveView('personal');
+
+      actualizarDisponibilidadPersonalCargo().catch((error) => {
+        console.error('Error al validar personal a cargo:', error);
+      });
+    }
+
+    const CARGO_CACHE_TTL_MS = 2 * 60 * 1000;
+    let cargoDataCache = {
+      key: null,
+      timestamp: 0,
+      dataByEmployee: new Map()
+    };
+    let cargoIncidentRowsCache = {
+      timestamp: 0,
+      rows: []
+    };
+    let cargoTableroLastLoad = 0;
+    let cargoEmployeesList = [];
+    let cargoLastIncidentRows = [];
+    let cargoLastEmployeesSnapshot = [];
+
+    function cargoNormalizeIncidentType(value) {
+      return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+    }
+
+    function cargoIsSafetyIncidentType(value) {
+      const normalized = cargoNormalizeIncidentType(value);
+      return normalized === 'accidente';
+    }
+
+    function cargoGetIncidentRowDate(row) {
+      return cargoNormalizeEventDate(row?.fecha || row?.fecha_incidencia || row?.fecha_registro || row?.created_at);
+    }
+
+    function cargoGetIncidentRowEmployeeId(row) {
+      const rawId = row?.empleado_id ?? row?.id_empleado ?? row?.employee_id ?? null;
+      const parsedId = Number(rawId);
+      return Number.isFinite(parsedId) ? parsedId : null;
+    }
+
+    async function cargoGetAllIncidentRows() {
+      const isCacheValid = (Date.now() - cargoIncidentRowsCache.timestamp) < CARGO_CACHE_TTL_MS
+        && Array.isArray(cargoIncidentRowsCache.rows);
+
+      if (isCacheValid) {
+        return cargoIncidentRowsCache.rows;
+      }
+
+      try {
+        const faltasResp = await fetch('/api/faltas-retardos').catch(() => null);
+
+        const faltasRows = faltasResp && faltasResp.ok ? cargoParseApiArray(await faltasResp.json()) : [];
+        const combinedRows = faltasRows.filter((row) => {
+          const type = row?.tipo || row?.tipo_incidencia;
+          return cargoIsSafetyIncidentType(type);
+        });
+
+        cargoIncidentRowsCache = {
+          timestamp: Date.now(),
+          rows: combinedRows
+        };
+
+        return combinedRows;
+      } catch (error) {
+        console.warn('No se pudieron cargar incidentes globales:', error);
+        return [];
+      }
+    }
+
+    function cargoBuildTeamIncidentDateSet(employees, incidentRows) {
+      const incidentDateKeys = new Set();
+      if (!Array.isArray(employees) || employees.length === 0 || !Array.isArray(incidentRows)) {
+        return incidentDateKeys;
+      }
+
+      const employeeIdSet = new Set(
+        employees
+          .map((employee) => Number(employee?.id))
+          .filter((employeeId) => Number.isFinite(employeeId))
+      );
+
+      const employeeNameSet = new Set(
+        employees
+          .map((employee) => cargoNormalizeName(employee?.nombre_completo || employee?.nombre || employee?.name || ''))
+          .filter(Boolean)
+      );
+
+      incidentRows.forEach((row) => {
+        const type = row?.tipo || row?.tipo_incidencia;
+        if (!cargoIsSafetyIncidentType(type)) return;
+
+        const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+        const rowEmployeeName = cargoNormalizeName(row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || '');
+
+        const belongsToTeam = (rowEmployeeId !== null && employeeIdSet.has(rowEmployeeId))
+          || (rowEmployeeName && employeeNameSet.has(rowEmployeeName));
+
+        if (!belongsToTeam) return;
+
+        const date = cargoGetIncidentRowDate(row);
+        if (date) {
+          incidentDateKeys.add(formatDateLocal(date));
+        }
+      });
+
+      return incidentDateKeys;
+    }
+
+    function cargoBuildTeamIncidentRows(employees, incidentRows) {
+      if (!Array.isArray(employees) || employees.length === 0 || !Array.isArray(incidentRows)) {
+        return [];
+      }
+
+      const employeeIdSet = new Set(
+        employees
+          .map((employee) => Number(employee?.id))
+          .filter((employeeId) => Number.isFinite(employeeId))
+      );
+
+      const employeeNameSet = new Set(
+        employees
+          .map((employee) => cargoNormalizeName(employee?.nombre_completo || employee?.nombre || employee?.name || ''))
+          .filter(Boolean)
+      );
+
+      return incidentRows.filter((row) => {
+        const type = row?.tipo || row?.tipo_incidencia;
+        if (!cargoIsSafetyIncidentType(type)) return false;
+
+        const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+        const rowEmployeeName = cargoNormalizeName(row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || '');
+
+        return (rowEmployeeId !== null && employeeIdSet.has(rowEmployeeId))
+          || (rowEmployeeName && employeeNameSet.has(rowEmployeeName));
+      });
+    }
+
+    function cargoFormatDisplayDate(dateKey) {
+      const parsed = cargoParseLocalDate(dateKey);
+      if (!parsed) return dateKey || 'Sin fecha';
+      return parsed.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    function cargoIncidentTypeLabel(value) {
+      const normalized = cargoNormalizeIncidentType(value);
+      if (normalized === 'accidente') return 'Accidente';
+      return 'Incidencia';
+    }
+
+    function cargoGetIncidentEmployeeName(row) {
+      return (row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || 'Empleado no identificado').toString().trim();
+    }
+
+    function cargoGetIncidentEmployeeCode(row) {
+      const possibleCode = row?.numero_empleado ?? row?.employee_number ?? row?.empleado_numero ?? row?.empleado_id ?? row?.id_empleado ?? row?.employee_id;
+      return (possibleCode ?? '').toString().trim();
+    }
+
+    function cargoGetIncidentDetailText(row) {
+      return (
+        row?.detalle
+        || row?.descripcion
+        || row?.motivo
+        || row?.comentario
+        || row?.observaciones
+        || row?.nota
+        || 'Sin detalle registrado'
+      ).toString().trim();
+    }
+
+    function closeCargoIncidentModal() {
+      const modal = document.getElementById('cargoIncidenteModal');
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function openCargoIncidentModalForDate(dateKey) {
+      const modal = document.getElementById('cargoIncidenteModal');
+      const fechaEl = document.getElementById('cargoIncidenteFecha');
+      const listEl = document.getElementById('cargoIncidenteList');
+      if (!modal || !fechaEl || !listEl || !dateKey) return;
+
+      const allRows = Array.isArray(cargoLastIncidentRows) ? cargoLastIncidentRows : [];
+      const teamRows = cargoBuildTeamIncidentRows(cargoLastEmployeesSnapshot, allRows);
+
+      let rowsForDate = teamRows.filter((row) => {
+        const date = cargoGetIncidentRowDate(row);
+        return date && formatDateLocal(date) === dateKey;
+      });
+
+      if (rowsForDate.length === 0) {
+        rowsForDate = allRows.filter((row) => {
+          const type = row?.tipo || row?.tipo_incidencia;
+          if (!cargoIsSafetyIncidentType(type)) return false;
+          const date = cargoGetIncidentRowDate(row);
+          return date && formatDateLocal(date) === dateKey;
+        });
+      }
+
+      fechaEl.textContent = `Fecha: ${cargoFormatDisplayDate(dateKey)}`;
+
+      if (rowsForDate.length === 0) {
+        listEl.innerHTML = '<p class="cargo-tab-empty">No se encontró detalle de accidente para esta fecha.</p>';
+      } else {
+        listEl.innerHTML = rowsForDate.map((row) => {
+          const employeeName = cargoEscapeHtml(cargoGetIncidentEmployeeName(row));
+          const employeeCode = cargoEscapeHtml(cargoGetIncidentEmployeeCode(row));
+          const typeLabel = cargoEscapeHtml(cargoIncidentTypeLabel(row?.tipo || row?.tipo_incidencia));
+          const detail = cargoEscapeHtml(cargoGetIncidentDetailText(row));
+
+          return `
+            <article class="cargo-incidente-item">
+              <p><strong>Empleado:</strong> ${employeeName}${employeeCode ? ` (${employeeCode})` : ''}</p>
+              <p><strong>Tipo:</strong> ${typeLabel}</p>
+              <p><strong>Detalle:</strong> ${detail}</p>
+            </article>
+          `;
+        }).join('');
+      }
+
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function initializeCargoIncidentModal() {
+      const modal = document.getElementById('cargoIncidenteModal');
+      const closeBtn = document.getElementById('cargoIncidenteClose');
+      const streakGrid = document.getElementById('cargoRachaDias');
+
+      if (!modal || !closeBtn || !streakGrid) return;
+
+      if (closeBtn.dataset.bound !== '1') {
+        closeBtn.dataset.bound = '1';
+        closeBtn.addEventListener('click', closeCargoIncidentModal);
+      }
+
+      if (modal.dataset.bound !== '1') {
+        modal.dataset.bound = '1';
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) {
+            closeCargoIncidentModal();
+          }
+        });
+      }
+
+      if (streakGrid.dataset.bound !== '1') {
+        streakGrid.dataset.bound = '1';
+        streakGrid.addEventListener('click', (event) => {
+          const target = event.target.closest('.cargo-racha-dia.is-incident');
+          if (!target || !streakGrid.contains(target)) return;
+          const dateKey = target.getAttribute('data-date');
+          if (dateKey) {
+            openCargoIncidentModalForDate(dateKey);
+          }
+        });
+
+        streakGrid.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          const target = event.target.closest('.cargo-racha-dia.is-incident');
+          if (!target || !streakGrid.contains(target)) return;
+          event.preventDefault();
+          const dateKey = target.getAttribute('data-date');
+          if (dateKey) {
+            openCargoIncidentModalForDate(dateKey);
+          }
+        });
+      }
+
+      if (document.body.dataset.cargoIncidentEscBound !== '1') {
+        document.body.dataset.cargoIncidentEscBound = '1';
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeCargoIncidentModal();
+          }
+        });
+      }
+    }
+
+    function cargoEmployeeUniqueKey(employee) {
+      if (employee?.id !== undefined && employee?.id !== null && employee?.id !== '') {
+        return `id:${employee.id}`;
+      }
+      const name = (employee?.nombre_completo || employee?.nombre || employee?.name || '').toString().trim().toLowerCase();
+      return `name:${name}`;
+    }
+
+    function cargoEmployeeDisplayName(employee) {
+      return (employee?.nombre_completo || employee?.nombre || employee?.name || '').toString().trim();
+    }
+
+    async function cargoFetchEmployeesHierarchy(supervisorName) {
+      const queue = [supervisorName];
+      const visitedSupervisors = new Set();
+      const visitedEmployees = new Set();
+      const allEmployees = [];
+      const MAX_NODES = 500;
+
+      while (queue.length > 0 && allEmployees.length < MAX_NODES) {
+        const currentSupervisor = (queue.shift() || '').toString().trim();
+        if (!currentSupervisor) continue;
+
+        const supervisorKey = currentSupervisor.toLowerCase();
+        if (visitedSupervisors.has(supervisorKey)) continue;
+        visitedSupervisors.add(supervisorKey);
+
+        try {
+          const response = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(currentSupervisor)}`);
+          if (!response.ok) continue;
+
+          const directEmployees = await response.json();
+          if (!Array.isArray(directEmployees) || directEmployees.length === 0) continue;
+
+          directEmployees.forEach((employee) => {
+            const uniqueKey = cargoEmployeeUniqueKey(employee);
+            if (visitedEmployees.has(uniqueKey)) return;
+            visitedEmployees.add(uniqueKey);
+            allEmployees.push(employee);
+
+            const subordinateSupervisorName = cargoEmployeeDisplayName(employee);
+            if (subordinateSupervisorName) {
+              queue.push(subordinateSupervisorName);
+            }
+          });
+        } catch (error) {
+          console.error(`Error al cargar jerarquía para supervisor ${currentSupervisor}:`, error);
+        }
+      }
+
+      return allEmployees;
+    }
+
+    function cargoNormalizeName(name) {
+      const raw = (name || '').toString();
+      const normalized = typeof raw.normalize === 'function'
+        ? raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        : raw;
+      return normalized
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function cargoNamesMatch(nameA, nameB) {
+      const normalizedA = cargoNormalizeName(nameA);
+      const normalizedB = cargoNormalizeName(nameB);
+      if (!normalizedA || !normalizedB) return false;
+      if (normalizedA === normalizedB) return true;
+
+      const wordsA = normalizedA.split(' ').filter(Boolean);
+      const wordsB = normalizedB.split(' ').filter(Boolean);
+      if (wordsA.length === 0 || wordsB.length === 0) return false;
+
+      const shorter = wordsA.length <= wordsB.length ? wordsA : wordsB;
+      const longerSet = new Set(wordsA.length <= wordsB.length ? wordsB : wordsA);
+      return shorter.every(word => longerSet.has(word));
+    }
+
+    function cargoFindEmployeeByName(employees, targetName) {
+      if (!Array.isArray(employees) || !targetName) return null;
+      const targetNormalized = cargoNormalizeName(targetName);
+      if (!targetNormalized) return null;
+
+      const exact = employees.find((employee) => {
+        const employeeName = cargoEmployeeDisplayName(employee);
+        return cargoNormalizeName(employeeName) === targetNormalized;
+      });
+      if (exact) return exact;
+
+      return employees.find((employee) => {
+        const employeeName = cargoEmployeeDisplayName(employee);
+        return cargoNamesMatch(employeeName, targetName);
+      }) || null;
+    }
+
+    async function cargoFetchAllEmployees() {
+      try {
+        const response = await fetch('/api/empleados');
+        if (!response.ok) return [];
+        const payload = await response.json();
+        return Array.isArray(payload) ? payload : [];
+      } catch (error) {
+        console.error('Error al cargar empleados para jerarquía completa:', error);
+        return [];
+      }
+    }
+
+    function cargoResolveTopBossName(currentUserName, employees) {
+      let currentName = (currentUserName || '').toString().trim();
+      if (!currentName) return '';
+
+      const visited = new Set();
+      let safetyCounter = 0;
+
+      while (currentName && safetyCounter < 30) {
+        safetyCounter += 1;
+        const currentKey = cargoNormalizeName(currentName);
+        if (!currentKey || visited.has(currentKey)) break;
+        visited.add(currentKey);
+
+        const employee = cargoFindEmployeeByName(employees, currentName);
+        const bossName = (employee?.supervisor || '').toString().trim();
+        if (!bossName) break;
+
+        currentName = bossName;
+      }
+
+      return currentName;
+    }
+
+    function cargoBuildHierarchyTreeFromEmployees(rootName, employees, visited = new Set(), depth = 0) {
+      const safeName = (rootName || '').toString().trim();
+      if (!safeName || depth > 12) return null;
+
+      const visitKey = cargoNormalizeName(safeName);
+      if (!visitKey) return null;
+      if (visited.has(visitKey)) {
+        return { name: safeName, children: [] };
+      }
+      visited.add(visitKey);
+
+      const children = [];
+      const addedChildren = new Set();
+
+      employees.forEach((employee) => {
+        const employeeName = cargoEmployeeDisplayName(employee) || `Empleado ${employee?.id || ''}`.trim();
+        if (!employeeName) return;
+
+        const employeeKey = cargoNormalizeName(employeeName);
+        if (!employeeKey || addedChildren.has(employeeKey)) return;
+
+        if (!cargoNamesMatch(employee?.supervisor, safeName)) return;
+
+        addedChildren.add(employeeKey);
+        const childNode = cargoBuildHierarchyTreeFromEmployees(employeeName, employees, visited, depth + 1);
+        children.push(childNode || { name: employeeName, children: [] });
+      });
+
+      return { name: safeName, children };
+    }
+
+    function cargoEscapeHtml(text) {
+      return (text || '')
+        .toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function cargoRenderHierarchyNode(node) {
+      if (!node) return '';
+      const childHtml = Array.isArray(node.children) && node.children.length > 0
+        ? `<ul>${node.children.map((child) => cargoRenderHierarchyNode(child)).join('')}</ul>`
+        : '';
+
+      return `<li><span class="cargo-jerarquia-node">${cargoEscapeHtml(node.name)}</span>${childHtml}</li>`;
+    }
+
+    async function cargoDownloadHierarchyImage() {
+      const treeContainer = document.getElementById('cargoJerarquiaTree');
+      const downloadBtn = document.getElementById('cargoJerarquiaDownload');
+      if (!treeContainer || !downloadBtn) return;
+
+      const hasHierarchy = treeContainer.querySelector('ul li .cargo-jerarquia-node');
+      if (!hasHierarchy) {
+        alert('Primero carga la jerarquía para poder descargarla.');
+        return;
+      }
+
+      const originalHtml = downloadBtn.innerHTML;
+      downloadBtn.disabled = true;
+      downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Generando...</span>';
+
+      try {
+        const exportWidth = Math.max(900, Math.ceil(treeContainer.scrollWidth + 40));
+        const exportHeight = Math.max(520, Math.ceil(treeContainer.scrollHeight + 40));
+
+        const hierarchyStyles = `
+          .cargo-jerarquia-export-wrap{background:#f5f5f5;padding:20px;font-family:Arial,sans-serif;width:${exportWidth}px;height:${exportHeight}px;box-sizing:border-box;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree{overflow:visible;padding:10px 6px 16px;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree ul{position:relative;padding-top:24px;white-space:nowrap;text-align:center;margin:0;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li{list-style:none;position:relative;display:inline-block;vertical-align:top;padding:24px 8px 0;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li::before,
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li::after{content:'';position:absolute;top:0;width:50%;height:24px;border-top:2px solid #9ca3af;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li::before{right:50%;border-right:2px solid #9ca3af;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li::after{left:50%;border-left:2px solid #9ca3af;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li:only-child::before,
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li:only-child::after{display:none;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li:only-child{padding-top:0;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li:first-child::before,
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree li:last-child::after{border:0;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-tree ul ul::before{content:'';position:absolute;top:0;left:50%;width:0;height:24px;border-left:2px solid #9ca3af;}
+          .cargo-jerarquia-export-wrap .cargo-jerarquia-node{display:inline-block;min-width:130px;padding:8px 12px;border:1px solid #9ca3af;border-radius:8px;background:#fff;color:#374151;font-weight:700;font-size:14px;}
+        `;
+
+        const xhtml = `
+          <div xmlns="http://www.w3.org/1999/xhtml" class="cargo-jerarquia-export-wrap">
+            <style>${hierarchyStyles}</style>
+            <div class="cargo-jerarquia-tree">${treeContainer.innerHTML}</div>
+          </div>
+        `;
+
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="${exportWidth}" height="${exportHeight}">
+            <foreignObject width="100%" height="100%">${xhtml}</foreignObject>
+          </svg>
+        `;
+
+        const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+        const image = new Image();
+
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = reject;
+          image.src = svgUrl;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = exportWidth;
+        canvas.height = exportHeight;
+
+        const context = canvas.getContext('2d');
+        if (!context) {
+          throw new Error('No se pudo crear el contexto de imagen.');
+        }
+
+        context.fillStyle = '#f5f5f5';
+        context.fillRect(0, 0, exportWidth, exportHeight);
+        context.drawImage(image, 0, 0);
+
+        const downloadLink = document.createElement('a');
+        const rootNodeText = (treeContainer.querySelector('.cargo-jerarquia-node')?.textContent || 'jerarquia').trim();
+        const safeName = rootNodeText
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9\-_ ]/g, '')
+          .trim()
+          .replace(/\s+/g, '_') || 'jerarquia';
+
+        downloadLink.href = canvas.toDataURL('image/png');
+        downloadLink.download = `jerarquia_${safeName}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      } catch (error) {
+        console.error('Error al descargar jerarquía en imagen:', error);
+        alert('No fue posible generar la imagen de jerarquía.');
+      } finally {
+        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = originalHtml;
+      }
+    }
+
+    async function openCargoJerarquiaModal() {
+      const modal = document.getElementById('cargoJerarquiaModal');
+      const treeContainer = document.getElementById('cargoJerarquiaTree');
+      if (!modal || !treeContainer) return;
+
+      const loggedUser = localStorage.getItem('loggedInUser');
+      if (!loggedUser) return;
+
+      const parsedUser = JSON.parse(loggedUser);
+      const supervisorName = parsedUser.nombre_completo || parsedUser.name || parsedUser.nombre || '';
+      if (!supervisorName) return;
+
+      treeContainer.innerHTML = '<p class="cargo-tab-empty">Cargando jerarquía...</p>';
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+
+      const allEmployees = await cargoFetchAllEmployees();
+      const topBossName = allEmployees.length > 0
+        ? cargoResolveTopBossName(supervisorName, allEmployees)
+        : supervisorName;
+
+      const hierarchy = allEmployees.length > 0
+        ? cargoBuildHierarchyTreeFromEmployees(topBossName || supervisorName, allEmployees)
+        : null;
+
+      if (!hierarchy) {
+        treeContainer.innerHTML = '<p class="cargo-tab-empty">No fue posible cargar la jerarquía.</p>';
+        return;
+      }
+
+      treeContainer.innerHTML = `<ul>${cargoRenderHierarchyNode(hierarchy)}</ul>`;
+    }
+
+    function closeCargoJerarquiaModal() {
+      const modal = document.getElementById('cargoJerarquiaModal');
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function setCargoButtonAvailability(hasEmployees) {
+      const personalCargoBtn = document.getElementById('tableroPersonalCargoLink');
+      if (!personalCargoBtn) return;
+
+      const enabled = hasEmployees === true;
+      personalCargoBtn.disabled = !enabled;
+      personalCargoBtn.classList.toggle('is-disabled', !enabled);
+      personalCargoBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      personalCargoBtn.title = enabled ? '' : 'No tienes personal a cargo';
+    }
+
+    async function actualizarDisponibilidadPersonalCargo() {
+      const loggedUser = localStorage.getItem('loggedInUser');
+      if (!loggedUser) {
+        cargoEmployeesList = [];
+        setCargoButtonAvailability(false);
+        return;
+      }
+
+      const parsedUser = JSON.parse(loggedUser);
+      const supervisorName = parsedUser.nombre_completo || parsedUser.name || parsedUser.nombre || '';
+      if (!supervisorName) {
+        cargoEmployeesList = [];
+        setCargoButtonAvailability(false);
+        return;
+      }
+
+      const hierarchyEmployees = await cargoFetchEmployeesHierarchy(supervisorName);
+      cargoEmployeesList = Array.isArray(hierarchyEmployees) ? hierarchyEmployees : [];
+      setCargoButtonAvailability(cargoEmployeesList.length > 0);
+    }
+
+    function cargoParseApiArray(payload) {
+      if (Array.isArray(payload)) return payload;
+      return payload?.data || payload?.registros || payload?.rows || payload?.result || [];
+    }
+
+    function cargoParseLocalDate(dateStr, endOfDay = false) {
+      if (!dateStr) return null;
+      const raw = String(dateStr);
+      const match = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+      const datePart = match ? match[0] : raw.split('T')[0];
+      const [year, month, day] = datePart.split('-').map(v => parseInt(v, 10));
+      if (!year || !month || !day) return null;
+      const result = new Date(year, month - 1, day);
+      if (endOfDay) {
+        result.setHours(23, 59, 59, 999);
+      } else {
+        result.setHours(0, 0, 0, 0);
+      }
+      return result;
+    }
+
+    function cargoNormalizeEventDate(dateRaw) {
+      if (!dateRaw) return null;
+      const parsed = cargoParseLocalDate(dateRaw);
+      if (parsed) return parsed;
+      const fallback = new Date(dateRaw);
+      if (Number.isNaN(fallback.getTime())) return null;
+      fallback.setHours(0, 0, 0, 0);
+      return fallback;
+    }
+
+    async function cargoFetchEmployeeEvents(employeeId) {
+      const [vacRes, permRes, faltasRes] = await Promise.all([
+        fetch(`/api/vacaciones/empleado/${employeeId}`).catch(() => null),
+        fetch(`/api/permisos/empleado/${employeeId}`).catch(() => null),
+        fetch(`/api/faltas-retardos?empleado_id=${employeeId}`).catch(() => null)
+      ]);
+
+      const amonRes = await fetch(`/api/amonestaciones/empleado/${employeeId}`).catch(() => null);
+
+      const vacaciones = vacRes && vacRes.ok ? cargoParseApiArray(await vacRes.json()) : [];
+      const permisos = permRes && permRes.ok ? cargoParseApiArray(await permRes.json()) : [];
+      const faltasRetardos = faltasRes && faltasRes.ok ? cargoParseApiArray(await faltasRes.json()) : [];
+      const amonPayload = amonRes && amonRes.ok ? await amonRes.json() : [];
+      const amonestaciones = Array.isArray(amonPayload) ? amonPayload : (amonPayload?.data || amonPayload?.rows || amonPayload?.result || []);
+
+      const employeeIdNum = Number(employeeId);
+      const incidentesPorEmpleado = [
+        ...faltasRetardos
+      ].filter((row) => {
+        const type = row?.tipo || row?.tipo_incidencia;
+        if (!cargoIsSafetyIncidentType(type)) return false;
+        const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+        return rowEmployeeId === employeeIdNum;
+      });
+
+      let incidentesFinales = incidentesPorEmpleado;
+      if (incidentesFinales.length === 0 && Number.isFinite(employeeIdNum)) {
+        const incidentesGlobales = await cargoGetAllIncidentRows();
+        incidentesFinales = incidentesGlobales.filter((row) => cargoGetIncidentRowEmployeeId(row) === employeeIdNum);
+      }
+
+      return { vacaciones, permisos, faltasRetardos, amonestaciones, accidentesIncidentes: incidentesFinales };
+    }
+
+    async function cargoBuildWeekCache(employees, weekStart) {
+      if (!Array.isArray(employees) || employees.length === 0) return new Map();
+
+      const idsKey = employees
+        .map(emp => Number(emp.id))
+        .filter(id => !Number.isNaN(id))
+        .sort((a, b) => a - b)
+        .join(',');
+
+      const weekKey = `${formatDateLocal(weekStart)}|${idsKey}`;
+      const isValid = cargoDataCache.key === weekKey
+        && (Date.now() - cargoDataCache.timestamp) < CARGO_CACHE_TTL_MS
+        && cargoDataCache.dataByEmployee instanceof Map;
+
+      if (isValid) return cargoDataCache.dataByEmployee;
+
+      const dataByEmployee = new Map();
+      const chunkSize = 8;
+
+      for (let i = 0; i < employees.length; i += chunkSize) {
+        const chunk = employees.slice(i, i + chunkSize);
+        const chunkData = await Promise.all(chunk.map(async (employee) => {
+          try {
+            const data = await cargoFetchEmployeeEvents(employee.id);
+            return { employeeId: Number(employee.id), data };
+          } catch (error) {
+            return { employeeId: Number(employee.id), data: { vacaciones: [], permisos: [], faltasRetardos: [], amonestaciones: [], accidentesIncidentes: [] } };
+          }
+        }));
+
+        chunkData.forEach(({ employeeId, data }) => {
+          dataByEmployee.set(employeeId, data);
+        });
+      }
+
+      cargoDataCache = {
+        key: weekKey,
+        timestamp: Date.now(),
+        dataByEmployee
+      };
+
+      return dataByEmployee;
+    }
+
+    function cargoDetermineAbsenceLevel(percentage) {
+      let level = 'Bajo';
+      let gaugeClass = 'gauge-success';
+      if (percentage > 60) {
+        level = 'Alto';
+        gaugeClass = 'gauge-danger';
+      } else if (percentage > 20) {
+        level = 'Medio';
+        gaugeClass = 'gauge-warn';
+      }
+      return { level, gaugeClass };
+    }
+
+    function cargoDeterminePerformanceLevel(percentage) {
+      let level = 'Bajo';
+      let gaugeClass = 'gauge-danger';
+      if (percentage > 80) {
+        level = 'Alto';
+        gaugeClass = 'gauge-success';
+      } else if (percentage > 50) {
+        level = 'Medio';
+        gaugeClass = 'gauge-warn';
+      }
+      return { level, gaugeClass };
+    }
+
+    function cargoGetWeekStart(date) {
+      const day = date.getDay();
+      const diffToMonday = day === 0 ? -6 : 1 - day;
+      const monday = new Date(date);
+      monday.setHours(0, 0, 0, 0);
+      monday.setDate(date.getDate() + diffToMonday);
+      return monday;
+    }
+
+    function cargoBuildIncidentDateSet(dataByEmployee) {
+      const incidentDateKeys = new Set();
+      if (!(dataByEmployee instanceof Map)) return incidentDateKeys;
+
+      dataByEmployee.forEach((employeeData) => {
+        const incidentes = Array.isArray(employeeData?.accidentesIncidentes) ? employeeData.accidentesIncidentes : [];
+
+        incidentes.forEach((item) => {
+          const type = item?.tipo || item?.tipo_incidencia;
+          if (!cargoIsSafetyIncidentType(type)) return;
+          const date = cargoGetIncidentRowDate(item);
+          if (date) incidentDateKeys.add(formatDateLocal(date));
+        });
+      });
+
+      return incidentDateKeys;
+    }
+
+    function cargoDiffDays(fromDate, toDate) {
+      const start = new Date(fromDate);
+      const end = new Date(toDate);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+      return Math.floor((end.getTime() - start.getTime()) / 86400000);
+    }
+
+    function cargoCalculateSafetyStreaks(incidentDateKeys) {
+      if (!(incidentDateKeys instanceof Set) || incidentDateKeys.size === 0) {
+        return { currentStreak: 0, maxStreak: 0 };
+      }
+
+      const sortedIncidentDates = Array.from(incidentDateKeys)
+        .map((dateKey) => cargoParseLocalDate(dateKey))
+        .filter((date) => date instanceof Date && !Number.isNaN(date.getTime()))
+        .sort((a, b) => a.getTime() - b.getTime());
+
+      if (sortedIncidentDates.length === 0) {
+        return { currentStreak: 0, maxStreak: 0 };
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayKey = formatDateLocal(today);
+      const latestIncident = sortedIncidentDates[sortedIncidentDates.length - 1];
+
+      const currentStreak = incidentDateKeys.has(todayKey)
+        ? 0
+        : Math.max(0, cargoDiffDays(latestIncident, today));
+
+      let maxStreak = currentStreak;
+      for (let i = 1; i < sortedIncidentDates.length; i += 1) {
+        const gap = cargoDiffDays(sortedIncidentDates[i - 1], sortedIncidentDates[i]) - 1;
+        if (gap > maxStreak) {
+          maxStreak = gap;
+        }
+      }
+
+      return { currentStreak, maxStreak };
+    }
+
+    function cargoRenderRecentStreakDays(container, incidentDateKeys, daysToShow = 10) {
+      if (!container) return;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (!(incidentDateKeys instanceof Set)) {
+        container.innerHTML = Array.from({ length: daysToShow }, () => '<span class="cargo-racha-dia" tabindex="-1">-</span>').join('');
+        return;
+      }
+
+      let html = '';
+      for (let offset = daysToShow - 1; offset >= 0; offset -= 1) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - offset);
+        const dateKey = formatDateLocal(date);
+        const isIncident = incidentDateKeys.has(dateKey);
+        const isToday = offset === 0;
+        const cssClass = isIncident ? 'is-incident' : 'is-safe';
+        const todayClass = isToday ? ' is-today' : '';
+        const clickableClass = isIncident ? ' is-clickable' : '';
+        const tabIndex = isIncident ? '0' : '-1';
+        const helperTitle = isIncident ? `${dateKey} (clic para ver detalle)` : dateKey;
+        html += `<span class="cargo-racha-dia ${cssClass}${todayClass}${clickableClass}" data-date="${dateKey}" tabindex="${tabIndex}" role="button" title="${helperTitle}">${date.getDate()}</span>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    async function cargoGetDayEvents(employees, dateStr, cacheMap) {
+      const events = [];
+      const currentDate = cargoParseLocalDate(dateStr);
+
+      for (const employee of employees) {
+        const employeeId = Number(employee.id);
+        let employeeData = cacheMap instanceof Map ? cacheMap.get(employeeId) : null;
+        if (!employeeData) {
+          employeeData = await cargoFetchEmployeeEvents(employee.id);
+        }
+
+        const vacaciones = Array.isArray(employeeData?.vacaciones) ? employeeData.vacaciones : [];
+        const permisos = Array.isArray(employeeData?.permisos) ? employeeData.permisos : [];
+        const faltas = Array.isArray(employeeData?.faltasRetardos) ? employeeData.faltasRetardos : [];
+        const amonestaciones = Array.isArray(employeeData?.amonestaciones) ? employeeData.amonestaciones : [];
+
+        let onVacation = false;
+        let fullDayPermit = false;
+        let absence = false;
+
+        vacaciones.forEach(vac => {
+          const start = cargoParseLocalDate(vac.fecha_inicio);
+          const end = cargoParseLocalDate(vac.fecha_fin, true);
+          const state = (vac.estado || '').toString().trim().toLowerCase();
+          if (!start || !end || !currentDate) return;
+          if (currentDate >= start && currentDate <= end && ['aprobado', 'aprobada', 'pendiente'].includes(state)) {
+            onVacation = true;
+            events.push({
+              name: employee.nombre_completo || 'Empleado',
+              type: 'vacaciones',
+              affectsForce: true,
+              photoUrl: cargoGetEmpleadoFotoUrl(employee),
+              tooltip: `Vacaciones (${vac.estado || 'pendiente'})`
+            });
+          }
+        });
+
+        permisos.forEach(perm => {
+          const type = (perm.tipo || '').toString().trim().toLowerCase();
+          const state = (perm.estado || '').toString().trim().toLowerCase();
+          if (type !== 'dia_completo' || !['aprobado', 'aprobada', 'pendiente'].includes(state) || onVacation || !currentDate) return;
+          const start = cargoParseLocalDate(perm.fecha_inicio || perm.fecha);
+          const end = cargoParseLocalDate(perm.fecha_fin || perm.fecha_inicio || perm.fecha, true);
+          if (!start || !end) return;
+          if (currentDate >= start && currentDate <= end) {
+            fullDayPermit = true;
+            events.push({
+              name: employee.nombre_completo || 'Empleado',
+              type: 'permiso',
+              affectsForce: true,
+              photoUrl: cargoGetEmpleadoFotoUrl(employee),
+              tooltip: `Permiso ${perm.tipo || ''} (${perm.estado || 'pendiente'})`.trim()
+            });
+          }
+        });
+
+        faltas.forEach(row => {
+          if (!currentDate) return;
+          const type = (row.tipo || row.tipo_incidencia || '').toString().trim().toLowerCase();
+          const date = cargoParseLocalDate(row.fecha);
+          if (!date || date.getTime() !== currentDate.getTime()) return;
+
+          if (type === 'falta' && !onVacation && !fullDayPermit) {
+            absence = true;
+            events.push({
+              name: employee.nombre_completo || 'Empleado',
+              type: 'falta',
+              affectsForce: true,
+              photoUrl: cargoGetEmpleadoFotoUrl(employee),
+              tooltip: row?.motivo ? `Falta: ${row.motivo}` : 'Falta'
+            });
+          }
+
+          if (type === 'retardo' && !onVacation && !fullDayPermit && !absence) {
+            events.push({
+              name: employee.nombre_completo || 'Empleado',
+              type: 'retardo',
+              affectsForce: false,
+              photoUrl: cargoGetEmpleadoFotoUrl(employee),
+              tooltip: cargoBuildRetardoTooltip(row)
+            });
+          }
+        });
+
+        amonestaciones.forEach(row => {
+          const amonDate = cargoNormalizeEventDate(row.fecha_solicitud || row.fecha || row.fecha_amonestacion || row.created_at);
+          if (!amonDate || !currentDate) return;
+          if (amonDate.getTime() === currentDate.getTime()) {
+            events.push({
+              name: employee.nombre_completo || 'Empleado',
+              type: 'amonestacion',
+              affectsForce: false,
+              photoUrl: cargoGetEmpleadoFotoUrl(employee),
+              tooltip: row?.motivo ? `Amonestación: ${row.motivo}` : 'Amonestación'
+            });
+          }
+        });
+      }
+
+      const uniqueByEmployeeType = new Map();
+      events.forEach(evt => {
+        const key = `${evt.name}|${evt.type}`;
+        if (!uniqueByEmployeeType.has(key)) uniqueByEmployeeType.set(key, evt);
+      });
+      return Array.from(uniqueByEmployeeType.values());
+    }
+
+    function cargoInitials(name) {
+      const parts = (name || '').split(' ').filter(Boolean).slice(0, 2);
+      if (parts.length === 0) return 'NA';
+      return parts.map(part => part.charAt(0).toUpperCase()).join('');
+    }
+
+    function cargoEventLabel(type) {
+      if (type === 'vacaciones') return 'V';
+      if (type === 'permiso') return 'P';
+      if (type === 'falta') return 'F';
+      if (type === 'retardo') return 'R';
+      if (type === 'amonestacion') return 'A';
+      return '-';
+    }
+
+    function cargoGetRetardoHora(row) {
+      const possibleHour = row?.hora_llegada ?? row?.hora ?? row?.hora_entrada ?? row?.hora_registro ?? row?.hora_evento ?? row?.llegada;
+      return (possibleHour ?? '').toString().trim();
+    }
+
+    function cargoBuildRetardoTooltip(row) {
+      const horaLlegada = cargoGetRetardoHora(row);
+      const motivo = (row?.motivo || row?.detalle || row?.descripcion || '').toString().trim();
+      if (horaLlegada && motivo) return `Retardo • Llegó: ${horaLlegada} • ${motivo}`;
+      if (horaLlegada) return `Retardo • Llegó: ${horaLlegada}`;
+      if (motivo) return `Retardo • ${motivo}`;
+      return 'Retardo';
+    }
+
+    let cargoHoverOverlayEl = null;
+
+    function cargoEnsureHoverOverlay() {
+      if (cargoHoverOverlayEl && document.body.contains(cargoHoverOverlayEl)) {
+        return cargoHoverOverlayEl;
+      }
+
+      cargoHoverOverlayEl = document.createElement('div');
+      cargoHoverOverlayEl.id = 'cargoEventHoverOverlay';
+      cargoHoverOverlayEl.className = 'cargo-event-hover-overlay';
+      cargoHoverOverlayEl.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(cargoHoverOverlayEl);
+      return cargoHoverOverlayEl;
+    }
+
+    function cargoHideHoverOverlay() {
+      const overlay = cargoEnsureHoverOverlay();
+      overlay.classList.remove('is-visible');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function cargoShowHoverOverlay(text, event) {
+      if (!text || !event) return;
+      const overlay = cargoEnsureHoverOverlay();
+      overlay.textContent = text;
+      overlay.classList.add('is-visible');
+      overlay.setAttribute('aria-hidden', 'false');
+
+      const offset = 14;
+      const rect = overlay.getBoundingClientRect();
+      const maxLeft = window.innerWidth - rect.width - 8;
+      const maxTop = window.innerHeight - rect.height - 8;
+
+      let left = event.clientX + offset;
+      let top = event.clientY + offset;
+
+      if (left > maxLeft) {
+        left = Math.max(8, event.clientX - rect.width - offset);
+      }
+      if (top > maxTop) {
+        top = Math.max(8, event.clientY - rect.height - offset);
+      }
+
+      overlay.style.left = `${left}px`;
+      overlay.style.top = `${top}px`;
+    }
+
+    function initializeCargoWeekRetardoOverlay() {
+      const weekGrid = document.getElementById('cargoSemanaGrid');
+      if (!weekGrid || weekGrid.dataset.retardoOverlayBound === '1') return;
+
+      weekGrid.dataset.retardoOverlayBound = '1';
+
+      weekGrid.addEventListener('mousemove', (event) => {
+        const target = event.target.closest('.cargo-event-avatar.cargo-event-retardo');
+        if (!target || !weekGrid.contains(target)) {
+          cargoHideHoverOverlay();
+          return;
+        }
+
+        const detail = target.getAttribute('data-tooltip') || '';
+        cargoShowHoverOverlay(detail, event);
+      });
+
+      weekGrid.addEventListener('mouseover', (event) => {
+        const target = event.target.closest('.cargo-event-avatar.cargo-event-retardo');
+        if (!target || !weekGrid.contains(target)) return;
+        const detail = target.getAttribute('data-tooltip') || '';
+        cargoShowHoverOverlay(detail, event);
+      });
+
+      weekGrid.addEventListener('mouseleave', () => {
+        cargoHideHoverOverlay();
+      });
+    }
+
+    async function cargarTableroPersonalCargo(force = false) {
+      const now = Date.now();
+      if (!force && (now - cargoTableroLastLoad < 15000)) {
+        return;
+      }
+
+      cargoTableroLastLoad = now;
+
+      const totalElement = document.getElementById('cargoEmpleadosTotal');
+      const ausPctEl = document.getElementById('cargoAusentismoPorcentaje');
+      const ausTotalEl = document.getElementById('cargoAusentismoTotal');
+      const desPctEl = document.getElementById('cargoDesempenoPorcentaje');
+      const desTotalEl = document.getElementById('cargoDesempenoTotal');
+      const weekGrid = document.getElementById('cargoSemanaGrid');
+      const safetyDaysEl = document.getElementById('cargoSinAccidentesDias');
+      const bestStreakEl = document.getElementById('cargoRachaHistoricaDias');
+      const streakGridEl = document.getElementById('cargoRachaDias');
+
+      const loggedUser = localStorage.getItem('loggedInUser');
+      if (!loggedUser) {
+        cargoLastIncidentRows = [];
+        cargoLastEmployeesSnapshot = [];
+        totalElement.textContent = '0';
+        weekGrid.innerHTML = '<article class="cargo-dia-card"><h5>Sin sesión</h5><p class="cargo-dia-numero">-</p><p class="cargo-dia-mes">---</p></article>';
+        if (safetyDaysEl) safetyDaysEl.textContent = '0';
+        if (bestStreakEl) bestStreakEl.textContent = '0';
+        cargoRenderRecentStreakDays(streakGridEl, null);
+        return;
+      }
+
+      const parsedUser = JSON.parse(loggedUser);
+      const supervisorName = parsedUser.nombre_completo || parsedUser.name || parsedUser.nombre || '';
+      if (!supervisorName) {
+        cargoLastIncidentRows = [];
+        cargoLastEmployeesSnapshot = [];
+        totalElement.textContent = '0';
+        if (safetyDaysEl) safetyDaysEl.textContent = '0';
+        if (bestStreakEl) bestStreakEl.textContent = '0';
+        cargoRenderRecentStreakDays(streakGridEl, null);
+        return;
+      }
+
+      const employees = await cargoFetchEmployeesHierarchy(supervisorName);
+      cargoEmployeesList = Array.isArray(employees) ? employees : [];
+      const totalEmployees = cargoEmployeesList.length;
+      totalElement.textContent = String(totalEmployees);
+      setCargoButtonAvailability(totalEmployees > 0);
+
+      if (totalEmployees === 0) {
+        cargoLastIncidentRows = [];
+        cargoLastEmployeesSnapshot = [];
+        ausPctEl.textContent = '0.0%';
+        ausTotalEl.textContent = 'Total de ausencias: 0';
+        desPctEl.textContent = '100.0%';
+        desTotalEl.textContent = 'Incidentes totales: 0';
+        weekGrid.innerHTML = '<article class="cargo-dia-card"><h5>Sin personal</h5><p class="cargo-dia-numero">0</p><p class="cargo-dia-mes">---</p><p class="cargo-sin-ausencias">No hay empleados asignados</p></article>';
+        if (safetyDaysEl) safetyDaysEl.textContent = '0';
+        if (bestStreakEl) bestStreakEl.textContent = '0';
+        cargoRenderRecentStreakDays(streakGridEl, null);
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(23, 59, 59, 999);
+      const weekStart = cargoGetWeekStart(new Date());
+      const weekCache = await cargoBuildWeekCache(employees, weekStart);
+
+      let weeklyAbsences = 0;
+      let incidentesTotal = 0;
+
+      weekCache.forEach((employeeData) => {
+        const amonestaciones = Array.isArray(employeeData?.amonestaciones) ? employeeData.amonestaciones : [];
+        const faltasRetardos = Array.isArray(employeeData?.faltasRetardos) ? employeeData.faltasRetardos : [];
+        const accidentesIncidentes = Array.isArray(employeeData?.accidentesIncidentes) ? employeeData.accidentesIncidentes : [];
+
+        amonestaciones.forEach(item => {
+          const date = cargoNormalizeEventDate(item.fecha_solicitud || item.fecha || item.fecha_amonestacion || item.created_at);
+          if (date && date >= weekStart && date <= today) incidentesTotal += 1;
+        });
+
+        faltasRetardos.forEach(item => {
+          const type = (item.tipo || item.tipo_incidencia || '').toString().trim().toLowerCase();
+          const date = cargoNormalizeEventDate(item.fecha);
+          if (type === 'retardo' && date && date >= weekStart && date <= today) incidentesTotal += 1;
+        });
+
+        accidentesIncidentes.forEach(item => {
+          const type = item?.tipo || item?.tipo_incidencia;
+          const date = cargoGetIncidentRowDate(item);
+          if (cargoIsSafetyIncidentType(type) && date && date >= weekStart && date <= today) incidentesTotal += 1;
+        });
+      });
+
+      const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      let weekHtml = '';
+
+      for (let i = 0; i < 6; i += 1) {
+        const date = new Date(weekStart);
+        date.setDate(weekStart.getDate() + i);
+        const dateStr = formatDateLocal(date);
+        const dayEvents = await cargoGetDayEvents(employees, dateStr, weekCache);
+        const absenceCount = dayEvents.filter(evt => evt.affectsForce !== false).length;
+        weeklyAbsences += absenceCount;
+        const isToday = date.toDateString() === new Date().toDateString();
+
+        const avatarHtml = dayEvents.length > 0
+          ? `<div class="cargo-avatar-group">${dayEvents.slice(0, 8).map(evt => {
+              const detailText = `${evt.name}${evt.tooltip ? ` • ${evt.tooltip}` : ''}`;
+              const safeTooltip = cargoEscapeHtml(detailText);
+              const photoUrl = (evt.photoUrl || '').toString().trim();
+              const photoHtml = photoUrl
+                ? `<img class="cargo-avatar-photo" src="${cargoEscapeHtml(photoUrl)}" alt="${cargoEscapeHtml(evt.name)}" loading="lazy" />`
+                : `<span class="cargo-avatar-fallback">${cargoInitials(evt.name)}</span>`;
+              return `<span class="cargo-event-${evt.type} cargo-event-avatar" data-tooltip="${safeTooltip}" title="${safeTooltip}">${photoHtml}<i>${cargoEventLabel(evt.type)}</i></span>`;
+            }).join('')}</div>`
+          : '<p class="cargo-sin-ausencias">Sin ausencias</p>';
+
+        weekHtml += `
+          <article class="cargo-dia-card ${isToday ? 'is-active-day' : ''}">
+            <h5>${dayNames[i]}</h5>
+            <p class="cargo-dia-numero">${date.getDate()}</p>
+            <p class="cargo-dia-mes">${monthNames[date.getMonth()]}</p>
+            ${avatarHtml}
+          </article>
+        `;
+      }
+
+      weekGrid.innerHTML = weekHtml;
+
+      const totalSlots = totalEmployees * 6 || 1;
+      const absencePercentage = (weeklyAbsences / totalSlots) * 100;
+      const { level: absenceLevel, gaugeClass: absenceClass } = cargoDetermineAbsenceLevel(absencePercentage);
+      const ausGauge = ausPctEl.closest('.cargo-gauge');
+      ausGauge.classList.remove('gauge-success', 'gauge-warn', 'gauge-danger');
+      ausGauge.classList.add(absenceClass);
+      ausPctEl.textContent = `${absencePercentage.toFixed(1)}%`;
+      ausTotalEl.textContent = `Total de ausencias: ${weeklyAbsences} (${absenceLevel})`;
+
+      const incidentPercentage = Math.min(100, (incidentesTotal / totalSlots) * 100);
+      const performance = Math.max(0, 100 - incidentPercentage);
+      const { level: perfLevel, gaugeClass: perfClass } = cargoDeterminePerformanceLevel(performance);
+      const desGauge = desPctEl.closest('.cargo-gauge');
+      desGauge.classList.remove('gauge-success', 'gauge-warn', 'gauge-danger');
+      desGauge.classList.add(perfClass);
+      desPctEl.textContent = `${performance.toFixed(1)}%`;
+      desTotalEl.textContent = `Incidentes totales: ${incidentesTotal} (${perfLevel})`;
+
+      const incidentRows = await cargoGetAllIncidentRows();
+      cargoLastIncidentRows = Array.isArray(incidentRows) ? incidentRows : [];
+      cargoLastEmployeesSnapshot = Array.isArray(employees) ? employees : [];
+      let incidentDateKeys = cargoBuildTeamIncidentDateSet(employees, incidentRows);
+
+      if (incidentDateKeys.size === 0) {
+        incidentDateKeys = cargoBuildIncidentDateSet(weekCache);
+      }
+
+      if (incidentDateKeys.size === 0 && Array.isArray(incidentRows) && incidentRows.length > 0) {
+        incidentRows.forEach((row) => {
+          const type = row?.tipo || row?.tipo_incidencia;
+          if (!cargoIsSafetyIncidentType(type)) return;
+          const date = cargoGetIncidentRowDate(row);
+          if (date) incidentDateKeys.add(formatDateLocal(date));
+        });
+      }
+      const { currentStreak, maxStreak } = cargoCalculateSafetyStreaks(incidentDateKeys);
+
+      if (safetyDaysEl) {
+        safetyDaysEl.textContent = String(currentStreak);
+      }
+      if (bestStreakEl) bestStreakEl.textContent = String(maxStreak);
+      cargoRenderRecentStreakDays(streakGridEl, incidentDateKeys);
+    }
+
+    function populateCargoEmployeesSelect() {
+      const select = document.getElementById('cargoEmpleadoIdSelect');
+      const searchInput = document.getElementById('cargoEmpleadoSearch');
+      if (!select) return;
+
+      const previousValue = select.value;
+      const searchTerm = (searchInput?.value || '').toString().trim().toLowerCase();
+
+      select.innerHTML = '<option value="">-- Selecciona un empleado --</option>';
+
+      if (!Array.isArray(cargoEmployeesList) || cargoEmployeesList.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'No hay empleados a cargo';
+        select.appendChild(option);
+        return;
+      }
+
+      const filteredEmployees = cargoEmployeesList.filter((employee) => {
+        if (!searchTerm) return true;
+        const displayName = (employee.nombre_completo || employee.nombre || employee.name || '').toString().toLowerCase();
+        const employeeIdText = (employee.employeeNumber || employee.numero_empleado || employee.id || '').toString().toLowerCase();
+        return displayName.includes(searchTerm) || employeeIdText.includes(searchTerm);
+      });
+
+      if (filteredEmployees.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Sin resultados';
+        select.appendChild(option);
+        return;
+      }
+
+      filteredEmployees.forEach((employee) => {
+        const option = document.createElement('option');
+        option.value = employee.id || '';
+        option.textContent = employee.nombre_completo || employee.nombre || employee.name || `Empleado ${employee.id || ''}`;
+        select.appendChild(option);
+      });
+
+      if (previousValue && Array.from(select.options).some((opt) => opt.value === previousValue)) {
+        select.value = previousValue;
+      }
+    }
+
+    function cargoGetEmpleadoNombre(employee) {
+      return (employee?.nombre_completo || employee?.nombre || employee?.name || `Empleado ${employee?.id || ''}`).toString().trim();
+    }
+
+    function cargoGetEmpleadoFotoUrl(employee) {
+      const raw = (employee?.foto_url || employee?.imagen_url || employee?.photo || '').toString().trim();
+      if (!raw) return '';
+      if (raw.startsWith('http://') || raw.startsWith('https://') || raw.startsWith('/')) {
+        return raw;
+      }
+      return `/uploads/${raw}`;
+    }
+
+    function cargoGetDirectReportsFromList(supervisorName, employees) {
+      if (!supervisorName || !Array.isArray(employees)) return [];
+      return employees.filter((employee) => cargoNamesMatch(employee?.supervisor, supervisorName));
+    }
+
+    let cargoHierarchyRootName = '';
+    let cargoHierarchyCurrentName = '';
+    let cargoHierarchyStack = [];
+
+    function cargoRenderEmployeeCardsLevel() {
+      const cardsContainer = document.getElementById('cargoEmpleadoCards');
+      const searchInput = document.getElementById('cargoEmpleadoSearch');
+      const levelLabel = document.getElementById('cargoNivelActualLabel');
+      const backBtn = document.getElementById('cargoNivelBackBtn');
+      if (!cardsContainer || !levelLabel || !backBtn) return;
+
+      const currentLabel = cargoHierarchyCurrentName || cargoHierarchyRootName || 'Mi equipo';
+      const searchTerm = (searchInput?.value || '').toString().trim().toLowerCase();
+      const directReports = cargoGetDirectReportsFromList(cargoHierarchyCurrentName, cargoEmployeesList);
+
+      const filteredReports = directReports.filter((employee) => {
+        if (!searchTerm) return true;
+        const name = cargoGetEmpleadoNombre(employee).toLowerCase();
+        const code = (employee?.employeeNumber || employee?.numero_empleado || employee?.id || '').toString().toLowerCase();
+        return name.includes(searchTerm) || code.includes(searchTerm);
+      });
+
+      levelLabel.textContent = currentLabel;
+      backBtn.disabled = cargoHierarchyStack.length === 0;
+
+      if (filteredReports.length === 0) {
+        const baseMessage = directReports.length === 0
+          ? 'Este empleado no tiene personal a cargo.'
+          : 'No hay empleados que coincidan con la búsqueda.';
+        cardsContainer.innerHTML = `<div class="cargo-tab-empty">${baseMessage}</div>`;
+        return;
+      }
+
+      cardsContainer.innerHTML = filteredReports.map((employee) => {
+        const name = cargoEscapeHtml(cargoGetEmpleadoNombre(employee));
+        const puesto = cargoEscapeHtml((employee?.puesto || 'Sin puesto').toString());
+        const code = cargoEscapeHtml((employee?.employeeNumber || employee?.numero_empleado || employee?.id || '').toString());
+        const photoUrl = cargoGetEmpleadoFotoUrl(employee);
+        const initials = cargoEscapeHtml(cargoInitials(cargoGetEmpleadoNombre(employee)));
+        const photoHtml = photoUrl
+          ? `<img src="${cargoEscapeHtml(photoUrl)}" alt="${name}" loading="lazy" />`
+          : `<span class="cargo-card-initials">${initials}</span>`;
+
+        return `
+          <button type="button" class="cargo-empleado-card" data-employee-id="${employee?.id || ''}">
+            <div class="cargo-card-photo">${photoHtml}</div>
+            <div class="cargo-card-info">
+              <strong>${name}</strong>
+              <span>${puesto}</span>
+              <small>${code ? `#${code}` : ''}</small>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function cargoSelectEmployeeFromCard(employeeId) {
+      const select = document.getElementById('cargoEmpleadoIdSelect');
+      if (!select || !employeeId) return;
+      const targetId = String(employeeId);
+      if (!Array.from(select.options).some((option) => option.value === targetId)) return;
+      select.value = targetId;
+      cargarEmpleadoCargoSeleccionado().catch((error) => {
+        console.error('Error al cargar información del empleado seleccionado:', error);
+      });
+    }
+
+    function closeCargoEmployeesModal() {
+      const modal = document.getElementById('cargoEmpleadosModal');
+      const tabsContainer = document.getElementById('cargoEmpleadoTabs');
+      const select = document.getElementById('cargoEmpleadoIdSelect');
+      const searchInput = document.getElementById('cargoEmpleadoSearch');
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      cargoEmpleadoIdActual = null;
+      cargoHierarchyRootName = '';
+      cargoHierarchyCurrentName = '';
+      cargoHierarchyStack = [];
+      if (tabsContainer) tabsContainer.style.display = 'none';
+      if (select) select.value = '';
+      if (searchInput) searchInput.value = '';
+      closeCargoJerarquiaModal();
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    async function openCargoEmployeesModal() {
+      const modal = document.getElementById('cargoEmpleadosModal');
+      const tabsContainer = document.getElementById('cargoEmpleadoTabs');
+      const searchInput = document.getElementById('cargoEmpleadoSearch');
+      const cardsContainer = document.getElementById('cargoEmpleadoCards');
+      if (!modal) return;
+
+      if (Array.isArray(cargoEmployeesList) && cargoEmployeesList.length === 0) {
+        return;
+      }
+
+      if (!Array.isArray(cargoEmployeesList) || cargoEmployeesList.length === 0) {
+        await cargarTableroPersonalCargo(true);
+      }
+
+      if (searchInput) searchInput.value = '';
+      const loggedUser = localStorage.getItem('loggedInUser');
+      let supervisorName = '';
+      if (loggedUser) {
+        try {
+          const parsedUser = JSON.parse(loggedUser);
+          supervisorName = (parsedUser?.nombre_completo || parsedUser?.name || parsedUser?.nombre || '').toString().trim();
+        } catch (_) {}
+      }
+      cargoHierarchyRootName = supervisorName;
+      cargoHierarchyCurrentName = supervisorName;
+      cargoHierarchyStack = [];
+      populateCargoEmployeesSelect();
+      cargoRenderEmployeeCardsLevel();
+      if (tabsContainer) tabsContainer.style.display = 'none';
+      if (cardsContainer && cardsContainer.dataset.bound !== '1') {
+        cardsContainer.dataset.bound = '1';
+        cardsContainer.addEventListener('click', (event) => {
+          const card = event.target.closest('.cargo-empleado-card');
+          if (!card || !cardsContainer.contains(card)) return;
+          const employeeId = card.getAttribute('data-employee-id');
+          const selectedEmployee = cargoEmployeesList.find((employee) => String(employee?.id) === String(employeeId));
+          const employeeName = cargoGetEmpleadoNombre(selectedEmployee);
+
+          cargoSelectEmployeeFromCard(employeeId);
+
+          if (selectedEmployee && employeeName) {
+            cargoHierarchyStack.push(cargoHierarchyCurrentName);
+            cargoHierarchyCurrentName = employeeName;
+            cargoRenderEmployeeCardsLevel();
+          }
+        });
+      }
+
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function initializeCargoEmployeesModal() {
+      const card = document.getElementById('cargoResumenCard');
+      const modal = document.getElementById('cargoEmpleadosModal');
+      const closeButton = document.getElementById('cargoEmpleadosClose');
+      const searchInput = document.getElementById('cargoEmpleadoSearch');
+      const backBtn = document.getElementById('cargoNivelBackBtn');
+      const jerarquiaBtn = document.getElementById('cargoVerJerarquiaBtn');
+      const jerarquiaModal = document.getElementById('cargoJerarquiaModal');
+      const jerarquiaClose = document.getElementById('cargoJerarquiaClose');
+      const jerarquiaDownloadBtn = document.getElementById('cargoJerarquiaDownload');
+
+      if (!card || !modal || !closeButton) return;
+
+      if (card.dataset.modalBound !== '1') {
+        card.dataset.modalBound = '1';
+        card.addEventListener('click', () => {
+          openCargoEmployeesModal().catch((error) => {
+            console.error('Error al abrir modal de empleados:', error);
+          });
+        });
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openCargoEmployeesModal().catch((error) => {
+              console.error('Error al abrir modal de empleados:', error);
+            });
+          }
+        });
+      }
+
+      if (closeButton.dataset.modalBound !== '1') {
+        closeButton.dataset.modalBound = '1';
+        closeButton.addEventListener('click', closeCargoEmployeesModal);
+      }
+
+      if (modal.dataset.modalBound !== '1') {
+        modal.dataset.modalBound = '1';
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) {
+            closeCargoEmployeesModal();
+          }
+        });
+      }
+
+      if (searchInput && searchInput.dataset.bound !== '1') {
+        searchInput.dataset.bound = '1';
+        searchInput.addEventListener('input', () => {
+          populateCargoEmployeesSelect();
+          cargoRenderEmployeeCardsLevel();
+          const select = document.getElementById('cargoEmpleadoIdSelect');
+          const tabsContainer = document.getElementById('cargoEmpleadoTabs');
+          if (select && !select.value) {
+            cargoEmpleadoIdActual = null;
+            if (tabsContainer) tabsContainer.style.display = 'none';
+          }
+        });
+      }
+
+      if (backBtn && backBtn.dataset.bound !== '1') {
+        backBtn.dataset.bound = '1';
+        backBtn.addEventListener('click', () => {
+          if (cargoHierarchyStack.length === 0) return;
+          const previousLevel = cargoHierarchyStack.pop();
+          cargoHierarchyCurrentName = previousLevel || cargoHierarchyRootName;
+          cargoRenderEmployeeCardsLevel();
+        });
+      }
+
+      if (jerarquiaBtn && jerarquiaBtn.dataset.bound !== '1') {
+        jerarquiaBtn.dataset.bound = '1';
+        jerarquiaBtn.addEventListener('click', () => {
+          openCargoJerarquiaModal().catch((error) => {
+            console.error('Error al abrir jerarquía organizacional:', error);
+          });
+        });
+      }
+
+      if (jerarquiaClose && jerarquiaClose.dataset.bound !== '1') {
+        jerarquiaClose.dataset.bound = '1';
+        jerarquiaClose.addEventListener('click', closeCargoJerarquiaModal);
+      }
+
+      if (jerarquiaModal && jerarquiaModal.dataset.bound !== '1') {
+        jerarquiaModal.dataset.bound = '1';
+        jerarquiaModal.addEventListener('click', (event) => {
+          if (event.target === jerarquiaModal) {
+            closeCargoJerarquiaModal();
+          }
+        });
+      }
+
+      if (jerarquiaDownloadBtn && jerarquiaDownloadBtn.dataset.bound !== '1') {
+        jerarquiaDownloadBtn.dataset.bound = '1';
+        jerarquiaDownloadBtn.addEventListener('click', () => {
+          cargoDownloadHierarchyImage().catch((error) => {
+            console.error('Error al descargar jerarquía:', error);
+          });
+        });
+      }
+    }
+
+    let cargoEmpleadoIdActual = null;
+
+    function cambiarCargoTab(tabName) {
+      document.querySelectorAll('.cargo-tab-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.cargoTab === tabName);
+      });
+
+      document.querySelectorAll('.cargo-tab-pane').forEach((pane) => {
+        pane.classList.toggle('active', pane.id === `cargo-tab-${tabName}`);
+      });
+
+      if (cargoEmpleadoIdActual) {
+        cargarCargoTab(tabName, cargoEmpleadoIdActual).catch((error) => {
+          console.error(`Error al cargar tab ${tabName}:`, error);
+        });
+      }
+    }
+
+    async function cargarEmpleadoCargoSeleccionado() {
+      const select = document.getElementById('cargoEmpleadoIdSelect');
+      const tabsContainer = document.getElementById('cargoEmpleadoTabs');
+      if (!select || !tabsContainer) return;
+
+      const empleadoId = select.value;
+      cargoEmpleadoIdActual = empleadoId || null;
+
+      if (!empleadoId) {
+        tabsContainer.style.display = 'none';
+        return;
+      }
+
+      tabsContainer.style.display = 'block';
+      const activeBtn = document.querySelector('.cargo-tab-btn.active');
+      const activeTab = activeBtn?.dataset.cargoTab || 'apoyos';
+      await cargarCargoTab(activeTab, empleadoId);
+    }
+
+    function cargoRenderEmpty(containerId, message) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = `<div class="cargo-tab-empty">${message}</div>`;
+    }
+
+    function cargoRenderList(containerId, items) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      if (!Array.isArray(items) || items.length === 0) {
+        container.innerHTML = '<div class="cargo-tab-empty">Sin registros</div>';
+        return;
+      }
+
+      container.innerHTML = `<div class="cargo-tab-list">${items.map(item => `<div class="cargo-tab-item">${item}</div>`).join('')}</div>`;
+    }
+
+    async function cargarCargoTab(tabName, empleadoId) {
+      const targetId = `cargo-tab-${tabName}`;
+      const target = document.getElementById(targetId);
+      if (!target) return;
+
+      target.innerHTML = '<div class="cargo-tab-empty">Cargando...</div>';
+
+      if (tabName === 'apoyos') {
+        const response = await fetch(`/api/empleados/${empleadoId}/historial`);
+        if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar apoyos');
+        const apoyos = await response.json();
+        const list = (Array.isArray(apoyos) ? apoyos : []).map(a => {
+          const estado = (a.vale_status || a.estado || a.estatus || 'pendiente').toString();
+          return `<strong>Folio:</strong> ${a.folio || 'N/A'}<br><strong>Descripción:</strong> ${a.descripcion || 'Sin descripción'}<br><strong>Estado:</strong> ${estado}`;
+        });
+        return cargoRenderList(targetId, list);
+      }
+
+      if (tabName === 'amonestaciones') {
+        const response = await fetch(`/api/amonestaciones/empleado/${empleadoId}`);
+        if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar amonestaciones');
+        const payload = await response.json();
+        const amonestaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || []);
+        const list = amonestaciones.map(a => {
+          const fecha = a.fecha ? new Date(a.fecha).toLocaleDateString() : 'Sin fecha';
+          return `<strong>Fecha:</strong> ${fecha}<br><strong>Tipo:</strong> ${a.tipo || 'Escrita'}<br><strong>Motivo:</strong> ${a.motivo || 'Sin motivo'}`;
+        });
+        return cargoRenderList(targetId, list);
+      }
+
+      if (tabName === 'faltas' || tabName === 'retardos') {
+        const response = await fetch(`/api/faltas-retardos?empleado_id=${empleadoId}`);
+        if (!response.ok) return cargoRenderEmpty(targetId, `Error al cargar ${tabName}`);
+        const payload = await response.json();
+        const registros = Array.isArray(payload) ? payload : (payload?.registros || payload?.rows || payload?.result || []);
+        const tipoObjetivo = tabName === 'faltas' ? 'falta' : 'retardo';
+        const filtrados = registros.filter(r => (r.tipo || r.tipo_incidencia || '').toLowerCase() === tipoObjetivo);
+        const list = filtrados.map(r => {
+          const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString() : 'Sin fecha';
+          return `<strong>Fecha:</strong> ${fecha}${r.minutos ? `<br><strong>Minutos:</strong> ${r.minutos}` : ''}${r.motivo ? `<br><strong>Motivo:</strong> ${r.motivo}` : ''}`;
+        });
+        return cargoRenderList(targetId, list);
+      }
+
+      if (tabName === 'permisos') {
+        const response = await fetch(`/api/permisos/empleado/${empleadoId}`);
+        if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar permisos');
+        const permisos = await response.json();
+        const list = (Array.isArray(permisos) ? permisos : []).map(p => {
+          const desde = p.fecha_inicio ? new Date(p.fecha_inicio).toLocaleDateString() : 'N/A';
+          const hasta = p.fecha_fin ? new Date(p.fecha_fin).toLocaleDateString() : 'N/A';
+          return `<strong>Desde:</strong> ${desde}<br><strong>Hasta:</strong> ${hasta}<br><strong>Estado:</strong> ${p.estado || 'Pendiente'}${p.motivo ? `<br><strong>Motivo:</strong> ${p.motivo}` : ''}`;
+        });
+        return cargoRenderList(targetId, list);
+      }
+
+      if (tabName === 'vacaciones') {
+        const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+        if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar vacaciones');
+        const payload = await response.json();
+        const vacaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || payload?.result || []);
+        const list = vacaciones.map(v => {
+          const desde = v.fecha_inicio ? new Date(v.fecha_inicio).toLocaleDateString() : 'N/A';
+          const hasta = v.fecha_fin ? new Date(v.fecha_fin).toLocaleDateString() : 'N/A';
+          return `<strong>Desde:</strong> ${desde}<br><strong>Hasta:</strong> ${hasta}<br><strong>Estado:</strong> ${v.estado || 'Pendiente'}<br><strong>Días:</strong> ${v.dias_solicitados || 'N/A'}`;
+        });
+        return cargoRenderList(targetId, list);
+      }
+    }
+
+    function formatDateLocal(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getCurrentWeekRange() {
+      const today = new Date();
+      const day = today.getDay();
+      const diffToMonday = day === 0 ? -6 : 1 - day;
+
+      const monday = new Date(today);
+      monday.setHours(0, 0, 0, 0);
+      monday.setDate(today.getDate() + diffToMonday);
+
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+
+      return {
+        inicio: formatDateLocal(monday),
+        fin: formatDateLocal(sunday)
+      };
+    }
+
+    async function cargarComidasSemana() {
+      const countElement = document.getElementById('weeklyMealsCount');
+      if (!countElement) {
+        return;
+      }
+
+      try {
+        const { inicio, fin } = getCurrentWeekRange();
+        const loggedInRaw = localStorage.getItem('loggedInUser');
+        const fallbackUsername = (localStorage.getItem('username') || '').toString().trim();
+        let username = fallbackUsername;
+
+        if (loggedInRaw) {
+          try {
+            const user = JSON.parse(loggedInRaw);
+            username = (user?.username || user?.employeeNumber || fallbackUsername || '').toString().trim();
+          } catch (_) {}
+        }
+
+        const response = await fetch(`/api/comidas/semana-usuario?inicio=${encodeURIComponent(inicio)}&fin=${encodeURIComponent(fin)}&username=${encodeURIComponent(username)}`);
+
+        if (!response.ok) {
+          throw new Error('No se pudo obtener comidas de la semana');
+        }
+
+        const payload = await response.json();
+        const weeklyTotal = Number(payload?.total) || 0;
+
+        countElement.textContent = String(weeklyTotal);
+      } catch (error) {
+        console.error('Error al cargar comidas de la semana:', error);
+        countElement.textContent = '0';
+      }
+    }
+
+    function parseApiArray(payload) {
+      if (Array.isArray(payload)) return payload;
+      return payload?.data || payload?.rows || payload?.result || payload?.registros || [];
+    }
+
+    function toDateOnly(dateValue) {
+      if (!dateValue) return null;
+      const date = new Date(dateValue);
+      if (Number.isNaN(date.getTime())) return null;
+      date.setHours(0, 0, 0, 0);
+      return date;
+    }
+
+    function ymd(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatMonthLabel(date) {
+      return new Intl.DateTimeFormat('es-MX', { month: 'long', year: 'numeric' }).format(date);
+    }
+
+    function isGenericCalendarUserName(name) {
+      const normalized = (name || '').toString().trim().toLowerCase();
+      return !normalized || ['usuario', 'administrador', 'user', 'admin'].includes(normalized);
+    }
+
+    function obtenerIdentidadUsuarioCalendario() {
+      const loggedInRaw = localStorage.getItem('loggedInUser');
+      const fallbackUsername = (localStorage.getItem('username') || '').toString().trim();
+      const fallbackUserId = (localStorage.getItem('userId') || '').toString().trim();
+      let user = null;
+
+      if (loggedInRaw) {
+        try {
+          user = JSON.parse(loggedInRaw);
+        } catch (_) {
+          user = null;
+        }
+      }
+
+      const employeeNumber = (user?.employeeNumber || user?.username || fallbackUsername || '').toString().trim();
+      const fullName = (user?.nombre_completo || user?.name || user?.nombre || '').toString().trim();
+      const nameLower = fullName.toLowerCase();
+
+      const candidateSet = new Set(
+        [
+          user?.id,
+          user?.empleadoId,
+          user?.empleado_id,
+          fallbackUserId,
+          employeeNumber,
+          user?.username
+        ]
+          .map((value) => (value ?? '').toString().trim())
+          .filter(Boolean)
+      );
+
+      return {
+        employeeNumber,
+        fullName,
+        nameLower,
+        candidateIds: Array.from(candidateSet)
+      };
+    }
+
+    async function obtenerEmpleadoIdLogeado() {
+      if (Number.isFinite(soporteCalendarEmpleadoId) && soporteCalendarEmpleadoId > 0) {
+        return soporteCalendarEmpleadoId;
+      }
+
+      const identidad = obtenerIdentidadUsuarioCalendario();
+      const { employeeNumber, fullName, nameLower, candidateIds } = identidad;
+
+      try {
+        if (fullName && !isGenericCalendarUserName(fullName)) {
+          const byNameRes = await fetch(`/api/empleados?nombre=${encodeURIComponent(fullName)}`);
+          if (byNameRes.ok) {
+            const empleado = await byNameRes.json();
+            const empleadoId = Number(empleado?.id || empleado?.empleado_id);
+            if (Number.isFinite(empleadoId) && empleadoId > 0) {
+              soporteCalendarEmpleadoId = empleadoId;
+              return empleadoId;
+            }
+          }
+        }
+      } catch (_) {}
+
+      try {
+        const allRes = await fetch('/api/empleados');
+        if (allRes.ok) {
+          const empleados = await allRes.json();
+          if (Array.isArray(empleados)) {
+            const empleado = empleados.find((e) => {
+              const eName = (e?.nombre_completo || '').toString().trim().toLowerCase();
+              const idCandidates = [e?.id, e?.empleado_id, e?.numero_empleado, e?.employee_number]
+                .map((v) => (v ?? '').toString().trim())
+                .filter(Boolean);
+              return (nameLower && !isGenericCalendarUserName(fullName) && eName === nameLower)
+                || candidateIds.some((candidate) => idCandidates.includes(candidate));
+            });
+
+            const empleadoId = Number(empleado?.id || empleado?.empleado_id);
+            if (Number.isFinite(empleadoId) && empleadoId > 0) {
+              soporteCalendarEmpleadoId = empleadoId;
+              return empleadoId;
+            }
+          }
+        }
+      } catch (_) {}
+
+      const numericFallback = Number(employeeNumber);
+      if (Number.isFinite(numericFallback) && numericFallback > 0) {
+        soporteCalendarEmpleadoId = numericFallback;
+        return numericFallback;
+      }
+
+      return null;
+    }
+
+    function eventoEsDelUsuario(row, identidad, empleadoId) {
+      const rowEmployeeId = (row?.empleado_id ?? row?.empleadoId ?? row?.id_empleado ?? '').toString().trim();
+      const rowName = (row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || '').toString().trim().toLowerCase();
+      const identityIds = new Set([...(identidad?.candidateIds || []), (empleadoId || '').toString().trim()].filter(Boolean));
+      if (rowEmployeeId && identityIds.has(rowEmployeeId)) return true;
+      if (identidad?.nameLower && !isGenericCalendarUserName(identidad.fullName) && rowName && rowName === identidad.nameLower) return true;
+      return false;
+    }
+
+    function initializeCalendarioSoporteNavigation() {
+      const prevButton = document.getElementById('soporteCalPrev');
+      const nextButton = document.getElementById('soporteCalNext');
+
+      if (!prevButton || !nextButton) {
+        return;
+      }
+
+      prevButton.addEventListener('click', async () => {
+        soporteCalendarCurrentMonth = new Date(soporteCalendarCurrentMonth.getFullYear(), soporteCalendarCurrentMonth.getMonth() - 1, 1);
+        await cargarCalendarioSoporte(soporteCalendarCurrentMonth);
+      });
+
+      nextButton.addEventListener('click', async () => {
+        soporteCalendarCurrentMonth = new Date(soporteCalendarCurrentMonth.getFullYear(), soporteCalendarCurrentMonth.getMonth() + 1, 1);
+        await cargarCalendarioSoporte(soporteCalendarCurrentMonth);
+      });
+    }
+
+    function addRangeMarks(marksMap, detailsMap, startDate, endDate, type, monthStart, monthEnd, detailText) {
+      if (!startDate) return;
+
+      const safeStart = new Date(Math.max(startDate.getTime(), monthStart.getTime()));
+      const safeEnd = new Date(Math.min((endDate || startDate).getTime(), monthEnd.getTime()));
+      if (safeStart > safeEnd) return;
+
+      for (let current = new Date(safeStart); current <= safeEnd; current.setDate(current.getDate() + 1)) {
+        const key = ymd(current);
+        if (!marksMap.has(key)) marksMap.set(key, new Set());
+        marksMap.get(key).add(type);
+
+        if (detailText) {
+          if (!detailsMap.has(key)) detailsMap.set(key, []);
+          detailsMap.get(key).push(detailText);
+        }
+      }
+    }
+
+    function renderCalendarioSoporte(marksMap, detailsMap, monthStart) {
+      const grid = document.getElementById('soporteCalendarGrid');
+      const tooltip = document.getElementById('soporteCalendarTooltip');
+      const calendar = grid?.closest('.soporte-calendar');
+      if (!grid || !calendar) return;
+
+      grid.innerHTML = '';
+
+      const hideTooltip = () => {
+        if (!tooltip) return;
+        tooltip.classList.remove('is-visible');
+        tooltip.setAttribute('aria-hidden', 'true');
+        tooltip.style.display = 'none';
+        tooltip.innerHTML = '';
+        tooltip.style.left = '0';
+        tooltip.style.top = '0';
+      };
+
+      const moveTooltip = (event) => {
+        if (!tooltip) return;
+        const offset = 14;
+        const tooltipWidth = tooltip.offsetWidth || 220;
+        const tooltipHeight = tooltip.offsetHeight || 40;
+        const calendarRect = calendar.getBoundingClientRect();
+        const maxLeft = Math.max(8, calendarRect.width - tooltipWidth - 8);
+        const maxTop = Math.max(8, calendarRect.height - tooltipHeight - 8);
+
+        let left = event.clientX - calendarRect.left - (tooltipWidth / 2);
+        let top = event.clientY - calendarRect.top + offset;
+
+        left = Math.max(8, Math.min(maxLeft, left));
+        if (top > maxTop) {
+          top = Math.max(8, event.clientY - calendarRect.top - tooltipHeight - offset);
+        }
+
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+      };
+
+      const showTooltip = (event, lines) => {
+        if (!tooltip || !Array.isArray(lines) || lines.length === 0) return;
+        const escapeHtml = (value) => String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
+        tooltip.innerHTML = lines
+          .map((line) => `<div class="soporte-tooltip-line">${escapeHtml(line)}</div>`)
+          .join('');
+        tooltip.style.display = 'block';
+        tooltip.classList.add('is-visible');
+        tooltip.setAttribute('aria-hidden', 'false');
+        moveTooltip(event);
+      };
+
+      const firstDay = new Date(monthStart);
+      const leading = (firstDay.getDay() + 6) % 7;
+      const daysInMonth = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0).getDate();
+      const todayKey = ymd(new Date());
+
+      for (let i = 0; i < leading; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'soporte-day is-empty';
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cellDate = new Date(monthStart.getFullYear(), monthStart.getMonth(), day);
+        const cellKey = ymd(cellDate);
+        const types = marksMap.get(cellKey) || new Set();
+        const details = detailsMap.get(cellKey) || [];
+
+        const cell = document.createElement('div');
+        cell.className = 'soporte-day';
+        if (cellKey === todayKey) cell.classList.add('today');
+        if (types.size > 0) cell.classList.add('has-events');
+
+        const number = document.createElement('span');
+        number.textContent = String(day);
+        cell.appendChild(number);
+
+        if (types.size > 0) {
+          const marks = document.createElement('span');
+          marks.className = 'marks';
+          ['vac', 'perm', 'amon'].forEach((type) => {
+            if (types.has(type)) {
+              const dot = document.createElement('i');
+              dot.className = type;
+              marks.appendChild(dot);
+            }
+          });
+          cell.appendChild(marks);
+
+          if (details.length > 0) {
+            const uniqueDetails = [...new Set(details)];
+            cell.addEventListener('mouseenter', (event) => showTooltip(event, uniqueDetails));
+            cell.addEventListener('mousemove', moveTooltip);
+            cell.addEventListener('mouseleave', hideTooltip);
+          }
+        }
+
+        grid.appendChild(cell);
+      }
+
+      const totalCells = 42;
+      const renderedCells = leading + daysInMonth;
+      for (let i = renderedCells; i < totalCells; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'soporte-day is-empty';
+        grid.appendChild(empty);
+      }
+
+      grid.onmouseleave = hideTooltip;
+      calendar.onmouseleave = hideTooltip;
+
+      // Limpiar tooltip cuando se sale de botones adyacentes (RH, Mantenimiento, etc)
+      document.querySelectorAll('.bento-reportes-actions .bento-ticket-btn').forEach((btn) => {
+        btn.addEventListener('mouseleave', hideTooltip);
+      });
+    }
+
+    async function cargarCalendarioSoporte(targetMonth = soporteCalendarCurrentMonth) {
+      const monthStart = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1);
+      monthStart.setHours(0, 0, 0, 0);
+
+      const monthLabel = document.getElementById('soporteCalendarMonthLabel');
+      if (monthLabel) {
+        const label = formatMonthLabel(monthStart);
+        monthLabel.textContent = label.charAt(0).toUpperCase() + label.slice(1);
+      }
+
+      const monthEnd = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0);
+      monthEnd.setHours(0, 0, 0, 0);
+
+      const marksMap = new Map();
+      const detailsMap = new Map();
+
+      const identidad = obtenerIdentidadUsuarioCalendario();
+      const empleadoId = await obtenerEmpleadoIdLogeado();
+
+      try {
+        let vacaciones = [];
+        let permisos = [];
+        let amonestaciones = [];
+
+        if (empleadoId) {
+          const [respVac, respPerm, respAmon] = await Promise.all([
+            fetch(`/api/vacaciones/empleado/${empleadoId}`).catch(() => null),
+            fetch(`/api/permisos/empleado/${empleadoId}`).catch(() => null),
+            fetch(`/api/amonestaciones/empleado/${empleadoId}`).catch(() => null)
+          ]);
+
+          vacaciones = (respVac && respVac.ok) ? parseApiArray(await respVac.json()) : [];
+          permisos = (respPerm && respPerm.ok) ? parseApiArray(await respPerm.json()) : [];
+          amonestaciones = (respAmon && respAmon.ok) ? parseApiArray(await respAmon.json()) : [];
+        }
+
+        if ((!vacaciones.length && !permisos.length && !amonestaciones.length) && (identidad.candidateIds.length || identidad.nameLower)) {
+          const [respVacAll, respPermAll, respAmonAll] = await Promise.all([
+            fetch('/api/vacaciones/todas').catch(() => null),
+            fetch('/api/permisos').catch(() => null),
+            fetch('/api/amonestaciones').catch(() => null)
+          ]);
+
+          const vacacionesAll = (respVacAll && respVacAll.ok) ? parseApiArray(await respVacAll.json()) : [];
+          const permisosAll = (respPermAll && respPermAll.ok) ? parseApiArray(await respPermAll.json()) : [];
+          const amonestacionesAll = (respAmonAll && respAmonAll.ok) ? parseApiArray(await respAmonAll.json()) : [];
+
+          vacaciones = vacacionesAll.filter((row) => eventoEsDelUsuario(row, identidad, empleadoId));
+          permisos = permisosAll.filter((row) => eventoEsDelUsuario(row, identidad, empleadoId));
+          amonestaciones = amonestacionesAll.filter((row) => eventoEsDelUsuario(row, identidad, empleadoId));
+        }
+
+        vacaciones.forEach((row) => {
+          const inicio = toDateOnly(row.fecha_inicio || row.fechaInicio || row.fecha);
+          const fin = toDateOnly(row.fecha_fin || row.fechaFin || row.fecha);
+          const detalle = `Vacaciones`;
+          addRangeMarks(marksMap, detailsMap, inicio, fin, 'vac', monthStart, monthEnd, detalle);
+        });
+
+        permisos.forEach((row) => {
+          const inicio = toDateOnly(row.fecha_inicio || row.fecha || row.fechaInicio);
+          const fin = toDateOnly(row.fecha_fin || row.fecha || row.fechaFin);
+          const tipo = row.tipo || 'permiso';
+          const detalle = `Permiso (${tipo})`;
+          addRangeMarks(marksMap, detailsMap, inicio, fin, 'perm', monthStart, monthEnd, detalle);
+        });
+
+        amonestaciones.forEach((row) => {
+          const fecha = toDateOnly(row.fecha_solicitud || row.fecha || row.created_at);
+          const detalle = `Amonestación`;
+          addRangeMarks(marksMap, detailsMap, fecha, fecha, 'amon', monthStart, monthEnd, detalle);
+        });
+      } catch (error) {
+        console.error('Error al cargar calendario de soporte:', error);
+      }
+
+      renderCalendarioSoporte(marksMap, detailsMap, monthStart);
+    }
+
+    function initializeNotificationsDropdown() {
+      const notificationsButton = document.getElementById('notificationsButton');
+      const notificationsPanel = document.getElementById('notificationsPanel');
+      const notificationsBadge = notificationsButton?.querySelector('.notification-badge');
+      const notificationsList = notificationsPanel?.querySelector('.notifications-list');
+      const detailModal = document.getElementById('notificationDetailModal');
+      const detailCloseButton = document.getElementById('closeNotificationDetail');
+      const detailTitle = document.getElementById('notificationDetailTitle');
+      const detailMessage = document.getElementById('notificationDetailMessage');
+      const detailImage = document.getElementById('notificationDetailImage');
+
+      if (!notificationsButton || !notificationsPanel || !notificationsList || !detailModal || !detailCloseButton || !detailTitle || !detailMessage || !detailImage) {
+        return;
+      }
+
+      if (notificationsButton.dataset.notificationsInitialized === '1') {
+        return;
+      }
+      notificationsButton.dataset.notificationsInitialized = '1';
+
+      // Forzar texto blanco al pegar en el modal de detalle
+      if (detailMessage) {
+        detailMessage.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+          const selection = window.getSelection();
+          if (!selection.rangeCount) return;
+          selection.deleteFromDocument();
+          const textNode = document.createTextNode(text);
+          selection.getRangeAt(0).insertNode(textNode);
+          selection.collapseToEnd();
+        });
+      }
+
+      const getUsernameCandidates = () => {
+        const list = [];
+        const username = (localStorage.getItem('username') || '').trim();
+        if (username) list.push(username);
+
+        const rawLogged = localStorage.getItem('loggedInUser');
+        if (rawLogged) {
+          try {
+            const parsed = JSON.parse(rawLogged);
+            const fromLogged = [parsed.username, parsed.employeeNumber, parsed.name, parsed.nombre_completo]
+              .map(v => String(v || '').trim())
+              .filter(Boolean);
+            list.push(...fromLogged);
+          } catch (_) {}
+        }
+
+        const unique = [...new Set(list)];
+        return unique;
+      };
+
+      const resolveUsername = () => {
+        const candidates = getUsernameCandidates();
+        return candidates.length ? candidates[0] : '';
+      };
+
+      const seenNotificationIds = new Set();
+      const NOTIFICATIONS_POLL_INTERVAL_MS = 3000;
+      let notificationsPollTimer = null;
+      let notificationsRequestInFlight = false;
+      let unreadNotificationKeys = new Set();
+      let hasUnreadBaseline = false;
+      let browserNotificationPermissionRequested = false;
+      const notificationMessageByKey = new Map();
+
+      const escapeHtml = (text) => String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+      const sanitizeNotificationHtml = (rawHtml) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = String(rawHtml || '');
+
+        const allowedTags = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'SPAN', 'DIV', 'P', 'UL', 'OL', 'LI', 'FONT']);
+        const allowedStyle = new Set(['color', 'font-weight', 'font-style', 'text-decoration', 'font-family', 'font-size', 'text-align']);
+
+        const sanitizeStyleValue = (value) => {
+          const clean = String(value || '').replace(/[<>]/g, '').trim();
+          if (!clean) return '';
+          if (/expression\s*\(|javascript:|url\s*\(/i.test(clean)) return '';
+          return clean;
+        };
+
+        const cleanNode = (node) => {
+          const children = Array.from(node.childNodes);
+          children.forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) {
+              return;
+            }
+
+            if (child.nodeType !== Node.ELEMENT_NODE) {
+              child.remove();
+              return;
+            }
+
+            const tag = child.tagName.toUpperCase();
+            if (!allowedTags.has(tag)) {
+              while (child.firstChild) {
+                node.insertBefore(child.firstChild, child);
+              }
+              child.remove();
+              return;
+            }
+
+            Array.from(child.attributes).forEach((attr) => {
+              const attrName = attr.name.toLowerCase();
+              if (attrName.startsWith('on')) {
+                child.removeAttribute(attr.name);
+                return;
+              }
+
+              if (attrName === 'style') {
+                const styleEntries = String(attr.value || '')
+                  .split(';')
+                  .map((entry) => entry.trim())
+                  .filter(Boolean)
+                  .map((entry) => {
+                    const [prop, ...rest] = entry.split(':');
+                    const property = String(prop || '').trim().toLowerCase();
+                    const value = sanitizeStyleValue(rest.join(':'));
+                    if (!allowedStyle.has(property) || !value) {
+                      return null;
+                    }
+                    return `${property}: ${value}`;
+                  })
+                  .filter(Boolean);
+
+                if (styleEntries.length) {
+                  child.setAttribute('style', styleEntries.join('; '));
+                } else {
+                  child.removeAttribute('style');
+                }
+                return;
+              }
+
+              if (tag === 'FONT' && (attrName === 'color' || attrName === 'face' || attrName === 'size')) {
+                return;
+              }
+
+              child.removeAttribute(attr.name);
+            });
+
+            cleanNode(child);
+          });
+        };
+
+        cleanNode(wrapper);
+        return wrapper.innerHTML.trim();
+      };
+
+      const richMessageToPlainText = (rawHtml) => {
+        const temp = document.createElement('div');
+        temp.innerHTML = sanitizeNotificationHtml(rawHtml);
+        return String(temp.textContent || '').replace(/\s+/g, ' ').trim();
+      };
+
+      const getNotificationKey = (item, index) => {
+        const notificacionId = Number.parseInt(item?.id, 10);
+        if (Number.isInteger(notificacionId) && notificacionId > 0) {
+          return `id-${notificacionId}`;
+        }
+
+        return [
+          item?.titulo || '',
+          item?.mensaje || '',
+          item?.fecha || '',
+          item?.created_at || '',
+          index
+        ].join('|');
+      };
+
+      const ensureBrowserNotificationPermission = async (forcePrompt = false) => {
+        if (!("Notification" in window)) {
+          return 'unsupported';
+        }
+
+        if (Notification.permission === 'granted' || Notification.permission === 'denied') {
+          return Notification.permission;
+        }
+
+        if (!forcePrompt && browserNotificationPermissionRequested) {
+          return Notification.permission || 'default';
+        }
+
+        browserNotificationPermissionRequested = true;
+
+        try {
+          return await Notification.requestPermission();
+        } catch (_) {
+          return Notification.permission || 'default';
+        }
+      };
+
+      const showExternalNotification = async ({ title, body, tag } = {}) => {
+        try {
+          if (!("Notification" in window)) {
+            return;
+          }
+
+          let permission = Notification.permission;
+          if (permission === 'default') {
+            permission = await ensureBrowserNotificationPermission();
+          }
+
+          if (permission !== 'granted') {
+            return;
+          }
+
+          const notification = new Notification(title || 'Nueva notificacion', {
+            body: body || 'Tienes una nueva notificacion.',
+            tag: tag || 'inicio-system-notification',
+            renotify: true,
+            silent: false,
+            icon: '/favicon.ico'
+          });
+
+          notification.onclick = () => {
+            try {
+              notification.close();
+            } catch (_) {}
+
+            window.focus();
+          };
+        } catch (error) {
+          console.warn('No se pudo mostrar notificacion externa:', error);
+        }
+      };
+
+      const renderNotifications = (items) => {
+        notificationMessageByKey.clear();
+
+        if (!items.length) {
+          notificationsList.innerHTML = `
+            <li class="notification-item is-read" data-title="Sin notificaciones" data-full-message="No hay notificaciones para mostrar.">
+              <span class="notification-dot" style="opacity:0;"></span>
+              <div class="notification-content">
+                <strong>Sin notificaciones</strong>
+                <span>No tienes notificaciones nuevas.</span>
+              </div>
+            </li>
+          `;
+          return;
+        }
+
+        notificationsList.innerHTML = items.map((item, index) => {
+          const notificationId = Number.parseInt(item.id, 10);
+          const isRead = Boolean(item.vio_notificacion);
+          const full = sanitizeNotificationHtml(item.mensaje || '');
+          const shortPlain = richMessageToPlainText(full);
+          const short = shortPlain.length > 70 ? `${shortPlain.slice(0, 67)}...` : shortPlain;
+          const messageKey = Number.isInteger(notificationId) ? `id-${notificationId}` : `idx-${index}`;
+          notificationMessageByKey.set(messageKey, full);
+          return `
+            <li class="notification-item ${isRead ? 'is-read' : ''}" data-id="${Number.isInteger(notificationId) ? notificationId : ''}" data-message-key="${escapeHtml(messageKey)}" data-title="${escapeHtml(item.titulo || 'Notificacion')}" data-foto-url="${escapeHtml(item.foto_url || '')}">
+              <span class="notification-dot"></span>
+              <div class="notification-content">
+                <strong>${escapeHtml(item.titulo || 'Notificacion')}</strong>
+                <span>${escapeHtml(short || 'Sin mensaje')}</span>
+              </div>
+            </li>
+          `;
+        }).join('');
+      };
+
+      const loadNotifications = async () => {
+        if (notificationsRequestInFlight) {
+          return;
+        }
+
+        const username = resolveUsername();
+        if (!username) {
+          unreadNotificationKeys = new Set();
+          hasUnreadBaseline = false;
+          renderNotifications([]);
+          updateBadge();
+          return;
+        }
+
+        try {
+          notificationsRequestInFlight = true;
+          const response = await fetch(`/api/notificaciones-inicio/${encodeURIComponent(username)}`, { cache: 'no-store' });
+          const data = await response.json().catch(() => ({}));
+
+          // El botón de notificaciones siempre debe estar visible
+          notificationsButton.style.display = '';
+          notificationsPanel.style.display = '';
+          
+          const list = response.ok && data.success && Array.isArray(data.notificaciones)
+            ? data.notificaciones
+            : [];
+
+          const currentUnreadKeys = new Set(
+            list
+              .map((item, index) => ({ item, index }))
+              .filter(({ item }) => !item?.vio_notificacion)
+              .map(({ item, index }) => getNotificationKey(item, index))
+          );
+
+          const hasNewUnreadNotification = hasUnreadBaseline
+            && [...currentUnreadKeys].some((key) => !unreadNotificationKeys.has(key));
+
+          if (hasNewUnreadNotification) {
+            playNotificationSound();
+
+            const firstNewUnreadEntry = list
+              .map((item, index) => ({ item, index }))
+              .find(({ item, index }) => !item?.vio_notificacion && !unreadNotificationKeys.has(getNotificationKey(item, index)));
+
+            if (firstNewUnreadEntry && (document.hidden || !document.hasFocus())) {
+              const plainBody = richMessageToPlainText(firstNewUnreadEntry.item?.mensaje || '');
+              showExternalNotification({
+                title: firstNewUnreadEntry.item?.titulo || 'Nueva notificacion',
+                body: plainBody || 'Tienes una nueva notificacion de inicio.',
+                tag: `inicio-${getNotificationKey(firstNewUnreadEntry.item, firstNewUnreadEntry.index)}`
+              });
+            }
+          }
+
+          unreadNotificationKeys = currentUnreadKeys;
+          hasUnreadBaseline = true;
+          
+          renderNotifications(list);
+          updateBadge();
+        } catch (error) {
+          console.error('Error cargando notificaciones de inicio:', error);
+          // Asegurar que el botón siga visible incluso si hay error
+          notificationsButton.style.display = '';
+          notificationsPanel.style.display = '';
+          unreadNotificationKeys = new Set();
+          hasUnreadBaseline = false;
+          renderNotifications([]);
+          updateBadge();
+        } finally {
+          notificationsRequestInFlight = false;
+        }
+      };
+
+      const updateBadge = () => {
+        const unreadCount = notificationsList.querySelectorAll('.notification-item:not(.is-read)').length;
+        if (!notificationsBadge) return;
+
+        if (unreadCount > 0) {
+          notificationsBadge.textContent = String(unreadCount);
+          notificationsBadge.style.display = 'inline-block';
+        } else {
+          notificationsBadge.style.display = 'none';
+        }
+      };
+
+      const openPanel = () => {
+        notificationsPanel.classList.add('is-open');
+        notificationsPanel.setAttribute('aria-hidden', 'false');
+        loadNotifications();
+      };
+
+      const closePanel = () => {
+        notificationsPanel.classList.remove('is-open');
+        notificationsPanel.setAttribute('aria-hidden', 'true');
+      };
+
+      const openDetailModal = (title, message, fotoUrl) => {
+        detailTitle.textContent = title || 'Notificación';
+        const safeMessage = sanitizeNotificationHtml(message || '');
+        detailMessage.innerHTML = safeMessage || 'Sin información disponible.';
+        const imageUrl = String(fotoUrl || '').trim();
+        if (imageUrl) {
+          detailImage.src = imageUrl;
+          detailImage.style.display = 'block';
+        } else {
+          detailImage.src = '';
+          detailImage.style.display = 'none';
+        }
+        detailModal.classList.add('is-open');
+        detailModal.setAttribute('aria-hidden', 'false');
+      };
+
+      const markNotificationsAsSeen = async (notificacionId) => {
+        if (!Number.isInteger(notificacionId) || notificacionId <= 0) return;
+        if (seenNotificationIds.has(notificacionId)) return;
+
+        const username = resolveUsername();
+        if (!username) return;
+
+        try {
+          const response = await fetch('/api/notificaciones-inicio/visto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, notificacionId })
+          });
+
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.success) {
+            throw new Error(data.error || 'No se pudo marcar la notificación como vista');
+          }
+
+          seenNotificationIds.add(notificacionId);
+        } catch (error) {
+          console.error('Error al marcar notificaciones de inicio como vistas:', error);
+        }
+      };
+
+      const closeDetailModal = () => {
+        detailImage.src = '';
+        detailImage.style.display = 'none';
+        detailModal.classList.remove('is-open');
+        detailModal.setAttribute('aria-hidden', 'true');
+      };
+
+      notificationsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (notificationsPanel.classList.contains('is-open')) {
+          closePanel();
+        } else {
+          openPanel();
+        }
+      });
+
+      notificationsPanel.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+
+      notificationsList.addEventListener('click', (event) => {
+        const item = event.target.closest('.notification-item');
+        if (!item) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const title = item.dataset.title || item.querySelector('strong')?.textContent?.trim() || 'Notificacion';
+        const messageKey = item.dataset.messageKey || '';
+        const fullMessage = notificationMessageByKey.get(messageKey)
+          || item.querySelector('.notification-content span')?.textContent?.trim()
+          || '';
+        const fotoUrl = item.dataset.fotoUrl || '';
+        const notificacionId = Number.parseInt(item.dataset.id || '', 10);
+
+        item.classList.add('is-read');
+        updateBadge();
+        closePanel();
+        openDetailModal(title, fullMessage, fotoUrl);
+        markNotificationsAsSeen(notificacionId);
+      });
+
+      detailCloseButton.addEventListener('click', closeDetailModal);
+      detailModal.addEventListener('click', (event) => {
+        if (event.target === detailModal) {
+          closeDetailModal();
+        }
+      });
+
+      document.addEventListener('click', () => {
+        if (notificationsPanel.classList.contains('is-open')) {
+          closePanel();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && notificationsPanel.classList.contains('is-open')) {
+          closePanel();
+        }
+
+        if (event.key === 'Escape' && detailModal.classList.contains('is-open')) {
+          closeDetailModal();
+        }
+      });
+
+      const playNotificationSound = () => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      };
+
+      const startNotificationsPolling = () => {
+        if (notificationsPollTimer) {
+          clearInterval(notificationsPollTimer);
+        }
+
+        notificationsPollTimer = setInterval(() => {
+          loadNotifications();
+        }, NOTIFICATIONS_POLL_INTERVAL_MS);
+      };
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          loadNotifications();
+        }
+      });
+
+      window.addEventListener('focus', () => {
+        loadNotifications();
+      });
+
+      window.addEventListener('beforeunload', () => {
+        if (notificationsPollTimer) {
+          clearInterval(notificationsPollTimer);
+          notificationsPollTimer = null;
+        }
+      });
+
+      if (notificationsBadge) {
+        notificationsBadge.textContent = '';
+        notificationsBadge.style.display = 'none';
+      }
+
+      const requestPermissionOnFirstGesture = () => {
+        ensureBrowserNotificationPermission(true);
+      };
+
+      window.addEventListener('click', requestPermissionOnFirstGesture, { once: true, capture: true });
+      window.addEventListener('keydown', requestPermissionOnFirstGesture, { once: true, capture: true });
+
+      loadNotifications();
+      startNotificationsPolling();
+    }
+
+    function initializePrincipalCardOptions() {
+      const modal = document.getElementById('cardOptionsModal');
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+
+    async function typeWriter() 
+    {
+      try 
+      {
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        if (!welcomeMessage) return;
+        const storedUser = localStorage.getItem('loggedInUser');
+        let nombreCompleto = '';
+
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            nombreCompleto = parsedUser.nombre_completo || parsedUser.name || parsedUser.username || '';
+          } catch (_) {}
+        }
+
+        if (!nombreCompleto) {
+          nombreCompleto = localStorage.getItem('username') || 'Invitado';
+        }
+
+        console.log('inicio: storedUser=', storedUser, 'resolved nombreCompleto=', nombreCompleto);
+
+        const primerNombre = (nombreCompleto.split(' ')[0] || '').toLowerCase();
+        const primerNombreCapitalizado = primerNombre.charAt(0).toUpperCase() + primerNombre.slice(1);
+        const nombreAnimado = primerNombreCapitalizado || 'Invitado';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = '';
+        welcomeMessage.appendChild(nameSpan);
+
+        if (window.__welcomeTypeTimer) {
+          clearInterval(window.__welcomeTypeTimer);
+        }
+
+        let index = 0;
+        window.__welcomeTypeTimer = setInterval(() => {
+          nameSpan.textContent += nombreAnimado.charAt(index);
+          index += 1;
+          if (index >= nombreAnimado.length) {
+            clearInterval(window.__welcomeTypeTimer);
+            window.__welcomeTypeTimer = null;
+          }
+        }, 90);
+      } catch (error) 
+      {
+        console.error('Error al mostrar el mensaje de bienvenida:', error);
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        welcomeMessage.innerHTML = 'Hola,&nbsp;Invitado';
+      }
+    }
+  </script>
+  <script>
+    document.body.style.display = '';
+    document.body.classList.add('topbar-ready');
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const favoriteColorBtn = document.getElementById('favoriteColorBtn');
+      if (favoriteColorBtn) 
+      {
+        favoriteColorBtn.addEventListener('click', function() 
+        {
+          this.classList.add('clicked');
+          setTimeout(() => {
+            this.classList.remove('clicked');
+          }, 600);
+          openColorModal();
+        });
+      }
+    });
+
+    let selectedColor = '#ffffff';
+    let selectedColorName = 'Blanco';
+    let originalColor = null; // Para guardar el color original
+    let originalColorName = null;
+
+    function openColorModal() 
+    {
+      originalColor = window.favoriteColor.hex;
+      originalColorName = window.favoriteColor.name;
+      const modal = document.getElementById('colorModal');
+      modal.style.display = 'block'; // Mostrar sin animaciones \"aladino\"
+      initializeColorOptions();
+    }
+
+    function closeColorModal() 
+    {
+      const modal = document.getElementById('colorModal');
+      modal.style.display = 'none'; // Cerrar de forma inmediata
+    }
+
+    function cancelColorModal() 
+    {
+      if (originalColor && originalColorName) 
+      {
+        changeGlobalColor(originalColor, originalColorName).catch(err => {
+          console.error('Error al restaurar el color original:', err);
+        });
+      }
+      closeColorModal();
+    }
+
+    function initializeColorOptions() 
+    {
+      const colorOptions = document.querySelectorAll('.color-option');
+      
+      colorOptions.forEach(option => {
+        option.addEventListener('click', function() 
+        {
+          colorOptions.forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+          const color = this.getAttribute('data-color');
+          const colorName = this.getAttribute('data-name');
+          selectedColor = color;
+          selectedColorName = colorName;
+          document.getElementById('selectedColorDisplay').style.background = color;
+          document.getElementById('colorName').textContent = colorName;
+          document.getElementById('colorHex').textContent = color.toUpperCase();
+          applyColorInRealTime(color, colorName).catch(err => {
+            console.error('Error al aplicar color en tiempo real:', err);
+          });
+        });
+      });
+    }
+
+    async function applyColorInRealTime(hex, colorName) 
+    {
+      await changeGlobalColor(hex, colorName);
+    }
+
+    function applySelectedColor() 
+    {
+      showColorAppliedNotification();
+      guardarColorEnBD(selectedColor);
+    }
+
+    function guardarColorEnBD(color) 
+    {
+      const userId = localStorage.getItem('userId');
+      fetch('/api/usuario/favorite-color', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: userId,
+          color: color
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+      })
+      .catch(err => {
+        console.error('Error al guardar el color en la base de datos:', err);
+      });
+    }
+
+    function showColorAppliedNotification() 
+    {
+      const notification = document.createElement('div');
+      notification.className = 'color-applied-notification';
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="fas fa-palette"></i>
+          <span>Color aplicado: ${selectedColorName}</span>
+        </div>
+      `;
+
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+          if (notification.parentNode) 
+          {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const closeBtn = document.getElementById('closeColorModal');
+      const cancelBtn = document.getElementById('cancelColorBtn');
+      const applyBtn = document.getElementById('applyColorBtn');
+      const modal = document.getElementById('colorModal');
+
+      closeBtn.addEventListener('click', closeColorModal);
+      cancelBtn.addEventListener('click', cancelColorModal);
+      applyBtn.addEventListener('click', function() 
+      {
+        applySelectedColor();
+        closeColorModal();
+      });
+
+      modal.addEventListener('click', function(e) 
+      {
+        if (e.target === modal) {
+          cancelColorModal(); // restaurar el color
+        }
+      });
+      initColorWheel();
+      initRGBSliders();
+    });
+  </script>
+
+  <script>
+    let currentRGB = { r: 0, g: 0, b: 0 };
+    let intensity = 100; // 0-100, controla la intensidad/brillo del color
+
+    function initColorWheel() 
+    {
+      const canvas = document.getElementById('colorWheel');
+      const ctx = canvas.getContext('2d');
+      const radius = canvas.width / 2;
+      const imageData = ctx.createImageData(canvas.width, canvas.height);
+      const data = imageData.data;
+
+      for (let i = 0; i < data.length; i += 4) 
+      {
+        const pixelIndex = i / 4;
+        const x = pixelIndex % canvas.width;
+        const y = Math.floor(pixelIndex / canvas.width);
+        
+        const dx = x - radius;
+        const dy = y - radius;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance <= radius) 
+        {
+          const hue = Math.atan2(dy, dx) * 180 / Math.PI + 180;
+          const saturation = (distance / radius) * 100;
+          const lightness = 50;
+          
+          const rgb = hslToRgb(hue, saturation, lightness);
+          data[i] = rgb.r;
+          data[i + 1] = rgb.g;
+          data[i + 2] = rgb.b;
+          data[i + 3] = 255;
+        } else {
+          data[i + 3] = 0;
+        }
+      }
+      
+      ctx.putImageData(imageData, 0, 0);
+
+      canvas.addEventListener('click', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        pickColorFromWheel(x, y, canvas, ctx);
+      });
+
+      canvas.addEventListener('mousemove', function(e) {
+        if (e.buttons === 1) { // Si está presionado
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          pickColorFromWheel(x, y, canvas, ctx);
+        }
+      });
+    }
+
+    function hslToRgb(h, s, l) 
+    {
+      s /= 100;
+      l /= 100;
+      const k = n => (n + h / 30) % 12;
+      const a = s * Math.min(l, 1 - l);
+      const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+      
+      return {
+        r: Math.round(255 * f(0)),
+        g: Math.round(255 * f(8)),
+        b: Math.round(255 * f(4))
+      };
+    }
+
+    function rgbToHex(r, g, b) 
+    {
+      return '#' + [r, g, b].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      }).join('').toUpperCase();
+    }
+
+    function hexToRgb(hex) 
+    {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 0, g: 0, b: 0 };
+    }
+
+    function pickColorFromWheel(x, y, canvas, ctx) 
+    {
+      const imageData = ctx.getImageData(x, y, 1, 1);
+      const data = imageData.data;
+      
+      currentRGB = { r: data[0], g: data[1], b: data[2] };
+      updateColorDisplay();
+      updateColorPickerPosition(x, y, canvas);
+    }
+
+    function updateColorPickerPosition(x, y, canvas) 
+    {
+      const circle = document.getElementById('colorPickerCircle');
+      circle.style.left = x + 'px';
+      circle.style.top = y + 'px';
+    }
+
+    function getEffectiveRGB()
+    {
+      const factor = Math.max(0, Math.min(1, intensity / 100));
+      return {
+        r: Math.round(currentRGB.r * factor),
+        g: Math.round(currentRGB.g * factor),
+        b: Math.round(currentRGB.b * factor)
+      };
+    }
+
+    function updateColorDisplay() 
+    {
+      const effective = getEffectiveRGB();
+      const hex = rgbToHex(effective.r, effective.g, effective.b);
+      document.getElementById('selectedColorDisplay').style.background = hex;
+      document.getElementById('colorHexInput').value = hex;
+      
+      document.getElementById('redSlider').value = currentRGB.r;
+      document.getElementById('greenSlider').value = currentRGB.g;
+      document.getElementById('blueSlider').value = currentRGB.b;
+      
+      document.getElementById('redValue').textContent = currentRGB.r;
+      document.getElementById('greenValue').textContent = currentRGB.g;
+      document.getElementById('blueValue').textContent = currentRGB.b;
+
+      // Actualizar variables globales de color seleccionado
+      selectedColor = hex;
+      selectedColorName = 'Color Personalizado';
+
+      // Aplicar el color en tiempo real al tema
+      if (typeof changeGlobalColor === 'function') {
+        changeGlobalColor(hex, selectedColorName).catch(err => {
+          console.error('Error al aplicar color en tiempo real:', err);
+        });
+      }
+    }
+
+    function initRGBSliders() 
+    {
+      const redSlider = document.getElementById('redSlider');
+      const greenSlider = document.getElementById('greenSlider');
+      const blueSlider = document.getElementById('blueSlider');
+      const hexInput = document.getElementById('colorHexInput');
+      const intensitySlider = document.getElementById('intensitySlider');
+      const intensityValue = document.getElementById('intensityValue');
+
+      [redSlider, greenSlider, blueSlider].forEach(slider => {
+        slider.addEventListener('input', function() {
+          currentRGB.r = parseInt(redSlider.value);
+          currentRGB.g = parseInt(greenSlider.value);
+          currentRGB.b = parseInt(blueSlider.value);
+          updateColorDisplay();
+        });
+      });
+
+      hexInput.addEventListener('input', function(e) {
+        const hex = e.target.value;
+        if (/^#[0-9A-F]{6}$/i.test(hex)) {
+          currentRGB = hexToRgb(hex);
+          updateColorDisplay();
+        }
+      });
+
+      intensitySlider.addEventListener('input', function() {
+        intensity = parseInt(intensitySlider.value) || 0;
+        intensityValue.textContent = intensity + '%';
+        updateColorDisplay();
+      });
+    }
+
+    function initBackgroundImage() {
+      const fileInput = document.getElementById('backgroundImageInput');
+      const clearBtn = document.getElementById('clearBackgroundBtn');
+
+      fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            backgroundImageDataUrl = event.target.result;
+            const img = document.getElementById('previewImg');
+            img.src = backgroundImageDataUrl;
+            const preview = document.getElementById('backgroundImagePreview');
+            preview.classList.add('active');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      clearBtn.addEventListener('click', function() {
+        backgroundImageDataUrl = null;
+        fileInput.value = '';
+        document.getElementById('previewImg').src = '';
+        const preview = document.getElementById('backgroundImagePreview');
+        preview.classList.remove('active');
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      // Restauración automática a través de global-color.js
+    });
+  </script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    // Small global helper to safely escape HTML used by varios widgets
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Cargar y renderizar anuncios RH en el panel de inicio
+    async function cargarAnunciosInicio() {
+      const container = document.getElementById('inicioAnunciosList');
+      if (!container) return;
+      container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:8px;">Cargando anuncios...</div>';
+      try {
+        const resp = await fetch('/api/anuncios');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        const anuncios = Array.isArray(data.anuncios) ? data.anuncios : (Array.isArray(data) ? data : []);
+        const activos = anuncios.filter(a => a.activo).slice(0, 6);
+        if (!activos.length) {
+          container.innerHTML = '<div style="color:#9ca3af; text-align:center; padding:8px;">No hay anuncios activos</div>';
+          return;
+        }
+
+        // Render the first active anuncio filling the container (full area)
+        const first = activos[0];
+        const titulo = first.titulo || 'Sin título';
+        const imgUrl = first.imagen_url || '';
+        container.innerHTML = `
+          <div class="inicio-anuncio-full" id="anuncioUiverseContainer" style="height:100%;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;overflow:hidden;">
+            <style>
+              /* From Uiverse.io by Darlley */
+              #cursor,
+              #box,
+              #text {
+                cursor: pointer;
+              }
+              #cursor {
+                overflow: visible;
+                transform: translate3d(300px, 0, 0) scale(1);
+                transform-origin: center center;
+                transform-box: fill-box;
+                animation: cursor 5s ease infinite alternate;
+              }
+              @keyframes cursor {
+                0% {
+                  opacity: 0;
+                  transform: translate3d(300px, 0, 0) scale(1);
+                }
+                30% {
+                  opacity: 1;
+                  transform: translate3d(0, 0, 0) scale(1);
+                }
+                60% {
+                  opacity: 1;
+                  transform: translate3d(-200px, -200px, 0) scale(1);
+                }
+                65% {
+                  opacity: 1;
+                  transform: translate3d(-200px, -200px, 0) scale(0.95);
+                }
+                70% {
+                  opacity: 1;
+                  transform: translate3d(-200px, -200px, 0) scale(1);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translate3d(-300px, -50px, 0) scale(1);
+                }
+              }
+              #box {
+                opacity: 0;
+                animation: box 5s ease infinite alternate;
+              }
+              @keyframes box {
+                0%,
+                60% {
+                  opacity: 0;
+                }
+                65%,
+                100% {
+                  opacity: 1;
+                }
+              }
+              /* hide SVG text because we render title via HTML overlay for proper wrapping */
+              #text {
+                display: none;
+              }
+            </style>
+            <!-- From Uiverse.io by Darlley -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 614 390"
+              height="250"
+              width="auto"
+            >
+              <g id="Frame">
+                <g id="box-figma">
+                  <text
+                    id="text"
+                    x="58"
+                    y="112"
+                  >${escapeHtml(titulo)}</text>
+                  <g id="box">
+                    <path
+                      stroke-width="4"
+                      stroke="#2563EB"
+                      fill-opacity="0.05"
+                      fill="#2563EB"
+                      d="M587 20H28V306H587V20Z"
+                      id="figny9-box"
+                    ></path>
+                    <path
+                      stroke-width="2"
+                      stroke="#2563EB"
+                      fill="white"
+                      d="M33 15H23V25H33V15Z"
+                      id="figny9-adjust-1"
+                    ></path>
+                    <path
+                      stroke-width="2"
+                      stroke="#2563EB"
+                      fill="white"
+                      d="M33 301H23V311H33V301Z"
+                      id="figny9-adjust-3"
+                    ></path>
+                    <path
+                      stroke-width="2"
+                      stroke="#2563EB"
+                      fill="white"
+                      d="M592 301H582V311H592V301Z"
+                      id="figny9-adjust-4"
+                    ></path>
+                    <path
+                      stroke-width="2"
+                      stroke="#2563EB"
+                      fill="white"
+                      d="M592 15H582V25H592V15Z"
+                      id="figny9-adjust-2"
+                    ></path>
+                  </g>
+            <!-- Render title inside SVG using foreignObject so it is clipped by the blue box -->
+            <foreignObject x="28" y="70" width="559" height="200">
+              <div xmlns="http://www.w3.org/1999/xhtml" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+                <div style="color:#ffffff; font-weight:700; font-size:clamp(10px,2vw,27px); line-height:1.05; word-break:break-word; text-align:center; width:86%;">${escapeHtml(titulo)}</div>
+              </div>
+            </foreignObject>
+                  <g id="cursor">
+                    <path
+                      stroke-width="2"
+                      stroke="white"
+                      fill="#2563EB"
+                      d="M453.383 343L448 317L471 331L459.745 333.5L453.383 343Z"
+                      id="Vector 273"
+                    ></path>
+                    <path
+                      fill="#2563EB"
+                      d="M587 343H469.932V376H587V343Z"
+                      id="Rectangle 786"
+                    ></path>
+                    <text
+                      x="528"
+                      y="362"
+                      fill="white"
+                      font-size="14"
+                      font-family="Century Gothic"
+                      font-weight="700"
+                      text-anchor="middle"
+                    >Administrador</text>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </div>
+        `;
+        const area = container.querySelector('#anuncioUiverseContainer');
+        if (area) {
+          area.addEventListener('click', () => openAnuncioModal(imgUrl, titulo));
+        }
+      } catch (err) {
+        console.error('Error cargando anuncios para inicio:', err);
+        container.innerHTML = '<div style="color:#fca5a5; text-align:center; padding:8px;">No se pudieron cargar anuncios</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      cargarAnunciosInicio();
+    });
+    
+    // Modal for full-size anuncio
+    function openAnuncioModal(imgUrl, titulo) {
+      let modal = document.getElementById('anuncioFullModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'anuncioFullModal';
+        modal.style.position = 'fixed';
+        modal.style.inset = '0';
+        modal.style.background = 'rgba(0,0,0,0.8)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '4000';
+        modal.innerHTML = `
+          <div id="anuncioFullContent" style="position:relative; width:auto; height:auto; max-width:80vw; max-height:80vh; border-radius:12px; overflow:hidden; background:#000;">
+            <button id="anuncioFullClose" aria-label="Cerrar" style="position:absolute; right:12px; top:12px; z-index:4101; background:rgba(255,255,255,0.12); border:none; color:#fff; padding:8px 10px; border-radius:8px; cursor:pointer;">✕</button>
+            <img id="anuncioFullImage" src="" alt="Anuncio" style="width:100%; object-fit:cover; display:none;">
+            <div id="anuncioFullTitle" style = "padding: 2vh; text-align: center; font-size: 3vw; background: rgba(0,0,0,0.25);"></div>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeAnuncioModal();
+        });
+        modal.querySelector('#anuncioFullClose').addEventListener('click', closeAnuncioModal);
+      }
+
+      const imgEl = document.getElementById('anuncioFullImage');
+      const titleEl = document.getElementById('anuncioFullTitle');
+      if (imgUrl) {
+        imgEl.src = imgUrl;
+        imgEl.style.display = 'block';
+      } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+      }
+      titleEl.textContent = titulo || 'Sin título';
+      modal.style.display = 'flex';
+    }
+
+    function closeAnuncioModal() {
+      const modal = document.getElementById('anuncioFullModal');
+      if (!modal) return;
+      modal.style.display = 'none';
+    }
+  </script>
+</body>
+</html> 

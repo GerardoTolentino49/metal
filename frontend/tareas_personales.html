@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mis Tareas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <link rel="stylesheet" href="styles/tareas_personales.css">
+</head>
+<body>
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu visible" id="tareasMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Tareas (Nuevo)
+        <div class="submenu" id="tareasSubmenu">
+          <a href="tareas_personales.html" class="submenu-item">Tareas Personales</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Ajustes
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal: Kanban Board -->
+  <div class="main-content">
+    <div class="kanban-container">
+      <!-- Header del Kanban -->
+      <div class="kanban-header">
+        <h1 class="kanban-title">
+          <i class="fas fa-tasks"></i> Mis Tareas
+        </h1>
+        <button class="add-task-btn" id="addTaskBtn">
+          <i class="fas fa-plus"></i>
+          Nueva Tarea
+        </button>
+      </div>
+
+      <!-- Tablero Kanban -->
+      <div class="kanban-board">
+        <!-- Columna: Por Hacer -->
+        <div class="kanban-column" data-status="todo">
+          <div class="column-header">
+            <div class="column-title">
+              Por Hacer
+            </div>
+            <span class="task-count" id="todoCount">0</span>
+              <button class="column-add-btn" data-state="todo" title="Nueva tarea en Por Hacer"><i class="fas fa-plus"></i></button>
+          </div>
+          <div class="tasks-container" id="todoTasks">
+            <!-- Las tareas se cargarán aquí -->
+          </div>
+        </div>
+
+        <!-- Columna: En Progreso -->
+        <div class="kanban-column" data-status="in-progress">
+          <div class="column-header">
+            <div class="column-title">
+              En Progreso
+            </div>
+            <span class="task-count" id="inProgressCount">0</span>
+              <button class="column-add-btn" data-state="in-progress" title="Nueva tarea en En Progreso"><i class="fas fa-plus"></i></button>
+          </div>
+          <div class="tasks-container" id="inProgressTasks">
+            <!-- Las tareas se cargarán aquí -->
+          </div>
+        </div>
+
+        <!-- Columna: Completado -->
+        <div class="kanban-column" data-status="done">
+          <div class="column-header">
+            <div class="column-title">
+              Completado
+            </div>
+            <span class="task-count" id="doneCount">0</span>
+              <button class="column-add-btn" data-state="done" title="Nueva tarea en Completado"><i class="fas fa-plus"></i></button>
+          </div>
+          <div class="tasks-container" id="doneTasks">
+            <!-- Las tareas se cargarán aquí -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Calendario Organizador -->
+  <div class="planner-cta">
+    <button class="calendar-organizer-btn" id="openCalendarBtn">
+      <i class="fas fa-calendar-check"></i>
+      Calendario Organizador
+    </button>
+  </div>
+
+  <!-- Modal para Crear/Editar Tarea -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Nueva Tarea</h2>
+      </div>
+      <form id="taskForm">
+        <div class="form-group">
+          <label class="form-label" for="taskTitle">Título de la Tarea *</label>
+          <input type="text" id="taskTitle" class="form-input" placeholder="Ej: Revisar documentación" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="taskDescription">Descripción</label>
+          <textarea id="taskDescription" class="form-textarea" placeholder="Describe los detalles de la tarea..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="taskPriority">Prioridad *</label>
+          <select id="taskPriority" class="form-select" required>
+            <option value="low">Baja</option>
+            <option value="medium" selected>Media</option>
+            <option value="high">Alta</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="taskStatus">Estado *</label>
+          <select id="taskStatus" class="form-select" required>
+            <option value="todo" selected>Por Hacer</option>
+            <option value="in-progress">En Progreso</option>
+            <option value="done">Completado</option>
+          </select>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="modal-btn modal-btn-secondary" id="cancelBtn">Cancelar</button>
+          <button type="submit" class="modal-btn modal-btn-primary" id="saveBtn">Guardar Tarea</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Calendario Organizador -->
+  <div class="modal-overlay" id="calendarModal">
+    <div class="modal-content calendar-modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Calendario Organizador</h2>
+        <button class="close-modal-btn" id="closeCalendarBtn">&times;</button>
+      </div>
+
+      <div class="calendar-shell">
+        <div class="calendar-left">
+          <div class="month-bar">
+            <button class="month-nav-btn" id="prevMonthBtn" title="Mes anterior"><i class="fas fa-chevron-left"></i></button>
+            <div class="month-label" id="eventsMonthLabel"></div>
+            <button class="month-nav-btn" id="nextMonthBtn" title="Mes siguiente"><i class="fas fa-chevron-right"></i></button>
+            <input type="month" id="calendarMonth" class="form-input month-hidden-input" aria-label="Seleccionar mes">
+          </div>
+          <div class="calendar-weekdays">
+            <div class="weekday-header">Dom</div>
+            <div class="weekday-header">Lun</div>
+            <div class="weekday-header">Mar</div>
+            <div class="weekday-header">Mié</div>
+            <div class="weekday-header">Jue</div>
+            <div class="weekday-header">Vie</div>
+            <div class="weekday-header">Sáb</div>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <div class="calendar-right">
+          <div class="events-header">
+            <div>
+              <p class="events-title">Eventos del mes</p>
+              <p class="events-subtitle">Lista de todos los eventos del mes seleccionado</p>
+            </div>
+            <div class="events-month" id="eventsMonthSecondary"></div>
+          </div>
+          <div class="month-events-list" id="monthEventsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Día / Evento -->
+  <div class="modal-overlay" id="dayEventModal">
+    <div class="modal-content day-modal-content">
+      <div class="modal-header day-modal-header">
+        <div class="day-info-header">
+          <h2 class="modal-title">Gestionar día</h2>
+          <p class="day-date-label" id="selectedDateLabel">Selecciona un día</p>
+        </div>
+        <button class="close-modal-btn" id="closeDayModalBtn">&times;</button>
+      </div>
+
+      <div class="day-modal-body">
+        <div class="day-events-section">
+          <h3 class="section-title">Eventos de este día</h3>
+          <div class="day-events" id="dayEventsList"></div>
+        </div>
+
+        <div class="calendar-form day-event-form">
+          <h3 class="section-title">Nuevo evento</h3>
+          <div class="form-group">
+            <label class="form-label" for="dayEventDate">Fecha</label>
+            <input type="date" id="dayEventDate" class="form-input" readonly>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dayEventTitle">Título del evento *</label>
+            <input type="text" id="dayEventTitle" class="form-input" placeholder="Ej: Presentación mensual" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dayEventDescription">Notas</label>
+            <textarea id="dayEventDescription" class="form-textarea" placeholder="Detalles o entregables..." maxlength="300"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dayEventDone">
+              <input type="checkbox" id="dayEventDone"> Marcar como completado
+            </label>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="modal-btn modal-btn-secondary" id="resetDayEventBtn">Limpiar</button>
+            <button type="button" class="modal-btn modal-btn-primary" id="saveDayEventBtn">Guardar evento</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Compartir Tarea -->
+  <div class="modal-overlay" id="shareModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Compartir Tarea</h2>
+      </div>
+      <div class="form-group search-users">
+        <label class="form-label" for="searchUser">Buscar Usuario</label>
+        <input type="text" id="searchUser" class="form-input" placeholder="Buscar por nombre...">
+      </div>
+      <div class="users-list" id="usersList">
+        <!-- Los usuarios se cargarán aquí -->
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn modal-btn-secondary" id="closeShareBtn">Cerrar</button>
+        <button type="button" class="modal-btn modal-btn-primary" id="confirmShareBtn">Compartir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Comentarios de Tarea -->
+  <div class="modal-overlay" id="commentsModal">
+    <div class="modal-content comments-modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="commentsTaskTitle">Comentarios de la Tarea</h2>
+        <button class="close-modal-btn" id="closeCommentsBtn">&times;</button>
+      </div>
+      <div class="comments-shell">
+        <div class="comments-left" id="commentsLeft">
+          <!-- Descripción de la tarea se mostrará aquí -->
+        </div>
+        <div class="comments-right">
+          <div class="comments-container" id="commentsContainer">
+            <!-- Los comentarios se cargarán aquí -->
+          </div>
+          <div class="comments-form">
+            <textarea id="commentInput" class="form-textarea" placeholder="Escribe tu comentario..." maxlength="500"></textarea>
+            <div class="comment-form-actions">
+              <span class="char-count"><span id="charCount">0</span>/500</span>
+              <button type="button" class="modal-btn modal-btn-primary" id="addCommentBtn">Agregar Comentario</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón flotante eliminado (usamos botón en header y por-columna) -->
+
+  <!-- Modal de Alerta Personalizada -->
+  <div class="modal-overlay custom-alert-overlay" id="customAlertModal">
+    <div class="modal-content custom-alert-content">
+      <div class="custom-alert-icon">
+        <i class="fas fa-info-circle"></i>
+      </div>
+      <p class="custom-alert-message" id="customAlertMessage"></p>
+      <button class="modal-btn modal-btn-primary custom-alert-btn" id="customAlertOkBtn">OK</button>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script src="js/tareas_db.js"></script>
+  <script src="js/calendario_db.js"></script>
+  
+  <script>
+    // Alerta personalizada
+    function showAlert(message) {
+      const alertModal = document.getElementById('customAlertModal');
+      const alertMessage = document.getElementById('customAlertMessage');
+      const alertOkBtn = document.getElementById('customAlertOkBtn');
+      
+      if (alertMessage) alertMessage.textContent = message;
+      if (alertModal) alertModal.classList.add('active');
+      
+      const closeAlert = () => {
+        if (alertModal) alertModal.classList.remove('active');
+      };
+      
+      if (alertOkBtn) {
+        alertOkBtn.onclick = closeAlert;
+      }
+      
+      if (alertModal) {
+        alertModal.onclick = (e) => {
+          if (e.target === alertModal) closeAlert();
+        };
+      }
+    }
+
+    // Sistema de gestión de tareas con BD
+    let tasks = [];
+    let editingTaskId = null;
+    let monthlyEvents = [];
+    let selectedDate = null;
+
+    // Cargar tareas del localStorage
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('kanbanTasks');
+      if (savedTasks) {
+        tasks = JSON.parse(savedTasks);
+      }
+      renderTasks();
+    }
+
+    // Guardar tareas en BD y localStorage como respaldo
+    function saveTasks() {
+      localStorage.setItem('kanbanTasks', JSON.stringify(tasks));
+      // No llamar a BD aquí, lo hacen las funciones específicas
+    }
+
+    // Renderizar todas las tareas
+    function renderTasks() {
+      // Limpiar todas las columnas
+      document.getElementById('todoTasks').innerHTML = '';
+      document.getElementById('inProgressTasks').innerHTML = '';
+      document.getElementById('doneTasks').innerHTML = '';
+
+      // Contadores
+      let todoCount = 0;
+      let inProgressCount = 0;
+      let doneCount = 0;
+
+      // Renderizar cada tarea en su columna correspondiente
+      tasks.forEach(task => {
+        const taskElement = createTaskElement(task);
+        const container = document.getElementById(getContainerId(task.status));
+        if (container) {
+          container.appendChild(taskElement);
+        }
+
+        // Actualizar contadores
+        if (task.status === 'todo') todoCount++;
+        else if (task.status === 'in-progress') inProgressCount++;
+        else if (task.status === 'done') doneCount++;
+      });
+
+      // Actualizar contadores visuales
+      document.getElementById('todoCount').textContent = todoCount;
+      document.getElementById('inProgressCount').textContent = inProgressCount;
+      document.getElementById('doneCount').textContent = doneCount;
+    }
+
+    // Obtener el ID del contenedor según el estado
+    function getContainerId(status) {
+      const containerMap = {
+        'todo': 'todoTasks',
+        'in-progress': 'inProgressTasks',
+        'done': 'doneTasks'
+      };
+      return containerMap[status];
+    }
+
+    // Crear elemento de tarea
+    function createTaskElement(task) {
+      const taskDiv = document.createElement('div');
+      taskDiv.className = 'task-card';
+      // Add status-specific class for styling (todo, in-progress, done)
+      if (task.status === 'in-progress') taskDiv.classList.add('status-in-progress');
+      else if (task.status === 'done') taskDiv.classList.add('status-done');
+      else taskDiv.classList.add('status-todo');
+      taskDiv.draggable = true;
+      taskDiv.dataset.taskId = task.id;
+
+      const priorityClass = `priority-${task.priority}`;
+      const priorityText = {
+        'low': 'Baja',
+        'medium': 'Media',
+        'high': 'Alta'
+      }[task.priority];
+
+      // Generar badges de usuarios compartidos
+      let sharedUsersHtml = '';
+      if (task.sharedWith && task.sharedWith.length > 0) {
+        sharedUsersHtml = '<div class="shared-users">';
+        task.sharedWith.forEach(user => {
+          sharedUsersHtml += `<div class="shared-user-badge" title="${escapeHtml(user.nombre)}">
+            <i class="fas fa-user"></i> ${escapeHtml(user.nombre.split(' ')[0])}
+          </div>`;
+        });
+        sharedUsersHtml += '</div>';
+      }
+
+      taskDiv.innerHTML = `
+        <div class="task-header">
+          <h3 class="task-title">${escapeHtml(task.title)}</h3>
+          <div class="task-actions">
+            <button class="task-action-btn share" onclick="shareTask('${task.id}')" title="Compartir tarea">
+              <i class="fas fa-share-alt"></i>
+            </button>
+            <button class="task-action-btn edit" onclick="editTask('${task.id}')" title="Editar tarea">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="task-action-btn delete" onclick="deleteTask('${task.id}')" title="Eliminar tarea">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        ${task.description ? `<p class="task-description">${escapeHtml(task.description)}</p>` : ''}
+        ${sharedUsersHtml}
+        <div class="task-footer">
+          <span class="task-priority ${priorityClass}">${priorityText}</span>
+          <span class="task-date">
+            <i class="fas fa-calendar"></i>
+            ${formatDate(task.createdAt)}
+          </span>
+        </div>
+      `;
+
+      // Eventos de drag and drop
+      taskDiv.addEventListener('dragstart', handleDragStart);
+      taskDiv.addEventListener('dragend', handleDragEnd);
+
+      // Evento para abrir comentarios
+      taskDiv.addEventListener('click', (e) => {
+        // No abrir si el clic es en los botones de acción
+        if (!e.target.closest('.task-actions')) {
+          openCommentsModal(task.id);
+        }
+      });
+
+      return taskDiv;
+    }
+
+    // Escapar HTML para prevenir XSS
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Formatear fecha
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    // Drag and Drop handlers
+    let draggedElement = null;
+
+    function handleDragStart(e) {
+      draggedElement = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.innerHTML);
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      
+      // Remover todas las clases drag-over
+      document.querySelectorAll('.kanban-column').forEach(col => {
+        col.classList.remove('drag-over');
+      });
+    }
+
+    // Configurar drag and drop en las columnas
+    function setupDragAndDrop() {
+      const columns = document.querySelectorAll('.kanban-column');
+      
+      columns.forEach(column => {
+        column.addEventListener('dragover', e => {
+          e.preventDefault();
+          column.classList.add('drag-over');
+        });
+
+        column.addEventListener('dragleave', e => {
+          column.classList.remove('drag-over');
+        });
+
+        column.addEventListener('drop', e => {
+          e.preventDefault();
+          column.classList.remove('drag-over');
+          
+          if (draggedElement) {
+            const taskId = draggedElement.dataset.taskId;
+            const newStatus = column.dataset.status;
+            
+            // Actualizar el estado de la tarea
+            updateTaskStatus(taskId, newStatus);
+          }
+        });
+      });
+    }
+
+    // Actualizar estado de la tarea
+    async function updateTaskStatus(taskId, newStatus) {
+      const taskIndex = tasks.findIndex(t => t.id === taskId);
+      if (taskIndex !== -1) {
+        tasks[taskIndex].status = newStatus;
+        tasks[taskIndex].updatedAt = new Date().toISOString();
+        saveTasks();
+        // Guardar en BD
+        await updateTaskStatusDB(taskId, newStatus);
+        renderTasks();
+        setupDragAndDrop();
+      }
+    }
+
+    // Modal de tarea
+    const taskModal = document.getElementById('taskModal');
+    const taskForm = document.getElementById('taskForm');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const addTaskBtnFloat = document.getElementById('addTaskBtnFloat');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    // Función para abrir modal para nueva tarea
+    // si se proporciona `fixedState`, el selector de estado se oculta
+    function openNewTaskModal(fixedState = null) {
+      editingTaskId = null;
+      document.getElementById('modalTitle').textContent = 'Nueva Tarea';
+      taskForm.reset();
+
+      const statusGroup = document.querySelector('#taskStatus').closest('.form-group');
+      if (fixedState) {
+        // ocultar select y fijar valor mediante un input hidden
+        if (statusGroup) statusGroup.style.display = 'none';
+        let hidden = document.getElementById('taskStatusHidden');
+        if (!hidden) {
+          hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.id = 'taskStatusHidden';
+          hidden.name = 'taskStatus';
+          document.getElementById('taskForm').appendChild(hidden);
+        }
+        hidden.value = fixedState;
+        // set select value too in case it's used elsewhere
+        document.getElementById('taskStatus').value = fixedState;
+      } else {
+        if (statusGroup) statusGroup.style.display = '';
+        const hidden = document.getElementById('taskStatusHidden');
+        if (hidden) hidden.remove();
+      }
+
+      taskModal.classList.add('active');
+    }
+
+    // Abrir modal con botón original
+    if (addTaskBtn) addTaskBtn.addEventListener('click', () => openNewTaskModal(null));
+
+    // Abrir modal con botón flotante (protegido — elemento eliminado)
+    if (addTaskBtnFloat) addTaskBtnFloat.addEventListener('click', () => openNewTaskModal(null));
+
+    // Abrir modal desde cada columna (fija el estado y oculta el selector)
+    document.querySelectorAll('.column-add-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const state = btn.dataset.state || null;
+        openNewTaskModal(state);
+      });
+    });
+
+    // Cerrar modal
+    cancelBtn.addEventListener('click', () => {
+      taskModal.classList.remove('active');
+    });
+
+    // Cerrar modal al hacer clic fuera
+    taskModal.addEventListener('click', (e) => {
+      if (e.target === taskModal) {
+        taskModal.classList.remove('active');
+      }
+    });
+
+    // Guardar tarea
+    taskForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const hiddenStatus = document.getElementById('taskStatusHidden');
+      const taskData = {
+        title: document.getElementById('taskTitle').value,
+        description: document.getElementById('taskDescription').value,
+        priority: document.getElementById('taskPriority').value,
+        status: hiddenStatus ? hiddenStatus.value : document.getElementById('taskStatus').value,
+      };
+
+      if (editingTaskId) {
+        // Editar tarea existente
+        const taskIndex = tasks.findIndex(t => t.id === editingTaskId);
+        if (taskIndex !== -1) {
+          tasks[taskIndex] = {
+            ...tasks[taskIndex],
+            ...taskData,
+            updatedAt: new Date().toISOString()
+          };
+          // Guardar en BD
+          await saveTaskToDB(tasks[taskIndex]);
+        }
+      } else {
+        // Crear nueva tarea
+        const newTask = {
+          id: generateId(),
+          ...taskData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          existsInDB: false
+        };
+        tasks.push(newTask);
+        // Guardar en BD
+        await saveTaskToDB(newTask);
+      }
+
+      saveTasks();
+      renderTasks();
+      setupDragAndDrop();
+      taskModal.classList.remove('active');
+      taskForm.reset();
+    });
+
+    // Editar tarea
+    window.editTask = function(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        editingTaskId = taskId;
+        document.getElementById('modalTitle').textContent = 'Editar Tarea';
+        document.getElementById('taskTitle').value = task.title;
+        document.getElementById('taskDescription').value = task.description || '';
+        document.getElementById('taskPriority').value = task.priority;
+        // Ensure status selector is visible when editing
+        const statusGroup = document.querySelector('#taskStatus').closest('.form-group');
+        if (statusGroup) statusGroup.style.display = '';
+        const hidden = document.getElementById('taskStatusHidden');
+        if (hidden) hidden.remove();
+        document.getElementById('taskStatus').value = task.status;
+        taskModal.classList.add('active');
+      }
+    };
+
+    // Eliminar tarea
+    window.deleteTask = function(taskId) {
+      if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+        tasks = tasks.filter(t => t.id !== taskId);
+        saveTasks();
+        renderTasks();
+        setupDragAndDrop();
+      }
+    };
+
+    // Variables para compartir tareas
+    let shareContext = { type: null, id: null };
+    let allUsers = [];
+    let selectedUsers = [];
+
+    // Compartir tarea
+    window.shareTask = async function(taskId) {
+      shareContext = { type: 'task', id: taskId };
+      const task = tasks.find(t => t.id === taskId);
+      
+      if (!task) return;
+      
+      // Cargar usuarios compartidos actuales
+      selectedUsers = task.sharedWith ? [...task.sharedWith] : [];
+      
+      // Cargar todos los usuarios de la base de datos
+      await loadUsers();
+      
+      // Mostrar modal
+      document.getElementById('shareModal').classList.add('active');
+    };
+
+    // Cargar usuarios desde la base de datos
+    async function loadUsers() {
+      try {
+        const response = await fetch('/api/usuarios');
+        if (!response.ok) throw new Error('Error al cargar usuarios');
+        
+        const data = await response.json();
+        allUsers = data.map(user => ({
+          id: user.id,
+          nombre: user.nombre_completo || user.nombre || user.name,
+          departamento: user.departamento || user.department || 'General',
+          username: user.username
+        }));
+        
+        renderUsersList();
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+        showAlert('No se pudieron cargar los usuarios. Por favor, intenta de nuevo.');
+      }
+    }
+
+    // Renderizar lista de usuarios
+    function renderUsersList(searchTerm = '') {
+      const usersList = document.getElementById('usersList');
+      usersList.innerHTML = '';
+      
+      // Filtrar usuarios según búsqueda
+      const filteredUsers = allUsers.filter(user => {
+        const searchLower = searchTerm.toLowerCase();
+        const nombre = (user.nombre || user.name || '').toLowerCase();
+        const departamento = (user.departamento || user.department || '').toLowerCase();
+        
+        return nombre.includes(searchLower) || departamento.includes(searchLower);
+      });
+      
+      if (filteredUsers.length === 0) {
+        usersList.innerHTML = '<p style="text-align: center; color: var(--text-color); opacity: 0.6;">No se encontraron usuarios</p>';
+        return;
+      }
+      
+      filteredUsers.forEach(user => {
+        const isSelected = selectedUsers.some(u => u.id === user.id);
+        
+        const userItem = document.createElement('div');
+        userItem.className = `user-item ${isSelected ? 'selected' : ''}`;
+        userItem.innerHTML = `
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(user.nombre || user.name || 'Sin nombre')}</div>
+            <div class="user-department">${escapeHtml(user.departamento || user.department || 'Sin departamento')}</div>
+          </div>
+          <input type="checkbox" class="user-checkbox" ${isSelected ? 'checked' : ''}>
+        `;
+        
+        userItem.addEventListener('click', () => toggleUserSelection(user, userItem));
+        usersList.appendChild(userItem);
+      });
+    }
+
+    // Alternar selección de usuario
+    function toggleUserSelection(user, userItem) {
+      const checkbox = userItem.querySelector('.user-checkbox');
+      const isSelected = selectedUsers.some(u => u.id === user.id);
+      
+      if (isSelected) {
+        selectedUsers = selectedUsers.filter(u => u.id !== user.id);
+        userItem.classList.remove('selected');
+        checkbox.checked = false;
+      } else {
+        selectedUsers.push(user);
+        userItem.classList.add('selected');
+        checkbox.checked = true;
+      }
+    }
+
+    // Búsqueda de usuarios
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('searchUser');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          renderUsersList(e.target.value);
+        });
+      }
+    });
+
+    // Cerrar modal de compartir
+    const closeShareBtn = document.getElementById('closeShareBtn');
+    const shareModal = document.getElementById('shareModal');
+    
+    if (closeShareBtn) {
+      closeShareBtn.addEventListener('click', () => {
+        shareModal.classList.remove('active');
+        selectedUsers = [];
+        shareContext = { type: null, id: null };
+      });
+    }
+
+    // Confirmar compartir
+    const confirmShareBtn = document.getElementById('confirmShareBtn');
+    if (confirmShareBtn) {
+      confirmShareBtn.addEventListener('click', async () => {
+        if (!shareContext.id || !shareContext.type) return;
+
+        const userIds = selectedUsers.map(u => u.id);
+
+        try {
+          if (shareContext.type === 'task') {
+            const taskIndex = tasks.findIndex(t => t.id === shareContext.id);
+            await shareTaskToDB(shareContext.id, userIds);
+
+            if (taskIndex !== -1) {
+              tasks[taskIndex].sharedWith = [...selectedUsers];
+              saveTasks();
+              renderTasks();
+              setupDragAndDrop();
+            }
+
+            showAlert('Tarea compartida exitosamente');
+          } else if (shareContext.type === 'event') {
+            const eventIndex = monthlyEvents.findIndex(e => e.id === shareContext.id);
+            if (eventIndex !== -1) {
+              await shareCalendarEventToDB(shareContext.id, userIds);
+              monthlyEvents[eventIndex].sharedWith = [...selectedUsers];
+              saveMonthlyEvents();
+              renderMonthlyEvents();
+            }
+            showAlert('Evento compartido exitosamente');
+          }
+        } catch (error) {
+          console.error('Error al compartir:', error);
+          showAlert('No se pudo completar la acción. Intenta nuevamente.');
+        } finally {
+          shareModal.classList.remove('active');
+          selectedUsers = [];
+          shareContext = { type: null, id: null };
+        }
+      });
+    }
+
+    // Cerrar modal al hacer clic fuera
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) {
+        shareModal.classList.remove('active');
+        selectedUsers = [];
+        shareContext = { type: null, id: null };
+      }
+    });
+
+    // ==================== CALENDARIO ORGANIZADOR ====================
+
+    const calendarModal = document.getElementById('calendarModal');
+    const openCalendarBtn = document.getElementById('openCalendarBtn');
+    const closeCalendarBtn = document.getElementById('closeCalendarBtn');
+    const calendarMonthInput = document.getElementById('calendarMonth');
+    const eventsMonthLabel = document.getElementById('eventsMonthLabel');
+    const eventsMonthSecondary = document.getElementById('eventsMonthSecondary');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const monthEventsList = document.getElementById('monthEventsList');
+
+    // Modal de día
+    const dayEventModal = document.getElementById('dayEventModal');
+    const closeDayModalBtn = document.getElementById('closeDayModalBtn');
+    const dayEventsList = document.getElementById('dayEventsList');
+    const dayEventDateInput = document.getElementById('dayEventDate');
+    const dayEventTitleInput = document.getElementById('dayEventTitle');
+    const dayEventDescriptionInput = document.getElementById('dayEventDescription');
+    const dayEventDoneInput = document.getElementById('dayEventDone');
+    const saveDayEventBtn = document.getElementById('saveDayEventBtn');
+    const resetDayEventBtn = document.getElementById('resetDayEventBtn');
+    const selectedDateLabel = document.getElementById('selectedDateLabel');
+
+    async function loadMonthlyEvents() {
+      try {
+        const events = await loadCalendarEventsFromDB();
+        monthlyEvents = events.map(ev => ({
+          id: ev.id,
+          title: ev.titulo,
+          description: ev.descripcion || '',
+          date: ev.fecha,
+          month: ev.mes,
+          done: ev.completado || false,
+          sharedWith: ev.compartidos || []
+        }));
+      } catch (error) {
+        console.error('Error cargando eventos:', error);
+        // Fallback a localStorage si hay error
+        const stored = localStorage.getItem('monthlyEvents');
+        monthlyEvents = stored ? JSON.parse(stored) : [];
+      }
+    }
+
+    function saveMonthlyEvents() {
+      localStorage.setItem('monthlyEvents', JSON.stringify(monthlyEvents));
+    }
+
+    function getCurrentMonthValue() {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    }
+
+    function setDefaultPlannerDates() {
+      const fallbackMonth = getCurrentMonthValue();
+      if (calendarMonthInput && !calendarMonthInput.value) {
+        calendarMonthInput.value = fallbackMonth;
+      }
+      const currentMonth = calendarMonthInput?.value || fallbackMonth;
+      const targetDate = (selectedDate && isDateInMonth(selectedDate, currentMonth))
+        ? selectedDate
+        : `${currentMonth}-01`;
+
+      setSelectedDate(targetDate);
+    }
+
+    function getMonthLabel(monthValue) {
+      const names = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      if (!monthValue || monthValue.length < 7) return '';
+      const [year, month] = monthValue.split('-');
+      const monthIndex = parseInt(month, 10) - 1;
+      return `${names[monthIndex] || ''} ${year}`;
+    }
+
+    function isDateInMonth(dateStr, monthValue) {
+      return dateStr && monthValue && dateStr.startsWith(monthValue);
+    }
+
+    function setSelectedDate(dateStr) {
+      selectedDate = dateStr;
+      if (dayEventDateInput) dayEventDateInput.value = dateStr;
+      if (selectedDateLabel) {
+        selectedDateLabel.textContent = dateStr ? `\u2022 ${formatDate(dateStr)}` : 'Selecciona un día';
+      }
+      highlightSelectedCell();
+    }
+
+    function highlightSelectedCell() {
+      const grid = calendarGrid;
+      if (!grid) return;
+      grid.querySelectorAll('.day-cell').forEach(cell => {
+        if (cell.dataset.date === selectedDate) {
+          cell.classList.add('selected');
+        } else {
+          cell.classList.remove('selected');
+        }
+      });
+    }
+
+    function renderCalendarGrid() {
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      const monthValue = calendarMonthInput?.value || getCurrentMonthValue();
+      if (eventsMonthLabel) {
+        eventsMonthLabel.textContent = getMonthLabel(monthValue);
+      }
+
+      const [yearStr, monthStr] = monthValue.split('-');
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      if (!year || !month) return;
+
+      const firstDay = new Date(year, month - 1, 1);
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const startWeekday = firstDay.getDay(); // 0=Domingo
+      const weekdays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+      grid.innerHTML = '';
+
+      for (let i = 0; i < startWeekday; i++) {
+        const filler = document.createElement('div');
+        filler.className = 'day-cell empty';
+        grid.appendChild(filler);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${yearStr}-${monthStr.padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const weekday = new Date(year, month - 1, day).getDay();
+        const dayEvents = monthlyEvents.filter(ev => ev.date === dateStr);
+
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        cell.dataset.date = dateStr;
+        if (selectedDate === dateStr) {
+          cell.classList.add('selected');
+        }
+
+        const badgesHtml = dayEvents.length > 0
+          ? `<div class="day-badge">${dayEvents.length} ${dayEvents.length === 1 ? 'evento' : 'eventos'}</div>`
+          : '';
+
+        cell.innerHTML = `
+          <div class="day-number">${day}</div>
+          <div class="day-weekday">${weekdays[weekday]}</div>
+          <div class="day-badges">${badgesHtml}</div>
+        `;
+
+        cell.addEventListener('click', () => {
+          setSelectedDate(dateStr);
+          openDayModal(dateStr);
+        });
+
+        grid.appendChild(cell);
+      }
+    }
+
+    function renderDayEvents(dateStr) {
+      if (!dayEventsList) return;
+      const dayEvents = monthlyEvents.filter(ev => ev.date === dateStr);
+      dayEventsList.innerHTML = '';
+
+      if (!dayEvents.length) {
+        dayEventsList.innerHTML = '<div class="day-empty">Sin eventos en este día</div>';
+        return;
+      }
+
+      dayEvents.sort((a, b) => a.title.localeCompare(b.title));
+
+      dayEvents.forEach(event => {
+        const card = document.createElement('div');
+        card.className = `event-card ${event.done ? 'event-completed' : ''}`;
+
+        const sharedHtml = event.sharedWith && event.sharedWith.length
+          ? event.sharedWith.map(u => `<div class="shared-user-badge"><i class="fas fa-user"></i> ${escapeHtml(u.nombre?.split(' ')[0] || u.name || '')}</div>`).join('')
+          : '<div class="shared-user-badge">Solo tú</div>';
+
+        card.innerHTML = `
+          <div class="event-header">
+            <h4 class="event-title">${escapeHtml(event.title)}</h4>
+            <span class="event-date"><i class="fas fa-calendar"></i> ${formatDate(event.date)}</span>
+          </div>
+          ${event.description ? `<div class="event-description">${escapeHtml(event.description)}</div>` : ''}
+          <div class="event-meta">
+            <span class="event-status ${event.done ? '' : 'pending'}">${event.done ? 'Completado' : 'Pendiente'}</span>
+            <div class="event-shared">${sharedHtml}</div>
+          </div>
+          <div class="event-actions">
+            <button class="event-action-btn primary" onclick="toggleEventDone('${event.id}')">${event.done ? 'Marcar pendiente' : 'Marcar listo'}</button>
+            <button class="event-action-btn share" onclick="shareEvent('${event.id}')" title="Compartir evento"><i class="fas fa-share-alt"></i></button>
+          </div>
+        `;
+
+        dayEventsList.appendChild(card);
+      });
+    }
+
+    function renderMonthEventsColumn() {
+      if (!monthEventsList) return;
+      const selectedMonth = calendarMonthInput?.value || getCurrentMonthValue();
+      const monthEvents = monthlyEvents
+        .filter(ev => isDateInMonth(ev.date, selectedMonth))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      monthEventsList.innerHTML = '';
+
+      if (eventsMonthSecondary) {
+        eventsMonthSecondary.textContent = getMonthLabel(selectedMonth);
+      }
+
+      if (!monthEvents.length) {
+        monthEventsList.innerHTML = '<div class="day-empty">Sin eventos en el mes</div>';
+        return;
+      }
+
+      monthEvents.forEach(event => {
+        const card = document.createElement('div');
+        card.className = `event-card ${event.done ? 'event-completed' : ''}`;
+
+        const sharedHtml = event.sharedWith && event.sharedWith.length
+          ? event.sharedWith.map(u => `<div class="shared-user-badge"><i class="fas fa-user"></i> ${escapeHtml(u.nombre?.split(' ')[0] || u.name || '')}</div>`).join('')
+          : '<div class="shared-user-badge">Solo tú</div>';
+
+        card.innerHTML = `
+          <div class="event-header">
+            <h4 class="event-title">${escapeHtml(event.title)}</h4>
+            <span class="event-date"><i class="fas fa-calendar"></i> ${formatDate(event.date)}</span>
+          </div>
+          ${event.description ? `<div class="event-description">${escapeHtml(event.description)}</div>` : ''}
+          <div class="event-meta">
+            <span class="event-status ${event.done ? '' : 'pending'}">${event.done ? 'Completado' : 'Pendiente'}</span>
+            <div class="event-shared">${sharedHtml}</div>
+          </div>
+          <div class="event-actions">
+            <button class="event-action-btn primary" onclick="toggleEventDone('${event.id}')">${event.done ? 'Marcar pendiente' : 'Marcar listo'}</button>
+            <button class="event-action-btn share" onclick="shareEvent('${event.id}')" title="Compartir evento"><i class="fas fa-share-alt"></i></button>
+          </div>
+        `;
+
+        monthEventsList.appendChild(card);
+      });
+    }
+
+    function renderMonthlyEvents() {
+      if (!calendarMonthInput) return;
+      const selectedMonth = calendarMonthInput.value || getCurrentMonthValue();
+
+      if (!selectedDate || !isDateInMonth(selectedDate, selectedMonth)) {
+        selectedDate = `${selectedMonth}-01`;
+      }
+
+      renderCalendarGrid();
+      renderMonthEventsColumn();
+      setSelectedDate(selectedDate);
+    }
+
+    window.toggleEventDone = async function(eventId) {
+      const index = monthlyEvents.findIndex(ev => ev.id === eventId);
+      if (index === -1) return;
+      
+      monthlyEvents[index].done = !monthlyEvents[index].done;
+      
+      try {
+        await updateCalendarEventToDB(eventId, monthlyEvents[index].done);
+        saveMonthlyEvents();
+        renderMonthlyEvents();
+      } catch (error) {
+        console.error('Error actualizando evento:', error);
+        showAlert('No se pudo actualizar el evento');
+      }
+    };
+
+    window.shareEvent = async function(eventId) {
+      shareContext = { type: 'event', id: eventId };
+      const event = monthlyEvents.find(ev => ev.id === eventId);
+      if (!event) return;
+      selectedUsers = event.sharedWith ? [...event.sharedWith] : [];
+      await loadUsers();
+      document.getElementById('shareModal').classList.add('active');
+    };
+
+    function clearDayEventForm() {
+      if (dayEventTitleInput) dayEventTitleInput.value = '';
+      if (dayEventDescriptionInput) dayEventDescriptionInput.value = '';
+      if (dayEventDoneInput) dayEventDoneInput.checked = false;
+    }
+
+    if (resetDayEventBtn) {
+      resetDayEventBtn.addEventListener('click', () => {
+        clearDayEventForm();
+      });
+    }
+
+    if (saveDayEventBtn) {
+      saveDayEventBtn.addEventListener('click', async () => {
+        const title = dayEventTitleInput?.value.trim();
+        const date = selectedDate || dayEventDateInput?.value;
+        const monthValue = calendarMonthInput?.value || (date ? date.slice(0, 7) : getCurrentMonthValue());
+
+        if (!title || !date) {
+          showAlert('Agrega un título y una fecha para el evento');
+          return;
+        }
+
+        const newEvent = {
+          id: generateId(),
+          title,
+          description: dayEventDescriptionInput?.value.trim() || '',
+          date,
+          month: monthValue,
+          done: Boolean(dayEventDoneInput?.checked),
+          sharedWith: []
+        };
+
+        try {
+          await saveCalendarEventToDB(newEvent);
+          monthlyEvents.push(newEvent);
+          saveMonthlyEvents();
+          renderMonthlyEvents();
+          clearDayEventForm();
+          renderDayEvents(date);
+          showAlert('Evento guardado exitosamente');
+        } catch (error) {
+          console.error('Error guardando evento:', error);
+          showAlert('No se pudo guardar el evento');
+        }
+      });
+    }
+
+    if (calendarMonthInput) {
+      calendarMonthInput.addEventListener('change', () => {
+        selectedDate = `${calendarMonthInput.value || getCurrentMonthValue()}-01`;
+        renderMonthlyEvents();
+      });
+    }
+
+    if (openCalendarBtn && calendarModal) {
+      openCalendarBtn.addEventListener('click', () => {
+        setDefaultPlannerDates();
+        renderMonthlyEvents();
+        calendarModal.classList.add('active');
+      });
+    }
+
+    const prevMonthBtn = document.getElementById('prevMonthBtn');
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+    function changeMonth(delta) {
+      const current = calendarMonthInput?.value || getCurrentMonthValue();
+      const [year, month] = current.split('-').map(Number);
+      const newDate = new Date(year, (month - 1) + delta, 1);
+      const newMonthValue = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}`;
+      if (calendarMonthInput) {
+        calendarMonthInput.value = newMonthValue;
+      }
+      selectedDate = `${newMonthValue}-01`;
+      renderMonthlyEvents();
+    }
+
+    if (prevMonthBtn) {
+      prevMonthBtn.addEventListener('click', () => changeMonth(-1));
+    }
+
+    if (nextMonthBtn) {
+      nextMonthBtn.addEventListener('click', () => changeMonth(1));
+    }
+
+    if (closeCalendarBtn && calendarModal) {
+      closeCalendarBtn.addEventListener('click', () => {
+        calendarModal.classList.remove('active');
+      });
+    }
+
+    function openDayModal(dateStr) {
+      setSelectedDate(dateStr);
+      renderDayEvents(dateStr);
+      if (dayEventModal) dayEventModal.classList.add('active');
+    }
+
+    if (closeDayModalBtn && dayEventModal) {
+      closeDayModalBtn.addEventListener('click', () => {
+        dayEventModal.classList.remove('active');
+      });
+    }
+
+    if (calendarModal) {
+      calendarModal.addEventListener('click', (e) => {
+        if (e.target === calendarModal) {
+          calendarModal.classList.remove('active');
+        }
+      });
+    }
+
+    if (dayEventModal) {
+      dayEventModal.addEventListener('click', (e) => {
+        if (e.target === dayEventModal) {
+          dayEventModal.classList.remove('active');
+        }
+      });
+    }
+
+    // ==================== FUNCIONALIDAD DE COMENTARIOS ====================
+
+    let currentCommentTaskId = null;
+    let commentsRefreshInterval = null;
+    const commentsModal = document.getElementById('commentsModal');
+    const closeCommentsBtn = document.getElementById('closeCommentsBtn');
+    const commentInput = document.getElementById('commentInput');
+    const addCommentBtn = document.getElementById('addCommentBtn');
+    const charCount = document.getElementById('charCount');
+
+    // Función para refrescar comentarios automáticamente
+    async function autoRefreshComments() {
+      if (!currentCommentTaskId) return;
+      
+      try {
+        await loadCommentsFromDB(currentCommentTaskId);
+        renderComments(currentCommentTaskId);
+      } catch (err) {
+        console.error('Error al auto-refrescar comentarios:', err);
+      }
+    }
+
+    // Abrir modal de comentarios
+    window.openCommentsModal = async function(taskId) {
+      currentCommentTaskId = taskId;
+      const task = tasks.find(t => t.id === taskId);
+      
+      if (!task) return;
+
+      // Actualizar título del modal
+      document.getElementById('commentsTaskTitle').textContent = `Comentarios en ${escapeHtml(task.title)}`;
+
+      // Mostrar la descripción en el panel izquierdo
+      const left = document.getElementById('commentsLeft');
+      if (left) {
+        left.innerHTML = `
+          <div class="task-desc-title">Descripción</div>
+          <div class="task-desc">${escapeHtml(task.description || 'Sin descripción')}</div>
+        `;
+      }
+
+      // Mostrar modal inmediatamente con comentarios actuales
+      commentsModal.classList.add('active');
+      renderComments(taskId);
+      commentInput.focus();
+
+      // Traer comentarios actualizados desde la BD en background
+      loadCommentsFromDB(taskId).then(() => {
+        renderComments(taskId);
+      }).catch(err => {
+        console.error('Error al cargar comentarios:', err);
+      });
+
+      // Iniciar auto-refresh cada 2 segundos
+      if (commentsRefreshInterval) {
+        clearInterval(commentsRefreshInterval);
+      }
+      commentsRefreshInterval = setInterval(autoRefreshComments, 2000);
+    };
+
+    // Renderizar comentarios
+    function renderComments(taskId) {
+      const container = document.getElementById('commentsContainer');
+      const task = tasks.find(t => t.id === taskId);
+      
+      if (!task || !task.comments || task.comments.length === 0) {
+        container.innerHTML = '<div class="no-comments"><i class="fas fa-comments"></i><p>Sin comentarios aún. ¡Sé el primero en comentar!</p></div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      task.comments.forEach(comment => {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment-item';
+
+        const timestamp = comment.timestamp || comment.creado_en;
+        const time = new Date(timestamp || new Date());
+        const timeString = time.toLocaleString('es-ES', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        });
+
+        commentDiv.innerHTML = `
+          <div class="comment-author">${escapeHtml(comment.author || comment.nombre_completo || 'Anónimo')}</div>
+          <div class="comment-time">${timeString}</div>
+          <div class="comment-text">${escapeHtml(comment.text || comment.contenido || '')}</div>
+        `;
+
+        container.appendChild(commentDiv);
+      });
+    }
+
+    // Cerrar modal de comentarios
+    closeCommentsBtn.addEventListener('click', () => {
+      commentsModal.classList.remove('active');
+      currentCommentTaskId = null;
+      commentInput.value = '';
+      charCount.textContent = '0';
+      
+      // Detener auto-refresh
+      if (commentsRefreshInterval) {
+        clearInterval(commentsRefreshInterval);
+        commentsRefreshInterval = null;
+      }
+    });
+
+    // Cerrar modal al hacer clic fuera
+    commentsModal.addEventListener('click', (e) => {
+      if (e.target === commentsModal) {
+        commentsModal.classList.remove('active');
+        currentCommentTaskId = null;
+        commentInput.value = '';
+        charCount.textContent = '0';
+        
+        // Detener auto-refresh
+        if (commentsRefreshInterval) {
+          clearInterval(commentsRefreshInterval);
+          commentsRefreshInterval = null;
+        }
+      }
+    });
+
+    // Contar caracteres
+    commentInput.addEventListener('input', (e) => {
+      charCount.textContent = e.target.value.length;
+    });
+
+    // Agregar comentario
+    addCommentBtn.addEventListener('click', async () => {
+      const text = commentInput.value.trim();
+
+      if (!text) {
+        showAlert('El comentario no puede estar vacío');
+        return;
+      }
+
+      if (!currentCommentTaskId) return;
+
+      const taskIndex = tasks.findIndex(t => t.id === currentCommentTaskId);
+      if (taskIndex === -1) return;
+
+      // Inicializar array de comentarios si no existe
+      if (!tasks[taskIndex].comments) {
+        tasks[taskIndex].comments = [];
+      }
+
+      // Obtener nombre del usuario actual
+      const userInfo = document.getElementById('userInfo');
+      const authorName = userInfo ? userInfo.textContent.trim() : 'Usuario';
+
+      const commentId = generateId();
+
+      try {
+        // Agregar comentario optimista primero (para feedback inmediato)
+        const optimisticComment = {
+          id: commentId,
+          author: authorName,
+          text: text,
+          timestamp: new Date().toISOString()
+        };
+
+        tasks[taskIndex].comments.push(optimisticComment);
+        
+        // Renderizar inmediatamente
+        renderComments(currentCommentTaskId);
+        commentInput.value = '';
+        charCount.textContent = '0';
+        
+        // Scroll al último comentario
+        const container = document.getElementById('commentsContainer');
+        setTimeout(() => {
+          container.scrollTop = container.scrollHeight;
+        }, 50);
+
+        // Guardar en BD en background
+        const saved = await saveCommentToDB(currentCommentTaskId, commentId, text);
+        
+        // Actualizar con datos del servidor si son diferentes
+        if (saved) {
+          const commentIdx = tasks[taskIndex].comments.findIndex(c => c.id === commentId);
+          if (commentIdx !== -1) {
+            tasks[taskIndex].comments[commentIdx] = {
+              id: saved.id || commentId,
+              author: saved.author || authorName,
+              text: saved.contenido || text,
+              timestamp: saved.timestamp || new Date().toISOString()
+            };
+            renderComments(currentCommentTaskId);
+          }
+        }
+
+        saveTasks();
+      } catch (error) {
+        console.error('No se pudo guardar el comentario:', error);
+        // Remover comentario optimista si falla
+        const commentIdx = tasks[taskIndex].comments.findIndex(c => c.id === commentId);
+        if (commentIdx !== -1) {
+          tasks[taskIndex].comments.splice(commentIdx, 1);
+          renderComments(currentCommentTaskId);
+        }
+        showAlert('No se pudo guardar el comentario. Intenta nuevamente.');
+      }
+    });
+
+    // Permitir agregar comentario con Enter
+    commentInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        addCommentBtn.click();
+      }
+    });
+
+    // Generar ID único
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Inicializar la aplicación
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadMonthlyEvents();
+      setDefaultPlannerDates();
+      renderMonthlyEvents();
+      await loadTasksFromDB();
+      setupDragAndDrop();
+      checkPermissions();
+    });
+  </script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+
+    <script src="js/topbar.js"></script>
+</body>
+</html>

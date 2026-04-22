@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eventos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: #f5f5f5;
+      --border-color: #e0e0e0;
+    }
+    
+    [data-theme="dark"] {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --card-bg: #1a1a1a;
+      --border-color: #333333;
+    }
+    
+    * {
+      font-family: 'Montserrat', sans-serif;
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+    }
+    
+    .topbar {
+      width: 95vw;
+      height: 64px;
+      background: rgba(35, 36, 58, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1001;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 2rem;
+      backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(255,255,255,0.22);
+    }
+    
+    .topbar-header button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .topbar-header button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .topbar-header button:active {
+      transform: translateY(0);
+    }
+    
+    .main-content {
+      padding: 30px;
+      margin-top: 100px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .header-section h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: var(--text-color);
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+    }
+    
+    .search-bar {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .search-bar input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-size: 14px;
+    }
+    
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .event-item {
+      background: var(--card-bg);
+      border-left: 5px solid var(--primary-color);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .event-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .event-content {
+      flex: 1;
+    }
+    
+    .event-description {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      color: var(--text-color);
+    }
+    
+    .event-date {
+      font-size: 14px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    [data-theme="dark"] .event-date {
+      color: #aaa;
+    }
+    
+    .event-actions {
+      display: flex;
+      gap: 10px;
+      margin-left: 20px;
+    }
+    
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 12px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-small:hover {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .btn-delete {
+      background: var(--danger-color);
+      color: white;
+      border-color: var(--danger-color);
+    }
+    
+    .btn-delete:hover {
+      background: #c0392b;
+      border-color: #c0392b;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+    
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .empty-state h3 {
+      margin: 0;
+      color: var(--text-color);
+      font-size: 20px;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+    
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    [data-theme="dark"] .stat-label {
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-header">
+      <button class="btn-pdm">PDM</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header Section -->
+    <div class="header-section">
+      <h1><i class="fas fa-calendar-alt"></i> Mis Eventos</h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalEvents">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="recentEvents">0</div>
+        <div class="stat-label">Esta semana</div>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Buscar eventos...">
+    </div>
+
+    <!-- Events List -->
+    <div class="events-list" id="eventsList"></div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <i class="fas fa-inbox"></i>
+      <h3>No hay eventos</h3>
+      <p>No hay eventos disponibles.</p>
+    </div>
+  </div>
+
+  <script src="js/global-color.js"></script>
+  <script>
+    // Variables globales
+    let eventos = [];
+    
+    // Elementos del DOM
+    const eventsList = document.getElementById('eventsList');
+    const searchInput = document.getElementById('searchInput');
+    const pdmButton = document.querySelector('.btn-pdm');
+    const totalEventsEl = document.getElementById('totalEvents');
+    const recentEventsEl = document.getElementById('recentEvents');
+
+    // Inicializar
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarEventos();
+      setupEventListeners();
+      actualizarEstadisticas();
+    });
+
+    // Event Listeners
+    function setupEventListeners() {
+      searchInput.addEventListener('input', filtrarEventos);
+      pdmButton.addEventListener('click', () => {
+        window.location.href = 'inicio.html';
+      });
+    }
+
+    // Cargar eventos desde localStorage (o API)
+    async function cargarEventos() {
+      try {
+        // Intenta cargar desde API
+        const response = await fetch('/api/eventos');
+        if (response.ok) {
+          eventos = await response.json();
+        } else {
+          // Carga desde localStorage como fallback
+          const stored = localStorage.getItem('eventos');
+          eventos = stored ? JSON.parse(stored) : [];
+        }
+      } catch (error) {
+        // Carga desde localStorage como fallback
+        const stored = localStorage.getItem('eventos');
+        eventos = stored ? JSON.parse(stored) : [];
+      }
+      renderEventos();
+    }
+
+
+
+    // Renderizar eventos
+    function renderEventos() {
+      const busqueda = searchInput.value.toLowerCase();
+      const eventosFiltrados = eventos.filter(e => 
+        e.descripcion.toLowerCase().includes(busqueda)
+      ).sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+      
+      if (eventosFiltrados.length === 0) {
+        eventsList.innerHTML = '';
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('emptyState').style.display = 'none';
+      
+      eventsList.innerHTML = eventosFiltrados
+        .map(evento => crearEventoHTML(evento))
+        .join('');
+
+      // Agregar event listeners
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          eliminarEvento(parseInt(btn.dataset.id));
+        });
+      });
+    }
+
+    // Crear HTML del evento
+    function crearEventoHTML(evento) {
+      const fecha = new Date(evento.fecha);
+      const fechaFormato = fecha.toLocaleDateString('es-ES', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      return `
+        <div class="event-item">
+          <div class="event-content">
+            <p class="event-description">${evento.descripcion}</p>
+            <div class="event-date">
+              <i class="fas fa-calendar"></i>
+              ${fechaFormato}
+            </div>
+          </div>
+          <div class="event-actions">
+            <button class="btn-small btn-delete" data-id="${evento.id}">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Editar evento
+    function editarEvento(id) {
+      const evento = eventos.find(e => e.id === id);
+      if (!evento) return;
+    }
+
+    // Eliminar evento
+    function eliminarEvento(id) {
+      if (confirm('¿Está seguro de que desea eliminar este evento?')) {
+        eventos = eventos.filter(e => e.id !== id);
+        localStorage.setItem('eventos', JSON.stringify(eventos));
+        renderEventos();
+        actualizarEstadisticas();
+      }
+    }
+
+    // Filtrar eventos
+    function filtrarEventos() {
+      renderEventos();
+    }
+
+    // Actualizar estadísticas
+    function actualizarEstadisticas() {
+      totalEventsEl.textContent = eventos.length;
+      
+      const ahora = new Date();
+      const proximaSemana = new Date(ahora.getTime() + 7 * 24 * 60 * 60 * 1000);
+      
+      const eventosRecientes = eventos.filter(e => {
+        const fecha = new Date(e.fecha);
+        return fecha >= ahora && fecha <= proximaSemana;
+      }).length;
+      
+      recentEventsEl.textContent = eventosRecientes;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,3806 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vacaciones del personal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/vacaciones_panel.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <!--
+  <div class="topbar">
+        <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+  <!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+    <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button" data-tab="empleados">
+          <i class="fas fa-users"></i>Empleados
+        </button>
+        <button class="tab-switch-button" data-tab="apoyos">
+          <i class="fas fa-hand-holding-heart"></i>Apoyos
+        </button>
+        <button class="tab-switch-button" data-tab="amonestaciones">
+          <i class="fas fa-exclamation-triangle"></i>Amonestaciones
+        </button>
+        <button class="tab-switch-button active" data-tab="vacaciones">
+          <i class="fas fa-umbrella-beach"></i>Vacaciones
+        </button>
+        <button class="tab-switch-button" data-tab="asistencias">
+          <i class="fas fa-calendar-check"></i>Asistencias
+        </button>
+        <button class="tab-switch-button" data-tab="comidas">
+          <i class="fas fa-utensils"></i>Comidas
+        </button>
+        <button class="tab-switch-button" data-tab="anuncios">
+          <i class="fas fa-bullhorn"></i>Anuncios
+        </button>
+        <button class="tab-switch-button" data-tab="estadisticas">
+          <i class="fas fa-chart-bar"></i>Estadisticas
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    empleados: 'empleados_panel.html',
+    apoyos: 'apoyos.html',
+    amonestaciones: 'amonestaciones.html',
+    vacaciones: 'vacaciones_panel.html',
+    asistencias: 'asistencias.html',
+    comidas: 'comidas_panel.html',
+    anuncios: 'anuncios.html',
+    estadisticas: 'detalles_rh.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+  <!-- Modal de Aniversarios -->
+  <div id="aniversariosModal" class="edit-modal" style="z-index:1150; display:none; align-items:center; justify-content:center;">
+    <div class="edit-box aniversarios-content" style="width: 960px; max-width: 96vw;">
+      <div class="edit-header">
+        <div style="font-weight:700;">Próximos aniversarios</div>
+        <button id="anivClose" class="ep-close" type="button">✕</button>
+      </div>
+      <div class="edit-body">
+        <div id="aniversariosGrid" class="aniv-grid" style="display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+
+    <!-- Listados solicitados: Vacaciones activas, programadas y pasadas -->
+    <div id="vacacionesListas" class="vacaciones-wrapper">
+      <h2 id="headerActivas" class="collapsible-title open"><span class="chev">▶</span> Vacaciones activas</h2>
+      <div id="secActivas" class="collapsible-content">
+        <div id="tablaVacacionesActivas"></div>
+        </div>
+
+      <h2 id="headerProgramadas" class="collapsible-title open" style="margin-top:24px;"><span class="chev">▶</span> Vacaciones programadas</h2>
+      <div id="secProgramadas" class="collapsible-content">
+        <div id="tablaVacacionesProgramadas"></div>
+        </div>
+
+      <h2 id="headerPasadas" class="collapsible-title" style="margin-top:24px;"><span class="chev">▶</span> Vacaciones pasadas</h2>
+      <div id="secPasadas" class="collapsible-content">
+        <div id="tablaVacacionesPasadas"></div>
+        </div>
+      </div>
+
+      <button id="openHistoryBtn" class="history-fab" title="Mostrar historial" style="display: none;">Historial</button>
+
+    <!-- Overlay para difuminar el fondo cuando el modal de historial está activo -->
+    <div id="employeePanelOverlay" class="employee-panel-overlay"></div>
+
+    <!-- Panel lateral para historial del empleado -->
+    <aside id="employeePanel" class="employee-panel" aria-live="polite">
+      <div class="ep-header">
+        <div class="ep-title" id="epTitle">Historial de vacaciones</div>
+        <button type="button" class="ep-close" id="epClose" title="Cerrar" aria-label="Cerrar panel">✕</button>
+        </div>
+      <div class="ep-content" id="epContent">
+        <div style="padding:6px 2px;color:#aaa;">Selecciona un empleado para ver su historial…</div>
+      </div>
+    </aside>
+
+    <!-- Modal para editar evento del historial -->
+    <div id="editHistModal" class="edit-modal">
+      <div class="edit-box">
+        <div class="edit-header">
+          <div>Editar vacaciones</div>
+          <button id="editClose" class="ep-close">✕</button>
+        </div>
+        <div class="edit-body">
+          <div class="edit-row"><label>Empleado</label><input id="editEmpleado" class="edit-input" type="text" disabled></div>
+          <div class="edit-row"><label>Inicio</label><input id="editInicio" class="edit-input" type="date"></div>
+          <div class="edit-row"><label>Fin</label><input id="editFin" class="edit-input" type="date"></div>
+          <div class="edit-row"><label>Días</label><input id="editDias" class="edit-input" type="number" min="1"></div>
+          <div class="edit-row"><label>Estado</label>
+            <select id="editEstado" class="edit-input">
+              <option value="pendiente">pendiente</option>
+              <option value="aprobada">aprobada</option>
+              <option value="rechazada">rechazada</option>
+            </select>
+          </div>
+          <div class="edit-row"><label>Comentarios</label><input id="editComentarios" class="edit-input" type="text"></div>
+        </div>
+        <div class="edit-actions">
+          <button type="button" id="editGuardar" class="btn primary">Guardar</button>
+          <button type="button" id="editEliminar" class="btn" style="background:#b3261e;color:#fff;border:1px solid rgba(255,255,255,.15);">Eliminar</button>
+          <button type="button" id="editCancelar" class="btn">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      function formatDate(dateStr){
+        try{
+          const d = new Date(dateStr);
+          return d.toLocaleDateString('es-MX', {year:'numeric', month:'long', day:'numeric'});
+        }catch(_){ return dateStr || ''; }
+      }
+      // Escapa texto para evitar interpretación de HTML
+      function escapeHtml(s){
+        if(s === null || s === undefined) return '';
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      function wireEditModal(){
+        const modal = document.getElementById('editHistModal');
+        const close = document.getElementById('editClose');
+        const cancel = document.getElementById('editCancelar');
+        [close, cancel].forEach(btn => { if(btn) btn.addEventListener('click', ()=> modal.style.display = 'none'); });
+        if(modal){ modal.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; }); }
+        const guardar = document.getElementById('editGuardar');
+        if(guardar){
+          guardar.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); guardarEdicion(); });
+        }
+        const eliminar = document.getElementById('editEliminar');
+        if(eliminar){
+          eliminar.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); confirmarEliminarVacacion(); });
+        }
+        // Delegación global: garantiza funcionamiento aunque falle el wiring puntual
+        if(!window.__vacEditModalDelegated){
+          window.__vacEditModalDelegated = true;
+          document.addEventListener('click', (e)=>{
+            const t = e.target;
+            if(!t) return;
+            if(t.id === 'editGuardar'){
+              e.preventDefault(); e.stopPropagation(); guardarEdicion();
+            } else if(t.id === 'editEliminar'){
+              e.preventDefault(); e.stopPropagation(); confirmarEliminarVacacion();
+            } else if(t.id === 'editCancelar' || t.id === 'editClose'){
+              const m = document.getElementById('editHistModal'); if(m){ m.style.display = 'none'; }
+            }
+          }, true);
+        }
+      }
+
+      let editActualId = null;
+      let lastEmployeeId = null;
+      let lastEmployeeName = null;
+
+      function setSelectedEmployee(id, name){
+        lastEmployeeId = id || null;
+        lastEmployeeName = name || null;
+        const btn = document.getElementById('openHistoryBtn');
+        if(btn){
+          btn.textContent = lastEmployeeName ? ('Historial de ' + lastEmployeeName) : 'Historial';
+          btn.title = btn.textContent;
+        }
+        // Abrir automáticamente el panel de historial
+        abrirPanelEmpleado(id, name);
+      }
+      async function abrirModalEdicion(vacacion, empName){
+        editActualId = vacacion.id;
+        lastEmployeeId = vacacion.empleado_id || null;
+        lastEmployeeName = empName || null;
+        const emp = document.getElementById('editEmpleado'); if(emp) emp.value = empName || (`ID ${vacacion.empleado_id}`);
+        const fi = document.getElementById('editInicio'); if(fi) fi.value = (vacacion.fecha_inicio||'').slice(0,10);
+        const ff = document.getElementById('editFin'); if(ff) ff.value = (vacacion.fecha_fin||'').slice(0,10);
+        const di = document.getElementById('editDias'); if(di) di.value = vacacion.dias_solicitados || '';
+        const es = document.getElementById('editEstado'); if(es) es.value = (vacacion.estado||'').toLowerCase();
+        const co = document.getElementById('editComentarios');
+        if(co){
+          co.value = vacacion.comentarios || '';
+          co.style.color = '#ffca2c';
+        }
+        // Asegurar wiring por si no se inicializó aún
+        try{ wireEditModal(); }catch(_e){}
+        const modal = document.getElementById('editHistModal');
+        modal.style.display = 'flex';
+        // Foco inicial para permitir Enter/Escape
+        const first = document.getElementById('editInicio'); if(first) first.focus();
+        // Cerrar con Escape dentro del modal
+        function escClose(e){ if(e.key === 'Escape'){ modal.style.display = 'none'; document.removeEventListener('keydown', escClose); } }
+        document.addEventListener('keydown', escClose);
+      }
+
+      async function guardarEdicion(){
+        const payload = {
+          fecha_inicio: (document.getElementById('editInicio')||{}).value,
+          fecha_fin: (document.getElementById('editFin')||{}).value,
+          dias_solicitados: parseInt((document.getElementById('editDias')||{}).value||'0',10) || null,
+          estado: (document.getElementById('editEstado')||{}).value,
+          comentarios: (document.getElementById('editComentarios')||{}).value || null
+        };
+        // Mapear 'rechazada' a 'cancelada' para cumplir con el CHECK de la BD
+        if(payload.estado === 'rechazada'){ payload.estado = 'cancelada'; }
+        try{
+          // Cerrar inmediatamente el modal para cumplir con la UX requerida
+          const modal = document.getElementById('editHistModal');
+          if(modal){ modal.style.display = 'none'; }
+          const resp = await fetch(`/api/vacaciones/${editActualId}`, { method:'PUT', headers:{ 'Content-Type':'application/json','Accept':'application/json' }, body: JSON.stringify(payload) });
+          if(!resp.ok){ throw new Error('No se pudo actualizar'); }
+          const okMsg = document.createElement('div');
+          okMsg.className = 'custom-message success show';
+          okMsg.textContent = 'Vacación actualizada';
+          document.body.appendChild(okMsg);
+          setTimeout(()=> okMsg.remove(), 1500);
+          // Refrescar listados para ver el cambio
+          try{ await cargarVacaciones(); }catch(_){ }
+          // Refrescar el panel de historial del empleado si está abierto o hay contexto
+          try{
+            // Si hay un empleado seleccionado y el panel está abierto, refrescarlo
+            try{
+              const panel = document.getElementById('employeePanel');
+              if(panel && panel.classList.contains('show') && lastEmployeeId){
+                await abrirPanelEmpleado(lastEmployeeId, lastEmployeeName || undefined);
+              }
+            }catch(_){ }
+          }catch(_){ }
+        }catch(e){
+          const modal = document.getElementById('editHistModal');
+          if(modal){ modal.style.display = 'none'; }
+          const err = document.createElement('div');
+          err.className = 'custom-message error show';
+          err.textContent = e.message || 'Error al actualizar';
+          document.body.appendChild(err);
+          setTimeout(()=> err.remove(), 2000);
+        }
+      }
+
+      // Doble confirmación y eliminación con estilo del sistema
+      function crearModalConfirmacion(titulo, mensaje, botonOkText, botonCancelText, onOk){
+        const overlay = document.createElement('div');
+        overlay.className = 'edit-modal';
+        const box = document.createElement('div');
+        box.className = 'edit-box';
+        box.innerHTML = `
+          <div class="edit-header">
+            <div>${titulo}</div>
+            <button class="ep-close" aria-label="Cerrar">✕</button>
+          </div>
+          <div class="edit-body" style="padding-top:8px;">
+            <div style="color:#ddd;">${mensaje}</div>
+          </div>
+          <div class="edit-actions">
+            <button type="button" class="btn" data-role="cancel">${botonCancelText||'Cancelar'}</button>
+            <button type="button" class="btn" data-role="ok" style="background:#b3261e;color:#fff;border:1px solid rgba(255,255,255,.15);">${botonOkText||'Eliminar'}</button>
+          </div>
+        `;
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        const close = ()=>{ overlay.remove(); };
+        box.querySelector('.ep-close').onclick = close;
+        overlay.addEventListener('click', e=>{ if(e.target === overlay) close(); });
+        box.querySelector('[data-role="cancel"]').onclick = close;
+        box.querySelector('[data-role="ok"]').onclick = ()=>{ try{ onOk&&onOk(); }finally{ close(); } };
+      }
+
+      function confirmarEliminarVacacion(){
+        crearModalConfirmacion('Eliminar vacaciones', '¿Seguro que deseas eliminar esta solicitud? Esta acción no se puede deshacer.', 'Sí, eliminar', 'No, cancelar', ()=>{
+          crearModalConfirmacion('Confirmación adicional', 'Por seguridad, confirma nuevamente que deseas eliminarla.', 'Eliminar definitivamente', 'Regresar', ()=>{
+            eliminarVacacion();
+          });
+        });
+      }
+
+      async function eliminarVacacion(){
+        try{
+          const resp = await fetch(`/api/vacaciones/${editActualId}`, { method:'DELETE' });
+          if(!resp.ok){ throw new Error('No se pudo eliminar'); }
+          // Cerrar modal de edición si está abierto
+          const modal = document.getElementById('editHistModal'); if(modal){ modal.style.display = 'none'; }
+          // Refrescar listas visibles
+          try{ if(typeof cargarVacaciones === 'function'){ await cargarVacaciones(); } }catch(_){ }
+          try{ 
+            const panel = document.getElementById('employeePanel');
+            if(panel && panel.classList.contains('show') && lastEmployeeId){
+              await abrirPanelEmpleado(lastEmployeeId, lastEmployeeName || undefined); 
+            }
+          }catch(_){ }
+          showCustomMessage('Vacaciones eliminadas', 'success');
+        }catch(e){
+          console.error(e);
+          showCustomMessage('Error al eliminar', 'error');
+        }
+      }
+
+      function setupCollapsible(headerId, contentId){
+        const header = document.getElementById(headerId);
+        const content = document.getElementById(contentId);
+        if(!header || !content) return;
+        function open(){ content.style.maxHeight = content.scrollHeight + 'px'; header.classList.add('open'); }
+        function close(){ content.style.maxHeight = 0; header.classList.remove('open'); }
+        // Inicial abierto excepto 'Vacaciones pasadas'
+        if (headerId === 'headerPasadas') { close(); } else { open(); }
+        header.addEventListener('click', ()=>{
+          if (content.style.maxHeight && content.style.maxHeight !== '0px') { close(); }
+          else { open(); }
+          wireEditModal();
+        });
+        window.addEventListener('resize', ()=>{ if(header.classList.contains('open')) open(); });
+      }
+
+      function estadoClase(estado){
+        const e = (estado||'').toLowerCase();
+        if(e === 'pendiente') return 'estado-badge estado-pendiente';
+        if(e === 'aprobada') return 'estado-badge estado-aprobada';
+        if(e === 'rechazada') return 'estado-badge estado-rechazada';
+        return 'estado-badge';
+      }
+
+      // Exponer de forma global para evitar errores de ámbito
+      function normalizeBadges(){
+        try{
+          // 1) Normalizar spans con clase estado-badge
+          document.querySelectorAll('span.estado-badge').forEach(b => {
+            const estadoAttr = (b.getAttribute('data-estado')||'').trim().toLowerCase();
+            const estadoText = (b.textContent||'').trim().toLowerCase();
+            const estado = estadoAttr || estadoText;
+            if(!estado) return;
+            b.className = estadoClase(estado);
+            b.setAttribute('data-estado', estado);
+            b.removeAttribute('style');
+          });
+          // 2) Cualquier span en la última columna de la tabla cuyo texto sea 'aprobada' o 'pendiente'
+          document.querySelectorAll('.vac-table tbody tr td:last-child span').forEach(b => {
+            const text = (b.textContent||'').trim().toLowerCase();
+            if(text === 'aprobada' || text === 'pendiente' || text === 'rechazada'){
+              const estado = text;
+              if(!b.classList.contains('estado-badge')){
+                b.classList.add('estado-badge');
+              }
+              b.className = estadoClase(estado);
+              b.setAttribute('data-estado', estado);
+              b.removeAttribute('style');
+            }
+          });
+        }catch(_e){ }
+      }
+      try{ window.normalizeBadges = normalizeBadges; }catch(_e){}
+
+      function renderTable(containerId, rows){
+        const cont = document.getElementById(containerId);
+        if(!cont){ return; }
+        if(!rows || rows.length === 0){
+          cont.innerHTML = '<div style="padding:12px;color:#888;">Sin registros</div>';
+          return;
+        }
+        const html = [
+          '<div class="vac-card"><div style="overflow:auto;">',
+          '<table class="vac-table">',
+          '<thead><tr>',
+          '<th>Empleado</th>',
+          '<th>Inicio</th>',
+          '<th>Fin</th>',
+          '<th>Días</th>',
+          '<th>Pendientes</th>',
+          '<th>Notas</th>',
+          '<th>Estado</th>',
+          '</tr></thead><tbody>'
+        ];
+        rows.forEach(r => {
+          const empName = (r.nombre_completo || ('ID '+r.empleado_id));
+          html.push('<tr class="row-emp" data-emp-id="'+(r.empleado_id||'')+'" data-vac-id="'+(r.id||'')+'" data-emp-name="'+(empName.replace(/"/g,'&quot;'))+'">');
+          html.push('<td>'+ empName +'</td>');
+          html.push('<td>'+ formatDate(r.fecha_inicio) +'</td>');
+          html.push('<td>'+ formatDate(r.fecha_fin) +'</td>');
+          html.push('<td>'+ (r.dias_solicitados ?? '') +'</td>');
+          html.push('<td>'+ (r.dias_pendientes ?? '') +'</td>');
+          html.push('<td>'+ (r.comentarios ? String(r.comentarios).replace(/</g,'&lt;').replace(/>/g,'&gt;') : '') +'</td>');
+          html.push('<td><span class="'+estadoClase(r.estado)+'" data-estado="'+((r.estado||'').toLowerCase())+'">'+(r.estado || '')+'</span></td>');
+          html.push('</tr>');
+        });
+        html.push('</tbody></table></div></div>');
+        cont.innerHTML = html.join('');
+        // click handlers para abrir panel
+        cont.querySelectorAll('.row-emp').forEach(tr => {
+          tr.style.cursor = 'pointer';
+          tr.addEventListener('click', () => {
+            const empId = tr.getAttribute('data-emp-id');
+            const empName = tr.getAttribute('data-emp-name');
+            setSelectedEmployee(empId, empName);
+          });
+        });
+        normalizeBadges();
+      }
+
+      async function cargarVacaciones(){
+        try{
+          const resp = await fetch(`/api/vacaciones/todas?t=${Date.now()}`, { cache: 'no-store' });
+          if(!resp.ok) throw new Error('No se pudo cargar la información');
+          const data = await resp.json();
+          const hoy = new Date();
+          hoy.setHours(0,0,0,0);
+          const estadosValidos = new Set(['aprobada','pendiente']);
+
+          const activas = data.filter(v => {
+            if(!estadosValidos.has((v.estado||'').toLowerCase())) return false;
+            const ini = new Date(v.fecha_inicio); ini.setHours(0,0,0,0);
+            const fin = new Date(v.fecha_fin); fin.setHours(0,0,0,0);
+            return hoy >= ini && hoy <= fin;
+          }).sort((a,b)=> new Date(a.fecha_fin) - new Date(b.fecha_fin));
+
+          const programadas = data.filter(v => {
+            if(!estadosValidos.has((v.estado||'').toLowerCase())) return false;
+            const ini = new Date(v.fecha_inicio); ini.setHours(0,0,0,0);
+            return ini > hoy;
+          }).sort((a,b)=> new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+
+          const pasadas = data.filter(v => {
+            if(!estadosValidos.has((v.estado||'').toLowerCase())) return false;
+            const fin = new Date(v.fecha_fin); fin.setHours(0,0,0,0);
+            return fin < hoy;
+          }).sort((a,b)=> new Date(b.fecha_fin) - new Date(a.fecha_fin));
+
+          renderTable('tablaVacacionesActivas', activas);
+          renderTable('tablaVacacionesProgramadas', programadas);
+          renderTable('tablaVacacionesPasadas', pasadas);
+          // Ajustar alturas de colapsables tras renderizar
+          const a = document.getElementById('secActivas'); if(a){ a.style.maxHeight = a.scrollHeight + 'px'; }
+          const p = document.getElementById('secProgramadas'); if(p){ p.style.maxHeight = p.scrollHeight + 'px'; }
+          const s = document.getElementById('secPasadas'); if(s){ s.style.maxHeight = 0; }
+        }catch(e){
+          document.getElementById('tablaVacacionesActivas').innerHTML = '<div style="padding:12px;color:#f88;">'+(e.message||'Error')+'</div>';
+          document.getElementById('tablaVacacionesProgramadas').innerHTML = '';
+        }
+      }
+
+      async function abrirPanelEmpleado(empleadoId, empleadoNombre){
+        const panel = document.getElementById('employeePanel');
+        const overlay = document.getElementById('employeePanelOverlay');
+        const title = document.getElementById('epTitle');
+        const content = document.getElementById('epContent');
+        title.textContent = 'Historial: ' + (empleadoNombre || ('ID '+empleadoId));
+        content.innerHTML = '<div style="padding:10px;color:#bbb;">Cargando historial…</div>';
+        if(overlay) overlay.classList.add('show');
+        panel.classList.add('show');
+        // Alinear la parte superior del panel con la tabla de Vacaciones activas
+        alignPanelTop();
+        try{
+          // Obtener información del empleado para mostrar foto y fechas
+          let empleado = null;
+          try{
+            const empRes = await fetch(`/api/empleados/${empleadoId}`);
+            if(empRes.ok){ empleado = await empRes.json(); }
+          }catch(_){ /* noop */ }
+
+          // Renderizar encabezado con la información del empleado si está disponible
+          if(empleado){
+            const foto = empleado.foto_url ? `<img src="${empleado.foto_url}" alt="Foto" style="width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.35);">` : `<div style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#5a7,#394);color:#fff;font-weight:700;">${(empleado.nombre_completo||'').charAt(0)||'?'}</div>`;
+            const fechaIngresoDate = empleado.fecha_ingreso || empleado.fecha_creacion || null;
+            let aniosServicio = '';
+            if(fechaIngresoDate){
+              const fi = new Date(fechaIngresoDate);
+              if(!isNaN(fi.getTime())){
+                const hoy = new Date();
+                let anios = hoy.getFullYear() - fi.getFullYear();
+                const m = hoy.getMonth() - fi.getMonth();
+                if (m < 0 || (m === 0 && hoy.getDate() < fi.getDate())) anios--;
+                aniosServicio = `${anios} año${anios === 1 ? '' : 's'}`;
+              }
+            }
+
+            const fechaIngresoLabel = fechaIngresoDate ? (()=>{ try{ const d=new Date(fechaIngresoDate); return d.toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});}catch{ return 'No disponible'; } })() : 'No disponible';
+
+            // Insertar cabecera antes del listado
+            content.innerHTML = `
+              <div style="display:flex;gap:12px;align-items:center;padding:12px 12px 4px 12px;margin-bottom:8px;">
+                  ${foto}
+                  <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="font-weight:600;color:#fff;">${escapeHtml(empleado.nombre_completo || empleadoNombre || ('ID '+empleadoId))}</div>
+                    <div style="color:#cfcfcf;font-size:12px;">Fecha de ingreso: <span style="color:#fff;">${fechaIngresoLabel}</span></div>
+                    <div style="color:#cfcfcf;font-size:12px;">Años de servicio: <span style="color:#79d78b;font-weight:600;">${aniosServicio || 'N/D'}</span></div>
+                  </div>
+                </div>`;
+          } else {
+            // Limpiar si no hay datos del empleado
+            content.innerHTML = '';
+          }
+
+          const res = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+          if(!res.ok){ throw new Error('No se pudo cargar el historial'); }
+          const lista = await res.json();
+          if(!Array.isArray(lista) || lista.length === 0){
+            content.innerHTML += '<div style="padding:10px;color:#bbb;">Sin registros de vacaciones.</div>';
+            return;
+          }
+          const parts = lista.sort((a,b)=> new Date(b.fecha_inicio) - new Date(a.fecha_inicio)).map(v => {
+            const badge = `<span class="${estadoClase(v.estado)}">${v.estado||''}</span>`;
+            const empId = empleado?.id || empleadoId;
+            const empNombreEscaped = (empleadoNombre||'').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            return `
+              <div class="vac-item" data-id="${v.id}" data-emp-name="${empNombreEscaped}" data-emp-id="${empId}">
+                <div class="vi-top">
+                  <div style="font-weight:600;">
+                    <div><span style="color:#79d78b;">Inicio:</span> ${formatDate(v.fecha_inicio)}</div>
+                    <div><span style="color:#ef9a9a;">Fin:</span> ${formatDate(v.fecha_fin)}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    ${badge}
+                    <button class="btn-imprimir-constancia" title="Imprimir constancia de antigüedad" onclick="event.stopPropagation(); imprimirConstanciaAntiguedad('${empId}', '${empNombreEscaped}', ${v.id})">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </div>
+        </div>
+                <div class="vi-dates">Días: ${v.dias_solicitados ?? ''} · Solicitado: ${v.fecha_solicitud ? formatDate(v.fecha_solicitud) : 'N/A'}</div>
+                ${v.comentarios ? `<div style="margin-top:6px;opacity:.9;color:#ffca2c;">${escapeHtml(v.comentarios)}</div>` : ''}
+              </div>`;
+          });
+          // Si ya hay encabezado, agregar debajo; si no, solo la lista
+          if(content.innerHTML.trim().length > 0){
+            content.innerHTML += parts.join('');
+          } else {
+            content.innerHTML = parts.join('');
+          }
+          content.querySelectorAll('.vac-item').forEach(el => {
+            el.style.cursor = 'pointer';
+            el.addEventListener('click', () => {
+              const id = el.getAttribute('data-id');
+              const name = el.getAttribute('data-emp-name');
+              const v = lista.find(x => String(x.id) === String(id));
+              if(!v) return;
+              abrirModalEdicion(v, name);
+            });
+          });
+        }catch(e){
+          content.innerHTML = '<div style="padding:10px;color:#f88;">'+(e.message||'Error')+'</div>';
+        }
+      }
+
+      function cerrarPanelEmpleado(){
+        const panel = document.getElementById('employeePanel');
+        const overlay = document.getElementById('employeePanelOverlay');
+        if(panel){ panel.classList.remove('show'); }
+        if(overlay){ overlay.classList.remove('show'); }
+      }
+
+      function alignPanelTop(){ /* modal centrado: no-op */ }
+
+      // Conectar el botón flotante del historial (idempotente)
+      function wireHistoryButton(){
+        const b = document.getElementById('openHistoryBtn');
+        if(!b || b.dataset.wired === '1') return;
+        b.addEventListener('click', ()=>{
+          const panel = document.getElementById('employeePanel');
+          const overlay = document.getElementById('employeePanelOverlay');
+          if(!panel) return;
+          if(panel.classList.contains('show')){ 
+            panel.classList.remove('show');
+            if(overlay) overlay.classList.remove('show');
+          } else {
+            if(lastEmployeeId){ abrirPanelEmpleado(lastEmployeeId, lastEmployeeName || undefined); }
+            else { 
+              if(overlay) overlay.classList.add('show');
+              panel.classList.add('show'); 
+              alignPanelTop(); 
+            }
+          }
+        });
+        b.dataset.wired = '1';
+      }
+
+      if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', ()=>{ 
+          cargarVacaciones(); 
+          setupCollapsible('headerActivas','secActivas'); 
+          setupCollapsible('headerProgramadas','secProgramadas'); 
+          setupCollapsible('headerPasadas','secPasadas'); 
+          const epClose = document.getElementById('epClose');
+          if(epClose){ epClose.addEventListener('click', cerrarPanelEmpleado); }
+          const overlay = document.getElementById('employeePanelOverlay');
+          if(overlay){ overlay.addEventListener('click', cerrarPanelEmpleado); }
+          const panel = document.getElementById('employeePanel');
+          if(panel){ panel.addEventListener('click', (e)=>{ e.stopPropagation(); }); }
+          document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ cerrarPanelEmpleado(); } });
+          window.addEventListener('scroll', alignPanelTop, { passive: true });
+          window.addEventListener('resize', alignPanelTop);
+          const btnAniv = document.getElementById('btnAniversarios');
+          if (btnAniv) { btnAniv.addEventListener('click', showAniversariosModal); }
+          wireHistoryButton();
+        // Buscar (modal)
+        const btnBuscar = document.getElementById('btnBuscar');
+        const searchModal = document.getElementById('searchModal');
+        const sbClose = null; // botones removidos
+        const sbCancelar = null;
+        const sbBuscar = null;
+        const sbResultados = document.getElementById('sbResultados');
+        const sbQuery = document.getElementById('sbQuery');
+        function openSearch(){ searchModal.style.display = 'flex'; sbQuery.focus(); sbResultados.innerHTML = ''; }
+        function closeSearch(){ searchModal.style.display = 'none'; }
+        function renderResultados(items){
+          if(!items || items.length === 0){ sbResultados.innerHTML = '<div style="color:#aaa;">Sin resultados</div>'; return; }
+          sbResultados.innerHTML = items.map(e => `
+            <div class="sb-result">
+              <div>
+                <div style="font-weight:600;">${e.nombre_completo}</div>
+                <div style="opacity:.8;font-size:12px;">ID ${e.id}${e.puesto? ' · '+e.puesto: ''}</div>
+      </div>
+              <button class="sb-btn" data-id="${e.id}" data-name="${e.nombre_completo}">Ver historial</button>
+            </div>
+          `).join('');
+          sbResultados.querySelectorAll('.sb-btn').forEach(b => b.addEventListener('click', () => {
+            const id = b.getAttribute('data-id');
+            const name = b.getAttribute('data-name');
+            abrirPanelEmpleado(id, name);
+            closeSearch();
+          }));
+        }
+        let empleadosCache = null;
+        async function getEmpleados(){
+          if(Array.isArray(empleadosCache)) return empleadosCache;
+          const r = await fetch('/api/empleados');
+          empleadosCache = await r.json();
+          return empleadosCache;
+        }
+
+        async function doBuscar(){
+          const q = (sbQuery.value||'').trim();
+          if(!q){ sbResultados.innerHTML = '<div style="color:#f88;">Ingresa un criterio de búsqueda</div>'; return; }
+          try{
+            const isNumeric = /^\d+$/.test(q);
+            if(isNumeric && q.length >= 3){
+              // Búsqueda exacta por ID cuando es suficientemente largo
+              const r = await fetch(`/api/empleados/${encodeURIComponent(q)}`);
+              if(r.ok){
+                const emp = await r.json();
+                renderResultados(emp ? [emp] : []);
+                return;
+              }
+            }
+            // Búsqueda local (por nombre o por coincidencia parcial de ID)
+            const lista = await getEmpleados();
+            const qn = q.toLowerCase();
+            const res = lista.filter(e => {
+              const nombre = String(e.nombre_completo||'').toLowerCase();
+              const idStr = String(e.id||'');
+              return nombre.includes(qn) || idStr.includes(q);
+            });
+            renderResultados(res.slice(0, 25));
+          }catch(err){ sbResultados.innerHTML = '<div style="color:#f88;">Error al buscar</div>'; }
+        }
+        if(btnBuscar){ btnBuscar.addEventListener('click', openSearch); }
+        if(searchModal){ searchModal.addEventListener('click', e => { if(e.target === searchModal) closeSearch(); }); }
+        let sbTimer;
+        if(sbQuery){
+          sbQuery.addEventListener('keydown', e => { if(e.key==='Enter') doBuscar(); });
+          sbQuery.addEventListener('input', () => {
+            clearTimeout(sbTimer);
+            sbTimer = setTimeout(() => {
+              const v = (sbQuery.value||'').trim();
+              if(v.length >= 2){ doBuscar(); } else { sbResultados.innerHTML = ''; }
+            }, 220);
+          });
+        }
+        // Constancias (modal)
+        const btnConstancias = document.getElementById('btnConstancias');
+        const constModal = document.getElementById('imprimirConstanciasModal');
+        const constInput = document.getElementById('constanciaEmpleadoId');
+        const constClose = document.getElementById('closeImprimirConstanciasModal');
+        const constCancel = document.getElementById('cancelImprimirConstancias');
+        const constGenerar = document.getElementById('generarConstancia');
+        const constMes = document.getElementById('constanciaMes');
+        const constGenerarMes = document.getElementById('generarConstanciasMes');
+        const constanciaPreviewModal = document.getElementById('constanciaPreviewModal');
+        const constanciaPreviewCloseBtn = document.getElementById('constanciaPreviewCloseBtn');
+        const constanciaPreviewCloseAction = document.getElementById('constanciaPreviewCloseAction');
+        const constanciaPreviewDownloadBtn = document.getElementById('constanciaPreviewDownloadBtn');
+        if(btnConstancias){ btnConstancias.addEventListener('click', showImprimirConstanciasModal); }
+        if(constClose){ constClose.addEventListener('click', closeImprimirConstanciasModal); }
+        if(constCancel){ constCancel.addEventListener('click', closeImprimirConstanciasModal); }
+        if(constGenerar){ constGenerar.addEventListener('click', generarConstanciaVacaciones); }
+        if(constInput){ constInput.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); generarConstanciaVacaciones(); }}); }
+        if(constModal){ constModal.addEventListener('click', e => { if(e.target === constModal) closeImprimirConstanciasModal(); }); }
+        if(constanciaPreviewCloseBtn){ constanciaPreviewCloseBtn.addEventListener('click', closeConstanciaPreviewModal); }
+        if(constanciaPreviewCloseAction){ constanciaPreviewCloseAction.addEventListener('click', closeConstanciaPreviewModal); }
+        if(constanciaPreviewDownloadBtn){ constanciaPreviewDownloadBtn.addEventListener('click', descargarConstanciaPDF); }
+        if(constanciaPreviewModal){ constanciaPreviewModal.addEventListener('click', e => { if(e.target === constanciaPreviewModal) closeConstanciaPreviewModal(); }); }
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && constanciaPreviewModal && constanciaPreviewModal.classList.contains('open')) {
+            closeConstanciaPreviewModal();
+          }
+        });
+        if(constGenerarMes){ constGenerarMes.addEventListener('click', async () => {
+          const mes = parseInt((constMes && constMes.value) || String(new Date().getMonth()), 10);
+          const nombres = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+          await descargarConstanciasDelMes(mes, nombres[mes] || 'Mes');
+        }); }
+        // Solicitar (modal RH sin restricciones)
+        const btnSolicitar = document.getElementById('btnSolicitar');
+        const rhModal = document.getElementById('solicitarVacacionesModal');
+        const rhClose = document.getElementById('closeSolicitarVacacionesModal');
+        const rhCancel = document.getElementById('cancelSolicitarVacaciones');
+        const rhBuscar = document.getElementById('buscarEmpleadoBtn');
+        const rhForm = document.getElementById('formVacacionesRH');
+        const rhInicio = document.getElementById('rhFechaInicio');
+        const rhFin = document.getElementById('rhFechaFin');
+        if(btnSolicitar){ btnSolicitar.addEventListener('click', showSolicitarVacacionesModal); }
+        if(rhClose){ rhClose.addEventListener('click', closeSolicitarVacacionesModal); }
+        if(rhCancel){ rhCancel.addEventListener('click', closeSolicitarVacacionesModal); }
+        if(rhModal){ rhModal.addEventListener('click', e => { if(e.target === rhModal) closeSolicitarVacacionesModal(); }); }
+        if(rhBuscar){ rhBuscar.addEventListener('click', buscarEmpleadoRH); }
+        if(rhForm){ rhForm.addEventListener('submit', e => { e.preventDefault(); enviarSolicitudVacacionesRH(); }); }
+        const addEventBtn = document.getElementById('addEventBtn');
+        if(addEventBtn){ addEventBtn.addEventListener('click', showSolicitudesPendientesModal); }
+        if(rhInicio){ rhInicio.addEventListener('change', calcularDiasRH); }
+        if(rhFin){ rhFin.addEventListener('change', calcularDiasRH); }
+        });
+      } else {
+        cargarVacaciones();
+        setupCollapsible('headerActivas','secActivas');
+        setupCollapsible('headerProgramadas','secProgramadas');
+        const epClose = document.getElementById('epClose');
+        if(epClose){ epClose.addEventListener('click', ()=> document.getElementById('employeePanel').classList.remove('show')); }
+        window.addEventListener('scroll', alignPanelTop, { passive: true });
+        window.addEventListener('resize', alignPanelTop);
+        const btnAniv = document.getElementById('btnAniversarios');
+        if (btnAniv) { btnAniv.addEventListener('click', showAniversariosModal); }
+        // Conexión del botón (idempotente)
+        wireHistoryButton();
+        wireEditModal();
+        const closeX = document.getElementById('closeModal');
+        const eventModal = document.getElementById('eventModal');
+        if(closeX){
+          // Asegurar un único handler
+          closeX.replaceWith(closeX.cloneNode(true));
+          const newClose = document.getElementById('closeModal');
+          newClose.addEventListener('click', closeSolicitudesModal);
+        }
+        if(eventModal){ eventModal.addEventListener('click', e => { if(e.target === eventModal) closeSolicitudesModal(); }); }
+        // Buscar (modal)
+        const btnBuscar = document.getElementById('btnBuscar');
+        const searchModal = document.getElementById('searchModal');
+        const sbClose = document.getElementById('sbClose');
+        const sbCancelar = document.getElementById('sbCancelar');
+        const sbBuscar = document.getElementById('sbBuscar');
+        const sbResultados = document.getElementById('sbResultados');
+        const sbTipo = document.getElementById('sbTipo');
+        const sbQuery = document.getElementById('sbQuery');
+        function openSearch(){ searchModal.style.display = 'flex'; sbQuery.focus(); sbResultados.innerHTML = ''; }
+        function closeSearch(){ searchModal.style.display = 'none'; }
+        function renderResultados(items){
+          if(!items || items.length === 0){ sbResultados.innerHTML = '<div style="color:#aaa;">Sin resultados</div>'; return; }
+          sbResultados.innerHTML = items.map(e => `
+            <div class="sb-result">
+              <div>
+                <div style="font-weight:600;">${e.nombre_completo}</div>
+                <div style="opacity:.8;font-size:12px;">ID ${e.id}${e.puesto? ' · '+e.puesto: ''}</div>
+          </div>
+              <button class="sb-btn" data-id="${e.id}" data-name="${e.nombre_completo}">Ver historial</button>
+        </div>
+          `).join('');
+          sbResultados.querySelectorAll('.sb-btn').forEach(b => b.addEventListener('click', () => {
+            const id = b.getAttribute('data-id');
+            const name = b.getAttribute('data-name');
+            abrirPanelEmpleado(id, name);
+            closeSearch();
+          }));
+        }
+        async function doBuscar(){
+          const q = (sbQuery.value||'').trim();
+          if(!q){ sbResultados.innerHTML = '<div style="color:#f88;">Ingresa un criterio de búsqueda</div>'; return; }
+          try{
+            if(sbTipo.value === 'id' && /^\d+$/.test(q)){
+              const r = await fetch(`/api/empleados/${encodeURIComponent(q)}`);
+              if(!r.ok){ renderResultados([]); return; }
+              const emp = await r.json();
+              renderResultados(emp ? [emp] : []);
+            } else {
+              const r = await fetch('/api/empleados');
+              const lista = await r.json();
+              const qn = q.toLowerCase();
+              const res = lista.filter(e => String(e.nombre_completo||'').toLowerCase().includes(qn));
+              renderResultados(res.slice(0, 25));
+            }
+          }catch(err){ sbResultados.innerHTML = '<div style="color:#f88;">Error al buscar</div>'; }
+        }
+        if(btnBuscar){ btnBuscar.addEventListener('click', openSearch); }
+        if(sbClose){ sbClose.addEventListener('click', closeSearch); }
+        if(sbCancelar){ sbCancelar.addEventListener('click', closeSearch); }
+        if(sbBuscar){ sbBuscar.addEventListener('click', doBuscar); }
+        if(searchModal){ searchModal.addEventListener('click', e => { if(e.target === searchModal) closeSearch(); }); }
+        if(sbQuery){ sbQuery.addEventListener('keydown', e => { if(e.key==='Enter') doBuscar(); }); }
+      }
+    })();
+    </script>
+
+    <!-- Barra inferior tipo píldora -->
+    <div class="bottom-pill-bar">
+      <div class="bottom-pill-actions">
+        <button class="pill-btn pill-gray" id="addEventBtn"><span class="badge">0</span></button>
+        <button class="pill-btn pill-green" id="btnAniversarios"><i class="fas fa-birthday-cake"></i>Próximos aniversarios</button>
+        <button class="pill-btn pill-blue" id="btnBuscar"><i class="fas fa-search"></i>Buscar</button>
+        <button class="pill-btn pill-purple" id="btnConstancias"><i class="fas fa-print"></i>Constancias</button>
+        <button class="pill-btn pill-orange" id="btnSolicitar"><i class="fas fa-plus-circle"></i>Solicitar</button>
+        </div>
+      </div>
+
+    <!-- Modal de búsqueda -->
+    <div id="searchModal" class="search-modal">
+      <div class="search-box">
+        <div class="sb-body">
+          <div class="sb-pill">
+            <input id="sbQuery" class="sb-input" placeholder="Escribe el ID o nombre del empleado" />
+          </div>
+          <div id="sbResultados" class="sb-results-wrapper"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para agregar eventos -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Agregar Evento</h3>
+        <span class="close" id="closeModal">&times;</span>
+      </div>
+      <form id="eventForm">
+        <div class="form-group">
+          <label for="eventTitle">Título del evento</label>
+          <input type="text" id="eventTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="eventDate">Fecha</label>
+          <input type="date" id="eventDate" required>
+        </div>
+        <div class="form-group">
+          <label for="eventDescription">Descripción</label>
+          <textarea id="eventDescription" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelEvent">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Evento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para aprobar vacaciones -->
+  <div class="modal" id="confirmAprobarModal" style="display: none;">
+    <div class="modal-content" style="max-width: 420px; border-radius: 24px; background: rgba(255, 255, 255, 0.1); color: #f9fafb; padding: 20px 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div>
+          <div style="font-size: 14px; color: #9ca3af;">Aprobar solicitud de vacaciones</div>
+          <div class="confirm-emp-nombre" style="font-size: 18px; font-weight: 700; color: #f9fafb; margin-top: 2px;">Empleado</div>
+        </div>
+        <span class="close" id="closeConfirmAprobar" style="cursor: pointer; font-size: 22px; color: #9ca3af;">&times;</span>
+      </div>
+
+      <div style="background: rgb(0 0 0 / 50%); border-radius: 30px; padding: 14px 16px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-size: 13px; color: #e5e7eb; font-weight: 600;">
+            <span class="confirm-emp-puesto">Puesto</span>
+          </div>
+          <span style="background: #facc15; color: #111827; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Pendiente</span>
+        </div>
+        <div style="font-size: 12px; color: #e5e7eb; line-height: 1.4;">
+          <div><strong>Fecha inicio:</strong> <span class="confirm-fecha-inicio">-</span></div>
+          <div><strong>Fecha fin:</strong> <span class="confirm-fecha-fin">-</span></div>
+          <div><strong>Días solicitados:</strong> <span class="confirm-dias-solicitados">-</span></div>
+          <div><strong>Días pendientes:</strong> <span class="confirm-dias-pendientes">-</span></div>
+        </div>
+      </div>
+
+      <div style="font-size: 12px; color: #d1d5db; margin-bottom: 14px;">
+        ¿Estás seguro de que quieres <span style="font-weight: 700; color: #bbf7d0;">aprobar</span> esta solicitud de vacaciones?
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 4px;">
+        <button id="btnConfirmAprobarCancelar" class="btn btn-secondary" style="flex: 1; border-radius: 999px; border: 1px solid #4b5563; color: #e5e7eb;">
+          Cancelar
+        </button>
+        <button id="btnConfirmAprobarAceptar" class="btn btn-primary" style="flex: 1; border-radius: 999px; background: linear-gradient(135deg, #22c55e, #16a34a); border: none;">
+          ✓ Aprobar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para búsqueda de vacaciones -->
+  <div class="modal" id="busquedaModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Búsqueda de Vacaciones por Empleado</h3>
+        <span class="close" id="closeBusquedaModal">&times;</span>
+      </div>
+      <div class="busqueda-content">
+        <div class="form-group">
+          <label for="empleadoId">ID del Empleado:</label>
+          <input type="number" id="empleadoId" placeholder="Ingresa el ID del empleado" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelBusqueda">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="buscarVacaciones">Buscar</button>
+        </div>
+        <div id="resultadosBusqueda" style="margin-top: 20px; display: none;">
+          <h4>Resultados de la búsqueda:</h4>
+          <div id="vacacionesEmpleado"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal para imprimir constancias -->
+  <div class="modal" id="imprimirConstanciasModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Imprimir Constancias de Vacaciones</h3>
+        <span class="close" id="closeImprimirConstanciasModal">&times;</span>
+      </div>
+      <div class="imprimir-constancias-content">
+        <div style="display:grid; grid-template-columns: 1fr; gap:18px;">
+          <section style="background: rgba(255,255,255,0.06); border-radius:12px; padding:14px;">
+            <h4 style="margin:0 0 10px 0; color:#fff;">Por empleado</h4>
+            <div class="form-group" style="position: relative; max-width: 560px;">
+              <label for="constanciaEmpleadoId">Empleado (ID o Nombre):</label>
+              <input type="text" id="constanciaEmpleadoId" placeholder="Ingresa el ID o nombre del empleado" required style="width:100%;">
+              <div id="constanciaResultados" style="display:none; position:absolute; top: calc(100% + 6px); left:0; width:100%; max-height:260px; overflow:auto; background: rgba(20,20,20,0.96); border:1px solid rgba(255,255,255,0.12); border-radius: 10px; z-index: 1000; box-shadow: 0 8px 24px rgba(0,0,0,0.45);"></div>
+            </div>
+            <div class="modal-actions" style="margin-top:10px; display:flex; gap:10px; justify-content:flex-end;">
+              <button type="button" class="btn btn-secondary" id="cancelImprimirConstancias">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="generarConstancia">Generar Constancia</button>
+            </div>
+          </section>
+          <section style="background: rgba(255,255,255,0.06); border-radius:12px; padding:14px;">
+            <h4 style="margin:0 0 10px 0; color:#fff;">Por mes</h4>
+            <div class="form-group">
+              <label for="constanciaMes">Constancias por mes:</label>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <select id="constanciaMes" style="flex:1; min-width:220px;">
+                  <option value="0">Enero</option>
+                  <option value="1">Febrero</option>
+                  <option value="2">Marzo</option>
+                  <option value="3">Abril</option>
+                  <option value="4">Mayo</option>
+                  <option value="5">Junio</option>
+                  <option value="6">Julio</option>
+                  <option value="7">Agosto</option>
+                  <option value="8">Septiembre</option>
+                  <option value="9">Octubre</option>
+                  <option value="10">Noviembre</option>
+                  <option value="11">Diciembre</option>
+                </select>
+                <button type="button" class="btn btn-primary" id="generarConstanciasMes">Generar constancias del mes</button>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div id="constanciaResultado" style="margin-top: 16px; display: none;">
+          <div id="constanciaInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <style>
+          #constanciaPreviewModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+          }
+
+          #constanciaPreviewModal.open {
+            display: flex;
+          }
+
+          .constancia-preview-card {
+            width: 92%;
+            max-width: 1200px;
+            height: 86vh;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+          }
+
+          .constancia-preview-left {
+            flex: 1.4;
+            min-width: 360px;
+            background: #f6f6f8;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .constancia-preview-right {
+            width: 360px;
+            min-width: 280px;
+            background: #ffffff;
+            border-left: 1px solid #eef2f7;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+
+          .constancia-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eef2f7;
+            background: linear-gradient(90deg, #f8fafc, #ffffff);
+          }
+
+          .constancia-preview-title {
+            font-weight: 800;
+            color: #0f172a;
+          }
+
+          .constancia-preview-iframe {
+            flex: 1;
+            border: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+          }
+
+          .constancia-close-btn {
+            background: #f3f4f6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+          }
+
+          .constancia-preview-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 6px;
+          }
+
+          .constancia-preview-value {
+            font-size: 14px;
+            color: #111827;
+            line-height: 1.45;
+            word-break: break-word;
+          }
+
+          .constancia-preview-status {
+            padding: 10px 12px;
+            border-radius: 30px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            color: #334155;
+            font-size: 13px;
+          }
+
+          .constancia-preview-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 8px;
+          }
+
+          .constancia-preview-actions .btn {
+            flex: 1;
+          }
+
+          @media (max-width: 900px) {
+            .constancia-preview-card {
+              flex-direction: column;
+              height: 92vh;
+            }
+
+            .constancia-preview-left {
+              min-height: 320px;
+            }
+
+            .constancia-preview-right {
+              width: 100%;
+              border-left: none;
+              border-top: 1px solid #eef2f7;
+            }
+          }
+        </style>
+
+        <div id="constanciaPreviewModal" role="dialog" aria-modal="true" aria-hidden="true">
+          <div class="constancia-preview-card" role="document">
+            <div class="constancia-preview-left">
+              <div class="constancia-preview-header">
+                <div class="constancia-preview-title">Previsualizar constancia</div>
+                <button class="constancia-close-btn" id="constanciaPreviewCloseBtn" aria-label="Cerrar">×</button>
+              </div>
+              <iframe id="constanciaPreviewFrame" class="constancia-preview-iframe" src="about:blank" title="Vista previa de constancia"></iframe>
+            </div>
+            <div class="constancia-preview-right">
+              <div>
+                <div class="constancia-preview-label">Empleado</div>
+                <div class="constancia-preview-value" id="constanciaPreviewEmployeeName">Sin datos</div>
+              </div>
+              <div>
+                <div class="constancia-preview-label">Estado</div>
+                <div class="constancia-preview-status" id="constanciaPreviewStatus">Generando PDF...</div>
+              </div>
+              <div class="constancia-preview-actions">
+                <button type="button" class="btn btn-secondary" style="background-color: rgba(201,44,37,0.8);" id="constanciaPreviewCloseAction">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="constanciaPreviewDownloadBtn" disabled>Descargar PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+  <!-- Modal para solicitar vacaciones RH -->
+  <div class="modal" id="solicitarVacacionesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Solicitar Vacaciones para Empleado</h3>
+        <span class="close" id="closeSolicitarVacacionesModal">&times;</span>
+      </div>
+      <div class="solicitar-vacaciones-content">
+        <form id="formVacacionesRH">
+          <div class="form-group">
+            <label for="rhEmpleadoId">Empleado (ID o Nombre):</label>
+            <input type="text" id="rhEmpleadoId" placeholder="Escribe el ID o nombre del empleado" required>
+            <button type="button" class="btn btn-secondary" id="buscarEmpleadoBtn" style="margin-top: 5px; width: 100%;">
+              <i class="fas fa-search"></i> Buscar Empleado
+            </button>
+            <div id="rhResultados" style="display:none; margin-top:8px; max-height:220px; overflow:auto; background: rgba(255,255,255,0.08); border-radius: 8px;">
+            </div>
+          </div>
+          
+          <!-- Información del empleado -->
+          <div id="rhEmpleadoInfo" class="empleado-info" style="display: none; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <h4 style="color: white; margin: 0 0 10px 0;">Información del Empleado</h4>
+            <div id="rhEmpleadoContent" style="color: rgba(255,255,255,0.9);"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="rhFechaInicio">Fecha de inicio:</label>
+            <input type="date" id="rhFechaInicio" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="rhFechaFin">Fecha de fin:</label>
+            <input type="date" id="rhFechaFin" required>
+          </div>
+          
+          <!-- Información de días -->
+          <div id="rhDiasInfo" class="dias-info" style="display: none; background: rgba(76, 175, 80, 0.2); padding: 10px; border-radius: 8px; margin: 10px 0; text-align: center;">
+            <span style="color: white; font-weight: bold;">
+              Días laborables seleccionados: <span id="rhContadorDias">0</span> día(s)
+            </span>
+          </div>
+        
+          
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelSolicitarVacaciones">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="enviarSolicitudRH">
+              <i class="fas fa-paper-plane"></i> Enviar Solicitud
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  
+  <script>
+    // Variables globales
+    let currentDate = new Date();
+    let selectedDate = null;
+    let hoverTimeout = null;
+    let hoverModal = null;
+    let solicitudesPendientes = [];
+    let solicitudAprobacionActualId = null;
+    let empleados = [];
+    let vacacionesActivas = [];
+    let currentAniversariosYear = new Date().getFullYear(); // Año actual para el modal de aniversarios
+
+    // Inicialización (limitada a módulos activos)
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof loadSolicitudesPendientes === 'function') loadSolicitudesPendientes();
+      if (typeof loadEmpleados === 'function') loadEmpleados();
+      if (typeof loadVacacionesActivas === 'function') loadVacacionesActivas();
+
+      // Listeners para el modal de confirmación de aprobación
+      const confirmModal = document.getElementById('confirmAprobarModal');
+      const closeConfirm = document.getElementById('closeConfirmAprobar');
+      const btnCancelConfirm = document.getElementById('btnConfirmAprobarCancelar');
+      const btnOkConfirm = document.getElementById('btnConfirmAprobarAceptar');
+
+      if (closeConfirm) {
+        closeConfirm.addEventListener('click', cerrarModalAprobarSolicitud);
+      }
+      if (btnCancelConfirm) {
+        btnCancelConfirm.addEventListener('click', cerrarModalAprobarSolicitud);
+      }
+      if (btnOkConfirm) {
+        btnOkConfirm.addEventListener('click', confirmarAprobacionSolicitud);
+      }
+      if (confirmModal) {
+        confirmModal.addEventListener('click', (e) => {
+          if (e.target === confirmModal) {
+            cerrarModalAprobarSolicitud();
+          }
+        });
+      }
+    });
+
+    function createHoverModal() 
+    {
+      hoverModal = document.createElement('div');
+      hoverModal.className = 'hover-modal';
+      hoverModal.innerHTML = `
+        <div class="hover-modal-header"></div>
+        <div class="hover-modal-content"></div>
+      `;
+      document.body.appendChild(hoverModal);
+    }
+
+    function showHoverModal(dayElement, date) 
+    {
+      const dayEvents = events.filter(event => 
+      {
+        const eventDate = new Date(event.date + 'T00:00:00');
+        const compareDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        return eventDate.getTime() === compareDate.getTime();
+      });
+
+      const header = hoverModal.querySelector('.hover-modal-header');
+      const content = hoverModal.querySelector('.hover-modal-content');
+
+      header.textContent = formatDate(date);
+
+      if (dayEvents.length === 0) 
+      {
+        content.innerHTML = '<div class="no-events-message">No hay vacaciones programadas para este día</div>';
+      } else 
+      {
+        content.innerHTML = dayEvents.map(event => `
+          <div class="hover-event-item ${event.completed ? 'hover-event-completed' : ''}">
+            <div class="hover-event-title">${event.title}</div>
+            ${event.description ? `<div class="hover-event-description">${event.description}</div>` : ''}
+          </div>
+        `).join('');
+      }
+
+      // Posicionar el modal
+      const rect = dayElement.getBoundingClientRect();
+      const modalWidth = 250;
+      const modalHeight = 150;
+      
+      let left = rect.right + 10;
+      let top = rect.top;
+
+      // Ajustar si se sale por la derecha
+      if (left + modalWidth > window.innerWidth) 
+      {
+        left = rect.left - modalWidth - 10;
+      }
+
+      // Ajustar si se sale por abajo
+      if (top + modalHeight > window.innerHeight) 
+      {
+        top = window.innerHeight - modalHeight - 10;
+      }
+
+      hoverModal.style.left = left + 'px';
+      hoverModal.style.top = top + 'px';
+      hoverModal.classList.add('show');
+    }
+
+    function hideHoverModal() 
+    {
+      if (hoverModal) 
+      {
+        hoverModal.classList.remove('show');
+      }
+    }
+
+    function setupDayHover(dayElement, date) {
+      dayElement.addEventListener('mouseenter', () => {
+        // Limpiar timeout anterior si existe
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+        }
+
+        // Configurar nuevo timeout de 1 segundo
+        hoverTimeout = setTimeout(() => {
+          showHoverModal(dayElement, date);
+        }, 1000);
+      });
+
+      dayElement.addEventListener('mouseleave', () => {
+        // Limpiar timeout
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = null;
+        }
+        
+        // Ocultar modal después de un pequeño delay
+        setTimeout(() => {
+          hideHoverModal();
+        }, 100);
+      });
+    }
+
+    function loadEvents() {
+      const eventsList = document.getElementById('eventsList');
+      eventsList.innerHTML = '';
+
+      if (!selectedDate) {
+        eventsList.innerHTML = '<p>Selecciona una fecha para ver las vacaciones programadas</p>';
+        return;
+      }
+
+      const dayEvents = events.filter(event => {
+        const eventDate = new Date(event.date + 'T00:00:00');
+        const compareDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        return eventDate.getTime() === compareDate.getTime();
+      });
+
+      if (dayEvents.length === 0) {
+        eventsList.innerHTML = '<p>No hay vacaciones programadas para esta fecha</p>';
+        return;
+      }
+
+      dayEvents.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.className = 'event-item';
+        eventElement.innerHTML = `
+          <div class="event-info ${event.completed ? 'completed-event' : ''}">
+            <div class="event-title">${event.title}</div>
+            <div class="event-date">${formatDate(selectedDate)}</div>
+            ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
+          </div>
+        `;
+        eventsList.appendChild(eventElement);
+      });
+    }
+
+    function formatDate(date) {
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      return date.toLocaleDateString('es-ES', options);
+    }
+
+
+    function addEvent() 
+    {
+      const title = document.getElementById('eventTitle').value;
+      const date = document.getElementById('eventDate').value;
+      const description = document.getElementById('eventDescription').value;
+
+      const event = 
+      {
+        id: Date.now().toString(),
+        title: title,
+        date: date,
+        description: description
+      };
+
+      events.push(event);
+
+      document.getElementById('eventModal').style.display = 'none';
+      document.getElementById('eventForm').reset();
+
+      loadEvents();
+    }
+
+    function editEvent(eventId) 
+    {
+      const event = events.find(e => e.id === eventId);
+      if (event) 
+      {
+        document.getElementById('eventTitle').value = event.title;
+        document.getElementById('eventDate').value = event.date;
+        document.getElementById('eventDescription').value = event.description || '';
+        document.getElementById('eventModal').style.display = 'block';
+        
+        // Cambiar el formulario para editar
+        document.getElementById('eventForm').onsubmit = (e) => {
+          e.preventDefault();
+          updateEvent(eventId);
+        };
+      }
+    }
+
+    function updateEvent(eventId) {
+      const title = document.getElementById('eventTitle').value;
+      const date = document.getElementById('eventDate').value;
+      const description = document.getElementById('eventDescription').value;
+
+      const eventIndex = events.findIndex(e => e.id === eventId);
+      if (eventIndex !== -1) 
+      {
+        events[eventIndex] = 
+        {
+          id: eventId,
+          title: title,
+          date: date,
+          description: description
+        };
+
+        document.getElementById('eventModal').style.display = 'none';
+        document.getElementById('eventForm').reset();
+        loadEvents();
+
+        // Restaurar el formulario para agregar
+        document.getElementById('eventForm').onsubmit = (e) => 
+        {
+          e.preventDefault();
+          addEvent();
+        };
+      }
+    }
+
+    function completeEvent(eventId) 
+    {
+      if (confirm('¿Estás seguro de que quieres marcar este evento como terminado?')) 
+      {
+        const eventIndex = events.findIndex(e => e.id === eventId);
+        if (eventIndex !== -1) 
+        {
+          events[eventIndex].completed = true;
+          loadEvents();
+        }
+      }
+    }
+
+    function deleteEvent(eventId) 
+    {
+      if (confirm('¿Estás seguro de que quieres eliminar este evento?')) 
+      {
+        events = events.filter(e => e.id !== eventId);
+        loadEvents();
+      }
+    }
+
+    // Cargar solicitudes pendientes desde la base de datos
+      async function loadSolicitudesPendientes() 
+    {
+      try 
+      {
+        const response = await fetch(`/api/vacaciones/todas?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) 
+        {
+          throw new Error(`Error al cargar las solicitudes: ${response.status}`);
+        }
+        const solicitudes = await response.json();
+        solicitudesPendientes = solicitudes.filter(s => s.estado === 'pendiente');
+        updateSolicitudesButton();
+        if (typeof convertSolicitudesToEvents === 'function') { convertSolicitudesToEvents(); }
+      } catch (error) 
+      {
+        console.error('Error al cargar solicitudes pendientes:', error);
+        // Aún actualizar el botón con 0 en caso de error
+        updateSolicitudesButton();
+      }
+    }
+
+    // Función para actualizar el botón con el contador
+    function updateSolicitudesButton() {
+      const addEventBtn = document.getElementById('addEventBtn');
+      const count = solicitudesPendientes.length;
+      addEventBtn.innerHTML = `<span class="badge">${count}</span>`;
+    }
+
+
+    // Mostrar el modal de solicitudes pendientes
+    function showSolicitudesPendientesModal() {
+      const modal = document.getElementById('eventModal');
+      const modalHeader = modal.querySelector('.modal-header h3');
+      const modalForm = modal.querySelector('#eventForm');
+      
+      modalHeader.textContent = 'Solicitudes Pendientes de Vacaciones';
+      modalForm.style.display = 'none';
+      // Asegurar que el botón de cierre (X) cierre este modal específico
+      const closeBtn = document.getElementById('closeModal');
+      if (closeBtn) {
+        closeBtn.onclick = closeSolicitudesModal;
+      }
+      
+      const solicitudesContent = document.createElement('div');
+      solicitudesContent.id = 'solicitudesContent';
+      
+      if (solicitudesPendientes.length === 0) 
+      {
+        solicitudesContent.innerHTML = '<p style="text-align: center; color: white;">No hay solicitudes pendientes</p>';
+      } else 
+      {
+        solicitudesContent.innerHTML = `
+          <div style="max-height: 400px; overflow-y: auto;">
+            ${solicitudesPendientes.map(solicitud => `
+              <div class="solicitud-item" data-id="${solicitud.id}" style="background: rgba(255,255,255,0.1); margin: 10px 0; padding: 15px; border-radius: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h4 style="color: white; margin: 0;">${solicitud.nombre_completo}</h4>
+                  <span style="background: #ffc107; color: #000; padding: 4px 8px; border-radius: 30px; font-size: 12px;">Pendiente</span>
+                </div>
+                <div style="color: rgba(255,255,255,0.8); font-size: 14px;">
+                  <p><strong>Puesto:</strong> ${solicitud.puesto}</p>
+                  <p><strong>Supervisor:</strong> ${solicitud.supervisor}</p>
+                  <p><strong>Fecha inicio:</strong> ${formatDateForDisplay(solicitud.fecha_inicio)}</p>
+                  <p><strong>Fecha fin:</strong> ${formatDateForDisplay(solicitud.fecha_fin)}</p>
+                  <p><strong>Días solicitados:</strong> ${solicitud.dias_solicitados}</p>
+                  <p><strong>Días pendientes:</strong> <span style="color: ${solicitud.dias_pendientes > 0 ? '#4CAF50' : '#FFC107'}; font-weight: bold;">${solicitud.dias_pendientes || 0}</span></p>
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                  <button class="btn btn-primary" onclick="abrirModalAprobarSolicitud(${solicitud.id})" style="flex: 1;">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn btn-secondary" onclick="rechazarSolicitud(${solicitud.id})" style="flex: 1;">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      
+      modal.querySelector('.modal-content').appendChild(solicitudesContent);
+      modal.style.display = 'block'; //Muestra el modal
+      // Cerrar con ESC
+      function escHandler(e){ if(e.key === 'Escape'){ closeSolicitudesModal(); document.removeEventListener('keydown', escHandler); } }
+      document.addEventListener('keydown', escHandler);
+    }
+
+    function closeSolicitudesModal() {
+      const modal = document.getElementById('eventModal');
+      modal.style.display = 'none';
+      
+      // Limpiar el contenido de solicitudes SI Y SOLO SI existe
+      const solicitudesContent = document.getElementById('solicitudesContent');
+      if (solicitudesContent) {
+        solicitudesContent.remove();
+      }
+      
+      // Restaurar el formulario
+      const modalForm = document.getElementById('eventForm');
+      modalForm.style.display = 'block';
+      
+      // Restaurar el título
+      const modalHeader = modal.querySelector('.modal-header h3');
+      modalHeader.textContent = 'Agregar Evento';
+    }
+
+    // Función para formatear fecha para mostrar
+    function formatDateForDisplay(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', 
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    function limitarComentariosConstancia(texto) {
+      const maxChars = 500;
+      const maxLines = 5;
+      const normalizado = String(texto ?? '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      let limitado = normalizado.split('\n').slice(0, maxLines).join('\n');
+      if (limitado.length > maxChars) {
+        limitado = limitado.slice(0, maxChars);
+      }
+      return limitado;
+    }
+
+    function configurarLimiteComentariosTextarea(textarea) {
+      if (!textarea) return;
+      textarea.maxLength = 500;
+
+      const aplicarLimite = () => {
+        const limitado = limitarComentariosConstancia(textarea.value);
+        if (textarea.value !== limitado) {
+          textarea.value = limitado;
+        }
+      };
+
+      textarea.addEventListener('input', aplicarLimite);
+      textarea.addEventListener('paste', () => setTimeout(aplicarLimite, 0));
+      aplicarLimite();
+    }
+
+    function generarComentariosConstanciaDefault(ctx, vacacionReciente) {
+      if (!ctx || !vacacionReciente) {
+        return '';
+      }
+
+      const periodoVacacional = Math.max(1, ctx.antiguedad || 1);
+      const fechaRegreso = formatDateForDisplay(calcularFechaRegreso(new Date(vacacionReciente.fecha_fin)));
+      const diasCorrespondientes = ctx.diasCorrespondientes || '';
+      const diasSolicitados = vacacionReciente.dias_solicitados || '';
+      const diasPendientes = typeof vacacionReciente.dias_pendientes !== 'undefined' ? vacacionReciente.dias_pendientes : 0;
+
+      return `${periodoVacacional} periodo vacacional, Regresa el día: ${fechaRegreso}` +
+        `\nDías correspondientes: ${diasCorrespondientes}` +
+        `\nDías solicitados: ${diasSolicitados}` +
+        `\nDías pendientes: ${diasPendientes}`;
+    }
+
+    function sincronizarComentariosConstanciaTextarea() {
+      const textarea = document.getElementById('constanciaPreviewComments');
+      if (!textarea) return;
+
+      const ctx = window.constanciaContext || {};
+      const vacacionReciente = (ctx.vacacionesAprobadas && ctx.vacacionesAprobadas.length)
+        ? ctx.vacacionesAprobadas[ctx.vacacionesAprobadas.length - 1]
+        : null;
+      const comentarios = String(ctx.comments || '').trim() !== ''
+        ? ctx.comments
+        : generarComentariosConstanciaDefault(ctx, vacacionReciente);
+
+      textarea.value = limitarComentariosConstancia(comentarios || '');
+    }
+
+    // NUEVA FUNCIÓN: Calcular fecha de regreso (día siguiente al último día de vacaciones)
+    function calcularFechaRegreso(fechaFin) {
+      const fechaRegreso = new Date(fechaFin);
+      fechaRegreso.setDate(fechaRegreso.getDate() + 1);
+      
+      // Si el último día de vacaciones es sábado (6), regresar el lunes
+      if (fechaFin.getDay() === 6) {
+        fechaRegreso.setDate(fechaRegreso.getDate() + 1); // Avanzar al lunes
+      }
+      // Si el día de regreso es domingo, avanzar al lunes
+      else if (fechaRegreso.getDay() === 0) {
+        fechaRegreso.setDate(fechaRegreso.getDate() + 1);
+      }
+      
+      return fechaRegreso;
+    }
+
+    // ===== Modal de confirmación para aprobar solicitud =====
+    function abrirModalAprobarSolicitud(solicitudId) {
+      const modal = document.getElementById('confirmAprobarModal');
+      if (!modal) {
+        aprobarSolicitud(solicitudId);
+        return;
+      }
+
+      const solicitud = solicitudesPendientes.find(s => String(s.id) === String(solicitudId));
+      if (!solicitud) {
+        aprobarSolicitud(solicitudId);
+        return;
+      }
+
+      solicitudAprobacionActualId = solicitudId;
+
+      const nombreEl = modal.querySelector('.confirm-emp-nombre');
+      const puestoEl = modal.querySelector('.confirm-emp-puesto');
+      const inicioEl = modal.querySelector('.confirm-fecha-inicio');
+      const finEl = modal.querySelector('.confirm-fecha-fin');
+      const diasSolEl = modal.querySelector('.confirm-dias-solicitados');
+      const diasPendEl = modal.querySelector('.confirm-dias-pendientes');
+
+      if (nombreEl) nombreEl.textContent = solicitud.nombre_completo || 'Empleado';
+      if (puestoEl) puestoEl.textContent = solicitud.puesto || 'Puesto no especificado';
+      if (inicioEl) inicioEl.textContent = formatDateForDisplay(solicitud.fecha_inicio);
+      if (finEl) finEl.textContent = formatDateForDisplay(solicitud.fecha_fin);
+      if (diasSolEl) diasSolEl.textContent = solicitud.dias_solicitados;
+      if (diasPendEl) diasPendEl.textContent = solicitud.dias_pendientes ?? 0;
+
+      modal.style.display = 'block';
+
+      function escHandlerConfirm(e) {
+        if (e.key === 'Escape') {
+          cerrarModalAprobarSolicitud();
+          document.removeEventListener('keydown', escHandlerConfirm);
+        }
+      }
+      document.addEventListener('keydown', escHandlerConfirm);
+    }
+
+    function cerrarModalAprobarSolicitud() {
+      const modal = document.getElementById('confirmAprobarModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      solicitudAprobacionActualId = null;
+    }
+
+    async function confirmarAprobacionSolicitud() {
+      if (!solicitudAprobacionActualId) return;
+      const id = solicitudAprobacionActualId;
+      cerrarModalAprobarSolicitud();
+      await aprobarSolicitud(id);
+    }
+
+    // Función para aprobar solicitud (sin confirm nativo)
+    async function aprobarSolicitud(solicitudId) {
+      try {
+        const response = await fetch(`/api/vacaciones/${solicitudId}/estado`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            estado: 'aprobada',
+            aprobado_por: 1 // Cambiar a un ID numérico en producción
+          })
+        });
+
+        if (!response.ok) 
+        {
+          throw new Error('Error al aprobar la solicitud');
+        }
+
+        // Actualizar estado local y DOM sin refrescar (coerción segura de ID)
+        solicitudesPendientes = solicitudesPendientes.filter(s => String(s.id) !== String(solicitudId));
+        updateSolicitudesButton();
+        const item = document.querySelector(`.solicitud-item[data-id="${solicitudId}"]`);
+        if (item) { item.remove(); }
+        const cont = document.getElementById('solicitudesContent');
+        if (cont && cont.querySelectorAll('.solicitud-item').length === 0) {
+          cont.innerHTML = '<p style="text-align: center; color: white;">No hay solicitudes pendientes</p>';
+        }
+        try {
+          const tr = document.querySelector(`tr.row-emp[data-vac-id="${solicitudId}"]`);
+          if (tr) {
+            const badge = tr.querySelector('span[data-estado]');
+            if (badge) {
+              badge.textContent = 'aprobada';
+              badge.className = estadoClase('aprobada');
+              badge.setAttribute('data-estado','aprobada');
+              badge.removeAttribute('style');
+            }
+          }
+          const vi = document.querySelector(`.vac-item[data-id="${solicitudId}"]`);
+          if (vi) {
+            const viBadge = vi.querySelector('span');
+            if (viBadge) {
+              viBadge.textContent = 'aprobada';
+              viBadge.className = estadoClase('aprobada');
+              viBadge.setAttribute('data-estado','aprobada');
+              viBadge.removeAttribute('style');
+            }
+          }
+        } catch(_e) { /* noop */ }
+        if (typeof cargarVacaciones === 'function') { setTimeout(() => { cargarVacaciones().then(normalizeBadges).catch(()=>{}); }, 200); }
+        else if (typeof loadVacacionesActivas === 'function') { await loadVacacionesActivas(); }
+        if (typeof loadSolicitudesPendientes === 'function') { await loadSolicitudesPendientes(); }
+        if (typeof closeSolicitudesModal === 'function') { closeSolicitudesModal(); }
+        normalizeBadges();
+        showCustomMessage('Solicitud aprobada exitosamente', 'success');
+      } catch (error) 
+      {
+        console.error('Error al aprobar solicitud:', error);
+        showCustomMessage('Error al aprobar la solicitud', 'error');
+      }
+    }
+
+    // Función para rechazar solicitud
+    async function rechazarSolicitud(solicitudId) 
+    {
+      const motivo = prompt('Ingresa el motivo del rechazo:');
+      if (motivo) 
+      {
+        try 
+        {
+          const response = await fetch(`/api/vacaciones/${solicitudId}/estado`, 
+          {
+            method: 'PUT',
+            headers: 
+            {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              estado: 'cancelada',
+              motivo_rechazo: motivo,
+              aprobado_por: 1 // Cambiar a un ID numérico en lugar de string
+            })
+          });
+
+          if (!response.ok) 
+          {
+            throw new Error('Error al rechazar la solicitud');
+          }
+
+          // Actualizar estado local y DOM sin refrescar (coerción segura de ID)
+          solicitudesPendientes = solicitudesPendientes.filter(s => String(s.id) !== String(solicitudId));
+          updateSolicitudesButton();
+          const item = document.querySelector(`.solicitud-item[data-id="${solicitudId}"]`);
+          if (item) { item.remove(); }
+          const cont = document.getElementById('solicitudesContent');
+          if (cont && cont.querySelectorAll('.solicitud-item').length === 0) {
+            cont.innerHTML = '<p style="text-align: center; color: white;">No hay solicitudes pendientes</p>';
+          }
+          if (typeof cargarVacaciones === 'function') { await cargarVacaciones(); }
+          else if (typeof loadVacacionesActivas === 'function') { await loadVacacionesActivas(); }
+          if (typeof loadSolicitudesPendientes === 'function') { await loadSolicitudesPendientes(); }
+          if (typeof closeSolicitudesModal === 'function') { closeSolicitudesModal(); }
+          showCustomMessage('Solicitud rechazada exitosamente', 'success');
+        } catch (error) 
+        {
+          console.error('Error al rechazar solicitud:', error);
+          showCustomMessage('Error al rechazar la solicitud', 'error');
+        }
+      }
+    }
+
+    // Cargar empleados desde la base de datos
+    async function loadEmpleados() 
+    {
+      try 
+      {
+        const response = await fetch('/api/empleados');
+        
+        if (!response.ok) 
+        {
+          throw new Error(`Error al cargar empleados: ${response.status}`);
+        }
+        
+        empleados = await response.json();
+        
+      } catch (error) 
+      {
+        console.error('Error al cargar empleados:', error);
+      }
+    }
+
+    // Cargar vacaciones activas desde la base de datos
+      async function loadVacacionesActivas() 
+    {
+      try 
+      {
+        const response = await fetch(`/api/vacaciones/todas?t=${Date.now()}`, { cache: 'no-store' });
+        
+        if (!response.ok) 
+        {
+          throw new Error(`Error al cargar vacaciones activas: ${response.status}`);
+        }
+        
+        const todasLasVacaciones = await response.json();
+        
+        // Filtrar solo las vacaciones que están realmente activas (fecha actual entre inicio y fin)
+        const hoy = new Date();
+        vacacionesActivas = todasLasVacaciones.filter(vacacion => 
+        {
+          if (vacacion.estado !== 'aprobada') {
+            return false;
+          }
+          
+          const fechaInicio = new Date(vacacion.fecha_inicio);
+          const fechaFin = new Date(vacacion.fecha_fin);
+          
+          // Una vacación está activa si la fecha actual está entre la fecha de inicio y fin
+          return hoy >= fechaInicio && hoy <= fechaFin;
+        });        
+      } catch (error) 
+      {
+        console.error('Error al cargar vacaciones activas:', error);
+        vacacionesActivas = [];
+      }
+    }
+
+    // Función para mostrar modal de vacaciones activas
+    function showVacacionesActivasModal() 
+    {
+      const modal = document.getElementById('vacacionesActivasModal');
+      const vacacionesList = document.getElementById('vacacionesActivasList');
+      
+      if (vacacionesActivas.length === 0) 
+      {
+        vacacionesList.innerHTML = '<p style="text-align: center; color: white; padding: 20px;">No hay vacaciones activas en este momento</p>';
+      } else 
+      {
+        // Ordenar por fecha de inicio (más recientes primero)
+        const vacacionesOrdenadas = vacacionesActivas.sort((a, b) => 
+          new Date(a.fecha_inicio) - new Date(b.fecha_inicio)
+        );
+        
+        vacacionesList.innerHTML = `
+          <div style="max-height: 500px; overflow-y: auto;">
+            <div style="margin-bottom: 15px; padding: 10px; background: rgba(76, 175, 80, 0.2); border-radius: 8px; text-align: center;">
+              <h4 style="color: white; margin: 0;">Total: ${vacacionesActivas.length} solicitud${vacacionesActivas.length !== 1 ? 'es' : ''} aprobada${vacacionesActivas.length !== 1 ? 's' : ''} de vacaciones</h4>
+            </div>
+            ${vacacionesOrdenadas.map(vacacion => {
+              const fechaInicio = new Date(vacacion.fecha_inicio);
+              const fechaFin = new Date(vacacion.fecha_fin);
+              const hoy = new Date();
+              const estaActiva = hoy >= fechaInicio && hoy <= fechaFin;
+              const diasRestantes = Math.ceil((fechaFin - hoy) / (1000 * 60 * 60 * 24));
+              const diasTranscurridos = Math.ceil((hoy - fechaInicio) / (1000 * 60 * 60 * 24));
+              
+              // Determinar el color del borde y badge según el estado
+              const borderColor = estaActiva ? '#4CAF50' : '#FFC107';
+              const badgeColor = estaActiva ? '#4CAF50' : '#FFC107';
+              const badgeText = estaActiva ? 'En Vacaciones' : 'Aprobada';
+              const badgeIcon = estaActiva ? 'fas fa-umbrella-beach' : 'fas fa-check-circle';
+              
+              return `
+                <div class="solicitud-item" style="background: rgba(76, 175, 80, 0.15); margin: 10px 0; padding: 15px; border-radius: 8px; border-left: 4px solid ${borderColor};">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="color: white; margin: 0;">${vacacion.nombre_completo}</h4>
+                    <span style="background: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                      <i class="${badgeIcon}"></i> ${badgeText}
+                    </span>
+                  </div>
+                  <div style="color: rgba(255,255,255,0.9); font-size: 14px;">
+                    <p><strong><i class="fas fa-calendar-alt"></i> Fecha inicio:</strong> ${formatDateForDisplay(vacacion.fecha_inicio)}</p>
+                    <p><strong><i class="fas fa-calendar-check"></i> Fecha fin:</strong> ${formatDateForDisplay(vacacion.fecha_fin)}</p>
+                    <p><strong><i class="fas fa-clock"></i> Días solicitados:</strong> ${vacacion.dias_solicitados} día${vacacion.dias_solicitados !== 1 ? 's' : ''}</p>
+                    <p><strong><i class="fas fa-user-tie"></i> Puesto:</strong> ${vacacion.puesto || 'No especificado'}</p>
+                    <p><strong><i class="fas fa-user-shield"></i> Supervisor:</strong> ${vacacion.supervisor || 'No especificado'}</p>
+                    ${estaActiva ? 
+                      `<p><strong><i class="fas fa-hourglass-half"></i> Días restantes:</strong> <span style="color: #4CAF50; font-weight: bold;">${diasRestantes} día${diasRestantes !== 1 ? 's' : ''}</span></p>` :
+                      fechaInicio > hoy ?
+                      `<p><strong><i class="fas fa-calendar-plus"></i> Inicia en:</strong> <span style="color: #2196F3; font-weight: bold;">${Math.abs(diasTranscurridos)} día${Math.abs(diasTranscurridos) !== 1 ? 's' : ''}</span></p>` :
+                      `<p><strong><i class="fas fa-calendar-times"></i> Finalizó hace:</strong> <span style="color: #F44336; font-weight: bold;">${Math.abs(diasTranscurridos)} día${Math.abs(diasTranscurridos) !== 1 ? 's' : ''}</span></p>`
+                    }
+                    ${vacacion.dias_pendientes > 0 ? `<p><strong><i class="fas fa-info-circle"></i> Días pendientes:</strong> <span style="color: #FFC107; font-weight: bold;">${vacacion.dias_pendientes} día${vacacion.dias_pendientes !== 1 ? 's' : ''}</span></p>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+      
+      modal.style.display = 'block';
+    }
+    // Función para cerrar modal de vacaciones activas
+    function closeVacacionesActivasModal() 
+    {
+      const modal = document.getElementById('vacacionesActivasModal');
+      modal.style.display = 'none';
+    }
+    // Función para mostrar modal de aniversarios
+    async function showAniversariosModal() 
+    {
+      const modal = document.getElementById('aniversariosModal');
+      currentAniversariosYear = new Date().getFullYear();
+      await renderAniversariosGrid();
+      modal.style.display = 'flex';
+      const c = document.getElementById('anivClose');
+      if(c){ c.onclick = ()=> modal.style.display = 'none'; }
+      modal.addEventListener('click', (e)=>{ if(e.target === modal) modal.style.display = 'none'; });
+      document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ modal.style.display='none'; document.removeEventListener('keydown', esc); } });
+    }
+    // Función para renderizar el grid de aniversarios
+    async function renderAniversariosGrid() {
+      const grid = document.getElementById('aniversariosGrid');
+      grid.innerHTML = '';
+      try {
+        // Asegurar datos de empleados
+        const lista = await getEmpleados();
+        if(Array.isArray(lista)) { empleados = lista; }
+      } catch(_) { /* ignore */ }
+
+      const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+      for (let month = 0; month < 12; month++) 
+      {
+        const monthCard = document.createElement('div');
+        monthCard.className = 'month-card-aniversarios';
+        monthCard.style.cursor = 'pointer';
+        
+        const monthName = document.createElement('div');
+        monthName.className = 'month-name-aniversarios';
+        monthName.textContent = monthNames[month];
+
+        const monthAniversarios = document.createElement('div');
+        monthAniversarios.className = 'month-aniversarios';
+        
+        // Filtrar empleados que tienen aniversario en este mes
+        const aniversariosDelMes = (Array.isArray(empleados)?empleados:[]).filter(empleado => 
+        {
+          if (!empleado.fecha_creacion && !empleado.fecha_ingreso) return false;
+          
+          const fechaIngreso = new Date(empleado.fecha_ingreso || empleado.fecha_creacion);
+          return fechaIngreso.getMonth() === month;
+        });
+
+        if (aniversariosDelMes.length > 0) 
+        {
+          monthAniversarios.innerHTML = `
+            <div class="aniversarios-count">${aniversariosDelMes.length} aniversario${aniversariosDelMes.length !== 1 ? 's' : ''}</div>
+            <div class="aniversarios-list">
+              ${aniversariosDelMes.slice(0, 3).map(empleado => {
+                const fechaIngreso = new Date(empleado.fecha_ingreso || empleado.fecha_creacion);
+                const aniosCompletados = currentAniversariosYear - fechaIngreso.getFullYear();
+                
+                return `
+                  <div class="aniversario-item">
+                    <div class="aniversario-nombre">${empleado.nombre_completo}</div>
+                    <div class="aniversario-anios">${aniosCompletados} año${aniosCompletados !== 1 ? 's' : ''}</div>
+                  </div>
+                `;
+              }).join('')}
+              ${aniversariosDelMes.length > 3 ? `<div class="aniversario-item" style="text-align: center; color: rgba(255,255,255,0.7); font-size: 10px;">+${aniversariosDelMes.length - 3} más...</div>` : ''}
+            </div>
+          `;
+        } else {
+          monthAniversarios.innerHTML = '<div class="no-aniversarios">Sin aniversarios</div>';
+        }
+
+        monthCard.appendChild(monthName);
+        monthCard.appendChild(monthAniversarios);
+        monthCard.addEventListener('click', () => 
+        {
+          showAniversariosMesModal(month, monthNames[month], aniversariosDelMes);
+        });
+        
+        grid.appendChild(monthCard);
+      }
+    }
+
+    // Función para mostrar detalles de un aniversario
+    function showAniversarioDetails(empleadoId, nombreCompleto, dia, anios) {
+      const fechaIngreso = new Date();
+      fechaIngreso.setMonth(currentAniversariosYear, dia);
+      
+      const modal = document.getElementById('aniversariosModal');
+      const modalContent = modal.querySelector('.aniversarios-content');
+      
+      // Guardar el contenido original
+      if (!modalContent.dataset.originalContent) {
+        modalContent.dataset.originalContent = modalContent.innerHTML;
+      }
+      
+      // Mostrar detalles del aniversario
+      modalContent.innerHTML = `
+        <div class="aniversario-details">
+          <div class="aniversario-header">
+            <button class="back-btn" onclick="backToAniversariosGrid()">
+              <i class="fas fa-arrow-left"></i> Volver
+            </button>
+            <h4>Detalles del Aniversario</h4>
+          </div>
+          <div class="aniversario-info">
+            <div class="aniversario-empleado">
+              <h5>${nombreCompleto}</h5>
+              <p><strong>ID:</strong> ${empleadoId}</p>
+              <p><strong>Fecha de ingreso:</strong> ${formatDateForDisplay(fechaIngreso)}</p>
+              <p><strong>Años de servicio:</strong> ${anios} año${anios !== 1 ? 's' : ''}</p>
+              <p><strong>Próximo aniversario:</strong> ${formatDateForDisplay(fechaIngreso)}</p>
+            </div>
+            <div class="aniversario-actions">
+              <button class="btn btn-primary" onclick="enviarFelicitacion('${empleadoId}', '${nombreCompleto}')">
+                <i class="fas fa-gift"></i> Enviar Felicitación (En desarrollo / NO USAR)
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Función para volver al grid de aniversarios
+    function backToAniversariosGrid() {
+      const modal = document.getElementById('aniversariosModal');
+      const modalContent = modal.querySelector('.aniversarios-content');
+      
+      // Restaurar el contenido original
+      if (modalContent.dataset.originalContent) 
+      {
+        modalContent.innerHTML = modalContent.dataset.originalContent;
+        delete modalContent.dataset.originalContent;
+      }
+      renderAniversariosGrid();
+    }
+    function enviarFelicitacion(empleadoId, nombreCompleto) 
+    {
+      showCustomMessage(`¡Felicitación enviada a ${nombreCompleto}!`, 'success');
+    }
+
+    // Scripts para la topbar
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => 
+      {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => 
+        {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) 
+          {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+
+    // Función para mostrar modal de aniversarios de un mes específico
+    function showAniversariosMesModal(mes, nombreMes, aniversariosDelMes) 
+    {
+      const modal = document.getElementById('aniversariosModal');
+      const modalContent = modal.querySelector('.aniversarios-content');
+      
+      // Guardar el contenido original si no existe
+      if (!modalContent.dataset.originalContent) {
+        modalContent.dataset.originalContent = modalContent.innerHTML;
+      }    
+      // Ordenar aniversarios por nombre
+      aniversariosDelMes.sort((a, b) => a.nombre_completo.localeCompare(b.nombre_completo));  
+      // Mostrar todos los aniversarios del mes
+      modalContent.innerHTML = `
+        <div class="aniversarios-mes-details">
+          <div class="aniversarios-mes-header">
+            <button class="back-btn" onclick="backToAniversariosGrid()">
+              <i class="fas fa-arrow-left"></i> Volver
+            </button>
+            <h4>Aniversarios de ${nombreMes}</h4>
+          </div>
+          <div class="aniversarios-mes-info">
+            <div class="aniversarios-mes-count">
+              <h5>Total: ${aniversariosDelMes.length} aniversario${aniversariosDelMes.length !== 1 ? 's' : ''}</h5>
+            </div>
+            <div class="aniversarios-mes-list">
+              ${aniversariosDelMes.map(empleado => {
+                const fechaIngreso = new Date(empleado.fecha_ingreso || empleado.fecha_creacion);
+                const aniosCompletados = currentAniversariosYear - fechaIngreso.getFullYear();
+                
+                return `
+                  <div class="aniversario-mes-item" onclick="showAniversarioDetails('${empleado.id}', '${empleado.nombre_completo}', ${fechaIngreso.getDate()}, ${aniosCompletados})">
+                    <div class="aniversario-mes-nombre">${empleado.nombre_completo}</div>
+                    <div class="aniversario-mes-anios">${aniosCompletados} año${aniosCompletados !== 1 ? 's' : ''}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Función para mostrar modal de búsqueda
+    function showBusquedaModal() 
+    {
+      const modal = document.getElementById('busquedaModal');
+      modal.style.display = 'block';
+      // Limpiar resultados anteriores
+      document.getElementById('resultadosBusqueda').style.display = 'none';
+      document.getElementById('empleadoId').value = '';
+    }
+    function closeBusquedaModal() 
+    {
+      const modal = document.getElementById('busquedaModal');
+      modal.style.display = 'none';
+    }
+    function calcularDiasVacaciones(antiguedad) {
+      if (antiguedad < 1) return 12;
+      if (antiguedad >= 1 && antiguedad < 2) return 12;
+      if (antiguedad >= 2 && antiguedad < 3) return 14;
+      if (antiguedad >= 3 && antiguedad < 4) return 16;
+      if (antiguedad >= 4 && antiguedad < 5) return 18;
+      if (antiguedad >= 5 && antiguedad < 6) return 20;
+      if (antiguedad >= 6 && antiguedad <= 10) return 22;
+      if (antiguedad >= 11 && antiguedad <= 15) return 24;
+      if (antiguedad >= 16 && antiguedad <= 20) return 26;
+      if (antiguedad >= 21 && antiguedad <= 25) return 28;
+      if (antiguedad >= 26 && antiguedad <= 30) return 30;
+      if (antiguedad >= 31 && antiguedad <= 35) return 32;
+      return 32; // Máximo según la ley
+    }
+
+    // Función para calcular antigüedad del empleado
+    function calcularAntiguedad(fechaIngreso) 
+    {
+      if (!fechaIngreso) 
+      {
+        return 1; // Antigüedad por defecto si no hay fecha
+      }
+      
+      const fechaActual = new Date();
+      const fechaIngresoDate = new Date(fechaIngreso);
+
+      if (isNaN(fechaIngresoDate.getTime())) 
+      {
+        return 1; // Antigüedad por defecto si la fecha es inválida
+      }
+      
+      const diferencia = fechaActual - fechaIngresoDate;
+      const anios = diferencia / (1000 * 60 * 60 * 24 * 365.25);
+      const antiguedad = Math.floor(anios);
+      
+      return antiguedad;
+    }
+
+    // Función para buscar vacaciones de un empleado
+    async function buscarVacacionesEmpleado() {
+      const empleadoId = document.getElementById('empleadoId').value;
+      
+      if (!empleadoId) 
+      {
+        showCustomMessage('Por favor ingresa el ID del empleado', 'warning');
+        return;
+      }
+
+      try 
+      {
+        const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+        
+        if (!response.ok) 
+        {
+          throw new Error(`Error al buscar vacaciones: ${response.status}`);
+        }
+        
+        const vacaciones = await response.json();
+        
+        // Obtener información del empleado para calcular antigüedad
+        let empleadoInfo = null;
+        try {
+          const empleadoResponse = await fetch(`/api/empleados/${empleadoId}`);
+          if (empleadoResponse.ok) {
+            empleadoInfo = await empleadoResponse.json();
+          }
+        } catch (error) {
+          console.error('Error al obtener información del empleado:', error);
+        }
+        
+        // Obtener nombres de los aprobadores
+        const vacacionesConAprobadores = await Promise.all(
+          vacaciones.map(async (vacacion) => 
+          {
+            if (vacacion.aprobado_por) 
+            {
+              try 
+              {
+                const aprobadorResponse = await fetch(`/api/usuarios/${vacacion.aprobado_por}`);
+                if (aprobadorResponse.ok) 
+                {
+                  const aprobador = await aprobadorResponse.json();
+                  return {
+                    ...vacacion,
+                    nombre_aprobador: aprobador.nombre_completo || aprobador.nombre || aprobador.usuario
+                  };
+                }
+              } catch (error) 
+              {
+                console.error('Error al obtener nombre del aprobador:', error);
+              }
+            }
+            return vacacion;
+          })
+        );
+        
+        mostrarResultadosBusqueda(vacacionesConAprobadores, empleadoId, empleadoInfo);
+        
+      } catch (error) 
+      {
+        console.error('Error al buscar vacaciones:', error);
+        alert('Error al buscar las vacaciones del empleado');
+      }
+    }
+
+    function mostrarResultadosBusqueda(vacaciones, empleadoId, empleadoInfo) //Mostrar los resultados
+    {
+      const resultadosDiv = document.getElementById('resultadosBusqueda');
+      const vacacionesDiv = document.getElementById('vacacionesEmpleado');
+      
+      if (vacaciones.length === 0) 
+      {
+        vacacionesDiv.innerHTML = '<p style="color: white; text-align: center;">No se encontraron vacaciones para este empleado</p>';
+      } else 
+      {
+        // Ordenar por fecha de inicio (más recientes primero)
+        vacaciones.sort((a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio));
+        
+        // Calcular antigüedad y días correspondientes
+        let antiguedad = 0;
+        let diasCorrespondientes = 12;
+        
+        if (empleadoInfo && empleadoInfo.fecha_ingreso) 
+        {
+          antiguedad = calcularAntiguedad(empleadoInfo.fecha_ingreso);
+          diasCorrespondientes = calcularDiasVacaciones(antiguedad);
+        }
+        
+        vacacionesDiv.innerHTML = `
+          <div style="max-height: 400px; overflow-y: auto;">
+            ${vacaciones.map(vacacion => 
+            {
+              // Usar los días correspondientes de la base de datos si están disponibles
+              const diasCorrespondientesBD = vacacion.dias_correspondientes || diasCorrespondientes;
+              const diasPendientes = vacacion.dias_pendientes || Math.max(0, diasCorrespondientesBD - vacacion.dias_solicitados);
+              
+              return `
+              <div class="solicitud-item" style="background: rgba(255,255,255,0.1); margin: 10px 0; padding: 15px; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h4 style="color: white; margin: 0;">${vacacion.nombre_completo || 'Empleado ID: ' + empleadoId}</h4>
+                  <span style="background: ${getEstadoColor(vacacion.estado)}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                    ${vacacion.estado}
+                  </span>
+                </div>
+                <div style="color: rgba(255,255,255,0.8); font-size: 14px;">
+                  <p><strong>Fecha inicio:</strong> ${formatDateForDisplay(vacacion.fecha_inicio)}</p>
+                  <p><strong>Fecha fin:</strong> ${formatDateForDisplay(vacacion.fecha_fin)}</p>
+                  <p><strong>Días solicitados:</strong> ${vacacion.dias_solicitados}</p>
+                    <p><strong>Días que le corresponden:</strong> ${diasCorrespondientesBD} días (${antiguedad} años de antigüedad)</p>
+                    <p><strong>Días pendientes:</strong> <span style="color: ${diasPendientes > 0 ? '#4CAF50' : '#FFC107'}; font-weight: bold;">${diasPendientes}</span></p>
+                  <p><strong>Supervisor:</strong> ${vacacion.supervisor || 'N/A'}</p>
+                  ${vacacion.aprobado_por ? `<p><strong>Aprobado por:</strong> ${vacacion.nombre_aprobador || 'Usuario no encontrado'}</p>` : ''}
+                  ${vacacion.motivo_rechazo ? `<p><strong>Motivo rechazo:</strong> ${vacacion.motivo_rechazo}</p>` : ''}
+                  <p><strong>Fecha de solicitud:</strong> ${formatDateForDisplay(vacacion.fecha_solicitud || vacacion.created_at)}</p>
+                </div>
+              </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+      
+      resultadosDiv.style.display = 'block';
+    }
+
+    // Función para obtener color según el estado
+    function getEstadoColor(estado) 
+    {
+      switch(estado) 
+      {
+        case 'aprobada':
+          return '#4CAF50';
+        case 'pendiente':
+          return '#FFC107';
+        case 'cancelada':
+          return '#F44336';
+        default:
+          return '#9E9E9E';
+      }
+    }
+
+    let constanciaPreviewBlobUrl = null;
+    let constanciaPreviewRenderToken = 0;
+
+    function setConstanciaPreviewStatus(message, isError) {
+      const status = document.getElementById('constanciaPreviewStatus');
+      if (status) {
+        status.textContent = message;
+        status.style.background = isError ? '#fef2f2' : '#f8fafc';
+        status.style.borderColor = isError ? '#fecaca' : '#e5e7eb';
+        status.style.color = isError ? '#b91c1c' : '#334155';
+      }
+    }
+
+    function closeConstanciaPreviewModal() 
+    {
+      const modal = document.getElementById('constanciaPreviewModal');
+      const iframe = document.getElementById('constanciaPreviewFrame');
+      if (modal) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+      if (iframe) {
+        iframe.src = 'about:blank';
+      }
+      if (constanciaPreviewBlobUrl) {
+        URL.revokeObjectURL(constanciaPreviewBlobUrl);
+        constanciaPreviewBlobUrl = null;
+      }
+      const downloadBtn = document.getElementById('constanciaPreviewDownloadBtn');
+      if (downloadBtn) {
+        downloadBtn.disabled = true;
+      }
+      setConstanciaPreviewStatus('Generando PDF...');
+    }
+
+    async function generarConstanciaPdfBlob() {
+      if (!window.constanciaContent) {
+        throw new Error('No hay constancia generada para mostrar');
+      }
+      if (!window.jspdf || !window.jspdf.jsPDF || !window.html2canvas) {
+        throw new Error('Faltan librerías: jsPDF o html2canvas');
+      }
+
+      const container = document.createElement('div');
+      container.style.width = '816px';
+      container.style.padding = '0';
+      container.style.background = '#ffffff';
+      container.style.color = '#000';
+      container.style.position = 'fixed';
+      container.style.left = '-99999px';
+      container.style.top = '0';
+      container.style.boxSizing = 'border-box';
+      container.innerHTML = `<div style="width:100%;background:#ffffff;box-sizing:border-box;">${window.constanciaContent}</div>`;
+
+      document.body.appendChild(container);
+      try {
+        const canvas = await html2canvas(container, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+
+        const jsPDFConstructor = window.jspdf.jsPDF;
+        const pdf = new jsPDFConstructor({ unit: 'pt', format: 'letter' });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 25;
+        const maxWidth = pageWidth - (margin * 2);
+        const maxHeight = pageHeight - (margin * 2);
+        const renderScale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+        const renderWidth = canvas.width * renderScale;
+        const renderHeight = canvas.height * renderScale;
+        const renderX = 25;
+        const renderY = 25;
+
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', renderX, renderY, renderWidth, renderHeight, undefined, 'FAST');
+        return pdf.output('blob');
+      } finally {
+        document.body.removeChild(container);
+      }
+    }
+
+    async function renderConstanciaPreview() {
+      const modal = document.getElementById('constanciaPreviewModal');
+      const iframe = document.getElementById('constanciaPreviewFrame');
+      const employeeName = document.getElementById('constanciaPreviewEmployeeName');
+      const downloadBtn = document.getElementById('constanciaPreviewDownloadBtn');
+
+      if (!modal || !iframe) {
+        return;
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      if (employeeName) {
+        employeeName.textContent = window.nombreEmpleado || 'Sin datos';
+      }
+      if (downloadBtn) {
+        downloadBtn.disabled = true;
+      }
+      setConstanciaPreviewStatus('Generando PDF...');
+      iframe.src = 'about:blank';
+
+      // Ensure the right-panel custom controls (comments + dias pendientes) exist for editing preview
+      try {
+        setTimeout(() => {
+          const right = document.querySelector('.constancia-preview-right');
+          if (right && !document.getElementById('constanciaPreviewCustomControls')) {
+            const wrapper = document.createElement('div');
+            wrapper.id = 'constanciaPreviewCustomControls';
+            wrapper.style.display = 'flex';
+            wrapper.style.flexDirection = 'column';
+            wrapper.style.gap = '8px';
+
+            const lblComments = document.createElement('div');
+            lblComments.className = 'constancia-preview-label';
+            lblComments.textContent = 'Comentarios';
+            const ta = document.createElement('textarea');
+            ta.id = 'constanciaPreviewComments';
+            ta.style.minHeight = '80px';
+            ta.style.padding = '8px';
+            ta.style.border = '1px solid #e5e7eb';
+            ta.style.borderRadius = '6px';
+            configurarLimiteComentariosTextarea(ta);
+
+
+            const btnUpdate = document.createElement('button');
+            btnUpdate.type = 'button';
+            btnUpdate.className = 'btn btn-secondary';
+            btnUpdate.textContent = 'Actualizar preview';
+            btnUpdate.style.marginTop = '6px';
+
+            wrapper.appendChild(lblComments);
+            wrapper.appendChild(ta);
+            wrapper.appendChild(btnUpdate);
+
+            const actions = right.querySelector('.constancia-preview-actions');
+            if (actions) { right.insertBefore(wrapper, actions); } else { right.appendChild(wrapper); }
+
+            // Initialize values from context if available
+            try {
+              const ctx = window.constanciaContext || {};
+              const vacacionReciente = (ctx.vacacionesAprobadas && ctx.vacacionesAprobadas.length) ? ctx.vacacionesAprobadas[ctx.vacacionesAprobadas.length - 1] : null;
+              const periodoVacacional = Math.max(1, ctx.antiguedad || 1);
+              const defaultComments = vacacionReciente ? `${periodoVacacional} periodo vacacional, Regresa el día: ${formatDateForDisplay(calcularFechaRegreso(new Date(vacacionReciente.fecha_fin)))}` +
+                `\nDías correspondientes: ${ctx.diasCorrespondientes || ''}` +
+                `\nDías solicitados: ${vacacionReciente ? (vacacionReciente.dias_solicitados || '') : ''}` +
+                `\nDías pendientes: ${vacacionReciente ? (vacacionReciente.dias_pendientes || 0) : 0}` : '';
+              ta.value = limitarComentariosConstancia(defaultComments || '');
+            } catch (e) { /* noop */ }
+
+            btnUpdate.addEventListener('click', () => {
+              try {
+                const comments = limitarComentariosConstancia(document.getElementById('constanciaPreviewComments').value || '');
+                const ctx = window.constanciaContext || {};
+                const newContent = generarContenidoConstancia(ctx.empleado, ctx.vacacionesAprobadas, ctx.antiguedad, ctx.diasCorrespondientes, { comments });
+                window.constanciaContent = newContent;
+                renderConstanciaPreview();
+              } catch (err) { console.error('Error actualizando preview:', err); }
+            });
+          }
+          sincronizarComentariosConstanciaTextarea();
+        }, 10);
+      } catch(e) { console.error(e); }
+
+      const renderToken = ++constanciaPreviewRenderToken;
+
+      try {
+        const blob = await generarConstanciaPdfBlob();
+        if (renderToken !== constanciaPreviewRenderToken) {
+          return;
+        }
+
+        if (constanciaPreviewBlobUrl) {
+          URL.revokeObjectURL(constanciaPreviewBlobUrl);
+        }
+        constanciaPreviewBlobUrl = URL.createObjectURL(blob);
+        iframe.src = constanciaPreviewBlobUrl;
+        if (downloadBtn) {
+          downloadBtn.disabled = false;
+        }
+        setConstanciaPreviewStatus('PDF listo para revisar o descargar.');
+      } catch (error) {
+        console.error('Error generando preview de constancia:', error);
+        setConstanciaPreviewStatus(error && error.message ? error.message : 'No se pudo generar el PDF', true);
+        if (typeof showCustomMessage === 'function') {
+          showCustomMessage('Error al generar la previsualización de la constancia', 'error');
+        }
+      }
+    }
+
+    async function actualizarPreviewConstanciaDesdePanel() {
+      const commentsTextarea = document.getElementById('constanciaPreviewComments');
+      const updateBtn = document.getElementById('constanciaPreviewUpdateBtn');
+
+      if (!window.constanciaContext || !window.constanciaContext.empleado || !Array.isArray(window.constanciaContext.vacacionesAprobadas)) {
+        throw new Error('No hay contexto suficiente para actualizar el preview');
+      }
+
+      const comments = limitarComentariosConstancia(commentsTextarea ? commentsTextarea.value : '');
+      const ctx = window.constanciaContext;
+      ctx.comments = comments;
+
+      if (updateBtn) {
+        updateBtn.disabled = true;
+        updateBtn.dataset.originalText = updateBtn.textContent;
+        updateBtn.textContent = 'Actualizando...';
+      }
+
+      try {
+        const newContent = generarContenidoConstancia(
+          ctx.empleado,
+          ctx.vacacionesAprobadas,
+          ctx.antiguedad,
+          ctx.diasCorrespondientes,
+          { comments }
+        );
+
+        window.constanciaContent = newContent;
+        await renderConstanciaPreview();
+        setConstanciaPreviewStatus('Preview actualizado correctamente.');
+      } finally {
+        if (updateBtn) {
+          updateBtn.disabled = false;
+          updateBtn.textContent = updateBtn.dataset.originalText || 'Actualizar preview';
+          delete updateBtn.dataset.originalText;
+        }
+      }
+    }
+
+    // Función para mostrar modal de imprimir constancias
+    function showImprimirConstanciasModal() 
+    {
+      const modal = document.getElementById('imprimirConstanciasModal');
+      modal.style.display = 'block';
+      document.getElementById('constanciaResultado').style.display = 'none';
+      document.getElementById('constanciaEmpleadoId').value = '';
+      // Preseleccionar el mes actual
+      try {
+        const sel = document.getElementById('constanciaMes');
+        if (sel) { sel.value = String(new Date().getMonth()); }
+      } catch(_) { /* noop */ }
+    }
+
+    // Función para cerrar modal de imprimir constancias
+    function closeImprimirConstanciasModal() 
+    {
+      closeConstanciaPreviewModal();
+      const modal = document.getElementById('imprimirConstanciasModal');
+      modal.style.display = 'none';
+    }
+
+    // Función para generar constancia de vacaciones
+    async function generarConstanciaVacaciones() 
+    {
+      const entrada = (document.getElementById('constanciaEmpleadoId').value || '').trim();
+      const resultados = document.getElementById('constanciaResultados');
+      
+      if (!entrada) 
+      {
+        showCustomMessage('Por favor ingresa el ID o nombre del empleado', 'warning');
+        if(resultados){ resultados.style.display='none'; resultados.innerHTML=''; }
+        return;
+      }
+      
+      // Resolver por ID directo si es numérico
+      if (/^\d+$/.test(entrada)) {
+        try {
+          const empleadoId = entrada;
+          const empleadoResponse = await fetch(`/api/empleados/${encodeURIComponent(empleadoId)}`);
+          if (!empleadoResponse.ok) throw new Error('Empleado no encontrado');
+          const empleado = await empleadoResponse.json();
+          await generarConstanciaParaEmpleado(empleado);
+          if(resultados){ resultados.style.display='none'; resultados.innerHTML=''; }
+          return;
+        } catch (e) {
+          showCustomMessage('Error al buscar empleado por ID', 'error');
+          return;
+        }
+      }
+      
+      // Búsqueda por nombre
+      try {
+        let lista = [];
+        try { if (typeof getEmpleados === 'function') { lista = await getEmpleados(); } } catch(_) {}
+        if (!Array.isArray(lista) || lista.length === 0) {
+          const r = await fetch('/api/empleados');
+          lista = await r.json();
+        }
+        const qn = entrada.toLowerCase();
+        const coincidencias = lista.filter(e => String(e.nombre_completo||'').toLowerCase().includes(qn));
+
+        if (coincidencias.length === 0) {
+          if(resultados){
+            resultados.style.display='block';
+            resultados.innerHTML = '<div style="padding:10px;color:#ffd1d1;">No se encontraron coincidencias</div>';
+          }
+          return;
+        }
+        if (coincidencias.length === 1) {
+          await generarConstanciaParaEmpleado(coincidencias[0]);
+          if(resultados){ resultados.style.display='none'; resultados.innerHTML=''; }
+          return;
+        }
+        // Mostrar lista para seleccionar
+        if(resultados){
+          resultados.style.display='block';
+          resultados.innerHTML = coincidencias.slice(0,30).map(e => `
+            <div class="sb-result" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <div style=\"font-weight:600;color:#fff;\">${e.nombre_completo}</div>
+                <div style=\"opacity:.8;font-size:12px;color:#ddd;\">ID ${e.id}${e.puesto? ' · '+e.puesto: ''}</div>
+              </div>
+              <button class=\"sb-btn\" data-id=\"${e.id}\" style=\"background:#2196F3;color:#fff;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;\">Seleccionar</button>
+            </div>
+          `).join('');
+          // Evitar cierre por clic fuera mientras se interactúa con resultados
+          try {
+            const modal = document.getElementById('imprimirConstanciasModal');
+            if (modal) {
+              const stop = (ev) => { if (ev.target.closest('#constanciaResultados')) ev.stopPropagation(); };
+              resultados.addEventListener('click', stop);
+            }
+          } catch(_) {}
+          resultados.querySelectorAll('.sb-btn').forEach(b => b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            try {
+              const er = await fetch(`/api/empleados/${encodeURIComponent(id)}`);
+              if(!er.ok) throw new Error('Empleado no encontrado');
+              const emp = await er.json();
+              await generarConstanciaParaEmpleado(emp);
+              resultados.style.display='none'; resultados.innerHTML='';
+              (document.getElementById('constanciaEmpleadoId')).value = String(id);
+            } catch (err) {
+              showCustomMessage('Error al cargar empleado seleccionado', 'error');
+            }
+          }));
+        }
+        return;
+      } catch (e) {
+        console.error('Error en búsqueda por nombre:', e);
+        showCustomMessage('Error al buscar por nombre', 'error');
+        return;
+      }
+
+      // Fallback (no debería llegar aquí)
+    }
+
+    // Función para imprimir constancia de antigüedad desde el historial
+    async function imprimirConstanciaAntiguedad(empleadoId, empleadoNombre, vacacionId) {
+      try {
+        // Obtener información del empleado
+        const res = await fetch(`/api/empleados/${encodeURIComponent(empleadoId)}`);
+        if (!res.ok) {
+          throw new Error('No se pudo obtener la información del empleado');
+        }
+        const empleado = await res.json();
+        
+        if (!empleado) {
+          alert('No se encontró información del empleado');
+          return;
+        }
+        
+        // Obtener vacaciones del empleado
+        const vacacionesResponse = await fetch(`/api/vacaciones/empleado/${empleado.id}`);
+        if (!vacacionesResponse.ok) {
+          throw new Error('Error al obtener vacaciones');
+        }
+        const vacaciones = await vacacionesResponse.json();
+
+        // Filtrar solo vacaciones aprobadas
+        const vacacionesAprobadas = vacaciones.filter(v => v.estado === 'aprobada');
+        
+        if (vacacionesAprobadas.length === 0) {
+          alert('No se encontraron vacaciones aprobadas para este empleado');
+          return;
+        }
+
+        // Encontrar la vacación específica seleccionada
+        const vacacionSeleccionada = vacacionesAprobadas.find(v => String(v.id) === String(vacacionId));
+        
+        if (!vacacionSeleccionada) {
+          alert('No se encontró la vacación seleccionada');
+          return;
+        }
+
+        // Calcular antigüedad y días correspondientes
+        const antiguedad = calcularAntiguedad(empleado.fecha_ingreso || empleado.fecha_creacion);
+        const diasCorrespondientes = calcularDiasVacaciones(antiguedad);
+
+        // Crear contenido de la constancia usando solo la vacación seleccionada
+        const constanciaContent = generarContenidoConstancia(empleado, [vacacionSeleccionada], antiguedad, diasCorrespondientes);
+        
+        // Guardar en variables globales y crear contexto para el panel derecho
+        window.constanciaContent = constanciaContent;
+        window.nombreEmpleado = empleado.nombre_completo;
+        // Contexto usado por el panel de previsualización (permite sincronizar comentarios)
+        window.constanciaContext = {
+          empleado: empleado,
+          vacacionesAprobadas: [vacacionSeleccionada],
+          antiguedad: antiguedad,
+          diasCorrespondientes: diasCorrespondientes
+        };
+        // Inicializar comentarios por defecto en el contexto para que aparezcan en el textarea
+        try {
+          window.constanciaContext.comments = generarComentariosConstanciaDefault(window.constanciaContext, vacacionSeleccionada);
+        } catch (e) { window.constanciaContext.comments = ''; }
+
+        // Abrir directamente el preview
+        previewConstancia();
+        
+      } catch (error) {
+        console.error('Error al imprimir constancia de antigüedad:', error);
+        alert('Error al generar la constancia: ' + error.message);
+      }
+    }
+    
+    // Exponer función globalmente para que esté disponible desde onclick
+    window.imprimirConstanciaAntiguedad = imprimirConstanciaAntiguedad;
+
+    // Helper para generar constancia dado un objeto empleado
+    async function generarConstanciaParaEmpleado(empleado) {
+      try {
+
+        // Obtener vacaciones del empleado
+        const vacacionesResponse = await fetch(`/api/vacaciones/empleado/${empleado.id}`);
+        if (!vacacionesResponse.ok) 
+        {
+          throw new Error('Error al obtener vacaciones');
+        }
+        const vacaciones = await vacacionesResponse.json();
+
+        // Filtrar solo vacaciones aprobadas
+        const vacacionesAprobadas = vacaciones.filter(v => v.estado === 'aprobada');
+        
+        if (vacacionesAprobadas.length === 0) 
+        {
+          alert('No se encontraron vacaciones aprobadas para este empleado');
+          return;
+        }
+
+        // Calcular antigüedad y días correspondientes
+        const antiguedad = calcularAntiguedad(empleado.fecha_ingreso || empleado.fecha_creacion);
+        const diasCorrespondientes = calcularDiasVacaciones(antiguedad);
+
+        // Crear contenido de la constancia
+        const constanciaContent = generarContenidoConstancia(empleado, vacacionesAprobadas, antiguedad, diasCorrespondientes);
+        
+        // Mostrar preview y opción de descarga (pasamos contexto para permitir overrides desde el panel derecho)
+        mostrarPreviewConstancia(constanciaContent, empleado.nombre_completo, { empleado, vacacionesAprobadas, antiguedad, diasCorrespondientes });
+        
+      } catch (error) {
+        console.error('Error al generar constancia:', error);
+        alert('Error al generar la constancia: ' + error.message);
+      }
+    }
+
+    // Función para generar el contenido de la constancia
+    function generarContenidoConstancia(empleado, vacacionesAprobadas, antiguedad, diasCorrespondientes, overrides = {}) 
+    {
+      const fechaActual = new Date().toLocaleDateString('es-ES');
+      vacacionesAprobadas.sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+      const vacacionReciente = vacacionesAprobadas[vacacionesAprobadas.length - 1];
+      // Calcular métricas del año de la vacación reciente
+      const anioReferencia = new Date(vacacionReciente.fecha_inicio).getFullYear();
+      const diasSolicitadosAnio = vacacionesAprobadas
+        .filter(v => new Date(v.fecha_inicio).getFullYear() === anioReferencia)
+        .reduce((acc, v) => acc + (Number(v.dias_solicitados) || 0), 0);
+      // Días pendientes que se mostrarán en la constancia:
+      // pueden ser sobreescritos desde el panel de preview mediante `overrides.diasPendientes`.
+      const diasPendientesSolicitud = Number(typeof overrides.diasPendientes !== 'undefined' ? overrides.diasPendientes : (vacacionReciente.dias_pendientes)) || 0;
+      
+      const contenido = `
+        <div style="font-family: Montserrat, Arial, sans-serif; width: 100%; box-sizing: border-box;">
+          <div style="position:relative;min-height:140px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;border-radius:14px;background:#ffffff;border:1px solid #000;position:relative;">
+              <div style="display:flex;align-items:center;height:84px; width:160px;">
+                <img src="DYM.jpg" alt="PHOENIX Logo" style="height:72px;width:auto;object-fit:contain;display:block;"/>
+              </div>
+              <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;min-width:260px;">
+                <div style="margin-top:4px;padding:10px 18px;border-radius:8px;background:#cfeefb;border:1px solid #000;font-weight:700;display:inline-block;font-size:13px;">Constancia de vacaciones y antigüedad</div>
+                <div style="margin-top:6px;font-size:12px;font-weight:700;color:#000;">PHOENIX DISEÑO Y MANUFACTURA S DE RL DE CV</div>
+              </div>
+              <div style="height:84px; width:220px; display:flex; align-items:center; justify-content:flex-end; padding-right:10px;">
+                <img src="fotos/LOGO ERP.png" alt="logo" style="width:160px; height:auto; max-height:80px; object-fit:contain; display:block;"/>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;align-items:center;">
+            <div style="width:100%;border:1px solid #000;border-radius:10px;padding:8px;background:#ffffff;">
+              <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                <tr>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">ID<br><span style="font-weight:600;">${empleado.id}</span></td>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">Nombre<br><span style="font-weight:600;">${empleado.nombre_completo}</span></td>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">Departamento<br><span style="font-weight:600;">${empleado.departamento || 'N/A'}</span></td>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">Puesto<br><span style="font-weight:600;">${empleado.puesto || 'N/A'}</span></td>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">Área<br><span style="font-weight:600;">${empleado.area || 'N/A'}</span></td>
+                  <td style="padding:6px;border-right:1px solid #000;font-weight:700;">Fecha ingreso<br><span style="font-weight:600;">${formatDateForDisplay(empleado.fecha_ingreso || empleado.fecha_creacion)}</span></td>
+                  <td style="padding:6px;font-weight:700;">Antigüedad<br><span style="font-weight:600;">${antiguedad} años</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin-top:4px;">
+            <div style="flex:1;background:#ffffff;border:1px solid #000;border-radius:10px;padding:10px;">
+              <div style="font-size:11px;color:#000;margin-bottom:6px;font-weight:700;">TOTAL DE DÍAS</div>
+              <div style="font-size:13px;color:#000;font-weight:600;">${diasCorrespondientes}</div>
+            </div>
+            <div style="flex:1;background:#ffffff;border:1px solid #000;border-radius:10px;padding:10px;">
+              <div style="font-size:11px;color:#000;margin-bottom:6px;font-weight:700;">1er día de vacaciones</div>
+              <div style="font-size:13px;color:#000;font-weight:600;">${formatDateForDisplay(vacacionReciente.fecha_inicio)}</div>
+            </div>
+            <div style="width:260px;background:#ffffff;border:1px solid #000;border-radius:10px;padding:10px;">
+              <div style="font-size:11px;color:#000;margin-bottom:6px;font-weight:700;">Último día de vacaciones</div>
+              <div style="font-size:13px;color:#000;font-weight:600;">${formatDateForDisplay(vacacionReciente.fecha_fin)}</div>
+            </div>
+            <div style="width:260px;background:#ffffff;border:1px solid #000;border-radius:10px;padding:10px;">
+              <div style="font-size:11px;color:#000;margin-bottom:6px;font-weight:700;">Supervisor</div>
+              <div style="font-size:13px;color:#000;font-weight:600;">${empleado.supervisor || 'N/A'}</div>
+            </div>
+          </div>
+
+
+          <div style="margin-top:16px; margin-bottom: 24px; border:1px solid #000; border-radius:8px; padding:16px; background:#fff;">
+            <h3 style="color: #333; margin-bottom: 12px; text-align: center; font-size: 17px;">CAPITULO IV VACACIONES</h3>
+            <div style="font-size: 11px; line-height: 1.3;">
+              <p style="margin: 1px 0;"><strong>Artículo 76.</strong> Las personas trabajadoras que tengan más de un año de servicios disfrutarán de un período anual de vacaciones pagadas, que en ningún caso podrá ser inferior a doce días laborables, y que aumentará en dos días laborables, hasta llegar a veinte, por cada año subsecuente de servicios. A partir del sexto año, el periodo aumentará en dos días por cada cinco de servicios.</p>
+              <p style="margin: 1px 0;"><strong>Artículo 77.</strong> Los trabajadores que presten servicios discontinuos o de temporada tendrán derecho a un periodo anual de vacaciones, en proporción al número de días trabajados en el año.</p>
+              <p style="margin: 1px 0;"><strong>Artículo 78.</strong> Del total del periodo que le corresponde conforme a lo previsto en el artículo 76 de esta ley, la persona trabajadora disfrutará de doce días de vacaciones continuos, por lo menos. Dicho periodo, a potestad de la persona trabajadora podrá ser distribuido en la forma y tiempo que así lo requiera.</p>
+              <p style="margin: 1px 0;"><strong>Artículo 79.</strong> Las vacaciones no podrán compensarse con una remuneración. Si la relación de trabajo termina antes de que se cumpla el año de servicios, el trabajador tendrá derecho a una remuneración proporcional al tiempo de servicios prestados.</p>
+              <p style="margin: 1px 0;"><strong>Artículo 80.</strong> Los trabajadores tendrán derecho a una prima no menor de veinticinco por ciento sobre los salarios que les correspondan durante el período de vacaciones.</p>
+              <p style="margin: 1px 0;"><strong>Artículo 81.</strong> Las vacaciones deberán concederse a los trabajadores dentro de los seis meses siguientes al cumplimiento del año de servicios. Los patrones deberán entregar anualmente a sus trabajadores una constancia que contenga su antigüedad y de acuerdo cono ella el período de vacaciones que les corresponda y la fecha en que deberán disfrutarlo.</p>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 18px; border:1px solid #000; border-radius:8px; padding:12px; background:#fff;">
+            <h4 style="color: #333; margin-bottom: 4px; font-size: 12px;">COMENTARIOS:</h4>
+            ${(() => { 
+              const defaultComments = generarComentariosConstanciaDefault(
+                { antiguedad, diasCorrespondientes },
+                {
+                  fecha_fin: vacacionReciente.fecha_fin,
+                  dias_solicitados: diasSolicitadosAnio,
+                  dias_pendientes: diasPendientesSolicitud
+                }
+              );
+              const commentsToShow = limitarComentariosConstancia((typeof overrides.comments !== 'undefined') ? overrides.comments : defaultComments);
+              // Preserve line breaks for simple text comments
+              const commentsHtml = String(commentsToShow).split('\n').map(s => `<p style="margin: 1px 0; font-size: 11px;">${s}</p>`).join('');
+              return commentsHtml;
+            })()}
+          </div>
+            <div>
+              <div style="margin-top: 20%;">
+                <h4 style="color: #333; margin-bottom: 8px; font-size: 12px;">FIRMAS DE CONFORMIDAD</h4>
+                <div style="display: flex; justify-content: space-between;">
+                  <div style="text-align: center; width: 30%;">
+                    <div style="border-bottom: 1px solid #333; height: 28px; margin-bottom: 6px;"></div>
+                    <p style="margin: 0; font-size: 11px;">${empleado.nombre_completo}</p>
+                    <p style="margin: 0; font-size: 9px; color: #666;">(TRABAJADOR)</p>
+                  </div>
+                  <div style="text-align: center; width: 30%;">
+                    <div style="border-bottom: 1px solid #333; height: 28px; margin-bottom: 6px;"></div>
+                    <p style="margin: 0; font-size: 11px;">${empleado.supervisor || 'N/A'}</p>
+                    <p style="margin: 0; font-size: 9px; color: #666;">(SUPERVISOR)</p>
+                  </div>
+                  <div style="text-align: center; width: 30%;">
+                    <div style="border-bottom: 1px solid #333; height: 28px; margin-bottom: 6px;"></div>
+                    <p style="margin: 0; font-size: 11px;">Maria del Rosario Valdez Oregel</p>
+                    <p style="margin: 0; font-size: 9px; color: #666;">(RECURSOS HUMANOS)</p>
+                  </div>
+              </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 12px; font-size: 10.5px; color: #666;">
+              <p style="margin: 0;">Fecha de emisión: ${fechaActual}</p>
+            </div>
+          </div>
+
+          
+        </div>
+      `;      
+      return contenido;
+    }
+
+    // Función para mostrar el resultado y habilitar preview/descarga
+    function mostrarPreviewConstancia(contenido, nombreEmpleado, context = {})
+    {
+      // Guardar en variables globales para las funciones de preview/descarga
+      window.constanciaContent = contenido;
+      // Guardamos contexto para poder regenerar la constancia con overrides desde el panel
+      window.constanciaContext = context || {};
+      window.nombreEmpleado = nombreEmpleado;
+
+      if (window.constanciaContext) {
+        const vacacionReciente = (window.constanciaContext.vacacionesAprobadas && window.constanciaContext.vacacionesAprobadas.length)
+          ? window.constanciaContext.vacacionesAprobadas[window.constanciaContext.vacacionesAprobadas.length - 1]
+          : null;
+        window.constanciaContext.comments = generarComentariosConstanciaDefault(window.constanciaContext, vacacionReciente);
+      }
+
+      // Mostrar bloque de resultado en el modal y pintar acciones
+      const resultado = document.getElementById('constanciaResultado');
+      const info = document.getElementById('constanciaInfo');
+      if (resultado && info)
+      {
+        resultado.style.display = 'block';
+        info.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <strong>Constancia generada para:</strong> ${nombreEmpleado}
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn btn-secondary" onclick="previewConstancia()">Ver preview</button>
+              <!--<button type="button" class="btn btn-primary" onclick="descargarConstanciaPDF()">Descargar PDF</button>-->
+            </div>
+          </div>
+        `;
+
+        // Prepare the inputs panel in the preview area (create nodes if needed)
+        setTimeout(() => {
+          try {
+            const right = document.querySelector('.constancia-preview-right');
+            if (right) {
+              // Remove any previous custom controls we inserted
+              const existing = document.getElementById('constanciaPreviewCustomControls');
+              if (existing) { existing.remove(); }
+
+              const wrapper = document.createElement('div');
+              wrapper.id = 'constanciaPreviewCustomControls';
+              wrapper.style.display = 'flex';
+              wrapper.style.flexDirection = 'column';
+              wrapper.style.gap = '8px';
+
+              // Comments textarea
+              const lblComments = document.createElement('div');
+              lblComments.className = 'constancia-preview-label';
+              lblComments.textContent = 'Comentarios';
+              const ta = document.createElement('textarea');
+              ta.id = 'constanciaPreviewComments';
+              ta.style.minHeight = '80px';
+              ta.style.padding = '8px';
+              ta.style.border = '1px solid #e5e7eb';
+              ta.style.borderRadius = '6px';
+              configurarLimiteComentariosTextarea(ta);
+
+              // (removed dias pendientes input as requested)
+
+              // Update preview button
+              const btnUpdate = document.createElement('button');
+              btnUpdate.type = 'button';
+              btnUpdate.className = 'btn btn-secondary';
+              btnUpdate.id = 'constanciaPreviewUpdateBtn';
+              btnUpdate.textContent = 'Actualizar preview';
+              btnUpdate.style.marginTop = '6px';
+
+              wrapper.appendChild(lblComments);
+              wrapper.appendChild(ta);
+              wrapper.appendChild(btnUpdate);
+
+              // Insert wrapper before the actions area
+              const actions = right.querySelector('.constancia-preview-actions');
+              if (actions) {
+                right.insertBefore(wrapper, actions);
+              } else {
+                right.appendChild(wrapper);
+              }
+
+              // Initialize values from context if available
+              try {
+                sincronizarComentariosConstanciaTextarea();
+              } catch (e) { /* noop */ }
+
+              // Update handler: regenerate content with overrides and re-render preview
+              btnUpdate.addEventListener('click', async () => {
+                try {
+                  await actualizarPreviewConstanciaDesdePanel();
+                } catch (err) {
+                  console.error('Error actualizando preview:', err);
+                  setConstanciaPreviewStatus(err && err.message ? err.message : 'No se pudo actualizar el preview', true);
+                  if (typeof showCustomMessage === 'function') {
+                    showCustomMessage('No se pudo actualizar el preview', 'error');
+                  }
+                }
+              });
+            }
+          } catch(e) { console.error(e); }
+        }, 10);
+      }
+    }
+
+    function descargarConstanciaPDF() //Descargar contancia en PDF
+    {
+      if (!window.constanciaContent) 
+      {
+        alert('No hay constancia generada para descargar');
+        return;
+      }
+
+      if (constanciaPreviewBlobUrl) {
+        const a = document.createElement('a');
+        a.href = constanciaPreviewBlobUrl;
+        a.download = `Constancia-Vacaciones-${String(window.nombreEmpleado || 'empleado').replace(/\s+/g, '-')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        return;
+      }
+
+      renderConstanciaPreview().then(() => {
+        if (constanciaPreviewBlobUrl) {
+          const a = document.createElement('a');
+          a.href = constanciaPreviewBlobUrl;
+          a.download = `Constancia-Vacaciones-${String(window.nombreEmpleado || 'empleado').replace(/\s+/g, '-')}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+      });
+    }
+
+    // Función para preview de la constancia
+    function previewConstancia() 
+    {
+      if (!window.constanciaContent) 
+      {
+        alert('No hay constancia generada para mostrar');
+        return;
+      }
+
+      renderConstanciaPreview();
+    }
+    
+    // Exponer función globalmente
+    window.previewConstancia = previewConstancia;
+    window.descargarConstanciaPDF = descargarConstanciaPDF;
+    window.closeConstanciaPreviewModal = closeConstanciaPreviewModal;
+
+    // Función para mostrar modal de solicitar vacaciones RH
+    function showSolicitarVacacionesModal() {
+      const modal = document.getElementById('solicitarVacacionesModal');
+      modal.style.display = 'block';
+      
+      // Limpiar formulario
+      document.getElementById('formVacacionesRH').reset();
+      document.getElementById('rhEmpleadoInfo').style.display = 'none';
+      document.getElementById('rhDiasInfo').style.display = 'none';
+      
+      // Establecer fechas mínimas
+      //fconst today = new Date();
+      //const tomorrow = new Date(today);
+      //tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      //document.getElementById('rhFechaInicio').min = tomorrow.toISOString().split('T')[0];
+      //document.getElementById('rhFechaFin').min = tomorrow.toISOString().split('T')[0];
+    }
+
+    // Función para cerrar modal de solicitar vacaciones RH
+    function closeSolicitarVacacionesModal() {
+      const modal = document.getElementById('solicitarVacacionesModal');
+      modal.style.display = 'none';
+    }
+
+    // Función para buscar empleado en modal RH
+    async function buscarEmpleadoRH() {
+      const entrada = (document.getElementById('rhEmpleadoId').value || '').trim();
+      const contResultados = document.getElementById('rhResultados');
+      const info = document.getElementById('rhEmpleadoInfo');
+      const content = document.getElementById('rhEmpleadoContent');
+
+      if (!entrada) {
+        showCustomMessage('Por favor ingresa el ID o nombre del empleado', 'warning');
+        if (contResultados) { contResultados.style.display = 'none'; contResultados.innerHTML = ''; }
+        info.style.display = 'none';
+        return;
+      }
+
+      // Si es un ID numérico, buscar directo
+      if (/^\d+$/.test(entrada)) {
+        try {
+          const response = await fetch(`/api/empleados/${encodeURIComponent(entrada)}`);
+          if (!response.ok) { throw new Error('Empleado no encontrado'); }
+          const empleado = await response.json();
+          if (contResultados) { contResultados.style.display = 'none'; contResultados.innerHTML = ''; }
+          mostrarInformacionEmpleadoRH(empleado);
+          return;
+        } catch (error) {
+          console.error('Error al buscar empleado por ID:', error);
+          alert('Error al buscar el empleado: ' + error.message);
+          return;
+        }
+      }
+
+      // Si no es numérico, buscar por nombre en la lista local/servidor
+      try {
+        // Reusar getEmpleados si existe en este archivo
+        let lista = [];
+        try { if (typeof getEmpleados === 'function') { lista = await getEmpleados(); } } catch(_) { /* noop */ }
+        if (!Array.isArray(lista) || lista.length === 0) {
+          const r = await fetch('/api/empleados');
+          lista = await r.json();
+        }
+        const qn = entrada.toLowerCase();
+        const coincidencias = lista.filter(e => String(e.nombre_completo||'').toLowerCase().includes(qn));
+
+        if (coincidencias.length === 0) {
+          if (contResultados) {
+            contResultados.style.display = 'block';
+            contResultados.innerHTML = '<div style="padding:10px;color:#ffd1d1;">No se encontraron coincidencias</div>';
+          }
+          info.style.display = 'none';
+          return;
+        }
+
+        if (coincidencias.length === 1) {
+          const unico = coincidencias[0];
+          (document.getElementById('rhEmpleadoId')).value = String(unico.id);
+          if (contResultados) { contResultados.style.display = 'none'; contResultados.innerHTML = ''; }
+          mostrarInformacionEmpleadoRH(unico);
+          return;
+        }
+
+        // Renderizar lista de coincidencias para seleccionar
+        if (contResultados) {
+          contResultados.style.display = 'block';
+          contResultados.innerHTML = coincidencias.slice(0, 25).map(e => `
+            <div class="sb-result" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <div style="font-weight:600;color:#fff;">${e.nombre_completo}</div>
+                <div style="opacity:.8;font-size:12px;color:#ddd;">ID ${e.id}${e.puesto? ' · '+e.puesto: ''}</div>
+              </div>
+              <button class="sb-btn" data-id="${e.id}" data-name="${e.nombre_completo}" style="background:#2196F3;color:#fff;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;">Seleccionar</button>
+            </div>
+          `).join('');
+          contResultados.querySelectorAll('.sb-btn').forEach(b => b.addEventListener('click', async () => {
+            const id = b.getAttribute('data-id');
+            (document.getElementById('rhEmpleadoId')).value = String(id);
+            contResultados.style.display = 'none';
+            contResultados.innerHTML = '';
+            try {
+              const r = await fetch(`/api/empleados/${encodeURIComponent(id)}`);
+              if (!r.ok) throw new Error('Empleado no encontrado');
+              const emp = await r.json();
+              mostrarInformacionEmpleadoRH(emp);
+            } catch (err) {
+              console.error('Error al cargar empleado seleccionado:', err);
+              showCustomMessage('Error al cargar empleado seleccionado', 'error');
+            }
+          }));
+        }
+        info.style.display = 'none';
+        content.innerHTML = '';
+      } catch (error) {
+        console.error('Error al buscar por nombre:', error);
+        alert('Error al buscar por nombre: ' + (error && error.message ? error.message : 'desconocido'));
+      }
+    }
+
+    // Función para mostrar información del empleado en modal RH
+    function mostrarInformacionEmpleadoRH(empleado) {
+      const empleadoInfo = document.getElementById('rhEmpleadoInfo');
+      const empleadoContent = document.getElementById('rhEmpleadoContent');
+      
+      // Calcular antigüedad y días correspondientes
+      const antiguedad = calcularAntiguedad(empleado.fecha_ingreso || empleado.fecha_creacion);
+      const diasCorrespondientes = calcularDiasVacaciones(antiguedad);
+      
+      empleadoContent.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <div><strong>Nombre:</strong> ${empleado.nombre_completo}</div>
+          <div><strong>ID:</strong> ${empleado.id}</div>
+          <div><strong>Antigüedad:</strong> ${antiguedad} año${antiguedad !== 1 ? 's' : ''}</div>
+        </div>
+      `;
+      
+      empleadoInfo.style.display = 'block';
+    }
+
+    // Función para calcular días entre fechas en modal RH
+    function calcularDiasRH() {
+      const fechaInicio = document.getElementById('rhFechaInicio').value;
+      const fechaFin = document.getElementById('rhFechaFin').value;
+      
+      if (fechaInicio && fechaFin) {
+        const dias = diasEntreFechas(fechaInicio, fechaFin);
+        const diasInfo = document.getElementById('rhDiasInfo');
+        const contadorDias = document.getElementById('rhContadorDias');
+        
+        if (dias > 0) {
+          contadorDias.textContent = dias;
+          diasInfo.style.display = 'block';
+          diasInfo.style.background = 'rgba(76, 175, 80, 0.2)';
+        } else {
+          diasInfo.style.display = 'none';
+        }
+      }
+    }
+
+    // Función para calcular días entre fechas (excluyendo solo domingos)
+    function diasEntreFechas(f1, f2) {
+      // Crear fechas en zona horaria local para evitar problemas de UTC
+      const d1 = new Date(f1 + 'T00:00:00');
+      const d2 = new Date(f2 + 'T00:00:00');
+      
+      // Permitir fechas en cualquier orden (si están invertidas, intercambiarlas)
+      let start = new Date(d1);
+      let end = new Date(d2);
+      if (start > end) {
+        const temp = start;
+        start = end;
+        end = temp;
+      }
+      
+      let dias = 0;
+      const currentDate = new Date(start);
+      
+      while (currentDate <= end) {
+        // Excluir solo domingos (0), incluir sábados (6)
+        if (currentDate.getDay() !== 0) {
+          dias++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      
+      return dias;
+    }
+
+    // Función para enviar solicitud de vacaciones RH
+    async function enviarSolicitudVacacionesRH() {
+      const empleadoId = document.getElementById('rhEmpleadoId').value;
+      const fechaInicio = document.getElementById('rhFechaInicio').value;
+      const fechaFin = document.getElementById('rhFechaFin').value;
+      const motivo = ''; // Campo de motivo no implementado en el HTML
+      
+      if (!empleadoId || !fechaInicio || !fechaFin) {
+        alert('Por favor completa todos los campos obligatorios');
+        return;
+      }
+      // Normalizar fechas para el backend (asegurar inicio <= fin)
+      const dInicio = new Date(fechaInicio + 'T00:00:00');
+      const dFin = new Date(fechaFin + 'T00:00:00');
+      const fechaInicioNorm = (dInicio <= dFin ? dInicio : dFin).toISOString().split('T')[0];
+      const fechaFinNorm = (dInicio <= dFin ? dFin : dInicio).toISOString().split('T')[0];
+
+      const dias = diasEntreFechas(fechaInicioNorm, fechaFinNorm);
+      
+      try {
+        // Obtener información del empleado para validar
+        const empleadoResponse = await fetch(`/api/empleados/${empleadoId}`);
+        if (!empleadoResponse.ok) {
+          throw new Error('Empleado no encontrado');
+        }
+        const empleado = await empleadoResponse.json();
+        
+        // Calcular antigüedad y días correspondientes
+        const antiguedad = calcularAntiguedad(empleado.fecha_ingreso || empleado.fecha_creacion);
+        const diasCorrespondientesCalculados = calcularDiasVacaciones(antiguedad);
+
+        const diasCorrespondientes = empleado.dias_vacaciones || diasCorrespondientesCalculados;
+
+        const vacacionesExistentes = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+        let diasUsados = 0;
+        
+        if (vacacionesExistentes.ok) 
+        {
+          const vacaciones = await vacacionesExistentes.json();
+          const vacacionesAprobadas = vacaciones.filter(v => v.estado === 'aprobada');
+          diasUsados = vacacionesAprobadas.reduce((total, v) => total + v.dias_solicitados, 0);
+        }
+        
+        const diasDisponibles = diasCorrespondientes - diasUsados;
+        
+        // Crear la solicitud
+        const solicitud = {
+          empleado_id: parseInt(empleadoId),
+          fecha_inicio: fechaInicioNorm,
+          fecha_fin: fechaFinNorm,
+          dias_solicitados: dias,
+          dias_correspondientes: diasCorrespondientes,
+          supervisor: empleado.supervisor || 'N/A',
+          motivo: motivo || 'Solicitud realizada por RH',
+          estado: 'pendiente',
+          aprobado_por: null,
+          override_rh: true,
+          fecha_solicitud: new Date().toISOString().split('T')[0]
+        };
+        
+        const response = await fetch('/api/vacaciones', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(solicitud)
+        });
+        
+        if (!response.ok) {
+          let detalle = '';
+          try 
+          {
+            const data = await response.json();
+            detalle = JSON.stringify(data);
+          } catch (e) {
+            try 
+            {
+              detalle = await response.text();
+            } catch (e2) {
+              detalle = '';
+            }
+          }
+          console.error('Error del backend al crear la solicitud:', response.status, detalle);
+          throw new Error(detalle || 'Error al crear la solicitud');
+        }
+        
+        showCustomMessage('Acción realizada correctamente', 'success');
+        closeSolicitarVacacionesModal();
+        await loadSolicitudesPendientes();
+        await loadVacacionesActivas();
+        if (typeof convertSolicitudesToEvents === 'function') { convertSolicitudesToEvents(); }
+        
+      } catch (error) 
+      {
+        console.error('Error al enviar solicitud:', error);
+        showCustomMessage('Error al crear la solicitud: ' + (error?.message || 'Desconocido'), 'error');
+      }
+    }
+
+    function showCustomMessage(message, type = 'success') {
+      const messageElement = document.createElement('div');
+      messageElement.className = `custom-message ${type}`;
+      messageElement.textContent = message;
+      document.body.appendChild(messageElement);
+      setTimeout(() => {
+        messageElement.classList.add('show');
+      }, 100);
+      setTimeout(() => {
+        messageElement.classList.remove('show');
+        setTimeout(() => {
+          if (messageElement.parentNode) {
+            messageElement.parentNode.removeChild(messageElement);
+          }
+        }, 300);
+      }, 2000);
+    }
+
+    // Nueva función para obtener vacaciones de un mes específico
+    async function getVacacionesDelMes(mes, año) {
+      try 
+      {
+        const response = await fetch('/api/vacaciones/todas');
+        if (!response.ok) 
+        {
+          throw new Error(`Error al cargar las vacaciones: ${response.status}`);
+        }
+        const todasLasVacaciones = await response.json();
+        const vacacionesDelMes = todasLasVacaciones.filter(vacacion => {
+          if (vacacion.estado !== 'aprobada') return false;
+          const fechaInicio = new Date(vacacion.fecha_inicio);
+          return fechaInicio.getMonth() === mes && fechaInicio.getFullYear() === año;
+        });
+        
+        return vacacionesDelMes;
+      } catch (error) 
+      {
+        console.error('Error al obtener vacaciones del mes:', error);
+        return [];
+      }
+    }
+
+    // Nueva función para descargar todas las constancias de un mes
+    async function descargarConstanciasDelMes(mes, nombreMes) 
+    {
+      try 
+      {
+        showCustomMessage('Generando constancias del mes...', 'warning');
+        
+        const año = currentDate.getFullYear();
+        const vacacionesDelMes = await getVacacionesDelMes(mes, año);
+        
+        if (vacacionesDelMes.length === 0) 
+        {
+          showCustomMessage(`No hay vacaciones aprobadas que hayan comenzado en ${nombreMes} ${año}`, 'warning');
+          return;
+        }
+
+        const empleadosResponse = await fetch('/api/empleados');
+        if (!empleadosResponse.ok) 
+        {
+          throw new Error('Error al cargar empleados');
+        }
+        const todosLosEmpleados = await empleadosResponse.json();
+        
+        const empleadosMap = {};
+        todosLosEmpleados.forEach(empleado => {
+          empleadosMap[empleado.id] = empleado;
+        });
+        const vacacionesPorEmpleado = {};
+        vacacionesDelMes.forEach(vacacion => {
+          if (!vacacionesPorEmpleado[vacacion.empleado_id]) 
+          {
+            vacacionesPorEmpleado[vacacion.empleado_id] = [];
+          }
+          vacacionesPorEmpleado[vacacion.empleado_id].push(vacacion);
+        });
+        
+        // Generar constancia para cada empleado
+        const constancias = [];
+        for (const empleadoId in vacacionesPorEmpleado) 
+        {
+          const empleado = empleadosMap[empleadoId];
+          if (!empleado) continue;
+          
+          const vacacionesEmpleado = vacacionesPorEmpleado[empleadoId];
+          const antiguedad = calcularAntiguedad(empleado.fecha_ingreso || empleado.fecha_creacion);
+          const diasCorrespondientes = calcularDiasVacaciones(antiguedad);
+          
+          const constanciaContent = generarContenidoConstancia(empleado, vacacionesEmpleado, antiguedad, diasCorrespondientes);
+          constancias.push({
+            empleado: empleado,
+            contenido: constanciaContent,
+            vacaciones: vacacionesEmpleado
+          });
+        }
+        
+        if (constancias.length === 0) {
+          showCustomMessage('No se pudieron generar constancias', 'error');
+          return;
+        }
+        // Generar PDF combinado y mostrar preview en modal (no descargar directamente)
+        try {
+          setConstanciaPreviewStatus('Generando PDF...');
+          const blob = await generarConstanciasPdfBlob(constancias, `${nombreMes}_${año}_Constancias`);
+
+          // Mostrar en el modal de preview reutilizando el iframe
+          const modal = document.getElementById('constanciaPreviewModal');
+          const iframe = document.getElementById('constanciaPreviewFrame');
+          const downloadBtn = document.getElementById('constanciaPreviewDownloadBtn');
+          const employeeName = document.getElementById('constanciaPreviewEmployeeName');
+
+          if (employeeName) employeeName.textContent = `${nombreMes} ${año}`;
+          if (downloadBtn) downloadBtn.disabled = true;
+
+          if (constanciaPreviewBlobUrl) {
+            URL.revokeObjectURL(constanciaPreviewBlobUrl);
+          }
+          constanciaPreviewBlobUrl = URL.createObjectURL(blob);
+          if (iframe) iframe.src = constanciaPreviewBlobUrl;
+
+          // Set a sensible preview context so the right-hand comments panel is populated
+          try {
+            if (constancias && constancias.length) {
+              const first = constancias[0];
+              const emp = first.empleado || {};
+              const vacs = first.vacaciones || [];
+              const antig = calcularAntiguedad(emp.fecha_ingreso || emp.fecha_creacion);
+              const diasCor = calcularDiasVacaciones(antig);
+              window.constanciaContext = { empleado: emp, vacacionesAprobadas: vacs, antiguedad: antig, diasCorrespondientes: diasCor };
+              const vacacionReciente = (vacs && vacs.length) ? vacs[vacs.length - 1] : null;
+              window.constanciaContext.comments = generarComentariosConstanciaDefault(window.constanciaContext, vacacionReciente);
+              window.nombreEmpleado = `${nombreMes} ${año}`;
+
+              // Sync the textarea (controls are created shortly after mostrarPreviewConstancia logic)
+              setTimeout(() => {
+                try { sincronizarComentariosConstanciaTextarea(); } catch (e) { /* noop */ }
+              }, 50);
+            }
+          } catch (e) { console.error('Error setting preview context for monthly constancias:', e); }
+
+          if (downloadBtn) downloadBtn.disabled = false;
+          if (modal) { modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); }
+
+          setConstanciaPreviewStatus('PDF listo para revisar o descargar.');
+          showCustomMessage(`Se generaron ${constancias.length} constancias de ${nombreMes} ${año}`, 'success');
+        } catch (err) {
+          console.error('Error generando PDF combinado:', err);
+          showCustomMessage('Error al generar PDF de constancias: ' + (err?.message || ''), 'error');
+        }
+        
+      } catch (error) 
+      {
+        console.error('Error al generar constancias del mes:', error);
+        showCustomMessage('Error al generar las constancias: ' + error.message, 'error');
+      }
+    }
+    
+
+    // Generar PDF combinado usando jsPDF + html2canvas para que cada constancia quede centrada
+    async function generarConstanciasPdfCombined(constancias, nombreArchivo) {
+      if (!window.jspdf || !window.jspdf.jsPDF || !window.html2canvas) {
+        throw new Error('Faltan librerías: jsPDF o html2canvas');
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'pt', format: 'letter' });
+      const margin = 25; // mismo margen que en generarConstanciaPdfBlob
+
+      for (let i = 0; i < constancias.length; i++) {
+        const item = constancias[i];
+
+        // Crear contenedor temporal idéntico al usado para preview individual
+        const container = document.createElement('div');
+        container.style.width = '816px';
+        container.style.padding = '0';
+        container.style.background = '#ffffff';
+        container.style.color = '#000';
+        container.style.position = 'fixed';
+        container.style.left = '-99999px';
+        container.style.top = '0';
+        container.style.boxSizing = 'border-box';
+        container.innerHTML = `<div style="width:100%;background:#ffffff;box-sizing:border-box;">${item.contenido}</div>`;
+        document.body.appendChild(container);
+
+        try {
+          const canvas = await html2canvas(container, { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false });
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const maxWidth = pageWidth - (margin * 2);
+          const maxHeight = pageHeight - (margin * 2);
+          const renderScale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+          const renderWidth = canvas.width * renderScale;
+          const renderHeight = canvas.height * renderScale;
+          const renderX = (pageWidth - renderWidth) / 2; // centrar horizontalmente
+          const renderY = (pageHeight - renderHeight) / 2; // centrar verticalmente
+
+          if (i > 0) pdf.addPage();
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', renderX, renderY, renderWidth, renderHeight, undefined, 'FAST');
+        } finally {
+          document.body.removeChild(container);
+        }
+      }
+
+      const filename = `${nombreArchivo.replace(/[\\/:*?"<>|]+/g, '_')}.pdf`;
+      pdf.save(filename);
+    }
+
+    // Similar a generarConstanciasPdfCombined pero devuelve un Blob en lugar de guardar
+    async function generarConstanciasPdfBlob(constancias, nombreArchivo) {
+      if (!window.jspdf || !window.jspdf.jsPDF || !window.html2canvas) {
+        throw new Error('Faltan librerías: jsPDF o html2canvas');
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'pt', format: 'letter' });
+      const margin = 25; // mismo margen que en generarConstanciaPdfBlob
+
+      for (let i = 0; i < constancias.length; i++) {
+        const item = constancias[i];
+
+        // Crear contenedor temporal idéntico al usado para preview individual
+        const container = document.createElement('div');
+        container.style.width = '816px';
+        container.style.padding = '0';
+        container.style.background = '#ffffff';
+        container.style.color = '#000';
+        container.style.position = 'fixed';
+        container.style.left = '-99999px';
+        container.style.top = '0';
+        container.style.boxSizing = 'border-box';
+        container.innerHTML = `<div style="width:100%;background:#ffffff;box-sizing:border-box;">${item.contenido}</div>`;
+        document.body.appendChild(container);
+
+        try {
+          const canvas = await html2canvas(container, { scale: 2.5, useCORS: true, backgroundColor: '#ffffff', logging: false });
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const maxWidth = pageWidth - (margin * 2);
+          const maxHeight = pageHeight - (margin * 2);
+          const renderScale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+          const renderWidth = canvas.width * renderScale;
+          const renderHeight = canvas.height * renderScale;
+          const renderX = (pageWidth - renderWidth) / 2; // centrar horizontalmente
+          const renderY = (pageHeight - renderHeight) / 2; // centrar verticalmente
+
+          if (i > 0) pdf.addPage();
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', renderX, renderY, renderWidth, renderHeight, undefined, 'FAST');
+        } finally {
+          document.body.removeChild(container);
+        }
+      }
+
+      return pdf.output('blob');
+    }
+  </script>
+    <script src="js/topbar.js"></script>
+</body>
+</html>

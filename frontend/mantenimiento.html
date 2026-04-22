@@ -1,0 +1,5075 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel de Mantenimiento Industrial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/panel_style.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/mantenimiento_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  
+  <style>
+    .topbar {
+      width: 100%;
+      height: 64px;
+      background: rgba(35, 36, 58, 0.18);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1001;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 2rem;
+      backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+      border: 1.5px solid rgba(255,255,255,0.22);
+      margin: 12px auto 0 auto;
+      max-width: 95vw;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .kanban-board {
+      box-sizing: border-box;
+    }
+    
+    /* Estilos para los toggle switches */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #2196F3;
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    .toggle-switch:hover .toggle-slider {
+      background-color: #b3b3b3;
+    }
+
+    .toggle-switch input:checked:hover + .toggle-slider {
+      background-color: #1976D2;
+    }
+
+    .toggle-switch:active .toggle-slider:before {
+      width: 30px;
+    }
+
+    .toggle-switch input:checked:active + .toggle-slider:before {
+      width: 30px;
+      transform: translateX(22px);
+    }
+    
+  
+    .top-left-image-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .top-left-image {
+      width: 120px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .top-left-image:hover {
+      transform: scale(1.1);
+    }
+    
+    .image-caption {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+    
+    /* Estilos para la imagen en pantalla completa */
+    .fullscreen-image-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .fullscreen-image-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .fullscreen-image-container {
+      position: relative;
+      max-width: 95vw;
+      max-height: 95vh;
+    }
+    
+    .fullscreen-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    
+    .fullscreen-close-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .fullscreen-close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .ticket {
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 2px 12px #0001;
+      margin-bottom: 18px;
+      padding: 18px 20px 14px 20px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      border-left: 6px solid #2196F3;
+      position: relative;
+      max-width: none;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .ticket.ticket-paused {
+      background: rgba(224, 224, 224, 0.4) !important;
+      opacity: 0.4;
+      color: #999;
+    }
+    
+    .ticket.ticket-paused .ticket-title {
+      color: #999;
+    }
+    
+    .ticket.ticket-paused .modal-problema-ticket {
+      color: #999;
+    }
+    .ticket[data-urgency="critical"] { border-left-color: #d32f2f; }
+    .ticket[data-urgency="medium"] { border-left-color: #1976d2; }
+    .ticket[data-urgency="low"] { border-left-color: #388e3c; }
+    .ticket:hover {
+      box-shadow: 0 6px 24px #0002;
+      transform: translateY(-2px) scale(1.02);
+    }
+    .ticket .ticket-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .ticket .ticket-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #222;
+    }
+    .ticket .ticket-meta {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .ticket .ticket-time {
+      font-size: 12px;
+      color: #1976d2;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+    .ticket .ticket-user-select {
+      margin-top: 10px;
+    }
+    .asignar-usuario-btn {
+      background: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    .asignar-usuario-btn:hover {
+      background: #1976d2;
+    }
+
+    .asignar-usuario-btn-plus {
+      background: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px #2196f322;
+      transition: background 0.2s, transform 0.2s;
+      padding: 0;
+    }
+    .asignar-usuario-btn-plus:hover {
+      background: #1976d2;
+      transform: scale(1.08);
+    }
+    .asignar-usuario-btn-plus i {
+      pointer-events: none;
+    }
+    .modal-asignado-ticket.modal-asignado-small {
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 12px;
+      margin: 8px 0 0 0;
+    }
+    .modal-asignado-label {
+      font-weight: 600;
+      color: #1976d2;
+      margin-right: 4px;
+      font-size: 12px;
+    }
+    .modal-asignado-nombre {
+      font-weight: 500;
+      color: #1a7396;
+      background: #3c6b8f;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 12px;
+    }
+
+    .modal-problema-ticket {
+      color: #222;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin: 14px 0 0 0;
+      font-size: 15px;
+      font-family: 'Montserrat', sans-serif;
+      word-break: break-word;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+  <!-- Agregar estilos para el área específica -->
+  <style>
+    .ticket-area {
+      color: #1976d2;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 2px;
+      margin-bottom: 0;
+      letter-spacing: 0.01em;
+    }
+  </style>
+  <!-- Agregar estilos para el botón de eliminar -->
+  <style>
+    .completed-ticket {
+      position: relative;
+    }
+    
+    .delete-completed-ticket {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.2);
+      color: #ff4444;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .delete-completed-ticket:hover {
+      background: rgba(255, 0, 0, 0.2);
+      transform: scale(1.1);
+    }
+
+    .delete-completed-ticket:active {
+      transform: scale(0.95);
+    }
+
+    /* Estilos para las columnas separadas */
+    .completed-tickets-container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .completed-column {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .completed-column h3 {
+      margin: 0 0 15px 0;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      color: white;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .completed-tickets-grid {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .completed-tickets-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .completed-column {
+        flex: none;
+      }
+    }
+
+    /* Estilos para la barra de búsqueda y filtros */
+    .completed-search-bar {
+      display: flex;
+      gap: 15px;
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #ffffff;
+    }
+
+    .search-input-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-container i {
+      position: absolute;
+      left: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      z-index: 1;
+    }
+
+    .search-input-container input {
+      width: 100%;
+      padding: 12px 15px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input-container input:focus {
+      outline: none;
+      border-color: #4CAF50;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+
+    .search-input-container input::placeholder {
+      color: #999;
+    }
+
+    .filter-btn {
+      padding: 12px 20px;
+      background: #e3f2fd;
+      border: 1px solid #2196F3;
+      border-radius: 30px;
+      color: #2196F3;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      background: #bbdefb;
+      border-color: #1976d2;
+    }
+
+    .filter-btn.active {
+      background: #2196F3;
+      border-color: #1976d2;
+      color: #ffffff;
+    }
+
+    /* Modal de filtros flotante */
+    .filters-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .filters-modal-content {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filters-modal-header {
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f5f5f5;
+    }
+
+    .filters-modal-header h3 {
+      margin: 0;
+      color: #333;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .filters-modal-close {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .filters-modal-close:hover {
+      background: #ff4444;
+      color: #fff;
+    }
+
+    .filters-modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .filters-modal-footer {
+      padding: 20px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      background: #f5f5f5;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-size: 13px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 10px 12px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #333;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: #2196F3;
+      background: #fff;
+    }
+
+    .filter-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .btn-apply-filters,
+    .btn-clear-filters {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-apply-filters {
+      background: linear-gradient(135deg, #4CAF50, #388e3c);
+      color: white;
+    }
+
+    .btn-apply-filters:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .btn-clear-filters {
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .btn-clear-filters:hover {
+      background: #e0e0e0;
+    }
+
+    /* Contenedor de tabla */
+    .completed-table-container {
+      max-height: calc(85vh - 300px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .completed-table-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* Estilos para la tabla */
+    .completed-tickets-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .completed-tickets-table thead {
+      background: linear-gradient(135deg, #2196F3, #1976d2);
+    }
+
+    .completed-tickets-table th {
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      color: white;
+      border-bottom: 2px solid #1976d2;
+      white-space: nowrap;
+    }
+
+    .completed-tickets-table th.sortable {
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.2s ease;
+    }
+
+    .completed-tickets-table th.sortable:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .completed-tickets-table th.sortable.sorting {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .completed-tickets-table th .sort-indicator {
+      display: inline-block;
+      margin-left: 5px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .completed-tickets-table th:first-child {
+      padding-left: 20px;
+    }
+
+    .completed-tickets-table th:last-child {
+      padding-right: 20px;
+    }
+
+    .completed-tickets-table tbody tr {
+      border-bottom: 1px solid #e0e0e0;
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+
+    .completed-tickets-table tbody tr:hover {
+      background: #f5f5f5;
+    }
+
+    .completed-tickets-table td {
+      padding: 12px;
+      color: #333;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    .completed-tickets-table td:first-child {
+      padding-left: 20px;
+      font-weight: 500;
+    }
+
+    .completed-tickets-table td:last-child {
+      padding-right: 20px;
+    }
+
+    .completed-tickets-table td:last-child {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      vertical-align: middle;
+    }
+
+    /* Estilos específicos para columna Problema */
+    .completed-tickets-table td.td-problema,
+    .completed-tickets-table th:nth-child(4) {
+      max-width: 150px;
+      min-width: 120px;
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    /* Estilos específicos para columna Notas */
+    .completed-tickets-table td.td-notas,
+    .completed-tickets-table th:nth-child(5) {
+      max-width: 200px;
+      min-width: 150px;
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    .btn-delete-ticket,
+    .btn-view-image {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .btn-delete-ticket {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+
+    .btn-delete-ticket:hover {
+      background: rgba(244, 67, 54, 0.3);
+      transform: scale(1.05);
+    }
+
+    .btn-view-image {
+      background: rgba(33, 150, 243, 0.2);
+      color: #2196F3;
+      border: 1px solid rgba(33, 150, 243, 0.3);
+    }
+
+    .btn-view-image:hover {
+      background: rgba(33, 150, 243, 0.3);
+      transform: scale(1.05);
+    }
+
+    /* Scrollbar para el contenedor de tabla */
+    .completed-table-container {
+      background: #ffffff;
+    }
+
+    .completed-table-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .completed-table-container::-webkit-scrollbar-track {
+      background: #f5f5f5;
+      border-radius: 10px;
+    }
+
+    .completed-table-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+
+    .completed-table-container::-webkit-scrollbar-thumb:hover {
+      background: #999;
+    }
+
+    /* Indicador de carga */
+    .completed-table-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #2196F3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .completed-table-loading p {
+      margin: 0;
+      font-size: 16px;
+      color: #666;
+    }
+
+    /* Estilos para paginación */
+    .completed-table-pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-top: 1px solid #e0e0e0;
+      background: #f5f5f5;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .pagination-info {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pagination-btn {
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 30px;
+      color: #333;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background: #2196F3;
+      color: #fff;
+      border-color: #2196F3;
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #f5f5f5;
+    }
+
+    .pagination-page-info {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+      padding: 0 10px;
+    }
+
+    .pagination-size {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pagination-size label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .pagination-size select {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .pagination-size select:focus {
+      outline: none;
+      border-color: #2196F3;
+    }
+
+    /* Ajustar tamaño del modal para la tabla */
+    .completed-modal-content {
+      max-width: 95vw !important;
+      width: 95vw !important;
+      max-height: 90vh !important;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0 !important;
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+    }
+
+    .completed-modal-header {
+      padding: 20px 30px;
+      margin: 0;
+      flex-shrink: 0;
+      background: #ffffff !important;
+    }
+
+    .completed-modal-header h2 {
+      color: black !important;
+    }
+
+    /* Botón de cerrar modal */
+    .completed-modal-close {
+      background: #f5f5f5 !important;
+      border: 1px solid #ddd !important;
+      color: #333 !important;
+      backdrop-filter: none !important;
+    }
+
+    .completed-modal-close:hover {
+      background: #ff4444 !important;
+      color: #fff !important;
+      border-color: #ff4444 !important;
+    }
+
+    /* Asegurar que el fondo del overlay también sea opaco */
+    .completed-modal {
+      background: rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(5px) !important;
+    }
+
+    /* Responsive para tabla */
+    @media (max-width: 768px) {
+      .completed-modal-content {
+        max-width: 98vw !important;
+        width: 98vw !important;
+      }
+
+      .completed-search-bar {
+        flex-direction: column;
+      }
+
+      .completed-filters-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .completed-table-container {
+        overflow-x: auto;
+      }
+
+      .completed-tickets-table {
+        min-width: 800px;
+      }
+    }
+  </style>
+  <style>
+    /* ... estilos previos ... */
+    /* Mejorar contraste de las tablas del modal de ajustes */
+    .tools-table-box table,
+    .tools-table {
+      background: transparent !important;
+      color: #333 !important;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .tools-table th, .tools-table td {
+      color: #333 !important;
+      border: none;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .tools-table th {
+      background: #2196F3 !important;
+      color: #fff !important;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .tools-table tr {
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    .tools-table tr:last-child {
+      border-bottom: none;
+    }
+    .tools-table-box {
+      background: #f5f5f5 !important;
+      border-radius: 16px;
+      padding: 12px 8px 18px 8px;
+      margin: 0 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .tools-table td {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 14px;
+    }
+    .tools-table thead tr th {
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+    .tools-table tbody tr:hover {
+      background: #e3f2fd !important;
+      color: #1565c0 !important;
+    }
+  </style>
+
+  <style>
+    /* Estilos para el botón de descarga de BD con efecto glassmorphism */
+    .download-db-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: linear-gradient(135deg, rgb(33 150 243 / 0%), rgba(25, 118, 210, 0.3));
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 30px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 
+        0 8px 32px rgba(33, 150, 243, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+    }
+
+    .download-db-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .download-db-btn:hover::before {
+      left: 100%;
+    }
+
+    .download-db-btn:hover {
+      background: linear-gradient(135deg, rgba(25, 118, 210, 0.35), rgba(21, 101, 192, 0.4));
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 12px 40px rgba(33, 150, 243, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(33, 150, 243, 0.15);
+    }
+
+    .download-db-btn:active {
+      transform: translateY(0);
+      box-shadow: 
+        0 4px 16px rgba(33, 150, 243, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .download-db-btn i {
+      font-size: 16px;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    }
+
+    .download-db-btn span {
+      font-size: 13px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .download-db-btn {
+        bottom: 15px;
+        left: 15px;
+        padding: 10px 14px;
+        font-size: 12px;
+        border-radius: 14px;
+      }
+      
+      .download-db-btn span {
+        display: none;
+      }
+    }
+  </style>
+
+  <style>
+    /* Estilos para el botón de pausa del ticket */
+    .pause-button {
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    /* Estilo para botón de pausar (rojo) */
+    .pause-button.pause-state {
+      background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+      box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+    }
+
+    .pause-button.pause-state:hover {
+      background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+    }
+
+    /* Estilo para botón de reanudar (verde) */
+    .pause-button.resume-state {
+      background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .pause-button.resume-state:hover {
+      background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+    }
+
+    .pause-button:active {
+      transform: translateY(0);
+    }
+
+    /* Estilos para notificaciones en la esquina superior derecha */
+    .notification-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      font-weight: 500;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+      max-width: 350px;
+    }
+
+    .notification-toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .notification-toast.hide {
+      opacity: 0;
+      transform: translateX(400px);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 20px 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-header h2 {
+      flex: 1;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-left: auto;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+      <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button active" data-tab="tickets">
+          <i class="fa-solid fa-ticket"></i>Tickets
+        </button>
+        <button class="tab-switch-button" data-tab="calendario_de_mantenimiento_preventivo">
+          <i class="fas fa-calendar-alt"></i>Calendario de Mantenimiento Preventivo
+        </button>
+        <button class="tab-switch-button" data-tab="estadisticas_preventivas">
+          <i class="fas fa-chart-bar"></i>  Estadísticas Preventivas      </button>
+        <button class="tab-switch-button" data-tab="estadisticas_correctivas">
+          <i class="fas fa-chart-area"></i>Estadísticas Correctivas
+        </button>
+        
+      </div>
+    </div>
+  <div class="main-content">
+    <!--tab switch-->
+    
+  <script>
+    // =========== FUNCIONES GLOBALES PARA MODAL DE DEPARTAMENTO ===========
+    // Variables globales
+    window.herramientaPendiente = null;
+    window.departamentoSeleccionado = null;
+
+    // =========== FUNCIONES MODALES PERSONALIZADAS ===========
+    window.showCustomConfirm = function(message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('customConfirmModal');
+        const messageEl = document.getElementById('customConfirmMessage');
+        const cancelBtn = document.getElementById('customConfirmCancel');
+        const okBtn = document.getElementById('customConfirmOk');
+        
+        messageEl.textContent = message;
+        modal.style.display = 'flex';
+        
+        const cleanup = () => {
+          modal.style.display = 'none';
+          cancelBtn.onclick = null;
+          okBtn.onclick = null;
+        };
+        
+        cancelBtn.onclick = () => {
+          cleanup();
+          resolve(false);
+        };
+        
+        okBtn.onclick = () => {
+          cleanup();
+          resolve(true);
+        };
+      });
+    }
+
+    window.showCustomAlert = function(message) {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('customAlertModal');
+        const messageEl = document.getElementById('customAlertMessage');
+        const closeBtn = document.getElementById('customAlertClose');
+        
+        messageEl.textContent = message;
+        modal.style.display = 'flex';
+        
+        closeBtn.onclick = () => {
+          modal.style.display = 'none';
+          closeBtn.onclick = null;
+          resolve();
+        };
+      });
+    }
+
+    // Función para seleccionar departamento
+    window.seleccionarDepartamento = function(dept) {
+      // Desactivar todos los botones
+      document.querySelectorAll('.dept-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      // Activar el seleccionado
+      const selectedBtn = document.querySelector(`.dept-btn[data-dept="${dept}"]`);
+      if (selectedBtn) {
+        selectedBtn.classList.add('active');
+      }
+      window.departamentoSeleccionado = dept;
+      // Habilitar botón confirmar
+      const confirmarBtn = document.getElementById('confirmarDeptBtn');
+      if (confirmarBtn) {
+        confirmarBtn.disabled = false;
+        confirmarBtn.style.opacity = '1';
+        confirmarBtn.style.cursor = 'pointer';
+      }
+    }
+
+    // Función para confirmar la selección
+    window.confirmarDepartamento = async function() {
+      if (!window.departamentoSeleccionado) {
+        await window.showCustomAlert('Por favor selecciona un departamento');
+        return;
+      }
+
+      // Mapeo de selección a nombre de departamento
+      const deptMap = {
+        'P1': 'Producción P1',
+        'BA': 'Producción BA',
+        'WD': 'Producción WD'
+      };
+
+      const department = deptMap[window.departamentoSeleccionado];
+      const nombre = window.herramientaPendiente;
+
+      try {
+        const res = await fetch('/api/mantenimiento/herramientas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, department })
+        });
+             
+        if (res.ok) {
+          const data = await res.json();
+          window.cerrarModalDepartamento();
+          await window.showCustomAlert(`Herramienta agregada correctamente a ${department}`);
+          const input = document.getElementById('searchToolInput');
+          if (input) input.value = '';
+          if (window.cargarHerramientas) {
+            await window.cargarHerramientas();
+          }
+        } else {
+          const data = await res.json();
+          await window.showCustomAlert('Error: ' + (data.error || 'No se pudo agregar la herramienta'));
+        }
+      } catch (e) {
+        await window.showCustomAlert('Error de red o servidor');
+      }
+    }
+
+    // Función para cerrar el modal de departamento
+    window.cerrarModalDepartamento = function() {
+      const modal = document.getElementById('modalSeleccionarDepartamento');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      // Resetear selección
+      window.departamentoSeleccionado = null;
+      window.herramientaPendiente = null;
+      document.querySelectorAll('.dept-btn').forEach(btn => btn.classList.remove('active'));
+      const confirmarBtn = document.getElementById('confirmarDeptBtn');
+      if (confirmarBtn) {
+        confirmarBtn.disabled = true;
+        confirmarBtn.style.opacity = '0.5';
+        confirmarBtn.style.cursor = 'not-allowed';
+      }
+    }
+
+    // Función para agregar herramienta
+    window.agregarHerramienta = async function() {
+      const input = document.getElementById('searchToolInput');
+      const nombre = input ? input.value.trim() : '';    
+      if (!nombre) {
+        await window.showCustomAlert('Escribe el nombre de la herramienta');
+        return;
+      }
+      
+      // Guardar el nombre de la herramienta y mostrar el modal
+      window.herramientaPendiente = nombre;
+      const modal = document.getElementById('modalSeleccionarDepartamento');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+    // =========== FIN FUNCIONES GLOBALES ===========
+
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'mantenimiento.html',
+    calendario_de_mantenimiento_preventivo: 'calendario_mantenimiento.html',
+    estadisticas_preventivas: 'detalles_mantenimiento_preventivo.html',
+    estadisticas_correctivas: 'detalles_mantenimiento.html',
+
+
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+    <div class="container">
+      <div class="kanban-board" id="kanbanBoard">
+        <div class="kanban-column pending" data-status="pending">
+          <h2>Solicitudes Pendientes</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column critical" data-status="critical">
+          <h2>Crítico</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column medium" data-status="medium">
+          <h2>Medio</h2>
+          <div class="tickets-container"></div>
+        </div>
+        <div class="kanban-column low" data-status="low">
+          <h2>Bajo</h2>
+          <div class="tickets-container"></div>
+        </div>
+      </div>
+      <button class="completed-button" id="completedButton">
+        Terminados <span class="ticket-count">0</span>
+      </button>
+    </div>
+
+    <!-- Modal para detalles del ticket -->
+    <div class="ticket-modal" id="ticketModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; z-index: 10;">×</button>
+        <div class="modal-header">
+          <h2>Detalles del Ticket</h2>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- El contenido se llenará dinámicamente -->
+        </div>
+        <button id="pauseTicketBtn" class="pause-button pause-state" title="Pausar tiempo del ticket" style="display: none; position: absolute; bottom: 15px; right: 15px; z-index: 10;">
+          Pausar
+        </button>
+      </div>
+    </div>
+
+    <!-- Visor de imagen completa -->
+    <div class="image-viewer" id="imageViewer">
+      <div class="image-viewer-content">
+        <button class="image-viewer-close" onclick="closeImageViewer()">×</button>
+        <img id="fullImage" src="" alt="Imagen completa">
+      </div>
+    </div>
+
+    <!-- Modal para tickets terminados -->
+    <div class="completed-modal" id="completedModal">
+      <div class="completed-modal-content">
+        <button class="completed-modal-close" onclick="closeCompletedModal()">×</button>
+        <div class="completed-modal-header">
+          <h2>Tickets Terminados</h2>
+        </div>
+        
+        <!-- Barra de búsqueda y filtros -->
+        <div class="completed-search-bar">
+          <div class="search-input-container">
+            <input type="text" id="completedSearchInput" placeholder="Buscar tickets..." autocomplete="off">
+          </div>
+          <button class="filter-btn" id="completedFilterBtn">
+            <i class="fas fa-filter"></i>
+            Filtros
+          </button>
+        </div>
+
+        <!-- Tabla de tickets -->
+        <div class="completed-table-container">
+          <table class="completed-tickets-table" id="completedTicketsTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-column="name">Nombre <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="department">Departamento <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="area">Área <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="issue">Problema <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="notas">Notas <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="timestamp">Fecha Creación <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="time_end">Fecha Finalización <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="resolution_time">Tiempo Resolución <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="paused_time">Tiempo Pausado <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="real_work_time">Tiempo Real Trabajado <span class="sort-indicator"></span></th>
+                <th class="sortable" data-column="id_herramienta">Herramienta (ID) <span class="sort-indicator"></span></th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="completedTicketsTableBody">
+              <!-- Los tickets se cargarán aquí -->
+            </tbody>
+          </table>
+          <div id="completedTableEmpty" class="completed-table-empty" style="display: none;">
+            <p>No hay tickets terminados que coincidan con los filtros</p>
+          </div>
+          
+          <!-- Indicador de carga -->
+          <div id="completedTableLoading" class="completed-table-loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Cargando tickets...</p>
+          </div>
+
+          <!-- Controles de paginación -->
+          <div class="completed-table-pagination" id="completedTablePagination" style="display: none;">
+            <div class="pagination-info">
+              <span id="paginationInfo">Mostrando 0 - 0 de 0 tickets</span>
+            </div>
+            <div class="pagination-controls">
+              <button class="pagination-btn" id="paginationFirst" onclick="goToPage(1)" disabled>Primera</button>
+              <button class="pagination-btn" id="paginationPrev" onclick="goToPreviousPage()" disabled>Anterior</button>
+              <span class="pagination-page-info">
+                Página <span id="currentPageNumber">1</span> de <span id="totalPagesNumber">1</span>
+              </span>
+              <button class="pagination-btn" id="paginationNext" onclick="goToNextPage()" disabled>Siguiente</button>
+              <button class="pagination-btn" id="paginationLast" onclick="goToLastPage()" disabled>Última</button>
+            </div>
+            <div class="pagination-size">
+              <label>Mostrar:</label>
+              <select id="itemsPerPage" onchange="changeItemsPerPage()">
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Filtros (ventana flotante separada) -->
+    <div class="filters-modal" id="filtersModal" style="display: none;">
+      <div class="filters-modal-content">
+        <div class="filters-modal-header">
+          <h3>Filtros</h3>
+          <button class="filters-modal-close" onclick="closeFiltersModal()">×</button>
+        </div>
+        <div class="filters-modal-body">
+          <div class="filter-group">
+            <label>Departamento:</label>
+            <select id="filterDepartment">
+              <option value="">Todos</option>
+              <option value="Producción P1">Producción P1</option>
+              <option value="Producción BA">Producción BA</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Área específica:</label>
+            <select id="filterArea">
+              <option value="">Todas las áreas</option>
+              <!-- Las opciones se cargarán dinámicamente -->
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Fecha desde:</label>
+            <input type="date" id="filterDateFrom">
+          </div>
+          <div class="filter-group">
+            <label>Fecha hasta:</label>
+            <input type="date" id="filterDateTo">
+          </div>
+        </div>
+        <div class="filters-modal-footer">
+            <button class="btn-apply-filters" onclick="applyCompletedFilters()">Aplicar Filtros</button>
+            <button class="btn-clear-filters" onclick="clearCompletedFilters()">Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Notas al Terminar -->
+    <div id="notasModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:4000; align-items:center; justify-content:center;">
+      <div style="background:#ffffff; color:#111111; width:92%; max-width:560px; border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,0.35); overflow:hidden;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid #e5e7eb;">
+          <h3 style="margin:0; font-size:18px; color:#111111;">Notas de cierre</h3>
+          <button id="cerrarNotasBtn" style="background:transparent; border:none; color:#111111; font-size:22px; cursor:pointer; line-height:1;">×</button>
+        </div>
+        <div style="padding:16px 18px;">
+          <label for="notasInput" style="display:block; font-size:14px; color:#111111; margin-bottom:8px;">Agrega notas (obligatorio)</label>
+          <textarea id="notasInput" rows="5" style="width:100%; resize:vertical; background:#ffffff; color:#111111; border:1px solid #cfd8dc; border-radius:10px; outline:none;"></textarea>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; padding:12px 18px; border-top:1px solid #e5e7eb;">
+          <button id="cancelarNotasBtn" style="background:#f4d0d9; color:#111111; border:1px solid #eb0b26; padding:10px 16px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button id="guardarNotasBtn" style="background:#42904e; color:#111111; border:1px solid #1a5209; padding:10px 16px; border-radius:10px; cursor:pointer; opacity:.7;" disabled>Guardar y terminar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de tickets abiertos -->
+    <div class="messages-modal" id="messagesModal" style="display: none;">
+      <div class="messages-modal-content">
+        <div class="messages-header">
+          <h3>Tickets Abiertos</h3>
+          <button class="close-messages" id="closeMessages">&times;</button>
+        </div>
+        <div class="messages-list" id="ticketsList">
+          <!-- Los tickets se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Ventana de chat individual -->
+    <div class="chat-window" id="chatWindow" style="display: none;">
+      <div class="chat-window-content">
+        <div class="chat-header">
+          <h3 id="chatTitle">Chat con <span id="userName"></span></h3>
+          <button class="close-chat" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- Los mensajes se cargarán aquí -->
+        </div>
+        <div class="chat-input-container">
+          <input type="text" class="chat-input" id="messageInput" placeholder="Escribe un mensaje...">
+          <button class="send-message-btn" id="sendMessage">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pdfPreviewModal">
+      <div id="pdfPreviewContent">
+        <iframe id="pdfPreviewFrame"></iframe>
+        <div>
+          <button id="closePdfPreview">Cancelar</button>
+          <button id="uploadPdfConfirm">Subir PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de ajustes -->
+    <div id="settingsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:3000;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+      <div style="background:rgba(255,255,255,0.95);border-radius:18px;padding:32px 24px;min-width:320px;max-width:90vw;box-shadow:0 8px 32px rgba(31,38,135,0.18);position:relative;">
+        <button onclick="closeSettingsModal()" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:28px;color:#888;cursor:pointer;">×</button>
+        <h3 style="margin:0 0 20px 0;color:#333;font-size:20px;">Ajustes</h3>
+      
+        <button onclick="saveSettings()" style="background:#2196F3;color:#fff;border:none;border-radius:8px;padding:12px 24px;cursor:pointer;font-size:16px;width:100%;">Guardar</button>
+      </div>
+    </div>
+
+    <!-- Modal para seleccionar herramienta y tipo de mantenimiento -->
+    <div id="herramientaModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:3000; align-items:center; justify-content:center;">
+      <div style="background:#fff; border-radius:12px; padding:32px 24px; min-width:320px; max-width:90vw; box-shadow:0 8px 32px rgba(31,38,135,0.18); position:relative;">
+        <button onclick="cerrarHerramientaModal()" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:28px;color:#888;cursor:pointer;">×</button>
+        <h3 style="margin:0 0 20px 0;color:#333;font-size:20px;">Selecciona el tipo de servicio</h3>
+        <div style="margin-bottom:20px;">
+          <h4 style="margin:0 0 15px 0;color:#333;font-size:16px;text-align:center;">Tipos de servicio</h4>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              <label style="font-size:16px; color:#333; font-weight:500; min-width: 80px;">Correctivo</label>
+              <label class="toggle-switch">
+                <input type="checkbox" name="tipoMantenimiento" value="correctivo" id="checkCorrectivo">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              <label style="font-size:16px; color:#333; font-weight:500; min-width: 80px;">Apoyo de mecánica</label>
+              <label class="toggle-switch">
+                <input type="checkbox" name="tipoMantenimiento" value="mecanica">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              <label style="font-size:16px; color:#333; font-weight:500; min-width: 80px;">Servicio de infraestructura</label>
+              <label class="toggle-switch">
+                <input type="checkbox" name="tipoMantenimiento" value="infraestructura">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              <label style="font-size:16px; color:#333; font-weight:500; min-width: 80px;">Servicio de apoyo y modificaciones</label>
+              <label class="toggle-switch">
+                <input type="checkbox" name="tipoMantenimiento" value="modificaciones">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center;">
+              <label style="font-size:16px; color:#333; font-weight:500; min-width: 80px;">Implementaciones</label>
+              <label class="toggle-switch">
+                <input type="checkbox" name="tipoMantenimiento" value="implementaciones">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div id="activoSelectContainer" style="margin-bottom:20px; display:none;">
+          <label style="display:block; margin-bottom:8px; color:#333; font-size:16px; font-weight:500;">Selecciona un activo:</label>
+          <select id="herramientaSelect" style="width:100%;padding:12px 8px;border-radius:8px;border:1px solid #ccc;font-size:16px;">
+            <option value="">Selecciona un activo...</option>
+          </select>
+        </div>
+        <button id="btnCompletarTicket" style="background:#2196F3;color:#fff;border:none;border-radius:8px;padding:12px 24px;cursor:pointer;font-size:16px;width:100%;" disabled>Completar ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visor de imagen en pantalla completa -->
+  <div class="fullscreen-image-overlay" id="fullscreenOverlay">
+    <div class="fullscreen-image-container">
+      <button class="fullscreen-close-btn" onclick="closeFullscreenImage()">×</button>
+      <img src="IMG_2288.jpg" alt="Imagen en pantalla completa" class="fullscreen-image" id="fullscreenImage">
+    </div>
+  </div>
+
+<button id="settingsGearButton" class="glass-gear-btn">
+  <i class="fas fa-cog"></i>
+</button>
+
+<!-- Modal glass para ajustes -->
+<div id="settingsGlassModal">
+  <div class="settings-modal-content">
+    <button class="close-modal" id="closeSettingsGlassModal">&times;</button>
+    <div class="modal-header-section">
+      <h3>Ajustes</h3>
+    </div>
+    <div class="search-section">
+      <div class="search-box">
+        <input type="text" id="searchAssetsInput" placeholder="Buscar activos..." />
+        <button id="clearSearchBtn" class="clear-search-btn" title="Limpiar búsqueda">
+          <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div style="margin-top: 15px; padding: 0 15px;">
+        <label for="filterAreaSelect" style="display: block; font-size: 13px; color: #666; margin-bottom: 8px; font-weight: 600;">Filtrar por área:</label>
+        <select id="filterAreaSelect" style="width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; background: #fff; color: #333; font-size: 14px;">
+          <option value="">Todas las áreas</option>
+        </select>
+      </div>
+    </div>
+    <div class="search-tools-flexbox">
+      <div class="search-tool-box">
+        <input type="text" id="searchToolInput" placeholder="Agregar activo..." />
+        <button id="searchToolBtn" class="search-btn">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <div id="herramientasContainer" style="width: 100%; display: flex; flex-direction: column; gap: 20px;">
+        <!-- Las tablas se generarán dinámicamente aquí -->
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Modal personalizado para confirmaciones -->
+  <div id="customConfirmModal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content">
+      <div class="custom-modal-message" id="customConfirmMessage"></div>
+      <div class="custom-modal-separator"></div>
+      <div class="custom-modal-buttons">
+        <button class="custom-modal-btn custom-modal-cancel" id="customConfirmCancel">No, cancelar</button>
+        <button class="custom-modal-btn custom-modal-ok" id="customConfirmOk">Si, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal personalizado para mensajes de éxito/error -->
+  <div id="customAlertModal" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content">
+      <div class="custom-modal-message" id="customAlertMessage"></div>
+      <div class="custom-modal-separator"></div>
+      <div class="custom-modal-buttons">
+        <button class="custom-modal-btn custom-modal-close" id="customAlertClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para asignar usuario a un ticket -->
+  <div id="modalAsignarUsuario" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:5000; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:12px; padding:32px 24px; min-width:320px; max-width:90vw; box-shadow:0 8px 32px rgba(31,38,135,0.18); position:relative;">
+      <button onclick="cerrarModalAsignarUsuario()" style="position:absolute;top:10px;right:16px;background:none;border:none;font-size:28px;color:#888;cursor:pointer;">×</button>
+      <h3 style="margin:0 0 20px 0;color:#333;font-size:20px;">Asignar usuario</h3>
+      <div id="listaUsuariosMantenimiento"></div>
+    </div>
+  </div>
+
+  <!-- Modal para seleccionar departamento al agregar herramienta -->
+  <div id="modalSeleccionarDepartamento" class="custom-modal" style="display: none;">
+    <div class="custom-modal-content">
+      <div style="padding: 24px;">
+        <h3 style="margin: 0 0 24px 0; color: #333; font-size: 18px; font-weight: 600;">Selecciona el departamento</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+          <button type="button" class="dept-btn" data-dept="P1" onclick="seleccionarDepartamento('P1')"
+            style="padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 6px; background: #ffffff; color: #333; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
+            P1 - Producción P1
+          </button>
+          <button type="button" class="dept-btn" data-dept="BA" onclick="seleccionarDepartamento('BA')"
+            style="padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 6px; background: #ffffff; color: #333; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
+            BA - Producción BA
+          </button>
+          <button type="button" class="dept-btn" data-dept="WD" onclick="seleccionarDepartamento('WD')"
+            style="padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 6px; background: #ffffff; color: #333; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
+            WD - Wood Division
+          </button>
+        </div>
+      </div>
+      <div class="custom-modal-separator"></div>
+      <div class="custom-modal-buttons">
+        <button class="custom-modal-btn custom-modal-cancel" onclick="cerrarModalDepartamento()">Cancelar</button>
+        <button class="custom-modal-btn custom-modal-ok" id="confirmarDeptBtn" onclick="confirmarDepartamento()" style="opacity: 0.5; cursor: not-allowed;" disabled>Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Asegurar que la sidebar se muestre inmediatamente
+      document.body.classList.add('sidebar-ready');
+      
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const response = await fetch('/api/auth/check-permissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else {
+          switch(currentPage) {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+      } catch (e) {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+
+      // Función para descargar la base de datos
+      const downloadDbButton = document.getElementById('downloadDbButton');
+      if (downloadDbButton) {
+        downloadDbButton.addEventListener('click', async function() {
+          try {
+            // Mostrar indicador de carga
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Descargando...</span>';
+            this.disabled = true;
+
+            const response = await fetch('/api/mantenimiento/export-database', {
+              method: 'GET'
+            });
+
+            if (!response.ok) {
+              throw new Error('Error al exportar la base de datos');
+            }
+
+            // Obtener el blob de la respuesta
+            const blob = await response.blob();
+            
+            // Crear URL temporal para descarga
+            const url = window.URL.createObjectURL(blob);
+            
+            // Crear elemento de descarga
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tickets_mantenimiento_${new Date().toISOString().split('T')[0]}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpiar
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Restaurar botón
+            this.innerHTML = originalText;
+            this.disabled = false;
+            
+            alert('Archivo Excel descargado exitosamente');
+          } catch (error) {
+            console.error('Error al descargar la base de datos:', error);
+            alert('Error al descargar el archivo Excel: ' + error.message);
+            
+            // Restaurar botón en caso de error
+            this.innerHTML = '<i class="fas fa-database"></i><span>Descargar BD</span>';
+            this.disabled = false;
+          }
+        });
+      }
+    });
+    
+    let draggedTicket = null;
+    let lastTicketCount = 0; // Para rastrear tickets nuevos
+
+    // Sonidos: usar solo WebAudio (sin archivos)
+    const sounds = {};
+    // WebAudio: contexto y utilidades (fallback sin archivos)
+    let audioCtx = null;
+    function ensureAudioCtx() {
+      if (!audioCtx) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioCtx = new Ctx();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+    }
+    function playBeep(frequency = 880, durationMs = 120, type = 'sine', gainValue = 0.06) {
+      ensureAudioCtx();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = frequency;
+      filter.type = 'lowpass';
+      filter.frequency.value = 2600;
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      const now = audioCtx.currentTime;
+      gain.gain.linearRampToValueAtTime(gainValue, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + durationMs / 1000);
+      osc.connect(filter).connect(gain).connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + durationMs / 1000 + 0.02);
+      osc.onended = () => { try { osc.disconnect(); filter.disconnect(); gain.disconnect(); } catch (_) {} };
+    }
+
+    function playPluck(frequency, durationMs = 220, type = 'triangle', gainValue = 0.06, cutoff = 2400) {
+      ensureAudioCtx();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = frequency;
+      filter.type = 'lowpass';
+      filter.frequency.value = cutoff;
+      filter.Q.value = 0.8;
+      const now = audioCtx.currentTime;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(gainValue, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + durationMs / 1000);
+      osc.connect(filter).connect(gain).connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + durationMs / 1000 + 0.02);
+      osc.onended = () => { try { osc.disconnect(); filter.disconnect(); gain.disconnect(); } catch (_) {} };
+    }
+
+    function scheduleNote(frequency, offsetMs, durationMs, type = 'sine', gainValue = 0.05, cutoff = 3000) {
+      ensureAudioCtx();
+      if (!audioCtx) return;
+      const start = audioCtx.currentTime + offsetMs / 1000;
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = frequency;
+      filter.type = 'lowpass';
+      filter.frequency.value = cutoff;
+      filter.Q.value = 0.7;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(gainValue, start + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + durationMs / 1000);
+      osc.connect(filter).connect(gain).connect(audioCtx.destination);
+      osc.start(start);
+      osc.stop(start + durationMs / 1000 + 0.02);
+      osc.onended = () => { try { osc.disconnect(); filter.disconnect(); gain.disconnect(); } catch (_) {} };
+    }
+    // Ping tipo Facebook: dos pops con barrido descendente y filtro resonante
+    function playMessengerPing() {
+      ensureAudioCtx();
+      if (!audioCtx) return;
+      const makePop = (startOffsetMs = 0, startFreq = 1200, endFreq = 800, durMs = 170, gainVal = 0.07) => {
+        const start = audioCtx.currentTime + startOffsetMs / 1000;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const bp = audioCtx.createBiquadFilter();
+        const hp = audioCtx.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.value = 1100; bp.Q.value = 1.2;
+        hp.type = 'highpass'; hp.frequency.value = 120;
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(startFreq, start);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(1, endFreq), start + durMs / 1000);
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(gainVal, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + (durMs + 40) / 1000);
+        osc.connect(bp).connect(hp).connect(gain).connect(audioCtx.destination);
+        osc.start(start);
+        osc.stop(start + (durMs + 60) / 1000);
+        osc.onended = () => { try { osc.disconnect(); bp.disconnect(); hp.disconnect(); gain.disconnect(); } catch (_) {} };
+      };
+      makePop(0, 1200, 800, 170, 0.07);
+      makePop(90, 900, 620, 130, 0.06);
+    }
+
+    function playSound(key) {
+      // Diseños más estilizados
+      if (key === 'new') {
+        // Ping similar a Facebook
+        playMessengerPing();
+      } else if (key === 'move') {
+        // Pluck suave descendente
+        playPluck(720, 170, 'triangle', 0.05, 2200);
+        scheduleNote(540, 90, 140, 'triangle', 0.035, 2000);
+      } else if (key === 'done') {
+        // Arpegio ascendente de confirmación
+        scheduleNote(660, 0, 160, 'sine', 0.05, 2800);
+        scheduleNote(990, 120, 160, 'sine', 0.048, 2800);
+        scheduleNote(1320, 240, 180, 'sine', 0.045, 2600);
+      }
+    }
+
+    // Alarma persistente para tickets nuevos en pendiente hasta ser movidos
+    const alarmingTickets = new Set(); // ids de tickets que deben mantener la alarma
+    let audioUnlocked = false;
+    // Alarma con archivo MP3 en bucle (pre-cargado para evitar retrasos)
+    let alarmAudio = null;
+    let alarmMediaSource = null;
+    let alarmMediaGain = null;
+    let preloadedAlarmAudio = null;
+    let alarmReady = false;
+
+    // Reproducir el sonido una vez al cargar para verificación (puede ser bloqueado por autoplay)
+    function playVerificationSound() {
+      try {
+        const testAudio = new Audio('/audios/notificacion-lisa.mp3');
+        testAudio.volume = 1.0;
+        testAudio.play().catch(() => { /* Puede ser bloqueado por autoplay */ });
+      } catch (_) {}
+    }
+    window.addEventListener('load', playVerificationSound);
+    // Mantener también referencias previas para limpiar si existieran
+    let alarmOsc = null;
+    let alarmGain = null;
+    let alarmLfo = null;
+    let alarmLfoGain = null;
+    let alarmAmpLfo = null;
+    let alarmAmpLfoGain = null;
+    let alarmFilter = null;
+    function startAlarmLoop() {
+      if (alarmAudio) return;
+      try {
+        ensureAudioCtx();
+        // Usar el elemento pre-cargado para evitar latencia
+        if (!preloadedAlarmAudio) {
+          preloadedAlarmAudio = new Audio('/audios/notificacion-lisa.mp3');
+          preloadedAlarmAudio.preload = 'auto';
+          preloadedAlarmAudio.loop = true;
+          preloadedAlarmAudio.volume = 1.0;
+          preloadedAlarmAudio.addEventListener('canplaythrough', () => { alarmReady = true; }, { once: true });
+          try { preloadedAlarmAudio.load(); } catch (_) {}
+        }
+        alarmAudio = preloadedAlarmAudio;
+        if (audioCtx && audioCtx.createMediaElementSource && !alarmMediaSource) {
+          try {
+            alarmMediaSource = audioCtx.createMediaElementSource(alarmAudio);
+            alarmMediaGain = audioCtx.createGain();
+            // Amplificar al 500%
+            alarmMediaGain.gain.value = 5.0;
+            alarmMediaSource.connect(alarmMediaGain).connect(audioCtx.destination);
+          } catch (_) {}
+        }
+        // Si aún no está listo, igual intentamos play; el navegador arrancará cuando pueda
+        try { if (!alarmReady) { alarmAudio.currentTime = 0; } } catch (_) {}
+        alarmAudio.play().catch(() => {});
+      } catch (_) {}
+    }
+    function stopAlarmLoop() {
+      if (alarmAudio) {
+        try { alarmAudio.pause(); } catch (_) {}
+        // No destruimos el elemento pre-cargado para mantenerlo listo
+        alarmAudio = null;
+      }
+      // Asegurar que cualquier rastro de la alarma WebAudio previa se detenga
+      if (alarmOsc) { try { alarmOsc.stop(); } catch (_) {} try { alarmOsc.disconnect(); } catch (_) {} alarmOsc = null; }
+      if (alarmGain) { try { alarmGain.disconnect(); } catch (_) {} alarmGain = null; }
+      if (alarmFilter) { try { alarmFilter.disconnect(); } catch (_) {} alarmFilter = null; }
+      if (alarmLfo) { try { alarmLfo.stop(); } catch (_) {} try { alarmLfo.disconnect(); } catch (_) {} alarmLfo = null; }
+      if (alarmLfoGain) { try { alarmLfoGain.disconnect(); } catch (_) {} alarmLfoGain = null; }
+      if (alarmAmpLfo) { try { alarmAmpLfo.stop(); } catch (_) {} try { alarmAmpLfo.disconnect(); } catch (_) {} alarmAmpLfo = null; }
+      if (alarmAmpLfoGain) { try { alarmAmpLfoGain.disconnect(); } catch (_) {} alarmAmpLfoGain = null; }
+    }
+
+    function unlockAudioOnce() {
+      if (audioUnlocked) return;
+      try {
+        ensureAudioCtx();
+        // Preparar/pre-cargar el audio de alarma y conectar ganancia
+        if (!preloadedAlarmAudio) {
+          preloadedAlarmAudio = new Audio('/audios/notificacion-lisa.mp3');
+          preloadedAlarmAudio.preload = 'auto';
+          preloadedAlarmAudio.loop = true;
+          preloadedAlarmAudio.volume = 1.0;
+          preloadedAlarmAudio.addEventListener('canplaythrough', () => { alarmReady = true; }, { once: true });
+          try { preloadedAlarmAudio.load(); } catch (_) {}
+        }
+        if (audioCtx && audioCtx.createMediaElementSource && !alarmMediaSource && preloadedAlarmAudio) {
+          try {
+            alarmMediaSource = audioCtx.createMediaElementSource(preloadedAlarmAudio);
+            alarmMediaGain = audioCtx.createGain();
+            alarmMediaGain.gain.value = 5.0; // 500%
+            alarmMediaSource.connect(alarmMediaGain).connect(audioCtx.destination);
+          } catch (_) {}
+        }
+        // AudioContext listo
+        audioUnlocked = true;
+        document.removeEventListener('click', unlockAudioOnce);
+        document.removeEventListener('touchstart', unlockAudioOnce);
+        document.removeEventListener('keydown', unlockAudioOnce);
+        // Si ya hay tickets en pendientes, iniciar la alarma en bucle
+        if (alarmingTickets.size > 0) {
+          startAlarmLoop();
+        }
+      } catch (_) {}
+    }
+    document.addEventListener('click', unlockAudioOnce);
+    document.addEventListener('touchstart', unlockAudioOnce);
+    document.addEventListener('keydown', unlockAudioOnce);
+
+    function updateAlarmPlayback() {
+      if (alarmingTickets.size > 0) {
+        startAlarmLoop();
+      } else {
+        stopAlarmLoop();
+      }
+    }
+
+
+    // Función para mostrar notificación de nuevo ticket
+    function showNewTicketNotification(ticket) {
+      if (Notification.permission === 'granted') {
+        const notification = new Notification('Nuevo Ticket Recibido', {
+          body: `${ticket.name} - ${ticket.department}\n${ticket.issue.substring(0, 50)}...`,
+          icon: '/img/logo.png',
+          badge: '/img/logo.png',
+          tag: 'new-ticket',
+          requireInteraction: true
+        });
+        try {
+          const audio = new Audio('/audios/notificacion-lisa.mp3');
+          audio.volume = 0.6;
+          audio.play().catch(() => { try { playSound('new'); } catch (_) {} });
+        } catch (_) {
+          try { playSound('new'); } catch (_) {}
+        }
+      } else {
+        // Si no hay permiso de notificación, intentar reproducir el MP3; si falla, usar WebAudio
+        try {
+          const audio = new Audio('/audios/notificacion-lisa.mp3');
+          audio.volume = 0.6;
+          audio.play().catch(() => { try { playSound('new'); } catch (_) {} });
+        } catch (_) {
+          try { playSound('new'); } catch (_) {}
+        }
+      }
+    }
+
+    // Función para cargar tickets
+    async function loadTickets() {
+      // Cachear los contenedores para evitar búsquedas repetidas en el DOM
+      if (!window.containers) {
+        window.containers = {
+          pending: document.querySelector('.kanban-column.pending .tickets-container'),
+          critical: document.querySelector('.kanban-column.critical .tickets-container'),
+          medium: document.querySelector('.kanban-column.medium .tickets-container'),
+          low: document.querySelector('.kanban-column.low .tickets-container')
+        };
+      }
+
+      const { pending, critical, medium, low } = window.containers;
+      
+      if (!pending || !critical || !medium || !low) {
+        console.error('Contenedores no encontrados en el DOM');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/mantenimiento/tickets', {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Error al obtener tickets');
+        }
+        
+        const tickets = await response.json();
+
+        // Crear un mapa de tickets por ID para evitar duplicados
+        const ticketMap = new Map();
+        tickets.forEach(ticket => {
+          ticketMap.set(ticket.id, ticket);
+        });
+
+        // Convertir el mapa a array
+        const uniqueTickets = Array.from(ticketMap.values());
+
+        // Notificar tickets nuevos (sonido corto), independiente de la alarma
+        if (lastTicketCount > 0 && uniqueTickets.length > lastTicketCount) {
+          const newTickets = uniqueTickets.slice(lastTicketCount);
+          newTickets.forEach(ticket => { showNewTicketNotification(ticket); });
+        }
+
+        // Activar alarma SIEMPRE que haya al menos un ticket en pendiente
+        const currentPendingIds = new Set(
+          uniqueTickets
+            .filter(t => (t.urgency || '').toLowerCase() === 'pending' && t.enviado_supervisor !== true)
+            .map(t => String(t.id))
+        );
+        // Reemplazar completamente el set para reflejar el estado actual
+        alarmingTickets.clear();
+        currentPendingIds.forEach(id => alarmingTickets.add(id));
+        updateAlarmPlayback();
+        
+        lastTicketCount = uniqueTickets.length;
+
+        // Verificar si los tickets han cambiado
+        const currentTicketsStr = JSON.stringify(uniqueTickets);
+        if (window.lastTicketsStr === currentTicketsStr) {
+          return;
+        }
+        window.lastTicketsStr = currentTicketsStr;
+
+        // Limpiar todos los contenedores
+        [pending, critical, medium, low].forEach(container => {
+          container.innerHTML = '';
+        });
+
+        // Actualizar el contador de tickets terminados
+        const completedCount = uniqueTickets.filter(ticket => ticket.urgency === 'completed').length;
+        const countSpan = document.querySelector('.completed-button .ticket-count');
+        if (countSpan) countSpan.textContent = completedCount;
+
+        if (!Array.isArray(uniqueTickets) || uniqueTickets.length === 0) {
+          return;
+        }
+
+        // Crear un DocumentFragment para cada columna
+        const fragments = {
+          pending: document.createDocumentFragment(),
+          critical: document.createDocumentFragment(),
+          medium: document.createDocumentFragment(),
+          low: document.createDocumentFragment()
+        };
+
+        // Distribuir tickets en sus respectivos fragmentos
+        uniqueTickets.forEach(ticket => {
+          if (ticket.urgency === 'completed') return;
+          if (ticket.enviado_supervisor === true) return;
+          
+          const div = createTicketElement(ticket);
+          const targetFragment = fragments[ticket.urgency] || fragments.pending;
+          targetFragment.appendChild(div);
+        });
+
+        // Aplicar los fragmentos a los contenedores
+        Object.entries(fragments).forEach(([urgency, fragment]) => {
+          const container = window.containers[urgency];
+          if (container) {
+            container.appendChild(fragment);
+          }
+        });
+
+      } catch (error) {
+        console.error('Error al cargar tickets:', error);
+      }
+    }
+
+    // Función para actualizar la urgencia de un ticket
+    async function updateTicketUrgency(ticketId, newUrgency) {
+      try {
+        const response = await fetch(`/api/mantenimiento/tickets/${ticketId}/urgency`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ urgency: newUrgency })
+        });
+
+        if (!response.ok) throw new Error('Error al actualizar la urgencia del ticket');
+        
+        // En lugar de recargar todos los tickets, solo actualizamos el estado del ticket movido
+        const ticket = draggedTicket;
+        if (ticket) {
+          // Actualizar el indicador de urgencia en el ticket
+          const urgencySpan = ticket.querySelector('span[style="color:#d00"]');
+          if (urgencySpan) {
+            urgencySpan.textContent = `[${newUrgency}]`;
+          }
+          
+          // Obtener el contenedor de destino
+          const targetContainer = document.querySelector(`.kanban-column[data-status="${newUrgency}"] .tickets-container`);
+          if (targetContainer) {
+            // Remover el ticket de su contenedor actual
+            if (ticket.parentNode) {
+              ticket.parentNode.removeChild(ticket);
+            }
+            // Agregar el ticket al final del nuevo contenedor
+            targetContainer.appendChild(ticket);
+          }
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al actualizar el estado del ticket');
+      }
+    }
+
+    // Función para eliminar un ticket
+    async function deleteTicket(ticketId) {
+      if (!confirm('¿Estás seguro de que deseas eliminar este ticket?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/mantenimiento/tickets/${ticketId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el ticket');
+        }
+
+        // Recargar tickets para mostrar el cambio
+        loadTickets();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar el ticket');
+      }
+    }
+
+    // Animación suave para la aparición de tickets
+    function animateTicketEntry(element) {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(20px)';
+      requestAnimationFrame(() => {
+        element.style.transition = 'opacity 0.4s, transform 0.4s';
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      });
+    }
+
+    function formatElapsedTimeWithSeconds(totalSeconds) {
+      const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+      const hours = Math.floor(safeSeconds / 3600);
+      const minutes = Math.floor((safeSeconds % 3600) / 60);
+      const seconds = safeSeconds % 60;
+      return `${hours}h ${minutes}m ${seconds}s abierto`;
+    }
+
+    function getElapsedSecondsFromTimestamp(timestamp) {
+      const startTime = new Date(timestamp);
+      if (Number.isNaN(startTime.getTime())) {
+        return 0;
+      }
+      return Math.floor((Date.now() - startTime.getTime()) / 1000);
+    }
+
+    function updateLiveTicketTimers() {
+      const timerElements = document.querySelectorAll('.ticket-open-time[data-start-timestamp]');
+      timerElements.forEach((element) => {
+        const timestamp = element.dataset.startTimestamp;
+        const elapsedSeconds = getElapsedSecondsFromTimestamp(timestamp);
+        element.textContent = formatElapsedTimeWithSeconds(elapsedSeconds);
+      });
+    }
+
+    function ensureLiveTicketTimers() {
+      if (window.liveTicketTimersInterval) {
+        return;
+      }
+      updateLiveTicketTimers();
+      window.liveTicketTimersInterval = setInterval(updateLiveTicketTimers, 1000);
+    }
+
+    // Modificar createTicketElement para usar la animación
+    function createTicketElement(ticket) {
+      const div = document.createElement('div');
+      div.className = 'ticket';
+      
+      // Si el ticket está pausado, agregar clase y estilo transparente
+      if (ticket.paused === true || ticket.paused === 'true') {
+        div.classList.add('ticket-paused');
+        div.style.background = 'rgba(224, 224, 224, 0.4)';
+        div.style.opacity = '0.4';
+      }
+      
+      div.setAttribute('data-urgency', ticket.urgency);
+      div.setAttribute('draggable', 'true');
+      div.dataset.ticketId = ticket.id;
+      
+      // Calcula el tiempo transcurrido desde timestamp (BD)
+      const elapsedSeconds = getElapsedSecondsFromTimestamp(ticket.timestamp);
+      const hours = Math.floor(elapsedSeconds / 3600);
+        
+      // Mostrar los nombres de los usuarios asignados si existen
+      let usuariosAsignados = Array.isArray(ticket.assigned_user_names) ? ticket.assigned_user_names.filter(Boolean) : [];
+      let asignarBtnHTML = `
+        <button class="asignar-usuario-btn-plus" data-ticket-id="${ticket.id}" title="Asignar usuario">
+          <i class="fas fa-plus"></i>
+        </button>
+      `;
+      
+      // Modal de usuarios asignados (solo si hay usuarios asignados)
+      let modalAsignado = '';
+      if (usuariosAsignados.length > 0) {
+        modalAsignado = `
+          <div class="modal-asignado-ticket modal-asignado-small" style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
+            <b style="font-size:12px; color:#1976d2; margin-bottom:2px;">Responsables:</b>
+            <ul style="list-style:none; padding:0; margin:0;">
+              ${usuariosAsignados.map((nombre, idx) =>
+                `<li style=\"margin-bottom:2px;\">
+                  <span class=\"modal-asignado-nombre usuario-removable\" 
+                        style=\"color:#fff; background:#4CAF50; margin:0; padding:4px 10px; border-radius:8px; cursor:pointer; display:inline-block; font-size:13px; transition:background 0.2s;\" 
+                        data-uid=\"${ticket.assigned_user_id[idx]}\"
+                        title=\"Quitar responsable\">
+                    ${nombre} <i class=\"fas fa-times\" style=\"font-size:11px; margin-left:4px;\"></i>
+                  </span>
+                </li>`
+              ).join('')}
+            </ul>
+          </div>
+        `;
+      }
+      
+      // Modal para el tiempo abierto
+      let tiempoClass = '';
+      if (hours >= 2) {
+        tiempoClass = 'tiempo-rojo';
+      } else if (hours >= 1) {
+        tiempoClass = 'tiempo-amarillo';
+      } else {
+        tiempoClass = 'tiempo-verde';
+      }
+      
+      // Calcular tiempo pausado
+      let tiempoPausadoHTML = '';
+      let totalPausedSeconds = 0;
+      
+      // Obtener tiempo total pausado almacenado (ahora viene como segundos desde el servidor)
+      if (ticket.total_paused_seconds !== null && ticket.total_paused_seconds !== undefined) {
+        totalPausedSeconds = parseInt(ticket.total_paused_seconds) || 0;
+      }
+      
+      // Si el ticket está actualmente pausado, sumar el tiempo desde paused_at
+      if (ticket.paused && ticket.paused_at) {
+        try {
+          const pausedAt = new Date(ticket.paused_at);
+          const now = new Date();
+          const currentPausedSeconds = Math.floor((now - pausedAt) / 1000);
+          totalPausedSeconds += currentPausedSeconds;
+        } catch (e) {
+          console.error('Error calculando tiempo pausado actual:', e);
+        }
+      }
+      
+      // Convertir segundos a horas y minutos
+      const pausedHours = Math.floor(totalPausedSeconds / 3600);
+      const pausedMinutes = Math.floor((totalPausedSeconds % 3600) / 60);
+      
+      // Mostrar tiempo pausado siempre que haya tiempo (aunque sea muy poco)
+      if (totalPausedSeconds > 0) {
+        tiempoPausadoHTML = `<span class="tiempo-pausado" style="color:#000; background:transparent; border:1px solid #000; margin:0; padding:4px 10px; border-radius:8px; display:inline-block; font-size:13px; margin-left:8px;">${pausedHours}h ${pausedMinutes}m pausado</span>`;
+      }
+      
+      let modalTiempo = `
+        <div class="modal-asignado-ticket modal-asignado-small" style="margin-top:6px; display:flex; align-items:center; gap:0;">
+          <span class="modal-asignado-nombre ticket-open-time ${tiempoClass}" data-start-timestamp="${ticket.timestamp}" style="color:#000;">${formatElapsedTimeWithSeconds(elapsedSeconds)}</span>
+          ${tiempoPausadoHTML}
+        </div>
+      `;
+      
+      // Indicador de imagen adjunta
+      let imageIndicator = '';
+      if (ticket.image_path) {
+        imageIndicator = `
+          <div class="ticket-image-indicator" style="display:flex; align-items:center; gap:4px; margin-top:6px; padding:4px 8px; background:rgba(33,150,243,0.1); border-radius:6px; border:1px solid rgba(33,150,243,0.3);">
+            <i class="fas fa-image" style="color:#2196F3; font-size:12px;"></i>
+            <span style="color:#2196F3; font-size:11px; font-weight:500;">Imagen adjunta</span>
+          </div>
+        `;
+      }
+
+      div.innerHTML = `
+        <div class="ticket-header" style="position:relative; flex-direction:column; align-items:flex-start;">
+          <span class="ticket-title">${ticket.name}</span>
+          ${ticket.area ? `<span class="ticket-area" style="margin-bottom:0; margin-top:2px; color:#1976d2; font-size:13px;">${ticket.area}</span>` : ''}
+          <div style="position:absolute; top:6px; right:8px;">${asignarBtnHTML}</div>
+        </div>
+        <div class="modal-problema-ticket">${ticket.issue}</div>
+        ${imageIndicator}
+        ${modalAsignado}
+        ${modalTiempo}
+      `;
+
+      // Evento para abrir el modal de usuarios
+      div.querySelector('.asignar-usuario-btn-plus').addEventListener('click', function(e) {
+        e.stopPropagation();
+        mostrarModalAsignarUsuario(ticket.id);
+      });
+      
+      div.addEventListener('dragstart', handleDragStart);
+      div.addEventListener('dragend', handleDragEnd);
+      div.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showTicketDetails(ticket);
+      });
+      // --- MENÚ CONTEXTUAL PARA MOVER TICKET ---
+      function showMoveMenu(x, y) {
+        // Elimina cualquier menú anterior
+        document.querySelectorAll('.move-ticket-menu').forEach(m => m.remove());
+        const menu = document.createElement('div');
+        menu.className = 'move-ticket-menu';
+        menu.style.position = 'fixed';
+        menu.style.left = x + 'px';
+        menu.style.top = y + 'px';
+        menu.style.zIndex = 3001;
+        menu.style.background = 'rgba(35,36,58,0.98)';
+        menu.style.borderRadius = '12px';
+        menu.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)';
+        menu.style.padding = '10px 0';
+        menu.style.minWidth = '140px';
+        menu.style.color = '#fff';
+        menu.style.fontSize = '16px';
+        menu.style.userSelect = 'none';
+        menu.innerHTML = `
+          <div style="padding:10px 18px;cursor:pointer;" data-move="critical">Mover a Crítico</div>
+          <div style="padding:10px 18px;cursor:pointer;" data-move="medium">Mover a Medio</div>
+          <div style="padding:10px 18px;cursor:pointer;" data-move="low">Mover a Bajo</div>
+          <div style="padding:10px 18px;cursor:pointer;color:#2196F3;" data-action="ver-detalles">Ver detalles</div>
+        `;
+        menu.addEventListener('click', function(e) {
+          const col = e.target.getAttribute('data-move');
+          if (col) {
+            if (col === 'completed') {
+              openNotasModal(ticket.id, () => completarTicketDirecto(ticket.id, div));
+              menu.remove();
+              return;
+            }
+            const targetCol = document.querySelector(`.kanban-column[data-status="${col}"] .tickets-container`);
+            if (targetCol) {
+              if (div.parentNode) div.parentNode.removeChild(div);
+              targetCol.appendChild(div);
+            }
+            updateTicketUrgency(ticket.id, col);
+            menu.remove();
+            return;
+          }
+          const action = e.target.getAttribute('data-action');
+          if (action === 'ver-detalles') {
+            showTicketDetails(ticket);
+            menu.remove();
+          }
+        });
+        document.body.appendChild(menu);
+        // Cierra el menú si se hace clic fuera
+        setTimeout(() => {
+          document.addEventListener('mousedown', function handler(ev) {
+            if (!menu.contains(ev.target)) {
+              menu.remove();
+              document.removeEventListener('mousedown', handler);
+            }
+          });
+        }, 10);
+      }
+      // Clic derecho (PC)
+      div.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showMoveMenu(e.clientX, e.clientY);
+      });
+      // Long-press en móvil (touch)
+      let touchMenuTimeout = null;
+      div.addEventListener('touchstart', function(e) {
+        if (e.touches.length !== 1) return;
+        touchMenuTimeout = setTimeout(() => {
+          const touch = e.touches[0];
+          showMoveMenu(touch.clientX, touch.clientY);
+        }, 700); // 0.7s para menú contextual
+      });
+      div.addEventListener('touchend', function() {
+        clearTimeout(touchMenuTimeout);
+      });
+      div.addEventListener('touchmove', function() {
+        clearTimeout(touchMenuTimeout);
+      });
+      // --- FIN MENÚ CONTEXTUAL ---
+      animateTicketEntry(div);
+      return div;
+    }
+
+    function handleDragStart(e) {
+      draggedTicket = this;
+      this.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      draggedTicket = null;
+    }
+
+    document.querySelectorAll('.kanban-column').forEach(column => {
+      column.addEventListener('dragover', handleDragOver);
+      column.addEventListener('drop', handleDrop);
+    });
+
+    function handleDragOver(e) {
+      e.preventDefault();
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      if (!draggedTicket) return;
+
+      const newStatus = this.dataset.status;
+      const ticketId = draggedTicket.dataset.ticketId;
+
+      if (newStatus === 'completed') {
+        const ticketElement = draggedTicket;
+        const ticketId = ticketElement?.dataset?.ticketId;
+        if (!ticketId) return;
+        openNotasModal(ticketId, () => completarTicketDirecto(ticketId, ticketElement));
+        return;
+      }
+
+      // Obtener el contenedor de destino
+      const targetContainer = this.querySelector('.tickets-container');
+      if (targetContainer) {
+        // Remover el ticket de su contenedor actual
+        if (draggedTicket.parentNode) {
+          draggedTicket.parentNode.removeChild(draggedTicket);
+        }
+        // Agregar el ticket al final del nuevo contenedor
+        targetContainer.appendChild(draggedTicket);
+      }
+
+      // Sonido al mover ticket entre columnas
+      try { playSound('move'); } catch (_) {}
+
+      // Actualizar en la base de datos
+      updateTicketUrgency(ticketId, newStatus);
+
+      // Mantener la alarma basada en el estado global: si no es pendiente, se removerá en el siguiente loadTickets()
+    }
+
+    // --- Modal de Notas al terminar ---
+    function openNotasModal(ticketId, onConfirm) {
+      const modal = document.getElementById('notasModal');
+      const input = document.getElementById('notasInput');
+      const btnCerrar = document.getElementById('cerrarNotasBtn');
+      const btnCancelar = document.getElementById('cancelarNotasBtn');
+      const btnGuardar = document.getElementById('guardarNotasBtn');
+      if (!modal || !input || !btnCerrar || !btnCancelar || !btnGuardar) { onConfirm?.(); return; }
+      input.value = '';
+      btnGuardar.disabled = true;
+      btnGuardar.style.opacity = '.7';
+      modal.style.display = 'flex';
+      const close = () => { modal.style.display = 'none'; };
+      const cleanup = () => {
+        btnCerrar.removeEventListener('click', onClose);
+        btnCancelar.removeEventListener('click', onClose);
+        btnGuardar.removeEventListener('click', onSave);
+        input.removeEventListener('input', onInput);
+      };
+      const onClose = () => { cleanup(); close(); };
+      const onInput = () => {
+        const hasText = input.value.trim().length > 0;
+        btnGuardar.disabled = !hasText;
+        btnGuardar.style.opacity = hasText ? '1' : '.7';
+      };
+      const onSave = async () => {
+        const notas = input.value.trim();
+        if (!notas) { input.focus(); return; }
+        try {
+          // Enviar las notas junto con completar si el flujo directo las acepta
+          await fetch(`/api/mantenimiento/tickets/${ticketId}/notas`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ notas })
+          });
+        } catch (_) {}
+        cleanup();
+        close();
+        try { onConfirm && onConfirm(); } catch (_) {}
+      };
+      btnCerrar.addEventListener('click', onClose);
+      btnCancelar.addEventListener('click', onClose);
+      btnGuardar.addEventListener('click', onSave);
+      input.addEventListener('input', onInput);
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function showTicketDetails(ticket) {
+      try {
+      const modal = document.getElementById('ticketModal');
+      if (!modal) {
+        console.error('Modal no encontrado');
+        return;
+      }
+      modal.setAttribute('data-ticket-id', ticket.id); // <-- para el listener del modal
+      const modalBody = document.getElementById('modalBody');
+      if (!modalBody) {
+        console.error('ModalBody no encontrado');
+        return;
+      }
+      // Mostrar los usuarios asignados en el modal de detalles
+      let usuariosAsignados = Array.isArray(ticket.assigned_user_names) ? ticket.assigned_user_names.filter(Boolean) : [];
+      let usuariosHTML = '';
+      if (usuariosAsignados.length > 0) {
+        usuariosHTML = `<div class=\"modal-asignado-ticket modal-asignado-small\" style=\"display:flex; flex-direction:column; gap:4px; margin-top:6px;\"><b style=\"font-size:12px; color:#1976d2; margin-bottom:2px;\">Responsables:</b><ul style=\"list-style:none; padding:0; margin:0;\">${usuariosAsignados.map((nombre, idx) => `<li style=\"margin-bottom:2px;\"><span class=\"modal-asignado-nombre usuario-removable-modal\" style=\"color:#fff; background:#032138; margin:0; padding:4px 10px; border-radius:8px; cursor:pointer; display:inline-block; font-size:13px; transition:background 0.2s;\" data-uid=\"${ticket.assigned_user_id[idx]}\" title=\"Quitar responsable\">${nombre} <i class=\"fas fa-times\" style=\"font-size:11px; margin-left:4px;\"></i></span></li>`).join('')}</ul></div>`;
+      }
+      modalBody.innerHTML = `
+        <div class="ticket-info">
+          <p><strong>Departamento:</strong> ${ticket.department}</p>
+          ${ticket.area ? `<p><strong>Área específica:</strong> ${ticket.area}</p>` : ''}
+          <p><strong>Problema:</strong> ${ticket.issue}</p>
+          <p><strong>Fecha:</strong> ${new Date(ticket.timestamp).toLocaleString()}</p>
+          ${ticket.anydesk ? `<p><strong>AnyDesk:</strong> ${ticket.anydesk}</p>` : ''}
+          ${ticket.email ? `<p><strong>Email:</strong> ${ticket.email}</p>` : ''}
+          ${ticket.tipo_apoyo ? `<p><strong>Tipo de apoyo:</strong> ${ticket.tipo_apoyo}</p>` : ''}
+          ${ticket.activo ? `<p><strong>Activo:</strong> ${ticket.activo}</p>` : ''}
+          ${ticket.urgency ? `<p><strong>Urgencia:</strong> ${ticket.urgency}</p>` : ''}
+          ${ticket.id_herramienta ? `<p><strong>ID Herramienta:</strong> ${ticket.id_herramienta}</p>` : ''}
+          ${ticket.mantenimiento_preventivo ? `<p><strong>Mantenimiento Preventivo:</strong> Sí</p>` : ''}
+          ${ticket.mantenimiento_correctivo ? `<p><strong>Mantenimiento Correctivo:</strong> Sí</p>` : ''}
+          ${ticket.mecanica ? `<p><strong>Mecánica:</strong> Sí</p>` : ''}
+          ${ticket.implementaciones ? `<p><strong>Implementaciones:</strong> Sí</p>` : ''}
+          ${ticket.time_end ? `<p><strong>Fecha de finalización:</strong> ${new Date(ticket.time_end).toLocaleString()}</p>` : ''}
+          ${usuariosHTML}
+          <div class="ticket-image-container" style="margin-top:18px; text-align:center;">
+            ${
+              ticket.image_path
+                ? `<img src="${ticket.image_path}" alt="Imagen del ticket" style="max-width:320px; max-height:220px; border-radius:10px; box-shadow:0 2px 12px #0002; cursor:pointer;" onclick="showFullImage('${ticket.image_path}')">
+                   <div style="font-size:12px; color:#888; margin-top:4px;">Haz clic para ver en grande</div>`
+                : `<div style="color:#888; font-size:14px; padding:40px 0;">Sin imagen adjunta</div>`
+            }
+          </div>
+        </div>
+      `;
+      // Listener para quitar usuario desde la tarjeta (createTicketElement)
+      setTimeout(() => {
+        document.querySelectorAll('.usuario-removable').forEach(span => {
+          span.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const userId = this.getAttribute('data-uid');
+            if (!userId) return;
+            if (!confirm('¿Seguro que quieres quitar a este responsable del ticket?')) return;
+            let ticketId = this.closest('.ticket')?.dataset.ticketId;
+            let ticket = (window.lastTicketsStr && JSON.parse(window.lastTicketsStr).find(t => t.id === ticketId)) || null;
+            let nuevosIds = (ticket?.assigned_user_id || []).filter(id => String(id) !== String(userId));
+            fetch(`/api/mantenimiento/tickets/${ticketId}/asignar-usuario`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ assigned_user_id: nuevosIds })
+            }).then(() => loadTickets());
+          });
+        });
+      }, 0);
+      // Listener para quitar usuario desde el modal de detalles
+      setTimeout(() => {
+        document.querySelectorAll('.usuario-removable-modal').forEach(span => {
+          span.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const userId = this.getAttribute('data-uid');
+            if (!userId) return;
+            if (!confirm('¿Seguro que quieres quitar a este responsable del ticket?')) return;
+            const modal = document.getElementById('ticketModal');
+            const ticketId = modal?.getAttribute('data-ticket-id');
+            let ticket = (window.lastTicketsStr && JSON.parse(window.lastTicketsStr).find(t => t.id === ticketId)) || null;
+            let nuevosIds = (ticket?.assigned_user_id || []).filter(id => String(id) !== String(userId));
+            fetch(`/api/mantenimiento/tickets/${ticketId}/asignar-usuario`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ assigned_user_id: nuevosIds })
+            }).then(() => { loadTickets(); closeModal(); });
+          });
+        });
+      }, 0);
+      // Cambiar el título del modal al nombre del usuario
+      const modalTitle = modal.querySelector('.modal-header h2');
+      modalTitle.textContent = ticket.name;
+      
+      // Mostrar u ocultar el botón de pausa/reanudar según el estado del ticket
+      const pauseBtn = document.getElementById('pauseTicketBtn');
+      if (pauseBtn) {
+        // Mostrar el botón solo si el ticket está activo (sin time_end)
+        if (!ticket.time_end) {
+          pauseBtn.style.display = 'block';
+          
+          // Cambiar el botón según si está pausado o no
+          const isPaused = ticket.paused === true || ticket.paused === 'true';
+          
+          // Remover clases de estado anteriores
+          pauseBtn.classList.remove('pause-state', 'resume-state');
+          
+          if (isPaused) {
+            // Cambiar a botón de reanudar (verde con texto)
+            pauseBtn.classList.add('resume-state');
+            pauseBtn.textContent = 'Reanudar';
+            pauseBtn.title = 'Reanudar tiempo del ticket';
+          } else {
+            // Cambiar a botón de pausar (rojo con texto)
+            pauseBtn.classList.add('pause-state');
+            pauseBtn.textContent = 'Pausar';
+            pauseBtn.title = 'Pausar tiempo del ticket';
+          }
+        } else {
+          pauseBtn.style.display = 'none';
+        }
+      }
+      
+      modal.classList.add('active');
+      } catch (error) {
+        console.error('Error al mostrar detalles del ticket:', error);
+        alert('Error al abrir el ticket: ' + error.message);
+      }
+    }
+
+    // Función para mostrar notificación en la esquina superior derecha
+    function showNotification(message) {
+      // Remover notificaciones anteriores si existen
+      const existingNotifications = document.querySelectorAll('.notification-toast');
+      existingNotifications.forEach(notif => notif.remove());
+
+      // Crear el elemento de notificación
+      const notification = document.createElement('div');
+      notification.className = 'notification-toast';
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+
+      // Animar entrada
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 100);
+
+      // Remover después de 3 segundos
+      setTimeout(() => {
+        notification.classList.remove('show');
+        notification.classList.add('hide');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
+    }
+
+    // Función para pausar/reanudar el tiempo del ticket
+    async function pausarTicket() {
+      const modal = document.getElementById('ticketModal');
+      const ticketId = modal?.getAttribute('data-ticket-id');
+      
+      if (!ticketId) {
+        alert('No se pudo identificar el ticket');
+        return;
+      }
+      
+      // Obtener el estado actual del ticket para saber si está pausado
+      const tickets = window.lastTicketsStr ? JSON.parse(window.lastTicketsStr) : [];
+      const currentTicket = tickets.find(t => t.id === ticketId);
+      const isPaused = currentTicket && (currentTicket.paused === true || currentTicket.paused === 'true');
+      
+      try {
+        const response = await fetch(`/api/mantenimiento/tickets/${ticketId}/pausa`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          showNotification(isPaused ? 'Ticket reanudado correctamente' : 'Ticket pausado correctamente');
+          loadTickets();
+          closeModal();
+        } else {
+          const error = await response.json();
+          alert('Error: ' + (error.error || error.message || 'Error desconocido'));
+        }
+      } catch (error) {
+        console.error('Error al pausar/reanudar el ticket:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    function showFullImage(imageSrc) {
+      const viewer = document.getElementById('imageViewer');
+      const fullImage = document.getElementById('fullImage');
+      // Forzar recarga añadiendo un parámetro único para evitar caché
+      fullImage.src = imageSrc + '?t=' + Date.now();
+      fullImage.alt = 'Cargando imagen...';
+
+      // Limpiar errores anteriores
+      fullImage.onerror = null;
+
+      // Mostrar mensaje si la imagen no carga
+      fullImage.onerror = function() {
+        fullImage.alt = 'No se pudo cargar la imagen';
+        fullImage.src = '';
+        // Mostrar mensaje de error en el visor
+        viewer.insertAdjacentHTML('beforeend', '<div id="imageErrorMsg" style="color:#fff;background:#d00;padding:10px 20px;border-radius:8px;position:absolute;top:20px;left:50%;transform:translateX(-50%);z-index:10;">No se pudo cargar la imagen</div>');
+        setTimeout(() => {
+          const msg = document.getElementById('imageErrorMsg');
+          if (msg) msg.remove();
+        }, 4000);
+      };
+
+      viewer.classList.add('active');
+
+      // Cerrar al hacer clic fuera de la imagen
+      viewer.onclick = (e) => {
+        if (e.target === viewer) {
+          closeImageViewer();
+        }
+      };
+
+      // Cerrar con la tecla Escape (solo una vez)
+      function escListener(e) {
+        if (e.key === 'Escape') {
+          closeImageViewer();
+          document.removeEventListener('keydown', escListener);
+        }
+      }
+      document.addEventListener('keydown', escListener);
+    }
+
+    function closeImageViewer() {
+      const viewer = document.getElementById('imageViewer');
+      viewer.classList.remove('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('ticketModal');
+      modal.classList.remove('active');
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('ticketModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeModal();
+      }
+    });
+
+    // Event listener para el botón de pausa
+    document.addEventListener('DOMContentLoaded', function() {
+      const pauseTicketBtn = document.getElementById('pauseTicketBtn');
+      if (pauseTicketBtn) {
+        pauseTicketBtn.addEventListener('click', pausarTicket);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadTickets();
+      ensureLiveTicketTimers();
+      
+      // Modificar la función checkForUpdates para evitar llamadas simultáneas
+      let isUpdating = false;
+      async function checkForUpdates() {
+        if (isUpdating) return;
+        
+        try {
+          isUpdating = true;
+          const response = await fetch('/api/mantenimiento/tickets/check-updates', {
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Error al verificar actualizaciones');
+          }
+          
+          const { hasUpdates } = await response.json();
+          
+          if (hasUpdates) {
+            await loadTickets();
+          }
+        } catch (error) {
+          console.error('Error al verificar actualizaciones:', error);
+        } finally {
+          isUpdating = false;
+        }
+      }
+      
+      // Iniciar el ciclo de verificación con un intervalo más largo
+      setInterval(checkForUpdates, 10000); // Verificar cada 10 segundos
+    });
+
+    // Modificar el evento visibilitychange
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        // La página está oculta, asegurarse de que las notificaciones estén activas
+      } else {
+        // La página está visible, cargar tickets una sola vez
+        loadTickets();
+      }
+    });
+
+    // Botón de terminados - drag deshabilitado
+    const completedButton = document.getElementById('completedButton');
+    
+    let ticketACompletar = null;
+
+    // Reactivar drag and drop al botón de terminados
+    if (completedButton) {
+      completedButton.addEventListener('dragover', function(e) {
+        if (!draggedTicket) return;
+        e.preventDefault();
+        completedButton.classList.add('drag-over');
+      });
+
+      completedButton.addEventListener('dragleave', function() {
+        completedButton.classList.remove('drag-over');
+      });
+
+      completedButton.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        completedButton.classList.remove('drag-over');
+
+        if (!draggedTicket) return;
+        const ticketElement = draggedTicket;
+        const ticketId = ticketElement?.dataset?.ticketId;
+        if (!ticketId) return;
+
+        openNotasModal(ticketId, () => completarTicketDirecto(ticketId, ticketElement));
+      });
+    }
+
+    // Mostrar el modal y cargar las herramientas
+    async function mostrarModalHerramienta() {
+      const modal = document.getElementById('herramientaModal');
+      const herramientaSelect = document.getElementById('herramientaSelect');
+      const btnCompletarTicket = document.getElementById('btnCompletarTicket');
+
+      // Limpiar selecciones
+      herramientaSelect.value = '';
+      herramientaSelect.innerHTML = '<option value="">Selecciona un activo...</option>';
+      document.querySelectorAll('input[name="tipoMantenimiento"]').forEach(r => r.checked = false);
+
+      // Filtrar herramientas por DEPARTAMENTO del ticket a completar (NO por área)
+      let departamentoTicket = null;
+      if (window.lastTicketsStr && ticketACompletar) {
+        try {
+          const tickets = JSON.parse(window.lastTicketsStr);
+          const ticket = tickets.find(t => t.id == ticketACompletar);
+          if (ticket && ticket.department) {
+            departamentoTicket = ticket.department;
+          }
+        } catch (e) { departamentoTicket = null; }
+      }
+
+      try {
+        const res = await fetch('/api/mantenimiento/herramientas');
+        if (res.ok) {
+          const herramientas = await res.json();
+          let herramientasFiltradas = herramientas;
+          if (departamentoTicket) {
+            herramientasFiltradas = herramientas.filter(h => (h.department || '').trim().toLowerCase() === departamentoTicket.trim().toLowerCase());
+          }
+          if (herramientasFiltradas.length === 0) {
+            herramientaSelect.innerHTML = '<option value="">No hay activos para este departamento</option>';
+          } else {
+            herramientasFiltradas.forEach(h => {
+              const option = document.createElement('option');
+              option.value = h.id;
+              option.textContent = h.nombre;
+              herramientaSelect.appendChild(option);
+            });
+          }
+        } else {
+          herramientaSelect.innerHTML = '<option value="">Error al cargar activos</option>';
+        }
+      } catch (e) {
+        herramientaSelect.innerHTML = '<option value="">Error al cargar activos</option>';
+      }
+
+      // Deshabilitar el botón hasta que se seleccione un área
+      btnCompletarTicket.disabled = true;
+
+      modal.style.display = 'flex';
+    }
+
+    // Habilitar el botón solo si hay selección de herramienta y al menos un tipo de mantenimiento
+    function validarCompletarTicket() {
+      const herramientaSelect = document.getElementById('herramientaSelect');
+      const herramientaValida = herramientaSelect.value;
+      const tiposSeleccionados = document.querySelectorAll('input[name="tipoMantenimiento"]:checked');
+      const btnCompletarTicket = document.getElementById('btnCompletarTicket');
+      const otrosInput = document.getElementById('otrosActivoInput');
+      const checkPreventivo = document.getElementById('checkPreventivo');
+      const checkCorrectivo = document.getElementById('checkCorrectivo');
+      const activoSelectContainer = document.getElementById('activoSelectContainer');
+
+      // Mostrar el select solo si se selecciona preventivo o correctivo
+      if ((checkPreventivo && checkPreventivo.checked) || (checkCorrectivo && checkCorrectivo.checked)) {
+        activoSelectContainer.style.display = '';
+      } else {
+        activoSelectContainer.style.display = 'none';
+        herramientaSelect.value = '';
+      }
+
+      const seleccionMecanica = Array.from(tiposSeleccionados).some(cb => cb.value === 'mecanica');
+      const seleccionImplementaciones = Array.from(tiposSeleccionados).some(cb => cb.value === 'implementaciones');
+
+      let activoValido = true;
+      if ((checkPreventivo && checkPreventivo.checked) || (checkCorrectivo && checkCorrectivo.checked)) 
+      {
+        activoValido = !!herramientaValida;
+      }
+
+      btnCompletarTicket.disabled = !( (activoValido && ((checkPreventivo && checkPreventivo.checked) || (checkCorrectivo && checkCorrectivo.checked))) || seleccionMecanica || seleccionImplementaciones);
+    }
+    document.getElementById('herramientaSelect').addEventListener('change', validarCompletarTicket);
+    document.querySelectorAll('input[name="tipoMantenimiento"]').forEach(checkbox => {
+      checkbox.addEventListener('change', validarCompletarTicket);
+    });
+
+    // Completar el ticket cuando se da click en el botón
+    // Ahora permite seleccionar ambos tipos de mantenimiento
+    document.getElementById('btnCompletarTicket').addEventListener('click', async function() {
+      const herramientaId = document.getElementById('herramientaSelect').value;
+      const tiposSeleccionados = document.querySelectorAll('input[name="tipoMantenimiento"]:checked');
+      const activoAEnviar = herramientaId ? herramientaId : null;
+      // Obtener los valores de los checkboxes seleccionados
+      const tiposMantenimiento = Array.from(tiposSeleccionados).map(checkbox => checkbox.value);
+      const mantenimientoPreventivo = tiposMantenimiento.includes('preventivo');
+      const mantenimientoCorrectivo = tiposMantenimiento.includes('correctivo');
+      const mantenimientoMecanica = tiposMantenimiento.includes('mecanica');
+      const mantenimientoImplementaciones = tiposMantenimiento.includes('implementaciones');
+      const requiereActivo = mantenimientoPreventivo || mantenimientoCorrectivo;
+      if (!ticketACompletar || tiposSeleccionados.length === 0 || (requiereActivo && !activoAEnviar)) return;
+      try {
+        // Llama al endpoint PATCH para completar el ticket con la herramienta seleccionada o el nombre escrito
+        const res = await fetch(`/api/mantenimiento/tickets/${ticketACompletar}/completar`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            id_herramienta: activoAEnviar, 
+            mantenimiento_preventivo: mantenimientoPreventivo, 
+            mantenimiento_correctivo: mantenimientoCorrectivo,
+            mecanica: mantenimientoMecanica,
+            implementaciones: mantenimientoImplementaciones
+          })
+        });
+        if (res.ok) {
+          try { playSound('done'); } catch (_) {}
+          // Detener alarma para el ticket completado
+          if (ticketACompletar) { alarmingTickets.delete(String(ticketACompletar)); updateAlarmPlayback(); }
+          cerrarHerramientaModal();
+          await loadTickets();
+          // Mostrar mensaje de éxito
+        } else {
+          alert('Mantenimiento necesita cerrarlo primero.');
+        }
+      } catch (error) {
+        console.error('Error al completar ticket:', error);
+        alert('Mantenimiento necesita cerrarlo primero.');
+      }
+    });
+
+    // --- Nuevo flujo: completar directamente con efecto de "triturado" ---
+    function ensureShredStyles() {
+      if (document.getElementById('shred-styles')) return;
+      const style = document.createElement('style');
+      style.id = 'shred-styles';
+      style.textContent = `
+        /* Contenedor overlay y slot de la trituradora */
+        .shred-overlay{position:fixed; z-index:4000; pointer-events:none;}
+        .shred-slot{position:absolute; left:50%; transform:translateX(-50%); top:-8px; width:110%; height:12px; border-radius:8px; background:linear-gradient(#0f172a,#111827); box-shadow:0 6px 16px rgba(0,0,0,.35); overflow:hidden;}
+        .shred-teeth{position:absolute; inset:0; background:repeating-linear-gradient(-45deg, rgba(255,255,255,.9) 0 6px, transparent 6px 12px); opacity:.7; mix-blend-mode:overlay;}
+        /* Tarjeta bajando suave hacia el slot */
+        .shred-card{position:absolute; inset:0; border-radius:12px; overflow:hidden; box-shadow:0 10px 24px rgba(0,0,0,.25); animation:cardSlideDown 700ms cubic-bezier(.22,.65,.18,1) forwards;}
+        /* Trocitos que caen */
+        .shred-piece{position:absolute; background:#e5e7eb; border-radius:2px; box-shadow:0 2px 6px rgba(0,0,0,.25); opacity:.95;}
+        .fall{animation:pieceFall 950ms cubic-bezier(.22,.85,.12,1) forwards;}
+        /* Keyframes */
+        @keyframes cardSlideDown{0%{transform:translateY(-6px); opacity:1}60%{transform:translateY(10px)}100%{transform:translateY(26px); opacity:.88}}
+        @keyframes pieceFall{0%{transform:translateY(0) rotate(0); opacity:1}100%{transform:translateY(140px) rotate(220deg); opacity:0}}
+      `;
+      document.head.appendChild(style);
+    }
+
+    function playShredAnimation(ticketElement){
+      return new Promise(resolve => {
+        try{
+          const rect = ticketElement.getBoundingClientRect();
+          const overlay = document.createElement('div');
+          overlay.className = 'shred-overlay';
+          overlay.style.left = rect.left + 'px';
+          overlay.style.top = rect.top + 'px';
+          overlay.style.width = rect.width + 'px';
+          overlay.style.height = rect.height + 'px';
+
+          const slot = document.createElement('div');
+          slot.className = 'shred-slot';
+          const teeth = document.createElement('div');
+          teeth.className = 'shred-teeth';
+          const card = document.createElement('div');
+          card.className = 'shred-card';
+
+          slot.appendChild(teeth);
+          overlay.appendChild(slot);
+          overlay.appendChild(card);
+          document.body.appendChild(overlay);
+
+          // Generar tiras con tamaños/tiempos aleatorios
+          const pieces = Math.max(14, Math.round(rect.width / 18));
+          for(let i=0;i<pieces;i++){
+            const p = document.createElement('div');
+            p.className = 'shred-piece fall';
+            const w = 6 + Math.floor(Math.random()*12); // 6-18px
+            const h = 8 + Math.floor(Math.random()*8);  // 8-16px
+            const left = Math.floor(Math.random()*rect.width) - w/2;
+            p.style.width = w + 'px';
+            p.style.height = h + 'px';
+            p.style.left = left + 'px';
+            p.style.top = (rect.height*0.40) + 'px';
+            p.style.transform = `rotate(${Math.floor(Math.random()*40)-20}deg)`;
+            p.style.animationDelay = (120 + Math.floor(Math.random()*220)) + 'ms';
+            card.appendChild(p);
+          }
+
+          const done = () => { overlay.remove(); resolve(); };
+          setTimeout(done, 1000);
+        }catch(_){ resolve(); }
+      });
+    }
+
+    async function completarTicketDirecto(ticketId, ticketElement) {
+      try {
+        if (!ticketId) return;
+        // Evitar completar desde la columna de pendientes
+        if (ticketElement) {
+          const parentCol = ticketElement.closest('.kanban-column');
+          if (parentCol && parentCol.classList.contains('pending')) {
+            alert('No puedes terminar un ticket que está en la columna de pendientes. Debe estar en Crítico, Medio o Bajo.');
+            return;
+          }
+        }
+
+        // Marcar visualmente con efecto de triturado más notorio
+        ensureShredStyles();
+        if (ticketElement) {
+          ticketElement.style.pointerEvents = 'none';
+          await playShredAnimation(ticketElement);
+        }
+
+        // Enviar cierre directo con valores por defecto, incluyendo notas si existen
+        const notasInput = document.getElementById('notasInput');
+        const notas = notasInput ? (notasInput.value || '').trim() : '';
+        const res = await fetch(`/api/mantenimiento/tickets/${ticketId}/completar`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            id_herramienta: null,
+            mantenimiento_preventivo: false,
+            mantenimiento_correctivo: true,
+            mecanica: false,
+            implementaciones: false,
+            notas
+          })
+        });
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Error al completar el ticket');
+        }
+        try { playSound('done'); } catch (_) {}
+        if (ticketId) { alarmingTickets.delete(String(ticketId)); updateAlarmPlayback(); }
+
+        // Remover del DOM (ya terminó la animación overlay)
+        if (ticketElement && ticketElement.parentNode) {
+          ticketElement.parentNode.removeChild(ticketElement);
+        }
+
+        // Refrescar datos
+        await loadTickets();
+      } catch (err) {
+        console.error('Error al completar ticket directo:', err);
+        alert('Mantenimiento necesita cerrarlo primero.');
+      }
+    }
+
+    // --- NUEVA FUNCIÓN: Cerrar modal de herramienta ---
+    function cerrarHerramientaModal() {
+      const modal = document.getElementById('herramientaModal');
+      modal.style.display = 'none';
+      // Limpiar variables
+      ticketACompletar = null;
+      // Limpiar selecciones
+      document.getElementById('herramientaSelect').value = '';
+      document.querySelectorAll('input[name="tipoMantenimiento"]').forEach(c => c.checked = false);
+      document.getElementById('btnCompletarTicket').disabled = true;
+    }
+
+    // Variable global para almacenar todos los tickets terminados
+    let allCompletedTickets = [];
+    let currentSortColumn = null;
+    let currentSortDirection = 'asc';
+
+    function isCompletedMaintenanceTicket(ticket) {
+      const urgencyValue = (ticket?.urgency || '').toString().trim().toLowerCase();
+      if (['completed', 'completado', 'terminado'].includes(urgencyValue)) {
+        return true;
+      }
+      return Boolean(ticket?.time_end);
+    }
+    
+    // Variables de paginación
+    let currentPage = 1;
+    let itemsPerPage = 50;
+    let filteredTickets = [];
+
+    // Modificar el evento del botón de terminados
+    completedButton.addEventListener('click', async () => {
+      try {
+        // Mostrar indicador de carga
+        const loadingDiv = document.getElementById('completedTableLoading');
+        const tableDiv = document.getElementById('completedTicketsTable');
+        const emptyDiv = document.getElementById('completedTableEmpty');
+        const paginationDiv = document.getElementById('completedTablePagination');
+        
+        if (loadingDiv) loadingDiv.style.display = 'flex';
+        if (tableDiv) tableDiv.style.display = 'none';
+        if (emptyDiv) emptyDiv.style.display = 'none';
+        if (paginationDiv) paginationDiv.style.display = 'none';
+        
+        document.getElementById('completedModal').classList.add('active');
+        
+        // Cargar datos de forma asíncrona
+        setTimeout(async () => {
+          try {
+            const response = await fetch('/api/mantenimiento/tickets');
+            if (!response.ok) throw new Error('Error al obtener tickets');
+            
+            const tickets = await response.json();
+            allCompletedTickets = tickets.filter(isCompletedMaintenanceTicket);
+            
+            // Ordenar tickets por fecha, más recientes primero
+            allCompletedTickets.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            // Reiniciar filtros para evitar que fechas/autofill oculten tickets recientes
+            const searchInput = document.getElementById('completedSearchInput');
+            const departmentInput = document.getElementById('filterDepartment');
+            const areaInput = document.getElementById('filterArea');
+            const dateFromInput = document.getElementById('filterDateFrom');
+            const dateToInput = document.getElementById('filterDateTo');
+            if (searchInput) searchInput.value = '';
+            if (departmentInput) departmentInput.value = '';
+            if (areaInput) areaInput.value = '';
+            if (dateFromInput) dateFromInput.value = '';
+            if (dateToInput) dateToInput.value = '';
+            
+            // Cargar áreas únicas en el select de filtros
+            loadAreaFilterOptions(allCompletedTickets);
+            
+            // Resetear ordenamiento y paginación al cargar nuevos tickets
+            currentSortColumn = null;
+            currentSortDirection = 'asc';
+            currentPage = 1;
+            
+            // Mostrar todo el histórico sin filtros al abrir
+            renderCompletedTicketsTable(allCompletedTickets);
+            closeFiltersModal();
+            
+            // Ocultar indicador de carga
+            if (loadingDiv) loadingDiv.style.display = 'none';
+            
+            // Inicializar event listeners
+            setTimeout(() => {
+              initCompletedModalListeners();
+            }, 100);
+          } catch (error) {
+            console.error('Error:', error);
+            if (loadingDiv) loadingDiv.style.display = 'none';
+            alert('Error al cargar los tickets terminados: ' + error.message);
+          }
+        }, 50);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cargar los tickets terminados: ' + error.message);
+      }
+    });
+
+    // Función para cargar opciones de áreas en el filtro
+    function loadAreaFilterOptions(tickets) {
+      // Obtener todas las áreas únicas de los tickets
+      const areas = [...new Set(
+        tickets
+          .map(ticket => ticket.area)
+          .filter(area => area && area.trim() !== '')
+          .sort()
+      )];
+      
+      const areaSelect = document.getElementById('filterArea');
+      if (areaSelect) {
+        // Limpiar opciones existentes excepto "Todas las áreas"
+        areaSelect.innerHTML = '<option value="">Todas las áreas</option>';
+        
+        // Agregar cada área como opción
+        areas.forEach(area => {
+          const option = document.createElement('option');
+          option.value = area;
+          option.textContent = area;
+          areaSelect.appendChild(option);
+        });
+      }
+    }
+
+    // Función para formatear fecha al formato "11 de noviembre del 2025"
+    function formatDateSpanish(date) {
+      if (!date) return '-';
+      
+      const months = [
+        'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+        'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+      ];
+      
+      const d = new Date(date);
+      const day = d.getDate();
+      const month = months[d.getMonth()];
+      const year = d.getFullYear();
+      
+      return `${day} de ${month} del ${year}`;
+    }
+
+    // Función para crear una fila de tabla
+    function createCompletedTableRow(ticket) {
+      // Helper: escapar HTML para mostrar texto plano en la columna Notas
+      function escapeHtml(str){ return String(str === null || str === undefined ? '' : str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+      // Calcular tiempo de resolución
+      let creationDate = formatDateSpanish(ticket.timestamp);
+      let endDate = '-';
+      let resolutionTime = '-';
+      let pausedTime = '-';
+      let realWorkTime = '-';
+      
+      if (ticket.time_end) {
+        const startTime = new Date(ticket.timestamp);
+        const endTime = new Date(ticket.time_end);
+        const duration = endTime - startTime;
+        const totalHours = Math.floor(duration / (1000 * 60 * 60));
+        const totalMinutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+        
+        endDate = formatDateSpanish(ticket.time_end);
+        resolutionTime = `${totalHours}h ${totalMinutes}m`;
+        
+        // Calcular tiempo pausado
+        let totalPausedSeconds = 0;
+        if (ticket.total_paused_seconds !== null && ticket.total_paused_seconds !== undefined) {
+          totalPausedSeconds = parseInt(ticket.total_paused_seconds) || 0;
+        }
+        
+        // Si el ticket está actualmente pausado, sumar el tiempo desde paused_at
+        if (ticket.paused && ticket.paused_at) {
+          try {
+            const pausedAt = new Date(ticket.paused_at);
+            const now = new Date();
+            const currentPausedSeconds = Math.floor((now - pausedAt) / 1000);
+            totalPausedSeconds += currentPausedSeconds;
+          } catch (e) {
+            console.error('Error calculando tiempo pausado actual:', e);
+          }
+        }
+        
+        // Convertir tiempo pausado a horas y minutos
+        const pausedHours = Math.floor(totalPausedSeconds / 3600);
+        const pausedMinutes = Math.floor((totalPausedSeconds % 3600) / 60);
+        pausedTime = totalPausedSeconds > 0 ? `${pausedHours}h ${pausedMinutes}m` : '0h 0m';
+        
+        // Calcular tiempo real trabajado (tiempo total - tiempo pausado)
+        const totalDurationSeconds = Math.floor(duration / 1000);
+        const realWorkSeconds = totalDurationSeconds - totalPausedSeconds;
+        const realWorkHours = Math.floor(realWorkSeconds / 3600);
+        const realWorkMinutes = Math.floor((realWorkSeconds % 3600) / 60);
+        realWorkTime = realWorkSeconds >= 0 ? `${realWorkHours}h ${realWorkMinutes}m` : '0h 0m';
+      }
+      
+      const row = document.createElement('tr');
+      row.setAttribute('data-ticket-id', ticket.id);
+      const notas = ticket.notas ? ticket.notas.trim() : '-';
+      const notasDisplay = (notas !== '-' && notas.length > 200) ? (notas.slice(0,200) + '...') : notas;
+      const herramientaIdDisplay = (() => {
+        if (ticket.id_herramienta !== null && ticket.id_herramienta !== undefined && `${ticket.id_herramienta}`.trim() !== '') {
+          return ticket.id_herramienta;
+        }
+        if (ticket.herramienta_id !== null && ticket.herramienta_id !== undefined && `${ticket.herramienta_id}`.trim() !== '') {
+          return ticket.herramienta_id;
+        }
+        if (ticket.activo !== null && ticket.activo !== undefined && `${ticket.activo}`.trim() !== '') {
+          return ticket.activo;
+        }
+        return '-';
+      })();
+      row.innerHTML = `
+        <td>${ticket.name || '-'}</td>
+        <td>${ticket.department || '-'}</td>
+        <td>${ticket.area || '-'}</td>
+        <td class="td-problema">${ticket.issue || '-'}</td>
+        <td class="td-notas" title="${notas !== '-' ? escapeHtml(notas) : ''}">${escapeHtml(notasDisplay)}</td>
+        <td>${creationDate}</td>
+        <td>${endDate}</td>
+        <td>${resolutionTime}</td>
+        <td>${pausedTime}</td>
+        <td>${realWorkTime}</td>
+        <td>${herramientaIdDisplay}</td>
+        <td>
+          <button class="btn-delete-ticket" onclick="deleteCompletedTicket('${ticket.id}')" title="Eliminar ticket">
+            <i class="fas fa-trash"></i>
+          </button>
+          ${ticket.image_path ? `
+            <button class="btn-view-image" onclick="showFullImage('${ticket.image_path}')" title="Ver imagen">
+              <i class="fas fa-image"></i>
+            </button>
+          ` : ''}
+        </td>
+      `;
+      return row;
+    }
+
+    // Función para convertir tiempo "Xh Ym" a segundos
+    function timeToSeconds(timeStr) {
+      if (!timeStr || timeStr === '-') return 0;
+      const match = timeStr.match(/(\d+)h\s*(\d+)m/);
+      if (match) {
+        const hours = parseInt(match[1]) || 0;
+        const minutes = parseInt(match[2]) || 0;
+        return hours * 3600 + minutes * 60;
+      }
+      return 0;
+    }
+
+    // Función para ordenar tickets
+    function sortTickets(tickets, column, direction) {
+      const sorted = [...tickets];
+      
+      sorted.sort((a, b) => {
+        let aVal, bVal;
+        
+        switch(column) {
+          case 'name':
+            aVal = (a.name || '').toLowerCase();
+            bVal = (b.name || '').toLowerCase();
+            break;
+          case 'department':
+            aVal = (a.department || '').toLowerCase();
+            bVal = (b.department || '').toLowerCase();
+            break;
+          case 'area':
+            aVal = (a.area || '').toLowerCase();
+            bVal = (b.area || '').toLowerCase();
+            break;
+          case 'issue':
+            aVal = (a.issue || '').toLowerCase();
+            bVal = (b.issue || '').toLowerCase();
+            break;
+          case 'notas':
+            aVal = (a.notas || '').toLowerCase();
+            bVal = (b.notas || '').toLowerCase();
+            break;
+          case 'timestamp':
+            aVal = new Date(a.timestamp).getTime();
+            bVal = new Date(b.timestamp).getTime();
+            break;
+          case 'time_end':
+            aVal = a.time_end ? new Date(a.time_end).getTime() : 0;
+            bVal = b.time_end ? new Date(b.time_end).getTime() : 0;
+            break;
+          case 'resolution_time':
+            // Calcular tiempo de resolución
+            let aResTime = '-';
+            let bResTime = '-';
+            if (a.time_end) {
+              const aDuration = new Date(a.time_end) - new Date(a.timestamp);
+              const aHours = Math.floor(aDuration / (1000 * 60 * 60));
+              const aMinutes = Math.floor((aDuration % (1000 * 60 * 60)) / (1000 * 60));
+              aResTime = `${aHours}h ${aMinutes}m`;
+            }
+            if (b.time_end) {
+              const bDuration = new Date(b.time_end) - new Date(b.timestamp);
+              const bHours = Math.floor(bDuration / (1000 * 60 * 60));
+              const bMinutes = Math.floor((bDuration % (1000 * 60 * 60)) / (1000 * 60));
+              bResTime = `${bHours}h ${bMinutes}m`;
+            }
+            aVal = timeToSeconds(aResTime);
+            bVal = timeToSeconds(bResTime);
+            break;
+          case 'paused_time':
+            let aPausedSeconds = 0;
+            let bPausedSeconds = 0;
+            if (a.total_paused_seconds !== null && a.total_paused_seconds !== undefined) {
+              aPausedSeconds = parseInt(a.total_paused_seconds) || 0;
+            }
+            if (b.total_paused_seconds !== null && b.total_paused_seconds !== undefined) {
+              bPausedSeconds = parseInt(b.total_paused_seconds) || 0;
+            }
+            aVal = aPausedSeconds;
+            bVal = bPausedSeconds;
+            break;
+          case 'real_work_time':
+            // Calcular tiempo real trabajado
+            let aRealWork = 0;
+            let bRealWork = 0;
+            if (a.time_end) {
+              const aDuration = new Date(a.time_end) - new Date(a.timestamp);
+              const aTotalSeconds = Math.floor(aDuration / 1000);
+              const aPaused = parseInt(a.total_paused_seconds) || 0;
+              aRealWork = aTotalSeconds - aPaused;
+            }
+            if (b.time_end) {
+              const bDuration = new Date(b.time_end) - new Date(b.timestamp);
+              const bTotalSeconds = Math.floor(bDuration / 1000);
+              const bPaused = parseInt(b.total_paused_seconds) || 0;
+              bRealWork = bTotalSeconds - bPaused;
+            }
+            aVal = aRealWork;
+            bVal = bRealWork;
+            break;
+          case 'id_herramienta':
+            aVal = (a.id_herramienta ?? '').toString().toLowerCase();
+            bVal = (b.id_herramienta ?? '').toString().toLowerCase();
+            break;
+          default:
+            return 0;
+        }
+        
+        if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+      
+      return sorted;
+    }
+
+    // Función para actualizar indicadores de ordenamiento
+    function updateSortIndicators(column, direction) {
+      document.querySelectorAll('.completed-tickets-table th.sortable').forEach(th => {
+        const indicator = th.querySelector('.sort-indicator');
+        if (th.dataset.column === column) {
+          th.classList.add('sorting');
+          indicator.textContent = direction === 'asc' ? ' ▲' : ' ▼';
+        } else {
+          th.classList.remove('sorting');
+          indicator.textContent = '';
+        }
+      });
+    }
+
+    // Función para renderizar la tabla con paginación
+    function renderCompletedTicketsTable(tickets) {
+      const tbody = document.getElementById('completedTicketsTableBody');
+      const emptyMessage = document.getElementById('completedTableEmpty');
+      const table = document.getElementById('completedTicketsTable');
+      const pagination = document.getElementById('completedTablePagination');
+      
+      // Guardar tickets filtrados
+      filteredTickets = tickets;
+      
+      // Aplicar ordenamiento si hay uno activo
+      let ticketsToRender = [...tickets];
+      if (currentSortColumn) {
+        ticketsToRender = sortTickets(tickets, currentSortColumn, currentSortDirection);
+        updateSortIndicators(currentSortColumn, currentSortDirection);
+      }
+      
+      // Calcular paginación
+      const totalTickets = ticketsToRender.length;
+      const totalPages = Math.ceil(totalTickets / itemsPerPage);
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalTickets);
+      const pageTickets = ticketsToRender.slice(startIndex, endIndex);
+      
+      tbody.innerHTML = '';
+      
+      if (totalTickets === 0) {
+        if (table) table.style.display = 'none';
+        if (emptyMessage) emptyMessage.style.display = 'block';
+        if (pagination) pagination.style.display = 'none';
+      } else {
+        if (table) table.style.display = 'table';
+        if (emptyMessage) emptyMessage.style.display = 'none';
+        if (pagination) pagination.style.display = 'flex';
+        
+        // Renderizar solo los tickets de la página actual
+        pageTickets.forEach(ticket => {
+          tbody.appendChild(createCompletedTableRow(ticket));
+        });
+        
+        // Actualizar controles de paginación
+        updatePaginationControls(totalTickets, totalPages);
+      }
+    }
+
+    // Funciones de paginación
+    function updatePaginationControls(totalTickets, totalPages) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalTickets);
+      
+      // Actualizar información
+      document.getElementById('paginationInfo').textContent = 
+        `Mostrando ${startIndex + 1} - ${endIndex} de ${totalTickets} tickets`;
+      document.getElementById('currentPageNumber').textContent = currentPage;
+      document.getElementById('totalPagesNumber').textContent = totalPages;
+      
+      // Actualizar botones
+      document.getElementById('paginationFirst').disabled = currentPage === 1;
+      document.getElementById('paginationPrev').disabled = currentPage === 1;
+      document.getElementById('paginationNext').disabled = currentPage === totalPages;
+      document.getElementById('paginationLast').disabled = currentPage === totalPages;
+    }
+
+    // Funciones de paginación (globales para onclick)
+    window.goToPage = function(page) {
+      const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+      if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderCompletedTicketsTable(filteredTickets);
+        // Scroll al inicio de la tabla
+        const tableContainer = document.querySelector('.completed-table-container');
+        if (tableContainer) {
+          tableContainer.scrollTop = 0;
+        }
+      }
+    };
+
+    window.goToPreviousPage = function() {
+      if (currentPage > 1) {
+        goToPage(currentPage - 1);
+      }
+    };
+
+    window.goToNextPage = function() {
+      const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        goToPage(currentPage + 1);
+      }
+    };
+
+    window.goToLastPage = function() {
+      const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+      goToPage(totalPages);
+    };
+
+    window.changeItemsPerPage = function() {
+      const select = document.getElementById('itemsPerPage');
+      itemsPerPage = parseInt(select.value);
+      currentPage = 1; // Resetear a la primera página
+      renderCompletedTicketsTable(filteredTickets);
+    };
+
+    // Función para eliminar un ticket completado
+    async function deleteCompletedTicket(ticketId) {
+      if (!confirm('¿Estás seguro de que deseas eliminar permanentemente este ticket?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/mantenimiento/tickets/${ticketId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el ticket');
+        }
+
+        // Eliminar de la lista global
+        allCompletedTickets = allCompletedTickets.filter(t => t.id !== ticketId);
+
+        // Eliminar el elemento del DOM (fila de tabla)
+        const row = document.querySelector(`tr[data-ticket-id="${ticketId}"]`);
+        if (row) {
+          row.remove();
+        }
+
+        // Actualizar el contador de tickets terminados
+        const countSpan = completedButton.querySelector('.ticket-count');
+        let currentCount = parseInt(countSpan.textContent, 10) || 0;
+        countSpan.textContent = Math.max(0, currentCount - 1);
+
+        // Volver a renderizar la tabla con los filtros actuales
+        applyCompletedFilters();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar el ticket: ' + error.message);
+      }
+    }
+
+    // Función para aplicar filtros
+    function applyCompletedFilters() {
+      const searchTerm = document.getElementById('completedSearchInput').value.toLowerCase();
+      const departmentFilter = document.getElementById('filterDepartment').value;
+      const areaFilter = document.getElementById('filterArea').value;
+      const dateFrom = document.getElementById('filterDateFrom').value;
+      const dateTo = document.getElementById('filterDateTo').value;
+
+      let filteredTickets = allCompletedTickets.filter(ticket => {
+        // Búsqueda general
+        const matchesSearch = !searchTerm || 
+          (ticket.name && ticket.name.toLowerCase().includes(searchTerm)) ||
+          (ticket.department && ticket.department.toLowerCase().includes(searchTerm)) ||
+          (ticket.area && ticket.area.toLowerCase().includes(searchTerm)) ||
+          (ticket.issue && ticket.issue.toLowerCase().includes(searchTerm));
+
+        // Filtro de departamento
+        const matchesDepartment = !departmentFilter || 
+          (ticket.department && ticket.department.trim() === departmentFilter);
+
+        // Filtro de área (coincidencia exacta)
+        const matchesArea = !areaFilter || 
+          (ticket.area && ticket.area.trim() === areaFilter);
+
+        // Filtro de fecha desde
+        let matchesDateFrom = true;
+        if (dateFrom) {
+          const ticketDate = new Date(ticket.timestamp);
+          const filterDate = new Date(dateFrom);
+          filterDate.setHours(0, 0, 0, 0);
+          matchesDateFrom = ticketDate >= filterDate;
+        }
+
+        // Filtro de fecha hasta
+        let matchesDateTo = true;
+        if (dateTo) {
+          const ticketDate = new Date(ticket.timestamp);
+          const filterDate = new Date(dateTo);
+          filterDate.setHours(23, 59, 59, 999);
+          matchesDateTo = ticketDate <= filterDate;
+        }
+
+        return matchesSearch && matchesDepartment && matchesArea && matchesDateFrom && matchesDateTo;
+      });
+
+      currentPage = 1; // Resetear a la primera página al aplicar filtros
+      renderCompletedTicketsTable(filteredTickets);
+      closeFiltersModal();
+    }
+
+    // Hacer función accesible globalmente para onclick
+    window.applyCompletedFilters = applyCompletedFilters;
+
+    // Función para limpiar filtros
+    function clearCompletedFilters() {
+      document.getElementById('completedSearchInput').value = '';
+      document.getElementById('filterDepartment').value = '';
+      document.getElementById('filterArea').value = '';
+      document.getElementById('filterDateFrom').value = '';
+      document.getElementById('filterDateTo').value = '';
+      currentPage = 1; // Resetear a la primera página al limpiar filtros
+      renderCompletedTicketsTable(allCompletedTickets);
+      closeFiltersModal();
+    }
+
+    // Hacer función accesible globalmente para onclick
+    window.clearCompletedFilters = clearCompletedFilters;
+
+    // Event listeners para búsqueda y filtros (se inicializarán cuando se abra el modal)
+    function initCompletedModalListeners() {
+      const searchInput = document.getElementById('completedSearchInput');
+      const filterBtn = document.getElementById('completedFilterBtn');
+      const filtersPanel = document.getElementById('completedFiltersPanel');
+
+      // Búsqueda en tiempo real
+      if (searchInput) {
+        searchInput.removeEventListener('input', applyCompletedFilters);
+        searchInput.addEventListener('input', applyCompletedFilters);
+      }
+
+      // Toggle modal de filtros
+      if (filterBtn) {
+        filterBtn.onclick = function() {
+          const filtersModal = document.getElementById('filtersModal');
+          if (filtersModal) {
+            const isVisible = filtersModal.style.display !== 'none';
+            filtersModal.style.display = isVisible ? 'none' : 'flex';
+            filterBtn.classList.toggle('active', !isVisible);
+          }
+        };
+      }
+
+      // Los filtros ya no se aplican automáticamente, solo cuando se hace clic en "Aplicar Filtros"
+      // Se removieron los event listeners de 'change' para que el usuario pueda ajustar todos los filtros
+      // antes de aplicarlos
+
+      // Event listeners para ordenamiento de columnas
+      document.querySelectorAll('.completed-tickets-table th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+          const column = this.dataset.column;
+          
+          // Si es la misma columna, cambiar dirección; si es diferente, ordenar ascendente
+          if (currentSortColumn === column) {
+            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+          } else {
+            currentSortColumn = column;
+            currentSortDirection = 'asc';
+          }
+          
+          // Resetear a la primera página al cambiar ordenamiento
+          currentPage = 1;
+          
+          // Obtener los tickets actualmente filtrados
+          const searchTerm = document.getElementById('completedSearchInput').value.toLowerCase();
+          const departmentFilter = document.getElementById('filterDepartment').value;
+          const areaFilter = document.getElementById('filterArea').value;
+          const dateFrom = document.getElementById('filterDateFrom').value;
+          const dateTo = document.getElementById('filterDateTo').value;
+          
+          let ticketsToSort = allCompletedTickets.filter(ticket => {
+            const matchesSearch = !searchTerm || 
+              (ticket.name && ticket.name.toLowerCase().includes(searchTerm)) ||
+              (ticket.department && ticket.department.toLowerCase().includes(searchTerm)) ||
+              (ticket.area && ticket.area.toLowerCase().includes(searchTerm)) ||
+              (ticket.issue && ticket.issue.toLowerCase().includes(searchTerm));
+            const matchesDepartment = !departmentFilter || 
+              (ticket.department && ticket.department.trim() === departmentFilter);
+            const matchesArea = !areaFilter || 
+              (ticket.area && ticket.area.trim() === areaFilter);
+            let matchesDateFrom = true;
+            if (dateFrom) {
+              const ticketDate = new Date(ticket.timestamp);
+              const filterDate = new Date(dateFrom);
+              filterDate.setHours(0, 0, 0, 0);
+              matchesDateFrom = ticketDate >= filterDate;
+            }
+            let matchesDateTo = true;
+            if (dateTo) {
+              const ticketDate = new Date(ticket.timestamp);
+              const filterDate = new Date(dateTo);
+              filterDate.setHours(23, 59, 59, 999);
+              matchesDateTo = ticketDate <= filterDate;
+            }
+            return matchesSearch && matchesDepartment && matchesArea && matchesDateFrom && matchesDateTo;
+          });
+          
+          renderCompletedTicketsTable(ticketsToSort);
+        });
+      });
+    }
+
+    function closeCompletedModal() {
+      document.getElementById('completedModal').classList.remove('active');
+    }
+
+    function closeFiltersModal() {
+      const filtersModal = document.getElementById('filtersModal');
+      if (filtersModal) {
+        filtersModal.style.display = 'none';
+        const filterBtn = document.getElementById('completedFilterBtn');
+        if (filterBtn) {
+          filterBtn.classList.remove('active');
+        }
+      }
+    }
+
+    // Cerrar modal al hacer clic fuera del contenido
+    document.getElementById('completedModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeCompletedModal();
+      }
+    });
+
+    // Cerrar modal de filtros al hacer clic fuera del contenido
+    document.addEventListener('DOMContentLoaded', function() {
+      const filtersModal = document.getElementById('filtersModal');
+      if (filtersModal) {
+        filtersModal.addEventListener('click', (e) => {
+          if (e.target === filtersModal) {
+            closeFiltersModal();
+          }
+        });
+      }
+    });
+
+    // Control de submenús y animaciones de la topbar
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+
+    // Highlight y efecto cromático
+    function moverHighlight() {
+      const topbar = document.querySelector('.topbar');
+      const highlight = topbar.querySelector('.glass-highlight');
+      const btnSel = topbar.querySelector('.menu-item.selected');
+      if (!btnSel) return;
+      const rectTopbar = topbar.getBoundingClientRect();
+      const rectBtn = btnSel.getBoundingClientRect();
+      const left = rectBtn.left - rectTopbar.left;
+      highlight.style.left = left + 'px';
+      highlight.style.width = rectBtn.width + 'px';
+    }
+
+    function addChromaticEffect(element) {
+      element.classList.add('clicked');
+      setTimeout(() => {
+        element.classList.remove('clicked');
+      }, 600);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+      }, 1500);
+    });
+
+    // Efecto cromático al icono de usuario
+    document.addEventListener('DOMContentLoaded', function() {
+      const userIcon = document.getElementById('userIcon');
+      if (userIcon) {
+        userIcon.addEventListener('click', function() {
+          addChromaticEffect(this);
+        });
+      }
+    });
+
+    // Inicializar highlight
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        moverHighlight();
+      }, 1600);
+    });
+    window.addEventListener('resize', moverHighlight);
+
+    // Botón LISA redirige a inicio.html
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'nuevo-inicio.html';
+      });
+    });
+
+    // Contraste automático para el texto del topbar
+    function getContrastYIQ(hexcolor) {
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    
+    // Funciones para la imagen del lado izquierdo
+    function showFullscreenImage() {
+      const overlay = document.getElementById('fullscreenOverlay');
+      overlay.classList.add('active');
+      
+      // Cerrar con Escape
+      function escListener(e) {
+        if (e.key === 'Escape') {
+          closeFullscreenImage();
+          document.removeEventListener('keydown', escListener);
+        }
+      }
+      document.addEventListener('keydown', escListener);
+      
+      // Cerrar al hacer clic fuera de la imagen
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          closeFullscreenImage();
+        }
+      });
+    }
+    
+    function closeFullscreenImage() {
+      const overlay = document.getElementById('fullscreenOverlay');
+      overlay.classList.remove('active');
+    }
+    
+    // Agregar evento de doble clic a la imagen
+    document.addEventListener('DOMContentLoaded', function() {
+      const topLeftImage = document.getElementById('topLeftImage');
+      if (topLeftImage) {
+        topLeftImage.addEventListener('dblclick', showFullscreenImage);
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var gearBtn = document.getElementById('settingsGearButton');
+      var modal = document.getElementById('settingsGlassModal');
+      var closeBtn = document.getElementById('closeSettingsGlassModal');
+
+
+      if (gearBtn && modal && closeBtn) {
+        gearBtn.onclick = function() {
+          modal.classList.add('active');
+        };
+        closeBtn.onclick = function() {
+          modal.classList.remove('active');
+        };
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) modal.classList.remove('active');
+        });
+      }
+
+      // Cargar herramientas agrupadas por área
+      window.cargarHerramientas = async function() {
+        const container = document.getElementById('herramientasContainer');
+        const filterAreaSelect = document.getElementById('filterAreaSelect');
+        
+        try {
+          // Obtener todas las herramientas
+          const res = await fetch('/api/mantenimiento/herramientas');
+          if (!res.ok) throw new Error('Error al obtener herramientas');
+          const rawHerramientas = await res.json();
+          const allHerramientas = rawHerramientas.map(h => ({
+            ...h,
+            area: (h.area || '').trim() === 'Área General' ? 'Madera' : h.area
+          }));
+          
+          // Mostrar todas las herramientas en consola
+          console.log('📦 TODAS LAS HERRAMIENTAS:', allHerramientas);
+          
+          // Obtener áreas disponibles
+          const areasDisponibles = await obtenerAreasDisponibles(allHerramientas);
+          
+          // Llenar el dropdown de filtro
+          filterAreaSelect.innerHTML = '<option value="">Todas las áreas</option>';
+          areasDisponibles.forEach(area => {
+            const option = document.createElement('option');
+            option.value = area;
+            option.textContent = area;
+            filterAreaSelect.appendChild(option);
+          });
+          
+          // Función para renderizar herramientas
+          function renderizarHerramientas() {
+            const areaSeleccionada = filterAreaSelect.value;
+            
+            // Filtrar herramientas según área seleccionada
+            let herramientasMostrar = allHerramientas;
+            if (areaSeleccionada) {
+              herramientasMostrar = allHerramientas.filter(h => h.area === areaSeleccionada);
+            }
+            
+            // Agrupar por área
+            const herramientasPorArea = {};
+            herramientasMostrar.forEach(h => {
+              const area = h.area || 'Sin área';
+              if (!herramientasPorArea[area]) {
+                herramientasPorArea[area] = [];
+              }
+              herramientasPorArea[area].push(h);
+            });
+
+            // Mostrar siempre el contenedor de Madera en vista general o filtrada por Madera.
+            if ((!areaSeleccionada || areaSeleccionada === 'Madera') && !herramientasPorArea['Madera']) {
+              herramientasPorArea['Madera'] = [];
+            }
+            
+            // Limpiar contenedor
+            container.innerHTML = '';
+            
+            if (Object.keys(herramientasPorArea).length === 0) {
+              container.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">No hay herramientas</div>';
+              return;
+            }
+            
+            // Crear tabla para cada área
+            Object.keys(herramientasPorArea).sort().forEach(area => {
+              const tableBox = document.createElement('div');
+              tableBox.className = 'tools-table-box';
+              
+              const table = document.createElement('table');
+              table.className = 'tools-table';
+              
+              const thead = document.createElement('thead');
+              const headerRow = document.createElement('tr');
+              headerRow.innerHTML = `<th colspan="5">${area}</th>`;
+              thead.appendChild(headerRow);
+              table.appendChild(thead);
+              
+              const tbody = document.createElement('tbody');
+              tbody.setAttribute('data-area', area);
+              
+              herramientasPorArea[area].forEach(h => {
+                const tr = document.createElement('tr');
+                tr.setAttribute('draggable', 'true');
+                tr.dataset.id = h.id;
+                tr.dataset.nombre = h.nombre;
+                
+                // ID
+                const idCell = document.createElement('td');
+                idCell.textContent = h.id;
+                
+                // Nombre
+                const nombreCell = document.createElement('td');
+                nombreCell.className = 'nombre-cell';
+                nombreCell.setAttribute('data-id', h.id);
+                nombreCell.textContent = h.nombre;
+                
+                // Área (dropdown)
+                const areaCell = document.createElement('td');
+                areaCell.className = 'area-cell';
+                const areaSelect = document.createElement('select');
+                areaSelect.className = 'area-select';
+                // switchInput.disabled = true;
+                areaSelect.setAttribute('data-id', h.id);
+                
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = 'Área...';
+                areaSelect.appendChild(emptyOption);
+                
+                areasDisponibles.forEach(a => {
+                  const option = document.createElement('option');
+                  option.value = a;
+                  option.textContent = a;
+                  if (h.area === a) option.selected = true;
+                  areaSelect.appendChild(option);
+                });
+                
+                areaCell.appendChild(areaSelect);
+                
+                // Switch de herramienta
+                const herramientaCell = document.createElement('td');
+                herramientaCell.className = 'herramienta-cell';
+                const switchLabel = document.createElement('label');
+                switchLabel.className = 'switch';
+                switchLabel.style.cssText = 'position:relative;display:inline-block;width:50px;height:24px;cursor:pointer;';
+                const switchInput = document.createElement('input');
+                switchInput.type = 'checkbox';
+                switchInput.setAttribute('data-id', h.id);
+                switchInput.checked = h.herramienta === true || h.herramienta === 'true';
+                // switchInput.disabled = true;
+                const switchSpan = document.createElement('span');
+                switchSpan.className = 'slider';
+                
+                switchLabel.appendChild(switchInput);
+                switchLabel.appendChild(switchSpan);
+                herramientaCell.appendChild(switchLabel);
+                
+                // Event listener para cambio de switch
+                let isUpdating = false;
+                switchInput.addEventListener('change', async function() {
+                  if (this.disabled || isUpdating) return;
+                  isUpdating = true;
+                  const checked = this.checked;
+                  try {
+                    await actualizarHerramienta(h.id, checked);
+                  } catch (error) {
+                    console.error('Error al actualizar switch:', error);
+                    this.checked = !checked;
+                    this.dispatchEvent(new Event('input'));
+                    window.showCustomAlert('Error al actualizar: ' + (error.message || 'Error desconocido'));
+                  } finally {
+                    isUpdating = false;
+                  }
+                });
+                
+                switchLabel.addEventListener('click', function(e) {
+                  if (switchInput.disabled) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
+                  }
+                  e.preventDefault();
+                  switchInput.checked = !switchInput.checked;
+                  const changeEvent = new Event('change', { bubbles: true, cancelable: true });
+                  switchInput.dispatchEvent(changeEvent);
+                });
+                
+                // Acciones
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'actions-cell';
+                
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.title = 'Editar';
+                editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                editBtn.addEventListener('click', function() {
+                  editarHerramienta(h.id, h.nombre);
+                });
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.title = 'Eliminar';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.addEventListener('click', function() {
+                  eliminarHerramienta(h.id, h.nombre);
+                });
+                
+                actionsCell.appendChild(editBtn);
+                actionsCell.appendChild(deleteBtn);
+                
+                // Agregar celdas
+                tr.appendChild(idCell);
+                tr.appendChild(nombreCell);
+                tr.appendChild(areaCell);
+                tr.appendChild(herramientaCell);
+                tr.appendChild(actionsCell);
+                
+                // Agregar event para drag and drop
+                tr.addEventListener('dragstart', function(e) {
+                  e.dataTransfer.setData('text/plain', JSON.stringify({id: h.id, nombre: h.nombre, area: h.area}));
+                  e.dataTransfer.effectAllowed = 'move';
+                });
+                
+                tbody.appendChild(tr);
+              });
+              
+              if (tbody.children.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">Sin herramientas</td></tr>';
+              }
+              
+              table.appendChild(tbody);
+              tableBox.appendChild(table);
+              container.appendChild(tableBox);
+            });
+          }
+          
+          // Evento para cambiar el filtro
+          filterAreaSelect.addEventListener('change', renderizarHerramientas);
+          
+          // Renderizar inicial
+          renderizarHerramientas();
+          
+        } catch (e) {
+          console.error('Error:', e);
+          container.innerHTML = '<div style="padding: 20px; text-align: center; color: #d32f2f;">Error al cargar herramientas</div>';
+        }
+      }
+
+      // Función para editar herramienta (mover al scope global)
+      window.editarHerramienta = async function(id, nombreActual) {
+        const cell = document.querySelector(`.nombre-cell[data-id="${id}"]`);
+        if (!cell) {
+          console.error('No se encontró la celda para editar');
+          return;
+        }
+
+        // Obtener referencias a los elementos
+        const areaSelect = document.querySelector(`.area-select[data-id="${id}"]`);
+        const switchInput = document.querySelector(`input[data-id="${id}"][type="checkbox"]`);
+        const tr = cell.closest('tr');
+        const editBtn = tr ? tr.querySelector('.edit-btn') : null;
+        const deleteBtn = tr ? tr.querySelector('.delete-btn') : null;
+        
+        // Guardar estados originales
+        const estadoOriginalNombre = nombreActual;
+        const estadoOriginalArea = areaSelect ? areaSelect.value : '';
+        const estadoOriginalSwitch = switchInput ? switchInput.checked : false;
+        
+        // Habilitar campos
+        if (areaSelect) {
+          areaSelect.disabled = false;
+        }
+        if (switchInput) {
+          switchInput.disabled = false;
+        }
+
+        // Crear input de edición
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = nombreActual;
+        input.className = 'edit-input';
+        
+        // Guardar el contenido original
+        const contenidoOriginal = cell.innerHTML;
+        
+        // Reemplazar contenido con input
+        cell.innerHTML = '';
+        cell.appendChild(input);
+        cell.classList.add('editing');
+        
+        // Cambiar botón de editar a guardar
+        if (editBtn) {
+          editBtn.innerHTML = '<i class="fas fa-save"></i>';
+          editBtn.title = 'Guardar';
+          editBtn.className = 'edit-btn save-btn';
+        }
+        
+        // Ocultar botón de eliminar mientras se edita
+        if (deleteBtn) {
+          deleteBtn.style.display = 'none';
+        }
+        
+        // Enfocar y seleccionar texto
+        input.focus();
+        input.select();
+        
+        // Función para guardar
+        const guardar = async () => {
+          const nuevoNombre = input.value.trim();
+          
+          if (!nuevoNombre) {
+            window.showCustomAlert('El nombre no puede estar vacío');
+            input.focus();
+            return;
+          }
+          
+          try {
+            // Guardar nombre
+            const resNombre = await fetch(`/api/mantenimiento/herramientas/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ nombre: nuevoNombre })
+            });
+            
+            if (!resNombre.ok) {
+              const data = await resNombre.json();
+              throw new Error(data.error || 'No se pudo actualizar el nombre');
+            }
+            
+            // Guardar área si cambió
+            if (areaSelect && areaSelect.value !== estadoOriginalArea) {
+              await actualizarArea(id, areaSelect.value);
+            }
+            
+            // Guardar switch si cambió
+            if (switchInput && switchInput.checked !== estadoOriginalSwitch) {
+              await actualizarHerramienta(id, switchInput.checked);
+            }
+            
+            // Actualizar el nombre en la celda
+            cell.innerHTML = nuevoNombre;
+            cell.classList.remove('editing');
+            
+            // Actualizar el dataset del tr
+            if (tr) {
+              tr.dataset.nombre = nuevoNombre;
+            }
+            
+            // Restaurar botones - encontrar el botón actual en el DOM
+            const currentEditBtn = tr ? tr.querySelector('.edit-btn, .save-btn') : null;
+            if (currentEditBtn) {
+              currentEditBtn.innerHTML = '<i class="fas fa-edit"></i>';
+              currentEditBtn.title = 'Editar';
+              currentEditBtn.className = 'edit-btn';
+              // Remover listeners y restaurar el original
+              const restoredBtn = currentEditBtn.cloneNode(true);
+              currentEditBtn.parentNode.replaceChild(restoredBtn, currentEditBtn);
+              restoredBtn.addEventListener('click', function() {
+                editarHerramienta(id, nuevoNombre);
+              });
+            }
+            if (deleteBtn) {
+              deleteBtn.style.display = '';
+            }
+            
+            // Deshabilitar campos
+            if (areaSelect) {
+              areaSelect.disabled = true;
+            }
+            if (switchInput) {
+              switchInput.disabled = true;
+            }
+            
+            await window.cargarHerramientas();
+            window.showCustomAlert('Herramienta actualizada correctamente');
+          } catch (e) {
+            window.showCustomAlert('Error: ' + (e.message || 'No se pudo actualizar la herramienta'));
+            // No restaurar en caso de error, dejar que el usuario intente de nuevo
+          }
+        };
+        
+        // Función para cancelar
+        const cancelar = () => {
+          cell.innerHTML = contenidoOriginal;
+          cell.classList.remove('editing');
+          
+          // Restaurar valores originales
+          if (areaSelect) {
+            areaSelect.value = estadoOriginalArea;
+            areaSelect.disabled = true;
+          }
+          if (switchInput) {
+            switchInput.checked = estadoOriginalSwitch;
+            switchInput.disabled = true;
+          }
+          
+          // Restaurar botones - encontrar el botón actual en el DOM
+          const currentEditBtn = tr ? tr.querySelector('.edit-btn, .save-btn') : null;
+          if (currentEditBtn) {
+            currentEditBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            currentEditBtn.title = 'Editar';
+            currentEditBtn.className = 'edit-btn';
+            // Remover listeners y restaurar el original
+            const restoredBtn = currentEditBtn.cloneNode(true);
+            currentEditBtn.parentNode.replaceChild(restoredBtn, currentEditBtn);
+            restoredBtn.addEventListener('click', function() {
+              editarHerramienta(id, estadoOriginalNombre);
+            });
+          }
+          if (deleteBtn) {
+            deleteBtn.style.display = '';
+          }
+        };
+        
+        // Cambiar el listener del botón de editar a guardar
+        if (editBtn) {
+          // Guardar referencia al nuevo botón
+          const saveBtn = editBtn;
+          // Remover todos los listeners anteriores
+          const newSaveBtn = saveBtn.cloneNode(true);
+          saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+          // Agregar nuevo listener para guardar
+          newSaveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            guardar();
+          });
+        }
+        
+        // Eventos del input
+        input.addEventListener('blur', function() {
+          // No guardar automáticamente al perder foco, solo al presionar el botón guardar
+        });
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            cancelar();
+          }
+        });
+      }
+
+      // Función para obtener áreas disponibles
+      async function obtenerAreasDisponibles(herramientas) {
+        // Áreas predefinidas
+        const areasPredefinidas = [
+          'Corte P1',
+          'Armado P1',
+          'Soldadura P1',
+          'Pulido',
+          'Pintura',
+          'Envíos y Recibos',
+          'Corte BA',
+          'Armado BA',
+          'Soldadura BA',
+          'Maquinado',
+          'Madera'
+        ];
+        
+        return areasPredefinidas;
+      }
+      
+      // Función para actualizar área
+      window.actualizarArea = async function(id, area) {
+        try {
+          const areaNormalizada = (area || '').trim() === 'Madera' ? 'Área General' : (area || '').trim();
+          const res = await fetch(`/api/mantenimiento/herramientas/${id}/area`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ area: areaNormalizada || null })
+          });
+          
+          if (res.ok) {
+            // Actualización exitosa, no es necesario mostrar mensaje
+          } else {
+            const data = await res.json();
+            console.error('Error al actualizar área:', data.error);
+          }
+        } catch (e) {
+          console.error('Error de red al actualizar área:', e);
+        }
+      };
+
+      // Función para actualizar switch de herramienta
+      window.actualizarHerramienta = async function(id, herramienta) {
+        try {
+          const res = await fetch(`/api/mantenimiento/herramientas/${id}/herramienta`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ herramienta: herramienta })
+          });
+          
+          if (res.ok) {
+            // Actualización exitosa, no es necesario mostrar mensaje
+            return;
+          } else {
+            // Intentar obtener el mensaje de error del servidor
+            let errorMessage = 'Error desconocido';
+            try {
+              const data = await res.json();
+              errorMessage = data.error || `Error ${res.status}: ${res.statusText}`;
+            } catch (parseError) {
+              errorMessage = `Error ${res.status}: ${res.statusText}`;
+            }
+            
+            console.error('Error al actualizar herramienta:', errorMessage);
+            throw new Error(errorMessage);
+          }
+        } catch (e) {
+          console.error('Error de red al actualizar herramienta:', e);
+          // Revertir el switch si hay error
+          const switchInput = document.querySelector(`input[data-id="${id}"][type="checkbox"]`);
+          if (switchInput) {
+            switchInput.checked = !herramienta;
+          }
+          // Relanzar el error para que se maneje en el listener
+          throw e;
+        }
+      };
+
+      // Función para eliminar herramienta (mover al scope global)
+      window.eliminarHerramienta = async function(id, nombre) {
+        const confirmed = await window.showCustomConfirm(`¿Estás seguro de que quieres eliminar la herramienta "${nombre}"?`);
+        if (!confirmed) {
+          return;
+        }
+        
+        try {
+          const res = await fetch(`/api/mantenimiento/herramientas/${id}`, {
+            method: 'DELETE'
+          });
+          
+          if (res.ok) {
+            await window.showCustomAlert('Herramienta eliminada correctamente');
+            await window.cargarHerramientas(); // Recargar la tabla
+          } else {
+            const data = await res.json();
+            await window.showCustomAlert('Error: ' + (data.error || 'No se pudo eliminar la herramienta'));
+          }
+        } catch (e) {
+          await window.showCustomAlert('Error de red o servidor');
+        }
+      }
+
+      // Mostrar la tabla al abrir el modal
+      if (gearBtn && modal) {
+        gearBtn.onclick = async function() {
+          modal.classList.add('active');
+          await window.cargarHerramientas();
+        };
+      }
+
+      // Evento click en la lupa
+      const searchBtn = document.getElementById('searchToolBtn');
+      if (searchBtn) {
+        searchBtn.onclick = function() {
+          window.agregarHerramienta();
+        };
+      }
+
+      // Evento Enter en el input
+      const searchInput = document.getElementById('searchToolInput');
+      if (searchInput) {
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            window.agregarHerramienta();
+          }
+        });
+      }
+
+      // Funcionalidad de búsqueda de activos
+      const searchAssetsInput = document.getElementById('searchAssetsInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      
+      if (searchAssetsInput) {
+        searchAssetsInput.addEventListener('input', function() {
+          filtrarActivos(this.value);
+        });
+      }
+      
+      if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', function() {
+          searchAssetsInput.value = '';
+          filtrarActivos('');
+        });
+      }
+
+      // Función para filtrar activos
+      function filtrarActivos(termino) {
+        const p1Body = document.querySelector('#produccionP1Table tbody');
+        const baBody = document.querySelector('#produccionBATable tbody');
+        
+        const filasP1 = p1Body.querySelectorAll('tr');
+        const filasBA = baBody.querySelectorAll('tr');
+        
+        // Filtrar filas de P1
+        filasP1.forEach(fila => {
+          const nombre = fila.querySelector('.nombre-cell')?.textContent.toLowerCase() || '';
+          const id = fila.querySelector('td:first-child')?.textContent || '';
+          const terminoLower = termino.toLowerCase();
+          
+          if (nombre.includes(terminoLower) || id.includes(terminoLower)) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        });
+        
+        // Filtrar filas de BA
+        filasBA.forEach(fila => {
+          const nombre = fila.querySelector('.nombre-cell')?.textContent.toLowerCase() || '';
+          const id = fila.querySelector('td:first-child')?.textContent || '';
+          const terminoLower = termino.toLowerCase();
+          
+          if (nombre.includes(terminoLower) || id.includes(terminoLower)) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        });
+      }
+    });
+
+    // Drag and drop para Producción P1 y BA
+    function setupDropZone(tableId, departmentName) {
+      const table = document.getElementById(tableId);
+      const tbody = table.querySelector('tbody');
+      table.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        table.classList.add('drag-over');
+      });
+      table.addEventListener('dragleave', function(e) {
+        table.classList.remove('drag-over');
+      });
+      table.addEventListener('drop', async function(e) {
+        e.preventDefault();
+        table.classList.remove('drag-over');
+        const data = e.dataTransfer.getData('text/plain');
+        if (!data) return;
+        const {id, nombre} = JSON.parse(data);
+        // Evitar duplicados
+        if ([...tbody.querySelectorAll('tr')].some(tr => tr.dataset.id == id)) return;
+        // PATCH al backend para actualizar el department
+        try {
+          const res = await fetch(`/api/mantenimiento/herramientas/${id}/department`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ department: departmentName })
+          });
+          if (!res.ok) {
+            let errorDetail = '';
+            try {
+              const data = await res.json();
+              errorDetail = data?.error || data?.details || JSON.stringify(data);
+            } catch (_) {
+              errorDetail = await res.text();
+            }
+            throw new Error(`HTTP ${res.status} ${res.statusText} - ${errorDetail}`);
+          }
+          
+          // Agregar la fila a la tabla de destino
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${id}</td><td>${nombre}</td>`;
+          tr.dataset.id = id;
+          tr.dataset.nombre = nombre;
+          tr.setAttribute('draggable', 'true');
+          tr.addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain', JSON.stringify({id, nombre}));
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          tbody.appendChild(tr);
+          
+          // Eliminar de la tabla de origen (solo de las otras tablas, no de la actual)
+          // Puede no existir una tabla general de herramientas; hacer null-safe
+          const toolsTableBody = document.querySelector('#toolsTable tbody');
+          const p1TableBody = document.querySelector('#produccionP1Table tbody');
+          const baTableBody = document.querySelector('#produccionBATable tbody');
+          
+          // Solo eliminar de las tablas que NO son la tabla de destino
+          if (tableId === 'produccionP1Table') {
+            // Si estamos agregando a P1, eliminar de tools y BA
+            const rowInTools = toolsTableBody?.querySelector(`tr[data-id="${id}"]`);
+            const rowInBA = baTableBody.querySelector(`tr[data-id="${id}"]`);
+            if (rowInTools) rowInTools.remove();
+            if (rowInBA) rowInBA.remove();
+          } else if (tableId === 'produccionBATable') {
+            // Si estamos agregando a BA, eliminar de tools y P1
+            const rowInTools = toolsTableBody?.querySelector(`tr[data-id="${id}"]`);
+            const rowInP1 = p1TableBody.querySelector(`tr[data-id="${id}"]`);
+            if (rowInTools) rowInTools.remove();
+            if (rowInP1) rowInP1.remove();
+          }
+          
+        } catch (err) {
+          console.error('Fallo al actualizar herramienta:', err);
+          alert(`No se pudo actualizar en la base de datos.\n${err?.message || err}`);
+        }
+      });
+    }
+    // Drag and drop ya no es necesario con el nuevo sistema de filtrado por área
+    // El sistema ahora agrupa herramientas por área automáticamente
+
+    // Función para mostrar el modal y la lista de usuarios
+    function mostrarModalAsignarUsuario(ticketId) {
+      const modal = document.getElementById('modalAsignarUsuario');
+      const lista = document.getElementById('listaUsuariosMantenimiento');
+      lista.innerHTML = 'Cargando...';
+
+      // Asegúrate de tener la lista de usuarios cargada
+      if (!window.usuariosMantenimiento) {
+        fetch('/api/mantenimiento/usuarios')
+          .then(res => res.json())
+          .then(usuarios => {
+            window.usuariosMantenimiento = usuarios;
+            renderListaUsuarios(usuarios, ticketId);
+          });
+      } else {
+        renderListaUsuarios(window.usuariosMantenimiento, ticketId);
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    // Renderiza la lista de usuarios como botones
+    function renderListaUsuarios(usuarios, ticketId) {
+      const lista = document.getElementById('listaUsuariosMantenimiento');
+      lista.innerHTML = '';
+      // Obtener el ticket actual de la lista global de tickets
+      const ticket = (window.lastTicketsStr && JSON.parse(window.lastTicketsStr).find(t => t.id === ticketId)) || null;
+      let currentAssigned = Array.isArray(ticket?.assigned_user_id) ? ticket.assigned_user_id.slice() : [];
+      usuarios.forEach(usuario => {
+        const btn = document.createElement('button');
+        btn.textContent = usuario.nombre;
+        btn.style = 'display:block;width:100%;margin-bottom:10px;padding:10px 0;border-radius:8px;border:1px solid #2196F3;background:#f5faff;color:#1976d2;font-size:16px;cursor:pointer;';
+        btn.onclick = async function() {
+          // Agregar el usuario al array actual, sin duplicados
+          let nuevosIds = currentAssigned.map(id => String(id));
+          if (!nuevosIds.includes(String(usuario.id))) {
+            nuevosIds.push(String(usuario.id));
+          }
+          await fetch(`/api/mantenimiento/tickets/${ticketId}/asignar-usuario`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ assigned_user_id: nuevosIds })
+          });
+          cerrarModalAsignarUsuario();
+          loadTickets(); // Recarga los tickets para reflejar el cambio
+        };
+        lista.appendChild(btn);
+      });
+    }
+
+    // Cerrar el modal
+    function cerrarModalAsignarUsuario() {
+      document.getElementById('modalAsignarUsuario').style.display = 'none';
+    }
+
+  </script>
+
+  <script src="js/sidebar.js"></script>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <!-- Botón de descarga de BD en la parte inferior izquierda -->
+  <button id="downloadDbButton" class="download-db-btn" title="Descargar toda la base de datos de tickets de mantenimiento">
+    <i class="fas fa-database"></i>
+    <span>Descargar BD</span>
+  </button>
+  <script src="js/topbar.js"></script>
+</body>
+</html>
