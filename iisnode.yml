@@ -1,0 +1,14 @@
+loggingEnabled: true
+logDirectory: iisnode
+devErrorsEnabled: true
+nodeProcessCommandLine: "C:\Program Files\nodejs\node.exe"
+maxConcurrentRequestsPerProcess: 256
+maxNamedPipeConnectionRetry: 25
+namedPipeConnectionRetryDelay: 50
+maxNamedPipeConnectionPoolSize: 128
+maxNamedPipePooledConnectionAge: 10000
+initialRequestBufferSize: 4096
+maxRequestBufferSize: 65536
+watchedFiles: "*.js;iisnode.yml"
+uncFileChangesPollingInterval: 5000
+gracefulShutdownTimeout: 15000 
