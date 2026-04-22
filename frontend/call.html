@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Llamada - PDM</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:#111;color:#eee}
+    .container{max-width:980px;margin:18px auto;padding:12px}
+    .videos{display:flex;gap:12px;align-items:flex-start}
+    video{background:#000;border-radius:8px;flex:1;max-height:70vh;width:100%;object-fit:cover}
+    .controls{margin-top:12px;display:flex;gap:8px}
+    button{background:#0ea5a4;border:none;color:#fff;padding:10px 12px;border-radius:8px;cursor:pointer}
+    button.warn{background:#ef4444}
+    #status{margin-top:10px;color:#cfe}
+    .small{font-size:13px;color:#c9d1d9}
+    .link{background:#081126;padding:8px;border-radius:8px;margin-top:10px;word-break:break-all}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Llamada</h2>
+    <div id="info" class="small">Conexión P2P usando WebRTC (simple-peer). No requiere servidor adicional para señalización.</div>
+    <div class="videos">
+      <video id="localVideo" autoplay muted playsinline></video>
+      <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+
+    <div class="controls">
+      <button id="toggleVideo">Desactivar video</button>
+      <button id="toggleAudio">Silenciar</button>
+      <button id="hangup" class="warn">Colgar</button>
+      <button id="copyLink">Copiar enlace</button>
+    </div>
+
+    <div id="status"></div>
+    <div id="callLink" class="link" style="display:none"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js"></script>
+  <script>
+  (function(){
+    const params = new URLSearchParams(window.location.search);
+    const callId = params.get('call') || ('pdmcall_' + Math.random().toString(36).slice(2,9));
+    const target = params.get('target') || params.get('other') || null;
+    const role = params.get('role') || 'callee';
+
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+    const statusEl = document.getElementById('status');
+    const hangupBtn = document.getElementById('hangup');
+    const toggleVideoBtn = document.getElementById('toggleVideo');
+    const toggleAudioBtn = document.getElementById('toggleAudio');
+    const copyLinkBtn = document.getElementById('copyLink');
+    const callLinkEl = document.getElementById('callLink');
+
+    let localStream = null;
+    let peer = null;
+    let convId = null;
+    let pollInterval = null;
+    const processed = new Set();
+
+    function log(s){ try { statusEl.textContent = s; } catch(e){} }
+
+    // Read local user id from localStorage (same heuristic as mensajeria)
+    function getLocalUserId(){
+      try {
+        const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('userProfile') || localStorage.getItem('username');
+        if (!raw) return null;
+        try { const obj = JSON.parse(raw); return String(obj.id || obj.userId || obj.idEmpleado || obj.username || (obj.email && obj.email.split('@')[0]) || ''); } catch(e) { return String(raw || ''); }
+      } catch(e){ return null; }
+    }
+
+    async function getConversationId(me, other){
+      try {
+        const resp = await fetch('/api/conversations/dm?user1=' + encodeURIComponent(me) + '&user2=' + encodeURIComponent(other), { cache: 'no-store' });
+        if (!resp.ok) throw new Error('no conv');
+        const j = await resp.json();
+        return j && j.conversation_id ? j.conversation_id : (j && j.data && j.data.conversation_id ? j.data.conversation_id : null);
+      } catch(e){ console.warn('getConversationId', e); return null; }
+    }
+
+    async function sendSignal(signal){
+      try {
+        const me = window.currentUserId || getLocalUserId() || null;
+        const payload = { content: JSON.stringify({ callId: callId, signal: signal }), content_type: 'signal' };
+        if (me) payload.sender_id = me; else if (window.currentUsername) payload.sender_username = window.currentUsername;
+        if (target) payload.target_user_id = target;
+        await fetch('/api/mensajes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(()=>{});
+      } catch(e){ console.warn('sendSignal error', e); }
+    }
+
+    async function pollSignals(){
+      try {
+        if (!convId) return;
+        const resp = await fetch('/api/conversations/' + encodeURIComponent(convId) + '/messages', { cache: 'no-store' });
+        if (!resp.ok) return;
+        const mj = await resp.json();
+        const msgs = mj && mj.messages ? mj.messages : [];
+        msgs.sort((a,b)=> new Date(a.created_at) - new Date(b.created_at));
+        for (const m of msgs){
+          const mid = m.id || m.created_at || JSON.stringify(m);
+          if (processed.has(mid)) continue;
+          processed.add(mid);
+          if (!m.content_type) continue;
+          if (m.content_type !== 'signal') continue;
+          if (!m.content) continue;
+          // skip our own signals
+          const me = window.currentUserId || getLocalUserId() || null;
+          if (m.sender_id && me && String(m.sender_id) === String(me)) continue;
+          let parsed = null;
+          try { parsed = typeof m.content === 'string' ? JSON.parse(m.content) : m.content; } catch(e){ continue; }
+          if (!parsed || parsed.callId !== callId) continue;
+          if (parsed.signal) {
+            try { peer && peer.signal(parsed.signal); } catch(err){ console.warn('peer.signal failed', err); }
+          }
+        }
+      } catch(e){ console.warn('pollSignals error', e); }
+    }
+
+    async function init(){
+      try {
+        window.currentUserId = window.currentUserId || getLocalUserId();
+        if (!target) { log('Falta parámetro target en la URL.'); return; }
+        const me = window.currentUserId || getLocalUserId() || null;
+        if (!me) { log('No hay usuario en sesión. Abre Mensajería y vuelve a intentarlo.'); }
+
+        // show link
+        const pageUrl = window.location.origin + window.location.pathname + '?call=' + encodeURIComponent(callId) + '&target=' + encodeURIComponent(target);
+        callLinkEl.style.display = 'block'; callLinkEl.textContent = pageUrl;
+
+        // get conversation id for signaling channel
+        convId = await getConversationId(me, target);
+        if (!convId) log('No se pudo obtener la conversación; la señalización usará mensajes directos si están disponibles.');
+
+        // get media
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          localVideo.srcObject = localStream;
+        } catch (err) {
+          log('No se pudo acceder a cámara/mic: ' + (err && err.message));
+        }
+
+        // Create peer
+        peer = new SimplePeer({ initiator: role === 'caller', trickle: true, stream: localStream, config: { iceServers: [ { urls: 'stun:stun.l.google.com:19302' } ] } });
+
+        peer.on('signal', data => {
+          sendSignal(data);
+        });
+
+        peer.on('stream', function(s){
+          try { remoteVideo.srcObject = s; } catch(e){ console.warn('set remote stream', e); }
+        });
+
+        peer.on('error', function(e){ console.warn('peer error', e); log('Error en la llamada: ' + (e && e.message)); });
+        peer.on('close', function(){ log('Llamada finalizada'); cleanup(); });
+
+        // start polling
+        pollInterval = setInterval(pollSignals, 1000);
+        // run an immediate poll to catch initial offers
+        setTimeout(pollSignals, 500);
+
+        log('Listo. Esperando señalización...');
+      } catch(e){ console.warn('init call page', e); log('Error iniciando llamada: ' + (e && e.message)); }
+    }
+
+    function cleanup(){
+      try { if (peer) { try{ peer.destroy(); } catch(_){} peer = null; } } catch(e){}
+      try { if (localStream) { localStream.getTracks().forEach(t=>t.stop()); localStream = null; } } catch(e){}
+      try { if (pollInterval) clearInterval(pollInterval); } catch(e){}
+    }
+
+    hangupBtn.addEventListener('click', function(){ cleanup(); try{ window.close(); } catch(e){} });
+    toggleVideoBtn.addEventListener('click', function(){ if (!localStream) return; const v = localStream.getVideoTracks()[0]; if (!v) return; v.enabled = !v.enabled; toggleVideoBtn.textContent = v.enabled ? 'Desactivar video' : 'Activar video'; });
+    toggleAudioBtn.addEventListener('click', function(){ if (!localStream) return; const a = localStream.getAudioTracks()[0]; if (!a) return; a.enabled = !a.enabled; toggleAudioBtn.textContent = a.enabled ? 'Silenciar' : 'Activar mic'; });
+    copyLinkBtn.addEventListener('click', function(){ try { navigator.clipboard.writeText(callLinkEl.textContent); } catch(e){ /* ignore */ } });
+
+    // start
+    init();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sistema de Amonestaciones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="js/global-color.js" defer></script>
+    <script src="js/tarjetas-guard.js" defer></script>
+    <link rel="stylesheet" href="styles/amonestaciones_supervisor.css">
+        <!-- Forzar color específico en esta página (sobrescribe el color global) -->
+        <style>
+            :root { --bg-color: #e1343497 !important; }
+            body { background: var(--bg-color) !important; }
+        </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+</head>
+<body>
+    <!--
+    <div class="back-button-container">
+      <a href="inicio.html" class="back-button">
+        <svg class="back-button-icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>Menú principal</a>
+    </div>-->
+
+    <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 2%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-house"></i> 
+    </button>
+
+    <button class="tab-switch-button active" data-tab="amonestacion">
+      <i class="fas fa-exclamation-triangle"></i> Nueva amonestación
+    </button>
+
+  </div>
+</div>
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    amonestacion: 'amonestacion_supervisor.html'
+  };
+
+
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+
+    <div class="container" style="margin-top: 2%;">
+        <h1>Amonestaciones</h1>     
+        <form id="formVacaciones" style="margin-bottom: 30px; text-align: left;">
+            <label for="idEmpleado" style="font-weight:600; color:#333;">ID de empleado:</label><br>
+            <input type="text" id="idEmpleado" name="idEmpleado" required style="width:100%;padding:10px;margin-bottom:15px;border-radius:30px;border:1px solid #6abf35;font-size:1rem;" placeholder="Ingresa el ID del empleado">
+
+            <!-- Información del empleado -->
+            <div id="empleadoInfo" class="empleado-info">
+                <h4>Información del Empleado</h4>
+                <p><strong>Nombre:</strong> <span id="nombreEmpleado"></span></p>
+                <p><strong>Puesto:</strong> <span id="puestoEmpleado"></span></p>
+                <p><strong>Supervisor:</strong> <span id="supervisorEmpleado"></span></p>
+            </div>
+
+            <label style="font-weight:600; color:#333;">Notas:</label><br>
+            <div style="margin-bottom:15px;">
+                <div class="switch-grid">
+                    <label class="switch-item">
+                        <span class="switch-text">Por falta injustificada</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion1" value="1" id="switch1">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Retardos</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion2" value="2" id="switch2">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Baja calidad en su trabajo</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion3" value="3" id="switch3">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">No cumplir con el estándar de producción</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion4" value="4" id="switch4">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Indisciplina</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion5" value="5" id="switch5">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Desobedecer a los superiores</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion6" value="6" id="switch6">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Dañar equipo y/o desperdiciar material</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion7" value="7" id="switch7">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">No portar equipo de seguridad</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion8" value="8" id="switch8">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                    <label class="switch-item">
+                        <span class="switch-text">Faltas a las normas de seguridad e higiene</span>
+                        <div class="switch">
+                            <input type="checkbox" name="amonestacion9" value="9" id="switch9">
+                            <span class="slider"></span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <label for="evidenciaFoto" style="font-weight:600; color:#333;">Foto de evidencia (amonestación física):</label><br>
+            <input type="file" id="evidenciaFoto" name="evidenciaFoto" accept="image/*" required style="width:100%;padding:10px;margin-bottom:15px;border-radius:30px;border:1px solid #ccc;font-size:1rem;background:#fff;">
+
+            <button type="submit" id="btnSolicitar" class="back-button" style="width:100%;margin-bottom:10px;">Amonestar</button>
+            <div id="mensajeInhabilitado" class="mensaje-inhabilitado" style="display:none;"></div>
+        </form>
+    </div>
+
+    <script>
+        // Modal personalizado (reemplazo de alert nativo)
+        function mostrarAlertaPersonalizada(mensaje, tipo = 'info') {
+            // Crear fondo
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.inset = '0';
+            overlay.style.background = 'rgba(0,0,0,0.4)';
+            overlay.style.backdropFilter = 'blur(1px)';
+            overlay.style.zIndex = '1090';
+
+            // Crear modal
+            const modal = document.createElement('div');
+            modal.className = 'modal-confirmacion';
+            modal.innerHTML = `
+                <h2>${tipo === 'success' ? 'Éxito' : tipo === 'error' ? 'Error' : 'Aviso'}</h2>
+                <div class="dato">${mensaje}</div>
+                <button class="close-btn">Cerrar</button>
+            `;
+
+            // Colores por tipo
+            if (tipo === 'error') {
+                modal.querySelector('h2').style.color = '#d32f2f';
+            } else if (tipo === 'info') {
+                modal.querySelector('h2').style.color = '#1976d2';
+            }
+
+            // Cerrar
+            function cerrar() {
+                document.body.removeChild(modal);
+                document.body.removeChild(overlay);
+            }
+            modal.querySelector('.close-btn').addEventListener('click', cerrar);
+            overlay.addEventListener('click', cerrar);
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+        }
+
+        // Utilidades de normalización y coincidencia de nombres (ignora acentos, mayúsculas y orden)
+        function normalizarTexto(valor) {
+            return String(valor || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function tokensNombre(nombre) {
+            const limpio = normalizarTexto(nombre);
+            return limpio ? limpio.split(' ').filter(Boolean) : [];
+        }
+
+        function tokensSubconjunto(qTokens, nombreTokens) {
+            // Cada token de búsqueda debe coincidir con el inicio de algún token del nombre
+            return qTokens.every(qt => nombreTokens.some(nt => nt.startsWith(qt)));
+        }
+
+        async function buscarEmpleadoPorNombreFlexible(entrada) {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const qTokens = tokensNombre(entrada);
+            try {
+                empleadoInfo.innerHTML = '<p class="loading">Buscando por nombre...</p>';
+                empleadoInfo.classList.add('show');
+                const resp = await fetch('/api/empleados');
+                if (!resp.ok) throw new Error('No se pudo obtener la lista de empleados');
+                const lista = await resp.json();
+                const resultados = lista.filter(e => tokensSubconjunto(qTokens, tokensNombre(e.nombre_completo || '')));
+
+                if (resultados.length === 0) {
+                    empleadoInfo.innerHTML = '<p class="error">No se encontraron coincidencias</p>';
+                    document.getElementById('btnSolicitar').disabled = true;
+                    document.getElementById('mensajeInhabilitado').textContent = 'No se puede amonestar sin seleccionar un empleado válido';
+                    document.getElementById('mensajeInhabilitado').style.display = 'block';
+                    actualizarEstadoBotonAmonestar();
+                    return;
+                }
+
+                if (resultados.length === 1) {
+                    const unico = resultados[0];
+                    // Sincroniza el input con el ID resuelto y busca por ID
+                    const idInput = document.getElementById('idEmpleado');
+                    idInput.value = String(unico.id);
+                    await buscarEmpleado(unico.id);
+                    return;
+                }
+
+                // Múltiples coincidencias: mostrar lista para seleccionar
+                renderListaCoincidencias(resultados);
+            } catch (err) {
+                console.error('Error en búsqueda por nombre:', err);
+                empleadoInfo.innerHTML = '<p class="error">Error al buscar. Intenta de nuevo.</p>';
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').style.display = 'block';
+                actualizarEstadoBotonAmonestar();
+            }
+        }
+
+        function renderListaCoincidencias(empleados) {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const items = empleados.slice(0, 30).map(e => {
+                const nombre = e.nombre_completo || 'Sin nombre';
+                return `<button class="coincidencia-item" data-id="${e.id}" style="display:block;width:100%;text-align:left;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff;margin-bottom:8px;cursor:pointer;">
+                    <span style=\"font-weight:600;\">${nombre}</span><br>
+                    <span style=\"color:#666;\">ID: ${e.id}${e.puesto ? ' • ' + e.puesto : ''}</span>
+                </button>`;
+            }).join('');
+            empleadoInfo.innerHTML = `
+                <h4>Selecciona un empleado</h4>
+                <div>${items}</div>
+                <small style="color:#666;">Mostrando ${Math.min(empleados.length, 30)} de ${empleados.length} coincidencias</small>
+            `;
+            empleadoInfo.classList.add('show');
+
+            // Delegación de eventos para seleccionar
+            empleadoInfo.querySelectorAll('.coincidencia-item').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const idSel = e.currentTarget.getAttribute('data-id');
+                    const idInput = document.getElementById('idEmpleado');
+                    idInput.value = String(idSel);
+                    await buscarEmpleado(idSel);
+                });
+            });
+        }
+
+        function actualizarEstadoBotonAmonestar() {
+            const idEmpleado = document.getElementById('idEmpleado').value.trim();
+            const hayNumeroEmpleado = /^\d+$/.test(idEmpleado);
+            const evidenciaInput = document.getElementById('evidenciaFoto');
+            const hayFoto = evidenciaInput && evidenciaInput.files && evidenciaInput.files.length > 0;
+            const hayAmonestacion = !!document.querySelector('.switch input[type="checkbox"]:checked');
+
+            const boton = document.getElementById('btnSolicitar');
+            const listoParaAmonestar = hayNumeroEmpleado && hayAmonestacion && hayFoto;
+            boton.classList.toggle('btn-ready', listoParaAmonestar);
+        }
+
+        // Función para buscar empleado por ID
+        async function buscarEmpleado(id) 
+        {
+            const empleadoInfo = document.getElementById('empleadoInfo');
+            const nombreEmpleado = document.getElementById('nombreEmpleado');
+            const puestoEmpleado = document.getElementById('puestoEmpleado');
+            const supervisorEmpleado = document.getElementById('supervisorEmpleado');
+            
+            try 
+            {
+                // Mostrar loading
+                empleadoInfo.innerHTML = '<p class="loading">Buscando empleado...</p>';
+                empleadoInfo.classList.add('show');
+                
+                const response = await fetch(`/api/empleados/${id}`);
+                
+                if (!response.ok) 
+                {
+                    throw new Error('Empleado no encontrado');
+                }
+                
+                const empleado = await response.json();
+                
+                // Renderizar la información del empleado (evitar usar referencias previas removidas)
+                empleadoInfo.innerHTML = `
+                    <h4>Información del Empleado</h4>
+                    <p><strong>Nombre:</strong> <span id="nombreEmpleado">${empleado.nombre_completo || 'No disponible'}</span></p>
+                    <p><strong>Puesto:</strong> <span id="puestoEmpleado">${empleado.puesto || 'No disponible'}</span></p>
+                    <p><strong>Supervisor:</strong> <span id="supervisorEmpleado">${empleado.supervisor || 'No disponible'}</span></p>
+                `;
+                
+                // Habilitar el botón de amonestar y limpiar mensaje de error
+                document.getElementById('btnSolicitar').disabled = false;
+                document.getElementById('mensajeInhabilitado').style.display = 'none';
+                actualizarEstadoBotonAmonestar();
+                
+            } catch (error) 
+            {
+                console.error('Error al buscar empleado:', error);
+                empleadoInfo.innerHTML = '<p class="error">Empleado no encontrado. Verifica el ID ingresado.</p>';
+                
+                // Deshabilitar el botón de amonestar
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').textContent = 'No se puede amonestar a un empleado inexistente';
+                document.getElementById('mensajeInhabilitado').style.display = 'block';
+                actualizarEstadoBotonAmonestar();
+            }
+        }
+
+        // Event listener para el campo de ID/NOMBRE de empleado
+        document.getElementById('idEmpleado').addEventListener('input', function(e) 
+        {
+            const entrada = e.target.value.trim();
+            
+            // Limpiar información anterior si el campo está vacío
+            if (!entrada) 
+            {
+                document.getElementById('empleadoInfo').classList.remove('show');
+                document.getElementById('btnSolicitar').disabled = true;
+                document.getElementById('mensajeInhabilitado').style.display = 'none';
+                actualizarEstadoBotonAmonestar();
+                return;
+            }
+
+            actualizarEstadoBotonAmonestar();
+            
+            // Buscar empleado después de un pequeño delay para evitar muchas peticiones
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => 
+            {
+                if (!entrada) return;
+                const esNumerico = /^\d+$/.test(entrada);
+                if (esNumerico) {
+                    buscarEmpleado(entrada);
+                } else {
+                    buscarEmpleadoPorNombreFlexible(entrada);
+                }
+            }, 500); // Esperar 500ms después de que el usuario deje de escribir
+        });
+
+        document.querySelectorAll('.switch input[type="checkbox"]').forEach((switchInput) => {
+            switchInput.addEventListener('change', actualizarEstadoBotonAmonestar);
+        });
+
+        document.getElementById('evidenciaFoto').addEventListener('change', actualizarEstadoBotonAmonestar);
+
+        // Event listener para el formulario
+        document.getElementById('formVacaciones').addEventListener('submit', async function(e) 
+        {
+            e.preventDefault();
+            
+            const idEmpleado = document.getElementById('idEmpleado').value;
+            const evidenciaFileInput = document.getElementById('evidenciaFoto');
+            const evidenciaFile = evidenciaFileInput && evidenciaFileInput.files ? evidenciaFileInput.files[0] : null;
+            
+            // Obtener las amonestaciones seleccionadas
+            const amonestacionesSeleccionadas = [];
+            const nombresAmonestaciones = [
+                'Por falta injustificada',
+                'Retardos', 
+                'Baja calidad en su trabajo',
+                'No cumplir con el estándar de producción',
+                'Indisciplina',
+                'Desobedecer a sus superiores',
+                'Dañar equipo o desperdiciar material',
+                'No portar equipo de seguridad',
+                'Faltas a las normas de seguridad e higiene'
+            ];
+            
+            for (let i = 1; i <= 9; i++) {
+                const switchElement = document.querySelector(`input[name="amonestacion${i}"]`);
+                if (switchElement && switchElement.checked) {
+                    amonestacionesSeleccionadas.push({
+                        numero: i,
+                        nombre: nombresAmonestaciones[i-1]
+                    });
+                }
+            }
+            
+            if (!idEmpleado || amonestacionesSeleccionadas.length === 0 || !evidenciaFile) 
+            {
+                mostrarAlertaPersonalizada('Por favor completa todos los campos: ID de empleado, selecciona al menos una amonestación y adjunta la foto de evidencia', 'info');
+                return;
+            }
+            
+            try {
+                // Preparar datos con imagen
+                const formData = new FormData();
+                formData.append('id', idEmpleado);
+                formData.append('amonestaciones', JSON.stringify(amonestacionesSeleccionadas));
+                formData.append('evidencia', evidenciaFile);
+
+                // Enviar amonestación a la base de datos
+                const response = await fetch('/api/amonestaciones', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    mostrarAlertaPersonalizada('Amonestación registrada exitosamente', 'success');
+                    // Limpiar formulario
+                    document.getElementById('formVacaciones').reset();
+                    document.getElementById('empleadoInfo').classList.remove('show');
+                    document.getElementById('mensajeInhabilitado').style.display = 'none';
+                    actualizarEstadoBotonAmonestar();
+                } else {
+                    const errorData = await response.json();
+                    mostrarAlertaPersonalizada('Error al registrar la amonestación: ' + (errorData.message || 'Error desconocido'), 'error');
+                }
+            } catch (error) {
+                console.error('Error al enviar amonestación:', error);
+                mostrarAlertaPersonalizada('Error al conectar con el servidor', 'error');
+            }
+        });
+
+        actualizarEstadoBotonAmonestar();
+    </script>
+</body>
+</html>

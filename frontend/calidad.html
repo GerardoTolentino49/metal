@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Calidad (QC)</title>
+	<meta name="theme-color" content="#ffffff">
+	<style>
+		:root{--bg:#ffffff;--fg:#000000;--border:#000000}
+		html,body{height:100%;margin:0;padding:0 0 0 0;background:var(--bg);color:var(--fg);font-family:Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;font-size:20px;line-height:1.5;-webkit-font-smoothing:antialiased}
+		.page-wrapper{max-width:900px;margin:48px auto;padding:0}
+		.container{max-width:900px;margin:0 auto;padding:28px;border:2px solid var(--border);border-radius:30px;background:var(--bg)}
+		h1{font-size:32px;margin:0 0 8px 0;text-align:center}
+		.subtitle{font-size:18px;margin:0 0 18px 0;text-align:center}
+		.po-list{list-style:none;padding:0;margin:18px 0 0 0;display:grid;gap:14px}
+			.po-item{display:flex;align-items:center;justify-content:space-between;padding:18px;border:2px solid var(--border);border-radius:30px;background:var(--bg);cursor:pointer;transition:transform 160ms ease,box-shadow 160ms ease,border-color 160ms ease;will-change:transform,box-shadow}
+			/* Hover effect for PO items */
+			.po-item:hover{transform:translateY(-6px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.12)}
+		.po-item:focus{outline:4px solid rgba(0,0,0,0.12);outline-offset:3px}
+		.po-left{display:flex;flex-direction:column}
+		.po-id{font-weight:800;font-size:26px;letter-spacing:0.04em}
+		.po-desc{font-size:16px;color:inherit;opacity:0.95}
+		/* Selected PO: invert colors (background <- foreground) */
+		.po-item.selected{background:var(--fg);color:var(--bg);border-color:#ffffff}
+		.po-item.selected .action{color:var(--bg);border-color:var(--bg)}
+		/* Decorative diagonal ribbon for even receipts (smaller, black with white text) */
+		.po-list .po-item{position:relative;overflow:visible}
+
+			/* Evitar que los pseudo-elementos globales de `.card_box` (ej. "Premium")
+			   interfieran con placas dentro de la lista de POs */
+			.po-list .po-item .card_box span::before,
+			.po-list .po-item .card_box span::after{
+				display: none !important;
+			}
+
+			/* Invertir colores de la placa dinámica `.card_box` cuando su PO está seleccionado */
+			.po-list .po-item.selected .card_box{
+				background: var(--bg) !important;
+				color: var(--fg) !important;
+				box-shadow: none !important;
+				border: 1px solid rgba(0,0,0,0.12) !important;
+			}
+			.po-list .po-item.selected .card_box span{
+				color: var(--fg) !important;
+			}
+		/* Shift left column right when the diagonal ribbon is present to avoid overlap */
+		.po-list .po-item:nth-child(even) .po-left{padding-left:24px}
+		@media (max-width:640px){
+			.po-list .po-item:nth-child(even) .po-left{padding-left:34px}
+		}
+		.action{appearance:none;border:2px solid var(--border);background:transparent;color:var(--fg);padding:10px 18px;border-radius:30px;font-size:18px;cursor:pointer}
+		.action:focus{outline:4px solid #000;outline-offset:3px}
+		.footer{margin-top:20px;text-align:center;font-size:15px;color:var(--fg)}
+		/* Barra de búsqueda debajo del título */
+		.search-wrap{margin:18px 0 12px 0;display:flex;justify-content:center}
+		#po-search{width:100%;max-width:760px;padding:14px 16px;font-size:18px;border:2px solid var(--border);border-radius:30px;background:var(--bg);color:var(--fg);box-sizing:border-box}
+		/* Filtros por fecha (debajo de la búsqueda) */
+		.filter-wrap{display:flex;gap:10px;justify-content:center;margin:12px 0}
+		.filter-btn{appearance:none;border:1px solid rgba(0,0,0,0.12);background:transparent;color:var(--fg);padding:8px 14px;border-radius:18px;font-size:15px;cursor:pointer}
+		.filter-btn.active{background:#000;color:#fff;border-color:#000}
+		#po-search::placeholder{color:rgba(0,0,0,0.45)}
+		#po-search:focus{outline:4px solid rgba(0,0,0,0.12);outline-offset:2px}
+		@media (max-width:640px){html,body{font-size:18px}.container{margin:20px;padding:18px}.po-id{font-size:22px}.action{padding:9px 14px;font-size:16px}#po-search{font-size:16px;padding:12px 12px}}
+
+		/* Barra de pestañas centrada y pegada al container */
+		.topbar{position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:60}
+		/* Top bar decorativa: permitir interacción controlada por JS */
+		.topbar .tabs{pointer-events:auto}
+		.nav-wrap{width:100%;max-width:900px;margin:0 auto;padding:0 16px;box-sizing:border-box}
+		.tabs{display:flex;gap:0;width:100%;align-items:center;position:relative}
+		.tab{appearance:none;background:transparent;border:0;color:var(--fg);padding:14px 12px;border-radius:6px;font-size:16px;cursor:pointer;position:relative;flex:1;text-align:center}
+		.tab[aria-selected="true"]{font-weight:800}
+
+		/* Disabled tabs (only programmatic navigation allowed) */
+		.tab[data-disabled="true"]{opacity:0.65;pointer-events:none;cursor:default;color:rgba(0,0,0,0.6)}
+
+		/* indicador deslizante debajo de la pestaña activa */
+		.tabs{position:relative}
+		.tabs .indicator{position:absolute;left:0;bottom:6px;height:3px;background:#000;border-radius:3px;transform-origin:0 50%;transition:transform 260ms cubic-bezier(.2,.9,.3,1),width 260ms cubic-bezier(.2,.9,.3,1);will-change:transform,width}
+		.tab:focus{outline:3px solid rgba(0,0,0,0.12);outline-offset:3px}
+
+		/* Topbar actions (notifications button) - fixed to viewport top-right */
+		.topbar-actions{position:fixed;right:12px;top:12px;display:flex;align-items:center;gap:8px;z-index:120}
+		.notif-btn{appearance:none;background:transparent;color:var(--fg);width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:18px;padding:0}
+		.notif-btn:focus{outline:4px solid rgba(11,110,253,0.12);outline-offset:3px}
+		.notif-badge{position:absolute;top:-6px;right:-6px;background:#dc3545;color:#fff;border-radius:999px;padding:2px 6px;font-size:12px;font-weight:700;line-height:1;display:inline-block}
+		.notif-badge[data-count="0"]{display:none}
+		.notif-panel{position:fixed;right:12px;top:64px;min-width:360px;max-width:420px;background:var(--bg);border:2px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);padding:12px;display:none;z-index:130}
+		.notif-panel.open{display:block}
+		.notif-header{font-weight:900;font-size:16px;padding:10px 12px;border-bottom:1px solid rgba(0,0,0,0.12)}
+		.notif-list{max-height:320px;overflow:auto;padding:8px 12px}
+		.notif-item{padding:10px 12px;border-radius:8px;background:transparent;margin-bottom:8px;font-size:16px}
+		.notif-actions{padding:8px 10px;border-top:1px solid rgba(0,0,0,0.06);display:flex;justify-content:flex-end}
+
+		/* Paneles con animación de desplazamiento y fade */
+		.panel{display:none;transform:translateX(12px);opacity:0;transition:transform 260ms ease,opacity 260ms ease}
+		.panel.active{display:block;transform:translateX(0);opacity:1}
+		.panel.exit{transform:translateX(-12px);opacity:0}
+
+		/* Detalles de PO (inputs de solo lectura) */
+		.po-details{margin-top:12px}
+		.details-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+		.details-grid label{display:flex;flex-direction:column;font-size:15px;color:var(--fg)}
+		.readonly-input{margin-top:8px;padding:10px 12px;border:1px solid rgba(0,0,0,0.12);border-radius:30px;background:#f7f7f7;color:var(--fg);font-size:16px}
+
+		/* Checkbox and notes styling to match other inputs */
+		.details-grid input[type="checkbox"]{margin-top:10px;width:18px;height:18px;align-self:flex-start}
+
+		/* Switch styling (visually matches inputs) */
+		.switch{display:inline-flex;align-items:center;gap:10px;margin-top:8px}
+		.switch-input{display:none}
+		.switch-track{width:48px;height:28px;background:rgba(0,0,0,0.08);border-radius:20px;position:relative;display:inline-block;vertical-align:middle}
+		.switch-thumb{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;left:3px;top:3px;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
+		.switch-input:checked + .switch-track{background:#0b6efd}
+		.switch-input:checked + .switch-track .switch-thumb{transform:translateX(20px)}
+		.switch-text{font-size:15px;color:var(--fg)}
+		.notes-full{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid rgba(0,0,0,0.12);border-radius:30px;background:#f7f7f7;color:var(--fg);font-size:16px;resize:vertical}
+		.readonly-input[readonly]{cursor:default}
+		.buttons-row{display:flex;gap:12px;justify-content:center;margin-top:20px}
+		.primary-btn{appearance:none;border:0;background:#000000;color:#fff;padding:12px 20px;border-radius:30px;font-size:16px;cursor:pointer}
+		.secondary-btn{appearance:none;border:2px solid #000000;background:transparent;color:#000000;padding:10px 18px;border-radius:30px;font-size:16px;cursor:pointer}
+		.primary-btn:focus,.secondary-btn:focus{outline:4px solid rgba(11,110,253,0.12);outline-offset:3px}
+
+		/* Back and small action buttons */
+		.back-btn{appearance:none;background:transparent;color:var(--fg);padding:8px 10px;border-radius:30px;font-size:16px;cursor:pointer;margin-bottom:12px; border-color:black; border-width: 4px;}
+		.small-danger{appearance:none;border:0;background:#dc3545;color:#fff;padding:8px 12px;border-radius:30px;font-size:14px;cursor:pointer}
+		.small-primary{appearance:none;border:0;background:#0b6efd;color:#fff;padding:8px 12px;border-radius:30px;font-size:14px;cursor:pointer}
+		.small-outline{appearance:none;border:2px solid #0b6efd;background:transparent;color:#0b6efd;padding:8px 12px;border-radius:30px;font-size:14px;cursor:pointer}
+
+		@media (max-width:640px){.details-grid{grid-template-columns:1fr}.primary-btn,.secondary-btn{width:100%}}
+
+		/* Evidence upload controls */
+		.evidence-area{margin-top:12px}
+		.evidence-list{display:flex;flex-direction:column;gap:12px}
+		.evidence-btn{display:inline-block;padding:14px;border-radius:30px;border:2px dashed #0b6efd;background:transparent;color:#0b6efd;font-size:16px;cursor:pointer;text-align:left}
+		.evidence-btn img{border-radius:6px;margin-left:12px;vertical-align:middle}
+		.evidence-btn.uploaded{border-style:solid;background:rgba(11,110,253,0.06);color:#023a8a}
+
+		/* New control wrapper for mobile camera/gallery choice */
+		.evidence-control{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:30px;border:2px dashed #0b6efd;background:transparent;color:#0b6efd}
+		.evidence-control.uploaded{border-style:solid;background:rgba(11,110,253,0.06);color:#023a8a}
+		.evidence-actions{display:flex;gap:10px;justify-content:flex-start;margin-top:6px}
+		.evidence-actions [role="button"]{appearance:none;border:2px solid #0b6efd;background:transparent;color:#0b6efd;padding:8px 12px;border-radius:30px;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+		.evidence-actions button:focus{outline:4px solid rgba(11,110,253,0.12);outline-offset:3px}
+		.evidence-label{font-size:15px;color:var(--fg)}
+		.evidence-summary{border:2px solid var(--border);padding:12px;border-radius:30px;margin-bottom:14px;background:#fff}
+		.evidence-summary .summary-row{font-size:16px;margin-top:6px}
+		.evidence-summary .summary-label{font-weight:700;margin-right:8px}
+		.evidence-summary .summary-hint{font-size:14px;color:rgba(0,0,0,0.6);margin-top:8px}
+		.uploaded-actions{display:flex;gap:12px;margin-top:12px}
+		.retake-btn{appearance:none;border:0;background:#0b6efd;color:#fff;padding:10px 14px;border-radius:30px;font-size:15px;cursor:pointer}
+		.retake-btn:focus{outline:4px solid rgba(11,110,253,0.12);outline-offset:3px}
+		.delete-btn{appearance:none;border:0;background:#d9534f;color:#fff;padding:10px 14px;border-radius:30px;font-size:15px;cursor:pointer}
+		.delete-btn:focus{outline:4px solid rgba(217,83,79,0.12);outline-offset:3px}
+
+			/* Paginación */
+			.pagination{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:16px}
+			.page-btn{appearance:none;border:1px solid var(--border);background:transparent;padding:8px 12px;border-radius:30px;cursor:pointer;font-size:15px}
+			.page-btn[disabled]{opacity:0.5;cursor:default}
+			/* Disabled primary button appearance */
+			.primary-btn[disabled]{opacity:0.6;cursor:default}
+			#page-numbers{display:flex;gap:6px}
+			.page-number{appearance:none;border:1px solid transparent;background:transparent;padding:6px 10px;border-radius:6px;cursor:pointer}
+			.page-number[aria-current="true"]{font-weight:800;border-color:var(--border);background:rgba(0,0,0,0.04)}
+
+		/* PO items box: objetos en la PO con columnas: PO / Registrada / Diferencia */
+		.items-box{margin-top:18px;border:2px solid var(--border);border-radius:30px;padding:8px;background:var(--bg);max-height:420px;overflow:auto}
+		.items-box .items-header{display:grid;grid-template-columns:2fr 1fr;gap:8px;padding:8px 12px;font-weight:800;border-bottom:1px solid rgba(0,0,0,0.06)}
+		.items-box .items-list{display:flex;flex-direction:column}
+		.items-box .item-row{display:grid;grid-template-columns:2fr 1fr;align-items:center;gap:8px;padding:12px;border-radius:12px}
+		.items-box .item-row:nth-child(even){background:#f3f4f6}
+		.items-box .item-row .cell-name{font-size:15px}
+		.items-box .item-row .cell-po{font-size:15px}
+		.items-box .item-row .cell-registered input{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:30px;border:1px solid rgb(0, 0, 0);font-size:15px}
+		.items-box .item-row .cell-diff{font-weight:700;text-align:right}
+		.items-box .empty{padding:14px;color:rgba(0,0,0,0.6);text-align:center}
+		/* Footer in Información: heat number input and action button */
+		.info-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+		.heat-input{margin-top:6px;padding:10px 12px;border-radius:22px;border:1px solid rgba(0,0,0,0.12);font-size:16px;min-width:220px}
+		.info-footer .primary-btn{min-width:140px}
+		@media (max-width:640px){.info-footer{flex-direction:column;align-items:stretch}.info-footer .primary-btn{width:100%}}
+
+		/* Styles for partially-filled containers (card_box) */
+		.container.card-centered {
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		}
+
+		.card_box {
+		  width: 200px;
+		  height: 250px;
+		  border-radius: 20px;
+		  background: linear-gradient(170deg, rgba(58, 56, 56, 0.623) 0%, rgb(31, 31, 31) 100%);
+		  position: relative;
+		  box-shadow: 0 25px 50px rgba(0,0,0,0.55);
+		  cursor: pointer;
+		  transition: all .3s;
+		}
+
+		.card_box:hover {
+		  transform: scale(0.9);
+		}
+
+		.card_box span {
+		  position: absolute;
+		  overflow: hidden;
+		  width: 150px;
+		  height: 150px;
+		  top: -10px;
+		  left: -10px;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		}
+
+		.card_box span::before {
+		  content: 'Premium';
+		  position: absolute;
+		  width: 150%;
+		  height: 40px;
+		  background-image: linear-gradient(45deg, #ff6547 0%, #ffb144  51%, #ff7053  100%);
+		  transform: rotate(-45deg) translateY(-20px);
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  color: #fff;
+		  font-weight: 600;
+		  letter-spacing: 0.1em;
+		  text-transform: uppercase;
+		  box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+		}
+
+		.card_box span::after {
+		  content: '';
+		  position: absolute;
+		  width: 10px;
+		  bottom: 0;
+		  left: 0;
+		  height: 10px;
+		  z-index: -1;
+		  box-shadow: 140px -140px #cc3f47;
+		  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+		}
+
+        /* In-page UI message / toast container */
+        .ui-message-container{position:fixed;top:18px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:99999;pointer-events:none}
+        .ui-message{min-width:220px;max-width:420px;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.12);color:#fff;font-weight:600;font-size:15px;opacity:0;transform:translateY(-6px);transition:opacity 260ms ease,transform 260ms ease;pointer-events:auto}
+        .ui-message.show{opacity:1;transform:none}
+        .ui-message.success{background:#28a745}
+        .ui-message.error{background:#dc3545}
+        .ui-message.info{background:#0b6efd}
+
+		</style>
+
+</head>
+<body>
+	<div class="page-wrapper">
+    <div id="ui-message-container" class="ui-message-container" aria-live="polite" aria-atomic="true"></div>
+	<header class="topbar" role="banner" aria-label="Navegación principal">
+		<div class="nav-wrap">
+			<nav class="tabs" role="tablist" aria-label="Pestañas">
+				<button class="tab" role="tab" data-target="recibos" aria-selected="true">Recibos</button>
+				<button class="tab" role="tab" data-target="informacion" aria-selected="false">Información</button>
+				<button class="tab" role="tab" data-target="evidencia" aria-selected="false">Evidencia</button>
+				<span class="indicator" aria-hidden="true"></span>
+			</nav>
+			<div class="topbar-actions" aria-hidden="false">
+				<button id="notif-btn" class="notif-btn" aria-haspopup="true" aria-expanded="false" aria-label="Notificaciones">
+					<svg class="notif-icon" width="20" height="20" viewBox="0 0 24 24" fill="#000" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+						<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1 .9 2 2 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.63 5.36 6 7.92 6 11v5l-1 1v1h14v-1l-1-1z"/>
+					</svg>
+					<span id="notif-badge" class="notif-badge" data-count="0" aria-hidden="true">0</span>
+				</button>
+				<div id="notif-panel" class="notif-panel" role="menu" aria-hidden="true">
+					<div class="notif-header">Notificaciones</div>
+					<div class="notif-list" id="notif-list">
+						<div class="notif-item">No hay notificaciones</div>
+					</div>
+					<div class="notif-actions">
+						<button type="button" id="notif-clear" class="small-outline">Limpiar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section id="recibos" class="panel active" role="main" aria-labelledby="page-title" tabindex="-1">
+		<div class="container">
+		<h1 id="page-title">Calidad (QC)</h1>
+
+		<div class="search-wrap">
+			<input id="po-search" type="search" placeholder="Buscar POs" aria-label="Buscar órdenes de compra">
+		</div>
+
+		<ul class="po-list" aria-live="polite">
+			<li class="po-item" data-date="2026-04-13">
+				<div class="po-left">
+					<div class="po-id">PDM-26-001</div>
+					<div class="po-desc">Proveedor 1</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-001">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-14">
+				<div class="po-left">
+					<div class="po-id">PDM-26-002</div>
+					<div class="po-desc">Proveedor 2</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-002">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-15">
+				<div class="po-left">
+					<div class="po-id">PDM-26-003</div>
+					<div class="po-desc">Proveedor 3</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-003">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-18">
+				<div class="po-left">
+					<div class="po-id">PDM-26-004</div>
+					<div class="po-desc">Proveedor 4</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-004">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-20">
+				<div class="po-left">
+					<div class="po-id">PDM-26-005</div>
+					<div class="po-desc">Proveedor 5</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-005">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-21">
+				<div class="po-left">
+					<div class="po-id">PDM-26-006</div>
+					<div class="po-desc">Proveedor 6</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-006">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-05-01">
+				<div class="po-left">
+					<div class="po-id">PDM-26-007</div>
+					<div class="po-desc">Proveedor 7</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-007">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-10">
+				<div class="po-left">
+					<div class="po-id">PDM-26-008</div>
+					<div class="po-desc">Proveedor 8</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-008">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-13">
+				<div class="po-left">
+					<div class="po-id">PDM-26-009</div>
+					<div class="po-desc">Proveedor 9</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-009">Abrir</button>
+			</li>
+			<li class="po-item" data-date="2026-04-22">
+				<div class="po-left">
+					<div class="po-id">PDM-26-010</div>
+					<div class="po-desc">Proveedor 10</div>
+				</div>
+				<button class="action" aria-label="Abrir PDM-26-010">Abrir</button>
+			</li>
+		</ul>
+
+		<!-- Paginación: controles para navegar las páginas de recibos -->
+		<nav class="pagination" aria-label="Paginación de recibos">
+			<button class="page-btn" id="page-prev" aria-label="Página anterior">Anterior</button>
+			<div id="page-numbers" aria-hidden="false"></div>
+			<button class="page-btn" id="page-next" aria-label="Página siguiente">Siguiente</button>
+			<span id="page-info" style="margin-left:12px;font-size:15px;color:var(--fg)"></span>
+		</nav>
+
+			<div class="footer">PDMmetal ERP® 2026</div>
+		</div>
+	</section>
+
+	<section id="informacion" class="panel" aria-hidden="true" tabindex="-1">
+		<div class="container">
+			<button type="button" class="back-btn" id="back-from-informacion" aria-label="Volver">← Volver</button>
+			<h1>Información de la PO</h1>
+			<form class="po-details" aria-label="Detalles de la orden de compra">
+				<div class="details-grid">
+					<label for="po-proveedor">Proveedor
+						<input id="po-proveedor" class="readonly-input" readonly value="Proveedor ejemplo">
+					</label>
+					<label for="po-fecha">Fecha
+						<input id="po-fecha" class="readonly-input" readonly value="2026-04-13">
+					</label>
+					<label for="po-nombre">Nombre de la PO
+						<input id="po-nombre" class="readonly-input" readonly value="PDM-26-001">
+					</label>
+					<label for="po-locacion">Locación
+						<input id="po-locacion" class="readonly-input" readonly value="BA">
+					</label>
+					<label for="po-via">Vía de Despacho
+						<input id="po-via" class="readonly-input" readonly value="Camión del proveedor">
+					</label>
+					<!-- Campo 'Flete' eliminado -->
+
+					<label for="po-certificadas">Certificadas
+						<div class="switch" aria-hidden="true">
+							<input id="po-certificadas" class="switch-input" type="checkbox" disabled aria-label="Certificadas" />
+							<span class="switch-track" aria-hidden="true"><span class="switch-thumb" aria-hidden="true"></span></span>
+							<span class="switch-text" id="po-certificadas-text">No</span>
+						</div>
+					</label>
+
+					<label for="po-enviar-a">Enviar a
+						<input id="po-enviar-a" class="readonly-input" type="text" readonly value="BA">
+					</label>
+
+					<label for="po-fecha-requerida">Fecha requerida
+						<input id="po-fecha-requerida" class="readonly-input" type="date" readonly value="2026-04-20">
+					</label>
+				</div>
+
+				<!-- Notas: ancho completo en su propio renglón -->
+				<div style="margin-top:12px;">
+					<label for="po-notas" style="display:block">Notas
+						<textarea id="po-notas" class="notes-full" rows="3" placeholder="Notas..." readonly></textarea>
+					</label>
+				</div>
+			</form>
+
+			<!-- Lista de objetos en la PO: cada fila muestra: nombre | cantidad en PO | cantidad registrada (editable) | diferencia -->
+			<div class="items-box" aria-label="Objetos en la PO">
+				<div class="items-header" role="row">
+					<div>Item</div>
+					<div style="text-align:right">Heat Number</div>
+				</div>
+				<div class="items-list" id="po-items-box" role="list" aria-live="polite">
+					<div class="empty">Seleccione una PO para ver sus objetos</div>
+				</div>
+			</div>
+
+			<!-- Footer: next button (Siguiente) -->
+			<div class="info-footer" aria-label="Acciones de información">
+				<div></div>
+				<button type="button" class="primary-btn" id="siguiente-btn" disabled>Siguiente</button>
+			</div>
+		</div>
+	</section>
+
+	<section id="evidencia" class="panel" aria-hidden="true" tabindex="-1">
+		<div class="container">
+			<button type="button" class="back-btn" id="back-from-evidencia" aria-label="Volver">← Volver</button>
+			<h1>Evidencia</h1>
+			<p>Al subir una foto se generará un nuevo botón para la siguiente.</p>
+
+			<div id="evidence-summary" class="evidence-summary" aria-live="polite" aria-atomic="true">
+				<div class="summary-row"><span class="summary-label">PO:</span> <span id="summary-po">—</span></div>
+				<!-- <div class="summary-row"><span class="summary-label">Tipo de entrada:</span> <span id="summary-type">—</span></div> -->
+			</div>
+
+			<div class="evidence-area" aria-live="polite">
+				<div class="evidence-list" aria-label="Lista de evidencias"></div>
+			</div>
+
+			<div class="buttons-row" style="justify-content:center;margin-top:18px">
+				<button style="background: #3eb83e;" type="button" class="primary-btn" id="evidencia-guardar">Guardar</button>
+			</div>
+		</div>
+	</section>
+
+	</div>
+
+	<script>
+	(function(){
+		var tabs = Array.from(document.querySelectorAll('.tab'));
+		var tabList = document.querySelector('.tabs');
+		var indicator = tabList && tabList.querySelector('.indicator');
+		var panels = Array.from(document.querySelectorAll('.panel'));
+		var sections = panels.map(function(p){ return p.id });
+
+		// Flow state: selected PO (from Recibos) and entry type (from Información)
+		var selectedPO = null;
+		var entryType = null;
+		// Demo storage: items per PO and registered quantities
+		var poItemsMap = {};
+		var poRegistered = {};
+
+		function updateEvidenceSummary(){
+			var el = document.getElementById('evidence-summary');
+			if(!el) return;
+			var poEl = document.getElementById('summary-po');
+			var typeEl = document.getElementById('summary-type');
+			var poVal = selectedPO || (document.getElementById('po-nombre') && document.getElementById('po-nombre').value) || '—';
+			var typeVal = entryType || '—';
+			if(poEl) poEl.textContent = poVal;
+			if(typeEl) typeEl.textContent = typeVal;
+			var hintEl = document.getElementById('summary-hint');
+			if(!hintEl){
+				hintEl = document.createElement('div');
+				hintEl.id = 'summary-hint';
+				hintEl.className = 'summary-hint';
+				el.appendChild(hintEl);
+			}
+
+
+			// Compute which POs are partial (any PO item where PO qty - registered > 0)
+			// NOTE: moved to top-level `updatePOListBadges` so other handlers can call it.
+			if(!selectedPO) hintEl.textContent = 'Seleccione una PO en la pestaña Recibos.';
+			else if(!entryType) hintEl.textContent = 'Pulse Siguiente en Información.';
+			else hintEl.textContent = '';
+		}
+
+		function updatePOListBadges(){
+			try{
+				var list = document.querySelectorAll('.po-list .po-item');
+				list.forEach(function(li){
+					var pid = li.querySelector('.po-id') && li.querySelector('.po-id').textContent;
+					if(!pid) return;
+					var items = poItemsMap[pid];
+					var regs = poRegistered[pid] || [];
+					var isPartial = false;
+					if(items && items.length){
+						for(var i=0;i<items.length;i++){
+							var poQ = Number(items[i].poQty || items[i].cantidad || 0);
+							var regRaw = regs[i];
+							var regNum = Number(regRaw);
+							var regNotEmpty = regRaw !== undefined && regRaw !== null && String(regRaw).trim() !== '' && String(regRaw).trim() !== '0';
+							if((!isNaN(regNum) && (poQ - regNum > 0)) || regNotEmpty){ isPartial = true; break; }
+						}
+					}
+					// ya no se agregan badges dinámicos; eliminar cualquiera que quede
+					var existing = li.querySelector('.card_box');
+					if(existing) existing.remove();
+				});
+			}catch(e){}
+		}
+
+		function selectPO(id){
+			if(!id) return;
+			if(selectedPO === id) return;
+			// Remove previous visual selection
+			var prev = document.querySelector('.po-item.selected');
+			if(prev) prev.classList.remove('selected');
+			// Find and mark the new selected PO element
+			var items = document.querySelectorAll('.po-item');
+			var found = null;
+			items.forEach(function(li){
+				var pid = li.querySelector('.po-id') && li.querySelector('.po-id').textContent;
+				if(pid === id) found = li;
+			});
+			if(found) found.classList.add('selected');
+			// Update state and form field
+			selectedPO = id;
+			var poNombre = document.getElementById('po-nombre');
+			if (poNombre) poNombre.value = id;
+
+
+			// Populate other readonly fields with PO-derived defaults
+			try{
+				var provEl = document.getElementById('po-proveedor');
+				var locEl = document.getElementById('po-locacion');
+				var fechaEl = document.getElementById('po-fecha');
+				var enviarA = document.getElementById('po-enviar-a');
+				var fechaReq = document.getElementById('po-fecha-requerida');
+				var cert = document.getElementById('po-certificadas');
+				var certText = document.getElementById('po-certificadas-text');
+				if(enviarA && locEl) enviarA.value = locEl.value || (provEl && provEl.value) || '';
+				if(fechaReq && fechaEl){
+					// default: fecha requerida = fecha PO + 7 días
+					var d = new Date(fechaEl.value + 'T00:00:00');
+					if(!isNaN(d.getTime())){ d.setDate(d.getDate() + 7); fechaReq.value = d.toISOString().slice(0,10); }
+				}
+				if(cert){ cert.checked = false; }
+				if(certText) certText.textContent = cert && cert.checked ? 'Sí' : 'No';
+				var notas = document.getElementById('po-notas');
+				if(notas){ notas.value = 'Información de la PO ' + id; }
+
+				// Ensure demo items and registered arrays exist for this PO
+				if(!poItemsMap[id]){
+					var its = generateDemoItems(id);
+					poItemsMap[id] = its;
+					poRegistered[id] = its.map(function(){ return ''; });
+				}
+				updatePOListBadges();
+			}catch(e){}
+			// Clear evidences when switching PO
+			var list = document.querySelector('#evidencia .evidence-list');
+			if(list) list.innerHTML = '';
+			updateEvidenceSummary();
+			// Render objetos de la PO (demo) y reset diffs
+			renderPOItems(generateDemoItems(id));
+		}
+
+		// Generate demo items for a given PO id (replace with backend data integration later)
+		function generateDemoItems(poId){
+			var items = [];
+			var base = ['Item 1','Item 2','Item 3','Item 4','Item 5','Item 6','Item 7','Item 8'];
+			for(var i=0;i<base.length;i++){
+				items.push({name: base[i] + ' ' + (i+1), poQty: ((i+1)*3) });
+			}
+			return items;
+		}
+
+		// Render rows inside #po-items-box
+		function renderPOItems(items){
+			var box = document.getElementById('po-items-box');
+			if(!box) return;
+			box.innerHTML = '';
+			if(!items || items.length === 0){ box.innerHTML = '<div class="empty">No hay objetos en esta PO</div>'; return; }
+			items.forEach(function(it, idx){
+				var row = document.createElement('div');
+				row.className = 'item-row';
+				row.setAttribute('role','listitem');
+				// name cell
+				var cName = document.createElement('div'); cName.className = 'cell-name'; cName.textContent = it.name;
+				// registered input (Heat Number) - accept alphanumeric
+				var cReg = document.createElement('div'); cReg.className = 'cell-registered';
+				var inp = document.createElement('input');
+				inp.type = 'text';
+				inp.setAttribute('maxlength','64');
+				// Placeholder instructing user and empty default so placeholder is visible
+				inp.placeholder = 'Ingrese un Heat Number';
+				inp.value = '';
+				inp.setAttribute('aria-label','Heat Number de '+it.name);
+				cReg.appendChild(inp);
+				// sanitize input: allow printable/alfanumeric characters, strip control chars, limit length
+				function sanitizeAndUpdate(){
+					if(!inp) return;
+					var orig = inp.value || '';
+					var selStart = typeof inp.selectionStart === 'number' ? inp.selectionStart : null;
+					// remove control characters and limit length
+					var v = orig.replace(/[\x00-\x1F\x7F]/g, '').slice(0,64);
+					if(v !== orig){
+						var newPos = null;
+						if(selStart !== null){
+							var beforeOrig = orig.slice(0, selStart).replace(/[\x00-\x1F\x7F]/g, '');
+							newPos = Math.min(beforeOrig.length, 64);
+						}
+						inp.value = v;
+						if(newPos !== null){ try{ inp.setSelectionRange(newPos, newPos); }catch(e){} }
+					}
+					var val = v;
+					try{
+						if(selectedPO){
+							if(!poRegistered[selectedPO]) poRegistered[selectedPO] = [];
+							poRegistered[selectedPO][idx] = val;
+							// update visual badges for partial POs
+							updatePOListBadges();
+							// update Siguiente enabled/disabled state
+							if(typeof updateSiguienteState === 'function') updateSiguienteState();
+						}
+					}catch(x){}
+				}
+
+				// On blur, trim whitespace and sanitize
+				inp.addEventListener('blur', function(){ if(!inp) return; inp.value = (inp.value || '').trim().slice(0,64); sanitizeAndUpdate(); });
+				// sanitize on input and on paste
+				inp.addEventListener('input', sanitizeAndUpdate);
+				inp.addEventListener('paste', function(e){
+					var text = (e.clipboardData || window.clipboardData).getData('text') || '';
+					text = text.replace(/[\x00-\x1F\x7F]/g, '').slice(0,64);
+					try{ e.preventDefault(); inp.value = text; }catch(x){}
+					sanitizeAndUpdate();
+				});
+				row.appendChild(cName); row.appendChild(cReg);
+				box.appendChild(row);
+			});
+			// After rendering inputs, ensure Siguiente state reflects current values
+			if(typeof updateSiguienteState === 'function') updateSiguienteState();
+		}
+
+		function moveIndicatorTo(btn){
+			if(!indicator || !btn) return;
+			var parentRect = tabList.getBoundingClientRect();
+			var r = btn.getBoundingClientRect();
+			var left = Math.round(r.left - parentRect.left);
+			indicator.style.width = Math.round(r.width) + 'px';
+			indicator.style.transform = 'translateX(' + left + 'px)';
+		}
+
+		function showTab(name, push){
+			var current = document.querySelector('.panel.active');
+			var next = document.getElementById(name);
+			if(!next) return;
+			var btn = document.querySelector('.tab[data-target="'+name+'"]');
+			// Move indicator
+			moveIndicatorTo(btn);
+
+			if(current === next) {
+				if(push) history.replaceState(null,'','#'+name);
+				return;
+			}
+
+			// Prepare next panel
+			next.classList.remove('exit');
+			next.style.display = '';
+			next.removeAttribute('aria-hidden');
+
+			// Trigger enter animation
+			requestAnimationFrame(function(){
+				next.classList.add('active');
+			});
+
+			// Animate current out
+			if(current){
+				current.classList.add('exit');
+				current.classList.remove('active');
+				var onEnd = function(e){
+					if(e.propertyName !== 'opacity') return;
+					current.style.display = 'none';
+					current.setAttribute('aria-hidden','true');
+					current.classList.remove('exit');
+					current.removeEventListener('transitionend', onEnd);
+				};
+				current.addEventListener('transitionend', onEnd);
+			}
+
+			// Update tab aria-selected
+			tabs.forEach(function(t){ t.setAttribute('aria-selected', t === btn ? 'true' : 'false') });
+
+			// Update which tabs are clickable according to the desired flow
+			if (typeof updateTabAvailability === 'function') updateTabAvailability(name);
+
+			if(push) history.replaceState(null,'','#'+name);
+		}
+
+		// Click handling
+		document.addEventListener('click', function (e) {
+			if (e.target.matches('.tab')) {
+				// Prevent clicking disabled tabs
+				if (e.target.getAttribute('data-disabled') === 'true') return;
+				var target = e.target.getAttribute('data-target');
+				showTab(target, true);
+				var sec = document.getElementById(target);
+				if(sec) sec.focus();
+				return;
+			}
+			if (e.target.matches('.action')) {
+				var id = e.target.closest('.po-item').querySelector('.po-id').textContent;
+				// Centralized selection (updates form, visual selection and clears evidences)
+				selectPO(id);
+				// Enable Información tab then navigate there programmatically
+				enableTab('informacion');
+				showTab('informacion', true);
+				var secInfo = document.getElementById('informacion');
+				if (secInfo) secInfo.focus();
+			}
+
+			// Allow clicking anywhere on the `.po-item` to act like the "Abrir" button
+			var clickedItem = e.target.closest('.po-item');
+			if (clickedItem && !e.target.closest('.action')) {
+				var id = clickedItem.querySelector('.po-id').textContent;
+				selectPO(id);
+				enableTab('informacion');
+				showTab('informacion', true);
+				var secInfo = document.getElementById('informacion');
+				if (secInfo) secInfo.focus();
+			}
+		});
+
+		// Reposition indicator on resize
+		window.addEventListener('resize', function(){
+			var sel = document.querySelector('.tab[aria-selected="true"]');
+			moveIndicatorTo(sel);
+		});
+
+		// Inicializar siempre en 'recibos' al cargar/recargar la página
+		var hash = 'recibos';
+
+		// Ensure panels initial state
+		panels.forEach(function(p){
+			if(p.id === hash){ p.classList.add('active'); p.style.display = ''; p.removeAttribute('aria-hidden'); }
+			else { p.classList.remove('active'); p.style.display = 'none'; p.setAttribute('aria-hidden','true'); }
+		});
+
+		// Position indicator on initial load
+		var initialBtn = document.querySelector('.tab[data-target="'+hash+'"]');
+		moveIndicatorTo(initialBtn);
+
+				// Control de disponibilidad de pestañas según la pestaña activa
+		function updateTabAvailability(active){
+			var mapping = {
+				'recibos': { 'recibos': true, 'informacion': false, 'evidencia': false },
+				'informacion': { 'recibos': true, 'informacion': true, 'evidencia': false },
+				'evidencia': { 'recibos': false, 'informacion': true, 'evidencia': true }
+			};
+			var map = mapping[active] || mapping['recibos'];
+			tabs.forEach(function(t){
+				var target = t.getAttribute('data-target');
+				var enabled = !!map[target];
+				if(enabled){
+					t.removeAttribute('data-disabled');
+					t.setAttribute('tabindex','0');
+				} else {
+					t.setAttribute('data-disabled','true');
+					t.setAttribute('tabindex','-1');
+				}
+			});
+		}
+
+		// Update the enabled state of the Siguiente button based on inputs
+		function updateSiguienteState(){
+			var btn = document.getElementById('siguiente-btn');
+			if(!btn) return;
+			// default disabled
+			btn.disabled = true;
+			// must have a selected PO and at least one non-empty, non-'0' input
+			if(!selectedPO) return;
+			var box = document.getElementById('po-items-box');
+			if(!box) return;
+			var inputs = box.querySelectorAll('input');
+			for(var i=0;i<inputs.length;i++){
+				var v = (inputs[i].value || '').trim();
+				if(v !== '' && v !== '0'){
+					btn.disabled = false;
+					return;
+				}
+			}
+		}
+
+		// Initialise availability according to the initial hash
+		updateTabAvailability(hash);
+		// Ensure Siguiente initial state
+		updateSiguienteState();
+
+		function enableTab(name){
+			var tb = document.querySelector('.tab[data-target="'+name+'"]');
+			if(!tb) return;
+			tb.removeAttribute('data-disabled');
+			tb.setAttribute('tabindex','0');
+		}
+
+		// Evidence upload helpers (single interactive area with inner options)
+		function createUploadControl(){
+			var list = document.querySelector('#evidencia .evidence-list');
+			if(!list) return;
+			// avoid creating another empty upload control if one already exists
+			if(list.querySelectorAll('.evidence-control:not(.uploaded)').length > 0) return;
+			var index = list.querySelectorAll('.evidence-control').length + 1;
+
+			var wrapper = document.createElement('div');
+			wrapper.className = 'evidence-control';
+			wrapper.setAttribute('role','group');
+
+			// main interactive area (the big dashed area) - treated as single control visually
+			var mainArea = document.createElement('div');
+			mainArea.className = 'evidence-main';
+			mainArea.setAttribute('role','button');
+			mainArea.setAttribute('tabindex','0');
+			mainArea.setAttribute('aria-label','Subir evidencia ' + index);
+			mainArea.innerText = 'Subir Evidencias';
+
+			var actions = document.createElement('div');
+			actions.className = 'evidence-actions';
+
+			// small actionable elements inside the dashed area (not separate outer controls)
+			var selectSpan = document.createElement('span');
+			selectSpan.setAttribute('role','button');
+			selectSpan.setAttribute('tabindex','0');
+			selectSpan.className = 'evidence-action-select';
+			selectSpan.innerText = 'Seleccionar';
+
+			var cameraSpan = document.createElement('span');
+			cameraSpan.setAttribute('role','button');
+			cameraSpan.setAttribute('tabindex','0');
+			cameraSpan.className = 'evidence-action-camera';
+			cameraSpan.innerText = 'Tomar foto';
+
+			actions.appendChild(selectSpan);
+			actions.appendChild(cameraSpan);
+
+			// hidden file input used by actions; capture attribute toggled depending on action
+			var file = document.createElement('input');
+			file.type = 'file';
+			file.accept = 'image/*';
+			file.style.display = 'none';
+
+			// Helper to open file dialog with/without capture
+			function openFile(withCapture){
+				try{
+					if(withCapture) file.setAttribute('capture','environment');
+					else file.removeAttribute('capture');
+				}catch(e){}
+				file.click();
+			}
+
+			// Clicking main area opens gallery (no capture) by default
+			mainArea.addEventListener('click', function(e){
+				openFile(false);
+			});
+			mainArea.addEventListener('keydown', function(e){
+				if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFile(false); }
+			});
+
+			// select (gallery)
+			selectSpan.addEventListener('click', function(e){ e.stopPropagation(); openFile(false); });
+			selectSpan.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSpan.click(); } });
+
+			// camera (take photo)
+			cameraSpan.addEventListener('click', function(e){ e.stopPropagation(); openFile(true); });
+			cameraSpan.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cameraSpan.click(); } });
+
+			file.addEventListener('change', function(){
+				if(!file.files || file.files.length === 0) return;
+				var f = file.files[0];
+				// mark uploaded visually
+				wrapper.classList.add('uploaded');
+				// clear wrapper and show filename + preview
+				wrapper.innerHTML = '';
+				var label = document.createElement('div');
+				label.className = 'evidence-label';
+				label.textContent = 'Foto ' + index + ': ' + f.name;
+				wrapper.appendChild(label);
+
+				var thumb = document.createElement('img');
+				thumb.src = URL.createObjectURL(f);
+				thumb.alt = f.name;
+				thumb.style.maxWidth = '160px';
+				thumb.style.display = 'block';
+				thumb.style.marginTop = '8px';
+				wrapper.appendChild(thumb);
+
+				// Add action buttons: Volver a tomar (blue) y Eliminar (rojo)
+				var actionRow = document.createElement('div');
+				actionRow.style.marginTop = '10px';
+				actionRow.style.display = 'flex';
+				actionRow.style.gap = '8px';
+				
+				var retakeBtn = document.createElement('button');
+				retakeBtn.type = 'button';
+				retakeBtn.className = 'retake-btn';
+				retakeBtn.textContent = 'Volver a tomar foto';
+				retakeBtn.setAttribute('aria-label','Volver a tomar foto ' + index);
+
+				var deleteBtn = document.createElement('button');
+				deleteBtn.type = 'button';
+				deleteBtn.className = 'delete-btn';
+				deleteBtn.textContent = 'Eliminar foto';
+				deleteBtn.setAttribute('aria-label','Eliminar foto ' + index);
+				
+				actionRow.appendChild(retakeBtn);
+				actionRow.appendChild(deleteBtn);
+				wrapper.appendChild(actionRow);
+
+				// Retake: mark this file input as a retake and reopen with capture
+				retakeBtn.addEventListener('click', function(e){
+					e.stopPropagation();
+					try{ file.dataset.retake = '1'; }catch(x){}
+					openFile(true);
+				});
+
+				// Delete: remove preview and file input
+				deleteBtn.addEventListener('click', function(e){
+					e.stopPropagation();
+					try{ if(thumb && thumb.src) URL.revokeObjectURL(thumb.src); }catch(x){}
+					// remove wrapper and associated file input
+					if(wrapper && wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+					if(file && file.parentNode) file.parentNode.removeChild(file);
+				});
+
+				// If this change was triggered by a retake, don't create a new control
+				if(file && file.dataset && file.dataset.retake){
+					// clear the retake flag for future changes
+					try{ delete file.dataset.retake; }catch(x){}
+				} else {
+					createUploadControl();
+				}
+			});
+
+			wrapper.appendChild(mainArea);
+			wrapper.appendChild(actions);
+			list.appendChild(wrapper);
+			list.appendChild(file);
+			mainArea.focus();
+		}
+
+		function ensureEvidenceUI(){
+			var list = document.querySelector('#evidencia .evidence-list');
+			if(!list) return;
+			// if there are no controls, create the first one
+			if(list.querySelectorAll('.evidence-control').length === 0){
+				createUploadControl();
+			}
+		}
+
+		// Wire 'Siguiente' (Entrada Total) to jump to evidencia and ensure UI
+		var siguienteBtn = document.getElementById('siguiente-btn');
+		if(siguienteBtn) siguienteBtn.addEventListener('click', function(){
+			entryType = 'Entrada Total';
+			try{ delete window.heatNumber; }catch(e){}
+			enableTab('evidencia');
+			showTab('evidencia', true);
+			ensureEvidenceUI();
+			updateEvidenceSummary();
+			var sec = document.getElementById('evidencia'); if(sec) sec.focus();
+		});
+
+		// Back buttons in Información and Evidencia (top bar is decorative)
+		var backInfo = document.getElementById('back-from-informacion');
+		var backEvid = document.getElementById('back-from-evidencia');
+		if(backInfo) backInfo.addEventListener('click', function(){ showTab('recibos', true); var sec = document.getElementById('recibos'); if(sec) sec.focus(); });
+		if(backEvid) backEvid.addEventListener('click', function(){ enableTab('informacion'); showTab('informacion', true); var sec = document.getElementById('informacion'); if(sec) sec.focus(); });
+
+
+		// Guardar evidencias: limpiar UI y volver a Recibos con mensaje
+		// In-page message helper (replaces alert())
+		function showUIMessage(text, type, duration){
+			var container = document.getElementById('ui-message-container');
+			if(!container){
+				container = document.createElement('div');
+				container.id = 'ui-message-container';
+				container.className = 'ui-message-container';
+				container.setAttribute('aria-live','polite');
+				container.setAttribute('aria-atomic','true');
+				document.body.appendChild(container);
+			}
+			var msg = document.createElement('div');
+			msg.className = 'ui-message ' + (type || 'info');
+			msg.setAttribute('role','status');
+			msg.textContent = text;
+			container.appendChild(msg);
+			msg.addEventListener('click', function(){ msg.classList.remove('show'); setTimeout(function(){ if(msg.parentNode) msg.parentNode.removeChild(msg); }, 260); });
+			requestAnimationFrame(function(){ msg.classList.add('show'); });
+			var hide = (typeof duration === 'number') ? duration : (type === 'error' ? 4200 : 2600);
+			setTimeout(function(){ msg.classList.remove('show'); setTimeout(function(){ if(msg.parentNode) msg.parentNode.removeChild(msg); }, 260); }, hide);
+			return msg;
+		}
+
+		var btnGuardar = document.getElementById('evidencia-guardar');
+		if(btnGuardar) btnGuardar.addEventListener('click', function(){
+			var imgs = Array.from(document.querySelectorAll('#evidencia .evidence-list img'));
+			if(imgs.length === 0){ showUIMessage('No hay evidencias para guardar.', 'error'); return; }
+			// Aquí se podría enviar a backend; tras confirmar guardado procedemos a limpiar la UI
+			// Revocar object URLs si las hay
+			var list = document.querySelector('#evidencia .evidence-list');
+			if(list){
+				var imgsInList = Array.from(list.querySelectorAll('img'));
+				imgsInList.forEach(function(img){ try{ if(img.src) URL.revokeObjectURL(img.src); }catch(e){} });
+				// eliminar controles y inputs asociados
+				list.innerHTML = '';
+			}
+			// Resetear estado de evidencia y resumen
+			entryType = null;
+			updateEvidenceSummary();
+
+			// Notificar al usuario y llevar a Recibos
+			showUIMessage('Se ha guardado la evidencia de la PO', 'success');
+			setTimeout(function(){ showTab('recibos', true); var sec = document.getElementById('recibos'); if(sec) sec.focus(); }, 450);
+		});
+
+		// Notification button handlers
+		var notifBtn = document.getElementById('notif-btn');
+		var notifPanel = document.getElementById('notif-panel');
+		var notifBadge = document.getElementById('notif-badge');
+		var notifListEl = document.getElementById('notif-list');
+		var notifClearBtn = document.getElementById('notif-clear');
+		var notifications = []; // start empty
+
+		function renderNotifications(){
+			if(!notifListEl) return;
+			notifListEl.innerHTML = '';
+			if(notifications.length === 0){
+				var ni = document.createElement('div'); ni.className = 'notif-item'; ni.textContent = 'No hay notificaciones'; notifListEl.appendChild(ni);
+				if(notifBadge){ notifBadge.setAttribute('data-count','0'); notifBadge.textContent = '0'; }
+				return;
+			}
+			notifications.forEach(function(n){
+				var ni = document.createElement('div'); ni.className = 'notif-item'; ni.textContent = n; notifListEl.appendChild(ni);
+			});
+			if(notifBadge){ notifBadge.setAttribute('data-count', String(notifications.length)); notifBadge.textContent = String(notifications.length); }
+		}
+
+		function toggleNotifPanel(forceOpen){
+			if(!notifPanel || !notifBtn) return;
+			var isOpen = notifPanel.classList.contains('open');
+			var open = (typeof forceOpen === 'boolean') ? forceOpen : !isOpen;
+			if(open){
+				notifPanel.classList.add('open'); notifPanel.setAttribute('aria-hidden','false'); notifBtn.setAttribute('aria-expanded','true'); renderNotifications();
+			} else {
+				notifPanel.classList.remove('open'); notifPanel.setAttribute('aria-hidden','true'); notifBtn.setAttribute('aria-expanded','false');
+			}
+		}
+
+		if(notifBtn){
+			notifBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleNotifPanel(); });
+		}
+
+		document.addEventListener('click', function(e){
+			if(notifPanel && notifPanel.classList.contains('open') && !e.target.closest('.topbar-actions')){
+				toggleNotifPanel(false);
+			}
+		});
+
+		if(notifClearBtn){
+			notifClearBtn.addEventListener('click', function(e){ e.stopPropagation(); notifications = []; renderNotifications(); toggleNotifPanel(false); });
+		}
+
+		// If initial hash is evidencia, ensure UI
+		if(hash === 'evidencia') ensureEvidenceUI();
+		})();
+		</script>
+
+		<script>
+		// Búsqueda + Paginado (10 items por página) + filtros por fecha
+		document.addEventListener('DOMContentLoaded', function(){
+			var input = document.getElementById('po-search');
+			var listItems = Array.from(document.querySelectorAll('.po-list .po-item'));
+
+			// Make entire PO card focusable/clickable by keyboard (Enter/Space)
+			listItems.forEach(function(li){
+				li.setAttribute('tabindex','0');
+				li.setAttribute('role','button');
+				var idEl = li.querySelector('.po-id');
+				if(idEl && !li.getAttribute('aria-label')) li.setAttribute('aria-label','Abrir ' + idEl.textContent);
+				li.addEventListener('keydown', function(e){
+					if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); var action = li.querySelector('.action'); if(action) action.click(); }
+				});
+			});
+
+			var pageSize = 10;
+			var currentPage = 1;
+			var prevBtn = document.getElementById('page-prev');
+			var nextBtn = document.getElementById('page-next');
+			var pageNumbers = document.getElementById('page-numbers');
+			var pageInfo = document.getElementById('page-info');
+
+			var filterWrap = document.querySelector('.filter-wrap');
+			var filterButtons = filterWrap ? Array.from(filterWrap.querySelectorAll('.filter-btn')) : [];
+			var dateFilter = 'today'; // 'today' | 'this-week' | 'next-week' | null
+
+			function parseDateIso(s){
+				if(!s) return null;
+				// parse as local date start
+				var d = new Date(s + 'T00:00:00');
+				return isNaN(d.getTime()) ? null : d;
+			}
+			function startOfWeek(date){
+				var d = new Date(date);
+				d.setHours(0,0,0,0);
+				var day = d.getDay(); // 0 Sunday .. 6 Saturday
+				var isoDay = (day === 0) ? 7 : day; // 1..7 (Mon..Sun)
+				d.setDate(d.getDate() - (isoDay - 1));
+				d.setHours(0,0,0,0);
+				return d;
+			}
+			function addDays(d, n){ var r = new Date(d); r.setDate(r.getDate() + n); r.setHours(0,0,0,0); return r; }
+
+			// Helper: determine if a PO item is considered partial. (disabled)
+			function isPartialItem(li){
+				// Partial markers removed — treat no item as partial
+				return false;
+			}
+
+			function matchesDate(li){
+				if(!dateFilter) return true;
+
+				var ds = li.getAttribute('data-date');
+				if(!ds) return true;
+				var d = parseDateIso(ds);
+				if(!d) return true;
+				var today = new Date(); today.setHours(0,0,0,0);
+				var weekStart = startOfWeek(today);
+				if(dateFilter === 'today'){
+					return d.getTime() === today.getTime();
+				}
+				if(dateFilter === 'this-week'){
+					return d.getTime() >= weekStart.getTime() && d.getTime() < addDays(weekStart,7).getTime();
+				}
+				if(dateFilter === 'next-week'){
+					return d.getTime() >= addDays(weekStart,7).getTime() && d.getTime() < addDays(weekStart,14).getTime();
+				}
+				return true;
+			}
+
+			function getVisibleItems(){
+				return listItems.filter(function(li){ return li.style.display !== 'none'; });
+			}
+
+			function renderPage(){
+				var visible = getVisibleItems();
+				var total = visible.length;
+				var totalPages = Math.max(1, Math.ceil(total / pageSize));
+				if(currentPage > totalPages) currentPage = totalPages;
+				// hide all
+				listItems.forEach(function(li){ li.style.display = 'none'; });
+				// show current slice
+				var start = (currentPage - 1) * pageSize;
+				var end = start + pageSize;
+				visible.slice(start, end).forEach(function(li){ li.style.display = ''; });
+
+				// controls
+				if(prevBtn) prevBtn.disabled = currentPage <= 1;
+				if(nextBtn) nextBtn.disabled = currentPage >= totalPages;
+				if(pageInfo) pageInfo.textContent = total === 0 ? 'Sin resultados' : 'Página ' + currentPage + ' de ' + totalPages;
+
+				// render page number buttons
+				if(!pageNumbers) return;
+				pageNumbers.innerHTML = '';
+				var maxButtons = 7;
+				function createBtn(n){
+					var b = document.createElement('button');
+					b.className = 'page-number';
+					b.textContent = n;
+					if(n === currentPage) b.setAttribute('aria-current','true');
+					b.addEventListener('click', function(){ currentPage = n; renderPage(); });
+					pageNumbers.appendChild(b);
+				}
+
+				if(totalPages <= maxButtons){
+					for(var i=1;i<=totalPages;i++) createBtn(i);
+				} else {
+					var left = Math.max(1, currentPage - 2);
+					var right = Math.min(totalPages, currentPage + 2);
+					if(left > 1){ createBtn(1); if(left > 2){ var s=document.createElement('span'); s.textContent='…'; s.style.padding='6px 8px'; pageNumbers.appendChild(s); } }
+					for(var j=left;j<=right;j++) createBtn(j);
+					if(right < totalPages){ if(right < totalPages-1){ var s2=document.createElement('span'); s2.textContent='…'; s2.style.padding='6px 8px'; pageNumbers.appendChild(s2); } createBtn(totalPages); }
+				}
+			}
+
+			function applyFilters(){
+				var q = input ? input.value.trim().toLowerCase() : '';
+				listItems.forEach(function(li){
+					var id = (li.querySelector('.po-id') && li.querySelector('.po-id').textContent || '').toLowerCase();
+					var desc = (li.querySelector('.po-desc') && li.querySelector('.po-desc').textContent || '').toLowerCase();
+					var matchesText = (q === '' || id.indexOf(q) !== -1 || desc.indexOf(q) !== -1);
+					var matches = matchesText && matchesDate(li);
+					li.style.display = matches ? '' : 'none';
+				});
+				currentPage = 1;
+				renderPage();
+				// update active button styles
+				filterButtons.forEach(function(b){
+					var val = b.getAttribute('data-filter');
+					if(dateFilter && val === dateFilter) b.classList.add('active'); else b.classList.remove('active');
+				});
+			}
+
+			// Wire search input
+			if(input){
+				input.addEventListener('input', function(){ applyFilters(); });
+			}
+
+			// Wire filter buttons
+			filterButtons.forEach(function(b){
+				b.addEventListener('click', function(){
+					var f = b.getAttribute('data-filter');
+					if(dateFilter === f) dateFilter = null; else dateFilter = f;
+					applyFilters();
+				});
+			});
+
+			if(prevBtn) prevBtn.addEventListener('click', function(){ if(currentPage > 1){ currentPage--; renderPage(); } });
+			if(nextBtn) nextBtn.addEventListener('click', function(){ currentPage++; renderPage(); });
+
+			// initial render and apply filters (default none)
+			applyFilters();
+		});
+		</script>
+	</body>
+</html>

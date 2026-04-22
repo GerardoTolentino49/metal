@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel de anuncios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    window.onload = function() {
+      window.scrollTo(0, 0);
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/topbar_celular.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/anuncios.css">
+  <script src="js/global-color.js"></script>
+  <style>
+    /* Forzar texto blanco en input de título de notificaciones */
+    #notifyTitleInput {
+      color: white !important;
+    }
+
+    /* Forzar texto blanco en editor de mensaje de notificaciones */
+    #notifyMessageInput,
+    #notifyMessageInput * {
+      color: white !important;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+   
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+  <!--tab switch-->
+  <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+    <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button" data-tab="empleados">
+          <i class="fas fa-users"></i>Empleados
+        </button>
+        <button class="tab-switch-button" data-tab="apoyos">
+          <i class="fas fa-hand-holding-heart"></i>Apoyos
+        </button>
+        <button class="tab-switch-button" data-tab="amonestaciones">
+          <i class="fas fa-exclamation-triangle"></i>Amonestaciones
+        </button>
+        <button class="tab-switch-button" data-tab="vacaciones">
+          <i class="fas fa-umbrella-beach"></i>Vacaciones
+        </button>
+        <button class="tab-switch-button" data-tab="asistencias">
+          <i class="fas fa-calendar-check"></i>Asistencias
+        </button>
+        <button class="tab-switch-button" data-tab="comidas">
+          <i class="fas fa-utensils"></i>Comidas
+        </button>
+        <button class="tab-switch-button active" data-tab="anuncios">
+          <i class="fas fa-bullhorn"></i>Anuncios
+        </button>
+        <button class="tab-switch-button" data-tab="estadisticas">
+          <i class="fas fa-chart-bar"></i>Estadisticas
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    empleados: 'empleados_panel.html',
+    apoyos: 'apoyos.html',
+    amonestaciones: 'amonestaciones.html',
+    vacaciones: 'vacaciones_panel.html',
+    asistencias: 'asistencias.html',
+    comidas: 'comidas_panel.html',
+    anuncios: 'anuncios.html',
+    estadisticas: 'detalles_rh.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+
+  <div class="hamburger-menu" id="hamburgerMenu">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    
+    <div class="mobile-menu-content">
+      <div class="mobile-menu-item has-submenu" data-submenu="it">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileItSubmenu">
+          <a href="panel.html" class="mobile-submenu-item">Tickets</a>
+          <a href="detalles.html" class="mobile-submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="mobile-submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="mobile-submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="mobile-submenu-item">Bóveda</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="rh">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileRhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="design">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Design
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileDesignSubmenu">
+          <a href="design.html" class="mobile-submenu-item">Design</a>
+        </div>
+      </div>
+  
+      <div class="mobile-menu-item has-submenu" data-submenu="warehouse">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Warehouse
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileWarehouseSubmenu">
+          <a href="inventario.html" class="mobile-submenu-item">Inventario</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="maintenance">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Maintenance
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileMaintenanceSubmenu">
+          <a href="mantenimiento.html" class="mobile-submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="mobile-submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="mobile-submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="mobile-submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+      
+      <div class="mobile-menu-item has-submenu" data-submenu="admin">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Administración
+        <span class="mobile-submenu-arrow">▼</span>
+        <div class="mobile-submenu" id="mobileAdminSubmenu">
+          <a href="admin.html" class="mobile-submenu-item">Administración de Usuarios</a>
+          <a href="contrasenas.html" class="mobile-submenu-item">Administración de Contraseñas</a>
+          <a href="departamentos.html" class="mobile-submenu-item">Administración de Departamentos</a>
+          <a href="admin_design.html" class="mobile-submenu-item">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mobile-user-info">
+      <div id="mobileUserInfo">Usuario</div>
+      <button class="mobile-logout-btn" id="mobileLogoutBtn">Cerrar Sesión</button>
+    </div>
+    
+    <div class="mobile-menu-close" id="mobileMenuClose">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+
+    
+    <!-- Formulario para subir nuevo anuncio -->
+    <div class="upload-section glass-card" style="margin: 18px auto; max-width: 980px; padding: 24px; border-radius: 14px; background: rgba(255,255,255,0.04);margin-top: 100px; border: 1px solid rgba(255,255,255,0.08);">
+      <h2 style="color: #fff; margin-bottom: 20px; font-size: 24px; font-weight: 600;">Subir Nuevo Anuncio</h2>
+      
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label for="tituloAnuncio" style="display: block; color: #ddd; margin-bottom: 6px; font-weight: 500;">Título (opcional)</label>
+          <input type="text" id="tituloAnuncio" placeholder="Título del anuncio" style="width: 90%; padding: 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;">
+        </div>
+        
+        <div>
+          <label for="imagenAnuncio" style="display: block; color: #ddd; margin-bottom: 6px; font-weight: 500;">Imagen (1920x1080 recomendado)</label>
+          <input type="file" id="imagenAnuncio" accept="image/*" style="width: 90%; padding: 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">
+          <div id="previewContainer" style="margin-top: 12px; display: none;">
+            <img id="previewImagen" src="" alt="Vista previa" style="max-width: 100%; max-height: 300px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.14);">
+          </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label for="fechaInicioAnuncio" style="display: block; color: #ddd; margin-bottom: 6px; font-weight: 500;">Fecha inicio (opcional)</label>
+            <input type="date" id="fechaInicioAnuncio" style="width: 90%; padding: 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: #fff;">
+          </div>
+          
+          <div>
+            <label for="fechaFinAnuncio" style="display: block; color: #ddd; margin-bottom: 6px; font-weight: 500;">Fecha fin (opcional)</label>
+            <input type="date" id="fechaFinAnuncio" style="width: 80%; padding: 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: #fff;">
+          </div>
+        </div>
+        
+        <!-- Checkbox para menú de la semana -->
+        <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 30px; border: 1px solid rgba(255,255,255,0.08);">
+          <input type="checkbox" id="esMenuSemana" style="width: 20px; height: 20px; cursor: pointer; accent-color: #FFC107;">
+          <label for="esMenuSemana" style="color: #fff; font-weight: 500; cursor: pointer; user-select: none;">
+            Marcar como Menú de la Semana
+          </label>
+        </div>
+        
+        <button id="btnSubirAnuncio" class="glassy-fab" style="padding: 14px 24px; border-radius: 30px; background: linear-gradient(135deg, #4CAF50, #45a049); color: #fff; border: 1px solid rgba(255,255,255,0.12); font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+          <i class="fas fa-upload" style="margin-right: 8px;"></i>
+          Subir Anuncio
+        </button>
+      </div>
+      
+      <div id="uploadStatus" style="margin-top: 16px; color: #aaa; min-height: 20px;"></div>
+    </div>
+    
+    <!-- Lista de anuncios existentes -->
+    <div class="anuncios-list glass-card" style="margin: 18px auto; max-width: 980px; padding: 24px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+      <h2 style="color: #fff; margin-bottom: 20px; font-size: 24px; font-weight: 600;">Anuncios Existentes</h2>
+      <div id="anunciosList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    </div>
+
+    <button id="openCanvaBtn" style="position:fixed; right:22px; bottom:80px; z-index:2200; border:none; border-radius:999px; padding:12px 18px; font-weight:700; color:#fff; cursor:pointer; background:linear-gradient(135deg,#ff7b7b 0%, #ff3b3b 100%); box-shadow:0 10px 22px rgba(0,0,0,0.35);">
+      <i class="fas fa-paint-brush" style="margin-right:8px;"></i> Canva
+    </button>
+
+    <div id="canvaModal" style="display:none; position:fixed; right:22px; bottom:120px; z-index:2300; width:min(520px,92vw); border-radius:12px; padding:12px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); background:rgb(255, 255, 255); color:#000000; box-shadow:0 12px 30px rgba(0,0,0,0.45);">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;">
+        <strong style="font-size:14px;">Canva</strong>
+        <button id="closeCanvaModalBtn" style="border:none; border-radius:8px; width:34px; height:34px; font-size:20px; cursor:pointer; background:rgba(255,255,255,0.14); color:#000000;">&times;</button>
+      </div>
+      <textarea id="canvaTextInput" placeholder="Escribe tu texto aquí..." style="width:96%; height:180px; resize:vertical; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02); color:#000000; font-size:14px;"></textarea>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+        <button id="saveCanvaBtn" style="border:none; border-radius:10px; padding:8px 12px; background:linear-gradient(135deg,#22c55e 0%, #16a34a 100%); color:#fff; font-weight:700; cursor:pointer;">Guardar</button>
+      </div>
+    </div>
+
+    <button id="openNotifyModalBtn" style="position:fixed; right:22px; bottom:22px; z-index:2200; border:none; border-radius:999px; padding:12px 18px; font-weight:700; color:#fff; cursor:pointer; background:linear-gradient(135deg,#0ea5e9 0%, #2563eb 100%); box-shadow:0 10px 22px rgba(0,0,0,0.35);">
+      <i class="fas fa-paper-plane" style="margin-right:8px;"></i> Enviar notificaciones
+    </button>
+
+    <div id="notifyUsersModal" style="display:none; position:fixed; inset:0; z-index:2300; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+      <div style="width:min(860px,92vw); max-height:86vh; overflow:auto; border-radius:30px; padding:20px;backdrop-filter: blur(30px); border:1px solid rgba(255,255,255,0.12); box-shadow:0 16px 32px rgba(0,0,0,0.45);">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+          <h3 style="margin:0; color:#fff; font-size:20px;">Enviar notificacion a usuarios</h3>
+          <button id="closeNotifyModalBtn" style="border:none; border-radius:8px; width:34px; height:34px; font-size:20px; cursor:pointer; background:rgba(255,255,255,0.14); color:#fff;">&times;</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;">
+          <input id="notifyTitleInput" type="text" placeholder="Titulo de la notificacion" style="padding:11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.2); background-color: black; color: white;">
+          <div id="notifyMessageEditorWrap" style="border-radius:10px; border:1px solid rgba(255,255,255,0.2); overflow:hidden; background:rgba(255,255,255,0.04);">
+            <div id="notifyMessageToolbar" style="display:flex; flex-wrap:wrap; gap:6px; padding:8px; border-bottom:1px solid rgba(255,255,255,0.12); background:rgba(15,23,42,0.55);">
+              <button type="button" data-cmd="bold" title="Negrita" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700;">B</button>
+              <button type="button" data-cmd="italic" title="Cursiva" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-style:italic;">I</button>
+              <button type="button" data-cmd="underline" title="Subrayado" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer; text-decoration:underline;">U</button>
+              <button type="button" id="notifyMessageSizeDown" title="Reducir tamaño de letra" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700;">A-</button>
+              <button type="button" id="notifyMessageSizeUp" title="Aumentar tamaño de letra" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700;">A+</button>
+              <span id="notifyMessageSizeIndicator" title="Tamaño actual" style="padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.12); color:#fff; font-size:12px; font-weight:600; min-width:54px; text-align:center;">Tam: 3</span>
+              <select id="notifyMessageFont" title="Tipo de letra" style="border:none; border-radius:8px; padding:6px 8px; cursor:pointer;">
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Courier New">Courier New</option>
+              </select>
+              <button type="button" data-cmd="insertUnorderedList" title="Lista" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer;">Lista</button>
+              <button type="button" data-cmd="justifyLeft" title="Alinear izquierda" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer;">Izq</button>
+              <button type="button" data-cmd="justifyCenter" title="Centrar" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer;">Centro</button>
+              <button type="button" data-cmd="justifyRight" title="Alinear derecha" style="border:none; border-radius:8px; padding:6px 10px; cursor:pointer;">Der</button>
+            </div>
+            <div id="notifyMessageInput" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Mensaje" style="background-color:black; min-height:110px; max-height:280px; overflow:auto; padding:11px 12px; color:white; font-size:14px; line-height:1.45; outline:none;"></div>
+          </div>
+          <input id="notifyImageFileInput" type="file" accept="image/*" style="padding:11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.2); color:#fff;">
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+          <button id="selectAllNotifyUsersBtn" style="border:none; border-radius:30px; padding:8px 12px; background:#22c55e; color:#fff; cursor:pointer;">Seleccionar todos</button>
+          <button id="clearAllNotifyUsersBtn" style="border:none; border-radius:30px; padding:8px 12px; background:#ef4444; color:#fff; cursor:pointer;">Quitar todos</button>
+          <input id="notifyUsersSearch" type="text" placeholder="Buscar usuario" style="margin-left:auto; min-width:240px; padding:9px 10px; border-radius:30px; border:1px solid rgba(255,255,255,0.2);">
+        </div>
+
+        <div id="notifyUsersList" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; max-height:42vh; overflow:auto; padding:6px; border:1px solid rgba(255,255,255,0.12); border-radius:30px; background:rgba(255,255,255,0.03);"></div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; gap:12px;">
+          <span id="notifyUsersCount" style="color:#cbd5e1; font-size:13px;">0 usuarios seleccionados</span>
+          <button id="sendNotifyUsersBtn" style="border:none; border-radius:999px; padding:11px 18px; background:linear-gradient(135deg,#0ea5e9 0%, #2563eb 100%); color:#fff; font-weight:700; cursor:pointer;">
+            <i class="fas fa-paper-plane" style="margin-right:6px;"></i> Enviar notificacion
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+
+  <script src="js/permisos.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');       
+          menuItem.addEventListener('click', function(e) 
+          {
+
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+        
+
+        document.addEventListener('click', function(e) 
+        {
+          if (!e.target.closest('.menu-item.has-submenu')) 
+          {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500); // Aumentar el tiempo de espera
+    });
+
+    function moverHighlight() 
+    {
+      const topbar = document.querySelector('.topbar');
+      const highlight = topbar.querySelector('.glass-highlight');
+      const btnSel = topbar.querySelector('.menu-item.selected');
+      
+      if (!btnSel) return;
+      
+      const rectTopbar = topbar.getBoundingClientRect();
+      const rectBtn = btnSel.getBoundingClientRect();
+      const left = rectBtn.left - rectTopbar.left; 
+      highlight.style.left = left + 'px';
+      highlight.style.width = rectBtn.width + 'px';
+    }
+
+    function addChromaticEffect(element) 
+    {
+      element.classList.add('clicked');
+      setTimeout(() => {
+        element.classList.remove('clicked');
+      }, 600);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight(); // Mueve el highlight visualmente
+          });
+        });
+      }, 1500);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const userIcon = document.getElementById('userIcon');
+      if (userIcon) 
+      {
+        userIcon.addEventListener('click', function() 
+        {
+          addChromaticEffect(this);
+          window.location.href = 'usuario.html';
+        });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        moverHighlight();
+      }, 1600);
+    });
+    
+    window.addEventListener('resize', moverHighlight);
+  </script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.scrollTo(0, 0);
+      // Permitir interacción normal de inputs
+      document.body.style.overflow = 'auto';
+      checkPermissions();
+      // Deshabilitado: no mostrar saludo inicial
+    });
+
+    async function typeWriter() {
+      // No-op: se quita el saludo inicial
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      if (welcomeMessage) { welcomeMessage.innerHTML = ''; }
+    }
+  </script>
+  
+  <script src="js/mobile-menu.js"></script>
+  <script src="js/topbar.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  
+  <!-- Script para gestión de anuncios -->
+  <script>
+    const API_BASE_URL = window.location.origin;
+    let notifyUsersCache = [];
+    
+    // Vista previa de imagen
+    document.getElementById('imagenAnuncio').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewImagen').src = e.target.result;
+          document.getElementById('previewContainer').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    
+    // Subir anuncio
+    document.getElementById('btnSubirAnuncio').addEventListener('click', async function() {
+      const tituloEl = document.getElementById('tituloAnuncio');
+      const imagenEl = document.getElementById('imagenAnuncio');
+      const fechaInicioEl = document.getElementById('fechaInicioAnuncio');
+      const fechaFinEl = document.getElementById('fechaFinAnuncio');
+      const ordenEl = document.getElementById('ordenAnuncio');
+      const esMenuSemanaEl = document.getElementById('esMenuSemana');
+
+      const titulo = tituloEl ? tituloEl.value : '';
+      const imagen = imagenEl ? imagenEl.files[0] : null;
+      const fechaInicio = fechaInicioEl ? fechaInicioEl.value : '';
+      const fechaFin = fechaFinEl ? fechaFinEl.value : '';
+      const orden = ordenEl ? ordenEl.value : '0';
+      const esMenuSemana = esMenuSemanaEl ? esMenuSemanaEl.checked : false;
+      
+      if (!imagen) {
+        showUploadStatus('Por favor selecciona una imagen', 'error');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('imagen', imagen);
+      if (titulo) formData.append('titulo', titulo);
+      if (fechaInicio) formData.append('fecha_inicio', fechaInicio);
+      if (fechaFin) formData.append('fecha_fin', fechaFin);
+      formData.append('orden', orden);
+      formData.append('menu_semana', esMenuSemana ? '1' : '0');
+      
+      try {
+        showUploadStatus('Subiendo anuncio...');
+        const response = await fetch('/api/anuncios', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Limpiar mensajes en la sección inferior y mostrar toast
+          showUploadStatus('', 'info');
+          showToast('Anuncio subido correctamente', 'success');
+
+          // Limpiar formulario con comprobaciones seguras
+          const tituloEl = document.getElementById('tituloAnuncio');
+          const imagenEl = document.getElementById('imagenAnuncio');
+          const fechaInicioEl = document.getElementById('fechaInicioAnuncio');
+          const fechaFinEl = document.getElementById('fechaFinAnuncio');
+          const ordenEl = document.getElementById('ordenAnuncio');
+          const esMenuSemanaEl = document.getElementById('esMenuSemana');
+          const previewEl = document.getElementById('previewContainer');
+
+          if (tituloEl) tituloEl.value = '';
+          if (imagenEl) imagenEl.value = '';
+          if (fechaInicioEl) fechaInicioEl.value = '';
+          if (fechaFinEl) fechaFinEl.value = '';
+          if (ordenEl) ordenEl.value = '0';
+          if (esMenuSemanaEl) esMenuSemanaEl.checked = false;
+          if (previewEl) previewEl.style.display = 'none';
+
+          // Recargar lista
+          cargarAnuncios();
+        } else {
+          showUploadStatus(data.error || 'Error al subir anuncio', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showUploadStatus('Error al subir anuncio', 'error');
+      }
+    });
+    
+    function showUploadStatus(msg, kind = 'info') {
+      const el = document.getElementById('uploadStatus');
+      if (!el) return;
+      el.textContent = msg || '';
+      el.style.color = kind === 'error' ? '#f88' : kind === 'success' ? '#4CAF50' : '#aaa';
+    }
+
+    function escapeHtml(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function getRichMessageEditor() {
+      return document.getElementById('notifyMessageInput');
+    }
+
+    function getRichMessageHtml() {
+      const editor = getRichMessageEditor();
+      return editor ? String(editor.innerHTML || '').trim() : '';
+    }
+
+    function getRichMessagePlainText() {
+      const editor = getRichMessageEditor();
+      return editor ? String(editor.textContent || '').trim() : '';
+    }
+
+    function applyRichEditorCommand(command, value = null) {
+      const editor = getRichMessageEditor();
+      if (!editor) return;
+      editor.focus();
+      document.execCommand(command, false, value);
+    }
+
+    function initializeNotifyRichEditor() {
+      const editor = getRichMessageEditor();
+      const toolbar = document.getElementById('notifyMessageToolbar');
+      const fontSelect = document.getElementById('notifyMessageFont');
+      const sizeDownBtn = document.getElementById('notifyMessageSizeDown');
+      const sizeUpBtn = document.getElementById('notifyMessageSizeUp');
+      const sizeIndicator = document.getElementById('notifyMessageSizeIndicator');
+      const titleInput = document.getElementById('notifyTitleInput');
+      if (!editor || !toolbar) return;
+
+      if (editor.dataset.richEditorReady === '1') {
+        return;
+      }
+      editor.dataset.richEditorReady = '1';
+
+      // Forzar texto blanco al pegar en el input del título
+      if (titleInput) {
+        titleInput.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+          document.execCommand('insertText', false, text);
+        });
+      }
+
+      // Forzar texto blanco al pegar en el editor de mensaje
+      editor.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+        // Aplicar color blanco al texto pegado
+        setTimeout(() => {
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            document.execCommand('foreColor', false, '#ffffff');
+          }
+        }, 10);
+      });
+
+      editor.addEventListener('focus', () => {
+        if (!editor.innerHTML.trim()) {
+          editor.innerHTML = '<div><br></div>';
+        }
+      });
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-cmd]');
+        if (!button) return;
+        event.preventDefault();
+        const cmd = String(button.dataset.cmd || '').trim();
+        if (!cmd) return;
+        applyRichEditorCommand(cmd);
+      });
+
+      if (fontSelect) {
+        fontSelect.addEventListener('change', () => {
+          applyRichEditorCommand('fontName', fontSelect.value);
+        });
+      }
+
+      editor.dataset.fontSizeLevel = editor.dataset.fontSizeLevel || '3';
+      if (sizeIndicator) {
+        sizeIndicator.textContent = `${editor.dataset.fontSizeLevel}`;
+      }
+
+      const applyNotifySizeStep = (delta) => {
+        const current = Number(editor.dataset.fontSizeLevel || '3');
+        const next = Math.min(6, Math.max(2, current + delta));
+        editor.dataset.fontSizeLevel = String(next);
+        if (sizeIndicator) {
+          sizeIndicator.textContent = `${next}`;
+        }
+        applyRichEditorCommand('fontSize', String(next));
+      };
+
+      if (sizeDownBtn) {
+        sizeDownBtn.addEventListener('click', () => {
+          applyNotifySizeStep(-1);
+        });
+      }
+
+      if (sizeUpBtn) {
+        sizeUpBtn.addEventListener('click', () => {
+          applyNotifySizeStep(1);
+        });
+      }
+    }
+
+    function getSelectedNotifyUsers() {
+      return Array.from(document.querySelectorAll('.notify-user-checkbox:checked')).map(el => el.value);
+    }
+
+    function refreshNotifySelectedCount() {
+      const countEl = document.getElementById('notifyUsersCount');
+      if (!countEl) return;
+      const total = getSelectedNotifyUsers().length;
+      countEl.textContent = `${total} usuario${total === 1 ? '' : 's'} seleccionado${total === 1 ? '' : 's'}`;
+    }
+
+    function renderNotifyUsers(users, term = '') {
+      const listEl = document.getElementById('notifyUsersList');
+      if (!listEl) return;
+      const lower = String(term || '').trim().toLowerCase();
+      const filtered = users.filter(u => {
+        const name = String(u.nombre_completo || '').toLowerCase();
+        const username = String(u.username || '').toLowerCase();
+        return !lower || name.includes(lower) || username.includes(lower);
+      });
+
+      if (!filtered.length) {
+        listEl.innerHTML = '<div style="grid-column:1/-1; color:#9ca3af; text-align:center; padding:14px;">No hay usuarios para mostrar.</div>';
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(u => `
+        <label style="display:flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,0.12); border-radius:30px; padding:8px 10px; background:rgba(255,255,255,0.04); color:#fff; cursor:pointer;">
+          <input class="notify-user-checkbox" type="checkbox" value="${escapeHtml(u.username)}" style="width:16px; height:16px; accent-color:#2563eb;">
+          <span style="display:flex; flex-direction:column; min-width:0;">
+            <strong style="font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(u.nombre_completo || u.username)}</strong>
+            <small style="color:#93c5fd;">@${escapeHtml(u.username)}</small>
+          </span>
+        </label>
+      `).join('');
+
+      listEl.querySelectorAll('.notify-user-checkbox').forEach(cb => {
+        cb.addEventListener('change', refreshNotifySelectedCount);
+      });
+
+      refreshNotifySelectedCount();
+    }
+
+    async function loadNotifyUsers() {
+      const listEl = document.getElementById('notifyUsersList');
+      if (listEl) {
+        listEl.innerHTML = '<div style="grid-column:1/-1; color:#cbd5e1; text-align:center; padding:14px;">Cargando usuarios...</div>';
+      }
+      try {
+        const response = await fetch('/api/usuarios', { cache: 'no-store' });
+        const users = response.ok ? await response.json() : [];
+        notifyUsersCache = (Array.isArray(users) ? users : [])
+          .map(u => ({ username: u.username, nombre_completo: u.nombre_completo || u.username }))
+          .filter(u => String(u.username || '').trim().length > 0)
+          .sort((a, b) => String(a.nombre_completo).localeCompare(String(b.nombre_completo), 'es'));
+        renderNotifyUsers(notifyUsersCache, '');
+      } catch (error) {
+        console.error('Error al cargar usuarios para notificacion:', error);
+        if (listEl) {
+          listEl.innerHTML = '<div style="grid-column:1/-1; color:#fca5a5; text-align:center; padding:14px;">No se pudieron cargar usuarios.</div>';
+        }
+      }
+    }
+
+    function openNotifyModal() {
+      const modal = document.getElementById('notifyUsersModal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      initializeNotifyRichEditor();
+      const editor = getRichMessageEditor();
+      if (editor && !editor.innerHTML.trim()) {
+        editor.innerHTML = '';
+      }
+      setTimeout(() => {
+        if (editor) editor.focus();
+      }, 80);
+      loadNotifyUsers();
+    }
+
+    function closeNotifyModal() {
+      const modal = document.getElementById('notifyUsersModal');
+      if (!modal) return;
+      modal.style.display = 'none';
+    }
+
+    function openCanvaModal() {
+      const modal = document.getElementById('canvaModal');
+      if (!modal) return;
+      modal.style.display = 'block';
+      const ta = modal.querySelector('textarea');
+      if (ta) {
+        setTimeout(() => ta.focus(), 60);
+      }
+    }
+
+    function closeCanvaModal() {
+      const modal = document.getElementById('canvaModal');
+      if (!modal) return;
+      modal.style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const openBtn = document.getElementById('openCanvaBtn');
+      if (openBtn) openBtn.addEventListener('click', openCanvaModal);
+      const closeBtn = document.getElementById('closeCanvaModalBtn');
+      if (closeBtn) closeBtn.addEventListener('click', closeCanvaModal);
+      const saveBtn = document.getElementById('saveCanvaBtn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', async function () {
+          const ta = document.getElementById('canvaTextInput');
+          const text = ta ? String(ta.value || '') : '';
+          if (!text.trim()) {
+            showToast('El texto está vacío', 'error');
+            return;
+          }
+
+          try {
+            const resp = await fetch('/api/canva', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url_canva: text })
+            });
+            const data = await resp.json();
+            if (resp.ok) {
+              showToast('Guardado correctamente', 'success');
+              closeCanvaModal();
+            } else {
+              showToast(data.error || 'Error al guardar', 'error');
+            }
+          } catch (err) {
+            console.error('Error al guardar canva:', err);
+            showToast('Error al guardar', 'error');
+          }
+        });
+      }
+    });
+
+    // Notificación en esquina superior derecha
+    function showToast(message, kind = 'success') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.style.position = 'fixed';
+        container.style.top = '20px';
+        container.style.right = '20px';
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.gap = '10px';
+        container.style.zIndex = '3000';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      toast.style.minWidth = '260px';
+      toast.style.padding = '12px 16px';
+      toast.style.borderRadius = '10px';
+      toast.style.border = '1px solid rgba(255,255,255,0.18)';
+      toast.style.boxShadow = '0 8px 24px rgba(0,0,0,0.35)';
+      toast.style.backdropFilter = 'blur(10px)';
+      toast.style.webkitBackdropFilter = 'blur(10px)';
+      toast.style.color = '#fff';
+      toast.style.fontSize = '14px';
+      toast.style.fontWeight = '600';
+      toast.style.display = 'flex';
+      toast.style.alignItems = 'center';
+      toast.style.gap = '10px';
+      toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+
+      // Fondo según tipo
+      if (kind === 'success') {
+        toast.style.background = 'rgba(76, 175, 80, 0.28)';
+      } else if (kind === 'error') {
+        toast.style.background = 'rgba(244, 67, 54, 0.28)';
+      } else {
+        toast.style.background = 'rgba(35, 36, 58, 0.6)';
+      }
+
+      const icon = document.createElement('span');
+      icon.innerHTML = kind === 'success' ? '✅' : kind === 'error' ? '⚠️' : 'ℹ️';
+      const text = document.createElement('span');
+      text.textContent = message;
+
+      toast.appendChild(icon);
+      toast.appendChild(text);
+      container.appendChild(toast);
+
+      // Animación de entrada
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(-8px)';
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      });
+
+      // Auto eliminar
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-8px)';
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 200);
+      }, 2500);
+    }
+    
+    // Cargar lista de anuncios
+    async function cargarAnuncios() {
+      try {
+        const response = await fetch('/api/anuncios');
+        const data = await response.json();
+        
+        if (response.ok && data.anuncios) {
+          renderAnuncios(data.anuncios);
+        }
+      } catch (error) {
+        console.error('Error al cargar anuncios:', error);
+      }
+    }
+    
+    function renderAnuncios(anuncios) {
+      const container = document.getElementById('anunciosList');
+      
+      if (anuncios.length === 0) {
+        container.innerHTML = '<p style="color: #888; text-align: center;">No hay anuncios registrados</p>';
+        return;
+      }
+      
+      container.innerHTML = anuncios.map(anuncio => `
+        <div class="anuncio-item" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; display: flex; gap: 16px; align-items: center;">
+          <img src="${anuncio.imagen_url}" alt="${anuncio.titulo || 'Anuncio'}" style="width: 160px; height: 90px; object-fit: cover; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
+          
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <h3 style="color: #fff; margin: 0; font-size: 16px; font-weight: 600;">${anuncio.titulo || 'Sin título'}</h3>
+              ${anuncio.menu_semana ? '<span style="background: #FFC107; color: #1a1a1a; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;"><i class="fas fa-utensils"></i> MENÚ SEMANA</span>' : ''}
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; color: #aaa;">
+              <span><i class="fas fa-calendar"></i> ${formatDate(anuncio.fecha_inicio)} - ${formatDate(anuncio.fecha_fin) || 'Sin límite'}</span>
+              <!-- Orden oculto en UI -->
+              <span style="color: ${anuncio.activo ? '#4CAF50' : '#f44'};">
+                <i class="fas fa-circle" style="font-size: 8px;"></i> ${anuncio.activo ? 'Activo' : 'Inactivo'}
+              </span>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button onclick="toggleAnuncio(${anuncio.id}, ${!anuncio.activo})" 
+                    style="padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: ${anuncio.activo ? 'rgba(244, 67, 54, 0.2)' : 'rgba(76, 175, 80, 0.2)'}; color: #fff; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+              <i class="fas fa-${anuncio.activo ? 'pause' : 'play'}"></i> ${anuncio.activo ? 'Desactivar' : 'Activar'}
+            </button>
+            
+            <label style="display: flex; align-items: center; gap: 6px; color: #fff; font-size: 13px; padding: 6px 10px; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+              <input type="checkbox" ${anuncio.menu_semana ? 'checked' : ''} onchange="toggleMenuSemana(${anuncio.id}, this.checked)" style="width: 18px; height: 18px; cursor: pointer; accent-color: #FFC107;">
+              Menú de la semana
+            </label>
+
+            <button onclick="eliminarAnuncio(${anuncio.id})" 
+                    style="padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(244, 67, 54, 0.3); color: #fff; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function formatDate(dateStr) {
+      if (!dateStr) return null;
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+    
+    async function toggleAnuncio(id, activo) {
+      try {
+        const response = await fetch(`/api/anuncios/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activo })
+        });
+        
+        if (response.ok) {
+          cargarAnuncios();
+        }
+      } catch (error) {
+        console.error('Error al actualizar anuncio:', error);
+      }
+    }
+
+    async function toggleMenuSemana(id, menu_semana) {
+      try {
+        const response = await fetch(`/api/anuncios/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ menu_semana })
+        });
+
+        if (response.ok) {
+          showToast(menu_semana ? 'Marcado como menú de la semana' : 'Desmarcado como menú de la semana', 'success');
+          cargarAnuncios();
+        } else {
+          showToast('No se pudo actualizar el menú de la semana', 'error');
+        }
+      } catch (error) {
+        console.error('Error al actualizar menú de la semana:', error);
+        showToast('Error al actualizar menú de la semana', 'error');
+      }
+    }
+    
+    async function eliminarAnuncio(id) {
+      if (!confirm('¿Estás seguro de eliminar este anuncio?')) return;
+      
+      try {
+        const response = await fetch(`/api/anuncios/${id}`, {
+          method: 'DELETE'
+        });
+        
+        if (response.ok) {
+          cargarAnuncios();
+        }
+      } catch (error) {
+        console.error('Error al eliminar anuncio:', error);
+      }
+    }
+    
+    // Cargar anuncios al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarAnuncios();
+
+      const openBtn = document.getElementById('openNotifyModalBtn');
+      const closeBtn = document.getElementById('closeNotifyModalBtn');
+      const modal = document.getElementById('notifyUsersModal');
+      const searchInput = document.getElementById('notifyUsersSearch');
+      const selectAllBtn = document.getElementById('selectAllNotifyUsersBtn');
+      const clearAllBtn = document.getElementById('clearAllNotifyUsersBtn');
+      const sendBtn = document.getElementById('sendNotifyUsersBtn');
+
+      if (openBtn) openBtn.addEventListener('click', openNotifyModal);
+      if (closeBtn) closeBtn.addEventListener('click', closeNotifyModal);
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeNotifyModal();
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', () => {
+          renderNotifyUsers(notifyUsersCache, searchInput.value || '');
+        });
+      }
+
+      if (selectAllBtn) {
+        selectAllBtn.addEventListener('click', () => {
+          document.querySelectorAll('.notify-user-checkbox').forEach(cb => { cb.checked = true; });
+          refreshNotifySelectedCount();
+        });
+      }
+
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+          document.querySelectorAll('.notify-user-checkbox').forEach(cb => { cb.checked = false; });
+          refreshNotifySelectedCount();
+        });
+      }
+
+      if (sendBtn) {
+        sendBtn.addEventListener('click', async () => {
+          const titulo = (document.getElementById('notifyTitleInput')?.value || '').trim();
+          const mensaje = getRichMessageHtml();
+          const mensajePlano = getRichMessagePlainText();
+          const imageFile = document.getElementById('notifyImageFileInput')?.files?.[0] || null;
+          const destinatarios = getSelectedNotifyUsers();
+
+          if (!titulo) {
+            showToast('Escribe el titulo de la notificacion', 'error');
+            return;
+          }
+          if (!mensaje || !mensajePlano) {
+            showToast('Escribe el mensaje de la notificacion', 'error');
+            return;
+          }
+          if (!destinatarios.length) {
+            showToast('Selecciona al menos un usuario', 'error');
+            return;
+          }
+
+          try {
+            let fotoUrl = '';
+
+            if (imageFile) {
+              if (!String(imageFile.type || '').startsWith('image/')) {
+                showToast('Selecciona un archivo de imagen valido', 'error');
+                return;
+              }
+
+              const uploadData = new FormData();
+              uploadData.append('image', imageFile);
+
+              const uploadResponse = await fetch('/api/upload', {
+                method: 'POST',
+                body: uploadData
+              });
+              const uploadJson = await uploadResponse.json().catch(() => ({}));
+
+              if (!uploadResponse.ok || !uploadJson.path) {
+                throw new Error(uploadJson.error || 'No se pudo subir la imagen');
+              }
+
+              fotoUrl = String(uploadJson.path || '').trim();
+            }
+
+            const response = await fetch('/api/notificaciones-inicio', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ titulo, mensaje, foto_url: fotoUrl, destinatarios })
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success) {
+              throw new Error(data.error || 'No se pudo enviar la notificacion');
+            }
+
+            showToast('Notificacion enviada correctamente', 'success');
+            document.getElementById('notifyTitleInput').value = '';
+            const editor = getRichMessageEditor();
+            if (editor) editor.innerHTML = '';
+            document.getElementById('notifyImageFileInput').value = '';
+            document.getElementById('notifyUsersSearch').value = '';
+            closeNotifyModal();
+          } catch (error) {
+            console.error('Error enviando notificacion:', error);
+            showToast(error.message || 'Error al enviar notificacion', 'error');
+          }
+        });
+      }
+    });
+
+  </script>
+
+</body>
+</html>

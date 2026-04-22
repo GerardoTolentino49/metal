@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bóveda IT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/boveda.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/global-color.js"></script>
+  <!-- Librerías para previsualización de archivos -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="topbar" style="display:none">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+            
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button active" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button " data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+
+  <!-- Input file oculto para subir archivos -->
+  <input type="file" id="fileInput" multiple style="display: none;" accept="*/*">
+  
+  <!-- Overlay para drag and drop -->
+  <div class="drag-overlay" id="dragOverlay">
+    <div class="drop-zone" id="dropZone">
+      <div class="drop-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <div>SUELTA AQUÍ</div>
+      <div style="font-size: 16px; margin-top: 10px; opacity: 0.8;">
+        Arrastra cualquier archivo para subirlo
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de progreso -->
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-title">Subiendo archivos...</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText">0%</div>
+    <div class="file-info" id="fileInfo"></div>
+  </div>
+
+  <!-- Barra de búsqueda neumórfica -->
+  <div class="search-container">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input type="text" class="search-input" placeholder="Buscar archivos, etiquetas, departamentos..." id="searchInput">
+    </div>
+    <button class="upload-button" id="uploadButton" title="Subir archivos">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <span>Subir archivos</span>
+    </button>
+    <button class="filter-button" id="filterButton" title="Filtrar archivos">
+      <i class="fas fa-filter"></i>
+    </button>
+  </div>
+
+  <!-- Modal de filtros -->
+  <div class="filter-modal" id="filterModal">
+    <div class="filter-container">
+      <div class="filter-header">
+        <h3>Filtrar archivos</h3>
+        <button class="filter-close" id="filterClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="filter-content">
+        <!-- Filtro por extensión -->
+        <div class="filter-section">
+          <h4>Tipos de archivo</h4>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="pdf" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">PDF</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="doc,docx" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Documentos</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="xls,xlsx" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Hojas de cálculo</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="ppt,pptx" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Presentaciones</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="jpg,jpeg,png,gif,webp" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Imágenes</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="mp4,avi,mov,webm" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Videos</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="mp3,wav" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Audio</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="zip,rar" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Comprimidos</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="txt" class="extension-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Texto</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Filtro por etiquetas -->
+        <div class="filter-section">
+          <h4>Etiquetas</h4>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="Backups" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Backups</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Backups lisa" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Backups lisa</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Contraseñas" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Contraseñas</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Manuales" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Manuales</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Evidencias" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Evidencias</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Material de archivo" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Material de archivo</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Documentacion" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Documentación</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Cotizaciones" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Cotizaciones</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Facturas" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Facturas</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Filtro por departamentos -->
+        <div class="filter-section">
+          <h4>Departamentos</h4>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="IT" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">IT</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="RH" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">RH</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Diseño" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Diseño</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Warehouse" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Warehouse</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Mantenimiento" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Mantenimiento</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Gerencia" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Gerencia</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Contabilidad" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Contabilidad</span>
+            </label>
+            <label class="filter-option">
+              <input type="checkbox" value="Producción" class="tag-filter">
+              <span class="checkmark"></span>
+              <span class="option-text">Producción</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button class="filter-clear" id="filterClear">Limpiar filtros</button>
+        <button class="filter-apply" id="filterApply">Aplicar filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de archivos -->
+  <div class="files-container" id="filesContainer">
+    <!-- Las tarjetas de archivos se generarán dinámicamente aquí -->
+  </div>
+
+  <!-- Botones de cambio de vista -->
+  <div class="view-toggle-container">
+    <button class="view-toggle-btn active" id="gridViewBtn" title="Vista de cuadrícula">
+      <i class="fas fa-th"></i>
+    </button>
+    <button class="view-toggle-btn" id="listViewBtn" title="Vista de lista">
+      <i class="fas fa-list"></i>
+    </button>
+  </div>
+
+  <!-- Contenedor de basura para animación -->
+  <div class="trash-container">
+    <div class="trash-icon">
+      <i class="fas fa-trash"></i>
+    </div>
+  </div>
+
+  <!-- Modal de vista previa -->
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-container">
+      <div class="preview-header">
+        <div class="preview-title">
+          <div class="file-icon">
+            <div class="extension-text" id="previewExtension"></div>
+          </div>
+          <span id="previewFileName"></span>
+        </div>
+        <button class="preview-close" id="previewClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="preview-content" id="previewContent">
+        <!-- El contenido de la vista previa se insertará aquí -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Agregar el modal de confirmación después del modal de vista previa -->
+  <div class="confirm-modal" id="confirmModal">
+    <div class="confirm-container">
+      <div class="confirm-header">
+        <h3>Confirmar eliminación</h3>
+        <button class="confirm-close" id="confirmClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="confirm-content">
+        <div class="confirm-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="confirm-message">
+          <h4>¿Estás seguro de que quieres eliminar este archivo?</h4>
+          <p>Esta acción no se puede deshacer. El archivo será eliminado permanentemente.</p>
+          <div class="file-info-confirm" id="fileInfoConfirm">
+            <!-- La información del archivo se insertará aquí -->
+          </div>
+        </div>
+      </div>
+      <div class="confirm-actions">
+        <button class="confirm-cancel" id="confirmCancel">
+          <i class="fas fa-times"></i> No, cancelar
+        </button>
+        <button class="confirm-delete" id="confirmDelete">
+          <i class="fas fa-trash"></i> Si, eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para editar comentarios -->
+  <div class="comments-modal" id="commentsModal">
+    <div class="comments-container">
+      <div class="comments-header">
+        <h3>Editar comentarios</h3>
+        <button class="comments-close" id="commentsClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="comments-content">
+        <div class="comments-file-info" id="commentsFileInfo">
+          <!-- La información del archivo se insertará aquí -->
+        </div>
+        <div class="comments-form">
+          <label for="commentsTextarea">Comentarios:</label>
+          <textarea id="commentsTextarea" placeholder="Escribe tus comentarios aquí..." rows="4"></textarea>
+        </div>
+      </div>
+      <div class="comments-actions">
+        <button class="comments-cancel" id="commentsCancel">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button class="comments-save" id="commentsSave">
+          <i class="fas fa-save"></i> Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú contextual para etiquetas -->
+  <div class="context-menu" id="contextMenu">
+    <div class="context-menu-header">
+      Clasificar documento
+    </div>
+    
+    <div class="context-menu-content">
+      <!-- Primera columna: Categorías -->
+      <div class="context-menu-column">
+        <div class="context-menu-section">
+          <div class="context-menu-section-title">Categorías</div>
+          <div class="context-menu-item" data-tag="Backups">
+            Backups
+          </div>
+          <div class="context-menu-item" data-tag="Backups lisa">
+            Backups LISA
+          </div>
+          <div class="context-menu-item" data-tag="Contraseñas">
+            Contraseñas
+          </div>
+          <div class="context-menu-item" data-tag="Manuales">
+            Manuales
+          </div>
+          <div class="context-menu-item" data-tag="Evidencias">
+            Evidencias
+          </div>
+          <div class="context-menu-item" data-tag="Material de archivo">
+            Material de archivo
+          </div>
+          <div class="context-menu-item" data-tag="Documentacion">
+            Documentación
+          </div>
+          <div class="context-menu-item" data-tag="Cotizaciones">
+            Cotizaciones
+          </div>
+          <div class="context-menu-item" data-tag="Facturas">
+            Facturas
+          </div>
+        </div>
+      </div>
+      
+      <!-- Segunda columna: Departamentos -->
+      <div class="context-menu-column">
+        <div class="context-menu-section">
+          <div class="context-menu-section-title">Departamentos</div>
+          <div class="context-menu-item" data-tag="IT">
+            IT
+          </div>
+          <div class="context-menu-item" data-tag="RH">
+            RH
+          </div>
+          <div class="context-menu-item" data-tag="Diseño">
+            Diseño
+          </div>
+          <div class="context-menu-item" data-tag="Warehouse">
+            Warehouse
+          </div>
+          <div class="context-menu-item" data-tag="Mantenimiento">
+            Mantenimiento
+          </div>
+          <div class="context-menu-item" data-tag="Gerencia">
+            Gerencia
+          </div>
+          <div class="context-menu-item" data-tag="Contabilidad">
+            Contabilidad
+          </div>
+          <div class="context-menu-item" data-tag="Producción">
+            Producción
+          </div>
+          <div class="context-menu-item" data-tag="WD">
+            WD
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-section">
+      <div class="context-menu-item" data-action="remove-tags">
+        Quitar todas las etiquetas
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Funcionalidad de drag and drop mejorada con almacenamiento local
+    document.addEventListener('DOMContentLoaded', function() {
+      const dragOverlay = document.getElementById('dragOverlay');
+      const dropZone = document.getElementById('dropZone');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const fileInfo = document.getElementById('fileInfo');
+      const filesContainer = document.getElementById('filesContainer');
+      const previewModal = document.getElementById('previewModal');
+      const previewClose = document.getElementById('previewClose');
+      const previewContent = document.getElementById('previewContent');
+      const previewFileName = document.getElementById('previewFileName');
+      const previewExtension = document.getElementById('previewExtension');
+      const contextMenu = document.getElementById('contextMenu');
+      const uploadButton = document.getElementById('uploadButton');
+      const fileInput = document.getElementById('fileInput');
+
+      let dragCounter = 0;
+      let isDragActive = false;
+      let currentFileForContext = null;
+
+      // Cargar archivos guardados al iniciar
+      loadSavedFiles();
+
+      // Event listener para el botón de subir archivos
+      uploadButton.addEventListener('click', function() {
+        fileInput.click();
+      });
+
+      // Event listener para cuando se seleccionan archivos
+      fileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          handleFileUpload(files);
+        }
+      });
+
+      // Cerrar modal
+      previewClose.addEventListener('click', closePreview);
+      previewModal.addEventListener('click', function(e) {
+        if (e.target === previewModal) {
+          closePreview();
+        }
+      });
+
+      // Cerrar modal con Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && previewModal.classList.contains('active')) {
+          closePreview();
+        }
+      });
+
+      // Cerrar menú contextual al hacer clic fuera
+      document.addEventListener('click', function(e) {
+        if (!contextMenu.contains(e.target)) {
+          contextMenu.classList.remove('active');
+        }
+      });
+
+      // Manejar clic derecho en las tarjetas
+      document.addEventListener('contextmenu', function(e) {
+        const fileCard = e.target.closest('.file-card');
+        if (fileCard) {
+          e.preventDefault();
+          showContextMenu(e, fileCard);
+        }
+      });
+
+      function showContextMenu(e, fileCard) {
+        const fileId = fileCard.dataset.fileId;
+        currentFileForContext = fileId;
+        
+        // Obtener dimensiones del modal
+        const contextMenu = document.getElementById('contextMenu');
+        const menuRect = contextMenu.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        // Calcular posición inicial (donde se hizo clic)
+        let left = e.pageX;
+        let top = e.pageY;
+        
+        // Ajustar posición horizontal si se sale por la derecha
+        if (left + menuRect.width > viewportWidth) {
+          left = viewportWidth - menuRect.width - 10;
+        }
+        
+        // Ajustar posición vertical si se sale por abajo
+        if (top + menuRect.height > viewportHeight) {
+          // Mostrar arriba del punto de clic
+          top = e.pageY - menuRect.height;
+          
+          // Si aún se sale por arriba, mostrar en el centro de la pantalla
+          if (top < 0) {
+            top = Math.max(10, (viewportHeight - menuRect.height) / 2);
+          }
+        }
+        
+        // Asegurar que no se salga por la izquierda
+        if (left < 0) {
+          left = 10;
+        }
+        
+        // Asegurar que no se salga por arriba
+        if (top < 0) {
+          top = 10;
+        }
+        
+        // Aplicar posición
+        contextMenu.style.left = left + 'px';
+        contextMenu.style.top = top + 'px';
+        contextMenu.classList.add('active');
+        
+        // Marcar etiquetas actuales
+        const tags = fileCard.querySelectorAll('.file-tag');
+        const currentTags = Array.from(tags).map(tag => tag.textContent.trim());
+        
+        document.querySelectorAll('.context-menu-item[data-tag]').forEach(item => {
+          const tag = item.getAttribute('data-tag');
+          if (currentTags.includes(tag)) {
+            item.classList.add('selected');
+          } else {
+            item.classList.remove('selected');
+          }
+        });
+      }
+
+      // Manejar clics en el menú contextual
+      contextMenu.addEventListener('click', function(e) {
+        const menuItem = e.target.closest('.context-menu-item');
+        if (!menuItem) return;
+
+        const tag = menuItem.getAttribute('data-tag');
+        const action = menuItem.getAttribute('data-action');
+
+        if (action === 'remove-tags') {
+          // Mejorada: Eliminar todas las etiquetas de una sola vez
+          removeAllTags(currentFileForContext);
+        } else if (tag) {
+          addTag(currentFileForContext, tag);
+        }
+
+        contextMenu.classList.remove('active');
+      });
+
+      function closePreview() {
+        previewModal.classList.remove('active');
+        previewContent.innerHTML = '';
+      }
+
+      // Prevenir el comportamiento por defecto del navegador
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        document.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // Contador para evitar parpadeos
+      document.addEventListener('dragenter', function(e) {
+        dragCounter++;
+        if (!isDragActive) {
+          isDragActive = true;
+          dragOverlay.classList.add('active');
+        }
+      });
+
+      document.addEventListener('dragleave', function(e) {
+        dragCounter--;
+        if (dragCounter === 0) {
+          isDragActive = false;
+          dragOverlay.classList.remove('active');
+          dropZone.classList.remove('dragover');
+        }
+      });
+
+      // Efecto visual en la zona de drop
+      dropZone.addEventListener('dragenter', function(e) {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      dropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        if (!dropZone.contains(e.relatedTarget)) {
+          dropZone.classList.remove('dragover');
+        }
+      });
+
+      // Manejar el drop de archivos
+      document.addEventListener('drop', function(e) {
+        dragCounter = 0;
+        isDragActive = false;
+        dragOverlay.classList.remove('active');
+        dropZone.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length === 0) return;
+
+        handleDrop(e);
+      });
+
+      async function handleDrop(e) {
+        const files = e.dataTransfer.files;
+        if (files.length === 0) return;
+
+        await handleFileUpload(Array.from(files));
+      }
+
+      async function handleFileUpload(files) {
+        if (files.length === 0) return;
+
+        // Mostrar progreso
+        progressContainer.classList.add('active');
+
+        // Procesar archivos
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const progress = ((i + 1) / files.length) * 100;
+          
+          // Actualizar barra de progreso
+          progressFill.style.width = progress + '%';
+          progressText.textContent = Math.round(progress) + '%';
+          fileInfo.textContent = `Procesando: ${file.name}`;
+
+          // Guardar archivo en la base de datos
+          await saveFileToDatabase(file);
+        }
+
+        // Ocultar progreso y actualizar vista
+        setTimeout(() => {
+          progressContainer.classList.remove('active');
+          progressFill.style.width = '0%';
+          progressText.textContent = '0%';
+          fileInfo.textContent = '';
+          loadSavedFiles(); // Recargar archivos
+        }, 1000);
+      }
+
+      // Función para guardar archivo en la base de datos
+      async function saveFileToDatabase(file) {
+        return new Promise((resolve, reject) => {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          fetch('/api/boveda/upload', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              resolve(data.file);
+            } else {
+              reject(new Error(data.error || 'Error al subir archivo'));
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+        });
+      }
+
+      // Función para cargar archivos desde la base de datos
+      async function loadSavedFiles() {
+        try {
+          const response = await fetch('/api/boveda/files');
+          const data = await response.json();
+          
+          if (!data.success) {
+            throw new Error(data.error || 'Error al cargar archivos');
+          }
+
+          const files = data.files;
+          
+          if (files.length === 0) {
+            filesContainer.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>No hay archivos</h3>
+                <p>Arrastra archivos aquí para comenzar a organizar tu bóveda</p>
+              </div>
+            `;
+            return;
+          }
+
+          filesContainer.innerHTML = files.map(file => createFileCard(file)).join('');
+          
+          // Agregar eventos de doble clic a las tarjetas
+          document.querySelectorAll('.file-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+              // Evitar que se abra el modal si se hace clic en botones de acción
+              if (e.target.closest('.file-action-btn') || e.target.closest('.download-btn') || e.target.closest('.file-tag')) {
+                return;
+              }
+              const fileId = this.dataset.fileId;
+              openFilePreview(fileId);
+            });
+          });
+        } catch (error) {
+          console.error('Error al cargar archivos:', error);
+          filesContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Error al cargar archivos</h3>
+              <p>${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      // Función para crear tarjeta de archivo
+      function createFileCard(file) {
+        const fileDate = formatFullDate(new Date(file.fecha_subida));
+        const fileName = file.ruta.split('/').pop(); // Obtener nombre del archivo de la ruta
+        const decodedFileName = decodeURIComponent(fileName); // Decodificar nombre del archivo
+        const extension = fileName.split('.').pop().toUpperCase();
+        
+        // Generar etiquetas HTML si hay etiquetas
+        let tagsHtml = '';
+        if (file.etiqueta) {
+          const etiquetas = file.etiqueta.split(',').map(e => e.trim());
+          tagsHtml = `<div class="file-tags">${etiquetas.map(etiqueta => 
+            `<span class="file-tag" onclick="removeTag(${file.id}, '${etiqueta}')" title="Clic para eliminar">${etiqueta}</span>`
+          ).join('')}</div>`;
+        }
+        
+        return `
+          <div class="file-card" data-type="${extension.toLowerCase()}" data-file-id="${file.id}" title="Clic para previsualizar">
+            <div class="file-actions">
+              <button class="file-action-btn" onclick="deleteFile(${file.id})" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="file-action-btn comments-btn" onclick="editComments(${file.id})" title="Editar comentarios">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </div>
+            <div class="file-icon">
+              <div class="extension-text">${extension}</div>
+            </div>
+            <div class="file-info">
+              <div class="file-name" title="${decodedFileName}">${decodedFileName}</div>
+              <div class="file-meta">
+                <span class="file-date">${fileDate}</span>
+                ${file.comentarios ? `<span class="file-comments">${file.comentarios}</span>` : ''}
+              </div>
+              ${tagsHtml}
+            </div>
+            <div class="file-download">
+              <button class="download-btn" onclick="downloadFile('${file.ruta}')" title="Descargar archivo">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
+            <div class="file-preview-hint">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+        `;
+      }
+
+      // Función para formatear fecha completa en español
+      function formatFullDate(date) {
+        const months = [
+          'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+          'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+        
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return `Subido el ${day} de ${month} de ${year}`;
+      }
+
+      // Función para abrir vista previa (modificada para incluir HEIC, DOCX, XLSX)
+      async function openFilePreview(fileId) {
+        try {
+          const response = await fetch(`/api/boveda/files/${fileId}`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          if (!data.success) {
+            throw new Error(data.error || 'Error al cargar archivo');
+          }
+
+          const file = data.file;
+          const fileName = file.ruta.split('/').pop();
+          const extension = fileName.split('.').pop().toLowerCase();
+
+          // Decodificar el nombre del archivo si tiene caracteres especiales
+          const decodedFileName = decodeURIComponent(fileName);
+
+          previewFileName.textContent = decodedFileName;
+          previewExtension.textContent = extension.toUpperCase();
+          
+          // Configurar el tipo de archivo para el ícono
+          const previewTitle = document.querySelector('.preview-title .file-icon');
+          previewTitle.parentElement.setAttribute('data-type', extension);
+
+          // Generar vista previa según el tipo de archivo
+          if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+            // Vista previa de imagen
+            previewContent.innerHTML = `
+              <img src="${file.ruta}" alt="${fileName}" class="preview-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <div class="preview-unsupported" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Error al cargar imagen</h3>
+                <p>No se pudo cargar la imagen. Verifica que el archivo existe.</p>
+                <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                  <i class="fas fa-download"></i> Descargar archivo
+                </button>
+              </div>
+            `;
+          } else if (['mp4', 'avi', 'mov', 'webm'].includes(extension)) {
+            // Vista previa de video
+            previewContent.innerHTML = `
+              <video controls class="preview-video">
+                <source src="${file.ruta}" type="video/${extension}">
+                Tu navegador no soporta el elemento video.
+              </video>
+            `;
+          } else if (extension === 'pdf') {
+            // Vista previa de PDF
+            previewContent.innerHTML = `
+              <iframe src="${file.ruta}" class="preview-pdf"></iframe>
+            `;
+          } else if (extension === 'docx') {
+            // Vista previa de archivos DOCX con verificación de librería
+            if (typeof mammoth === 'undefined') {
+              previewContent.innerHTML = `
+                <div class="preview-unsupported">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <h3>Librería no disponible</h3>
+                  <p>La librería para convertir archivos DOCX no está disponible.</p>
+                  <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                    <i class="fas fa-download"></i> Descargar archivo
+                  </button>
+                </div>
+            `;
+          } else {
+              try {
+                const docxResponse = await fetch(file.ruta);
+                const docxArrayBuffer = await docxResponse.arrayBuffer();
+                
+                // Convertir DOCX a HTML usando mammoth
+                const result = await mammoth.convertToHtml({ arrayBuffer: docxArrayBuffer });
+                
+                previewContent.innerHTML = `
+                  <div class="preview-document-container">
+                    <div class="preview-document-header">
+                      <span class="preview-document-info">
+                        <i class="fas fa-file-word"></i>
+                        DOCX - Documento de Word
+                      </span>
+                      <div class="preview-document-actions">
+                        <button class="preview-document-action" onclick="copyDocumentContent()" title="Copiar contenido">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="preview-document-action" onclick="downloadFile('${file.ruta}')" title="Descargar archivo">
+                          <i class="fas fa-download"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="preview-document-content">
+                      <div class="preview-document-html" id="documentContent">${result.value}</div>
+                    </div>
+                  </div>
+                `;
+              } catch (error) {
+                console.error('Error al cargar DOCX:', error);
+                previewContent.innerHTML = `
+                  <div class="preview-unsupported">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error al cargar documento DOCX</h3>
+                    <p>No se pudo cargar el documento: ${error.message}</p>
+                    <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                      <i class="fas fa-download"></i> Descargar archivo
+                    </button>
+                  </div>
+                `;
+              }
+            }
+          } else if (extension === 'xlsx') {
+            // Vista previa de archivos XLSX con verificación de librería
+            if (typeof XLSX === 'undefined') {
+              previewContent.innerHTML = `
+                <div class="preview-unsupported">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <h3>Librería no disponible</h3>
+                  <p>La librería para convertir archivos XLSX no está disponible.</p>
+                  <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                    <i class="fas fa-download"></i> Descargar archivo
+                  </button>
+                </div>
+              `;
+            } else {
+              try {
+                const xlsxResponse = await fetch(file.ruta);
+                const xlsxArrayBuffer = await xlsxResponse.arrayBuffer();
+                
+                // Leer XLSX usando SheetJS
+                const workbook = XLSX.read(xlsxArrayBuffer, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                // Convertir a HTML
+                const htmlContent = XLSX.utils.sheet_to_html(worksheet);
+                
+                previewContent.innerHTML = `
+                  <div class="preview-spreadsheet-container">
+                    <div class="preview-spreadsheet-header">
+                      <span class="preview-spreadsheet-info">
+                        <i class="fas fa-file-excel"></i>
+                        XLSX - Hoja de cálculo
+                      </span>
+                      <div class="preview-spreadsheet-actions">
+                        <button class="preview-spreadsheet-action" onclick="copySpreadsheetContent()" title="Copiar contenido">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="preview-spreadsheet-action" onclick="downloadFile('${file.ruta}')" title="Descargar archivo">
+                          <i class="fas fa-download"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="preview-spreadsheet-content">
+                      <div class="preview-spreadsheet-html" id="spreadsheetContent">${htmlContent}</div>
+                    </div>
+                  </div>
+                `;
+              } catch (error) {
+                console.error('Error al cargar XLSX:', error);
+                previewContent.innerHTML = `
+                  <div class="preview-unsupported">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error al cargar hoja de cálculo XLSX</h3>
+                    <p>No se pudo cargar la hoja de cálculo: ${error.message}</p>
+                    <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                      <i class="fas fa-download"></i> Descargar archivo
+                    </button>
+                  </div>
+                `;
+              }
+            }
+          } else if (['txt', 'sql'].includes(extension)) {
+            // Vista previa de archivos de texto
+            try {
+              const textResponse = await fetch(file.ruta);
+              if (textResponse.ok) {
+                const textContent = await textResponse.text();
+                previewContent.innerHTML = `
+                  <div class="preview-text-container">
+                    <div class="preview-text-header">
+                      <span class="preview-text-info">
+                        <i class="fas fa-file-alt"></i>
+                        ${extension.toUpperCase()} - ${(textContent.length / 1024).toFixed(1)} KB
+                      </span>
+                      <div class="preview-text-actions">
+                        <button class="preview-text-action" onclick="copyTextContent()" title="Copiar contenido">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="preview-text-action" onclick="downloadFile('${file.ruta}')" title="Descargar archivo">
+                          <i class="fas fa-download"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="preview-text-content">
+                      <pre class="preview-text-code" id="textContent">${window.escapeHtml(textContent)}</pre>
+                    </div>
+                  </div>
+                `;
+              } else {
+                throw new Error('No se pudo cargar el contenido del archivo');
+              }
+            } catch (error) {
+              console.error('Error al cargar archivo de texto:', error);
+              previewContent.innerHTML = `
+                <div class="preview-unsupported">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <h3>Error al cargar archivo</h3>
+                  <p>No se pudo cargar el contenido del archivo: ${error.message}</p>
+                  <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                    <i class="fas fa-download"></i> Descargar archivo
+                  </button>
+                </div>
+              `;
+            }
+          } else {
+            // Archivo no soportado para vista previa (incluye HEIC)
+            previewContent.innerHTML = `
+              <div class="preview-unsupported">
+                <i class="fas fa-file"></i>
+                <h3>Vista previa no disponible</h3>
+                <p>Este tipo de archivo no puede ser previsualizado.</p>
+                <button class="preview-download" onclick="downloadFile('${file.ruta}')">
+                  <i class="fas fa-download"></i> Descargar archivo
+                </button>
+              </div>
+            `;
+          }
+
+          previewModal.classList.add('active');
+        } catch (error) {
+          console.error('Error al abrir vista previa:', error);
+          alert('Error al abrir archivo: ' + error.message);
+        }
+      }
+
+      // Funciones adicionales para copiar contenido de documentos y hojas de cálculo
+      window.copyDocumentContent = function() {
+        const documentElement = document.getElementById('documentContent');
+        if (documentElement) {
+          const text = documentElement.textContent;
+          
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+              showCopySuccess();
+            }).catch(err => {
+              console.error('Error al copiar:', err);
+              fallbackCopyTextToClipboard(text);
+            });
+          } else {
+            fallbackCopyTextToClipboard(text);
+          }
+        }
+      };
+
+      window.copySpreadsheetContent = function() {
+        const spreadsheetElement = document.getElementById('spreadsheetContent');
+        if (spreadsheetElement) {
+          const text = spreadsheetElement.textContent;
+          
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+              showCopySuccess();
+            }).catch(err => {
+              console.error('Error al copiar:', err);
+              fallbackCopyTextToClipboard(text);
+            });
+          } else {
+            fallbackCopyTextToClipboard(text);
+          }
+        }
+      };
+
+      // Hacer la función disponible globalmente
+      window.openFilePreview = openFilePreview;
+    });
+
+    // Función global para eliminar archivo (corregida)
+    async function deleteFile(fileId) {
+      try {
+        // Obtener información del archivo desde el servidor
+        const response = await fetch(`/api/boveda/files/${fileId}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.error || 'Error al obtener información del archivo');
+        }
+
+        const file = data.file;
+        
+        // Mostrar modal de confirmación
+        showDeleteConfirmation(file);
+      } catch (error) {
+        console.error('Error al obtener información del archivo:', error);
+        alert('Error al obtener información del archivo: ' + error.message);
+      }
+    }
+
+    // Función para mostrar modal de confirmación (modificada con animación)
+    function showDeleteConfirmation(file) {
+      const confirmModal = document.getElementById('confirmModal');
+      const confirmClose = document.getElementById('confirmClose');
+      const confirmCancel = document.getElementById('confirmCancel');
+      const confirmDelete = document.getElementById('confirmDelete');
+      const fileInfoConfirm = document.getElementById('fileInfoConfirm');
+      
+      // Mostrar información del archivo
+      const fileName = file.ruta.split('/').pop();
+      const decodedFileName = decodeURIComponent(fileName);
+      const fileDate = formatFullDate(new Date(file.fecha_subida));
+      
+      fileInfoConfirm.innerHTML = `
+        <div class="file-name">${decodedFileName}</div>
+        <div class="file-meta">Subido el ${fileDate}</div>
+      `;
+      
+      // Mostrar modal
+      confirmModal.classList.add('active');
+      
+      // Event listeners para cerrar modal
+      const closeModal = () => {
+        confirmModal.classList.remove('active');
+      };
+      
+      confirmClose.addEventListener('click', closeModal);
+      confirmCancel.addEventListener('click', closeModal);
+      confirmModal.addEventListener('click', function(e) {
+        if (e.target === confirmModal) {
+          closeModal();
+        }
+      });
+      
+      // Event listener para confirmar eliminación
+      confirmDelete.addEventListener('click', async () => {
+        try {
+          // Mostrar indicador de carga
+          confirmDelete.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+          confirmDelete.disabled = true;
+          
+          const response = await fetch(`/api/boveda/files/${file.id}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            // Cerrar modal
+            closeModal();
+            
+            // Ejecutar animación de eliminación
+            animateFileDeletion(file.id);
+            
+            // Mostrar mensaje de éxito después de la animación
+            setTimeout(() => {
+              showSuccessMessage('Archivo eliminado correctamente');
+              
+              // Recargar archivos
+              if (typeof window.loadAllFiles === 'function') {
+                window.loadAllFiles();
+              } else if (typeof window.reloadFiles === 'function') {
+                window.reloadFiles();
+              } else {
+                location.reload();
+              }
+            }, 1000);
+          } else {
+            throw new Error(data.error || 'Error desconocido');
+          }
+        } catch (error) {
+          console.error('Error al eliminar archivo:', error);
+          
+          // Restaurar botón
+          confirmDelete.innerHTML = '<i class="fas fa-trash"></i> Si, eliminar';
+          confirmDelete.disabled = false;
+          
+          // Mostrar error
+          alert('Error al eliminar archivo: ' + error.message);
+        }
+      });
+      
+      // Cerrar con Escape
+      document.addEventListener('keydown', function handleEscape(e) {
+        if (e.key === 'Escape' && confirmModal.classList.contains('active')) {
+          closeModal();
+          document.removeEventListener('keydown', handleEscape);
+        }
+      });
+    }
+
+    // Función para animar la eliminación del archivo
+    function animateFileDeletion(fileId) {
+      const fileCard = document.querySelector(`[data-file-id="${fileId}"]`);
+      if (!fileCard) return;
+      
+      // Crear contenedor de basura si no existe
+      let trashContainer = document.querySelector('.trash-container');
+      if (!trashContainer) {
+        trashContainer = document.createElement('div');
+        trashContainer.className = 'trash-container';
+        trashContainer.innerHTML = '<div class="trash-icon"><i class="fas fa-trash"></i></div>';
+        document.body.appendChild(trashContainer);
+      }
+      
+      const trashIcon = trashContainer.querySelector('.trash-icon');
+      
+      // Obtener posiciones
+      const cardRect = fileCard.getBoundingClientRect();
+      const trashRect = trashContainer.getBoundingClientRect();
+      
+      // Calcular la trayectoria
+      const startX = cardRect.left + cardRect.width / 2;
+      const startY = cardRect.top + cardRect.height / 2;
+      const endX = trashRect.left + trashRect.width / 2;
+      const endY = trashRect.top + trashRect.height / 2;
+      
+      // Crear partículas de papel
+      createPaperParticles(fileCard, trashContainer);
+      
+      // Activar icono de basura
+      trashIcon.classList.add('active');
+      
+      // Aplicar animación al archivo
+      fileCard.classList.add('deleting');
+      
+      // Remover el archivo después de la animación
+      setTimeout(() => {
+        fileCard.remove();
+        trashIcon.classList.remove('active');
+      }, 800);
+    }
+
+    // Función para crear partículas de papel
+    function createPaperParticles(fileCard, trashContainer) {
+      const cardRect = fileCard.getBoundingClientRect();
+      const trashRect = trashContainer.getBoundingClientRect();
+      
+      // Crear múltiples partículas
+      for (let i = 0; i < 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'paper-particle';
+        
+        // Posición inicial aleatoria alrededor del archivo
+        const startX = cardRect.left + Math.random() * cardRect.width;
+        const startY = cardRect.top + Math.random() * cardRect.height;
+        
+        // Posición final cerca de la basura
+        const endX = trashRect.left + Math.random() * trashRect.width;
+        const endY = trashRect.top + Math.random() * trashRect.height;
+        
+        particle.style.left = startX + 'px';
+        particle.style.top = startY + 'px';
+        particle.style.animationDelay = Math.random() * 0.3 + 's';
+        
+        document.body.appendChild(particle);
+        
+        // Remover partícula después de la animación
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 1000);
+      }
+    }
+
+    // Función para mostrar mensaje de éxito
+    function showSuccessMessage(message) {
+      // Crear elemento de mensaje
+      const successMessage = document.createElement('div');
+      successMessage.className = 'success-message';
+      successMessage.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+      `;
+      
+      // Agregar al DOM
+      document.body.appendChild(successMessage);
+      
+      // Mostrar con animación
+      setTimeout(() => {
+        successMessage.classList.add('show');
+      }, 100);
+      
+      // Ocultar después de 3 segundos
+      setTimeout(() => {
+        successMessage.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(successMessage);
+        }, 300);
+      }, 3000);
+    }
+
+    // Función global para descargar archivo
+    function downloadFile(filePath) {
+      const link = document.createElement('a');
+      link.href = filePath;
+      const fileName = decodeURIComponent(filePath.split('/').pop());
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Funciones globales para manejo de etiquetas
+    async function addTag(fileId, etiqueta) {
+      try {
+        const response = await fetch(`/api/boveda/files/${fileId}/etiquetas`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ etiqueta })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Recargar archivos sin recargar toda la página
+          if (typeof window.loadAllFiles === 'function') {
+            window.loadAllFiles();
+          } else {
+            location.reload();
+          }
+        } else {
+          alert('Error al agregar etiqueta: ' + (data.error || 'Error desconocido'));
+        }
+      } catch (error) {
+        console.error('Error al agregar etiqueta:', error);
+        alert('Error al agregar etiqueta: ' + error.message);
+      }
+    }
+
+    async function removeTag(fileId, etiqueta) {
+      try {
+        const response = await fetch(`/api/boveda/files/${fileId}/etiquetas`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ etiqueta })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Recargar archivos sin recargar toda la página
+          if (typeof window.loadAllFiles === 'function') {
+            window.loadAllFiles();
+          } else {
+            location.reload();
+          }
+        } else {
+          alert('Error al eliminar etiqueta: ' + (data.error || 'Error desconocido'));
+        }
+      } catch (error) {
+        console.error('Error al eliminar etiqueta:', error);
+        alert('Error al eliminar etiqueta: ' + error.message);
+      }
+    }
+
+    // Optimizar la carga de archivos con cache y lazy loading
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('searchInput');
+      const filesContainer = document.getElementById('filesContainer');
+      const searchContainer = document.querySelector('.search-container');
+      
+      window.allFiles = [];
+      window.currentFiles = [];
+      let searchTimeout = null;
+      
+      // Cache mejorado con TTL (Time To Live)
+      const searchCache = new Map();
+      const CACHE_TTL = 5 * 60 * 1000; // 5 minutos
+      
+      // Debounce optimizado
+      const DEBOUNCE_DELAY = 300; // Reducido de 500ms a 300ms
+      
+      // Pre-cargar archivos al inicio
+      loadAllFiles();
+
+      // Búsqueda optimizada con cache
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        if (searchTimeout) {
+          clearTimeout(searchTimeout);
+        }
+        
+        if (query) {
+          searchContainer.classList.add('searching');
+        }
+        
+        searchTimeout = setTimeout(() => {
+          filterFiles(query);
+          searchContainer.classList.remove('searching');
+        }, DEBOUNCE_DELAY);
+      });
+
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          performSearch();
+        }
+      });
+
+
+
+      // Función optimizada para cargar archivos
+      async function loadAllFiles() {
+        try {
+          const response = await fetch('/api/boveda/files');
+          const data = await response.json();
+          
+          if (!data.success) {
+            throw new Error(data.error || 'Error al cargar archivos');
+          }
+
+          window.allFiles = data.files;
+          window.currentFiles = [...window.allFiles];
+          
+          // Pre-procesar archivos de forma más eficiente
+          preprocessFilesForSearch();
+          
+          renderFiles(window.currentFiles);
+        } catch (error) {
+          console.error('Error al cargar archivos:', error);
+          showEmptyState('Error al cargar archivos: ' + error.message);
+        }
+      }
+
+      // Pre-procesamiento optimizado
+      function preprocessFilesForSearch() {
+        window.allFiles.forEach(file => {
+          const fileName = file.ruta.split('/').pop().toLowerCase();
+          const decodedFileName = decodeURIComponent(fileName);
+          const extension = fileName.split('.').pop().toLowerCase();
+          
+          // Crear objeto de búsqueda optimizado
+          file._searchData = {
+            fileName: decodedFileName.toLowerCase(),
+            extension: extension,
+            comments: (file.comentarios || '').toLowerCase(),
+            tags: (file.etiqueta || '').toLowerCase(),
+            fullText: `${decodedFileName} ${extension} ${file.comentarios || ''} ${file.etiqueta || ''}`.toLowerCase()
+          };
+        });
+      }
+
+      // Filtrado optimizado con cache
+      function filterFiles(query) {
+        const cacheKey = `${query}_${JSON.stringify(window.currentFilters)}`;
+        const now = Date.now();
+        
+        // Verificar cache con TTL
+        const cached = searchCache.get(cacheKey);
+        if (cached && (now - cached.timestamp) < CACHE_TTL) {
+          window.currentFiles = cached.data;
+          renderFiles(window.currentFiles, query);
+          return;
+        }
+
+        if (!query && (!window.currentFilters || (window.currentFilters.extensions.length === 0 && window.currentFilters.tags.length === 0))) {
+          window.currentFiles = [...window.allFiles];
+        } else {
+          // Filtrado optimizado usando datos pre-procesados
+          window.currentFiles = window.allFiles.filter(file => {
+            const searchData = file._searchData;
+            
+            const matchesQuery = !query || searchData.fullText.includes(query.toLowerCase());
+            const matchesExtension = !window.currentFilters || window.currentFilters.extensions.length === 0 || 
+              window.currentFilters.extensions.includes(searchData.extension);
+            const matchesTags = !window.currentFilters || window.currentFilters.tags.length === 0 || 
+              window.currentFilters.tags.some(tag => searchData.tags.includes(tag.toLowerCase()));
+            
+            return matchesQuery && matchesExtension && matchesTags;
+          });
+        }
+        
+        // Guardar en cache con timestamp
+        if (searchCache.size > 100) { // Limitar cache a 100 entradas
+          const firstKey = searchCache.keys().next().value;
+          searchCache.delete(firstKey);
+        }
+        searchCache.set(cacheKey, { data: window.currentFiles, timestamp: now });
+        
+        renderFiles(window.currentFiles, query);
+      }
+
+      // Renderizado optimizado con DocumentFragment
+      function renderFiles(files, query = '') {
+        const currentContent = filesContainer.innerHTML;
+        const newContent = generateFilesHTML(files, query);
+        
+        if (currentContent !== newContent) {
+          // Usar DocumentFragment para mejor rendimiento
+          const fragment = document.createDocumentFragment();
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = newContent;
+          
+          while (tempDiv.firstChild) {
+            fragment.appendChild(tempDiv.firstChild);
+          }
+          
+          filesContainer.innerHTML = '';
+          filesContainer.appendChild(fragment);
+          
+          // Agregar clase para centrado cuando no hay resultados
+          if (files.length === 0 && (query || (window.currentFilters && (window.currentFilters.extensions.length > 0 || window.currentFilters.tags.length > 0)))) {
+            filesContainer.classList.add('empty-search');
+          } else {
+            filesContainer.classList.remove('empty-search');
+          }
+          
+          // Agregar event listeners de forma optimizada
+          if (files.length > 0) {
+            addFileCardEventListeners();
+          }
+        }
+      }
+
+      // Generación de HTML optimizada
+      function generateFilesHTML(files, query = '') {
+        if (files.length === 0) {
+          if (query || (window.currentFilters && (window.currentFilters.extensions.length > 0 || window.currentFilters.tags.length > 0))) {
+            let filterInfo = '';
+            if (window.currentFilters && (window.currentFilters.extensions.length > 0 || window.currentFilters.tags.length > 0)) {
+              const activeFilters = [];
+              if (window.currentFilters.extensions.length > 0) {
+                activeFilters.push(`Tipos: ${window.currentFilters.extensions.join(', ')}`);
+              }
+              if (window.currentFilters.tags.length > 0) {
+                activeFilters.push(`Etiquetas: ${window.currentFilters.tags.join(', ')}`);
+              }
+              filterInfo = `<p>Filtros activos: ${activeFilters.join(' | ')}</p>`;
+            }
+            
+            return `
+              <div class="empty-state search-results">
+                <i class="fas fa-search"></i>
+                <h3>No se encontraron resultados</h3>
+                <p>No hay archivos que coincidan con los criterios de búsqueda</p>
+                ${query ? `<p>Búsqueda: "${query}"</p>` : ''}
+                ${filterInfo}
+                <button class="clear-search-btn" onclick="clearSearch()">
+                  <i class="fas fa-times"></i> Limpiar búsqueda
+                </button>
+                <button class="clear-search-btn" onclick="clearFilters()" style="margin-left: 10px;">
+                  <i class="fas fa-filter"></i> Limpiar filtros
+                </button>
+              </div>
+            `;
+          } else {
+            return `
+              <div class="empty-state">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>No hay archivos</h3>
+                <p>Arrastra archivos aquí para comenzar a organizar tu bóveda</p>
+              </div>
+            `;
+          }
+        }
+
+        let resultsHeader = '';
+        const hasFilters = window.currentFilters && (window.currentFilters.extensions.length > 0 || window.currentFilters.tags.length > 0);
+        
+        if ((query && files.length > 0) || hasFilters) {
+          let headerText = '';
+          if (query && hasFilters) {
+            headerText = `Se encontraron ${files.length} resultado${files.length !== 1 ? 's' : ''} para "${query}" con filtros aplicados`;
+          } else if (query) {
+            headerText = `Se encontraron ${files.length} resultado${files.length !== 1 ? 's' : ''} para "${query}"`;
+          } else if (hasFilters) {
+            headerText = `Se encontraron ${files.length} resultado${files.length !== 1 ? 's' : ''} con filtros aplicados`;
+          }
+          
+          resultsHeader = `
+            <div class="search-results-header">
+              <span class="search-results-count">${files.length}</span>
+              <p>${headerText}</p>
+            </div>
+          `;
+        }
+
+        // Usar map con join para mejor rendimiento
+        return resultsHeader + files.map(file => createFileCard(file)).join('');
+      }
+
+      // Event listeners optimizados con delegación
+      function addFileCardEventListeners() {
+        // Usar delegación de eventos en lugar de múltiples listeners
+        filesContainer.addEventListener('click', handleFileCardClick, { passive: true });
+      }
+
+      function handleFileCardClick(e) {
+        const fileCard = e.target.closest('.file-card');
+        if (!fileCard) return;
+        
+        // Evitar que se abra el modal si se hace clic en botones de acción
+        if (e.target.closest('.file-action-btn') || e.target.closest('.download-btn') || e.target.closest('.file-tag')) {
+          return;
+        }
+        
+        const fileId = fileCard.dataset.fileId;
+        openFilePreview(fileId);
+      }
+
+      function showEmptyState(message = null) {
+        if (message) {
+          filesContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Error al cargar archivos</h3>
+              <p>${message}</p>
+            </div>
+          `;
+        } else {
+          filesContainer.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <h3>No hay archivos</h3>
+              <p>Arrastra archivos aquí para comenzar a organizar tu bóveda</p>
+            </div>
+          `;
+        }
+      }
+
+      window.clearSearch = function() {
+        searchInput.value = '';
+        filterFiles('');
+        searchInput.focus();
+      };
+
+      window.reloadFiles = function() {
+        searchCache.clear();
+        loadAllFiles();
+      };
+
+      function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+          console.log('Buscando:', query);
+          filterFiles(query);
+        }
+      }
+
+      // Event listeners optimizados
+      searchInput.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      }, { passive: true });
+
+      searchInput.addEventListener('blur', function() {
+        this.parentElement.classList.remove('focused');
+      }, { passive: true });
+
+      // Función optimizada para crear tarjetas
+      function createFileCard(file) {
+        const fileDate = formatFullDate(new Date(file.fecha_subida));
+        const fileName = file.ruta.split('/').pop();
+        const decodedFileName = decodeURIComponent(fileName);
+        const extension = fileName.split('.').pop().toUpperCase();
+        
+        let tagsHtml = '';
+        if (file.etiqueta && file.etiqueta.trim() !== '') {
+          const etiquetas = file.etiqueta.split(',').map(e => e.trim()).filter(e => e !== '');
+          if (etiquetas.length > 0) {
+            tagsHtml = `<div class="file-tags">${etiquetas.map(etiqueta => 
+              `<span class="file-tag" onclick="removeTag(${file.id}, '${etiqueta}')" title="Clic para eliminar">${etiqueta}</span>`
+            ).join('')}</div>`;
+          }
+        }
+        
+        return `
+          <div class="file-card" data-type="${extension.toLowerCase()}" data-file-id="${file.id}" title="Clic para previsualizar">
+            <div class="file-actions">
+              <button class="file-action-btn" onclick="deleteFile(${file.id})" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="file-action-btn comments-btn" onclick="editComments(${file.id})" title="Editar comentarios">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+            </div>
+            <div class="file-icon">
+              <div class="extension-text">.${extension}</div>
+            </div>
+            <div class="file-info">
+              <div class="file-name" title="${decodedFileName}">${decodedFileName}</div>
+              <div class="file-meta">
+                <span class="file-date">${fileDate}</span>
+                ${file.comentarios ? `<span class="file-comments">${file.comentarios}</span>` : ''}
+              </div>
+              ${tagsHtml}
+            </div>
+            <div class="file-download">
+              <button class="download-btn" onclick="downloadFile('${file.ruta}')" title="Descargar archivo">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
+            <div class="file-preview-hint">
+              <i class="fas fa-eye"></i>
+            </div>
+          </div>
+        `;
+      }
+
+      function formatFullDate(date) {
+        const months = [
+          'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+          'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+        
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return `Subido el ${day} de ${month} de ${year}`;
+      }
+
+      // Funciones globales optimizadas
+      window.loadAllFiles = loadAllFiles;
+      window.filterFiles = filterFiles;
+      window.renderFiles = renderFiles;
+      window.showEmptyState = showEmptyState;
+      window.createFileCard = createFileCard;
+      window.formatFullDate = formatFullDate;
+    });
+
+    // Funcionalidad de filtros optimizada (corregida)
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButton = document.getElementById('filterButton');
+      const filterModal = document.getElementById('filterModal');
+      const filterClose = document.getElementById('filterClose');
+      const filterApply = document.getElementById('filterApply');
+      const filterClear = document.getElementById('filterClear'); // Cambiar filterReset por filterClear
+      const extensionFilters = document.querySelectorAll('.extension-filter');
+      const tagFilters = document.querySelectorAll('.tag-filter');
+      
+      window.currentFilters = {
+        extensions: [],
+        tags: []
+      };
+
+      // Mostrar u ocultar filtros
+      filterButton.addEventListener('click', toggleFilterModal);
+      filterClose.addEventListener('click', toggleFilterModal);
+      filterModal.addEventListener('click', function(e) {
+        if (e.target === filterModal) {
+          toggleFilterModal();
+        }
+      });
+
+      // Aplicar filtros
+      filterApply.addEventListener('click', applyFilters);
+
+      // Restablecer filtros (corregido)
+      if (filterClear) { // Verificar que el elemento existe
+        filterClear.addEventListener('click', resetFilters);
+      }
+
+      // Función para mostrar u ocultar el modal de filtros
+      function toggleFilterModal() {
+        filterModal.classList.toggle('active');
+      }
+
+      // Función para aplicar filtros optimizada
+      function applyFilters() {
+        const selectedExtensions = [];
+        extensionFilters.forEach(filter => {
+          if (filter.checked) {
+            const extensions = filter.value.split(',');
+            selectedExtensions.push(...extensions);
+          }
+        });
+        
+        const selectedTags = [];
+        tagFilters.forEach(filter => {
+          if (filter.checked) {
+            selectedTags.push(filter.value);
+          }
+        });
+        
+        window.currentFilters = {
+          extensions: selectedExtensions,
+          tags: selectedTags
+        };
+        
+        // Limpiar cache de búsquedas al cambiar filtros
+        if (window.searchCache) {
+          window.searchCache.clear();
+        }
+        
+        // Actualizar vista
+        window.filterFiles();
+        toggleFilterModal();
+      }
+
+      // Función para restablecer filtros
+      function resetFilters() {
+        window.currentFilters = {
+          extensions: [],
+          tags: []
+        };
+        
+        // Desmarcar todos los checkboxes
+        extensionFilters.forEach(filter => filter.checked = false);
+        tagFilters.forEach(filter => filter.checked = false);
+        
+        // Limpiar cache de búsquedas al restablecer filtros
+        if (window.searchCache) {
+          window.searchCache.clear();
+        }
+        
+        // Actualizar vista
+        window.filterFiles();
+        toggleFilterModal();
+      }
+
+      // Función para mostrar indicador de filtros activos
+      function updateFilterIndicator() {
+        const activeFilters = [];
+        if (window.currentFilters.extensions.length > 0) {
+          activeFilters.push(`Tipos: ${window.currentFilters.extensions.join(', ')}`);
+        }
+        if (window.currentFilters.tags.length > 0) {
+          activeFilters.push(`Etiquetas: ${window.currentFilters.tags.join(', ')}`);
+        }
+        
+        if (activeFilters.length > 0) {
+          filterButton.classList.add('has-filters');
+          filterButton.setAttribute('title', 'Filtros activos - Clic para modificar');
+        } else {
+          filterButton.classList.remove('has-filters');
+          filterButton.setAttribute('title', 'Filtrar archivos');
+        }
+      }
+
+      // Función para limpiar filtros (función global)
+      window.clearFilters = function() {
+        resetFilters();
+      };
+
+      // Sobrescribir la función filterFiles existente para integrar con filtros optimizada
+      const originalFilterFiles = window.filterFiles;
+      window.filterFiles = function(query = '') {
+        // Combinar búsqueda de texto con filtros
+        let filteredFiles = window.allFiles.filter(file => {
+          const searchData = file._searchData;
+          
+          // Búsqueda optimizada usando datos pre-procesados
+          const matchesQuery = !query || searchData.fullText.includes(query.toLowerCase());
+          
+          // Aplicar filtros
+          const matchesExtension = window.currentFilters.extensions.length === 0 || 
+            window.currentFilters.extensions.includes(searchData.extension);
+          
+          const matchesTags = window.currentFilters.tags.length === 0 || 
+            window.currentFilters.tags.some(tag => searchData.tags.includes(tag.toLowerCase()));
+          
+          return matchesQuery && matchesExtension && matchesTags;
+        });
+        
+        window.renderFiles(filteredFiles, query);
+        updateFilterIndicator();
+      };
+    });
+  </script>
+
+  <script>
+    // Funcionalidad de filtros
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButton = document.getElementById('filterButton');
+      const filterModal = document.getElementById('filterModal');
+      const filterClose = document.getElementById('filterClose');
+      const filterClear = document.getElementById('filterClear');
+      const filterApply = document.getElementById('filterApply');
+      const extensionFilters = document.querySelectorAll('.extension-filter');
+      const tagFilters = document.querySelectorAll('.tag-filter');
+      
+      let currentFilters = {
+        extensions: [],
+        tags: []
+      };
+
+      // Abrir modal de filtros
+      filterButton.addEventListener('click', function() {
+        filterModal.classList.add('active');
+      });
+
+      // Cerrar modal
+      filterClose.addEventListener('click', closeFilterModal);
+      filterModal.addEventListener('click', function(e) {
+        if (e.target === filterModal) {
+          closeFilterModal();
+        }
+      });
+
+      // Cerrar con Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && filterModal.classList.contains('active')) {
+          closeFilterModal();
+        }
+      });
+
+      // Limpiar filtros
+      filterClear.addEventListener('click', function() {
+        extensionFilters.forEach(filter => filter.checked = false);
+        tagFilters.forEach(filter => filter.checked = false);
+        currentFilters = { extensions: [], tags: [] };
+        applyFilters();
+        updateFilterIndicator();
+      });
+
+      // Aplicar filtros
+      filterApply.addEventListener('click', function() {
+        applyFilters();
+        closeFilterModal();
+      });
+
+      function closeFilterModal() {
+        filterModal.classList.remove('active');
+      }
+
+      function applyFilters() {
+        // Obtener extensiones seleccionadas
+        currentFilters.extensions = [];
+        extensionFilters.forEach(filter => {
+          if (filter.checked) {
+            const extensions = filter.value.split(',');
+            currentFilters.extensions.push(...extensions);
+          }
+        });
+
+        // Obtener etiquetas seleccionadas
+        currentFilters.tags = [];
+        tagFilters.forEach(filter => {
+          if (filter.checked) {
+            currentFilters.tags.push(filter.value);
+          }
+        });
+
+        // Aplicar filtros a los archivos
+        filterFiles();
+        updateFilterIndicator();
+      }
+
+      function filterFiles() {
+        const query = document.getElementById('searchInput').value.trim();
+        
+        let filteredFiles = window.allFiles.filter(file => {
+          const fileName = file.ruta.split('/').pop().toLowerCase();
+          const extension = fileName.split('.').pop().toLowerCase();
+          const fileTags = file.etiqueta ? file.etiqueta.split(',').map(t => t.trim()) : [];
+          
+          // Filtro por búsqueda de texto
+          const matchesSearch = !query || 
+            decodeURIComponent(fileName).toLowerCase().includes(query.toLowerCase()) ||
+            extension.includes(query.toLowerCase()) ||
+            (file.comentarios || '').toLowerCase().includes(query.toLowerCase()) ||
+            fileTags.some(tag => tag.toLowerCase().includes(query.toLowerCase()));
+          
+          // Filtro por extensión
+          const matchesExtension = currentFilters.extensions.length === 0 || 
+            currentFilters.extensions.includes(extension);
+          
+          // Filtro por etiquetas
+          const matchesTags = currentFilters.tags.length === 0 || 
+            currentFilters.tags.some(tag => fileTags.includes(tag));
+          
+          return matchesSearch && matchesExtension && matchesTags;
+        });
+        
+        window.renderFiles(filteredFiles, query);
+        
+        // Mostrar indicador de filtros activos
+        updateFilterIndicator();
+      }
+
+      function updateFilterIndicator() {
+        const hasFilters = currentFilters.extensions.length > 0 || currentFilters.tags.length > 0;
+        const filterButton = document.getElementById('filterButton');
+        
+        if (hasFilters) {
+          filterButton.classList.add('has-filters');
+          filterButton.setAttribute('title', 'Filtros activos - Clic para modificar');
+        } else {
+          filterButton.classList.remove('has-filters');
+          filterButton.setAttribute('title', 'Filtrar archivos');
+        }
+      }
+
+      // Sobrescribir la función filterFiles existente para integrar con filtros
+      const originalFilterFiles = window.filterFiles;
+      window.filterFiles = function(query = '') {
+        // Combinar búsqueda de texto con filtros
+        let filteredFiles = window.allFiles.filter(file => {
+          const fileName = file.ruta.split('/').pop().toLowerCase();
+          const extension = fileName.split('.').pop().toLowerCase();
+          const fileTags = file.etiqueta ? file.etiqueta.split(',').map(t => t.trim()) : [];
+          
+          // Filtro por búsqueda de texto
+          const matchesSearch = !query || 
+            decodeURIComponent(fileName).toLowerCase().includes(query.toLowerCase()) ||
+            extension.includes(query.toLowerCase()) ||
+            (file.comentarios || '').toLowerCase().includes(query.toLowerCase()) ||
+            fileTags.some(tag => tag.toLowerCase().includes(query.toLowerCase()));
+          
+          // Filtro por extensión
+          const matchesExtension = currentFilters.extensions.length === 0 || 
+            currentFilters.extensions.includes(extension);
+          
+          // Filtro por etiquetas
+          const matchesTags = currentFilters.tags.length === 0 || 
+            currentFilters.tags.some(tag => fileTags.includes(tag));
+          
+          return matchesSearch && matchesExtension && matchesTags;
+        });
+        
+        window.renderFiles(filteredFiles, query);
+      };
+
+      // Hacer las funciones disponibles globalmente
+      window.currentFilters = currentFilters;
+      window.applyFilters = applyFilters;
+      window.updateFilterIndicator = updateFilterIndicator;
+    });
+  </script>
+
+  <script>
+    // Funciones globales para manejo de texto (agregar al final del archivo)
+    // Función para escapar HTML en el contenido de texto
+    window.escapeHtml = function(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    };
+
+    // Función para copiar el contenido de texto al portapapeles
+    window.copyTextContent = function() {
+      const textElement = document.getElementById('textContent');
+      if (textElement) {
+        const text = textElement.textContent;
+        
+        // Usar la API moderna del portapapeles si está disponible
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess();
+          }).catch(err => {
+            console.error('Error al copiar:', err);
+            fallbackCopyTextToClipboard(text);
+          });
+        } else {
+          fallbackCopyTextToClipboard(text);
+        }
+      }
+    };
+
+    // Función de respaldo para copiar texto
+    window.fallbackCopyTextToClipboard = function(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showCopySuccess();
+        } else {
+          alert('No se pudo copiar el contenido');
+        }
+      } catch (err) {
+        console.error('Error al copiar:', err);
+        alert('No se pudo copiar el contenido');
+      }
+      
+      document.body.removeChild(textArea);
+    };
+
+    // Función para mostrar mensaje de éxito al copiar
+    window.showCopySuccess = function() {
+      const copyButton = document.querySelector('.preview-text-action[onclick="copyTextContent()"]');
+      if (copyButton) {
+        const originalContent = copyButton.innerHTML;
+        copyButton.innerHTML = '<i class="fas fa-check"></i>';
+        copyButton.style.color = '#4caf50';
+        
+        setTimeout(() => {
+          copyButton.innerHTML = originalContent;
+          copyButton.style.color = '';
+        }, 2000);
+      }
+    };
+  </script>
+
+  <script>
+    // Funcionalidad de cambio de vista
+    document.addEventListener('DOMContentLoaded', function() {
+      const gridViewBtn = document.getElementById('gridViewBtn');
+      const listViewBtn = document.getElementById('listViewBtn');
+      const filesContainer = document.getElementById('filesContainer');
+      
+      // Obtener vista guardada en localStorage
+      const savedView = localStorage.getItem('boveda-view-mode') || 'grid';
+      
+      // Aplicar vista guardada
+      if (savedView === 'list') {
+        filesContainer.classList.add('list-view');
+        listViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+      } else {
+        filesContainer.classList.remove('list-view');
+        gridViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+      }
+      
+      // Event listeners para cambio de vista
+      gridViewBtn.addEventListener('click', function() {
+        filesContainer.classList.remove('list-view');
+        gridViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+        localStorage.setItem('boveda-view-mode', 'grid');
+        
+        // Efecto visual
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+      
+      listViewBtn.addEventListener('click', function() {
+        filesContainer.classList.add('list-view');
+        listViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+        localStorage.setItem('boveda-view-mode', 'list');
+        
+        // Efecto visual
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 150);
+      });
+    });
+  </script>
+
+  <script>
+    // Funciones para manejo de comentarios
+    let currentFileForComments = null;
+
+    // Función global para editar comentarios
+    async function editComments(fileId) {
+      try {
+        // Obtener información del archivo desde el servidor
+        const response = await fetch(`/api/boveda/files/${fileId}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.error || 'Error al obtener información del archivo');
+        }
+
+        const file = data.file;
+        currentFileForComments = fileId;
+        
+        // Mostrar modal de comentarios
+        showCommentsModal(file);
+      } catch (error) {
+        console.error('Error al obtener información del archivo:', error);
+        alert('Error al obtener información del archivo: ' + error.message);
+      }
+    }
+
+    // Función para mostrar modal de comentarios
+    function showCommentsModal(file) {
+      const commentsModal = document.getElementById('commentsModal');
+      const commentsClose = document.getElementById('commentsClose');
+      const commentsCancel = document.getElementById('commentsCancel');
+      const commentsSave = document.getElementById('commentsSave');
+      const commentsFileInfo = document.getElementById('commentsFileInfo');
+      const commentsTextarea = document.getElementById('commentsTextarea');
+      
+      // Mostrar información del archivo
+      const fileName = file.ruta.split('/').pop();
+      const decodedFileName = decodeURIComponent(fileName);
+      const fileDate = formatFullDate(new Date(file.fecha_subida));
+      
+      commentsFileInfo.innerHTML = `
+        <div class="comments-file-name">${decodedFileName}</div>
+        <div class="comments-file-meta">Subido el ${fileDate}</div>
+      `;
+      
+      // Cargar comentarios existentes
+      commentsTextarea.value = file.comentarios || '';
+      
+      // Mostrar modal
+      commentsModal.classList.add('active');
+      
+      // Event listeners para cerrar modal
+      const closeModal = () => {
+        commentsModal.classList.remove('active');
+      };
+      
+      commentsClose.addEventListener('click', closeModal);
+      commentsCancel.addEventListener('click', closeModal);
+      commentsModal.addEventListener('click', function(e) {
+        if (e.target === commentsModal) {
+          closeModal();
+        }
+      });
+      
+      // Event listener para guardar comentarios
+      commentsSave.addEventListener('click', async () => {
+        try {
+          // Mostrar indicador de carga
+          commentsSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+          commentsSave.disabled = true;
+          
+          const newComments = commentsTextarea.value.trim();
+          
+          const response = await fetch(`/api/boveda/files/${currentFileForComments}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              comentarios: newComments,
+              etiquetas: file.etiqueta,
+              en_uso: file.en_uso
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            // Cerrar modal
+            closeModal();
+            
+            // Mostrar mensaje de éxito
+            showSuccessMessage('Comentarios guardados correctamente');
+            
+            // Recargar archivos
+            if (typeof window.loadAllFiles === 'function') {
+              window.loadAllFiles();
+            } else if (typeof window.reloadFiles === 'function') {
+              window.reloadFiles();
+            } else {
+              location.reload();
+            }
+          } else {
+            throw new Error(data.error || 'Error desconocido');
+          }
+        } catch (error) {
+          console.error('Error al guardar comentarios:', error);
+          
+          // Restaurar botón
+          commentsSave.innerHTML = '<i class="fas fa-save"></i> Guardar';
+          commentsSave.disabled = false;
+          
+          // Mostrar error
+          alert('Error al guardar comentarios: ' + error.message);
+        }
+      });
+      
+      // Cerrar con Escape
+      document.addEventListener('keydown', function handleEscape(e) {
+        if (e.key === 'Escape' && commentsModal.classList.contains('active')) {
+          closeModal();
+          document.removeEventListener('keydown', handleEscape);
+        }
+      });
+    }
+
+    // Hacer las funciones disponibles globalmente
+    window.editComments = editComments;
+    window.showCommentsModal = showCommentsModal;
+  </script>
+
+  <script>
+    // Nueva función para eliminar todas las etiquetas de una vez
+    async function removeAllTags(fileId) {
+      try {
+        // Mostrar indicador de carga
+        const fileCard = document.querySelector(`[data-file-id="${fileId}"]`);
+        if (fileCard) {
+          const tags = fileCard.querySelectorAll('.file-tag');
+          tags.forEach(tag => {
+            tag.style.opacity = '0.5';
+            tag.style.pointerEvents = 'none';
+          });
+        }
+
+        const response = await fetch(`/api/boveda/files/${fileId}/etiquetas/all`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Mostrar mensaje de éxito
+          showSuccessMessage('Todas las etiquetas han sido eliminadas');
+          
+          // Recargar archivos sin recargar toda la página
+          if (typeof window.loadAllFiles === 'function') {
+            window.loadAllFiles();
+          } else {
+            location.reload();
+          }
+        } else {
+          throw new Error(data.error || 'Error desconocido');
+        }
+      } catch (error) {
+        console.error('Error al eliminar todas las etiquetas:', error);
+        
+        // Restaurar etiquetas si hay error
+        const fileCard = document.querySelector(`[data-file-id="${fileId}"]`);
+        if (fileCard) {
+          const tags = fileCard.querySelectorAll('.file-tag');
+          tags.forEach(tag => {
+            tag.style.opacity = '1';
+            tag.style.pointerEvents = 'auto';
+          });
+        }
+        
+        alert('Error al eliminar etiquetas: ' + error.message);
+      }
+    }
+
+    // Función para mostrar mensaje de éxito (si no existe)
+    function showSuccessMessage(message) {
+      // Crear elemento de mensaje si no existe
+      let successMessage = document.querySelector('.success-message');
+      if (!successMessage) {
+        successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        document.body.appendChild(successMessage);
+      }
+      
+      successMessage.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+      `;
+      
+      // Mostrar con animación
+      setTimeout(() => {
+        successMessage.classList.add('show');
+      }, 100);
+      
+      // Ocultar después de 3 segundos
+      setTimeout(() => {
+        successMessage.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+<script scr="js/topbar.js"></script>
+</body>
+</html>

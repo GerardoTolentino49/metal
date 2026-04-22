@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administración de Diseño - LISA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/admin_design.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <!-- IT -->
+      <div class="menu-item has-submenu" id="itMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+        </div>
+      </div>
+      
+      <!-- RH -->
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="denuncias.html" class="submenu-item">Denuncias anónimas</a>
+        </div>
+      </div>
+      
+      <!-- Design -->
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        </svg>
+        Design
+        <div class="submenu" id="designSubmenu">
+          <a href="design.html" class="submenu-item">Design</a>
+        </div>
+      </div>
+      
+      <!-- Warehouse -->
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Warehouse
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics</a>
+        </div>
+      </div>
+      
+      <!-- Maintenance -->
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Maintenance
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+      
+      <!-- Administración -->
+      <div class="menu-item has-submenu" id="adminMenuBtn">
+        <svg class="menu-icon" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Administración
+        <div class="submenu" id="adminSubmenu">
+          <a href="admin.html" class="submenu-item" id="adminLink">Administración de Usuarios</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Administración de Departamentos</a>
+          <a href="admin_design.html" class="submenu-item" id="adminDesignLink">Administración de Diseño</a>
+        </div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+          <button class="logout-button" id="logoutButton">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+
+  <div class="main-content">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h2 class="admin-title">Administración de Diseño</h2>
+      </div>
+      <table class="design-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Tiempo Logeado</th>
+            <th>Orden Activa</th>
+          </tr>
+        </thead>
+        <tbody id="designTableBody">
+          <!-- Los empleados de diseño se cargarán dinámicamente aquí -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script>
+    // Control de submenús desplegables
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuButtons = [
+        { btn: 'itMenuBtn', submenu: 'itSubmenu' },
+        { btn: 'rhMenuBtn', submenu: 'rhSubmenu' },
+        { btn: 'designMenuBtn', submenu: 'designSubmenu' },
+        { btn: 'warehouseMenuBtn', submenu: 'warehouseSubmenu' },
+        { btn: 'maintenanceMenuBtn', submenu: 'maintenanceSubmenu' },
+        { btn: 'adminMenuBtn', submenu: 'adminSubmenu' }
+      ];
+
+      menuButtons.forEach(({ btn, submenu }) => {
+        const button = document.getElementById(btn);
+        const submenuElement = document.getElementById(submenu);
+        
+        if (button && submenuElement) {
+          let isOpen = false;
+          let timeoutId = null;
+          
+          // Función para mostrar el submenú
+          function showSubmenu() {
+            submenuElement.style.display = 'block';
+            button.querySelector('.submenu-arrow').style.transform = 'rotate(180deg)';
+            // Agregar clase para animación después de un pequeño delay
+            setTimeout(() => {
+              submenuElement.classList.add('show');
+            }, 10);
+          }
+          
+          // Función para ocultar el submenú
+          function hideSubmenu() {
+            submenuElement.classList.remove('show');
+            setTimeout(() => {
+              if (!isOpen) {
+                submenuElement.style.display = 'none';
+                button.querySelector('.submenu-arrow').style.transform = 'rotate(0deg)';
+              }
+            }, 300);
+          }
+          
+          // Mostrar al hacer hover en el botón
+          button.addEventListener('mouseenter', function() {
+            if (!isOpen) {
+              clearTimeout(timeoutId);
+              showSubmenu();
+            }
+          });
+          
+          // Ocultar al salir del botón (con delay para permitir movimiento al submenú)
+          button.addEventListener('mouseleave', function(e) {
+            if (!isOpen) {
+              timeoutId = setTimeout(() => {
+                hideSubmenu();
+              }, 100);
+            }
+          });
+          
+          // Mantener abierto cuando el mouse entra al submenú
+          submenuElement.addEventListener('mouseenter', function() {
+            clearTimeout(timeoutId);
+          });
+          
+          // Ocultar cuando el mouse sale del submenú
+          submenuElement.addEventListener('mouseleave', function() {
+            if (!isOpen) {
+              hideSubmenu();
+            }
+          });
+          
+          // Mantener abierto al hacer clic
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            isOpen = !isOpen;
+      
+            if (isOpen) {
+              showSubmenu();
+            } else {
+              hideSubmenu();
+            }
+          });
+
+          // Ocultar al hacer clic fuera
+          document.addEventListener('click', function(e) {
+            if (!button.contains(e.target) && !submenuElement.contains(e.target)) {
+              isOpen = false;
+              hideSubmenu();
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <script>
+    // Verificar si el usuario es IT
+    function checkAdminAccess() {
+      const rol = localStorage.getItem('rol');
+      if (rol !== 'IT') {
+        alert('No tienes permiso para acceder a esta página');
+        window.location.href = 'panel.html';
+      }
+    }
+
+    // Cargar empleados de diseño y mostrar el tiempo logeado en tiempo real
+    async function loadDesignEmployees() {
+      try {
+        const response = await fetch('/api/empleados_design/activos');
+        const empleados = await response.json();
+        const tableBody = document.getElementById('designTableBody');
+        tableBody.innerHTML = '';
+        empleados.forEach(emp => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${emp.id}</td>
+            <td>${emp.nombre} ${emp.apellidos}</td>
+            <td><span class="timer" data-inicio="${emp.fecha_inicio || ''}" data-id="${emp.id}">00:00:00</span></td>
+            <td>${emp.orden_activa || '-'}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+        iniciarTimers();
+      } catch (error) {
+        console.error('Error al cargar empleados de diseño:', error);
+        alert('Error al cargar la lista de empleados de diseño');
+      }
+    }
+
+    // Función para actualizar los timers en tiempo real
+    function iniciarTimers() {
+      setInterval(() => {
+        document.querySelectorAll('.timer').forEach(timer => {
+          const inicio = timer.getAttribute('data-inicio');
+          if (inicio) {
+            const inicioDate = new Date(inicio);
+            const ahora = new Date();
+            const diff = ahora - inicioDate;
+            if (!isNaN(diff)) {
+              const horas = Math.floor(diff / 3600000);
+              const minutos = Math.floor((diff % 3600000) / 60000);
+              const segundos = Math.floor((diff % 60000) / 1000);
+              timer.textContent = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+            }
+          } else {
+            timer.textContent = '00:00:00';
+          }
+        });
+      }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAdminAccess();
+      loadDesignEmployees();
+    });
+  </script>
+</body>
+</html> 

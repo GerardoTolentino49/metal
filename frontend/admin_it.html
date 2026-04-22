@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes de PDMmetal ERP</title>
+    <link rel="stylesheet" href="admin_it.css">
+    <link rel="stylesheet" href="styles/nuevo-equipo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      .admin-it-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .admin-it-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .admin-it-action-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #111827;
+        color: #ffffff;
+      }
+
+      .admin-it-action-btn.danger {
+        display:none;
+        background: #dc2626;
+      }
+
+      /* Password input + visibility toggle */
+      .password-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .password-input-wrapper .admin-it-input {
+        flex: 1;
+      }
+
+      .password-eye {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 6px;
+        color: #374151;
+        border-radius: 8px;
+      }
+
+      .password-eye:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+      }
+
+      /* Hide only the 'Editar' button inside the Actions column for the Users tab */
+      .orders-interface[data-active-tab="users"] .admin-it-actions .admin-it-action-btn[data-action="edit-user"] {
+        display: none !important;
+      }
+
+      /* Narrow 'Número de empleado' column in Usuarios view so Nombre completo fits better */
+      .orders-interface[data-active-tab="users"] .orders-table th:nth-child(2),
+      .orders-interface[data-active-tab="users"] .orders-table td:nth-child(2) {
+        width: 90px;
+        max-width: 110px;
+        padding-left: 8px;
+        padding-right: 8px;
+        white-space: nowrap;
+        text-align: center;
+      }
+
+      .orders-interface[data-active-tab="users"] .orders-table td:nth-child(2) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .admin-it-pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .admin-it-pill.active {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .admin-it-pill.inactive {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* Force permiso pills to appear like action buttons (inline override) */
+      .perm-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 6px 12px !important;
+        border-radius: 999px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        margin-right: 10px !important;
+        margin-top: 10px !important;
+        line-height: 1 !important;
+        text-transform: uppercase !important;
+        white-space: nowrap !important;
+        letter-spacing: 0.6px !important;
+        box-shadow: none !important;
+        border: none !important; /* override inline border */
+        overflow: hidden !important;
+        min-height: 30px !important;
+        cursor: default !important;
+      }
+
+      /* Toast notifications (top-right) */
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 2200;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .toast {
+        pointer-events: auto;
+        background: rgba(17,24,39,0.95);
+        color: #ffffff;
+        padding: 8px 14px;
+        border-radius: 999px;
+        box-shadow: 0 8px 24px rgba(2,6,23,0.2);
+        font-weight: 600;
+        font-size: 13px;
+        transform-origin: right top;
+        transition: transform 180ms ease, opacity 180ms ease;
+      }
+
+      .toast.success {
+        background: linear-gradient(90deg,#0f172a,#0b1220);
+      }
+
+      .toast.hide {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.995);
+      }
+
+      .admin-it-source-note {
+        color: #ffffff;
+        opacity: 0.85;
+        font-size: 12px;
+        margin-top: 8px;
+      }
+
+      .admin-it-empty {
+        text-align: center;
+        color: #6b7280;
+        padding: 24px;
+      }
+
+      .orders-interface {
+        margin-top: 28px;
+      }
+
+      .admin-it-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .admin-it-modal-card {
+        width: min(960px, 92vw);
+        max-height: 88vh;
+        overflow: auto;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      .admin-it-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .admin-it-modal-title {
+        margin: 0;
+        font-size: 18px;
+        color: #111827;
+      }
+
+      .admin-it-modal-close {
+        border: none;
+        background: transparent;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        color: #6b7280;
+      }
+
+      .admin-it-modal-body {
+        padding: 18px 20px;
+      }
+
+      .admin-it-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .admin-it-card-col {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .admin-it-card-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+      }
+
+      .admin-it-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .admin-it-form-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .admin-it-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .admin-it-form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+      }
+
+      .admin-it-input,
+      .admin-it-select {
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+
+      .admin-it-permissions-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .admin-it-permission-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .admin-it-permission-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      .admin-it-permission-desc {
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .admin-it-danger-text {
+        color: #7f1d1d;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      .switch-toggle {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+      }
+
+      .switch-toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .switch-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .3s;
+        border-radius: 26px;
+      }
+
+      .switch-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+      }
+
+      .switch-toggle input:checked + .switch-slider {
+        background-color: #2a8f4b;
+      }
+
+      .switch-toggle input:checked + .switch-slider:before {
+        transform: translateX(24px);
+      }
+
+      .admin-it-btn {
+        border: none;
+        border-radius: 30px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .admin-it-btn.primary {
+        background: #2563eb;
+        color: #ffffff;
+      }
+
+      .admin-it-btn.ghost {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      @media (max-width: 900px) {
+        .admin-it-cards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Estilos de paginación (igual a nuevo-equipo.html) */
+      .pagination-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, rgb(221 221 221 / 95%) 0%, rgba(250, 250, 250, 0.95) 100%);
+        border-radius: 0 0 20px 20px;
+      }
+
+      .pagination-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #4b5563;
+      }
+
+      .pagination-info label {
+        font-weight: 600;
+      }
+
+      .rows-per-page-select {
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 30px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .rows-per-page-select:hover {
+        border-color: #2a8f4b;
+      }
+
+      .rows-per-page-select:focus {
+        outline: none;
+        border-color: #2a8f4b;
+        box-shadow: 0 0 0 3px rgba(42, 143, 75, 0.1);
+      }
+
+      .pagination-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .pagination-btn {
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 30px;
+        background: white;
+        color: #4b5563;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+      }
+
+      .pagination-btn:hover:not(:disabled) {
+        background: #f3f4f6;
+        border-color: #2a8f4b;
+        color: #2a8f4b;
+      }
+
+      .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .page-info {
+        font-size: 14px;
+        color: #4b5563;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+      }
+      .text-cards {
+        color: #000000;
+      }
+
+      /* Hide the 'Permisos' tab in admin view (visual only) */
+      .tab-switch-proyectos-button[data-tab="orders"] {
+        display: none !important;
+      }
+    </style>
+</head>
+<body style="background-color: rgba(89, 120, 107, 0.8);">
+    <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button active" data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+
+  </div>
+</div>
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+<script>
+/* Lines 1254-1255 omitted */
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+  </script>
+
+  <div class="orders-interface">
+    <div class="interface-header">
+      <div>
+        <div class="tab-switch-proyectos" id="adminItDataSwitch">
+          <button class="tab-switch-proyectos-button active" data-tab="projects">
+            <i class="fas fa-building"></i> Departamentos
+          </button>
+          <button class="tab-switch-proyectos-button" data-tab="orders">
+            <i class="fas fa-user-check"></i> Permisos
+          </button>
+          <button class="tab-switch-proyectos-button" data-tab="users">
+            <i class="fas fa-users"></i> Usuarios
+          </button>
+          <button class="tab-switch-proyectos-button" data-tab="schedule">
+            <i class="fas fa-gears"></i> Ingeniería
+          </button>
+          <button class="tab-switch-proyectos-button" data-tab="chats" id="adminChatsBtn" type="button" title="Abrir chats y grupos">
+            <i class="fas fa-comments"></i> Chats y Grupos
+          </button>
+        </div>
+        <p class="admin-it-source-note" style="display:none;" id="adminItSourceNote">Fuente actual: Departamentos</p>
+      </div>
+
+      <div class="search-bar-wrapper">
+        <input type="text" class="search-bar" id="adminItSearch" placeholder="Buscar en la tabla actual...">
+      </div>
+    </div>
+
+    <div class="table-wrapper" style="position: relative; overflow-x:auto;">
+      <table class="orders-table" id="adminItTable">
+        <thead id="adminItTableHead"></thead>
+        <tbody id="adminItTableBody">
+          <tr>
+            <td colspan="8" class="admin-it-empty">Cargando...</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-controls" id="adminItPaginationControls" style="display: none;">
+        <div class="pagination-info">
+          <label for="adminItRowsPerPageSelect">Mostrar:</label>
+          <select id="adminItRowsPerPageSelect" class="rows-per-page-select">
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <span>renglones por página</span>
+        </div>
+        <div class="pagination-buttons">
+          <button id="adminItPrevPageBtn" class="pagination-btn" title="Página anterior">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span id="adminItPageInfo" class="page-info">Página 1 de 1</span>
+          <button id="adminItNextPageBtn" class="pagination-btn" title="Página siguiente">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-it-modal" id="cardsModal">
+    <div class="admin-it-modal-card">
+      <div class="admin-it-modal-header">
+        <h3 class="admin-it-modal-title" id="cardsModalTitle">Gestionar Tarjetas</h3>
+        <button class="admin-it-modal-close" type="button" id="cardsModalClose">&times;</button>
+      </div>
+      <div class="admin-it-modal-body">
+        <div id="cardsModalGrid" class="admin-it-cards-grid"></div>
+        <div class="admin-it-modal-actions">
+          <button class="admin-it-btn ghost" type="button" id="cardsModalCancel">Cancelar</button>
+          <button class="admin-it-btn primary" type="button" id="cardsModalSave">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-it-modal" id="editUserModal">
+    <div class="admin-it-modal-card" style="width:min(560px, 92vw);">
+      <div class="admin-it-modal-header">
+        <h3 class="admin-it-modal-title">Editar Usuario</h3>
+        <button class="admin-it-modal-close" type="button" id="editUserModalClose">&times;</button>
+      </div>
+      <div class="admin-it-modal-body">
+        <div class="admin-it-form-grid">
+          <div class="admin-it-form-group">
+            <label for="editUserNombre">Nombre completo</label>
+            <input id="editUserNombre" class="admin-it-input" type="text">
+          </div>
+          <div class="admin-it-form-group">
+            <label for="editUserUsername">Nombre de usuario</label>
+            <input id="editUserUsername" class="admin-it-input" type="text">
+          </div>
+          <div class="admin-it-form-group">
+            <label for="editUserRol">Rol</label>
+            <input id="editUserRol" class="admin-it-input" type="text">
+          </div>
+          <div class="admin-it-form-group">
+            <label for="editUserPassword">Nueva contraseña (opcional)</label>
+            <input id="editUserPassword" class="admin-it-input" type="password" placeholder="Dejar vacío para no cambiar">
+          </div>
+          <div class="admin-it-form-group">
+            <label for="editUserActivo">Estado</label>
+            <select id="editUserActivo" class="admin-it-select">
+              <option value="true">Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-it-modal-actions">
+          <button class="admin-it-btn ghost" type="button" id="editUserCancel">Cancelar</button>
+          <button class="admin-it-btn primary" type="button" id="editUserSave">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        <div class="admin-it-modal" id="resetPasswordModal">
+          <div class="admin-it-modal-card" style="width:min(420px, 92vw);">
+            <div class="admin-it-modal-header">
+              <h3 class="admin-it-modal-title">Restablecer contraseña</h3>
+              <button class="admin-it-modal-close" type="button" id="resetPasswordModalClose">&times;</button>
+            </div>
+            <div class="admin-it-modal-body">
+              <div class="admin-it-form-grid">
+                <div class="admin-it-form-group">
+                  <label for="resetUserRol">Rol</label>
+                  <input id="resetUserRol" class="admin-it-input" type="text">
+                </div>
+                <div class="admin-it-form-group">
+                  <label for="resetUserPassword">Nueva contraseña</label>
+                  <div class="password-input-wrapper">
+                    <input id="resetUserPassword" class="admin-it-input" type="password" placeholder="Nueva contraseña">
+                    <button type="button" id="resetPasswordToggle" class="password-eye" title="Mostrar contraseña"><i class="fas fa-eye"></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="admin-it-modal-actions">
+                <button class="admin-it-btn ghost" type="button" id="resetPasswordCancel">Cancelar</button>
+                <button class="admin-it-btn primary" type="button" id="resetPasswordSave">Guardar Cambios</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-it-modal" id="deleteUserModal">
+    <div class="admin-it-modal-card" style="width:min(520px, 92vw);">
+      <div class="admin-it-modal-header">
+        <h3 class="admin-it-modal-title">Confirmar Eliminación</h3>
+        <button class="admin-it-modal-close" type="button" id="deleteUserModalClose">&times;</button>
+      </div>
+      <div class="admin-it-modal-body">
+        <p class="admin-it-danger-text" id="deleteUserMessage">¿Seguro que deseas eliminar este usuario?</p>
+        <div class="admin-it-modal-actions">
+          <button class="admin-it-btn ghost" type="button" id="deleteUserCancel">Cancelar</button>
+          <button class="admin-it-btn primary" style="background:#dc2626;" type="button" id="deleteUserConfirm">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-it-modal" id="departmentPermsModal">
+    <div class="admin-it-modal-card" style="width:min(760px, 92vw);">
+      <div class="admin-it-modal-header">
+        <h3 class="admin-it-modal-title" id="departmentPermsTitle">Permisos del Departamento</h3>
+        <button class="admin-it-modal-close" type="button" id="departmentPermsClose">&times;</button>
+      </div>
+      <div class="admin-it-modal-body">
+        <div class="admin-it-permissions-grid" id="departmentPermsGrid"></div>
+        <div class="admin-it-modal-actions">
+          <button class="admin-it-btn ghost" type="button" id="departmentPermsCancel">Cancelar</button>
+          <button class="admin-it-btn primary" type="button" id="departmentPermsSave">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-it-modal" id="deleteDepartmentModal">
+    <div class="admin-it-modal-card" style="width:min(520px, 92vw);">
+      <div class="admin-it-modal-header">
+        <h3 class="admin-it-modal-title">Confirmar Eliminación</h3>
+        <button class="admin-it-modal-close" type="button" id="deleteDepartmentModalClose">&times;</button>
+      </div>
+      <div class="admin-it-modal-body">
+        <p class="admin-it-danger-text" id="deleteDepartmentMessage">¿Seguro que deseas eliminar este departamento?</p>
+        <div class="admin-it-modal-actions">
+          <button class="admin-it-btn ghost" type="button" id="deleteDepartmentCancel">Cancelar</button>
+          <button class="admin-it-btn primary" style="background:#dc2626;" type="button" id="deleteDepartmentConfirm">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const adminItState = {
+      activeTab: 'projects',
+      search: '',
+      currentPage: 1,
+      rowsPerPage: 10,
+      cache: {
+        projects: null,
+        orders: null,
+        users: null,
+        schedule: null
+      },
+      cardsEditingUserId: null,
+      editingUserId: null,
+      deletingUserId: null,
+      editingDepartmentId: null,
+      deletingDepartmentId: null
+    };
+
+    const staticChats = [
+      { id: 'ch1', nombre: 'General', tipo: 'Grupo', miembros: ['Todos'] },
+      { id: 'ch2', nombre: 'Soporte IT', tipo: 'Grupo', miembros: ['Gerardo', 'Nahum'] }
+    ];
+
+    const availablePermissions = [
+      { key: 'tickets', name: 'Tickets IT', description: 'Acceso a tickets de soporte técnico' },
+      { key: 'mantenimiento', name: 'Tickets de Mantenimiento', description: 'Acceso a tickets de mantenimiento' },
+      { key: 'apoyos', name: 'Apoyos', description: 'Acceso al módulo de apoyos' },
+      { key: 'amonestaciones', name: 'Amonestaciones', description: 'Acceso al módulo de amonestaciones' },
+      { key: 'vacaciones', name: 'Vacaciones', description: 'Acceso al módulo de vacaciones' },
+      { key: 'estadisticas', name: 'Estadísticas', description: 'Acceso a estadísticas generales' },
+      { key: 'estadisticas_mantenimiento', name: 'Estadísticas de Mantenimiento', description: 'Acceso a estadísticas de mantenimiento' },
+      { key: 'design', name: 'Diseño', description: 'Acceso al módulo de diseño' },
+      { key: 'pm', name: 'PM', description: 'Acceso al módulo de PM' },
+      { key: 'inventario', name: 'Inventario', description: 'Acceso al módulo de inventario' },
+      { key: 'administracion', name: 'Administración', description: 'Acceso completo al sistema' }
+    ];
+
+    const availableCards = {
+      columna1: [
+        { id: 'show_tickets_it', nombre: 'Tickets IT' },
+        { id: 'show_tickets_mantenimiento', nombre: 'Tickets Mantenimiento' },
+        { id: 'show_vacaciones', nombre: 'Vacaciones' },
+        { id: 'show_permisos', nombre: 'Permisos Empleados' },
+        { id: 'show_amonestaciones', nombre: 'Amonestaciones' },
+        { id: 'show_comidas', nombre: 'Registro de Comidas' },
+        { id: 'show_requisicion', nombre: 'Requisicion de Compras' }
+      ],
+      columna2: [
+        { id: 'show_it', nombre: 'IT' },
+        { id: 'show_rh', nombre: 'RH' },
+        { id: 'show_mantenimiento', nombre: 'Mantenimiento' },
+        { id: 'show_enviosyrecibos', nombre: 'Envíos y Recibos' }
+      ],
+      columna3: [
+        { id: 'show_proyectos', nombre: 'Proyectos' },
+        { id: 'show_diseno', nombre: 'Diseño' },
+        { id: 'show_planeacion_compras', nombre: 'Planeación y Compras' },
+        { id: 'show_produccion', nombre: 'Producción' },
+        { id: 'show_calidad', nombre: 'Calidad' },
+        { id: 'show_importacion_exportacion', nombre: 'Importación y Exportación' },
+        { id: 'show_contabilidad', nombre: 'Contabilidad' },
+        { id: 'show_almacen', nombre: 'Almacén' }
+      ]
+    };
+
+    const adminItConfigs = {
+      projects: {
+        sourceLabel: 'Departamentos',
+        columns: ['Nombre del departamento', 'Permisos', 'Acciones'],
+        endpoint: '/api/departamentos',
+        mapRows: (items) => (Array.isArray(items) ? items : []).map((dep) => ({
+          searchText: `${dep.nombre || ''} ${(Array.isArray(dep.accesos) ? dep.accesos.join(' ') : '')}`,
+          cells: [
+            escapeHtml(dep.nombre || '-'),
+            formatPermisosHtml(dep.accesos),
+            renderActions([
+              { label: 'Editar', action: 'edit-department', id: dep.id },
+              { label: 'Eliminar', action: 'delete-department', id: dep.id }
+            ])
+          ]
+        }))
+      },
+      orders: {
+        sourceLabel: 'Permisos (vista similar a Contraseñas)',
+        columns: ['ID', 'Nombre completo', 'Estado', 'Acciones'],
+        endpoint: '/api/usuarios',
+        mapRows: (items) => (Array.isArray(items) ? items : []).map((u) => ({
+          searchText: `${u.id || ''} ${u.nombre_completo || ''} ${u.activo ? 'activo' : 'inactivo'}`,
+          cells: [
+            escapeHtml(String(u.id ?? '-')),
+            escapeHtml(u.nombre_completo || '-'),
+            `<span class="admin-it-pill ${u.activo ? 'active' : 'inactive'}">${u.activo ? 'Activo' : 'Inactivo'}</span>`,
+            renderActions([
+              { label: 'Gestionar Permisos', action: 'manage-cards', id: u.id }
+            ])
+          ]
+        }))
+      },
+      users: {
+        sourceLabel: 'Usuarios (vista similar a Admin)',
+        columns: ['ID', '# empleado', 'Nombre completo', 'Username', 'Contraseña', 'Estatus', 'Último acceso', 'Acciones'],
+        endpoint: '/api/usuarios',
+        mapRows: (items) => (Array.isArray(items) ? items : []).map((u) => ({
+          searchText: `${u.id || ''} ${u.numero_empleado || u.employeeNumber || ''} ${u.nombre_completo || ''} ${u.username || ''}`,
+          cells: [
+            escapeHtml(String(u.id ?? '-')),
+            escapeHtml(u.numero_empleado || u.numeroEmpleado || u.employeeNumber || u.employee_number || u.numero || u.id_ingreso || '-'),
+            escapeHtml(u.nombre_completo || '-'),
+            escapeHtml(u.username || '-'),
+            (`<button type="button" class="admin-it-action-btn reset-pass-btn" data-action="reset-password" data-id="${escapeHtml(String(u.id ?? ''))}">Restablecer contraseña</button>`),
+            `<span class="admin-it-pill ${u.activo ? 'active' : 'inactive'}">${u.activo ? 'Activo' : 'Inactivo'}</span>`,
+            escapeHtml(u.ultimo_acceso ? new Date(u.ultimo_acceso).toLocaleString() : 'Nunca'),
+            renderActions([
+              { label: 'Permisos', action: 'manage-cards', id: u.id },
+              { label: 'Eliminar', action: 'delete-user', id: u.id }
+            ])
+          ]
+        }))
+      },
+      chats: {
+        sourceLabel: 'Chats y Grupos',
+        columns: ['ID', 'Nombre', 'Tipo', 'Miembros', 'Acciones'],
+        endpoint: null,
+        mapRows: (items) => (Array.isArray(items) ? items : []).map((c) => ({
+          searchText: `${c.id || ''} ${c.nombre || c.name || ''} ${c.tipo || ''}`,
+          cells: [
+            escapeHtml(String(c.id ?? '-')),
+            escapeHtml(c.nombre || c.name || '-'),
+            escapeHtml(c.tipo || '-'),
+            escapeHtml((Array.isArray(c.miembros) ? c.miembros.join(', ') : c.miembros || '-')),
+            renderActions([
+              { label: 'Abrir', action: 'open-chat', id: c.id },
+              { label: 'Eliminar', action: 'delete-chat', id: c.id }
+            ])
+          ]
+        }))
+      },
+      schedule: {
+        sourceLabel: 'Departamentos',
+        columns: ['Nombre del departamento', 'Permisos', 'Acciones'],
+        endpoint: '/api/departamentos',
+        mapRows: (items) => (Array.isArray(items) ? items : []).map((dep) => ({
+          searchText: `${dep.nombre || ''} ${(Array.isArray(dep.accesos) ? dep.accesos.join(' ') : '')}`,
+          cells: [
+            escapeHtml(dep.nombre || '-'),
+            formatPermisosHtml(dep.accesos),
+            renderActions([
+              { label: 'Editar', action: 'edit-department', id: dep.id },
+              { label: 'Eliminar', action: 'delete-department', id: dep.id }
+            ])
+          ]
+        }))
+      }
+    };
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function formatPermisos(accesos) {
+      if (!Array.isArray(accesos) || accesos.length === 0) {
+        return 'Sin permisos asignados';
+      }
+      return accesos.join(', ');
+    }
+
+    // Deterministic color generator per key (returns CSS colors)
+    function colorForKey(key) {
+      let hash = 0;
+      for (let i = 0; i < key.length; i++) {
+        hash = key.charCodeAt(i) + ((hash << 5) - hash);
+        hash = hash & hash;
+      }
+      const hue = Math.abs(hash) % 360;
+      // Stronger, saturated background with darker border and white text
+      const bg = `hsl(${hue}, 65%, 45%)`;
+      const border = `hsl(${hue}, 65%, 35%)`;
+      const text = '#ffffff';
+      return { bg, border, text };
+    }
+
+    // Returns HTML with colored capsule pills for permisos
+    function formatPermisosHtml(accesos) {
+      if (!Array.isArray(accesos) || accesos.length === 0) {
+        return '<span class="perm-empty">Sin permisos asignados</span>';
+      }
+      return (accesos || []).map(p => {
+        const key = String(p || '');
+        const col = colorForKey(key);
+        const label = escapeHtml(key).toUpperCase();
+        return `<span class="perm-pill" style="background:${col.bg};border:1px solid ${col.border};color:${col.text};">${label}</span>`;
+      }).join(' ');
+    }
+
+    function renderActions(actions) {
+      return `<div class="admin-it-actions">${actions
+        .map((item) => `<button type="button" class="admin-it-action-btn ${item.label.toLowerCase() === 'eliminar' ? 'danger' : ''}" data-action="${escapeHtml(item.action)}" data-id="${escapeHtml(String(item.id ?? ''))}">${escapeHtml(item.label)}</button>`)
+        .join('')}</div>`;
+    }
+
+    function invalidateUsersCache() {
+      adminItState.cache.users = null;
+      adminItState.cache.orders = null;
+    }
+
+    function invalidateDepartmentsCache() {
+      adminItState.cache.projects = null;
+      adminItState.cache.schedule = null;
+    }
+
+    function getItemById(tabKey, id) {
+      const list = Array.isArray(adminItState.cache[tabKey]) ? adminItState.cache[tabKey] : [];
+      return list.find((item) => String(item.id) === String(id));
+    }
+
+    async function requestJson(url, options = {}) {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        let message = `Error ${response.status}`;
+        try {
+          const data = await response.json();
+          message = data.error || data.message || message;
+        } catch (_) {}
+        throw new Error(message);
+      }
+      return response;
+    }
+
+    async function handleTableAction(action, id) {
+      try {
+        if (action === 'open-chat') {
+          // navigate to mensajería and pass chat id as query param
+          window.location.href = 'mensajeria.html?chatId=' + encodeURIComponent(id);
+          return;
+        }
+
+        if (action === 'delete-chat') {
+          if (!confirm('¿Eliminar este chat o grupo? Esta acción no se puede deshacer.')) return;
+          try {
+            await requestJson(`/api/chats/${id}`, { method: 'DELETE' });
+          } catch (err) {
+            // fallback for static/demo data
+            const idx = staticChats.findIndex(c => String(c.id) === String(id));
+            if (idx >= 0) staticChats.splice(idx, 1);
+          }
+          adminItState.cache.chats = null;
+          await renderAdminItTable();
+          showToast('Chat eliminado.');
+          return;
+        }
+        if (action === 'manage-cards') {
+          await openCardsModal(id);
+          return;
+        }
+
+          if (action === 'reset-password') {
+            await openResetPasswordModal(id);
+            return;
+          }
+
+        if (action === 'edit-user') {
+          await editUser(id);
+          return;
+        }
+
+        if (action === 'delete-user') {
+          await deleteUser(id);
+          return;
+        }
+
+        if (action === 'edit-department') {
+          await editDepartmentPermisos(id);
+          return;
+        }
+
+        if (action === 'delete-department') {
+          await deleteDepartment(id);
+        }
+      } catch (error) {
+        alert(error.message || 'No se pudo ejecutar la acción.');
+      }
+    }
+
+    async function editUser(userId) {
+      let user = getItemById('users', userId) || getItemById('orders', userId);
+      if (!user) {
+        const response = await requestJson(`/api/usuarios/${userId}`);
+        user = await response.json();
+      }
+
+      adminItState.editingUserId = userId;
+      document.getElementById('editUserNombre').value = user.nombre_completo || '';
+      document.getElementById('editUserUsername').value = user.username || '';
+      document.getElementById('editUserRol').value = user.rol || '';
+      document.getElementById('editUserPassword').value = '';
+      document.getElementById('editUserActivo').value = user.activo ? 'true' : 'false';
+      openModal('editUserModal');
+    }
+
+    async function deleteUser(userId) {
+      const user = getItemById('users', userId) || getItemById('orders', userId);
+      const name = user?.nombre_completo || `ID ${userId}`;
+      adminItState.deletingUserId = userId;
+      document.getElementById('deleteUserMessage').textContent = `¿Estás seguro que deseas eliminar al usuario ${name}? Esta acción no se puede deshacer.`;
+      openModal('deleteUserModal');
+    }
+
+    async function editDepartmentPermisos(deptId) {
+      const department = getItemById('projects', deptId) || getItemById('schedule', deptId);
+      if (!department) {
+        throw new Error('No se encontró el departamento.');
+      }
+
+      adminItState.editingDepartmentId = department.id;
+      document.getElementById('departmentPermsTitle').textContent = `Permisos de ${department.nombre || 'Departamento'}`;
+      renderDepartmentPermissions(Array.isArray(department.accesos) ? department.accesos : []);
+      openModal('departmentPermsModal');
+    }
+
+    async function deleteDepartment(deptId) {
+      const department = getItemById('projects', deptId) || getItemById('schedule', deptId);
+      const name = department?.nombre || `ID ${deptId}`;
+      adminItState.deletingDepartmentId = deptId;
+      document.getElementById('deleteDepartmentMessage').textContent = `¿Estás seguro que deseas eliminar el departamento ${name}? Esta acción no se puede deshacer.`;
+      openModal('deleteDepartmentModal');
+    }
+
+    // Open the reset-password modal for a user
+    async function openResetPasswordModal(userId) {
+      let user = getItemById('users', userId) || getItemById('orders', userId);
+      if (!user) {
+        const response = await requestJson(`/api/usuarios/${userId}`);
+        user = await response.json();
+      }
+
+      adminItState.resettingUserId = userId;
+      document.getElementById('resetUserRol').value = user.rol || '';
+      document.getElementById('resetUserPassword').value = '';
+      const modal = document.getElementById('resetPasswordModal');
+      if (modal) modal.style.display = 'flex';
+      setTimeout(() => {
+        const pwd = document.getElementById('resetUserPassword');
+        if (pwd) pwd.focus();
+      }, 50);
+    }
+
+    function closeResetPasswordModal() {
+      const modal = document.getElementById('resetPasswordModal');
+      if (modal) modal.style.display = 'none';
+      adminItState.resettingUserId = null;
+    }
+
+    async function saveResetPassword() {
+      const userId = adminItState.resettingUserId;
+      if (!userId) return;
+      const rol = document.getElementById('resetUserRol').value.trim();
+      const password = document.getElementById('resetUserPassword').value;
+      if (!password || !password.trim()) {
+        alert('Ingrese la nueva contraseña.');
+        return;
+      }
+
+      await requestJson(`/api/usuarios/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rol, password })
+      });
+
+      closeResetPasswordModal();
+      adminItState.resettingUserId = null;
+      invalidateUsersCache();
+      await renderAdminItTable();
+      showToast('Contraseña actualizada correctamente.');
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.style.display = 'none';
+    }
+
+    function showToast(message, type = 'success', duration = 5000) {
+      try {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+          container = document.createElement('div');
+          container.id = 'toastContainer';
+          container.className = 'toast-container';
+          document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'toast ' + (type === 'success' ? 'success' : '');
+        toast.textContent = message;
+        container.appendChild(toast);
+
+        // show then hide
+        requestAnimationFrame(() => {
+          toast.classList.remove('hide');
+        });
+
+        setTimeout(() => {
+          toast.classList.add('hide');
+          setTimeout(() => toast.remove(), 220);
+        }, duration);
+      } catch (e) {
+        console.log('Toast error', e);
+      }
+    }
+
+    function renderDepartmentPermissions(activePermissions) {
+      const grid = document.getElementById('departmentPermsGrid');
+      const active = new Set(activePermissions || []);
+      grid.innerHTML = availablePermissions
+        .map((permission) => {
+          const checked = active.has(permission.key) ? 'checked' : '';
+          return `
+            <div class="admin-it-permission-item">
+              <div>
+                <div class="admin-it-permission-title">${escapeHtml(permission.name)}</div>
+                <div class="admin-it-permission-desc">${escapeHtml(permission.description)}</div>
+              </div>
+              <label class="switch-toggle">
+                <input type="checkbox" class="department-permission-input" data-permission="${escapeHtml(permission.key)}" ${checked}>
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    async function saveUserEdit() {
+      const userId = adminItState.editingUserId;
+      if (!userId) return;
+
+      const payload = {
+        nombre_completo: document.getElementById('editUserNombre').value.trim(),
+        username: document.getElementById('editUserUsername').value.trim(),
+        rol: document.getElementById('editUserRol').value.trim(),
+        activo: document.getElementById('editUserActivo').value === 'true'
+      };
+
+      const password = document.getElementById('editUserPassword').value;
+      if (password && password.trim()) {
+        payload.password = password;
+      }
+
+      await requestJson(`/api/usuarios/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      closeModal('editUserModal');
+      adminItState.editingUserId = null;
+      invalidateUsersCache();
+      await renderAdminItTable();
+      showToast('Usuario actualizado correctamente.');
+    }
+
+    async function confirmDeleteUser() {
+      const userId = adminItState.deletingUserId;
+      if (!userId) return;
+      await requestJson(`/api/usuarios/${userId}`, { method: 'DELETE' });
+      closeModal('deleteUserModal');
+      adminItState.deletingUserId = null;
+      invalidateUsersCache();
+      await renderAdminItTable();
+      showToast('Usuario eliminado correctamente.');
+    }
+
+    async function saveDepartmentPermissions() {
+      const departmentId = adminItState.editingDepartmentId;
+      if (!departmentId) return;
+
+      const accesos = Array.from(document.querySelectorAll('.department-permission-input:checked'))
+        .map((input) => input.dataset.permission)
+        .filter(Boolean);
+
+      await requestJson('/api/departamentos/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          departments: [{ id: departmentId, accesos }]
+        })
+      });
+
+      closeModal('departmentPermsModal');
+      adminItState.editingDepartmentId = null;
+      invalidateDepartmentsCache();
+      await renderAdminItTable();
+      showToast('Permisos del departamento actualizados.');
+    }
+
+    async function confirmDeleteDepartment() {
+      const deptId = adminItState.deletingDepartmentId;
+      if (!deptId) return;
+      await requestJson(`/api/departamentos/${deptId}`, { method: 'DELETE' });
+      closeModal('deleteDepartmentModal');
+      adminItState.deletingDepartmentId = null;
+      invalidateDepartmentsCache();
+      await renderAdminItTable();
+      showToast('Departamento eliminado correctamente.');
+    }
+
+    function renderCardsColumns(selected) {
+      const grid = document.getElementById('cardsModalGrid');
+      const columns = ['columna1', 'columna2', 'columna3'];
+      grid.innerHTML = columns
+        .map((columnKey) => {
+          const items = availableCards[columnKey] || [];
+          return `<div class="admin-it-card-col">${items
+            .map((card) => `
+              <label class="admin-it-card-item" for="card_${card.id}">
+                <input type="checkbox" id="card_${card.id}" data-card-id="${card.id}" ${selected[card.id] ? 'checked' : ''}>
+                <span style="color:black;">${escapeHtml(card.nombre)}</span>
+              </label>
+            `)
+            .join('')}</div>`;
+        })
+        .join('');
+    }
+
+    async function openCardsModal(userId) {
+      const modal = document.getElementById('cardsModal');
+      const title = document.getElementById('cardsModalTitle');
+      const user = getItemById('orders', userId) || getItemById('users', userId);
+      title.textContent = `Gestionar Tarjetas - ${user?.nombre_completo || `Usuario ${userId}`}`;
+
+      let selected = {};
+      const response = await fetch(`/api/tarjetas-disponibles?userId=${encodeURIComponent(userId)}`);
+      if (response.ok) {
+        const data = await response.json();
+        selected = data.success && data.tarjetas ? data.tarjetas : {};
+      }
+      adminItState.cardsEditingUserId = userId;
+      renderCardsColumns(selected);
+      modal.style.display = 'flex';
+    }
+
+    function closeCardsModal() {
+      const modal = document.getElementById('cardsModal');
+      modal.style.display = 'none';
+      adminItState.cardsEditingUserId = null;
+    }
+
+    async function saveCardsModal() {
+      const userId = adminItState.cardsEditingUserId;
+      if (!userId) {
+        return;
+      }
+
+      const payload = {};
+      Object.values(availableCards)
+        .flat()
+        .forEach((card) => {
+          const input = document.querySelector(`input[data-card-id="${card.id}"]`);
+          payload[card.id] = !!input?.checked;
+        });
+
+      await requestJson(`/api/tarjetas-disponibles/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      closeCardsModal();
+      showToast('Tarjetas actualizadas correctamente.');
+    }
+
+    async function loadTabData(tabKey) {
+      if (adminItState.cache[tabKey]) {
+        return adminItState.cache[tabKey];
+      }
+      const config = adminItConfigs[tabKey];
+      if (!config) {
+        adminItState.cache[tabKey] = [];
+        return [];
+      }
+      // If no endpoint provided, use built-in static data (e.g., chats) or return empty array
+      if (!config.endpoint) {
+        if (tabKey === 'chats') {
+          adminItState.cache[tabKey] = staticChats.slice();
+          return adminItState.cache[tabKey];
+        }
+        adminItState.cache[tabKey] = [];
+        return [];
+      }
+      const response = await fetch(config.endpoint);
+      if (!response.ok) {
+        throw new Error(`No se pudo cargar ${config.sourceLabel}`);
+      }
+
+      const data = await response.json();
+      adminItState.cache[tabKey] = data;
+      return data;
+    }
+
+    async function renderAdminItTable() {
+      const tabKey = adminItState.activeTab;
+      const ordersInterface = document.querySelector('.orders-interface');
+      if (ordersInterface) ordersInterface.setAttribute('data-active-tab', tabKey);
+      const config = adminItConfigs[tabKey];
+      const head = document.getElementById('adminItTableHead');
+      const body = document.getElementById('adminItTableBody');
+      const sourceNote = document.getElementById('adminItSourceNote');
+      const paginationControls = document.getElementById('adminItPaginationControls');
+
+      if (tabKey === 'schedule') {
+        head.innerHTML = '';
+        body.innerHTML = '';
+        sourceNote.textContent = 'Fuente actual: Ingeniería';
+        paginationControls.style.display = 'none';
+        return;
+      }
+
+      sourceNote.textContent = `Fuente actual: ${config.sourceLabel}`;
+      head.innerHTML = `<tr>${config.columns.map((col) => `<th>${escapeHtml(col)}</th>`).join('')}</tr>`;
+      body.innerHTML = `<tr><td colspan="${config.columns.length}" class="admin-it-empty">Cargando...</td></tr>`;
+
+      try {
+        const rawData = await loadTabData(tabKey);
+        const rows = config.mapRows(rawData);
+        const query = adminItState.search.trim().toLowerCase();
+        const filtered = query
+          ? rows.filter((row) => row.searchText.toLowerCase().includes(query))
+          : rows;
+
+        const totalItems = filtered.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / adminItState.rowsPerPage));
+        if (adminItState.currentPage > totalPages) {
+          adminItState.currentPage = totalPages;
+        }
+
+        updateAdminItPagination(totalItems, totalPages);
+
+        if (filtered.length === 0) {
+          body.innerHTML = `<tr><td colspan="${config.columns.length}" class="admin-it-empty">Sin resultados para esta vista.</td></tr>`;
+          return;
+        }
+
+        const startIndex = (adminItState.currentPage - 1) * adminItState.rowsPerPage;
+        const pageRows = filtered.slice(startIndex, startIndex + adminItState.rowsPerPage);
+
+        body.innerHTML = pageRows
+          .map((row) => `<tr>${row.cells.map((cell) => `<td>${cell}</td>`).join('')}</tr>`)
+          .join('');
+      } catch (error) {
+        updateAdminItPagination(0, 1);
+        body.innerHTML = `<tr><td colspan="${config.columns.length}" class="admin-it-empty">${escapeHtml(error.message || 'Error al cargar datos.')}</td></tr>`;
+      }
+    }
+
+    function updateAdminItPagination(totalItems, totalPages) {
+      const controls = document.getElementById('adminItPaginationControls');
+      const pageInfo = document.getElementById('adminItPageInfo');
+      const prevBtn = document.getElementById('adminItPrevPageBtn');
+      const nextBtn = document.getElementById('adminItNextPageBtn');
+      const rowsSelect = document.getElementById('adminItRowsPerPageSelect');
+
+      if (!controls || !pageInfo || !prevBtn || !nextBtn || !rowsSelect) {
+        return;
+      }
+
+      controls.style.display = totalItems > 0 ? 'flex' : 'none';
+      rowsSelect.value = String(adminItState.rowsPerPage);
+      pageInfo.textContent = `Página ${adminItState.currentPage} de ${totalPages}`;
+      prevBtn.disabled = adminItState.currentPage <= 1;
+      nextBtn.disabled = adminItState.currentPage >= totalPages;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const switchContainer = document.getElementById('adminItDataSwitch');
+      const searchInput = document.getElementById('adminItSearch');
+      const tabButtons = switchContainer.querySelectorAll('.tab-switch-proyectos-button[data-tab]');
+      const rowsPerPageSelect = document.getElementById('adminItRowsPerPageSelect');
+      const prevPageBtn = document.getElementById('adminItPrevPageBtn');
+      const nextPageBtn = document.getElementById('adminItNextPageBtn');
+      const tableBody = document.getElementById('adminItTableBody');
+      const cardsModal = document.getElementById('cardsModal');
+      const cardsModalClose = document.getElementById('cardsModalClose');
+      const cardsModalCancel = document.getElementById('cardsModalCancel');
+      const cardsModalSave = document.getElementById('cardsModalSave');
+      const editUserModal = document.getElementById('editUserModal');
+      const deleteUserModal = document.getElementById('deleteUserModal');
+      const departmentPermsModal = document.getElementById('departmentPermsModal');
+      const deleteDepartmentModal = document.getElementById('deleteDepartmentModal');
+      const resetPasswordModal = document.getElementById('resetPasswordModal');
+      const resetPasswordModalClose = document.getElementById('resetPasswordModalClose');
+      const resetPasswordCancel = document.getElementById('resetPasswordCancel');
+      const resetPasswordSave = document.getElementById('resetPasswordSave');
+      const resetPasswordToggle = document.getElementById('resetPasswordToggle');
+
+      tableBody.addEventListener('click', async function (event) {
+        const button = event.target.closest('.admin-it-action-btn[data-action][data-id]');
+        if (!button) return;
+        const action = button.dataset.action;
+        const id = button.dataset.id;
+        await handleTableAction(action, id);
+      });
+
+      cardsModalClose.addEventListener('click', closeCardsModal);
+      cardsModalCancel.addEventListener('click', closeCardsModal);
+      cardsModalSave.addEventListener('click', async function () {
+        try {
+          await saveCardsModal();
+        } catch (error) {
+          alert(error.message || 'No se pudieron guardar las tarjetas.');
+        }
+      });
+
+      cardsModal.addEventListener('click', function (event) {
+        if (event.target === cardsModal) {
+          closeCardsModal();
+        }
+      });
+
+      if (resetPasswordModal) {
+        resetPasswordModalClose.addEventListener('click', closeResetPasswordModal);
+        resetPasswordCancel.addEventListener('click', closeResetPasswordModal);
+        resetPasswordSave.addEventListener('click', async function () {
+          try {
+            await saveResetPassword();
+          } catch (error) {
+            alert(error.message || 'No se pudo restablecer la contraseña.');
+          }
+        });
+
+        resetPasswordModal.addEventListener('click', function (event) {
+          if (event.target === resetPasswordModal) {
+            closeResetPasswordModal();
+          }
+        });
+
+        if (resetPasswordToggle) {
+          resetPasswordToggle.addEventListener('click', function () {
+            const input = document.getElementById('resetUserPassword');
+            if (!input) return;
+            if (input.type === 'password') {
+              input.type = 'text';
+              this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+              input.type = 'password';
+              this.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+          });
+        }
+      }
+
+      document.getElementById('editUserModalClose').addEventListener('click', () => closeModal('editUserModal'));
+      document.getElementById('editUserCancel').addEventListener('click', () => closeModal('editUserModal'));
+      document.getElementById('editUserSave').addEventListener('click', async function () {
+        try {
+          await saveUserEdit();
+        } catch (error) {
+          alert(error.message || 'No se pudo guardar el usuario.');
+        }
+      });
+
+      document.getElementById('deleteUserModalClose').addEventListener('click', () => closeModal('deleteUserModal'));
+      document.getElementById('deleteUserCancel').addEventListener('click', () => closeModal('deleteUserModal'));
+      document.getElementById('deleteUserConfirm').addEventListener('click', async function () {
+        try {
+          await confirmDeleteUser();
+        } catch (error) {
+          alert(error.message || 'No se pudo eliminar el usuario.');
+        }
+      });
+
+      document.getElementById('departmentPermsClose').addEventListener('click', () => closeModal('departmentPermsModal'));
+      document.getElementById('departmentPermsCancel').addEventListener('click', () => closeModal('departmentPermsModal'));
+      document.getElementById('departmentPermsSave').addEventListener('click', async function () {
+        try {
+          await saveDepartmentPermissions();
+        } catch (error) {
+          alert(error.message || 'No se pudo guardar el departamento.');
+        }
+      });
+
+      document.getElementById('deleteDepartmentModalClose').addEventListener('click', () => closeModal('deleteDepartmentModal'));
+      document.getElementById('deleteDepartmentCancel').addEventListener('click', () => closeModal('deleteDepartmentModal'));
+      document.getElementById('deleteDepartmentConfirm').addEventListener('click', async function () {
+        try {
+          await confirmDeleteDepartment();
+        } catch (error) {
+          alert(error.message || 'No se pudo eliminar el departamento.');
+        }
+      });
+
+      [editUserModal, deleteUserModal, departmentPermsModal, deleteDepartmentModal].forEach((modal) => {
+        modal.addEventListener('click', function (event) {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+      });
+
+      tabButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+          const nextTab = this.dataset.tab;
+          if (!nextTab || nextTab === adminItState.activeTab) {
+            return;
+          }
+
+          tabButtons.forEach((btn) => btn.classList.remove('active'));
+          this.classList.add('active');
+          adminItState.activeTab = nextTab;
+          adminItState.currentPage = 1;
+          renderAdminItTable();
+        });
+      });
+
+      searchInput.addEventListener('input', function (event) {
+        adminItState.search = event.target.value || '';
+        adminItState.currentPage = 1;
+        renderAdminItTable();
+      });
+
+      if (rowsPerPageSelect) {
+        rowsPerPageSelect.addEventListener('change', function (event) {
+          const nextValue = parseInt(event.target.value, 10);
+          adminItState.rowsPerPage = Number.isNaN(nextValue) ? 10 : nextValue;
+          adminItState.currentPage = 1;
+          renderAdminItTable();
+        });
+      }
+
+      if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', function () {
+          adminItState.currentPage = Math.max(1, adminItState.currentPage - 1);
+          renderAdminItTable();
+        });
+      }
+
+      if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', function () {
+          adminItState.currentPage += 1;
+          renderAdminItTable();
+        });
+      }
+
+      renderAdminItTable();
+
+      
+    });
+  </script>
+
+</body>
+</html>

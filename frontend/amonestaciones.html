@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Amonestaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="styles/apoyos.css">
+  <link rel="stylesheet" href="styles/amonestaciones.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/global-color.js"></script>
+
+</head>
+<body>
+
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) 
+            {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) 
+              {
+                arrow.style.transform = 'rotate(180deg)';
+              } else 
+              {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('input[name="ticketsChartType"]').forEach(input => {
+        input.addEventListener('change', function() {
+          currentTicketsChartType = this.value;
+          const year = document.querySelector('.year-button.active')?.dataset.year || new Date().getFullYear();
+          loadTicketStats(year);
+          loadUrgencyTimes(year);
+        });
+      });
+    });
+  </script>
+  <script>
+    // Control de submenús desplegables para la barra superior
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        // Control de submenús
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Solo si el clic es en el propio botón, no en el submenú
+            if (e.target.closest('.submenu')) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Oculta todos los submenús primero
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            // Alterna el submenú del botón clickeado
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        // Ocultar submenús al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+
+        // Highlight y efecto cromático
+        function moverHighlight() {
+          const topbar = document.querySelector('.topbar');
+          const highlight = topbar.querySelector('.glass-highlight');
+          const btnSel = topbar.querySelector('.menu-item.selected');
+          if (!btnSel) return;
+          const rectTopbar = topbar.getBoundingClientRect();
+          const rectBtn = btnSel.getBoundingClientRect();
+          const left = rectBtn.left - rectTopbar.left;
+          highlight.style.left = left + 'px';
+          highlight.style.width = rectBtn.width + 'px';
+        }
+
+        function addChromaticEffect(element) {
+          element.classList.add('clicked');
+          setTimeout(() => {
+            element.classList.remove('clicked');
+          }, 600);
+        }
+
+        document.querySelectorAll('.menu-item').forEach(button => {
+          button.addEventListener('click', function() {
+            document.querySelectorAll('.menu-item.selected').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            addChromaticEffect(this);
+            moverHighlight();
+          });
+        });
+
+        const userIcon = document.getElementById('userIcon'); //Efecto cromático al icono de usuario
+        if (userIcon) {
+          userIcon.addEventListener('click', function() {
+            addChromaticEffect(this);
+          });
+        }
+
+        setTimeout(() => {
+          moverHighlight();
+        }, 100);
+        window.addEventListener('resize', moverHighlight);
+      }, 1500);
+    });
+
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        btn.classList.remove('clicked');
+        void btn.offsetWidth; // Reflow para reiniciar animación
+        btn.classList.add('clicked');
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) + (parseInt(result[2]).toString(16).padStart(2, '0')) + (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+  <script>
+    function getContrastYIQ(hexcolor) { //Contraste automático para el texto del topbar
+      hexcolor = hexcolor.replace('#', '');
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+      }
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+      var yiq = ((r*299)+(g*587)+(b*114))/1000;
+      return (yiq >= 128) ? 'dark' : 'light';
+    }
+
+    function updateTopbarContrast() {
+      // Detecta el color de fondo real de la topbar
+      const topbar = document.querySelector('.topbar');
+      if (!topbar) return;
+      let bg = window.getComputedStyle(topbar).backgroundColor;
+      // Convierte a hex
+      function rgb2hex(rgb) {
+        if (!rgb) return '#fff';
+        let result = rgb.match(/rgba?\((\d+), (\d+), (\d+)/);
+        if (!result) return '#fff';
+        return '#' +
+          (parseInt(result[1]).toString(16).padStart(2, '0')) +
+          (parseInt(result[2]).toString(16).padStart(2, '0')) +
+          (parseInt(result[3]).toString(16).padStart(2, '0'));
+      }
+      let hex = rgb2hex(bg);
+      let contrast = getContrastYIQ(hex);
+      // Aplica el data-contrast a los elementos del menú
+      document.querySelectorAll('.menu-item, .submenu-item, .topbar-header h1, .lisa-btn-cromatica').forEach(el => {
+        el.setAttribute('data-contrast', contrast);
+      });
+    }
+    // Ejecuta al cargar y al cambiar el tema
+    document.addEventListener('DOMContentLoaded', updateTopbarContrast);
+    window.addEventListener('resize', updateTopbarContrast);
+    // Si tienes un switch de tema, llama a updateTopbarContrast() después de cambiar el tema
+  </script>
+
+  <script>
+    document.querySelectorAll('.lisa-btn-cromatica').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'inicio.html';
+      });
+    });
+  </script>
+  <script>
+  // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    empleados: 'empleados_panel.html',
+    apoyos: 'apoyos.html',
+    amonestaciones: 'amonestaciones.html',
+    vacaciones: 'vacaciones_panel.html',
+    asistencias: 'asistencias.html',
+    comidas: 'comidas_panel.html',
+    anuncios: 'anuncios.html',
+    estadisticas: 'detalles_rh.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+}); 
+</script>
+
+  <script>
+    // Navegación de submenús
+    document.addEventListener('DOMContentLoaded', function() {
+      // Control del menú hamburguesa para móvil
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const topbarMenu = document.getElementById('topbarMenu');
+      
+      if (mobileMenuToggle && topbarMenu) {
+        mobileMenuToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          topbarMenu.classList.toggle('active');
+          const icon = this.querySelector('i');
+          if (topbarMenu.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+          } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(e) {
+          if (!topbarMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+            topbarMenu.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            if (icon) {
+              icon.classList.remove('fa-times');
+              icon.classList.add('fa-bars');
+            }
+          }
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        topbarMenu.addEventListener('click', function(e) {
+          if (e.target.closest('a')) {
+            topbarMenu.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            if (icon) {
+              icon.classList.remove('fa-times');
+              icon.classList.add('fa-bars');
+            }
+          }
+        });
+      }
+
+      // Agregar event listeners a todos los enlaces del submenú
+      document.querySelectorAll('.submenu-item').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const href = this.getAttribute('href');
+          if (href) {
+            window.location.href = href;
+          }
+        });
+      });
+    });
+  </script>
+
+
+<!--tab switch-->
+    <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+    <div class="tab-switch">
+        <button class="tab-switch-button" data-tab="inicio">
+          <i class="fas fa-home"></i>
+        </button>
+        <button class="tab-switch-button" data-tab="empleados">
+          <i class="fas fa-users"></i>Empleados
+        </button>
+        <button class="tab-switch-button" data-tab="apoyos">
+          <i class="fas fa-hand-holding-heart"></i>Apoyos
+        </button>
+        <button class="tab-switch-button active" data-tab="amonestaciones">
+          <i class="fas fa-exclamation-triangle"></i>Amonestaciones
+        </button>
+        <button class="tab-switch-button" data-tab="vacaciones">
+          <i class="fas fa-umbrella-beach"></i>Vacaciones
+        </button>
+        <button class="tab-switch-button" data-tab="asistencias">
+          <i class="fas fa-calendar-check"></i>Asistencias
+        </button>
+        <button class="tab-switch-button" data-tab="comidas">
+          <i class="fas fa-utensils"></i>Comidas
+        </button>
+        <button class="tab-switch-button" data-tab="anuncios">
+          <i class="fas fa-bullhorn"></i>Anuncios
+        </button>
+        <button class="tab-switch-button" data-tab="estadisticas">
+          <i class="fas fa-chart-bar"></i>Estadisticas
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="main-content" style="justify-content: normal;">
+    <div class="amonestaciones-container">
+
+      <!-- Compact search bar placed above the table -->
+      <div class="compact-search" style="display:flex;align-items:center;gap:12px;margin:6px 0 14px;">
+        <div style = "width:50vw;">
+          <div style="position:relative;">
+            <i class="fas fa-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#9aa6b2;font-size:14px"></i>
+            <input id="searchInput" class="search-input" placeholder="Buscar por nombre, motivo o cualquier campo..." style="width:100%;padding:10px 44px 10px 40px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;color:black; height: 23px;">
+            <button id="clearSearchBtn" class="clear-search-btn" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);display:none;border:none;background:transparent;color:#7b8790;cursor:pointer"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+
+        <div style="position:relative; left: 30px;">
+          <button id="filterToggleBtn" class="filter-toggle-btn" title="Filtros" style="width:40px;height:40px;border-radius:50%;border:none;background:linear-gradient(180deg,#3aa76a,#2e8b50);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer"><i class="fas fa-filter"></i></button>
+
+          <div id="filterPopover" class="filter-popover" style="display:none;position:absolute;left:auto;top:48px;min-width:240px;max-width:360px;box-sizing:border-box;background:rgba(26, 26, 26, 0.153);border-radius:30px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:1005; backdrop-filter: blur(30px);">
+            <div class="filter-bar" id="statusFilterBar">
+              <i class="fas fa-filter filter-icon"></i>
+              <span class="filter-text" id="statusFilterText">Sin Revisar</span>
+              <i class="fas fa-chevron-down filter-arrow"></i>
+              <div class="filter-dropdown">
+                <div class="filter-option" data-value="all">Todos los estados</div>
+                <div class="filter-option selected" data-value="sin-revisar">Sin Revisar</div>
+                <div class="filter-option" data-value="revisados">Revisados</div>
+              </div>
+            </div>
+            <div class="filter-bar" id="actaFilterBar">
+              <i class="fas fa-file-alt filter-icon"></i>
+              <span class="filter-text" id="actaFilterText">Todas las actas</span>
+              <i class="fas fa-chevron-down filter-arrow"></i>
+              <div class="filter-dropdown">
+                <div class="filter-option selected" data-value="all">Todas las actas</div>
+                <div class="filter-option" data-value="con-acta">Con Acta</div>
+                <div class="filter-option" data-value="sin-acta">Sin Acta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="amonestacionesTableContainer"></div>
+
+      <!-- Controles de paginación (alineado con nuevo-equipo.html) -->
+      <div class="pagination-controls" id="paginationControlsAmonestaciones" style="
+      display: flex; 
+      gap:12px; 
+      align-items:center;
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, rgb(221 221 221 / 95%) 0%, rgba(250, 250, 250, 0.95) 100%);
+      border-radius: 0 0 20px 20px;
+      ">
+        <div class="pagination-info">
+          <label for="pageSizeSelectAmonestaciones">Mostrar:</label>
+          <select id="pageSizeSelectAmonestaciones" class="rows-per-page-select">
+            <option value="4">4</option>
+            <option value="8" selected>8</option>
+            <option value="12">12</option>
+            <option value="16">16</option>
+          </select>
+          <span style="margin-left:8px;">renglones por página</span>
+        </div>
+
+        <div class="pagination-buttons" style="display:flex; gap:8px; align-items:center;">
+          <button id="btnPrevPageAmonestaciones" type="button" class="pagination-btn" title="Página anterior" disabled>
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <!-- <span id="pageInfoAmonestaciones" class="page-info">Página 1 de 1</span> -->
+           <div style="margin-left: auto;">
+          <span class ="page-info" id="paginationInfoAmonestaciones">Mostrando 0-0 de 0 registros</span>
+        </div>
+          <button id="btnNextPageAmonestaciones" type="button" class="pagination-btn" title="Página siguiente" disabled>
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="no-amonestaciones" id="noAmonestaciones" style="display: none;">
+        <div class="no-amonestaciones-content">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h3>No hay amonestaciones registradas</h3>
+          <p>No se encontraron amonestaciones para mostrar en este momento.</p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="successNotification" class="success-notification" style="display:none;">
+    Cambios guardados correctamente
+  </div>
+
+  <!-- Modal de detalles de amonestación -->
+  <div id="modalDetalles" class="modal-detalles">
+    <div class="modal-content-detalles">
+      <span class="close-modal" id="closeModal">&times;</span>
+      <div class="modal-header">
+        <h2 id="modalTitulo">Detalles de la Amonestación</h2>
+    </div>
+      <div class="modal-body" id="modalBody">
+        <!-- El contenido se llenará dinámicamente -->
+  </div>
+    </div>
+  </div>
+
+  <!-- Modal de pantalla completa para imágenes -->
+  <div id="fullscreenModal" class="fullscreen-modal">
+    <span class="fullscreen-close" id="fullscreenClose">&times;</span>
+    <img id="fullscreenImage" class="fullscreen-image" src="" alt="Imagen en pantalla completa">
+  </div>
+
+  <!-- Modal para editar fecha de amonestación -->
+  <div id="modalEditarFecha" class="modal-editar-fecha">
+    <div class="modal-content-editar-fecha">
+      <span class="close-modal" id="closeModalEditarFecha">&times;</span>
+      <div class="modal-header">
+        <h2>Editar Fecha de Amonestación</h2>
+      </div>
+      <div class="modal-body-editar-fecha">
+        <div class="form-group">
+          <label for="inputFechaAmonestacion">Fecha de Amonestación:</label>
+          <input type="date" id="inputFechaAmonestacion" class="input-fecha" required>
+        </div>
+      </div>
+      <div class="modal-actions-editar-fecha">
+        <button class="btn-cancelar" onclick="cerrarModalEditarFecha()">Cancelar</button>
+        <button class="btn-guardar" onclick="guardarFechaAmonestacion()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sidebar.js"></script>
+  <script>
+    // Control de submenús desplegables
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuButtons = [
+        { btn: 'itMenuBtn', submenu: 'itSubmenu' },
+        { btn: 'rhMenuBtn', submenu: 'rhSubmenu' },
+        { btn: 'designMenuBtn', submenu: 'designSubmenu' },
+        { btn: 'warehouseMenuBtn', submenu: 'warehouseSubmenu' },
+        { btn: 'maintenanceMenuBtn', submenu: 'maintenanceSubmenu' },
+        { btn: 'adminMenuBtn', submenu: 'adminSubmenu' }
+      ];
+
+      menuButtons.forEach(({ btn, submenu }) => {
+        const button = document.getElementById(btn);
+        const submenuElement = document.getElementById(submenu);
+        
+        if (button && submenuElement) {
+          let isOpen = false;
+          let timeoutId = null;
+          
+          // Función para mostrar el submenú
+          function showSubmenu() {
+            submenuElement.style.display = 'block';
+            button.querySelector('.submenu-arrow').style.transform = 'rotate(180deg)';
+            // Agregar clase para animación después de un pequeño delay
+            setTimeout(() => {
+              submenuElement.classList.add('show');
+            }, 10);
+          }
+          
+          // Función para ocultar el submenú
+          function hideSubmenu() {
+            submenuElement.classList.remove('show');
+            setTimeout(() => {
+              if (!isOpen) {
+                submenuElement.style.display = 'none';
+                button.querySelector('.submenu-arrow').style.transform = 'rotate(0deg)';
+              }
+            }, 300);
+          }
+          
+          // Mostrar al hacer hover en el botón
+          button.addEventListener('mouseenter', function() {
+            if (!isOpen) {
+              clearTimeout(timeoutId);
+              showSubmenu();
+            }
+          });
+          
+          // Ocultar al salir del botón (con delay para permitir movimiento al submenú)
+          button.addEventListener('mouseleave', function(e) {
+            if (!isOpen) {
+              timeoutId = setTimeout(() => {
+                hideSubmenu();
+              }, 100);
+            }
+          });
+          
+          // Mantener abierto cuando el mouse entra al submenú
+          submenuElement.addEventListener('mouseenter', function() {
+            clearTimeout(timeoutId);
+          });
+          
+          // Ocultar cuando el mouse sale del submenú
+          submenuElement.addEventListener('mouseleave', function() {
+            if (!isOpen) {
+              hideSubmenu();
+            }
+          });
+
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            isOpen = !isOpen;
+      
+            if (isOpen) {
+              showSubmenu();
+            } else {
+              hideSubmenu();
+            }
+          });
+
+          // Ocultar al hacer clic fuera
+          document.addEventListener('click', function(e) {
+            if (!button.contains(e.target) && !submenuElement.contains(e.target)) {
+              isOpen = false;
+              hideSubmenu();
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/fecha-utils.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      try {
+        const response = await fetch('/api/auth/check-permissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else {
+          switch(currentPage) {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+        document.body.classList.add('sidebar-ready');
+      } catch (e) {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Variables globales
+      let todasLasAmonestaciones = [];
+      let terminoBusqueda = '';
+      let filtroEstado = 'sin-revisar';
+      
+      // Variables de paginación
+      let paginaActual = 1;
+      let registrosPorPagina = 8;
+      let totalPaginas = 1;
+      let amonestacionesFiltradasCompletas = [];
+      let filtroActa = 'all';
+      
+      // Hacer las variables accesibles globalmente para los onclick
+      window.paginaActualAmonestaciones = function() { return paginaActual; };
+      window.totalPaginasAmonestaciones = function() { return totalPaginas; };
+
+      // Mostrar tabla vacía inicialmente
+      displayAmonestaciones([]);
+      
+      // Cargar amonestaciones al iniciar la página
+      loadAmonestaciones();
+      
+      // Recargar amonestaciones cada 30 segundos para mostrar nuevas
+      setInterval(loadAmonestaciones, 30000);
+
+      // Configurar búsqueda y filtros
+      setupSearchAndFilters();
+
+      // Configurar el botón de cerrar modal
+      const closeModal = document.getElementById('closeModal');
+      const modal = document.getElementById('modalDetalles');
+      
+      closeModal.onclick = function() {
+        modal.style.display = 'none';
+      }
+      
+      // Cerrar modal al hacer clic fuera de él
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      // Configurar modal de pantalla completa para imágenes
+      const fullscreenModal = document.getElementById('fullscreenModal');
+      const fullscreenImage = document.getElementById('fullscreenImage');
+      const fullscreenClose = document.getElementById('fullscreenClose');
+
+      // Función para abrir imagen en pantalla completa
+      function openFullscreenImage(imageSrc) {
+        fullscreenImage.src = imageSrc;
+        fullscreenModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+      }
+
+      // Función para cerrar pantalla completa
+      function closeFullscreenImage() {
+        fullscreenModal.classList.remove('active');
+        document.body.style.overflow = 'auto'; // Restaurar scroll del body
+      }
+
+      // Event listeners para pantalla completa
+      fullscreenClose.onclick = closeFullscreenImage;
+      fullscreenModal.onclick = function(event) {
+        if (event.target === fullscreenModal) {
+          closeFullscreenImage();
+        }
+      };
+
+      // Cerrar con tecla Escape
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && fullscreenModal.classList.contains('active')) {
+          closeFullscreenImage();
+        }
+      });
+
+      // Función para configurar la búsqueda y filtros
+      function setupSearchAndFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const statusFilterBar = document.getElementById('statusFilterBar');
+        const actaFilterBar = document.getElementById('actaFilterBar');
+        const statusFilterText = document.getElementById('statusFilterText');
+        const actaFilterText = document.getElementById('actaFilterText');
+
+        // Búsqueda en tiempo real
+        searchInput.addEventListener('input', function() {
+          terminoBusqueda = this.value.toLowerCase().trim();
+          
+          // Mostrar/ocultar botón de limpiar
+          if (terminoBusqueda.length > 0) {
+            clearSearchBtn.style.display = 'block';
+          } else {
+            clearSearchBtn.style.display = 'none';
+          }
+          
+          aplicarFiltro();
+        });
+
+        // Botón de limpiar búsqueda
+        clearSearchBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          terminoBusqueda = '';
+          this.style.display = 'none';
+          aplicarFiltro();
+        });
+
+        // Filtro de estado
+        statusFilterBar.addEventListener('click', function(e) {
+          e.stopPropagation();
+          this.classList.toggle('active');
+          
+          // Cerrar otros filtros
+          actaFilterBar.classList.remove('active');
+        });
+
+        // Filtro de acta administrativa
+        actaFilterBar.addEventListener('click', function(e) {
+          e.stopPropagation();
+          this.classList.toggle('active');
+          
+          // Cerrar otros filtros
+          statusFilterBar.classList.remove('active');
+        });
+
+        // Manejar opciones del filtro de estado
+        statusFilterBar.querySelectorAll('.filter-option').forEach(option => {
+          option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Remover selección anterior
+            statusFilterBar.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            this.classList.add('selected');
+            
+            // Actualizar texto y valor
+            statusFilterText.textContent = this.textContent;
+            filtroEstado = this.dataset.value;
+            
+            // Cerrar dropdown
+            statusFilterBar.classList.remove('active');
+            
+            // Aplicar filtro
+            aplicarFiltro();
+          });
+        });
+
+        // Manejar opciones del filtro de acta
+        actaFilterBar.querySelectorAll('.filter-option').forEach(option => {
+          option.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Remover selección anterior
+            actaFilterBar.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            this.classList.add('selected');
+            
+            // Actualizar texto y valor
+            actaFilterText.textContent = this.textContent;
+            filtroActa = this.dataset.value;
+            
+            // Cerrar dropdown
+            actaFilterBar.classList.remove('active');
+            
+            // Aplicar filtro
+            aplicarFiltro();
+          });
+        });
+
+        // Cerrar filtros al hacer clic fuera
+        document.addEventListener('click', function() {
+          statusFilterBar.classList.remove('active');
+          actaFilterBar.classList.remove('active');
+          // También cerrar el popover si está visible
+          try {
+            const fp = document.getElementById('filterPopover');
+            if (fp && fp.style && (fp.style.display === 'flex' || window.getComputedStyle(fp).display !== 'none')) {
+              fp.style.display = 'none';
+            }
+          } catch (e) { /* noop */ }
+        });
+
+        // Toggle del popover de filtros desde el botón verde (asegurar que se ligue en el mismo scope)
+        try {
+          const filterToggleBtn = document.getElementById('filterToggleBtn');
+          const filterPopover = document.getElementById('filterPopover');
+          if (filterToggleBtn && filterPopover) {
+            // Evitar que clics dentro del popover cierren inmediatamente
+            filterPopover.addEventListener('click', function(ev){ ev.stopPropagation(); });
+
+            filterToggleBtn.addEventListener('click', function(ev){
+              ev.stopPropagation();
+              const isVisible = filterPopover.style.display === 'flex' || window.getComputedStyle(filterPopover).display !== 'none';
+              if (isVisible) {
+                filterPopover.style.display = 'none';
+                return;
+              }
+
+                // Mostrar como fixed para evitar que sea recortado por contenedores con overflow
+              try {
+                filterPopover.style.position = 'fixed';
+                filterPopover.style.visibility = 'hidden';
+                filterPopover.style.display = 'flex';
+                filterPopover.style.top = '0px';
+                filterPopover.style.left = '0px';
+
+                // Asegurar que no tenga 'right' que lo estire al ancho completo
+                filterPopover.style.right = 'auto';
+                // Forzar ancho de ventana pequeña
+                filterPopover.style.maxWidth = '90%';
+                filterPopover.style.boxSizing = 'border-box';
+
+                // Forzar render para medir ancho
+                const popW = filterPopover.offsetWidth || 260;
+                const popH = filterPopover.offsetHeight || 140;
+                const btnRect = filterToggleBtn.getBoundingClientRect();
+
+                // Calcular posición: preferir alinear al borde derecho del botón
+                let left = Math.round(btnRect.right - popW);
+                if (left < 8) left = Math.round(btnRect.left);
+                // Evitar salirse a la derecha de la ventana
+                const maxLeft = Math.max(8, window.innerWidth - popW - 8);
+                if (left > maxLeft) left = maxLeft;
+
+                const top = Math.round(btnRect.bottom + 8);
+
+                filterPopover.style.left = left + 'px';
+                filterPopover.style.top = top + 'px';
+                filterPopover.style.visibility = 'visible';
+                filterPopover.style.zIndex = 3000;
+              } catch (e) {
+                // Fallback simple
+                filterPopover.style.display = 'flex';
+                filterPopover.style.zIndex = 3000;
+              }
+            });
+          }
+        } catch (e) { /* noop */ }
+      }
+
+      // Función para ir a una página específica
+      window.irAPaginaAmonestaciones = function(pagina) {
+        // Recalcular totalPaginas antes de validar
+        const totalAmonestaciones = amonestacionesFiltradasCompletas.length;
+        const totalPaginasCalculadas = Math.ceil(totalAmonestaciones / registrosPorPagina) || 1;
+        
+        if (pagina < 1 || pagina > totalPaginasCalculadas) {
+          console.log('Página inválida:', pagina, 'de', totalPaginasCalculadas);
+          return;
+        }
+        paginaActual = pagina;
+        totalPaginas = totalPaginasCalculadas;
+        displayAmonestaciones(amonestacionesFiltradasCompletas);
+      }
+      ;
+
+      // Asegurar que los botones de paginación respondan mediante listeners (fallback a los onclick inline)
+      (function attachPaginationListeners(){
+        const safe = el => document.getElementById(el);
+        const btnPrev = safe('btnPrevPageAmonestaciones');
+        const btnNext = safe('btnNextPageAmonestaciones');
+        const btnFirst = safe('btnFirstPageAmonestaciones');
+        const btnLast = safe('btnLastPageAmonestaciones');
+
+        if (btnPrev) {
+          btnPrev.addEventListener('click', function(e){
+            e.preventDefault();
+            if (paginaActual > 1) irAPaginaAmonestaciones(paginaActual - 1);
+          });
+        }
+        if (btnNext) {
+          btnNext.addEventListener('click', function(e){
+            e.preventDefault();
+            if (paginaActual < totalPaginas) irAPaginaAmonestaciones(paginaActual + 1);
+          });
+        }
+        if (btnFirst) {
+          btnFirst.addEventListener('click', function(e){
+            e.preventDefault();
+            irAPaginaAmonestaciones(1);
+          });
+        }
+        if (btnLast) {
+          btnLast.addEventListener('click', function(e){
+            e.preventDefault();
+            irAPaginaAmonestaciones(totalPaginas);
+          });
+        }
+        // Listener para el select de tamaño de página (fallback seguro)
+        const pageSizeSelect = document.getElementById('pageSizeSelectAmonestaciones');
+        if (pageSizeSelect) {
+          pageSizeSelect.addEventListener('change', function(e){
+            const v = parseInt(this.value) || 8;
+            if (typeof window.cambiarTamañoPaginaAmonestaciones === 'function') {
+              window.cambiarTamañoPaginaAmonestaciones(v);
+            } else {
+              registrosPorPagina = v; paginaActual = 1; aplicarFiltro();
+            }
+          });
+        }
+      })();
+
+      // Función para cambiar el tamaño de página
+      window.cambiarTamañoPaginaAmonestaciones = function(nuevoTamaño) {
+        registrosPorPagina = nuevoTamaño;
+        paginaActual = 1; // Volver a la primera página
+        aplicarFiltro();
+      }
+
+      // Función para actualizar los controles de paginación
+      function actualizarControlesPaginacionAmonestaciones(totalRegistros) {
+        // Aceptar cualquiera de los IDs que puedan existir en diferentes plantillas
+        const paginationContainer = document.getElementById('paginationContainerAmonestaciones') || document.getElementById('paginationControlsAmonestaciones');
+        const paginationInfoEl = document.getElementById('paginationInfoAmonestaciones');
+
+        // Calcular inicio/fin
+        const inicio = totalRegistros > 0 ? (paginaActual - 1) * registrosPorPagina + 1 : 0;
+        const fin = Math.min(paginaActual * registrosPorPagina, totalRegistros);
+
+        // Actualizar texto aunque no exista el contenedor específico
+        if (paginationInfoEl) {
+          paginationInfoEl.textContent = `Mostrando ${inicio}-${fin} de ${totalRegistros} registros`;
+        }
+
+        // Mostrar/ocultar contenedor si existe
+        if (paginationContainer) {
+          if (totalRegistros === 0) {
+            paginationContainer.style.display = 'none';
+          } else {
+            paginationContainer.style.display = 'flex';
+          }
+        }
+
+        // Actualizar otros controles de forma segura si existen
+        const pageInput = document.getElementById('pageInputAmonestaciones');
+        if (pageInput) pageInput.value = paginaActual;
+
+        const totalPagesEl = document.getElementById('totalPagesAmonestaciones');
+        if (totalPagesEl) totalPagesEl.textContent = totalPaginas;
+
+        const btnFirst = document.getElementById('btnFirstPageAmonestaciones');
+        const btnPrev = document.getElementById('btnPrevPageAmonestaciones');
+        const btnNext = document.getElementById('btnNextPageAmonestaciones');
+        const btnLast = document.getElementById('btnLastPageAmonestaciones');
+
+        if (btnFirst) btnFirst.disabled = paginaActual === 1;
+        if (btnPrev) btnPrev.disabled = paginaActual === 1;
+        if (btnNext) btnNext.disabled = paginaActual === totalPaginas || totalPaginas === 0;
+        if (btnLast) btnLast.disabled = paginaActual === totalPaginas || totalPaginas === 0;
+      }
+
+      // Función para aplicar el filtro y búsqueda
+      function aplicarFiltro() {
+        paginaActual = 1; // Reiniciar a la primera página al aplicar filtros
+        let amonestacionesFiltradas = [...todasLasAmonestaciones];
+        
+        // Filtro por estado (revisado/no revisado)
+        if (filtroEstado === 'sin-revisar') {
+          amonestacionesFiltradas = amonestacionesFiltradas.filter(amonestacion => {
+            return !amonestacion.revisado || amonestacion.revisado === false || amonestacion.revisado === null;
+          });
+        } else if (filtroEstado === 'revisados') {
+          amonestacionesFiltradas = amonestacionesFiltradas.filter(amonestacion => {
+            return amonestacion.revisado === true;
+          });
+        }
+
+        // Filtro por acta administrativa
+        if (filtroActa === 'con-acta') {
+          amonestacionesFiltradas = amonestacionesFiltradas.filter(amonestacion => {
+            return amonestacion.acta_administrativa === true;
+          });
+        } else if (filtroActa === 'sin-acta') {
+          amonestacionesFiltradas = amonestacionesFiltradas.filter(amonestacion => {
+            return !amonestacion.acta_administrativa || amonestacion.acta_administrativa === false;
+          });
+        }
+
+        // Búsqueda por texto
+        if (terminoBusqueda.length > 0) {
+          amonestacionesFiltradas = amonestacionesFiltradas.filter(amonestacion => {
+            const idEmpleado = (amonestacion.empleado_id || '').toString().toLowerCase();
+            const nombre = (amonestacion.nombre_completo || '').toLowerCase();
+            const motivo = (amonestacion.motivo || '').toLowerCase();
+            const supervisor = (amonestacion.supervisor || '').toLowerCase();
+            const puesto = (amonestacion.puesto || '').toLowerCase();
+            const comentarios = (amonestacion.comentarios || '').toLowerCase();
+            
+            return idEmpleado.includes(terminoBusqueda) ||
+                   nombre.includes(terminoBusqueda) ||
+                   motivo.includes(terminoBusqueda) ||
+                   supervisor.includes(terminoBusqueda) ||
+                   puesto.includes(terminoBusqueda) ||
+                   comentarios.includes(terminoBusqueda);
+          });
+        }
+        
+        // Ordenar por fecha, las más nuevas primero
+        amonestacionesFiltradas.sort((a, b) => {
+          const fechaA = new Date(a.fecha_solicitud || a.fecha);
+          const fechaB = new Date(b.fecha_solicitud || b.fecha);
+          return fechaB - fechaA; // Orden descendente (más nuevas primero)
+        });
+        
+        displayAmonestaciones(amonestacionesFiltradas);
+      }
+
+      // Función para cargar todas las amonestaciones
+      async function loadAmonestaciones() {
+        try {
+          // Intentar cargar desde diferentes endpoints posibles
+          let response = await fetch('/api/amonestaciones');
+          if (!response.ok) {
+            // Si no existe ese endpoint, intentar con el de notificaciones
+            response = await fetch('/api/amonestaciones/notificaciones');
+          }
+          
+          if (!response.ok) {
+            throw new Error('Error al cargar amonestaciones');
+          }
+          
+          const amonestaciones = await response.json();
+          todasLasAmonestaciones = amonestaciones || [];
+          aplicarFiltro();
+        } catch (error) {
+          console.error('Error al cargar amonestaciones:', error);
+          todasLasAmonestaciones = [];
+          aplicarFiltro(); // Aplicar filtro para mostrar tabla vacía
+        }
+      }
+
+      // Función para mostrar las amonestaciones en lista
+      function displayAmonestaciones(amonestaciones) {
+        const container = document.getElementById('amonestacionesTableContainer');
+        const noAmonestaciones = document.getElementById('noAmonestaciones');
+
+        // Siempre ocultar el mensaje de "no hay amonestaciones" ya que la tabla siempre estará visible
+        noAmonestaciones.style.display = 'none';
+
+        // Guardar todas las amonestaciones filtradas para la paginación
+        amonestacionesFiltradasCompletas = amonestaciones || [];
+
+        // Calcular paginación
+        const totalAmonestaciones = amonestacionesFiltradasCompletas.length;
+        totalPaginas = Math.ceil(totalAmonestaciones / registrosPorPagina) || 1;
+        if (paginaActual > totalPaginas && totalPaginas > 0) {
+          paginaActual = totalPaginas;
+        }
+        if (paginaActual < 1) {
+          paginaActual = 1;
+        }
+
+        // Obtener amonestaciones de la página actual
+        const inicio = (paginaActual - 1) * registrosPorPagina;
+        const fin = inicio + registrosPorPagina;
+        const amonestacionesPagina = amonestacionesFiltradasCompletas.slice(inicio, fin);
+
+        container.innerHTML = '';
+
+        // Siempre crear la tabla, incluso si no hay datos
+        const table = document.createElement('table');
+        table.className = 'amonestaciones-table';
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>NÚMERO DE EMPLEADO</th>
+              <th>Nombre completo</th>
+              <th>Motivo</th>
+              <th>Fecha</th>
+              <th>Fecha de Amonestación</th>
+              <th>Estado</th>
+              <th>Acta Administrativa</th>
+              <th>Días Suspensión</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector('tbody');
+        
+        // Si no hay amonestaciones, mostrar una fila con mensaje
+        if (!amonestacionesPagina || amonestacionesPagina.length === 0) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td colspan="9" style="text-align: center; padding: 24px; color: rgba(0, 0, 0, 0.6); background: transparent;">
+              <i class="fas fa-inbox" style="font-size: 36px; margin-bottom: 12px; opacity: 0.2; display: block; color: inherit;"></i>
+              <p style="margin: 0; font-size: 15px;">No hay amonestaciones que coincidan con los filtros seleccionados</p>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        } else {
+          // Mostrar las amonestaciones
+          amonestacionesPagina.forEach((a, index) => {
+          const fecha = formatearFechaEspanol(a.fecha_solicitud || a.fecha);
+          const estadoTexto = a.revisado ? 'Revisado' : (a.estado || 'Pendiente');
+          const estadoClase = a.revisado ? 'revisado' : 'pendiente';
+          const actaAdministrativa = a.acta_administrativa ? 'Sí' : 'No';
+          const actaClase = a.acta_administrativa ? 'acta-si' : 'acta-no';
+          const diasSuspension = a.dias_suspension || 0;
+          const tr = document.createElement('tr');
+          // Agregar clase para filas intercaladas
+          tr.className = index % 2 === 0 ? 'row-even' : 'row-odd';
+          tr.innerHTML = `
+            <td data-label="ID">${a.empleado_id || 'N/A'}</td>
+            <td data-label="Nombre">${a.nombre_completo || 'N/A'}</td>
+            <td data-label="Motivo">${a.motivo || 'Sin motivo especificado'}</td>
+            <td data-label="Fecha">${fecha}</td>
+            <td data-label="Fecha de Amonestación">${a.fecha_amonestacion ? formatearFechaEspanol(a.fecha_amonestacion) : ''}</td>
+            <td data-label="Estado"><span class="estado-chip ${estadoClase}">${estadoTexto}</span></td>
+            <td data-label="Acta Administrativa">
+              <div class="switch-container">
+                <label class="switch-toggle">
+                  <input type="checkbox" ${a.acta_administrativa ? 'checked' : ''} onchange="toggleActaAdministrativa(${a.id}, ${a.acta_administrativa})">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </td>
+            <td data-label="Días Suspensión">
+              <div class="dias-suspension-container">
+                <input type="number" 
+                       class="dias-suspension-input" 
+                       value="${diasSuspension}" 
+                       min="0" 
+                       max="365"
+                       placeholder="0"
+                       data-id="${a.id}"
+                       oninput="validateNumericInput(this); updateDiasSuspension(${a.id}, this.value)"
+                       onchange="updateDiasSuspension(${a.id}, this.value)"
+                       onblur="updateDiasSuspension(${a.id}, this.value)"
+                       onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                <span class="dias-label">días</span>
+              </div>
+            </td>
+            <td data-label="Acciones">
+              <div class="action-buttons">
+                <button class="btn-ver" data-id="${a.id}"><i class="fas fa-eye"></i> Ver</button>
+                <button class="btn-editar-fecha" data-id="${a.id}"><i class="fas fa-calendar"></i> Editar Fecha</button>
+                ${!a.revisado ? `<button class=\"btn-revisado\" data-id=\"${a.id}\"><i class=\"fas fa-check\"></i></button>` : ''}
+              </div>
+            </td>
+          `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        container.appendChild(table);
+
+        // Acciones - usar amonestaciones completas para encontrar el registro
+        container.querySelectorAll('.btn-ver').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            const am = amonestacionesFiltradasCompletas.find(x => x.id === id);
+            if (am) verDetallesAmonestacion(am);
+          });
+        });
+
+        container.querySelectorAll('.btn-editar-fecha').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            const am = amonestacionesFiltradasCompletas.find(x => x.id === id);
+            if (am) abrirModalEditarFecha(am);
+          });
+        });
+
+        // (btn-establecer-fecha eliminado; usar botón 'Editar Fecha' en Acciones si se quiere abrir el modal)
+
+        container.querySelectorAll('.btn-revisado').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(btn.getAttribute('data-id'));
+            marcarComoRevisado(id);
+          });
+        });
+        
+        // Actualizar controles de paginación siempre, incluso si no hay datos
+        actualizarControlesPaginacionAmonestaciones(totalAmonestaciones);
+      }
+
+      // Función para mostrar el mensaje de no hay amonestaciones (ya no se usa, pero se mantiene por compatibilidad)
+      function showNoAmonestaciones() {
+        // Ya no ocultamos la tabla, siempre se muestra
+        // Simplemente mostramos una tabla vacía con mensaje
+        displayAmonestaciones([]);
+      }
+
+      // Función para mostrar notificación de éxito
+      function showSuccessNotification(message) {
+        const notification = document.getElementById('successNotification');
+        if (notification) {
+          notification.textContent = message;
+          notification.style.display = 'block';
+          setTimeout(() => {
+            notification.style.display = 'none';
+          }, 3000);
+        }
+      }
+
+      // Función para validar entrada numérica
+      function validateNumericInput(input) {
+        // Remover cualquier carácter que no sea número
+        input.value = input.value.replace(/[^0-9]/g, '');
+        
+        // Asegurar que esté dentro del rango permitido
+        const value = parseInt(input.value) || 0;
+        if (value > 365) {
+          input.value = 365;
+        } else if (value < 0) {
+          input.value = 0;
+        }
+      }
+
+      // Función para actualizar los días de suspensión desde el modal
+      window.updateDiasSuspensionFromModal = async function(amonestacionId, diasSuspension) {
+        try {
+          // Validar que sea un número entero no negativo
+          const dias = parseInt(diasSuspension);
+          if (isNaN(dias) || dias < 0) {
+            alert('Los días de suspensión deben ser un número entero no negativo');
+            return;
+          }
+
+          // Si es 0, no hacer nada (evitar llamadas innecesarias)
+          const amonestacion = todasLasAmonestaciones.find(a => a.id === amonestacionId);
+          if (amonestacion && amonestacion.dias_suspension === dias) {
+            return;
+          }
+          
+          const response = await fetch(`/api/amonestaciones/${amonestacionId}/dias-suspension`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dias_suspension: dias })
+          });
+
+          if (response.ok) {
+            // Actualizar la amonestación en la lista local
+            if (amonestacion) {
+              amonestacion.dias_suspension = dias;
+            }
+
+            // Aplicar el filtro actual para actualizar la vista
+            aplicarFiltro();
+            
+            // Mostrar notificación de éxito solo si cambió
+            if (amonestacion && amonestacion.dias_suspension !== dias) {
+              showSuccessNotification(`Días de suspensión actualizados a ${dias} días`);
+            }
+          } else {
+            const errorData = await response.json();
+            alert('Error al actualizar días de suspensión: ' + (errorData.message || 'Error desconocido'));
+          }
+        } catch (error) {
+          console.error('Error al actualizar días de suspensión:', error);
+          alert('Error al conectar con el servidor');
+        }
+      }
+
+      // Función para actualizar los días de suspensión
+      window.updateDiasSuspension = async function(amonestacionId, diasSuspension) {
+        try {
+          // Validar que sea un número entero no negativo
+          const dias = parseInt(diasSuspension);
+          if (isNaN(dias) || dias < 0) {
+            alert('Los días de suspensión deben ser un número entero no negativo');
+            return;
+          }
+
+          // Si es 0, no hacer nada (evitar llamadas innecesarias)
+          const amonestacion = todasLasAmonestaciones.find(a => a.id === amonestacionId);
+          if (amonestacion && amonestacion.dias_suspension === dias) {
+            return;
+          }
+          
+          const response = await fetch(`/api/amonestaciones/${amonestacionId}/dias-suspension`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dias_suspension: dias })
+          });
+
+          if (response.ok) {
+            // Actualizar la amonestación en la lista local
+            if (amonestacion) {
+              amonestacion.dias_suspension = dias;
+            }
+
+            // Aplicar el filtro actual para actualizar la vista
+            aplicarFiltro();
+            
+            // Mostrar notificación de éxito solo si cambió
+            if (amonestacion && amonestacion.dias_suspension !== dias) {
+              showSuccessNotification(`Días de suspensión actualizados a ${dias} días`);
+            }
+          } else {
+            const errorData = await response.json();
+            alert('Error al actualizar días de suspensión: ' + (errorData.message || 'Error desconocido'));
+          }
+        } catch (error) {
+          console.error('Error al actualizar días de suspensión:', error);
+          alert('Error al conectar con el servidor');
+        }
+      }
+
+      // Función para alternar el estado de acta administrativa
+      window.toggleActaAdministrativa = async function(amonestacionId, currentValue) {
+        try {
+          const newValue = !currentValue;
+          
+          const response = await fetch(`/api/amonestaciones/${amonestacionId}/acta-administrativa`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ acta_administrativa: newValue })
+          });
+
+          if (response.ok) {
+            // Actualizar la amonestación en la lista local
+            const amonestacion = todasLasAmonestaciones.find(a => a.id === amonestacionId);
+            if (amonestacion) {
+              amonestacion.acta_administrativa = newValue;
+            }
+
+            // Aplicar el filtro actual para actualizar la vista
+            aplicarFiltro();
+            
+            // Mostrar notificación de éxito
+            showSuccessNotification(`Acta administrativa ${newValue ? 'activada' : 'desactivada'} correctamente`);
+          } else {
+            const errorData = await response.json();
+            alert('Error al actualizar acta administrativa: ' + (errorData.message || 'Error desconocido'));
+          }
+        } catch (error) {
+          console.error('Error al actualizar acta administrativa:', error);
+          alert('Error al conectar con el servidor');
+        }
+      }
+
+      // Función para marcar amonestación como revisada
+      window.marcarComoRevisado = async function(amonestacionId) {
+        try {
+          const response = await fetch(`/api/amonestaciones/${amonestacionId}/revisar`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            // Actualizar la amonestación en la lista local
+            const amonestacion = todasLasAmonestaciones.find(a => a.id === amonestacionId);
+            if (amonestacion) {
+              amonestacion.revisado = true;
+            }
+
+            // Aplicar el filtro actual para actualizar la vista
+            aplicarFiltro();
+            
+            // Cerrar el modal
+            document.getElementById('modalDetalles').style.display = 'none';
+            
+            // Mostrar notificación de éxito
+            showSuccessNotification('Amonestación marcada como revisada');
+          } else {
+            const errorData = await response.json();
+            alert('Error al marcar como revisada: ' + (errorData.message || 'Error desconocido'));
+          }
+        } catch (error) {
+          console.error('Error al marcar como revisada:', error);
+          alert('Error al conectar con el servidor');
+        }
+      }
+
+      // Función para ver detalles de una amonestación
+      async function verDetallesAmonestacion(amonestacion) {
+        const modal = document.getElementById('modalDetalles');
+        const modalTitulo = document.getElementById('modalTitulo');
+        const modalBody = document.getElementById('modalBody');
+        
+        // Configurar el título
+        modalTitulo.textContent = `Amonestación de ${amonestacion.nombre_completo || 'N/A'}`;
+        
+        // Formatear la fecha
+        const fecha = formatearFechaEspanol(amonestacion.fecha_solicitud || amonestacion.fecha);
+        // Si está revisada, mostrar "REVISADO", sino usar el estado original
+        const estado = amonestacion.revisado ? 'REVISADO' : (amonestacion.estado || 'Pendiente');
+        const estadoClass = estado.toLowerCase().replace(' ', '-');
+        
+        // Crear el contenido del modal
+        modalBody.innerHTML = `
+          <div class="detalle-info">
+            <div class="label">Estado:</div>
+            <div class="value">
+              <span class="estado-badge ${estadoClass}">${estado}</span>
+            </div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Acta Administrativa:</div>
+            <div class="value">
+              <div class="switch-container">
+                <label class="switch-toggle">
+                  <input type="checkbox" ${amonestacion.acta_administrativa ? 'checked' : ''} onchange="toggleActaAdministrativa(${amonestacion.id}, ${amonestacion.acta_administrativa})">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Días de Suspensión:</div>
+            <div class="value">
+              <div class="dias-suspension-modal-container">
+                <input type="number" 
+                       class="dias-suspension-modal-input" 
+                       value="${amonestacion.dias_suspension || 0}" 
+                       min="0" 
+                       max="365"
+                       placeholder="0"
+                       id="modalDiasSuspension${amonestacion.id}"
+                       oninput="validateNumericInput(this); updateDiasSuspensionFromModal(${amonestacion.id}, this.value)"
+                       onchange="updateDiasSuspensionFromModal(${amonestacion.id}, this.value)"
+                       onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                <span class="dias-modal-label">días</span>
+              </div>
+            </div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Nombre Completo:</div>
+            <div class="value">${amonestacion.nombre_completo || 'N/A'}</div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Puesto:</div>
+            <div class="value">${amonestacion.puesto || 'N/A'}</div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Supervisor:</div>
+            <div class="value">${amonestacion.supervisor || 'N/A'}</div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Motivo:</div>
+            <div class="value">${amonestacion.motivo || 'Sin motivo especificado'}</div>
+          </div>
+          <div class="detalle-info">
+            <div class="label">Fecha:</div>
+            <div class="value">${fecha}</div>
+          </div>
+          ${amonestacion.comentarios ? `
+            <div class="detalle-info">
+              <div class="label">Comentarios:</div>
+              <div class="value">${amonestacion.comentarios}</div>
+            </div>
+          ` : ''}
+          ${amonestacion.folio ? `
+            <div class="detalle-info">
+              <div class="label">Folio:</div>
+              <div class="value">${amonestacion.folio}</div>
+            </div>
+          ` : ''}
+          ${amonestacion.descripcion ? `
+            <div class="detalle-info">
+              <div class="label">Descripción:</div>
+              <div class="value">${amonestacion.descripcion}</div>
+            </div>
+          ` : ''}
+          ${amonestacion.notas ? `
+            <div class="detalle-info">
+              <div class="label">Notas:</div>
+              <div class="value">${amonestacion.notas}</div>
+            </div>
+          ` : ''}
+          <div class="fotos-section">
+            <div class="label">Formato físico:</div>
+            <div class="fotos-grid" id="fotosGrid">
+              <!-- Las fotos se cargarán aquí -->
+            </div>
+          </div>
+          <div class="modal-actions">
+            ${!amonestacion.revisado ? `
+              <button class="btn-revisado" onclick="marcarComoRevisado(${amonestacion.id})">
+                <i class="fas fa-check"></i> Marcar como Revisado
+              </button>
+            ` : `
+              <div class="revisado-badge centered">
+                <i class="fas fa-check-circle"></i> Ya Revisado
+              </div>
+            `}
+          </div>
+        `;
+        
+        // Mostrar el modal primero
+        modal.style.display = 'block';
+        
+        // Intentar cargar datos completos de la amonestación desde el backend
+        try {
+          console.log('Intentando cargar datos completos para amonestación ID:', amonestacion.id);
+          
+          // Intentar diferentes endpoints para obtener datos completos
+          let response = await fetch(`/api/amonestaciones/${amonestacion.id}`);
+          if (!response.ok) {
+            response = await fetch(`/api/amonestaciones/detalle/${amonestacion.id}`);
+          }
+          if (!response.ok) {
+            response = await fetch(`/api/amonestaciones/notificaciones/${amonestacion.id}`);
+          }
+          
+          if (response.ok) {
+            const amonestacionCompleta = await response.json();
+            console.log('Datos completos obtenidos:', amonestacionCompleta);
+            // Cargar las fotos con los datos completos
+            loadFotosEnModal(amonestacionCompleta);
+          } else {
+            console.log('No se pudieron obtener datos completos, usando datos básicos');
+            // Cargar las fotos con los datos básicos
+            loadFotosEnModal(amonestacion);
+          }
+        } catch (error) {
+          console.error('Error al cargar datos completos:', error);
+          // Cargar las fotos con los datos básicos
+          loadFotosEnModal(amonestacion);
+        }
+      }
+
+      // Función para cargar las fotos en el modal
+      function loadFotosEnModal(amonestacion) {
+        const fotosGrid = document.getElementById('fotosGrid');
+        fotosGrid.innerHTML = '';
+        
+        // Debug: mostrar todos los campos de la amonestación
+        console.log('=== ANÁLISIS DE AMONESTACIÓN ===');
+        console.log('Datos completos de la amonestación:', amonestacion);
+        console.log('Tipo de datos:', typeof amonestacion);
+        console.log('Claves disponibles:', Object.keys(amonestacion));
+        
+        // Mostrar cada campo individualmente
+        Object.keys(amonestacion).forEach(key => {
+          console.log(`Campo '${key}':`, amonestacion[key], `(tipo: ${typeof amonestacion[key]})`);
+        });
+        
+        // Buscar fotos en todos los campos de la amonestación
+        const fotos = [];
+        
+        // Función para verificar si un valor es una imagen
+        function esImagen(valor) {
+          if (!valor || typeof valor !== 'string') return false;
+          const valorLimpio = valor.trim();
+          if (valorLimpio === '' || valorLimpio === 'null' || valorLimpio === '[null]') return false;
+          
+          // Verificar si es una ruta de imagen
+          const extensionesImagen = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+          const esRutaImagen = extensionesImagen.some(ext => valorLimpio.toLowerCase().includes(ext));
+          
+          // Verificar si contiene 'uploads' o es una ruta de archivo
+          const esRutaArchivo = valorLimpio.includes('uploads') || valorLimpio.includes('/') || valorLimpio.includes('\\');
+          
+          const esImagen = esRutaImagen || esRutaArchivo;
+          if (esImagen) {
+            console.log(`✓ Valor identificado como imagen: "${valorLimpio}"`);
+          }
+          return esImagen;
+        }
+        
+        console.log('=== BÚSQUEDA DE IMÁGENES ===');
+        
+        // Si viene evidencia_url directo, úsalo primero
+        if (amonestacion.evidencia_url && typeof amonestacion.evidencia_url === 'string') {
+          fotos.push(amonestacion.evidencia_url);
+        }
+
+        // Buscar en todos los campos del objeto
+        Object.keys(amonestacion).forEach(key => {
+          const valor = amonestacion[key];
+          console.log(`Analizando campo '${key}':`, valor);
+          if (esImagen(valor)) {
+            fotos.push(valor);
+            console.log(`✓ Imagen encontrada en campo '${key}':`, valor);
+          }
+        });
+        
+        // Buscar en campos específicos de evidencia
+        console.log('=== BÚSQUEDA EN CAMPOS ESPECÍFICOS ===');
+        for (let i = 1; i <= 10; i++) {
+          const camposEvidencia = [
+            `evidencia${i}`, `foto${i}`, `imagen${i}`, 
+            `foto_${i}`, `imagen_${i}`, `evidencia_${i}`,
+            `archivo${i}`, `file${i}`, `photo${i}`, `image${i}`
+          ];
+          
+          camposEvidencia.forEach(campo => {
+            if (amonestacion[campo]) {
+              console.log(`Campo específico '${campo}':`, amonestacion[campo]);
+              if (esImagen(amonestacion[campo])) {
+                fotos.push(amonestacion[campo]);
+                console.log(`✓ Imagen encontrada en campo específico '${campo}':`, amonestacion[campo]);
+              }
+            }
+          });
+        }
+        
+        // Eliminar duplicados
+        const fotosUnicas = [...new Set(fotos)];
+        
+        console.log('=== RESULTADO FINAL ===');
+        console.log('Total de fotos encontradas:', fotosUnicas.length);
+        console.log('Fotos únicas:', fotosUnicas);
+        
+        if (fotosUnicas.length === 0) {
+          console.log('❌ No se encontraron imágenes en los datos, intentando cargar por ID');
+          // Intentar cargar imagen por ID de amonestación
+          intentarCargarImagenPorId(amonestacion.id);
+          return;
+        }
+
+        console.log('=== CARGANDO IMÁGENES ===');
+        fotosUnicas.forEach((foto, index) => {
+          const fotoItem = document.createElement('div');
+          fotoItem.className = 'foto-item';
+          
+          // Construir la URL completa de la imagen
+          let fotoUrl = foto.trim();
+          
+          // Si ya es una ruta completa, usarla tal como está
+          if (fotoUrl.startsWith('http') || fotoUrl.startsWith('/')) {
+            console.log(`URL completa detectada: ${fotoUrl}`);
+          } else if (fotoUrl.includes('uploads/')) {
+            // Si contiene 'uploads/', agregar '/' al inicio
+            fotoUrl = '/' + fotoUrl;
+            console.log(`URL con uploads detectada, agregando /: ${fotoUrl}`);
+          } else {
+            // Si es solo el nombre del archivo, agregar la ruta de uploads
+            fotoUrl = `/uploads/${fotoUrl}`;
+            console.log(`Nombre de archivo detectado, agregando /uploads/: ${fotoUrl}`);
+          }
+          
+          console.log(`Intentando cargar imagen ${index + 1}: ${fotoUrl}`);
+          
+          const img = document.createElement('img');
+          img.src = fotoUrl;
+          img.alt = `Evidencia ${index + 1}`;
+          
+          img.onload = function() {
+            console.log('✓ Imagen cargada exitosamente:', fotoUrl);
+          };
+          
+          img.onerror = function() {
+            this.parentElement.innerHTML = `<div class="foto-placeholder">Error al cargar: ${fotoUrl}</div>`;
+          };
+          
+          // Agregar evento de clic para pantalla completa
+          fotoItem.onclick = function() {
+            openFullscreenImage(fotoUrl);
+          };
+          
+          fotoItem.appendChild(img);
+          fotosGrid.appendChild(fotoItem);
+        });
+      }
+
+      // Función para intentar cargar imagen por ID de amonestación
+      function intentarCargarImagenPorId(amonestacionId) {
+        const fotosGrid = document.getElementById('fotosGrid');
+        
+        console.log('Intentando cargar imagen para amonestación ID:', amonestacionId);
+        
+        // Lista de posibles nombres de archivo basados en el ID
+        const posiblesImagenes = [
+          `amonestacion_${amonestacionId}.jpg`,
+          `amonestacion_${amonestacionId}.png`,
+          `evidencia_${amonestacionId}.jpg`,
+          `evidencia_${amonestacionId}.png`,
+          `foto_${amonestacionId}.jpg`,
+          `foto_${amonestacionId}.png`,
+          `imagen_${amonestacionId}.jpg`,
+          `imagen_${amonestacionId}.png`
+        ];
+        
+        // Variables para controlar el estado
+        let imagenesCargadas = 0;
+        let imagenesFallidas = 0;
+        const totalImagenes = posiblesImagenes.length;
+        let yaSeMostroMensaje = false;
+        
+        // Función para verificar si todas las imágenes han terminado de cargar
+        function verificarEstadoFinal() {
+          if (imagenesCargadas + imagenesFallidas === totalImagenes && !yaSeMostroMensaje) {
+            yaSeMostroMensaje = true;
+            if (imagenesCargadas === 0) {
+              fotosGrid.innerHTML = '<div class="foto-placeholder">No se encontraron evidencias fotográficas disponibles</div>';
+            }
+          }
+        }
+        
+        posiblesImagenes.forEach((nombreImagen, index) => {
+          const fotoItem = document.createElement('div');
+          fotoItem.className = 'foto-item';
+          
+          const fotoUrl = `/uploads/${nombreImagen}`;
+          console.log(`Intentando cargar imagen ${index + 1}: ${fotoUrl}`);
+          
+          const img = document.createElement('img');
+          img.src = fotoUrl;
+          img.alt = `Evidencia ${index + 1}`;
+          
+          img.onload = function() {
+            console.log('✓ Imagen cargada exitosamente:', fotoUrl);
+            imagenesCargadas++;
+            verificarEstadoFinal();
+          };
+          
+          img.onerror = function() {
+            console.log('✗ Error al cargar imagen:', fotoUrl);
+            imagenesFallidas++;
+            // Solo remover el elemento si no se cargó, no mostrar mensaje de error
+            fotoItem.remove();
+            verificarEstadoFinal();
+          };
+          
+          // Agregar evento de clic para pantalla completa
+          fotoItem.onclick = function() {
+            openFullscreenImage(fotoUrl);
+          };
+          
+          fotoItem.appendChild(img);
+          fotosGrid.appendChild(fotoItem);
+        });
+      }
+
+      // Variables para el modal de edición de fecha
+      let amonestacionEditando = null;
+
+      // Función para abrir el modal de edición de fecha
+      window.abrirModalEditarFecha = function(amonestacion) {
+        amonestacionEditando = amonestacion;
+        const modal = document.getElementById('modalEditarFecha');
+        const inputFecha = document.getElementById('inputFechaAmonestacion');
+        
+        // Convertir la fecha al formato YYYY-MM-DD para el input tipo date
+        let fecha = amonestacion.fecha_solicitud || amonestacion.fecha;
+        if (fecha) {
+          // Si la fecha viene en formato DD/MM/YYYY o similar, conversión necesaria
+          // Si viene en formato ISO, usarla directamente
+          if (typeof fecha === 'string' && fecha.includes('/')) {
+            const partes = fecha.split('/');
+            if (partes.length === 3) {
+              fecha = `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+            }
+          }
+          // Si es un objeto Date, convertirlo
+          else if (fecha instanceof Date) {
+            const year = fecha.getFullYear();
+            const month = String(fecha.getMonth() + 1).padStart(2, '0');
+            const day = String(fecha.getDate()).padStart(2, '0');
+            fecha = `${year}-${month}-${day}`;
+          }
+          inputFecha.value = fecha;
+        }
+        
+        modal.style.display = 'block';
+      };
+
+      // Función para cerrar el modal de edición de fecha
+      window.cerrarModalEditarFecha = function() {
+        const modal = document.getElementById('modalEditarFecha');
+        modal.style.display = 'none';
+        amonestacionEditando = null;
+      };
+
+      // Función para guardar la fecha de amonestación
+      window.guardarFechaAmonestacion = async function() {
+        if (!amonestacionEditando) {
+          alert('No hay amonestación seleccionada');
+          return;
+        }
+
+        const inputFecha = document.getElementById('inputFechaAmonestacion');
+        const nuevaFecha = inputFecha.value;
+
+        if (!nuevaFecha) {
+          alert('Por favor selecciona una fecha');
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/amonestaciones/${amonestacionEditando.id}/fecha`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fecha: nuevaFecha })
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error al actualizar la fecha: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          
+          // Actualizar la amonestación en la lista (guardar en la nueva propiedad fecha_amonestacion)
+          const index = todasLasAmonestaciones.findIndex(a => a.id === amonestacionEditando.id);
+          if (index !== -1) {
+            todasLasAmonestaciones[index].fecha_amonestacion = nuevaFecha;
+          }
+
+          // Cerrar modal y recargar tabla
+          cerrarModalEditarFecha();
+          showSuccessNotification('Fecha actualizada correctamente');
+          aplicarFiltro();
+
+        } catch (error) {
+          console.error('Error al guardar la fecha:', error);
+          alert(`Error: ${error.message}`);
+        }
+      };
+
+      // Configurar el botón de cerrar modal
+      const closeModalEditarFecha = document.getElementById('closeModalEditarFecha');
+      if (closeModalEditarFecha) {
+        closeModalEditarFecha.onclick = function() {
+          cerrarModalEditarFecha();
+        };
+      }
+
+      // Cerrar modal al hacer clic fuera de él
+      const modalEditarFecha = document.getElementById('modalEditarFecha');
+      window.onclick = function(event) {
+        if (event.target === modalEditarFecha) {
+          cerrarModalEditarFecha();
+        }
+      };
+
+    });
+  </script>
+    <script src="js/topbar.js"></script>
+</body>
+</html> 

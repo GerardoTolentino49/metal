@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calendar - Xen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="Estilos/theme.css">
+  <link rel="stylesheet" href="Estilos/calendario.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/theme.js"></script>
+  <script src="js/permissions.js"></script>
+</head>
+<body>
+  <!-- Topbar con estilo glass -->
+  <nav class="topbar">
+    <div class="topbar-content">
+      <div class="topbar-left">
+        <h1 class="logo">Xen</h1>
+      </div>
+      <div class="topbar-center">
+        <a href="inicio.html" class="nav-item">
+          <span>Home</span>
+        </a>
+        <a href="tablero.html" class="nav-item">
+          <span>Board</span>
+        </a>
+        <a href="tareas.html" class="nav-item">
+          <span>Tasks</span>
+        </a>
+        <a href="calendario.html" class="nav-item active">
+          <span>Calendar</span>
+        </a>
+        <a href="equipo.html" class="nav-item">
+          <span>Team</span>
+        </a>
+        <a href="diseno.html" class="nav-item">
+          <span>Design</span>
+        </a>
+        <a href="reportes.html" class="nav-item">
+          <span>Reports</span>
+        </a>
+        <a href="ajustes.html" class="nav-item">
+          <span>Settings</span>
+        </a>
+      </div>
+      <div class="topbar-right">
+        <div class="user-menu">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <a href="perfil.html" class="username" id="username">User</a>
+          <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar de supervisores (piscina) -->
+  <aside class="supervisors-pool" id="supervisorsPool">
+    <div class="supervisors-pool-header">
+      <h3>Supervisores</h3>
+      <p class="supervisors-pool-subtitle">Arrastra a un área</p>
+    </div>
+    <div class="supervisors-list" id="supervisorsList">
+      <!-- Los supervisores se cargan dinámicamente -->
+    </div>
+  </aside>
+
+  <!-- Contenedores de producción -->
+  <main class="main-content">
+    <div class="content-wrapper">
+      <div class="production-container" id="productionContainer">
+        <!-- Los contenedores se generan dinámicamente -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Verificar autenticación
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('username');
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+      if (!isLoggedIn || isLoggedIn !== 'true') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Ocultar pestañas según el rol del usuario
+      const rol = localStorage.getItem('rol');
+      if (rol === 'diseñador') {
+        // Ocultar todas las pestañas excepto Inicio y Diseño
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          if (text !== 'home' && text !== 'design') {
+            item.style.display = 'none';
+          }
+        });
+      }
+      if (rol === 'pm') {
+        // Ocultar todas las pestañas excepto Home y PM
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+          const text = item.textContent.trim().toLowerCase();
+          const href = item.getAttribute('href') || '';
+          if (text !== 'home' && !href.includes('pm.html')) {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      if (username) {
+        // Cargar nombre del empleado (solo primer nombre)
+        loadEmployeeName(username);
+      }
+      
+      // Función para cargar nombre del empleado (solo primer nombre)
+      async function loadEmployeeName(username) {
+        try {
+          // Buscar el usuario en la lista de empleados
+          const responseDesign = await fetch('/api/employees/design');
+          const responseIT = await fetch('/api/employees/it');
+          
+          let employee = null;
+          
+          if (responseDesign.ok) {
+            const data = await responseDesign.json();
+            if (data.success && data.employees) {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || 
+                       (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (!employee && responseIT.ok) {
+            const data = await responseIT.json();
+            if (data.success && data.employees) {
+              employee = data.employees.find(emp => {
+                const empName = (emp.nombre_completo || `${emp.nombre || ''} ${emp.apellidos || ''}`).toLowerCase();
+                return empName.includes(username.toLowerCase()) || 
+                       (emp.usuario && emp.usuario.toLowerCase() === username.toLowerCase());
+              });
+            }
+          }
+          
+          if (employee) {
+            // Obtener el nombre del empleado (nombre o nombre_completo)
+            const fullName = employee.nombre_completo || employee.nombre || username;
+            // Tomar solo el primer nombre
+            const firstName = fullName.split(' ')[0];
+            document.getElementById('username').textContent = firstName;
+          } else {
+            // Si no se encuentra el empleado, usar el username pero solo el primer nombre
+            const firstName = username.split(' ')[0];
+            document.getElementById('username').textContent = firstName;
+          }
+        } catch (error) {
+          console.error('Error al cargar información del empleado:', error);
+          // Fallback: usar solo el primer nombre del username
+          const firstName = username.split(' ')[0];
+          document.getElementById('username').textContent = firstName;
+        }
+      }
+
+      // Función para verificar si hay una orden activa
+      function hasActiveOrder() {
+        const activeSession = localStorage.getItem('activeSession');
+        if (activeSession) {
+          try {
+            const session = JSON.parse(activeSession);
+            if (session.orderNumber && session.startTime) {
+              return true;
+            }
+          } catch (e) {
+            console.error('Error al parsear activeSession:', e);
+          }
+        }
+        return false;
+      }
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        // Verificar si hay una orden activa
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          alert('You cannot log out while you have an active order. Please go to the Design page and finish the order first.');
+          return;
+        }
+
+        localStorage.clear();
+        window.location.href = 'login.html';
+      });
+
+      // Prevenir cerrar la pestaña si hay una orden activa
+      window.addEventListener('beforeunload', function(e) {
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          e.returnValue = 'You have an active order. Are you sure you want to close the tab? You must finish the order first from the Design page.';
+          return e.returnValue;
+        }
+      });
+
+      // Cargar contenedores de producción
+      loadProductionContainers();
+      
+      // Cargar supervisores
+      loadSupervisors();
+    });
+
+    // Función para cargar los contenedores de producción
+    async function loadProductionContainers() {
+      try {
+        // Obtener todos los puestos únicos
+        const puestosResponse = await fetch('/api/production/puestos');
+        const puestosData = await puestosResponse.json();
+
+        if (!puestosData.success || !puestosData.puestos || puestosData.puestos.length === 0) {
+          document.getElementById('productionContainer').innerHTML = 
+            '<div class="production-empty">No hay áreas de producción disponibles</div>';
+          return;
+        }
+
+        const container = document.getElementById('productionContainer');
+        container.innerHTML = '';
+
+        // Para cada puesto, crear un contenedor y cargar los empleados
+        for (const puesto of puestosData.puestos) {
+          const box = document.createElement('div');
+          box.className = 'production-box';
+          
+          const title = document.createElement('h3');
+          title.className = 'production-box-title';
+          title.textContent = puesto;
+          box.appendChild(title);
+
+          const employeesContainer = document.createElement('div');
+          employeesContainer.className = 'production-employees';
+          box.appendChild(employeesContainer);
+
+          container.appendChild(box);
+
+          // Cargar empleados para este puesto
+          await loadEmployeesForPuesto(puesto, employeesContainer);
+        }
+
+        // Hacer las áreas droppable después de crearlas
+        setTimeout(() => {
+          makeAreasDroppable();
+          loadSupervisorAssignments();
+        }, 100);
+      } catch (error) {
+        console.error('Error al cargar contenedores de producción:', error);
+        document.getElementById('productionContainer').innerHTML = 
+          '<div class="production-empty">Error al cargar las áreas de producción</div>';
+      }
+    }
+
+    // Función para cargar empleados de un puesto específico
+    async function loadEmployeesForPuesto(puesto, container) {
+      try {
+        console.log('Cargando empleados para puesto:', puesto);
+        const response = await fetch(`/api/production/employees?puesto=${encodeURIComponent(puesto)}`);
+        const data = await response.json();
+
+        console.log('Respuesta para puesto', puesto, ':', data);
+
+        if (!data.success) {
+          console.error('Error en respuesta:', data.error || data.message);
+          container.innerHTML = `<div class="production-empty">Error: ${data.message || 'Error desconocido'}</div>`;
+        return;
+      }
+
+        if (!data.employees || data.employees.length === 0) {
+          console.warn('No se encontraron empleados para puesto:', puesto);
+          container.innerHTML = '<div class="production-empty">No hay empleados en esta área</div>';
+          return;
+        }
+
+        console.log(`Encontrados ${data.employees.length} empleados para puesto:`, puesto);
+
+        data.employees.forEach(employee => {
+          const employeeDiv = document.createElement('div');
+          employeeDiv.className = 'production-employee';
+
+          // Obtener nombre - buscar cualquier columna que contenga "nombre" o "name"
+          let nombre = 'Sin nombre';
+          const nombreKeys = Object.keys(employee).filter(key => 
+            key.toLowerCase().includes('nombre') || 
+            key.toLowerCase().includes('name')
+          );
+          if (nombreKeys.length > 0) {
+            nombre = employee[nombreKeys[0]] || 'Sin nombre';
+          } else if (Object.keys(employee).length > 0) {
+            // Si no hay columna de nombre, usar la primera columna que no sea id o puesto
+            const firstKey = Object.keys(employee).find(key => 
+              !['id', 'puesto', 'foto_url', 'es_supervisor'].includes(key.toLowerCase())
+            );
+            if (firstKey) {
+              nombre = employee[firstKey] || 'Sin nombre';
+            }
+          }
+          
+          const nombreCorto = nombre.toString().split(' ')[0]; // Solo primer nombre para mostrar
+
+          // Buscar columna de foto dinámicamente
+          let fotoUrl = null;
+          const fotoKeys = Object.keys(employee).filter(key => 
+            key.toLowerCase().includes('foto') || 
+            key.toLowerCase().includes('photo') ||
+            key.toLowerCase().includes('imagen') ||
+            key.toLowerCase().includes('image')
+          );
+        
+          if (fotoKeys.length > 0) {
+            fotoUrl = employee[fotoKeys[0]];
+          }
+          
+          console.log('Empleado:', nombre, 'Foto URL:', fotoUrl, 'Columnas disponibles:', Object.keys(employee));
+          
+          if (fotoUrl) {
+            const img = document.createElement('img');
+            img.className = 'production-employee-photo';
+            // Si la URL no empieza con /, agregar /uploads/
+            img.src = fotoUrl.toString().startsWith('/') ? fotoUrl : `/uploads/${fotoUrl}`;
+            img.alt = nombre;
+            img.onerror = function() {
+              console.log('Error al cargar imagen:', img.src);
+              // Si la imagen falla, mostrar placeholder
+              this.style.display = 'none';
+              const placeholder = document.createElement('div');
+              placeholder.className = 'production-employee-placeholder';
+              placeholder.textContent = nombreCorto.charAt(0).toUpperCase();
+              employeeDiv.insertBefore(placeholder, this);
+            };
+            img.onload = function() {
+              console.log('Imagen cargada exitosamente:', img.src);
+            };
+            employeeDiv.appendChild(img);
+          } else {
+            // Mostrar placeholder con inicial
+            const placeholder = document.createElement('div');
+            placeholder.className = 'production-employee-placeholder';
+            placeholder.textContent = nombreCorto.charAt(0).toUpperCase();
+            employeeDiv.appendChild(placeholder);
+        }
+
+          // Nombre del empleado
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'production-employee-name';
+          nameSpan.textContent = nombreCorto;
+          employeeDiv.appendChild(nameSpan);
+
+          container.appendChild(employeeDiv);
+        });
+      } catch (error) {
+        console.error(`Error al cargar empleados para ${puesto}:`, error);
+        container.innerHTML = '<div class="production-empty">Error al cargar empleados</div>';
+      }
+    }
+
+    // Función para cargar todos los supervisores
+    async function loadSupervisors() {
+      try {
+        // Obtener todos los empleados y filtrar los que son supervisores
+        const response = await fetch('/api/production/employees');
+        const data = await response.json();
+
+        if (!data.success || !data.employees) {
+          console.error('Error al obtener empleados para supervisores');
+        return;
+      }
+
+        // Filtrar solo supervisores (es_supervisor = true)
+        const supervisores = data.employees.filter(emp => emp.es_supervisor === true);
+        
+        console.log('Supervisores encontrados:', supervisores.length);
+
+        const supervisorsList = document.getElementById('supervisorsList');
+        supervisorsList.innerHTML = '';
+
+        if (supervisores.length === 0) {
+          supervisorsList.innerHTML = '<div class="supervisors-empty">No hay supervisores disponibles</div>';
+          return;
+        }
+
+        supervisores.forEach(supervisor => {
+          const supervisorDiv = document.createElement('div');
+          supervisorDiv.className = 'supervisor-item';
+          supervisorDiv.draggable = true;
+          supervisorDiv.dataset.supervisorId = supervisor.id || supervisor.nombre || Math.random().toString();
+          supervisorDiv.dataset.supervisorName = supervisor.nombre || 'Supervisor';
+
+          // Buscar columna de nombre
+          let nombre = 'Supervisor';
+          const nombreKeys = Object.keys(supervisor).filter(key => 
+            key.toLowerCase().includes('nombre') || 
+            key.toLowerCase().includes('name')
+          );
+          if (nombreKeys.length > 0) {
+            nombre = supervisor[nombreKeys[0]] || 'Supervisor';
+          }
+
+          const nombreCorto = nombre.toString().split(' ')[0];
+
+          // Buscar columna de foto
+          let fotoUrl = null;
+          const fotoKeys = Object.keys(supervisor).filter(key => 
+            key.toLowerCase().includes('foto') || 
+            key.toLowerCase().includes('photo') ||
+            key.toLowerCase().includes('imagen') ||
+            key.toLowerCase().includes('image')
+          );
+          if (fotoKeys.length > 0) {
+            fotoUrl = supervisor[fotoKeys[0]];
+          }
+
+          // Crear avatar
+          if (fotoUrl) {
+            const img = document.createElement('img');
+            img.className = 'supervisor-avatar';
+            img.src = fotoUrl.toString().startsWith('/') ? fotoUrl : `/uploads/${fotoUrl}`;
+            img.alt = nombre;
+            img.onerror = function() {
+              this.style.display = 'none';
+              const placeholder = document.createElement('div');
+              placeholder.className = 'supervisor-avatar-placeholder';
+              placeholder.textContent = nombreCorto.charAt(0).toUpperCase();
+              supervisorDiv.insertBefore(placeholder, this);
+            };
+            supervisorDiv.appendChild(img);
+          } else {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'supervisor-avatar-placeholder';
+            placeholder.textContent = nombreCorto.charAt(0).toUpperCase();
+            supervisorDiv.appendChild(placeholder);
+          }
+
+          // Nombre del supervisor
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'supervisor-name';
+          nameSpan.textContent = nombreCorto;
+          supervisorDiv.appendChild(nameSpan);
+
+          // Event listeners para drag and drop
+          supervisorDiv.addEventListener('dragstart', handleDragStart);
+          supervisorDiv.addEventListener('dragend', handleDragEnd);
+
+          supervisorsList.appendChild(supervisorDiv);
+        });
+
+        // Cargar asignaciones guardadas
+        loadSupervisorAssignments();
+      } catch (error) {
+        console.error('Error al cargar supervisores:', error);
+        document.getElementById('supervisorsList').innerHTML = 
+          '<div class="supervisors-empty">Error al cargar supervisores</div>';
+      }
+    }
+
+    // Variables para drag and drop
+    let draggedSupervisor = null;
+
+    function handleDragStart(e) {
+      draggedSupervisor = this;
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.innerHTML);
+    }
+
+    function handleDragEnd(e) {
+      this.style.opacity = '1';
+    }
+
+    // Hacer las áreas de producción droppable
+    function makeAreasDroppable() {
+      const productionBoxes = document.querySelectorAll('.production-box');
+      productionBoxes.forEach(box => {
+        box.addEventListener('dragover', handleDragOver);
+        box.addEventListener('drop', handleDrop);
+        box.addEventListener('dragenter', handleDragEnter);
+        box.addEventListener('dragleave', handleDragLeave);
+      });
+    }
+
+    function handleDragOver(e) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+
+    function handleDragEnter(e) {
+      this.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+
+      if (!draggedSupervisor) {
+        return false;
+      }
+
+      const puesto = this.querySelector('.production-box-title').textContent.trim();
+      const supervisorId = draggedSupervisor.dataset.supervisorId;
+      const supervisorName = draggedSupervisor.dataset.supervisorName;
+
+      // Agregar indicador visual del supervisor asignado
+      addSupervisorToArea(this, supervisorId, supervisorName, draggedSupervisor);
+
+      // Guardar asignación
+      saveSupervisorAssignment(puesto, supervisorId, supervisorName);
+
+      this.classList.remove('drag-over');
+      return false;
+    }
+
+    function addSupervisorToArea(box, supervisorId, supervisorName, supervisorElement) {
+      // Remover asignación anterior si existe
+      const existingAssignment = box.querySelector('.supervisor-assignment');
+      if (existingAssignment) {
+        existingAssignment.remove();
+      }
+
+      // Crear elemento de asignación
+      const assignment = document.createElement('div');
+      assignment.className = 'supervisor-assignment';
+      
+      // Clonar el avatar del supervisor
+      const avatar = supervisorElement.querySelector('.supervisor-avatar, .supervisor-avatar-placeholder');
+      if (avatar) {
+        const clonedAvatar = avatar.cloneNode(true);
+        clonedAvatar.className = 'supervisor-assignment-avatar';
+        assignment.appendChild(clonedAvatar);
+      }
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'supervisor-assignment-name';
+      nameSpan.textContent = supervisorName;
+      assignment.appendChild(nameSpan);
+
+      // Insertar después del título
+      const title = box.querySelector('.production-box-title');
+      title.insertAdjacentElement('afterend', assignment);
+    }
+
+    function saveSupervisorAssignment(puesto, supervisorId, supervisorName) {
+      let assignments = JSON.parse(localStorage.getItem('supervisorAssignments') || '{}');
+      assignments[puesto] = {
+        supervisorId: supervisorId,
+        supervisorName: supervisorName,
+        assignedAt: new Date().toISOString()
+      };
+      localStorage.setItem('supervisorAssignments', JSON.stringify(assignments));
+    }
+
+    function loadSupervisorAssignments() {
+      const assignments = JSON.parse(localStorage.getItem('supervisorAssignments') || '{}');
+      const productionBoxes = document.querySelectorAll('.production-box');
+      
+      productionBoxes.forEach(box => {
+        const puesto = box.querySelector('.production-box-title').textContent.trim();
+        const assignment = assignments[puesto];
+        
+        if (assignment) {
+          // Buscar el supervisor en la lista
+          const supervisorElement = document.querySelector(`[data-supervisor-id="${assignment.supervisorId}"]`);
+          if (supervisorElement) {
+            addSupervisorToArea(box, assignment.supervisorId, assignment.supervisorName, supervisorElement);
+          }
+        }
+      });
+    }
+
+    // Observar cuando se agregan nuevas áreas para hacerlas droppable
+    const observer = new MutationObserver(function(mutations) {
+      makeAreasDroppable();
+    });
+
+    observer.observe(document.getElementById('productionContainer'), {
+      childList: true,
+      subtree: true
+    });
+  </script>
+</body>
+</html>
+

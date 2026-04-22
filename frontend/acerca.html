@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Acerca de</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="Estilos/theme.css">
+  <link rel="stylesheet" href="Estilos/acerca.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/theme.js"></script>
+  <script src="js/permissions.js"></script>
+</head>
+<body>
+
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content fade-in">
+        <h1 class="hero-title">PDMmetal ERP</h1>
+        <p class="hero-version">Versión 3.0</p>
+      </div>
+      <div class="hero-image-container">
+        <div class="hero-image fade-in-delay" style="background-image: url('Fotos/fondo1.webp');"></div>
+      </div>
+    </section>
+
+
+    <!-- Sección de Compatibilidad -->
+    <section class="content-section reverse">
+      <div class="section-content slide-in-right">
+        <h2 class="section-title">Compatible con PDM System</h2>
+        <p class="section-text">
+          PDMmetal ERP está diseñado para ser completamente amigable con los usaurios.
+           Nuestra aplicación se integra perfectamente con el sistema PDM System, 
+           permitiéndote gestionar tus proyectos de manera eficiente y sin complicaciones.
+        </p>
+        <div class="features-grid">
+          <div class="feature-item fade-in">
+            <span>Sincronización automática</span>
+          </div>
+          <div class="feature-item fade-in">
+            <span>Seguridad garantizada</span>
+          </div>
+          <div class="feature-item fade-in">
+            <span>Rendimiento optimizado</span>
+          </div>
+          <div class="feature-item fade-in">
+            <span>Acceso multiplataforma</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-image-container">
+        <div class="section-image slide-in-left image-2" style="background-image: url('Fotos/fondo3.webp');"></div>
+      </div>
+    </section>
+
+
+    <!-- Sección Final -->
+    <section class="final-section">
+      <div class="final-content fade-in">
+        <h2 class="final-title">Hecho con dedicación y pasión</h2>
+        <p class="final-text">
+          Cada detalle ha sido cuidadosamente diseñado para ofrecerte la mejor experiencia 
+          en gestión de proyectos, por lo que reconocemos el esfuerzo de los usuarios que contribuyeron a darle forma.
+        </p>
+          <div class="feature-item fade-in">
+            <span>Gerardo Julian Sánchez Tolentino - Programador / UI Designer / UX Designer / DBA</span>
+          </div>
+          <div class="feature-item fade-in">
+            <span>Nahum García - IT Manager</span>
+          </div>
+          <div class="feature-item fade-in">
+            <span>Ramiro Cortés - Por su contribución en los módulos de PM y diseño</span>
+          </div>
+            <div class="feature-item fade-in">
+            <span>Rosario Valdez  y Alejandra Torres- Por su contibución en el módulo de RH</span>
+          </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Verificar autenticación
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('username');
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+      if (!isLoggedIn || isLoggedIn !== 'true') {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      if (username) {
+        document.getElementById('username').textContent = username;
+      }
+
+      // Función para verificar si hay una orden activa
+      function hasActiveOrder() {
+        const activeSession = localStorage.getItem('activeSession');
+        if (activeSession) {
+          try {
+            const session = JSON.parse(activeSession);
+            if (session.orderNumber && session.startTime) {
+              return true;
+            }
+          } catch (e) {
+            console.error('Error al parsear activeSession:', e);
+          }
+        }
+        return false;
+      }
+
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        // Verificar si hay una orden activa
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          alert('No puedes cerrar sesión mientras tengas una orden activa. Por favor, ve a la página de Diseño y finaliza la orden primero.');
+          return;
+        }
+
+        localStorage.clear();
+        window.location.href = 'login.html';
+      });
+
+      // Prevenir cerrar la pestaña si hay una orden activa
+      window.addEventListener('beforeunload', function(e) {
+        if (hasActiveOrder()) {
+          e.preventDefault();
+          e.returnValue = 'Tienes una orden activa. ¿Estás seguro de que quieres cerrar la pestaña? Debes finalizar la orden primero desde la página de Diseño.';
+          return e.returnValue;
+        }
+      });
+
+      // Intersection Observer para animaciones al hacer scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+          }
+        });
+      }, observerOptions);
+
+      // Observar todos los elementos con clases de animación
+      const animatedElements = document.querySelectorAll(
+        '.fade-in, .fade-in-delay, .slide-in-left, .slide-in-right, .scale-in'
+      );
+
+      animatedElements.forEach(el => {
+        observer.observe(el);
+      });
+
+      // Parallax effect para imágenes
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.section-image');
+            
+            parallaxElements.forEach((element, index) => {
+              const rect = element.getBoundingClientRect();
+              const elementTop = rect.top + scrolled;
+              const elementHeight = rect.height;
+              
+              if (scrolled + window.innerHeight > elementTop && scrolled < elementTop + elementHeight) {
+                const yPos = -(scrolled - elementTop) * 0.3;
+                element.style.transform = `translateY(${yPos}px)`;
+              }
+            });
+            
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

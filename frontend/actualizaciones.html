@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Actualizaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/actualizaciones.css">
+</head>
+<body>
+
+  <div class="updates-container">
+    <div class="page-header">
+      <h1 class="page-title">Actualizaciones</h1>
+      <p class="page-subtitle">Historial de mejoras y nuevas funcionalidades</p>
+    </div>
+
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 2.2.3 Release</span>
+        <span class="update-date">25 de Febrero 2026</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se modificó el template de los tickets de IT.</li>
+            <li>Se agregó un menú secundario que se activa con el clic derecho en el menú 'Empleados' de RH</li>
+            <li>Se mejoró el uso del token de sesión.</li>
+            <li>Se revisitaron los HTML más antiguos para actualizar la UI al lenguaje visual actual.</li>
+            <li>Se optimizó el rendimiento general del selector, recortando efectos visuales.</li>
+            <li>En el selector se cambió el nombre del usuario por su foto proporcionada por RH</li>
+            <li>Se mejoró el rendimiento del sistema de búsqueda de empleados agregando indexes para una búsqueda más eficiente.</li>
+            <li>Se agregó un nuevo bento grid en las estadísticas de los PMs para poder ver el tiempo que lleva peniente una orden / submittal en pendiente de aprobación en horas.</li>
+            <li>Se modificó el comportamiento de las vacaciones ahora existen menos impediementos para solicitar evitando errores de confirmación.</li>
+            <li>Se agregó una columna extra para el nombre en los apoyos de RH para agilizar la búsqueda de empleados.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que al cerrar las sesiones atascadas, el tiempo no se guardara correctamente el tiempo del usuario en la BDD.</li>
+            <li>Arreglado el error que provocaba que en las vacaciones se mostrara la fecha incorrecta con un día antes.</li>
+            <li>Arreglado el error que provocaba que los usuarios de diseño no tuvieran ningún texto en la barra superior.</li>
+            <li>Arreglado el error que provocaba que no se actualizara el color de activo o inactivo en ciertas situaciones.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 2.2 Release</span>
+        <span class="update-date">23 de Febrero 2026</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Menú Principal:</strong>
+          <ul class="sub-changes">
+            <li>Se descativaron las opciones del topbar del menú principal si el usuario no tiene permiso para alguna de las tarjetas que se desprenden de ese menú.</li>
+            <li>Se mejoró el algoritmo de gráficos, permitiendo mostrar las vacaciones y los permisos siempre y cuando sean de dia completo.</li>
+            <li>Se desactivó el menú de vales de forma temproal para evitar confusiones al usuario.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de IT:</strong>
+          <ul class="sub-changes">
+            <li>Se modificaron las tablas en la parte inferior para evitar el scroll y mostrar los radios con bordes inferiores.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un botón para cerrar los tickets de mantenimiento que se tengan abiertos en ese momento por el usuario.</li>
+            <li>Se cambió la imagen de fondo para dar más coherencia visual.</li>
+            <li>Se quitó la descripción de los tipos de apoyo al estar muy largos y no aportar a la experiencia del usuario.</li>
+          </ul>
+        </li>
+        <li><strong>Vacaciones:</strong>
+          <ul class="sub-changes">
+            <li>Se arregló el error que provocaba que al tratar de imprimir una constancia de antigüedad, se exportara en dos hojas en lugar de una sola.</li>
+            <li>arregló el error que provocaba que al momento de cancelar un solicitud antes de un tick, no se reiniciara la página y no permitiera hacer nada más.</li>
+          </ul>
+        </li>
+        <li><strong>Empleados:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un input en todos los empleados para agregar notas de comportamiento.</li>
+            <li>Se modificaron los inputs de area y departamento, permitiendo modificarlos manualmente.</li>
+            <li>Se corrigió el error que provocaba que al seleccionar un empleado sin guardar cambios se cambiara el estado de activo a inactivo.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se Se conectaron las vacaciones y los permisos al selector, para que al encargado se muestre dicha información.</li>
+            <li>Se mejoró el algoritmo de búsqueda de vacaciones y permisos, permitiendo pasar de 34.20s a 2.43s lo que supone una mejora del 93% en tiempo de respuesta.</li>
+            <li>Se optimizó la búsqueda de RH para buscar de forma más eficiente con el nombre o número de empleado.</li>
+            <li>Se activó la opción de Importar excel en Retardos.html permitiendo leer el excel que sale directamente del checador, ingresando a todos los que tengan ya sea, un retardo, una falta o tiempo extra; y si la condición no se cumple se omite el insert en la base de datos.</li>
+            <li>Se optimizó el rendimiento general del selector, recortando efectos visuales.</li>
+            <li>Se optimizó el rendimiento general del panel de RH, recortando efectos visuales.</li>
+            <li>Se agregaron los inputs necesarios al logeo de diseño.</li>
+            <li>Se cambió la lógica de diseño en la cual los submittals no pueden tener números de parte.</li>
+            <li>Se cambió la lógica del botón de 'Pendiente de aprobación' para que esté siempre activo cuando el usuario está logeado a un submittal, la lógica de la orden no cambia.</li>
+            <li>Se quitaron los logs y la depuración innecesaria del HTML 'contrasenas'.</li>
+            <li>Se agregaron más campos en el color favorito permitiendo valores más amplios de colores oscuros, omitiendo los claros.</li>
+            <li>Se agregó un bento grid en las estadísticas de 'PM' esto para mostrar diferentes KPIs obtenidos de los paneles de PM y Logeo de diseño.</li>
+            <li>Se arreglaron las fechas de inicio y de fin impidiendo que se asignen órdenes o submittals con fechas entrelazadas e ilógicas.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la previsualización de fechas se desplegara igual que en la base de datos sin pasar por un filtro de despliegue.</li>
+            <li>Arreglado el error que provocaba que no se pudieran agregar permisos a los empleados.</li>
+            <li>Arreglado el error que provocaba que cuando un usuario ingresaba sus credenciales en el Login con una nomenclatura de query de base de datos, se buscara en bucle provocando el desbordamiento de la memoria.</li>
+            <li>Arreglado el error que provocaba que el cálculo de inicio de semana fuera poco preciso provocando errores de insersión de datos.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 1.9 Release</span>
+        <span class="update-date">-- de Febrero 2026</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Menú Principal:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó una nueva pestaña a la barra de navegación llamada 'Inicio' en la cual se encontrarán las métricas de acceso rápido para los supersores.</li>
+            <li>Se movió la barra de sesión a la parte superior de la pantalla.</li>
+            <li>Se se agregó el efecto Blur a las tarjetas en las opciones más usadas para mejorar la experiencia visual.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de IT:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó la imagen del menú principal en el formulario para dar coherencia visual.</li>
+            <li>El campo Email dejó de ser un campo obligaorio pasando a ser opcional.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un botón para cerrar los tickets de mantenimiento que se tengan abiertos en ese momento por el usuario.</li>
+            <li>Se cambió la imagen de fondo para dar más coherencia visual.</li>
+            <li>Se quitó la descripción de los tipos de apoyo al estar muy largos y no aportar a la experiencia del usuario.</li>
+          </ul>
+        </li>
+        <li><strong>Vacaciones:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un modal en la parte derecha de la pantalla para desplegar el historial de las vacaciones del usuario seleccionado.</li>
+            <li>Se quitaron los colores de la interfaz, cambiando de color unicamente cuando son clickeables.</li>
+          </ul>
+        </li>
+        <li><strong>Registro de comidas:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la búsqueda terminara antes del tiempo de respuesta del servidor provocando que la búsqueda quedara en bucle.</li>
+          </ul>
+        </li>
+          <li><strong>Apoyos:</strong>
+          <ul class="sub-changes">
+            <li>Se cambión la lógica de las solicitudes de apoyos, ahora si el empleado presenta alguna amonestación los botones se deshabilitan por 3 meses a excepción del botón de herramientas.</li>
+          </ul>
+        </li>
+        <li><strong>Footbar:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un footbar en el inicio.html y en el selector.html en la pestaña de inicio con un efecto de blur para mejorar la experiencia visual.</li>
+            <li>Se agregaron los dominios de la empresa en el footbar (Facebook, Instagram, LinkedIn y la Página Web).</li>
+          </ul>
+        </li>
+        <li><strong>Empleados:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que al seleccionar un empleado sin guardar cambios se cambiara el estado de activo a inactivo.</li>
+            <li>Se agregaron más campos para ingresar a un empelado.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un html básico HTML indicando el error 404 para indicar al usuario que el link no existe.</li>
+            <li>Se cambiaron las posiciones de las tarjetas de las opciones más usadas, así como su color para indicar que su uso es conjunto o complementario</li>
+            <li>Se mejoró el uso del token de sesión.</li>
+            <li>Se revisitaron los HTML más antiguos para actualizar la UI al lenguaje visual actual.</li>
+            <li>Se optimizó el rendimiento general del selector, recortando efectos visuales.</li>
+            <li>Se optimizó el rendimiento general del panel de RH, recortando efectos visuales.</li>
+            <li>Se quitó el módulo de Tareas al no contar con uso relevante.</li>
+            <li>Se quitó el código paralelo de XEN, mejorando el rendimiento.</li>
+            <li>Se se combinó el estilo visual y funcional de XEN, fusionando la base de datos e interfaz con LISA.</li>
+            <li>Se quitaron los logs y la depuración innecesaria del HTML 'contrasenas'.</li>
+            <li>Se agregó el departamento de 'Intendencia' en la lista desplegable de los tickets de mantenimiento.</li>
+            <li>Se agregó un botón en los permisos para poder agregar notas post permiso, la cual está acomodada por fecha de forma desendiente.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la previsualización de fechas se desplegara igual que en la base de datos sin pasar por un filtro de despliegue.</li>
+            <li>Arreglado el error que provocaba que no se pudieran agregar permisos a los empleados.</li>
+            <li>Arreglado el error que provocaba que cuando un usuario ingresaba sus credenciales en el Login con una nomenclatura de query de base de datos, se buscara en bucle provocando el desbordamiento de la memoria.</li>
+            <li>Arreglado el error que provocaba que el cálculo de inicio de semana fuera poco preciso provocando errores de insersión de datos.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 1.5 Release</span>
+        <span class="update-date">18 de Diciembre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Tickets de IT:</strong>
+          <ul class="sub-changes">
+            <li>Se quitaron los inputs de "nombre completo", "departamento" y "correo", ahora esa información se extrae directamente del panel de RH.</li>
+            <li>Se quitó la imagen de fondo para ahorrar recursos gráficos.</li>
+            <li>Se cambiaron los botones laterales a la parte inferior para evitar errores visuales en las versiones móviles.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó la imagen de fondo para ahorrar recursos gráficos.</li>
+            <li>Se cambiaron los botones laterales a la parte inferior para evitar errores visuales en las versiones móviles.</li>
+          </ul>
+        </li>
+        <li><strong>Topbar:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la foto del empleado no se mostrara en la barra superior.</li>
+            <li>Se quitaron los íconos de la barra superior para ahorrar recursos y mejorar el estilo visual.</li>
+          </ul>
+        </li>
+        <li><strong>Apoyos:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que el tipo de apoyo que le diera clic el usuario no importara y siempre mostrara "Apoyo mediano".</li>
+            <li>Se agregó un modal que sustituye el desplazamiento sobre la página.</li>
+          </ul>
+        </li>
+        <li><strong>Amonestaciones:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que los apoyos se mostraran arriba de la barra superior provocando que no se mostraran.</li>
+            <li>Se agregó una modal con una tabla paginada para mejorar el rendimiento y reducir los errores visuales provocados por el poco espacio de los modales.</li>
+          </ul>
+        </li>
+        <li><strong>Empleados:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que en la barra de búsqueda de los empleados al momento de buscar y borrar el nombre se siguiera desplegando la información del empleado anterior.</li>
+            <li>Se cambió la barra inferior de paginación por una que encaja más con el estilo visual de la página.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió el origen de carga, ahora la página central pasa a ser el login.</li>
+            <li>Se optimizaron las tarjetas del selector.</li>
+            <li>Se agregó un modal en la parte inferior  que muestra el nombre del usuario logeado.</li>
+            <li>Se cambiaron la mayoría de los radios de los bordes de 15 a 30 pixeles.</li>
+            <li>Se agregó un script para evitar que alguien que no tenga ciertos permisos ingrese a págiinas a las que no  tendría acceso.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 1.0.1 Release</span>
+        <span class="update-date">30 de Octubre 2025</span>
+        <span class="update-size-minor">Actualización Menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió la paleta de colores del panel de RH.</li>
+            <li>Se agregaron más campos en la base de datos de los empleados para dar más información sobre el empleados.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.999 Pre-Release</span>
+        <span class="update-date">14 de Octubre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que las fotos de los artículos de inventario no se mostraran correctamente.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se habilitó el módulo de Faltas / Retardos en el panel de RH.</li>
+            <li>Se agregaron optimizaciones a la base de datos para mejorar el rendimiento.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.99 Pre-Release</span>
+        <span class="update-date">14 de Octubre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error de consistencia que provocaba que los submenús de la barra superior no fueran los mismos en todos los paneles.</li>
+          </ul>
+        </li>
+        <li><strong>Estadísticas de IT:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó la funcionalidad de ver el tiempo de urgencia de los tiempos de criticiidad.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió la vista del selector para los menús en dispositivos móviles.</li>
+            <li>Se eliminó el botón temporal para configurar supervisores.</li>
+            <li>Se agregó una nueva propiedad a la base de datos de empleados para indicar si el empleado es supervisor.</li> 
+            <li>Se agregaron las estadísticas de apoyos en el panel de RH.</li>
+            <li>Se agregó una barra de búsqueda para las pestañas de proveedores, entradas y salidas del almacén.</li>
+            <li>Se removió el botón de Eliminar en Warehouse.</li>
+            <li>Se agregó un campo a un producto que indica si el producto es de P1 o de BA.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.981 Pre-Release</span>
+        <span class="update-date">10 de Octubre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Administración de Departamentos:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió el estilo de la tabla de permisos, ahora se muestra de forma más clara y organizada en forma de switches.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que no se pudieran registrar las salidas en el almacén.</li>
+            <li>Arreglado el error que provocaba que no se pudieran agregar permisos a los departamentos.</li>
+            <li>Arreglado el error que provocaba que en Administración de Departamentos no se desplegara la barra superior.</li>
+            <li>Arreglado el error que provocaba que en Administración de Usuarios no se pudiera navegar por la barra superior.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió la lógica de precio de Warehouse, ahora se mostrará el precio en dólares y pesos mexicanos.</li>
+            <li>Se cambiaron todas las referencias de 'LISA' por 'PDM' en la barra superior (Las referencias y variables de lisa no se reemplazaron en el código, solo se cambiaron las referencias visuales).</li>
+            <li>Se normalizó la barra superior, ahora todos los submenús se despliegan desde la misma barra superior.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.98 Pre-Release</span>
+        <span class="update-date">10 de Octubre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Inventario:</strong>
+          <ul class="sub-changes">
+            <li>Se optimizó la tabla, ahora solo se renderizarán 15 articulos por página.</li>
+            <li>Se agregó un contador de resultados.</li>
+            <li>Se rediseñó el modal de filtros avanzados.</li>
+            <li>Se agregó la posibilidad de filtrar varios campos al mismo tiempo.</li>
+            <li>Se agregó una animación a la barra inferior que indica el gran total de inventarios en ambas plantas, este evento se activa solo cuando el mouse pasa por encima de la barra inferior.</li>
+            <li>Se agregó la condición en la que si un producto tiiene un stock mayor o igual a 1 pero menor o igual a 15 se mostrará como 'Por agotarse'.</li>
+            <li>Se eliminaron las columnas 'Pedido Abierto' y 'Piezas Pedidas'.</li>
+            <li>Se agregó la funcionalidad de auditoría de inventario con la posibilidad de importar un archivo Excel y comparar el inventario del sistema con el inventario del archivo Excel.</li>
+          </ul>
+        </li>
+        <li><strong>Warehouse Analítics:</strong>
+          <ul class="sub-changes">
+            <li>Se dividió en cuatro secciones el panel, ahora se pueden ver las estadísticas de cada sección.</li>
+            <li>Se agregó la funcionalidad de expandir una gráfica para ver los datos en detalle.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que no se pudieran registrar las salidas en el almacén.</li>
+            <li>Arreglado el error que provocaba que los filtros no se sumaran correctamente, es decir, si había dos filtros activos, se mostraba toda la tabla de resultados.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+    
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.971</span>
+        <span class="update-date">1 de Octubre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Selector:</strong>
+          <ul class="sub-changes">
+            <li>Se agregaron íconos a las tarjetas para identificar el panel al que pertenecen mientras que los emojis se removieron.</li>
+          </ul>
+        </li>
+        <li><strong>Vacaciones RH:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó la posibilidad de generar constancias de vacaciones mensuales de forma automática.</li>
+            <li>Se agregó una nueva columna a la lista que meustra las notas hechas a las vacaciones.</li>
+            <li>Se agregó un botón en el formulario de mantenimiiento para volver al selector.</li>
+          </ul>
+        </li>
+        <li><strong>Detalles IT:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó la posibilidad de generar reportes mensuales de los resultados obtenidos.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que no se pudieran arrastrar los activos en el panel de mantenimiento.</li>
+            <li>Arreglado el error que provocaba que eun supervisor en concreto no se mostrara en el selector de supervisores.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.97</span>
+        <span class="update-date">29 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Vacaciones RH:</strong>
+          <ul class="sub-changes">
+            <li>Se eliminó el calendario de la vista principal, ahora se mostrará en un la barra de tareas inferior.</li>
+          </ul>
+        </li>
+        <li><strong>Formulario de Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se agregaron campos para el tipo de apoyo y el activo de forma obligatoria.</li>
+            <li>Se editó el texto de "Descripción detallado" a "Descripción detallada".</li>
+          </ul>
+        </li>
+        <li><strong>Panel de tickets de Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Los modales de los tickets de mantenimiento ahora muestran más información en modo de preview.</li>
+            <li>Se cambió el estilo de los modales de los detalles de los tickets de mantenimiento, se quitó la transparencia y se agregó un fondo oscuro.</li>
+            <li>Se agregó ícono que indica si el ticket contiene una imagen en el preview.</li>
+            <li>Se modificó el estilo visual de los 'Ajustes' para que el modal tennga un color sólido sin incluir transparencia para facilitar la lectura de los textos en ambientes con mucha luz.</li>
+            <li>Se agregó la posibilidad de cambiar y eliminar los activos.</li>
+          </ul>
+        </li>
+        <li><strong>Almacén:</strong>
+          <ul class="sub-changes">
+            <li>Se modificó el sidebar para que sea colapsable.</li>
+            <li>Se modificó el estilo de las tablas para que se muestren correctamente cuando el sidebar está colapsado.</li>
+            <li>El estilo de las tablas heredadas ahora muestran más contraste y son más legibles.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregaron más campos a la base de datos del almacén para capturar más información sobre los productos.</li>
+            <li>Se agregó la posibilidad de generar backups de la base de datos del almacén; esto descarga un excel con todas las tablas que se usaron durante el registro de entradas y salidas y demás tablas vitales.</li>
+            <li>Se agregó la posibilildad de buscar por nombre sin importar el orden (apellidos/nombres) en amonestaciones.</li>
+            <li>Se agregaron las restricciones en almacén para que no se pueda ingresar tipo de dato diferente a los permitidos.</li>
+            <li>El almacén ahora tiene la funcionalidad de 'Auto-save' esto hace que la información se guarde automáticamente cuando se salga de un campo.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la tabla de amonestaciones no tuviera relaciones con la tabla de empleados provocando que no se ingresara ningún dato.</li>
+            <li>Arreglado el error que provocaba que el las salidas de almacén no se conectaran correctamente a la base de datos.</li>
+            <li>Arreglado el error que provocaba que al momento de buscar un empleado para amonestar y buscar otro, la información del primero no se eliminara de la memoria local, impidiendo que se ingresara la información de un segundo empleado.</li>
+            <li>Arreglado el error que provocaba que en el selector, las tarjetas mostradas no tuvieran el tamaño correcto en resoluciones pequeñas.</li>
+            <li>Arreglado el error que provocaba que los supervisores no aparecieran en el selector de supervisores.</li>
+          </ul>
+        </li>
+      </ul> 
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.961</span>
+        <span class="update-date">22 de Septiembre 2025</span>
+        <span class="update-size-minor">Actualización Menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un popup al momento de ingresar un id valido en el campo de ID para solicitar un apoyo.</li>
+            <li>Se agregó una ventana más visual de las amonestaciones en el panel de Producción.</li>
+            <li>Se modificó el botón de solicitar vacaciones del panel de RH, ahora no tendrá niinguna restricción.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que la tabla de amonestaciones no tuviera relaciones con la tabla de empleados provocando que no se ingresara ningún dato.</li>
+            <li>Arreglado el error que provocaba que después de ingresar un id el siguiente no lo buscara corrrectamente en la base de datos.</li>
+            <li>Arreglado el error que provocaba que la fecha de aniversario de los empleados no se conotemplara en la formula para calcular los días disponibles.</li>
+            <li>Arreglado el error que provocaba que al registrar amonestaciones la fotografía mostrada fuera un placeholder.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.96</span>
+        <span class="update-date">19 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Mayor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un sidebar al almacen para mejorar la experiencia de usuario.</li>
+            <li>Se modificó el flujo de terminado de vacaciones, ahora en lugar de pedie el ID del supervisor se pide una clave secreta.</li>
+            <li>Se modificó el calendario de los supervisores para que puedan ver vacaciones de sus empleados, ahora pide la misma clave secreta que el debe poner para solicitar vacaciones.</li>
+            <li>Se agregó la posibilidad de buscar vacaciones por ID del empleado al presionar Enter en el campo de ID.</li>
+            <li>Se agregó la posibilidad de buscar constancias de un empleado al presionar Enter en el campo de ID.</li>
+            <li>Se modificó el modal para editar los datos de un empleado, ahora el campo de 'Departamento' es editable manualmente y ya no dependerá del droplist disponible.</li>
+            <li>Se agregó un CRUD para el almacen de productos.</li>
+            <li>Se agregó el botón de 'Inventario por QR' en todos los html para mejorar la experiencia de usuario.</li>
+            <li>Los campos de 'Entradas', 'Salidas' y 'Base de datos' son ahora funcionales.</li>
+            <li>La función de amonestaciones está disponible ahora.</li>
+            <li>Se quitó el borde de color en las fotos de los empleados en el panel de RH.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Arreglado el error que provocaba que los empleados cuando llegaran a 0 días pendientes el contador se restableciera en lugar de esperar al próximo aniversario.</li>
+            <li>Arreglado el error que provocaba que los días pendientes en lugar de restarse se sumaban provocando que el empleado siempre tuviera los mismos días disponibles.</li>
+            <li>Arreglado el error que provocaba que el modal de Solicitudes pendientes al dar clic fuera de sus bordes y volverlo a abrir, se duplicaran los campos visualmente.</li>
+            <li>Arreglado el error que provocaba que los modales de las tarjetas de los empleados no tuvieran bordes redondeados.</li>
+            <li>Arreglado el error que provocaba que los qr activos no redirigieran correctamente a su activo correspondiente.</li>
+            <li>Arreglado el error que provocaba que en al marcar un ticket de 'Mantenimiento' como 'Terminado' y poner como propiedad el 'Servicio de infrastructura' el ticket  nunca se terminara.</li>
+            <li>Arreglado el error que provocaba que al estar en la  ventana de 'Amonestaciones' y dar clic en en los botones de la barra superior no redirigiera correctamente a la página Seleccionada.</li>
+            <li>Arreglado el error que provocaba que se mostraran los empleados inactivos en el panel de RH.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.951</span>
+        <span class="update-date">17 de Septiembre 2025</span>
+        <span class="update-size-minor">Actualización Menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se habilitó el script de generación de QR para el inventario de IT.</li>
+            <li>Se agregó la funcionalidad de ver el detalle de un activo de IT por su ID a través de un QR.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que los íconos de la 'Topbar' fueran diferentes en el panel de IT y en el panel de RH.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.95</span>
+        <span class="update-date">17 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un modal de filtros para el panel de RH.</li>
+            <li>Se agregaron estadísticas para el panel de RH.</li>
+            <li>Se modificó el límite de fechas para solicitar vacaciones a un día antes del aniversario que sigue al próximo aniversario (≈ 1 año 11 meses 29 días).</li>
+            <li>Se modificó la lógica de la fecha de inicio, ahora se establecen 12 días como mínimo para agendar las vacaciones.</li>
+            <li>La fecha del dia de hoy ya no influye al calculo de las vacaciones, sino que se toma la fecha de inicio seleccionado por el usuario; siempre y cuando dicha fecha sea no mayor a 1 año 11 meses 29 días.</li>
+            <li>Se modificó la vista de las tarjetas de los empleados en el panel de RH, ahora solo muestra el nombre completo del empleado y la foto cubriendo todo el modal.</li>
+            <li>Se modificó la forma de enviar mensajes desde el panel, ahora con abrir el ticket, se abre la ventana automáticamente para enviar mensajes.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que en el panel de RH no se mostrara la antigüedad de los empleados provocando un error al solicitar vacaciones.</li>
+            <li>Se corrgió un error que provocaba que el cálculo del inventario de 'warehouse' siempre diera 0.</li>
+            <li>Se corrgió un error que provocaba que los previews no se mostraran correctamente.</li>
+            <li>Se corrgió un error que provocaba que en el cálculo de la conversión de pesos a dólares no se mostrara el resultado correctamente, ya que tomaba valor por defecto en lugar del API.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.943</span>
+        <span class="update-date">12 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó el campo de motivo de la solicitud de vacaciones.</li>
+            <li>Se quitaron los console.log para evitar filtrar el cálculo de vacaciones.</li>
+            <li>El historial de apoyos ahora se muestra en la tarjeta del empleado.</li>
+            <li>Se modificaron las tallas de ropa y botas de las tarjetas de los empleados.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que en el panel de RH no se mostrara la antigüedad de los empleados provocando un error al solicitar vacaciones.</li>
+            <li>Se corrgió un error que provocaba que el supervisor de un empleado no se mostrara correctament y no pudiera progresar en el formulario de vacaciones.</li>
+            <li>Se corrgió el comportamiento del historial de apoyos, ahora se muestra correctamente.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.942</span>
+        <span class="update-date">11 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se modificó la barra de búsqueda del panel de RH para que busque por nombre sin importar el orden (apellidos/nombres) mostrando todas las coincidencias.</li>
+            <li>Se quitaron los console.log del modal de vacaciones.</li>
+            <li>El departamento del empleado ahora se muestra en su tarjeta de información.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que la información de los empleados no se editaran correctamente.</li>
+            <li>Se corrgió un error que provocaba que el supervisor de un empleado no se mostrara correctamente.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.94</span>
+        <span class="update-date">11 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrigió un error que provocaba que se mostrara todas las vacaciones activas sin importar la fecha.</li>
+            <li>Se agregó la funcionalidad de descargar las constancias de vacaciones en formato pdf de todo un mes.</li>
+            <li>Se corrigió un error de lógica que provocaba que los días finales de las vacaciones se contaran como días iniciales lo que hacía que se mostraran solamente dos colores en lugar de 3.</li>
+            <li>Se corrigió un error que provocaba que el borde desplegable se 'comiera' parte del renderizado delhover de los empleados, haciendo que se mostrara fuera de escala.</li>
+            <li>Se corrigió un error que provocaba que el botón de estado activo/inactivo no funcionara correctamente.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.93a</span>
+        <span class="update-date">08 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se modificó el cálculo de vacaciones para que se cuente el año de servicio completo.</li>
+            <li>Se corrgió un error que provocaba que la hoja de pdf se mostrara diferente del preview.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.93</span>
+        <span class="update-date">08 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que cuando un usuario diera enter al momento de poner su numero de empleado en el input de vacaciones se mostrara un error de validación.</li>
+            <li>Se corrgió un error que provocaba que ciertos domingos se contraran en el calculo de días laborables.</li>
+            <li>Se corrgió el tamaño del imput del año en el modal de vacaciones.</li>
+            <li>Se eliminaron los console.log del modal de vacaciones.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.91a</span>
+        <span class="update-date">4 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que la información de los empleados no se cargaran correctamente en el panel de RH.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.91</span>
+        <span class="update-date">4 de Septiembre 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se modificó el grid del selector para que se muestre de forma más clara y organizada.</li>
+            <li>Se eliminó el apartado de 'Última modificación' en la información de los empleados en el panel de RH.</li>
+            <li>Se eliminó la lógica basada en estrellas, la lógica fue reciclada para un sistema de estadísticas de apoyos.</li>
+            <li>Se agregaron los departamentos de 'Mantenimiento', 'Almacén' y 'WD' al modal de información de los empleados en el panel de RH.</li>
+            <li>Se agregó un botón para descargar la base de datos de  'phoenix_tickets_mantenimiento' en formato excel.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que las vacaciones de los empleados se desplazaran un día hacia atras, lo que provocaba incongruencias en la fecha de regreso.</li>
+            <li>Se corrigió la barra de busqueda del los empleados en el panel de RH, ahora muestra más contraste y una lógica propia de comportamiento, permitiendo cerrarlo correctamente.</li>
+            <li>Se corrigió un error que provocaba que la barra de búsqueda del panel de RH buscara cadenas vacias en loop, provocando un desbordamiento de la memoria.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.89</span>
+        <span class="update-date">28 de Agosto 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un CRUD para warehouse con conexión en fase de desarrollo.</li>
+            <li>Se cambiaron los colores de los botones del panel de IT de negro a blanco para generar más contraste.</li>
+            <li>Se cambió el texto de 'Descripción detallado del problema' por 'Descripción detallada del problema' en el formulario de IT para evitar confusiones.</li>
+            <li>Se agregó la lógica de hilos la cual permite generar un hilo de estado para un ticket (en fase de desarrollo).</li>
+            <li>Se modificaron los logs del server para que muestre solo información fundamental, dando prioridad a los errores.</li>
+            <li>Se agregó un contador de caracteres para los formularios de RH y IT con límite de 255 caracteres.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que los usuarios ingresaran más de 255 caracteres en los formularios de RH y IT, provocando un desbordamiento de la base de datos.</li>
+            <li>Se corrigió el tiempo de espera del topbar, ahora se muestra el submenú de forma más rápida.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.88</span>
+        <span class="update-date">28 de agosto 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un CRUD para warehouse con conexión en fase de desarrollo.</li>
+            <li>Se cambiaron los colores de los botones del panel de IT de negro a blanco para generar más contraste.</li>
+            <li>Se cambió el texto de 'Descripción detallado del problema' por 'Descripción detallada del problema' en el formulario de IT para evitar confusiones.</li>
+            <li>Se agregó la lógica de hilos la cual permite generar un hilo de estado para un ticket (en fase de desarrollo).</li>
+            <li>Se modificaron los logs del server para que muestre solo información fundamental, dando prioridad a los errores.</li>
+            <li>Se agregó un contador de caracteres para los formularios de RH y IT con límite de 255 caracteres.</li>
+          </ul>
+        </li>
+        <li><strong>Correción de errores:</strong>
+          <ul class="sub-changes">
+            <li>Se corrgió un error que provocaba que los usuarios ingresaran más de 255 caracteres en los formularios de RH y IT, provocando un desbordamiento de la base de datos.</li>
+            <li>Se corrigió el tiempo de espera del topbar, ahora se muestra el submenú de forma más rápida.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.86a</span>
+        <span class="update-date">22 de agosto 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un modal que permite ver las evidencias de las denuncia en pantalla completa en su tamaño original.</li>
+            <li>Se optimizó el panel para que busque de forma mas eficiente entre los datos de la base de datos.</li>
+            <li>Se corrigió un error que provocaba que el modal de confirmación no se cerrara correctamente.</li>
+            <li>Se arreglaron los logs del server.js para que muestre información más detallada de los errores.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.86</span>
+        <span class="update-date">22 de agosto 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>RH:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un submenu llamado 'Denuncias Anónimas' en el panel de RH.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un formulario de denuncia anónima en el selector.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.85</span>
+        <span class="update-date">21 de agosto 2025</span>
+        <span class="update-size-minor">Actualización Menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se agregaron los tipos de servicio: servicio de infraestructura, servicio de apoyo y modificaciones y implementaciones para terminar un ticket.</li>
+          </ul>
+        </li>
+        <li><strong>RH:</strong>
+          <ul class="sub-changes">
+            <li>Se corrigió un error que provocaba que el menú de los empelados se mostraran los empleados inactivos.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se implementó el uso de la la API de 'Pino-http' para la optimización de los logs y la reducción de recursos.</li>
+            <li>Se arregló un error que provocaba que el server.js llamara de manera infinita a la base de datos de empleados provocando un desbordamiento de la memoria.</li>
+            <li>Se arregló un error que provocaba que en el botón del topbar de usuario no se mostrara el submenu.</li>
+            <li>Se agregó agregó un script (está desactivado por el momento) que permite crear un código QR para el inventario de las computadoras y los activos de IT, mismos que se pueden escanear para ver la información del activo.</li>
+            <li>Se arregló un error que provocaba que el las imágenes los tickets en el panel de IT se mostraran fuera de escala provocando un desbordamiento de la pantalla.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.84</span>
+        <span class="update-date">18 de agosto 2025</span>
+        <span class="update-size-major">Actualización importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>RH:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un nuevo botón para tickets de RH.</li>
+          </ul>
+        </li>
+        <li><strong>Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó la gráfica de 'Usuarios con más tickets'.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se arregló un error que provocaba que el servidor buscara constantemente en la base de datos de empleados lo que provocaba un desbordamiento de la memoria por una ruta no encontrada.</li>
+            <li>Se arregló un error que provocaba que los empleados se cargaran todos de una sola vez, ahora solo se cargan los que estan en pantalla.</li>
+            <li>Se arregló un error que provocaba que los tickets no guardaran la última urgencia.</li>
+            <li>Se mejoró la lógica de la topbar, ahora no cuenta con flechas para desplegar los submenús y se agregó un cooldown de 2 segundos para que no se pueda desplegar el submenú de forma automática.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.83</span>
+        <span class="update-date">18 de agosto 2025</span>
+        <span class="update-size-minor">Actualización menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>RH:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió el estilo visual de los gráficos de los apoyos para dar más coherencia y contraste con el resto de la interfaz.</li>
+            <li>Se cambió la lógica del botón de Información, ahora solo se despliega si y solo si el usuario da clic en el y no de forma automática.</li>
+            <li>Se agregó un nuevo botón para que en el panel de vacaciones se puedan solicitar vacaciones (esto solo se debe usar cuando un usuario de producción no pueda entrar a la plataforma y sea de caracter urgente).</li>
+          </ul>
+        </li>
+        <li><strong>Mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó la gráfica de 'Usuarios con más tickets'.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó el botón de 'LISA', ahora tendrá el nombre de 'PDM'.</li>
+            <li>Se arregló un error que provocaba los tickets no mostraran la foto del usuarios que hizo el ticket.</li>
+            <li>Se arregló un error que provocaba que los tickets no guardaran la última urgencia.</li>
+            <li>Se mejoró la lógica de la topbar, ahora no cuenta con flechas para desplegar los submenús y se agregó un cooldown de 2 segundos para que no se pueda desplegar el submenú de forma automática.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.82</span>
+        <span class="update-date">15 de agosto 2025</span>
+        <span class="update-size-major">Actualización Importante</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Vacaciones del selector:</strong>
+          <ul class="sub-changes">
+            <li>Se arregló un error que provocaba que los días de vacaciones no se contaran correctamente.</li>
+          </ul>
+        </li>
+        <li><strong>Selector:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió el estilo de cargado, ahora se muestra una barra superior donde aparecen los departamentos para seleccionar una opción de forma más clasificada.</li>
+          </ul>
+        </li>
+        <li><strong>Tickets de mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se arregló un error que provocaba que los tickets terminados no guardaran la última urgencia.</li>
+            <li>Se cambió el texto de 'Tipo de Mantenimiento' por 'Tipo de servicio'.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó la ruta de 'Acerca de', ahora ya no es accesible desde ningún lugar.</li>
+            <li>Se arregló un error que provocaba que el el botón de 'Warehouose' no funcionara correctamente.</li>
+            <li>Se arregló un error que provocaba que el modal del chat se desbordara y no generara un contraste adecuado.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="update-item glass-card">
+      <div class="update-header">
+        <span class="update-version">Actualización 0.75a</span>
+        <span class="update-date">6 de agosto 2025</span>
+        <span class="update-size-minor">Actualización menor</span>
+      </div>
+      <ul class="update-changes">
+        <li><strong>Apoyos:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó un modal que facilita el buscar empleados de forma más rápida.</li>
+            <li>Se agregó la función de descargar un excel con todos los empleados.</li>
+          </ul>
+        </li>
+        <li><strong>Bóveda:</strong>
+          <ul class="sub-changes">
+            <li>Se agregó una demo técnica en la que se simula la subida de clasificación de archivos (Aún debe ser testeado y mejorado antes de su uso).</li>
+          </ul>
+        </li>
+        <li><strong>Calendario de mantenimiento:</strong>
+          <ul class="sub-changes">
+            <li>Se cambió la lógica de los colores, ahora se muestran los colores de los eventos debajo como una barra de progreso en lugar de cambiar el color del fondo.</li>
+          </ul>
+        </li>
+        <li><strong>Miselánea:</strong>
+          <ul class="sub-changes">
+            <li>Se quitó la ruta de 'Acerca de', ahora ya no es accesible desde ningún lugar.</li>
+            <li>Se arregló un error que provocaba que el el botón de 'Warehouose' no funcionara correctamente.</li>
+            <li>Se arregló un error que provocaba que el modal del chat se desbordara y no generara un contraste adecuado.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="floating-updates">
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.75</span>
+          <span class="update-date">4 de Agosto 2025 </span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>IT (Calendario):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un calendario de actividades mensual y anual para la coordinación de eventos.</li>
+              <li>Se agregó la posibilidad de editar y completar los eventos del calendario.</li>
+              <li>Se agregó un círculo que indica el número de notificaciones de un día en específico, el cual cambia de color dependiendo de la cantidad de notificaciones.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Estadísticas preventivas):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un recuadro de porcentaje de cumplimiento de EMP que se basa en el porcentaje de eventos completados de un mes en específico, dicho porcentaje es mensual.</li>
+              <li>Se agregó una gráfica de tendencia de los porcentajes de cumplimiento de MP de los últimos 12 meses.</li>
+              <li>Se agregó una lilnea de meta de 90% de cumplimiento de MP.</li>
+            </ul>
+          </li>
+          <li><strong>Vacaciones RH (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la posibilidad de ver las vacaciones de todos los empleados en el calendario de RH.</li>
+              <li>Se agregó la posibilidad de generar constancias de antiguedad y vacaciones de forma automática.</li>
+              <li>Se agregó la posibilidad de ver las vacaciones activas de toda la empresa de forma más visual.</li>
+              <li>Se agregó la posibilidad de ver los próximos aniversarios de los empleados de forma anual en el cual aparecen la cantidad de años que cumplen en dicho año.</li>
+              <li>Se agregó un botón para enviar una felicitación a un empleado en el momento de su aniversario, esta función permanecerá desctivada a menos que se apruebe su uso.</li>
+              <li>Se agregó un botón para buscar un empleado para que ver el historial de vacaciones de dicho empleado.</li>
+            </ul>
+          </li>
+          <li><strong>Vacaciones RH (Selector):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la posibilidad de buscar a un empleado.</li>
+              <li>Se agregó un modal que indica información del empleado seleccionado.</li>
+              <li>Se agregó la lógica que posibilita que un empleado pueda tomar menos días de los que le corresponden y dejar en espera los días restantes.</li>
+              <li>Se agregaron las restricciones lógicas que impiden tomar más días de los que le correponden y poner fechas incoherentes.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Se arregló un error que provocaba que la adminisración de Usuarios y departamentos mostrara el sidebar en lugar del topbar.</li>
+              <li>Se quitaron efectos de glow de los modales del selector para ahorrar recursos.</li>
+              <li>Se quitó la información de los modales del selector para que la transición sea más fluida en dispositivos móviles.</li>
+              <li>Ahora los tickets enviados desde el formulario de 'Mantenimiento' enviaran un correo con información más detallada a forma de notificación a 'mantenimiento_pdm@outlook.com'.</li>
+              <li>Se agregaron varios contadores en el calendario de mantenimiento (completados, aplazados y pendientes) para que se pueda ver la cantidad de eventos de un mes en específico, dicho contador cambia sus datoos dependiendo del mes seleccionado.</li>
+              <li>Se quitaron algunos efectos gráficos del selector para ahorrar recursos.</li>
+              <li>Se agregó un nuevo formulario de 'Amonestaciones' en el selector.</li>
+              <li>Se cambiaron las fotos de fondo del selector, de 10 fotos a 5, cada una con un 16% de probabilidad de ser seleccionada y el fondo original con un 20% de probabilidad.</li>
+              <li>Se cambiaron las extensiones de las fotos de fondo del selector, de .jpg a .webp y ahora la página consume un 51% menos de recursos.</li>
+              <li>Se quitaron los sonidos de notificación de mensaje y de enviar solicitud del Formulario de IT.</li>
+              <li>Se quitó la solicitud del navegador para poner las notiticaciones del formulario de IT.</li>
+              <li>Se arregló un error que provacaba que el caht de IT se debordara y se mostrara en la parte superior de la pantalla en lugar de la parte inferior.</li>
+              <li>Se quitó el png agregado en la versión 0.62 para ahorrar recursos.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.71</span>
+          <span class="update-date">28 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>IT (Inventario):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la posibilidad de modificar el software y hardware de un empleado.</li>
+              <li>Se agregó un botón llamado 'Cambiar de dueño' solamente en el modal de 'Hardware' para cambiar el responsable de un Hardware.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Estadísticas):</strong>
+            <ul class="sub-changes">
+              <li>Se cambió el ancho del modal de 'Estadísticas', ahora abarca mas espacio en pantalla.</li>
+              <li>Se cambió el nombre de la gráfica 'Tikets Terminados' por 'Tickets por Mes'.</li>
+              <li>Se eliminó el switch de la gráfica 'Tickets por Mes' que cambiaba el estilo visual de la gráfica por una gráfica de radial.</li>
+              <li>En 'Tickets por Mes' ahora se miran los tickets realizados en dicho mes sin importar si están terminados o no.</li>
+              <li>La gráfica de 'Tickets por departamento' ahora muestra los tickets terminados en verde y los no terminados en rojo.</li>
+              <li>Se agregaron los departamentos 'Mantenimiento', 'Almacén' y 'WD' a la gráfica de 'Tickets por departamento'.</li>
+              <li>Se agregó un nuevo modal cuando hace clic sobre un nivel de urgencia, este modal muestra los tickets terminados de dicho nivel de urgencia.</li>
+              <li>Se agregó un nuevo modal cuando hace clic sobre un usuario, este modal muestra los tickets terminados de dicho usuario.</li>
+              <li>Se cambiaron los colores de los modales para tener más coherencia con el resto de la interfaz.</li>
+            </ul>
+          </li>
+          <li><strong>Vacaciones RH:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un calendario de vacaciones a la interfaz de RH en forma de prueba.</li>
+              <li>Se agregaron los botones de 'Vista mensual' y 'Vista anual' en la interfaz.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Se arregló un error que provocaba que los tickets terminados de 'Producción BA' se pasaran erróneamente a 'Producción P2'.</li>
+              <li>Se arregló un error que provocaba que los tickets de 'Producción BA' no se mostraran correctamente</li>
+              <li>Ahora todos los tickets enviados desde el formulario de 'Mantenimiento' enviaran un correo a forma de notificación a 'mantenimiento_pdm@outlook.com'.</li>
+              <li>Se arregló un error que provocaba que en el la sección de 'Acerca de' el botón de Volver al inicio redirigiera directamente Formulario de IT en lugar de el selector.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.7</span>
+          <span class="update-date">22 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Inventario IT:</strong>
+            <ul class="sub-changes">
+              <li>Se agregaron 3 modales que permiten agregar software y hardware a un empleado.</li>
+              <li>Se agregó la posibilidad de modificar el software y hardware de un empleado.</li>
+              <li>Los empleados ahora dependen del personal que tiene RH</li>
+            </ul>
+          </li>
+          <li><strong>Vacaciones RH:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó el submenú de vacaciones a la topbar de RH.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Cada que un usuario rellene el formulario de 'Mantenimiento' se le enviará un correo a forma de notificación.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.691</span>
+          <span class="update-date">18 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se cambió la lógica de terminado, ahora se puede terminar un ticket sin necesidad de que el usuario tenga que seleccionar el campo de 'Activo'.</li>
+              <li>Se corrigió un error que provocaba que los tickets terminados de P1 y BA se mortraran únicamente en Produccion P1.</li>
+              <li>Se cambió el estilo de los activos, ahora generan un mayor contraste con el fondo.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.69</span>
+          <span class="update-date">17 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se Agregó un menú para celular, para que se puedan mover los tickets de un lado a otro sin arrastre mejorando la experiencia de usuario.</li>
+              <li>Se quitó la columna de 'Alto' del kanban board.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.68a</span>
+          <span class="update-date">17 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se corrigió un error que provocaba que no se mostrara ninguna herramienta y los tickets nunca se terminaran.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.68</span>
+          <span class="update-date">17 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Apoyos (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se cambió la lógica del boton de 'Apoyo sencillo', ahora tendrá un cooldown de 3 meses.</li>
+              <li>Se agregó un modal de ayuda para los tipos de apoyo.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Formulario):</strong>
+            <ul class="sub-changes">
+              <li>Se corrigió un error que provocaba que el formulario de 'Mantenimiento' se desbordara mostrando el logo de la empresa erróneamente.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la ruta de vacaciones a la barra superior en el apartado de 'RH'.</li>
+              <li>Se agregó la ruta de inventario a la barra superior en el apartado de 'IT'.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.67</span>
+          <span class="update-date">15 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la posibilidad de agregar manualmente un activo en lugar de los predeterminados.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.66</span>
+          <span class="update-date">14 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la posibilidad de agregar varios usuarios responsables a un mismo ticket aumentando las estadísticas de los usuarios.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Estadísticas):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un ranking de usuarios con más tickets terminados (solamente para el panel de mantenimiento).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.65</span>
+          <span class="update-date">14 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la lógica de que cada usuario sea responsable de un ticket.</li>
+              <li>Se corrigió un error que provocaba que los tickets se tuvieran que terminar siempre con un mismo campo en ela Base de datos.</li>
+            </ul>
+          </li>
+          <li><strong>IT (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la lógica de que cada usuario sea responsable de un ticket.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó el campo 'Color favorito' al inicio de la interfaz, este campo se guarda en la base de datos y se muestra en el inicio de la interfaz para personalizar la interfaz.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.63</span>
+          <span class="update-date">11 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Selector:</strong>
+            <ul class="sub-changes">
+              <li>Se quitó el efecto de glow de cada modal para ahorrar recursos.</li>
+            </ul>
+          </li>
+          <li><strong>Notificaciones:</strong>
+            <ul class="sub-changes">
+              <li>Se quitó la barra de dirección 172.168.10.11:3000/notificaciones, y ya no estará disponible.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un botón de ajustes a la interfaz de 'Mantenimiento' para mejorar la gestión de los activos.</li>
+              <li>Se corrigió un error que provocaba que el QR de la interfaz del formulario de 'Mantenimiento' no se mostrara correctamente causando errores visuales.</li>
+              <li>Se agregó un slidebar en cada columna para evitar que se desborde el contenido de la columna.</li>
+              <li>Se agregó el efecto Glassmorphism al botón de Terminado.</li>  
+            </ul>
+          </li>
+          <li><strong>IT (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó el efecto Glassmorphism al botón de Terminado para general coherencia con el resto de la interfaz.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.62</span>
+          <span class="update-date">9 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Selector:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un nuevo png en la parte inferior de la interfaz.</li>
+            </ul>
+          </li>
+          <li><strong>Miselánea:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un favicon que está en la pestaña de la página.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.61</span>
+          <span class="update-date">8 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Barra lateral:</strong>
+            <ul class="sub-changes">
+              <li>Se quitó la barra lateral de 'Apoyos', 'Tickets', 'Mantenimiento' y 'Estadísticas de IT' y 'Estadísticas de Mantenimiento'.</li>
+            </ul>
+          </li>
+          <li><strong>Topbar:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó una barra superior para la navegación solo para 'Apoyos', 'Tickets', 'Mantenimiento' y 'Estadísticas de IT' y 'Estadísticas de Mantenimiento'.</li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Formulario):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó el departamento de 'Mantenimiento' al formulario.</li>
+            </ul>
+          </li>
+          <li><strong>Selector:</strong>
+            <ul class="sub-changes">
+              <li>Se agregaron fotos de fondo, cada foto se mostrará con una probabilidad del 10%.</li>
+            </ul>
+          </li>
+          <li><strong>Notificaciones:</strong>
+            <ul class="sub-changes">
+              <li>Se modificó el color de fondo de la interfaz para mayor coherencia con el resto de la interfaz.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.60</span>
+          <span class="update-date">7 de julio 2025</span>
+          <span class="update-size-major">Actualización Importante</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Barra lateral:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó a la barra lateral el menú 'Maintenance' con los submenús 'Mantenimiento' y 'Estadísticas'</li>
+              <li>Se agregó un menú centralizado de formularios, mismo que estará presente en el inicio y apoyos.</li>
+            </ul>
+          </li>
+          <li><strong>Estadísticas de Mantenimiento:</strong>
+            <ul class="sub-changes">
+              <li>Se modificó la lógica de las estadísticas de mantenimiento, ahora muestra un promedio de tiempo de resolución
+                para cada nivel de urgencia.</li>
+              <li>Se agregó la funcionalidad en la que se pueden ver los tickets y el tiempo de resolución de cada ticket 
+                de las primeras 5 personas con más tickets.
+              </li>
+            </ul>
+          </li>
+          <li><strong>Mantenimiento (Formulario):</strong>
+            <ul class="sub-changes">
+              <li>Se modificó la interfaz de usuario para que sea más intuitiva y fácil de usar.</li>
+              <li>Se quitó el API de ServiceEMAIL, ahora ya no se creará y enviará un correo electrónico al usuario cuando se crea un ticket.</li>
+            </ul>
+          </li>
+          <li><strong>Selector:</strong>
+            <ul class="sub-changes">
+              <li>Se modificó la interfaz de usuario para que sea más intuitiva y fácil de usar.</li>
+              <li>Se descativaron los botones con excepción de 'Soporte de IT', 'Soporte de Mantenimiento' y 'Vacaciones'</li>
+              <li>Se agregó la compatibilidad con dispositivos móviles, mostrando dos 'modales' en vez de un solo.</li>
+            </ul>
+          </li>
+          <li><strong>Base de datos:</strong>
+            <ul class="sub-changes">
+              <li>Se agregaron más columnas para almacenar más estados de los tickets (de IT y de Mantenimiento), de momento esos datos
+                estadísticos no se muestran en el panel en ningún momento.</li>
+            </ul>
+          </li>
+          <li><strong>Notificaciones:</strong>
+            <ul class="sub-changes">
+              <li>Se modificó el color de fondo de la interfaz para mayor coherencia con el resto de la interfaz.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Actualización 0.58</span>
+          <span class="update-date">1 de julio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Apoyos</strong>
+            <ul class="sub-changes">
+              <li>Se agregó el estilo de Neuromorfismo a la interfaz de 'Apoyos'</li>
+              <li>Se modificó la lógica del botón de 'Préstamo de herramienta', ahora el botón no obedecerá al contador, por lo que se pueden pedir sin importar el contador.</li>
+              <li>Se agregó a la lista el apartado de Herramienta para modificar el tipo de apoyo.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Alpha 0.3</span>
+          <span class="update-date">17 de junio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>IT (Panel):</strong>
+            <ul class="sub-changes">
+              <li>Se agregó la funcionalidad de que un usuario pueda hacer tickets.</li>
+              <li>Se agregó el panel de IT.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Pre-Alpha 0.2</span>
+          <span class="update-date">10 de junio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Ideas generales:</strong>
+            <ul class="sub-changes">
+              <li>Se corrigió el error en que el formulario de IT no se mandaba a la base de datos.</li>
+              <li>Se coorrigió el error que provocaba que el panel de IT renderizara los datos desde la memoria local en lugar de la base de datos.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="update-item glass-card">
+        <div class="update-header">
+          <span class="update-version">Pre-Alpha 0.1</span>
+          <span class="update-date">10 de junio 2025</span>
+          <span class="update-size-minor">Actualización menor</span>
+        </div>
+        <ul class="update-changes">
+          <li><strong>Ideas generales:</strong>
+            <ul class="sub-changes">
+              <li>Se agregó un panel kanban para los tickets con datos no reales.</li>
+              <li>Se agregó un formulario de IT con datos que no se mandan a una base datos.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setRandomBackground() //Fondo aleatorio
+    {
+      if (Math.random() < 0.85) // 85% de probabilidad
+      {
+        const fotos = ['fotos/fondo1.webp', 'fotos/fondo2.webp', 'fotos/fondo3.webp', 'fotos/fondo4.webp', 'fotos/fondo5.webp', 'fotos/w1_edited.jpg'];
+        const randomFoto = fotos[Math.floor(Math.random() * fotos.length)];
+        document.body.style.background = `url('${randomFoto}') no-repeat center center fixed`;
+        document.body.style.backgroundSize = 'cover';
+      } else 
+      {
+        document.body.style.background = "url('fotos/w1_edited.jpg') no-repeat center top fixed";
+        document.body.style.backgroundSize = 'cover';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      setRandomBackground();
+    });
+  </script>
+</body>
+</html>

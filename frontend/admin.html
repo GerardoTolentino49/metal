@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administración de Usuarios - LISA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/admin.css">
+  <link rel="stylesheet" href="styles/calidad.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="js/global-color.js"></script>
+</head>
+<body>
+  <div class="topbar" style="display: none;">
+    <div class="glass-highlight"></div>
+    <div class="topbar-header">
+      <button class="lisa-btn-cromatica">PDM</button>
+    </div>
+    <div class="topbar-menu">
+      <div class="menu-item has-submenu" id="itMenuBtn">
+          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>
+        IT
+        <div class="submenu" id="itSubmenu">
+          <a href="panel.html" class="submenu-item">Tickets</a>
+          <a href="detalles.html" class="submenu-item">Estadísticas</a>
+          <a href="it_inventario.html" class="submenu-item">Inventario</a>
+          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
+          <a href="boveda.html" class="submenu-item">Bóveda</a>
+          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
+          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
+          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
+          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
+          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="rhMenuBtn">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        RH
+        <div class="submenu" id="rhSubmenu">
+          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
+          <a href="apoyos.html" class="submenu-item">Apoyos</a>
+          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
+          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
+          <a href="asistencias.html" class="submenu-item">Asistencias</a>
+          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
+          <a href="anuncios.html" class="submenu-item">Anuncios</a>
+          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="warehouseMenuBtn">
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+        </svg>
+        Almacén
+        <div class="submenu" id="warehouseSubmenu">
+          <a href="inventario.html" class="submenu-item">Warehouse</a>
+          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Mantenimiento
+        <div class="submenu" id="maintenanceSubmenu">
+          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
+          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
+          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
+          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
+        </div>
+      </div>
+
+      <div class="menu-item has-submenu" id="designMenuBtn">
+        Diseño
+        <div class="submenu" id="designSubmenu">
+          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
+        </div>
+      </div>
+      
+      <div class="menu-item has-submenu" id="pmMenuBtn">
+        PM
+        <div class="submenu" id="pmSubmenu">
+          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
+          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
+          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-controls">
+      <div class="user-menu-item">
+        <div class="user-icon" id="userIcon">
+          <i class="fas fa-user"></i>
+        </div>
+        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
+        <div class="user-submenu" id="userSubmenu">
+          <div class="user-info" id="userInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button active" data-tab="Ausuarios">
+      <i class="fas fa-users-cog"></i> Ajustes de usuarios
+    </button>        
+
+    <button class="tab-switch-button" data-tab="Adepartamentos">
+      <i class="fas fa-building"></i> Ajustes de departamentos
+    </button>
+
+    <button class="tab-switch-button" data-tab="Acontraseñas">
+      <i class="fas fa-key"></i> Ajustes de permisos
+    </button>
+
+    <button class="tab-switch-button" data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes de ingeniería
+    </button>
+
+  </div>
+</div>
+<script>
+    // Navegación del tab-switch de RH
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Ausuarios: 'admin.html',
+    Adepartamentos: 'departamentos.html',
+    Acontraseñas: 'contrasenas.html',
+    Aingenieria: 'admin_it.html',
+
+
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+
+  <script src="js/permisos.js"></script>
+  <script src="js/floating-buttons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.querySelectorAll('.menu-item.has-submenu').forEach(menuItem => {
+          const submenu = menuItem.querySelector('.submenu');
+          const arrow = menuItem.querySelector('.submenu-arrow');
+
+          menuItem.addEventListener('click', function(e) {
+            // Si el clic es en un enlace del submenú, permitir la navegación
+            if (e.target.closest('.submenu-item')) {
+              return; // Permitir que el enlace funcione normalmente
+            }
+            // Solo prevenir el comportamiento por defecto si no es un enlace
+            if (!e.target.closest('a')) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+
+            if (submenu) {
+              submenu.classList.toggle('active');
+              if (submenu.classList.contains('active')) {
+                arrow.style.transform = 'rotate(180deg)';
+              } else {
+                arrow.style.transform = 'rotate(0deg)';
+              }
+            }
+          });
+        });
+
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.menu-item.has-submenu') && !e.target.closest('.submenu')) {
+            document.querySelectorAll('.menu-item.has-submenu .submenu.active').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item.has-submenu .submenu-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
+          }
+        });
+      }, 1500);
+    });
+  </script>
+  <div class="main-content">
+    <div class="admin-container">
+      <div class="admin-header">
+        <h2 class="admin-title">Administración de Usuarios</h2>
+        <button class="add-user-button" id="addUserButton">Agregar Usuario</button>
+      </div>
+      <div class="table-wrapper" style="position: relative; overflow-x:auto;">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre Completo</th>
+              <th>Usuario</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Último Acceso</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <!-- Los usuarios se cargarán dinámicamente aquí -->
+          </tbody>
+        </table>
+
+        <!-- Controles de paginación (estilo Calidad) -->
+        <div class="pagination-controls" id="adminPaginationControls" style="display: none;">
+          <div class="pagination-info">
+            <label for="adminRowsPerPageSelect">Mostrar:</label>
+            <select id="adminRowsPerPageSelect" class="rows-per-page-select">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
+            <span>renglones por página</span>
+          </div>
+          <div class="pagination-buttons">
+            <button id="adminPrevPageBtn" class="pagination-btn" title="Página anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="adminPageInfo" class="page-info">Página 1 de 1</span>
+            <button id="adminNextPageBtn" class="pagination-btn" title="Página siguiente">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para agregar usuario -->
+  <div id="addUserModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Agregar Nuevo Usuario</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="addUserForm">
+          <div class="form-group">
+            <label for="addNombre">Nombre Completo</label>
+            <input type="text" id="addNombre" name="addNombre" required>
+          </div>
+          <div class="form-group">
+            <label for="addUsername">Nombre de Usuario</label>
+            <input type="text" id="addUsername" name="addUsername" required>
+          </div>
+          <div class="form-group">
+            <label for="addPassword">Contraseña</label>
+            <input type="password" id="addPassword" name="addPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="addRol">Rol</label>
+            <select id="addRol" name="addRol" required>
+              <option value="">Seleccione un departamento</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="submit-button">Guardar</button>
+            <button type="button" class="cancel-button">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para editar usuario -->
+  <div id="editUserModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Editar Usuario</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <input type="hidden" id="editId">
+          <div class="form-group">
+            <label for="editNombre">Nombre Completo</label>
+            <input type="text" id="editNombre" name="editNombre" required>
+          </div>
+          <div class="form-group">
+            <label for="editUsername">Nombre de Usuario</label>
+            <input type="text" id="editUsername" name="editUsername" required>
+          </div>
+          <div class="form-group">
+            <label for="editPassword">Nueva Contraseña (opcional)</label>
+            <input type="password" id="editPassword" name="editPassword">
+          </div>
+          <div class="form-group">
+            <label for="editRol">Rol</label>
+            <select id="editRol" name="editRol" required>
+              <option value="">Seleccione un departamento</option>
+            </select>
+          </div>
+          <div class="switch-container">
+            <span class="switch-label">Usuario Activo</span>
+            <label class="switch">
+              <input type="checkbox" id="editActivo" name="editActivo">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="submit-button">Guardar Cambios</button>
+            <button type="button" class="cancel-button">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación de eliminación -->
+  <div id="deleteUserModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Confirmar Eliminación</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
+        <div class="modal-buttons">
+          <button class="modal-button delete" id="confirmDeleteButton">Eliminar</button>
+          <button class="modal-button cancel" id="cancelDeleteButton">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/permisos.js"></script>
+  <script>
+    // Control de submenús desplegables
+    document.addEventListener('DOMContentLoaded', function() 
+    {
+      const menuButtons = [
+        { btn: 'itMenuBtn', submenu: 'itSubmenu' },
+        { btn: 'rhMenuBtn', submenu: 'rhSubmenu' },
+        { btn: 'designMenuBtn', submenu: 'designSubmenu' },
+        { btn: 'warehouseMenuBtn', submenu: 'warehouseSubmenu' },
+        { btn: 'maintenanceMenuBtn', submenu: 'maintenanceSubmenu' },
+        { btn: 'adminMenuBtn', submenu: 'adminSubmenu' }
+      ];
+
+      menuButtons.forEach(({ btn, submenu }) => 
+      {
+        const button = document.getElementById(btn);
+        const submenuElement = document.getElementById(submenu);
+        
+        if (button && submenuElement) 
+        {
+          let isOpen = false;
+          let timeoutId = null;
+          
+          // Función para mostrar el submenú
+          function showSubmenu() {
+            submenuElement.style.display = 'block';
+            button.querySelector('.submenu-arrow').style.transform = 'rotate(180deg)';
+            // Agregar clase para animación después de un pequeño delay
+            setTimeout(() => {
+              submenuElement.classList.add('show');
+            }, 10);
+          }
+          
+          // Función para ocultar el submenú
+          function hideSubmenu() 
+          {
+            submenuElement.classList.remove('show');
+            setTimeout(() => 
+            {
+              if (!isOpen) 
+              {
+                submenuElement.style.display = 'none';
+                button.querySelector('.submenu-arrow').style.transform = 'rotate(0deg)';
+              }
+            }, 300);
+          }
+          
+          // Mostrar al hacer hover en el botón
+          button.addEventListener('mouseenter', function() 
+          {
+            if (!isOpen) 
+            {
+              clearTimeout(timeoutId);
+              showSubmenu();
+            }
+          });
+          
+          // Ocultar al salir del botón (con delay para permitir movimiento al submenú)
+          button.addEventListener('mouseleave', function(e) 
+          {
+            if (!isOpen) 
+            {
+              timeoutId = setTimeout(() => 
+              {
+                hideSubmenu();
+              }, 100);
+            }
+          });
+          
+          // Mantener abierto cuando el mouse entra al submenú
+          submenuElement.addEventListener('mouseenter', function() 
+          {
+            clearTimeout(timeoutId);
+          });
+          
+          // Ocultar cuando el mouse sale del submenú
+          submenuElement.addEventListener('mouseleave', function() 
+          {
+            if (!isOpen) {
+              hideSubmenu();
+            }
+          });
+          
+          // Mantener abierto al hacer clic
+          button.addEventListener('click', function(e) 
+          {
+            // Si el clic es en un enlace del submenú, permitir la navegación
+            if (e.target.closest('.submenu-item')) {
+              return; // Permitir que el enlace funcione normalmente
+            }
+            // Solo prevenir el comportamiento por defecto si no es un enlace
+            if (!e.target.closest('a')) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            isOpen = !isOpen;
+      
+            if (isOpen) 
+            {
+              showSubmenu();
+            } else 
+            {
+              hideSubmenu();
+            }
+          });
+
+          // Ocultar al hacer clic fuera
+          document.addEventListener('click', function(e) 
+          {
+            if (!button.contains(e.target) && !submenuElement.contains(e.target)) 
+            {
+              isOpen = false;
+              hideSubmenu();
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() 
+    {
+      document.body.style.display = 'none';
+      const username = localStorage.getItem('username');
+      if (!username) 
+      {
+        window.location.href = 'login.html';
+        return;
+      }
+      try 
+      {
+        const response = await fetch('/api/auth/check-permissions', 
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username })
+        });
+        if (!response.ok) throw new Error('Error al verificar permisos');
+        const data = await response.json();
+        // Verificar acceso a la página actual
+        const currentPage = window.location.pathname.split('/').pop();
+        let tieneAcceso = false;
+        if (data.user.rol === 'IT') tieneAcceso = true;
+        else {
+          switch(currentPage) {
+            case 'panel.html': tieneAcceso = data.permissions.includes('tickets'); break;
+            case 'detalles.html': tieneAcceso = data.permissions.includes('estadisticas'); break;
+            case 'apoyos.html': tieneAcceso = data.permissions.includes('apoyos'); break;
+            case 'amonestaciones.html': tieneAcceso = data.permissions.includes('amonestaciones'); break;
+            case 'design.html': tieneAcceso = data.permissions.includes('design'); break;
+            case 'inventario.html': tieneAcceso = data.permissions.includes('inventario'); break;
+            case 'admin.html':
+            case 'departamentos.html':
+            case 'contrasenas.html':
+            case 'admin_design.html':
+              tieneAcceso = data.user.rol === 'IT';
+              break;
+            case 'inicio.html': tieneAcceso = true; break;
+            default: tieneAcceso = true;
+          }
+        }
+        if (!tieneAcceso) 
+        {
+          alert('No tienes permiso para acceder a esta página.');
+          window.location.href = 'inicio.html';
+          return;
+        }
+        document.body.style.display = '';
+      } catch (e) 
+      {
+        alert('Error al verificar permisos.');
+        window.location.href = 'inicio.html';
+      }
+    });
+  </script>
+  <script>
+    function checkAdminAccess() 
+    {
+      const rol = localStorage.getItem('rol');
+      const adminLink = document.getElementById('adminLink');
+      
+      if (rol === 'IT') {
+        adminLink.style.display = 'flex';
+      } else 
+      {
+        window.location.href = 'panel.html';
+      }
+    }
+
+    // Funciones para el modal de agregar usuario
+    function showAddUserModal() 
+    {
+      const modal = document.getElementById('addUserModal');
+      modal.style.display = 'block';
+    }
+
+    function hideAddUserModal() 
+    {
+      const modal = document.getElementById('addUserModal');
+      modal.style.display = 'none';
+    }
+    let adminUsuarios = [];
+    let adminFiltered = [];
+    let adminCurrentPage = 1;
+    let adminPageSize = 10;
+
+    async function loadUsers() {
+      try {
+        const response = await fetch('/api/usuarios');
+        const users = await response.json();
+
+        adminUsuarios = Array.isArray(users) ? users : [];
+        adminFiltered = adminUsuarios.slice();
+        adminCurrentPage = 1;
+        renderAdminPage(adminCurrentPage);
+
+        // Cargar departamentos para el select
+        const deptResponse = await fetch('/api/departamentos');
+        const departamentos = await deptResponse.json();
+
+        // Actualizar los selects de departamentos en los modales
+        const addDeptSelect = document.getElementById('addRol');
+        const editDeptSelect = document.getElementById('editRol');
+
+        // Limpiar y agregar opciones
+        const updateSelect = (select) => {
+          if (!select) return;
+          select.innerHTML = '<option value="">Seleccione un departamento</option>';
+          (departamentos || []).forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.nombre;
+            option.textContent = dept.nombre;
+            select.appendChild(option);
+          });
+        };
+
+        updateSelect(addDeptSelect);
+        updateSelect(editDeptSelect);
+
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+        alert('Error al cargar la lista de usuarios');
+      }
+    }
+
+    function renderAdminPage(page) {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '';
+
+      const total = adminFiltered.length;
+      const totalPages = Math.max(1, Math.ceil(total / adminPageSize));
+      const p = Math.min(Math.max(1, page), totalPages);
+      const start = (p - 1) * adminPageSize;
+      const items = adminFiltered.slice(start, start + adminPageSize);
+
+      for (const user of items) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.id}</td>
+          <td>${user.nombre_completo || ''}</td>
+          <td>${user.username || ''}</td>
+          <td>${user.rol || ''}</td>
+          <td class="${user.activo ? 'status-active' : 'status-inactive'}">
+            ${user.activo ? 'Activo' : 'Inactivo'}
+          </td>
+          <td>${user.ultimo_acceso ? new Date(user.ultimo_acceso).toLocaleString() : 'Nunca'}</td>
+          <td>
+            <button class="action-button edit-button" onclick="showEditModal(${user.id})">Editar</button>
+            <button class="action-button delete-button" onclick="showDeleteModal(${user.id})">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      }
+
+      adminCurrentPage = p;
+      updateAdminPagination(totalPages);
+    }
+
+    function updateAdminPagination(totalPages) {
+      const controls = document.getElementById('adminPaginationControls');
+      const info = document.getElementById('adminPageInfo');
+      const prev = document.getElementById('adminPrevPageBtn');
+      const next = document.getElementById('adminNextPageBtn');
+      const rowsSelect = document.getElementById('adminRowsPerPageSelect');
+
+      if (!controls || !info || !prev || !next || !rowsSelect) return;
+
+      if (adminFiltered.length <= adminPageSize) {
+        controls.style.display = 'none';
+      } else {
+        controls.style.display = '';
+      }
+
+      info.textContent = `Página ${adminCurrentPage} de ${totalPages}`;
+      prev.disabled = adminCurrentPage <= 1;
+      next.disabled = adminCurrentPage >= totalPages;
+
+      // ensure select value
+      rowsSelect.value = String(adminPageSize);
+    }
+
+    // Manejar el formulario de agregar usuario
+    document.getElementById('addUserForm').addEventListener('submit', async function(e) 
+    {
+      e.preventDefault();
+      
+      const formData = 
+      {
+        nombre_completo: document.getElementById('addNombre').value,
+        username: document.getElementById('addUsername').value,
+        password: document.getElementById('addPassword').value,
+        rol: document.getElementById('addRol').value
+      };
+
+      try 
+      {
+        const response = await fetch('/api/usuarios', 
+        {
+          method: 'POST',
+          headers: 
+          {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al crear el usuario');
+        }
+
+        loadUsers();
+        hideAddUserModal();
+        this.reset();
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert(error.message || 'Error al crear el usuario');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', async function() 
+    {
+      await actualizarInterfazPermisos();
+      
+      checkAdminAccess();
+      await loadUsers();
+      document.getElementById('addUserButton').addEventListener('click', showAddUserModal);
+
+      // Configurar los botones de cerrar de los modales
+      document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+          const modal = this.closest('.modal');
+          modal.style.display = 'none';
+        });
+      });
+
+      // Configurar los botones de cancelar
+      document.querySelectorAll('.cancel-button').forEach(cancelBtn => {
+        cancelBtn.addEventListener('click', function() {
+          const modal = this.closest('.modal');
+          modal.style.display = 'none';
+        });
+      });
+
+      // Configurar el botón de confirmar eliminación
+      document.getElementById('confirmDeleteButton').addEventListener('click', confirmDelete);
+      document.getElementById('cancelDeleteButton').addEventListener('click', closeDeleteModal);
+
+      // Pagination controls event listeners
+      const rowsSelect = document.getElementById('adminRowsPerPageSelect');
+      const prevBtn = document.getElementById('adminPrevPageBtn');
+      const nextBtn = document.getElementById('adminNextPageBtn');
+
+      if (rowsSelect) {
+        rowsSelect.addEventListener('change', (e) => {
+          adminPageSize = parseInt(e.target.value, 10) || 10;
+          adminCurrentPage = 1;
+          renderAdminPage(adminCurrentPage);
+        });
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          renderAdminPage(Math.max(1, adminCurrentPage - 1));
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          const totalPages = Math.max(1, Math.ceil(adminFiltered.length / adminPageSize));
+          renderAdminPage(Math.min(totalPages, adminCurrentPage + 1));
+        });
+      }
+
+      // Cerrar modales al hacer clic fuera de ellos
+      window.addEventListener('click', function(e) 
+      {
+        if (e.target.classList.contains('modal')) 
+        {
+          e.target.style.display = 'none';
+        }
+      });
+    });
+
+    // Función para mostrar el modal de edición
+    async function showEditModal(userId) 
+    {
+      try 
+      {
+        const response = await fetch(`/api/usuarios/${userId}`);
+        const user = await response.json();
+        
+        document.getElementById('editId').value = user.id;
+        document.getElementById('editNombre').value = user.nombre_completo;
+        document.getElementById('editUsername').value = user.username;
+        document.getElementById('editRol').value = user.rol;
+        document.getElementById('editActivo').checked = user.activo;
+        
+        const modal = document.getElementById('editUserModal');
+        modal.style.display = 'block';
+      } catch (error) 
+      {
+        console.error('Error al cargar datos del usuario:', error);
+        alert('Error al cargar los datos del usuario');
+      }
+    }
+
+    // Cerrar el modal de edición
+    function hideEditModal() 
+    {
+      const modal = document.getElementById('editUserModal');
+      modal.style.display = 'none';
+    }
+
+    // Guardar cambios de edición
+    document.getElementById('editUserForm').addEventListener('submit', async function(e) 
+    {
+      e.preventDefault();
+      const id = document.getElementById('editId').value;
+      const data = 
+      {
+        nombre_completo: document.getElementById('editNombre').value,
+        username: document.getElementById('editUsername').value,
+        password: document.getElementById('editPassword').value,
+        rol: document.getElementById('editRol').value,
+        activo: document.getElementById('editActivo').checked
+      };
+      // Si la contraseña está vacía, no la enviamos
+      if (!data.password) delete data.password;
+      try 
+      {
+        const response = await fetch(`/api/usuarios/${id}`, 
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (!response.ok) 
+        {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al guardar los cambios');
+        }
+        hideEditModal();
+        loadUsers();
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert(error.message || 'Error al actualizar el usuario');
+      }
+    });
+
+    let userToDelete = null;
+
+    function showDeleteModal(userId) 
+    {
+      userToDelete = userId;
+      const modal = document.getElementById('deleteUserModal');
+      modal.style.display = 'block';
+    }
+
+    function closeDeleteModal() 
+    {
+      const modal = document.getElementById('deleteUserModal');
+      modal.style.display = 'none';
+      userToDelete = null;
+    }
+
+    async function confirmDelete() 
+    {
+      if (!userToDelete) return;
+
+      try 
+      {
+        const response = await fetch(`/api/usuarios/${userToDelete}`, 
+        {
+          method: 'DELETE',
+          headers: 
+          {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) 
+        {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al eliminar el usuario');
+        }
+        closeDeleteModal();
+        loadUsers();
+
+      } catch (error) 
+      {
+        console.error('Error:', error);
+        alert(error.message || 'Error al eliminar el usuario');
+      }
+    }
+
+    document.getElementById('adminMenuBtn').addEventListener('click', function() 
+    {
+      const submenu = document.getElementById('adminSubmenu');
+      if (submenu.style.display === 'block') 
+      {
+        submenu.style.display = 'none';
+      } else 
+      {
+        submenu.style.display = 'block';
+      }
+    });
+
+    async function mostrarBotonNotificaciones() 
+    {
+      const data = await verificarPermisosCentral();
+      if (!data) return;
+
+      const notificacionesLink = document.getElementById('notificacionesLink');
+      if (data.user.rol === 'IT' || data.permissions.includes('notificaciones')) 
+      {
+        notificacionesLink.style.display = 'flex';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', mostrarBotonNotificaciones);
+  </script>
+</body>
+<script src="js/topbar.js"></script>
+</html> 
