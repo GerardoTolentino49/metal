@@ -1394,7 +1394,7 @@
 				<button class="nav-item active" data-section="general"><i class="fas fa-cog"></i> General</button>
 				<button class="nav-item" data-section="data"><i class="fas fa-database"></i> Controles de datos</button>
 					<button class="nav-item" data-section="personalizacion"><i class="fas fa-paint-roller"></i> Personalización</button>
-					<button class="nav-item" data-section="personal"><i class="fas fa-users"></i> Personal a cargo</button>
+					<button class="nav-item" data-section="personal"><i class="fas fa-key"></i> Contraseña</button>
 			</nav>
 			<div class="user-panel-body">
 				<div class="user-panel-header">
@@ -1472,8 +1472,23 @@
 					</div>
 
 					<div class="panel-section" data-section-content="personal" style="display:none;">
-						<!-- Contenido 'Personal a cargo' — se rellenará dinámicamente con el contenido de la vista de inicio -->
-						<div id="personal-content-placeholder">Cargando...</div>
+						<h4>Contraseña</h4>
+						<div style="margin-top:8px; display:flex; flex-direction:column; gap:8px; max-width:560px;">
+							<label style="font-weight:700;">Contraseña actual
+								<input id="current-password" type="password" placeholder="Contraseña actual" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+							</label>
+							<label style="font-weight:700;">Nueva contraseña
+								<input id="new-password" type="password" placeholder="Nueva contraseña" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+							</label>
+							<label style="font-weight:700;">Repetir nueva contraseña
+								<input id="repeat-password" type="password" placeholder="Repetir nueva contraseña" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+							</label>
+							<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
+								<button id="password-cancel-btn" class="btn" type="button">Cancelar</button>
+								<button id="password-save-btn" class="btn primary" type="button" disabled>Guardar</button>
+							</div>
+							<div id="password-msg" style="margin-top:8px;color:var(--muted);font-size:13px"></div>
+						</div>
 					</div>
 
 				</div>
@@ -3367,6 +3382,39 @@ document.addEventListener('DOMContentLoaded', function(){
 	    } catch(e){}
 	  }
 	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _disableMensajeriaClick); else _disableMensajeriaClick();
+	})();
+	</script>
+	<script>
+	(function(){
+	  function initPasswordUI(){
+	    var cur = document.getElementById('current-password');
+	    var nw = document.getElementById('new-password');
+	    var rep = document.getElementById('repeat-password');
+	    var save = document.getElementById('password-save-btn');
+	    var cancel = document.getElementById('password-cancel-btn');
+	    var msg = document.getElementById('password-msg');
+	    if (!save) return;
+	    function updateState(){
+	      var curVal = cur && cur.value.trim();
+	      var nVal = nw && nw.value.trim();
+	      var rVal = rep && rep.value.trim();
+	      var ok = Boolean(curVal && nVal && rVal && (nVal === rVal) && nVal.length >= 6);
+	      save.disabled = !ok;
+	      if (nVal && rVal && nVal !== rVal) { msg.textContent = 'Las contraseñas no coinciden.'; } 
+	      else if (nVal && nVal.length > 0 && nVal.length < 6) { msg.textContent = 'La contraseña debe tener al menos 6 caracteres.'; }
+	      else { msg.textContent = ''; }
+	    }
+	    [cur, nw, rep].forEach(function(el){ if (el) el.addEventListener('input', updateState); });
+	    if (cancel) cancel.addEventListener('click', function(){ if (cur) cur.value=''; if (nw) nw.value=''; if (rep) rep.value=''; updateState(); });
+	    if (save) save.addEventListener('click', function(){
+	      // Nota: aquí sólo simulamos el guardado en el cliente. Implementar llamada al servidor si es necesario.
+	      save.disabled = true;
+	      if (msg) { msg.style.color = 'green'; msg.textContent = 'Cambios guardados (simulado).'; }
+	      setTimeout(function(){ if (msg) { msg.textContent=''; msg.style.color='var(--muted)'; } }, 2200);
+	      if (cur) cur.value=''; if (nw) nw.value=''; if (rep) rep.value='';
+	    });
+	  }
+	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPasswordUI); else initPasswordUI();
 	})();
 	</script>
 	</body>
