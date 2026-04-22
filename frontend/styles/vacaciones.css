@@ -1,0 +1,826 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+}
+
+/* Panel lateral derecha: historial de vacaciones del empleado */
+.panel-vacaciones-empleado {
+    flex: 0 0 360px;
+    width: 360px;
+    max-width: 380px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 18px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    padding: 16px 18px 14px;
+    z-index: 1;
+    border: 1px solid rgba(255,255,255,0.65);
+}
+
+.panel-header {
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    margin-bottom: 6px;
+}
+
+.panel-title {
+    display: block;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #1b5e20;
+}
+
+.panel-subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 2px;
+}
+
+.panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 4px;
+}
+
+.panel-body-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.panel-empty-state p {
+    margin-bottom: 4px;
+}
+
+.panel-item-vacacion {
+    padding: 8px 10px 7px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    background: #f4f9f4;
+    border: 1px solid rgba(76,175,80,0.12);
+    font-size: 0.83rem;
+}
+
+.panel-item-principal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.panel-item-fechas {
+    font-weight: 600;
+    color: #2e7d32;
+}
+
+.panel-item-detalle {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.badge-estado {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.estado-aprobada {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.estado-pendiente {
+    background: #fff8e1;
+    color: #a15c00;
+}
+
+.estado-rechazada {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.estado-default {
+    background: #eceff1;
+    color: #455a64;
+}
+
+.badge-dias {
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e3f2fd;
+    color: #0d47a1;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+
+.badge-motivo {
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #f3e5f5;
+    color: #6a1b9a;
+    font-size: 0.72rem;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-pasado {
+    opacity: 0.85;
+}
+
+.item-actual {
+    border-color: #1e88e5;
+    box-shadow: 0 0 0 1px rgba(30,136,229,0.18);
+}
+
+.item-futuro {
+    border-style: dashed;
+}
+
+@media (max-width: 1000px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding-top: 80px;
+    }
+
+    .panel-vacaciones-empleado {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 520px;
+        max-height: 50vh;
+        padding: 12px 14px;
+    }
+}
+
+.container {
+    background: linear-gradient(to bottom right, rgba(156, 39, 177, 0), rgb(255, 255, 255));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    max-width: 1200px;
+    width: 100%;
+    position: relative;
+}
+
+.icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.back-button {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.top-left-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(76, 175, 80, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.top-left-button:hover {
+    background: rgba(56, 142, 60, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+}
+
+.back-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.features {
+    margin: 30px 0;
+    text-align: left;
+}
+
+.features h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.features ul {
+    list-style: none;
+}
+
+.features li {
+    padding: 8px 0;
+    color: #555;
+    position: relative;
+    padding-left: 25px;
+}
+
+.features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+    font-weight: bold;
+}
+.container.anim-out {
+    animation: slideLeftFadeOut 0.7s forwards;
+}
+@keyframes slideLeftFadeOut {
+    0% { transform: translateX(0); opacity: 1; }
+    80% { opacity: 0.5; }
+    100% { transform: translateX(-120%) scale(0.98); opacity: 0; pointer-events: none; }
+}
+.modal-verifica {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    padding: 40px 30px;
+    min-width: 320px;
+    max-width: 90vw;
+    z-index: 1000;
+    opacity: 0;
+    animation: modalIn 0.7s 0.3s forwards;
+    text-align: center;
+}
+@keyframes modalIn {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    80% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.modal-verifica h2 {
+    color: #388E3C;
+    margin-bottom: 18px;
+}
+.modal-verifica .dato {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.1rem;
+}
+.modal-verifica .btn-verde {
+    margin-top: 18px;
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-verifica .btn-verde:hover {
+    background: #388E3C;
+}
+.modal-verifica .btn-cancelar {
+    margin-top: 18px;
+    margin-left: 10px;
+    background: #bbb;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-verifica .btn-cancelar:hover {
+    background: #888;
+    color: #fff;
+}
+.modal-confirmacion {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    padding: 40px 30px;
+    min-width: 320px;
+    max-width: 90vw;
+    z-index: 1100;
+    opacity: 0;
+    animation: modalIn 0.7s 0.3s forwards;
+    text-align: center;
+}
+.modal-confirmacion h2 {
+    color: #388E3C;
+    margin-bottom: 18px;
+}
+.modal-confirmacion .close-btn {
+    margin-top: 18px;
+    background: #388E3C;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-confirmacion .close-btn:hover {
+    background: #388E3C;
+}
+
+/* Estilos para el nombre del empleado */
+.empleado-info {
+    background: #f0f8f0;
+    border: 2px solid #4CAF50;
+    border-radius: 30px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: left;
+    display: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.empleado-info.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.empleado-info h4 {
+    color: #388E3C;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.empleado-info p {
+    color: #555;
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.empleado-info .error {
+    color: #d32f2f;
+    font-weight: 600;
+}
+
+.loading {
+    color: #666;
+    font-style: italic;
+}
+
+/* Estilos para el botón deshabilitado */
+.back-button:disabled {
+    background: #cccccc !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.back-button:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.mensaje-inhabilitado {
+    color: #d32f2f;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Estilos para campos deshabilitados */
+select:disabled {
+    background-color: #f5f5f5;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Estilos para mostrar que las fechas son automáticas */
+.fechas-automaticas {
+    background: #e8f5e8;
+    border: 2px solid #4CAF50;
+    border-radius: 30px;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #2e7d32;
+}
+
+/* Estilos para el recuadro de días seleccionados */
+.dias-seleccionados {
+    background: #f0f8f0;
+    border: 2px solid #4CAF50;
+    border-radius: 30px;
+    padding: 12px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.dias-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dias-icon {
+    font-size: 1.2rem;
+}
+
+.dias-texto {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.dias-texto strong {
+    color: #388E3C;
+}
+
+.dias-nota {
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* Estilos para fechas inválidas */
+.fecha-invalida {
+    border-color: #d32f2f !important;
+    background-color: #ffebee !important;
+}
+
+.fecha-invalida:focus {
+    border-color: #d32f2f !important;
+    box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2) !important;
+}
+
+/* Estilos para fecha de inicio inválida (mantener compatibilidad) */
+.fecha-inicio-invalida {
+    border-color: #d32f2f !important;
+    background-color: #ffebee !important;
+}
+
+.fecha-inicio-invalida:focus {
+    border-color: #d32f2f !important;
+    box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2) !important;
+}
+
+/* Estilos para el modal de días pendientes */
+.modal-dias-pendientes {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height:90%;
+    overflow-y: auto;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    padding: 40px 30px;
+    z-index: 1200;
+    opacity: 0;
+    animation: modalIn 0.7s 0.3s forwards;
+    text-align: center;
+}
+
+.modal-dias-pendientes h2 {
+    color: #4CAF50;
+    margin-bottom: 18px;
+    font-size: 1.5rem;
+}
+
+.modal-dias-pendientes .dato {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.modal-dias-pendientes .dias-pendientes-info {
+    background: #e8f5e8;
+    border: 2px solid #4CAF50;
+    border-radius: 30px;
+    padding: 15px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.modal-dias-pendientes .dias-pendientes-numero {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4CAF50;
+    margin: 10px 0;
+}
+
+.modal-dias-pendientes .btn-verde {
+    margin-top: 18px;
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.modal-dias-pendientes .btn-verde:hover {
+    background: #388E3C;
+}
+
+.info-regreso {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #e3f2fd;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: #1976d2;
+}
+/* Botón "Continuar" en modales de confirmación */
+.modal-confirmacion .btn-verde {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #43a047, #2e7d32);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(46,125,50,0.35);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.modal-confirmacion .btn-verde:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(46,125,50,0.45);
+    filter: brightness(1.03);
+}
+
+.modal-confirmacion .btn-verde:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(46,125,50,0.35);
+}
+
+.modal-confirmacion .btn-verde:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76,175,80,0.25), 0 8px 18px rgba(46,125,50,0.35);
+}
+
+/* Botón flotante para abrir el historial de vacaciones */
+.fab-historial-vacaciones {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    transform: none;
+    z-index: 1050;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.2s ease;
+}
+
+.fab-historial-vacaciones .fab-icon {
+    font-size: 1.1rem;
+}
+
+.fab-historial-vacaciones .fab-label {
+    white-space: nowrap;
+}
+
+.fab-historial-vacaciones:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    filter: brightness(1.05);
+}
+
+.fab-historial-vacaciones:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 600px) {
+    .fab-historial-vacaciones {
+        right: 14px;
+        bottom: 14px;
+        padding: 9px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Contenedor de la lista dentro del modal de historial de vacaciones */
+.historial-vacaciones-lista {
+    max-height: 320px;
+    overflow-y: auto;
+    margin-top: 10px;
+    text-align: left;
+}
+
+/* Modal de historial anclado a la derecha */
+.modal-historial-flotante {
+    position: fixed;
+    top: 50%;
+    right: 32px;
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%) !important; /* centrado vertical, pegado a la derecha */
+    min-width: 320px;
+    max-width: 380px;
+    padding: 22px 22px 18px;
+}
+
+@media (max-width: 600px) {
+    .modal-historial-flotante {
+        top: auto;
+        right: 8px;
+        left: 8px;
+        bottom: 70px;
+        margin: 0 auto;
+        max-width: none;
+    }
+    .input-vacaciones-mes{
+        padding: 10px;
+        border-radius: 30%;
+        border: 1px solid #ccc;
+        font-size: 90%;
+        width: 100px;
+    }
+}
+
+.back-button-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background:rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  color: #333;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.back-button-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+.tab-switch {
+      display: inline-flex;
+      align-items: center;
+      background: white;
+      border-radius: 30px;
+      padding: 4px;
+      gap: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .tab-switch-button {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: black;
+      opacity: 0.6;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      opacity: 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="light"] .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .tab-switch-button:hover:not(.active) {
+      opacity: 0.8;
+    }
+
+/* Botón de envío de vacaciones: mantener verde en todos los estados */
+#btnSolicitar {
+    background: linear-gradient(135deg, #4CAF50, #388E3C) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 6px 16px rgba(56, 142, 60, 0.35) !important;
+}
+
+#btnSolicitar:hover {
+    background: linear-gradient(135deg, #4CAF50, #388E3C) !important;
+    color: #fff !important;
+}
+
+#btnSolicitar:disabled {
+    background: linear-gradient(135deg, #4CAF50, #388E3C) !important;
+    color: #fff !important;
+    opacity: 0.6;
+}
+
+/* Historial embebido: limitar alto para evitar mucho scroll en toda la página */
+#historialVacacionesInline .historial-vacaciones-lista {
+    max-height: 170px;
+    overflow-y: auto;
+    padding-right: 4px;
+    text-align: left;
+}

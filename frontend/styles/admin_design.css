@@ -1,0 +1,68 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-bg: #f5f5f5;
+    --border-color: #e0e0e0;
+  }
+  [data-theme="dark"] {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --card-bg: #1a1a1a;
+    --border-color: #333333;
+  }
+  * { font-family: 'Montserrat', sans-serif; }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+  }
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+  }
+  .admin-container {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 1200px;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .admin-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+  }
+  .design-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .design-table th, .design-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .design-table th {
+    font-weight: 600;
+    color: var(--text-color);
+    background: var(--card-bg);
+  }
+  .design-table tr:hover {
+    background: var(--bg-color);
+  }
+  @media screen and (max-width: 768px) {
+    .main-content { margin-left: 0; }
+    .admin-container { margin: 20px; padding: 20px; }
+    .design-table { display: block; overflow-x: auto; }
+  }

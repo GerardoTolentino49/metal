@@ -1,0 +1,68 @@
+/* Blanco y negro: fondo de página negro, contenedor blanco */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #ffffff; /* negro de la página */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.po-main {
+  width: 80vw; /* 80% del ancho de la pantalla */
+  margin: 3vh auto; /* ligero margen top/bottom y centrado */
+  background: #fff; /* contenedor blanco */
+  color: #000; /* texto negro */
+  border: 2px solid #000; /* borde negro para contraste */
+  padding: 24px;
+  box-sizing: border-box;
+  min-height: 60vh; /* altura razonable con margen vertical */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-color: #000;
+  border-radius: 30px;
+
+}
+
+.po-container {
+  width: 80%; /* 80% del ancho de la pantalla */
+  margin: 3vh auto; /* ligero margen top/bottom y centrado */
+  background: #fff; /* contenedor blanco */
+  color: #000; /* texto negro */
+  border: 2px solid #000; /* borde negro para contraste */
+  padding: 24px;
+  box-sizing: border-box;
+  min-height: 60vh; /* altura razonable con margen vertical */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-color: #000;
+  border-radius: 30px;
+}
+.po-objects{
+    border-radius: 30px;
+    border-color:black;
+    height: 30px;
+    color: black;
+    display:flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 20px;
+    background-color: #fff;
+
+}
+
+.po-title {
+  margin: 0;
+  height: 20px;
+  font-size: 2rem;
+  font-weight: 700;
+  border-color: #000;
+  border-width: 1px;
+}
+
+.body{
+    background-color: white;
+}

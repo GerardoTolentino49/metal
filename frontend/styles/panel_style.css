@@ -1,0 +1,2328 @@
+:root {
+  /* Modo claro (por defecto) */
+  --bg-color: #23284a; /* O el color azul oscuro que ves en IT */
+  --text-color: #000000;
+  --card-bg: #f5f5f5;
+  --border-color: #e0e0e0;
+  --header-bg: #F5F5F5;
+  --pending-color: #ffa500;
+  --critical-color: #ff1744;
+  --high-color: #f44336;
+  --medium-color: #FF9800;
+  --low-color: #4CAF50;
+  --completed-color: #2196F3;
+}
+
+[data-theme="dark"] {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --card-bg: #1a1a1a;
+  --border-color: #333333;
+  --header-bg: #000000;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: #ffffff;
+  min-height: 100vh;
+  height: 100%;
+  overflow: hidden; /* Evitar scroll de toda la página */
+}
+
+.header {
+  background-color: var(--header-bg);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  width: 100vw;
+  max-width: 100vw;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0;
+  padding: 20px;
+  height: calc(100vh - 40px);
+  border-radius: 15px;
+  background: rgba(29, 34, 60, 0);
+  position: relative;
+  padding-bottom: 80px; /* Espacio para el botón */
+  overflow: hidden; /* Evitar scroll en el contenedor principal */
+  /* Agregar padding derecho para evitar que se corte la última columna */
+  padding-right: 30px;
+}
+
+.kanban-board {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  border-radius: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  height: calc(100% - 90px); /* Deja espacio para ver el borde inferior */
+  background: none;
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 20px; /* Asegura separación visual al final */
+  /* Asegurar que todas las columnas sean visibles */
+  min-width: 0;
+}
+
+.kanban-column {
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-radius: 30px;
+  border: 1.5px solid rgba(255,255,255,0.22);
+  box-shadow: 0 8px 32px rgba(31,38,135,0.12);
+  transition: all 0.3s ease;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  /* Asegurar que la columna no se desborde */
+  min-width: 0;
+  /* Que el contenido interno haga scroll, pero la página no */
+  overflow: hidden;
+}
+
+.kanban-column h2 {
+  margin: 0 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #ffffff;
+  display: flex;
+  justify-content: center; /* Cambiar de space-between a center */
+  align-items: center;
+  text-align: center; /* Agregar para asegurar centrado del texto */
+}
+
+.kanban-column.pending h2 { border-color: var(--pending-color); }
+.kanban-column.critical h2 { border-color: var(--critical-color); }
+.kanban-column.high h2 { border-color: var(--high-color); }
+.kanban-column.medium h2 { border-color: var(--medium-color); }
+.kanban-column.low h2 { border-color: var(--low-color); }
+.kanban-column.completed h2 { 
+  border-color: var(--completed-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-count {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Ajustar el contenedor de tickets para evitar desbordamiento */
+.tickets-container {
+  flex: 1;
+  overflow-y: auto; /* Scroll interno de los tickets */
+  padding-right: 5px; /* Espacio para la barra de scroll */
+  margin-right: -5px; /* Compensar el padding */
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent; /* Para Firefox */
+  /* Asegurar que el contenido no se desborde */
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.ticket {
+  background: rgba(128, 128, 128, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: move;
+  font-size: 12px;
+  position: relative;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ticket:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: rgba(128, 128, 128, 0.2);
+}
+
+.ticket.dragging {
+  opacity: 0.8;
+  transform: scale(0.95);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(128, 128, 128, 0.25);
+}
+
+
+.ticket.dragging-over-completed {
+  transform: scale(0.7);
+  opacity: 0.8;
+}
+
+.ticket-content p {
+  margin: 3px 0;
+  font-size: 11px;
+}
+
+.ticket-content strong {
+  color: #888;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.delete-btn:hover {
+  color: #ff0000;
+}
+
+@media screen and (max-width: 1200px) {
+  .kanban-board {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- MODALES BASE --- */
+.modal,
+.ticket-modal,
+.completed-modal,
+.assign-modal,
+.problem-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+.modal.active,
+.ticket-modal.active,
+.completed-modal.active,
+.assign-modal.active,
+.problem-modal.active {
+  display: flex;
+}
+
+/* --- CONTENIDO DE MODALES --- */
+.modal-content,
+.completed-modal-content,
+.assign-modal-content,
+.problem-modal-content {
+  background: rgba(0, 0, 0, 0.58);
+  padding: 25px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- HEADER DE MODALES --- */
+.modal-header,
+.completed-modal-header,
+.assign-modal-header,
+.problem-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+.modal-header h2,
+.completed-modal-header h2,
+.assign-modal-header h3,
+.problem-modal-header h3 {
+  margin: 0;
+  color: #ffffff; /* Cambiar a blanco en lugar de var(--text-color) */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* --- BOTÓN DE CERRAR MODAL --- */
+.modal-close,
+.completed-modal-close,
+.assign-modal-close,
+.problem-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px; /* Cambiar de left a right */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff; /* Cambiar a blanco en lugar de var(--text-color) */
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+.modal-close:hover,
+.completed-modal-close:hover,
+.assign-modal-close:hover,
+.problem-modal-close:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  transform: scale(1.1);
+}
+
+/* --- BODY DE MODALES --- */
+.modal-body,
+.completed-modal-body,
+.assign-modal-body,
+.problem-modal-body {
+  color: #ffffff; /* Cambiar a blanco en lugar de var(--text-color) */
+}
+
+/* --- ANIMACIÓN DE APARICIÓN DE MODAL --- */
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- RESTO DE ESTILOS (botones, badges, etc.) --- */
+/* ...deja aquí los estilos únicos de cada componente, pero elimina los duplicados... */
+
+/* Estilos para el visor de imagen completa */
+.image-viewer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-viewer.active {
+  display: flex;
+}
+
+.image-viewer-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.image-viewer img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.image-viewer-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.image-viewer-close:hover {
+  color: #ff4444;
+}
+
+.media-item {
+  cursor: zoom-in;
+}
+
+.media-item video {
+  cursor: pointer;
+}
+
+/* Ajustar el contenido principal para la barra lateral */
+.main-content {
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Mejoras para la animación del botón de terminado */
+.completed-button {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(33, 149, 243, 0);
+  color: white;
+  padding: 12px 30px;
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  backdrop-filter: blur(3px) brightness(1.15) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) brightness(1.15) saturate(1.3);
+  user-select: none;
+}
+
+.completed-button:hover {
+  background: rgba(33, 149, 243, 0.096);
+  box-shadow: 0 6px 24px rgba(33, 150, 243, 0.22), 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.completed-button:active {
+  background: rgba(33, 150, 243, 0.32);
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+}
+
+/* Estado cuando se está arrastrando cualquier ticket */
+.completed-button.dragging-active {
+  background: rgba(33, 150, 243, 0.25);
+  box-shadow: 
+    0 8px 32px rgba(33, 150, 243, 0.3), 
+    0 4px 16px rgba(0,0,0,0.15),
+    0 0 0 2px rgba(33, 150, 243, 0.2),
+    0 0 20px rgba(0,0,0,0.4);
+  transform: translateX(-50%) scale(1.2);
+  filter: brightness(1.1);
+}
+
+/* Estado cuando se arrastra un ticket sobre el botón */
+.completed-button.drag-over {
+  background: rgba(33, 150, 243, 0.3);
+  box-shadow: 
+    0 12px 40px rgba(33, 150, 243, 0.4), 
+    0 6px 20px rgba(0,0,0,0.2),
+    0 0 0 3px rgba(33, 150, 243, 0.3),
+    0 0 30px rgba(0,0,0,0.6);
+  transform: translateX(-50%) scale(1.3);
+  filter: brightness(1.2);
+}
+
+/* Animación para el ticket cuando se arrastra sobre el botón de terminado */
+.ticket.dragging-over-completed {
+  transform: scale(0.7);
+  opacity: 0.8;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto de pulso para el botón cuando se está arrastrando */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 
+      0 8px 32px rgba(33, 150, 243, 0.3), 
+      0 4px 16px rgba(0,0,0,0.15),
+      0 0 0 2px rgba(33, 150, 243, 0.2),
+      0 0 20px rgba(0,0,0,0.4);
+  }
+  50% {
+    box-shadow: 
+      0 8px 32px rgba(33, 150, 243, 0.4), 
+      0 4px 16px rgba(0,0,0,0.15),
+      0 0 0 2px rgba(33, 150, 243, 0.3),
+      0 0 25px rgba(0,0,0,0.5);
+  }
+  100% {
+    box-shadow: 
+      0 8px 32px rgba(33, 150, 243, 0.3), 
+      0 4px 16px rgba(0,0,0,0.15),
+      0 0 0 2px rgba(33, 150, 243, 0.2),
+      0 0 20px rgba(0,0,0,0.4);
+  }
+}
+
+.completed-button.dragging-active {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.completed-button .ticket-count {
+  background: white;
+  color: black;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  min-width: 24px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Modal de tickets terminados */
+.completed-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+}
+
+.completed-modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.completed-modal-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  max-width: 1000px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+}
+
+.completed-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.completed-modal-close:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  transform: scale(1.1);
+}
+
+.completed-modal-header {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.completed-modal-header h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.completed-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.completed-ticket {
+  background: rgba(128, 128, 128, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.completed-ticket:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(128, 128, 128, 0.15);
+}
+
+.completed-ticket h3 {
+  margin: 0 0 15px 0;
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.completed-ticket-info {
+  display: grid;
+  gap: 10px;
+}
+
+.completed-ticket-info p {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.completed-ticket-info strong {
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+/* Estilos para el botón flotante */
+.floating-button {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  font-size: 24px;
+}
+
+.floating-button i {
+  font-size: 24px;
+  color: var(--text-color);
+}
+
+.floating-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.floating-button:active {
+  transform: scale(0.95);
+}
+
+/* Animación para el ícono de ajustes */
+#settingsButton i {
+  transition: transform 0.3s ease;
+}
+
+#settingsButton:hover i {
+  transform: rotate(90deg);
+}
+
+#pdfPreviewModal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  align-items: center;
+  justify-content: center;
+}
+#pdfPreviewModal.active {
+  display: flex;
+}
+#pdfPreviewContent {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#pdfPreviewFrame {
+  width: 400px;
+  height: 500px;
+  border: none;
+  margin-bottom: 20px;
+}
+#closePdfPreview {
+  background: #ff1744;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+#uploadPdfConfirm {
+  background: #2196F3;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+/* Estilo glass aero para el modal de tickets abiertos */
+.messages-modal {
+  display: none;
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 350px;
+  max-width: 95vw;
+  height: 480px;
+  z-index: 2000;
+  background: none;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+  border-radius: 25px;
+}
+.messages-modal.active {
+  display: flex !important;
+}
+.messages-modal-content {
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.13);
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(18px) saturate(160%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+}
+.messages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+.messages-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 18px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.close-messages {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.message-item {
+  padding: 12px 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.18);
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  max-width: 90%;
+  position: relative;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+  font-size: 16px;
+}
+.message-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.message-item.received {
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 18px 18px 18px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.message-content {
+  line-height: 1.2;
+  word-wrap: break-word;
+  font-size: 0.9em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+}
+
+/* Estilos para la barra de desplazamiento */
+.messages-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* Estilos para la ventana de chat individual */
+.chat-window {
+  display: none;
+  position: fixed;
+  bottom: 140px; /* Movido más abajo */
+  right: 20px; /* Movido más a la derecha */
+  width: 350px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
+  z-index: 1002;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(18px) saturate(160%);
+  animation: slideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+.chat-window-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 18px 14px 0 14px;
+  background: transparent;
+  border-radius: 25px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+}
+
+.chat-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close-chat {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 18px;
+  padding: 10px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 14px 22px;
+  border-radius: 32px;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  backdrop-filter: blur(12px) saturate(180%);
+  font-size: 16px;
+  word-break: break-word;
+  transition: all 0.3s;
+  display: inline-block;
+  margin-bottom: 0;
+  animation: messageAppear 0.3s ease-out;
+}
+
+.message-bubble.sent {
+  background: rgba(0, 123, 255, 0.35);
+  color: #fff;
+  margin-left: auto;
+  margin-right: 0;
+  border-radius: 32px 32px 8px 32px;
+  box-shadow: 0 8px 32px rgba(0, 123, 255, 0.10);
+  text-align: left;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  align-self: flex-end;
+}
+
+.message-bubble.received {
+  background: rgba(255, 255, 255, 0.75);
+  color: #000;
+  margin-right: auto;
+  margin-left: 0;
+  border-radius: 32px 32px 32px 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  text-align: left;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  align-self: flex-start;
+}
+
+.message-content {
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.message-time {
+  font-size: 12px;
+  opacity: 0.7;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chat-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--text-color);
+  font-size: 15px;
+  outline: none;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+
+.chat-input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.send-message-btn {
+  background: rgba(0, 123, 255, 0.18);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 18px;
+}
+
+.send-message-btn:hover {
+  transform: scale(1.08);
+  background: rgba(0, 123, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Agregar estilos para el botón de eliminar */
+.completed-ticket {
+  position: relative;
+}
+
+.delete-completed-ticket {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  color: #ff4444;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.delete-completed-ticket:hover {
+  background: rgba(255, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.delete-completed-ticket:active {
+  transform: scale(0.95);
+}
+
+/* Estilizar la barra de scroll para Chrome/Safari */
+.tickets-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tickets-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tickets-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.tickets-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Estilos para el switch */
+.switch input:checked + .slider {
+  background-color: #2196F3;
+}
+
+.switch input:checked + .slider .slider-thumb {
+  transform: translateX(26px);
+}
+
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Bordes de color para cada columna según urgencia */
+.kanban-column.pending {
+  border: 0.3px solid var(--pending-color) !important;
+}
+.kanban-column.critical {
+  border: 0.3px solid var(--critical-color) !important;
+}
+.kanban-column.high {
+  border: 0.3px solid var(--high-color) !important;
+}
+.kanban-column.medium {
+  border: 0.3px solid var(--medium-color) !important;
+}
+.kanban-column.low {
+  border: 0.3px solid var(--low-color) !important;
+}
+
+/* Tickets con fondo blanco para todas las columnas */
+.kanban-column .ticket {
+  background: rgb(255, 255, 255) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #333 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-column .ticket:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.kanban-column .ticket.dragging {
+  opacity: 0.8;
+  transform: scale(0.95);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Asegurar que todos los textos internos sean oscuros */
+.kanban-column .ticket * {
+  color: #000000 !important;
+}
+
+/* Estilos específicos para el nombre del ticket - REDUCIDO 30% */
+.ticket-name {
+  font-size: 11.2px; /* Reducido de 16px a 11.2px (30% menos) */
+  font-weight: bold;
+  margin-bottom: 8px; /* Reducido de 10px a 8px para compensar */
+  color: #333 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1; /* Reducido de 1.2 a 1.1 para mejor ajuste */
+  /* Agregar padding para mejor legibilidad */
+  padding: 1px 0;
+  /* Asegurar que el texto se mantenga legible */
+  letter-spacing: 0.2px;
+}
+
+/* Estilos para el preview del problema */
+.problem-preview {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 15px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  color: #333 !important;
+}
+
+.problem-preview:hover {  
+  transform: translateY(-2px);
+}
+
+/* Estilos para los indicadores de tiempo */
+.time-indicator {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.time-indicator.green {
+  background: #4CAF50;
+}
+
+.time-indicator.yellow {
+  background: #FFC107;
+  color: #333;
+}
+
+.time-indicator.orange {
+  background: #FF9800;
+  color: white;
+}
+
+.time-indicator.red {
+  background: #F44336;
+  color: white;
+}
+
+/* Estilos para el badge del usuario asignado */
+.assigned-user-badge {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 8px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  bottom: 0;
+  right: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- SUBMENÚS: Mostrar solo cuando tienen la clase .active --- */
+.submenu {
+  display: none;
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.submenu.active {
+  display: block;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* MODAL MENSAJES - Glass y posición */
+.messages-modal {
+  display: none;
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 350px;
+  max-width: 95vw;
+  height: 480px;
+  z-index: 2000;
+  background: none;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+  border-radius: 25px;
+}
+.messages-modal.active {
+  display: flex !important;
+}
+.messages-modal-content {
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.13);
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(18px) saturate(160%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+#settingsModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 3000;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+}
+
+#settingsModal.active {
+  display: flex !important;
+}
+
+#settingsModal > div {
+  background: rgba(255,255,255,0.13);
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  padding: 32px 24px;
+  min-width: 320px;
+  max-width: 90vw;
+  position: relative;
+}
+
+/* Estilos para el botón de asignación */
+.assign-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  z-index: 10;
+}
+
+.assign-button:hover {
+  background: rgba(33, 150, 243, 1);
+  transform: scale(1.1);
+}
+
+.assign-button:active {
+  transform: scale(0.95);
+}
+
+/* Modal de asignación */
+.assign-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.assign-modal.active {
+  display: flex;
+}
+
+.assign-modal-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+}
+
+.assign-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+
+.assign-modal-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.assign-modal-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.assign-modal-close:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  transform: scale(1.1);
+}
+
+.assign-modal-body {
+  color: var(--text-color);
+}
+
+.assign-modal-body p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+}
+/* Asegurar que el ticket tenga posición relativa para el botón absoluto */
+.ticket {
+  position: relative;
+}
+
+/* Estilos para el badge del usuario asignado */
+.assigned-user-badge {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 8px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  bottom: 0;
+  right: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Estilos para los indicadores de tiempo */
+.time-indicator {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.time-indicator.green {
+  background: #4CAF50;
+}
+
+.time-indicator.yellow {
+  background: #FFC107;
+  color: #333;
+}
+
+.time-indicator.orange {
+  background: #FF9800;
+  color: white;
+}
+
+.time-indicator.red {
+  background: #F44336;
+  color: white;
+}
+
+/* Estilos para el modal del problema */
+.problem-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.problem-modal.active {
+  display: flex;
+}
+
+.problem-modal-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 25px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+}
+
+.problem-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.problem-modal-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.problem-modal-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.problem-modal-close:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4444;
+  transform: scale(1.1);
+}
+
+.problem-modal-body {
+  color: var(--text-color);
+}
+
+.problem-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+/* Estilos específicos para el contenido del ticket */
+.ticket-info {
+  color: #ffffff; /* Asegurar que el texto del ticket sea blanco */
+}
+
+.ticket-info p {
+  color: #ffffff; /* Asegurar que los párrafos sean blancos */
+}
+
+.ticket-info strong {
+  color: #ffffff; /* Asegurar que el texto en negrita sea blanco */
+}
+
+/* Estilos para el icono de usuario en el modal */
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.user-icon-placeholder {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.user-icon-placeholder:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.ticket-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+
+.ticket-user-info {
+  flex: 1;
+}
+
+.ticket-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.ticket-details {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Modal de actualizaciones - SOLO ESTE MODAL EN BLANCO Y NEGRO */
+.updates-modal {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 400px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 2000;
+  transition: right 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.updates-modal.active {
+  right: 0;
+}
+
+.updates-modal-content {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-left: 2px solid #000000;
+  display: flex;
+  flex-direction: column;
+}
+
+.updates-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #000000;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.updates-modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.updates-modal-header {
+  padding: 20px;
+  background: linear-gradient(179deg, #a5a5a5 0%, #ffffff00 100%);
+}
+
+.updates-modal-header h3 {
+  margin: 0 0 10px 0;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.updates-modal-header p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.updates-modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  height: calc(100vh - 120px); /* Altura fija para el modal */
+}
+
+.updates-thread {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding-right: 10px;
+  max-height: calc(100vh - 200px); /* Altura máxima para el scroll */
+}
+
+.updates-thread::-webkit-scrollbar {
+  width: 6px;
+}
+
+.updates-thread::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.updates-thread::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.update-item {
+  background: linear-gradient(93deg, #0000003b 0%, #ffffff00 100%);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #000000;
+}
+
+.update-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.update-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.update-author i {
+  font-size: 16px;
+}
+
+.update-timestamp {
+  color: #666;
+  font-size: 12px;
+}
+
+.update-content {
+  color: #000000;
+  line-height: 1.5;
+  font-size: 14px;
+  /* Forzar que textos largos sin espacios se partan en múltiples líneas */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap; /* respeta saltos de línea del usuario */
+}
+
+.no-updates {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.update-input-container {
+  border-radius: 30px;
+  padding: 15px;
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0; /* No se encoge */
+}
+
+.update-input-container textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  padding: 12px;
+  color: #000000;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+
+.update-input-container textarea:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.update-input-container textarea::placeholder {
+  color: #999;
+}
+
+#sendUpdateBtn {
+  width: 100%;
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  padding: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#sendUpdateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#sendUpdateBtn:active {
+  transform: translateY(0);
+}
+
+/* Botón Empezar en el modal de detalles */
+.start-ticket-btn {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.start-ticket-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.start-ticket-btn:active {
+  transform: translateY(0);
+}
+
+.start-ticket-btn i {
+  font-size: 14px;
+}
+
+/* Notificaciones */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(29, 34, 60, 0.95);
+  color: #ffffff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 3000;
+  max-width: 300px;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification-success {
+  border-left-color: #4CAF50;
+}
+
+.notification-error {
+  border-left-color: #f44336;
+}
+
+.notification-warning {
+  border-left-color: #ff9800;
+}
+
+/* Modal de tickets terminados - Diseño moderno */
+.completed-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.completed-modal.active {
+  display: flex;
+}
+
+.completed-modal-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  padding: 0;
+  max-width: 95vw;
+  width: 95vw;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  border-radius: 30px;
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.completed-modal-header {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+  padding: 30px 40px 25px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px 30px 0 0;
+  position: relative;
+}
+
+.completed-modal-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #000000 0%, #000000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+.completed-modal-close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  z-index: 10;
+}
+
+.completed-modal-close:hover {
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.2) 0%, rgba(255, 59, 48, 0.1) 100%);
+  color: #ff3b30;
+  transform: scale(1.1) rotate(90deg);
+  border-color: rgba(255, 59, 48, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 59, 48, 0.3);
+}
+
+.completed-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  padding: 40px;
+  max-height: calc(90vh - 120px);
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.completed-tickets-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.completed-tickets-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.completed-tickets-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.completed-tickets-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.completed-ticket {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 25px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.completed-ticket::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+  border-radius: 20px 20px 0 0;
+}
+
+.completed-ticket:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.completed-ticket h3 {
+  margin: 0 0 20px 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.completed-ticket-info {
+  display: grid;
+  gap: 12px;
+}
+
+.completed-ticket-info p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.completed-ticket-info strong {
+  color: #ffffff;
+  font-weight: 600;
+  min-width: 120px;
+  opacity: 0.9;
+}
+
+.completed-ticket-info strong::after {
+  content: ':';
+  margin-right: 8px;
+}
+
+/* Botón de eliminar mejorado */
+.delete-completed-ticket {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.2) 0%, rgba(255, 59, 48, 0.1) 100%);
+  border: 1px solid rgba(255, 59, 48, 0.3);
+  color: #ff3b30;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 300;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(255, 59, 48, 0.2);
+}
+
+.delete-completed-ticket:hover {
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.3) 0%, rgba(255, 59, 48, 0.2) 100%);
+  transform: scale(1.15) rotate(90deg);
+  box-shadow: 0 8px 25px rgba(255, 59, 48, 0.4);
+  border-color: rgba(255, 59, 48, 0.5);
+}
+
+.delete-completed-ticket:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+/* Media items mejorados */
+.ticket-media {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.media-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.media-item:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.media-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.media-type {
+  display: block;
+  text-align: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 0 0 12px 12px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mensaje de no tickets */
+.completed-tickets-grid .no-tickets-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 60px 20px;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .completed-modal-content {
+    width: 95vw;
+    max-height: 95vh;
+    border-radius: 20px;
+  }
+  
+  .completed-modal-header {
+    padding: 25px 20px 20px 20px;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .completed-modal-header h2 {
+    font-size: 24px;
+  }
+  
+  .completed-tickets-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 25px 20px;
+  }
+  
+  .completed-ticket {
+    padding: 20px;
+  }
+}
+
+/* Botón de cargar más */
+.load-more-container {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.load-more-button {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 15px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.load-more-button:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.load-more-button:active {
+  transform: translateY(0);
+}
+
+.load-more-button i {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.load-more-button:hover i {
+  transform: rotate(90deg);
+}
+
+/* Mejorar el botón de cerrar del modal */
+.completed-modal-close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  z-index: 10;
+}
+
+.completed-modal-close:hover {
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.2) 0%, rgba(255, 59, 48, 0.1) 100%);
+  color: #ff3b30;
+  transform: scale(1.1) rotate(90deg);
+  border-color: rgba(255, 59, 48, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 59, 48, 0.3);
+}

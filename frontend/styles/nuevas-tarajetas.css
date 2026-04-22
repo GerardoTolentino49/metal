@@ -1,0 +1,330 @@
+body {
+    margin:0;
+    padding:0;
+    background:#e0e0e0;
+    font-family: 'Roboto Condensed', sans-serif;
+    min-height: 100vh;
+  }
+  
+      /* Switch Container */
+  .switch-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+  }
+  
+  .switch-option {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    padding: 12px 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  
+  .switch-option:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .switch-option.active {
+    background: #4CAF50;
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  }
+  
+  .switch-option.active:hover {
+    background: #45a049;
+  }
+  
+  ul {
+    position:absolute;
+    top:55%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 30px;
+    margin:0;
+    padding:0;
+    max-width: 1200px;
+    width: 90%;
+    margin-top: 40px;
+    justify-items: center;
+    align-items: center;
+  }
+  
+  ul li {
+    list-style:none;
+    margin: 0;
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  @media (max-width: 1200px) {
+    ul {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 900px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    ul {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 600px;
+      gap: 30px 20px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    ul {
+      grid-template-columns: 1fr;
+      max-width: 300px;
+      gap: 25px;
+    }
+  }
+  
+  ul li a .material-symbols-rounded {
+    font-size: 40px;
+    color: #262626;
+    line-height:90px;
+    transition: .5s;
+    padding-right: 14px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  
+  ul li a i {
+    font-size: 40px;
+    color: #262626;
+    line-height:90px;
+    transition: .5s;
+    padding-right: 14px;
+    vertical-align: middle;
+  }
+  
+  ul li a .fa,
+  ul li a .fab,
+  ul li a .fas {
+    font-size: 40px;
+    color: #262626;
+    line-height:90px;
+    transition: .5s;
+    padding-right: 14px;
+    vertical-align: middle;
+  }
+  
+  ul li a span:not(.material-symbols-rounded) {
+    padding:0;
+    margin:0;
+    position:absolute;
+    top: 25px;
+    left: 60px;
+    color: #262626;
+    letter-spacing: 2px;
+    transition: .5s;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 130px;
+    line-height: 1.3;
+    font-size: 14px;
+  }
+  
+  ul li a {
+    text-decoration: none;
+    display:block;
+    position: relative;
+    width:210px;
+    height:90px;
+    background: #fff;
+    text-align:left;
+    padding-left: 20px;
+    transform: rotate(-30deg) skew(25deg) translate(0,0);
+    transition:.5s;
+    box-shadow: -20px 20px 10px rgba(0,0,0,.5);
+  }
+  ul li a:before {
+    content: '';
+    position: absolute;
+    top:10px;
+    left:-20px;
+    height:100%;
+    width:20px;
+    background: #b1b1b1;
+    transform: .5s;
+    transform: rotate(0deg) skewY(-45deg);
+  }
+  ul li a:after {
+    content: '';
+    position: absolute;
+    bottom:-20px;
+    left:-10px;
+    height:20px;
+    width:100%;
+    background: #b1b1b1;
+    transform: .5s;
+    transform: rotate(0deg) skewX(-45deg);
+  }
+  
+  ul li a:hover {
+    transform: rotate(-30deg) skew(25deg) translate(20px,-15px);
+    box-shadow: -50px 50px 50px rgba(0,0,0,.5);
+  }
+  
+  ul li:hover i,
+  ul li:hover .fa,
+  ul li:hover .fab,
+  ul li:hover .fas,
+  ul li:hover .material-symbols-rounded {
+    color:#fff;
+  }
+  
+  ul li:hover span:not(.material-symbols-rounded) {
+    color:#fff;
+  }
+  
+  /* Ticket de IT - Azul */
+  ul li:hover:nth-child(1) a{
+    background: #2196F3;
+  }
+  ul li:hover:nth-child(1) a:before{
+    background: #1976D2;
+  }
+  ul li:hover:nth-child(1) a:after{
+    background: #42A5F5;
+  }
+  
+  /* Ticket de Mantenimiento - Naranja */
+  ul li:hover:nth-child(2) a{
+    background: #FF9800;
+  }
+  ul li:hover:nth-child(2) a:before{
+    background: #F57C00;
+  }
+  ul li:hover:nth-child(2) a:after{
+    background: #FFB74D;
+  }
+  
+  /* Vacaciones - Verde */
+  ul li:hover:nth-child(3) a{
+    background: #4CAF50;
+  }
+  ul li:hover:nth-child(3) a:before{
+    background: #388E3C;
+  }
+  ul li:hover:nth-child(3) a:after{
+    background: #66BB6A;
+  }
+  
+  /* Amonestaciones - Rojo */
+  ul li:hover:nth-child(4) a{
+    background: #F44336;
+  }
+  ul li:hover:nth-child(4) a:before{
+    background: #D32F2F;
+  }
+  ul li:hover:nth-child(4) a:after{
+    background: #EF5350;
+  }
+  
+  /* Proyectos - Púrpura */
+  ul li:hover:nth-child(5) a{
+    background: #9C27B0;
+  }
+  ul li:hover:nth-child(5) a:before{
+    background: #7B1FA2;
+  }
+  ul li:hover:nth-child(5) a:after{
+    background: #BA68C8;
+  }
+  
+  /* Diseño - Rosa */
+  ul li:hover:nth-child(6) a{
+    background: #E91E63;
+  }
+  ul li:hover:nth-child(6) a:before{
+    background: #C2185B;
+  }
+  ul li:hover:nth-child(6) a:after{
+    background: #F06292;
+  }
+  
+  /* Planeación y Compras - Índigo */
+  ul li:hover:nth-child(7) a{
+    background: #3F51B5;
+  }
+  ul li:hover:nth-child(7) a:before{
+    background: #303F9F;
+  }
+  ul li:hover:nth-child(7) a:after{
+    background: #5C6BC0;
+  }
+  
+  /* Producción - Cian */
+  ul li:hover:nth-child(8) a{
+    background: #00BCD4;
+  }
+  ul li:hover:nth-child(8) a:before{
+    background: #0097A7;
+  }
+  ul li:hover:nth-child(8) a:after{
+    background: #4DD0E1;
+  }
+  
+  /* Calidad (QC) - Teal */
+  ul li:hover:nth-child(9) a{
+    background: #009688;
+  }
+  ul li:hover:nth-child(9) a:before{
+    background: #00796B;
+  }
+  ul li:hover:nth-child(9) a:after{
+    background: #26A69A;
+  }
+  
+  /* Importación y Exportación - Amber */
+  ul li:hover:nth-child(10) a{
+    background: #FFC107;
+  }
+  ul li:hover:nth-child(10) a:before{
+    background: #FFA000;
+  }
+  ul li:hover:nth-child(10) a:after{
+    background: #FFD54F;
+  }
+  
+  /* Contabilidad - Deep Purple */
+  ul li:hover:nth-child(11) a{
+    background: #673AB7;
+  }
+  ul li:hover:nth-child(11) a:before{
+    background: #512DA8;
+  }
+  ul li:hover:nth-child(11) a:after{
+    background: #9575CD;
+  }
+  
+  /* Almacén - Brown */
+  ul li:hover:nth-child(12) a{
+    background: #795548;
+  }
+  ul li:hover:nth-child(12) a:before{
+    background: #5D4037;
+  }
+  ul li:hover:nth-child(12) a:after{
+    background: #A1887F;
+  }

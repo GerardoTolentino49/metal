@@ -1,0 +1,2313 @@
+:root {
+    /* Modo claro (por defecto) */
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-bg: #f5f5f5;
+    --border-color: #e0e0e0;
+    --header-bg: #F5F5F5;
+    --pending-color: #ffa500;
+    --critical-color: #ff1744;
+    --medium-color: #FF9800;
+    --low-color: #4CAF50;
+    --completed-color: #2196F3;
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --card-bg: #1a1a1a;
+    --border-color: #333333;
+    --header-bg: #000000;
+  }
+
+  /* Estilos del indicador de imagen para modo oscuro */
+  [data-theme="dark"] .ticket-image-indicator {
+    background: rgba(33, 150, 243, 0.2);
+    border-color: rgba(33, 150, 243, 0.4);
+  }
+
+  [data-theme="dark"] .ticket-image-indicator:hover {
+    background: rgba(33, 150, 243, 0.25);
+    border-color: rgba(33, 150, 243, 0.6);
+  }
+  
+  * {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  html, body {
+    height: 100%;
+    overflow: hidden; /* Evita scroll global */
+}
+
+  body {
+    /* Si tienes min-height: 100vh, puedes dejarlo, pero NO uses height: 100vh si tienes elementos fijos */
+    overflow: hidden; /* Asegura que no haya scroll en el body */
+}
+
+.container {
+    height: 100vh; /* O ajusta según tu layout */
+    overflow: hidden; /* No scroll en el contenedor principal */
+  }
+  
+  .header {
+    background-color: var(--header-bg);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logo {
+    max-width: 150px;
+    height: auto;
+  }
+  
+  .container {
+    padding: 0;
+    margin: 0 auto;
+    width: 100vw;
+    max-width: 100vw;
+    height: calc(100vh - 40px);
+    border-radius: 15px;
+    position: relative;
+    padding-bottom: 80px; /* Espacio para el botón */
+    overflow: hidden; /* Evitar scroll en el contenedor principal */
+  }
+  
+  .kanban-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    height: calc(100% - 60px);
+    border-radius: 10px;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  @media screen and (max-width: 900px) {
+    .kanban-board {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 10px;
+      height: calc(100% - 60px);
+      width: 100vw;
+      min-width: 700px;
+      max-width: unset;
+      padding-bottom: 16px;
+      /* Elimina el grid para usar scroll horizontal */
+    }
+    .kanban-column {
+      min-width: 320px;
+      max-width: 340px;
+      flex: 1 0 320px;
+      height: auto;
+    }
+  }
+  
+  .kanban-column {
+    background: rgba(255, 255, 255, 0.10);
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-bottom-left-radius: 40px;  /* MÁS redondeado en la base */
+    border-bottom-right-radius: 40px;
+    overflow: hidden;
+    min-height: 0;
+    /* Si quieres que el fondo sea más sólido en la base, puedes agregar un gradiente: */
+    /* background: linear-gradient(to bottom, rgba(255,255,255,0.10) 90%, #181c2a 100%); */
+  }
+  
+  .kanban-column h2 {
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .kanban-column.pending h2 { border-color: var(--pending-color); }
+  .kanban-column.critical h2 { border-color: var(--critical-color); }
+  .kanban-column.medium h2 { border-color: var(--medium-color); }
+  .kanban-column.low h2 { border-color: var(--low-color); }
+  .kanban-column.completed h2 { 
+    border-color: var(--completed-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .ticket-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    min-width: 24px;
+    text-align: center;
+  }
+  
+  .tickets-container {
+    flex: 1 1 auto; /* Ocupa el espacio restante */
+    min-height: 0;  /* Permite que el scroll funcione correctamente */
+    overflow-y: auto; /* Ya lo tienes, pero asegúrate que esté */
+    padding-right: 5px; /* Espacio para la barra de scroll */
+    margin-right: -5px; /* Compensar el padding */
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: #2196F3 #e0e0e0; /* Para Firefox */
+  }
+  
+  .ticket {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #0001;
+    margin-bottom: 18px;
+    padding: 18px 20px 14px 20px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    border-left: 6px solid #2196F3;
+    border-right: 6px solid #2196F3;
+    position: relative;
+    min-width: 220px;
+    max-width: 340px;
+    font-family: 'Montserrat', sans-serif;
+  }
+.ticket[data-urgency="critical"] { border-left-color: #d32f2f; }
+.ticket[data-urgency="medium"] { border-left-color: #1976d2; }
+.ticket[data-urgency="low"] { border-left-color: #388e3c; }
+.ticket:hover {
+  box-shadow: 0 6px 24px #0002;
+  transform: translateY(-2px) scale(1.02);
+}
+.ticket .ticket-header {
+    display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.ticket .ticket-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: #222;
+}
+.ticket .ticket-meta {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 6px;
+}
+.ticket .ticket-time {
+  font-size: 12px;
+  color: #1976d2;
+  font-weight: 500;
+  margin-top: 6px;
+}
+.ticket .ticket-user-select {
+  margin-top: 10px;
+  }
+  
+  .ticket:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background: rgba(128, 128, 128, 0.2);
+  }
+  
+  .ticket.dragging {
+    opacity: 0.8;
+    transform: scale(0.95);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background: rgba(128, 128, 128, 0.25);
+  }
+  
+  .ticket-header {
+    margin-bottom: 8px;
+  }
+  
+  .ticket-content {
+    flex-grow: 1;
+  }
+  
+  .ticket-footer {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #666;
+  }
+  
+  .ticket-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--text-color);
+  }
+  
+  .ticket.dragging-over-completed {
+    transform: scale(0.7);
+    opacity: 0.8;
+  }
+  
+  .drag-ghost {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  
+  .ticket-id {
+    color: var(--text-color);
+  }
+  
+  .ticket-date {
+    color: #666;
+  }
+  
+  .ticket-content p {
+    margin: 3px 0;
+    font-size: 11px;
+  }
+  
+  .ticket-content strong {
+    color: #888;
+  }
+  
+  
+  @media screen and (max-width: 1200px) {
+    .kanban-board {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .kanban-board {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .kanban-board {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Estilos para el modal de detalles */
+  .ticket-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+  }
+  
+  .ticket-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 25px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease-out;
+  }
+  
+  @keyframes modalAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-close:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+    transform: scale(1.1);
+  }
+  
+  .modal-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1976d2;
+    background: linear-gradient(to bottom right, #000000, #204672);
+    color: white;
+    padding: 20px 25px;
+    margin: -25px -25px 25px -25px;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .modal-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  /* Empleados panel: ajustar espaciado entre ID y etiqueta recontratable */
+  .empleado-info-derecha {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Usamos márgenes individuales para controlar el espacio */
+  }
+
+  .empleado-info-derecha .empleado-id-pill {
+    margin-right: 12px; /* Espacio por defecto entre ID y badge */
+  }
+
+  .empleado-info-derecha .recontratable-badge {
+    white-space: nowrap;
+  }
+
+  /* Cuando el empleado NO es recontratable reducimos el gap */
+  .empleado-info-derecha.empleado-info-no-gap .empleado-id-pill {
+    margin-right: 6px;
+  }
+  
+  .ticket-info {
+    display: grid;
+    gap: 15px;
+    background: rgba(0, 0, 0, 1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .ticket-info p {
+    margin: 0;
+    line-height: 1.6;
+    color: #ffffff;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+  
+  .ticket-info strong {
+    color: #ffffff;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 140px;
+  }
+
+  /* Indicador de imagen adjunta en tickets */
+  .ticket-image-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: rgba(33, 150, 243, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .ticket-image-indicator:hover {
+    background: rgba(33, 150, 243, 0.15);
+    border-color: rgba(33, 150, 243, 0.5);
+  }
+
+  .ticket-image-indicator i {
+    color: #2196F3;
+    font-size: 12px;
+  }
+
+  .ticket-image-indicator span {
+    color: #2196F3;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Estilos para el header del modal de ajustes */
+  .modal-header-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .modal-header-section h3 {
+    margin: 0;
+    color: #333333;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  /* Estilos para la sección de búsqueda */
+  .search-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 25px;
+    padding: 8px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .search-box input {
+    background: none;
+    border: none;
+    color: #333333;
+    font-size: 16px;
+    padding: 8px 12px;
+    outline: none;
+    flex: 1;
+    border-radius: 20px;
+  }
+
+  .search-box input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .clear-search-btn {
+    background: none;
+    border: none;
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .clear-search-btn:hover {
+    color: #333333;
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.1);
+  }
+
+  .clear-search-btn i {
+    font-size: 14px;
+  }
+
+  /* Responsive para el header con búsqueda */
+  @media (max-width: 768px) {
+    .search-section {
+      padding: 0 10px;
+    }
+    
+    .search-box {
+      min-width: auto;
+      max-width: 100%;
+      border-radius: 20px;
+    }
+    
+    .modal-header-section h3 {
+      font-size: 22px;
+    }
+  }
+
+  /* Estilos para las tablas de herramientas */
+  .tools-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .tools-table td:first-child {
+    width: 60px;
+    min-width: 60px;
+  }
+
+  .tools-table td:nth-child(2) {
+    width: auto;
+    min-width: 120px;
+  }
+
+  .tools-table td:nth-child(3) {
+    width: 120px;
+    min-width: 120px;
+  }
+
+  .tools-table td:nth-child(4) {
+    width: 80px;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .tools-table td:last-child {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  /* Estilos para botones de acciones en tablas de herramientas */
+  .actions-cell {
+    text-align: center;
+    width: 100px;
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .edit-btn {
+    color: #2196F3;
+  }
+
+  .edit-btn:hover {
+    background: rgba(33, 150, 243, 0.1);
+    color: #1565c0;
+  }
+
+  .delete-btn {
+    color: #f44336;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+  }
+
+  .delete-btn:hover {
+    background: rgba(244, 67, 54, 0.1);
+    color: #d32f2f;
+  }
+
+  /* Asegurar que los botones de eliminar en el modal de ajustes estén en su lugar correcto */
+  .settings-modal-content .delete-btn {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+  }
+
+  /* Forzar que los botones estén siempre en la misma línea */
+  .actions-cell .edit-btn,
+  .actions-cell .delete-btn {
+    display: inline-flex !important;
+    vertical-align: middle !important;
+    white-space: nowrap !important;
+  }
+
+  /* Asegurar que la celda de acciones mantenga los botones en línea */
+  .actions-cell {
+    white-space: nowrap !important;
+    overflow: visible !important;
+  }
+
+  .nombre-cell {
+    position: relative;
+    min-width: 120px;
+    max-width: 200px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nombre-cell.editing {
+    padding: 2px;
+    white-space: normal;
+    overflow: visible;
+    background: rgba(33, 150, 243, 0.05);
+    border-radius: 4px;
+  }
+
+  .nombre-cell input {
+    width: 100%;
+    border: 1px solid #2196F3;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .nombre-cell input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  }
+
+  /* Estilos para la celda de área */
+  .area-cell {
+    position: relative;
+    min-width: 120px;
+    max-width: 150px;
+  }
+
+  .area-input {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: not-allowed;
+  }
+
+  .area-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .area-input:enabled {
+    cursor: text;
+    opacity: 1;
+  }
+
+  .area-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .area-input:focus:enabled {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+  }
+
+  .area-select {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 4px 28px 4px 8px;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.15);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: not-allowed;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .area-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: rgb(0, 0, 0);
+    pointer-events: none;
+  }
+
+  .area-select:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+    background-color: rgb(0, 0, 0);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    pointer-events: all;
+  }
+
+  .area-select:not(:disabled):focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.25);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+  }
+
+  .area-select:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .area-select option {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 8px;
+  }
+
+  /* Estilos para la celda de switch de herramienta */
+  .herramienta-cell {
+    text-align: center;
+    padding: 8px;
+  }
+
+  .herramienta-cell .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .herramienta-cell .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .herramienta-cell .switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .herramienta-cell .switch input:not(:disabled) ~ .slider {
+    pointer-events: none;
+  }
+
+  .herramienta-cell .switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: transform 0.4s ease, background-color 0.4s ease;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateX(0);
+    z-index: 2;
+  }
+
+  .herramienta-cell .switch input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  .herramienta-cell .switch input:checked + .slider:before {
+    transform: translateX(29px) !important;
+  }
+
+  /* Asegurar que funcione incluso cuando está deshabilitado pero checked */
+  .herramienta-cell .switch input[checked]:not(:disabled) + .slider:before,
+  .herramienta-cell .switch input:checked:not(:disabled) + .slider:before {
+    transform: translateX(29px) !important;
+  }
+
+  .herramienta-cell .switch:not(:has(input:disabled)):hover .slider {
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
+  }
+  
+  /* Fallback para navegadores sin soporte :has() */
+  .herramienta-cell .switch:hover input:not(:disabled) + .slider {
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
+  }
+
+  .herramienta-cell .switch input:disabled + .slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .herramienta-cell .switch input:disabled ~ .slider,
+  .herramienta-cell .switch input:disabled + .slider {
+    pointer-events: none;
+  }
+
+  /* Cuando está deshabilitado pero checked, mantener la posición */
+  .herramienta-cell .switch input:disabled:checked + .slider:before {
+    transform: translateX(29px) !important;
+  }
+
+  .herramienta-cell .switch input:disabled + .slider:hover {
+    box-shadow: none;
+  }
+
+  .herramienta-cell .switch input:not(:disabled) + .slider {
+    cursor: pointer;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .herramienta-cell .switch {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  .herramienta-cell .switch input:disabled {
+    cursor: not-allowed;
+  }
+  
+  .herramienta-cell .switch:has(input:disabled) {
+    cursor: not-allowed;
+  }
+
+  /* Estilos para modales personalizados del sistema */
+  .custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+
+  .custom-modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    min-width: 300px;
+    max-width: 500px;
+    width: 90%;
+    overflow: hidden;
+  }
+
+  .custom-modal-message {
+    padding: 20px 24px;
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .custom-modal-separator {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 0;
+  }
+
+  .custom-modal-buttons {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .custom-modal-btn {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .custom-modal-cancel {
+    color: #666666;
+  }
+
+  .custom-modal-cancel:hover {
+    background-color: #f5f5f5;
+  }
+
+  .custom-modal-ok {
+    color: #ff2600;
+    font-weight: 600;
+  }
+
+  .custom-modal-ok:hover {
+    background-color: #f0f8ff;
+  }
+
+  .custom-modal-close {
+    color: #007AFF;
+    font-weight: 600;
+  }
+
+  .custom-modal-close:hover {
+    background-color: #f0f8ff;
+  }
+
+  /* Estilos para botones de selección de departamento */
+  .dept-btn {
+    transition: all 0.3s ease !important;
+    border-color: #e0e0e0 !important;
+    background-color: #ffffff !important;
+    color: #333 !important;
+  }
+
+  .dept-btn:hover {
+    border-color: #2196F3 !important;
+    background-color: #f0f8ff !important;
+  }
+
+  .dept-btn.active {
+    border-color: #2196F3 !important;
+    background-color: #2196F3 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3) !important;
+  }
+  
+  .ticket-media {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+  }
+  
+  .media-item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    background: rgba(128, 128, 128, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .media-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .media-item img,
+  .media-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  
+  .media-type {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    backdrop-filter: blur(5px);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+      margin: 10px;
+    }
+  
+    .ticket-media {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
+  
+  /* Estilos para el visor de imagen completa */
+  .image-viewer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-viewer.active {
+    display: flex;
+  }
+  
+  .image-viewer-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .image-viewer img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+  
+  .image-viewer-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .image-viewer-close:hover {
+    color: #ff4444;
+  }
+  
+  .media-item {
+    cursor: zoom-in;
+  }
+  
+  .media-item video {
+    cursor: pointer;
+  }
+
+  
+  .completed-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgb(33 150 243 / 0%); /* Azul con transparencia */
+    color: white;
+    padding: 12px 30px;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(33, 150, 243, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 100;
+    backdrop-filter: blur(12px) brightness(1.15) saturate(1.3);
+    -webkit-backdrop-filter: blur(12px) brightness(1.15) saturate(1.3);
+  }
+  
+  .completed-button:hover {
+    background: rgba(33, 150, 243, 0.28);
+    box-shadow: 0 6px 24px rgba(33, 150, 243, 0.22), 0 4px 16px rgba(0,0,0,0.15);
+    transform: translateX(-50%) translateY(-2px);
+  }
+  
+  .completed-button:active {
+    background: rgba(33, 150, 243, 0.32);
+    transform: translateX(-50%) translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+}
+
+.completed-button.drag-over {
+  background: rgba(76, 175, 80, 0.28);
+  border-color: rgba(76, 175, 80, 0.7);
+  box-shadow: 0 8px 26px rgba(76, 175, 80, 0.35), 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateX(-50%) translateY(-2px) scale(1.03);
+}
+
+/* Botón glass tipo tuerca abajo a la derecha */
+.glass-gear-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.13);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  color: #2196F3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  z-index: 2001;
+  cursor: pointer;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.glass-gear-btn:hover {
+  background: rgba(33,150,243,0.18);
+  color: #1565c0;
+  transform: scale(1.08) rotate(20deg);
+}
+
+/* Modal glass con efecto "Aladino" */
+#settingsGlassModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 3000;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+}
+#settingsGlassModal.active {
+  display: flex;
+}
+@keyframes fadeInAladdin {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(80px);
+    filter: blur(8px);
+  }
+  80% {
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+.settings-modal-content {
+  background: #ffffff;
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  border: 1.5px solid rgba(0,0,0,0.1);
+  padding: 40px 32px;
+  min-width: 320px;
+  max-width: 90vw;
+  max-height: 85vh;
+  min-height: 70vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+.settings-modal-content h3 {
+  color: #ffffff;
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+.settings-modal-content .close-modal {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: none;
+  border: none;
+  color: #333333;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.settings-modal-content .close-modal:hover {
+  color: #1565c0;
+}
+.settings-modal-content .add-tool-box {
+  background: rgba(255,255,255,0.22);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+  text-align: center;
+  font-size: 20px;
+  color: #23284a;
+  font-weight: 600;
+  margin-top: 10px;
+  }
+  
+  .completed-button .ticket-count {
+    background: white;
+    color: black;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    min-width: 24px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Modal de tickets terminados */
+  .completed-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+  }
+  
+  .completed-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .completed-modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    max-width: 1000px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: modalAppear 0.3s ease-out;
+  }
+  
+  .completed-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  .completed-modal-close:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+    transform: scale(1.1);
+  }
+  
+  .completed-modal-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .completed-modal-header h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .completed-tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px;
+  }
+  
+  .completed-ticket {
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  .completed-ticket:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background: rgba(128, 128, 128, 0.15);
+  }
+  
+  .completed-ticket h3 {
+    margin: 0 0 15px 0;
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .completed-ticket-info {
+    display: grid;
+    gap: 10px;
+  }
+  
+  .completed-ticket-info p {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .completed-ticket-info strong {
+    color: var(--text-color);
+    opacity: 0.8;
+  }
+  
+  /* Estilos para el botón flotante */
+  .floating-button {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    font-size: 24px;
+  }
+  
+  .floating-button i {
+    font-size: 24px;
+    color: var(--text-color);
+  }
+  
+  .floating-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .floating-button:active {
+    transform: scale(0.95);
+  }
+  
+  /* Animación para el ícono de ajustes */
+  #settingsButton i {
+    transition: transform 0.3s ease;
+  }
+  
+  #settingsButton:hover i {
+    transform: rotate(90deg);
+  }
+  
+  #pdfPreviewModal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+  }
+  #pdfPreviewModal.active {
+    display: flex;
+  }
+  #pdfPreviewContent {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #pdfPreviewFrame {
+    width: 400px;
+    height: 500px;
+    border: none;
+    margin-bottom: 20px;
+  }
+  #closePdfPreview {
+    background: #ff1744;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  #uploadPdfConfirm {
+    background: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  /* Estilo glass aero para el modal de tickets abiertos */
+  .messages-modal {
+    display: none;
+    position: fixed;
+    bottom: 120px; /* Movido más abajo */
+    right: 20px; /* Movido más a la derecha */
+    width: 340px;
+    height: 460px;
+    background: rgba(255, 255, 255, 0.13);
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
+    z-index: 1000;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(18px) saturate(160%);
+    animation: slideIn 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  .messages-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 18px 14px 0 14px;
+    background: transparent;
+    border-radius: 25px;
+    /* No repetir fondo ni sombra aquí para evitar doble efecto */
+  }
+  
+  .messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  
+  .messages-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 18px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .close-messages {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  
+  .messages-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .message-item {
+    padding: 12px 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.18);
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-width: 90%;
+    position: relative;
+    transition: all 0.3s ease;
+    color: var(--text-color);
+    font-size: 16px;
+  }
+  
+  .message-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .message-item.received {
+    margin-right: auto;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 18px 18px 18px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .message-content {
+    line-height: 1.2;
+    word-wrap: break-word;
+    font-size: 0.9em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+  }
+  
+  /* Estilos para la barra de desplazamiento */
+  .messages-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .messages-list::-webkit-scrollbar-track {
+    background: var(--bg-color);
+  }
+  
+  .messages-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+  }
+  
+  .messages-list::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
+  
+  /* Estilos para la ventana de chat individual */
+  .chat-window {
+    display: none;
+    position: fixed;
+    bottom: 140px; /* Movido más abajo */
+    right: 20px; /* Movido más a la derecha */
+    width: 350px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.18);
+    z-index: 1002;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(18px) saturate(160%);
+    animation: slideIn 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  .chat-window-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 18px 14px 0 14px;
+    background: transparent;
+    border-radius: 25px;
+  }
+  
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+  }
+  
+  .chat-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 16px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .close-chat {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 18px;
+    padding: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .message-bubble {
+    max-width: 80%;
+    padding: 14px 22px;
+    border-radius: 32px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    backdrop-filter: blur(12px) saturate(180%);
+    font-size: 16px;
+    word-break: break-word;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-bottom: 0;
+    animation: messageAppear 0.3s ease-out;
+  }
+  
+  .message-bubble.sent {
+    background: rgba(0, 123, 255, 0.35);
+    color: #fff;
+    margin-left: auto;
+    margin-right: 0;
+    border-radius: 32px 32px 8px 32px;
+    box-shadow: 0 8px 32px rgba(0, 123, 255, 0.10);
+    text-align: left;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    align-self: flex-end;
+  }
+  
+  .message-bubble.received {
+    background: rgba(255, 255, 255, 0.75);
+    color: #000;
+    margin-right: auto;
+    margin-left: 0;
+    border-radius: 32px 32px 32px 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    text-align: left;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    align-self: flex-start;
+  }
+  
+  .message-content {
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  
+  .message-time {
+    font-size: 12px;
+    opacity: 0.7;
+    text-align: right;
+    margin-top: 4px;
+  }
+  
+  .chat-input-container {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--text-color);
+    font-size: 15px;
+    outline: none;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+  }
+  
+  .chat-input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .send-message-btn {
+    background: rgba(0, 123, 255, 0.18);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 18px;
+  }
+  
+  .send-message-btn:hover {
+    transform: scale(1.08);
+    background: rgba(0, 123, 255, 0.28);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Agregar estilos para el botón de eliminar */
+  .completed-ticket {
+    position: relative;
+  }
+  
+  .delete-completed-ticket {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+  
+  .delete-completed-ticket:hover {
+    background: rgba(255, 0, 0, 0.2);
+    transform: scale(1.1);
+  }
+  
+  .delete-completed-ticket:active {
+    transform: scale(0.95);
+  }
+  
+  /* Estilizar la barra de scroll para Chrome/Safari */
+  .tickets-container::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 8px;
+  }
+  
+  .tickets-container::-webkit-scrollbar-thumb {
+    background: #2196F3;
+    border-radius: 8px;
+  }
+  
+  .tickets-container::-webkit-scrollbar-track {
+    background: #e0e0e0;
+    border-radius: 8px;
+  }
+  
+  /* Estilos para el switch */
+  .switch input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  .switch input:checked + .slider .slider-thumb {
+    transform: translateX(26px);
+  }
+  
+  .switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  .switch input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  /* Bordes de color para cada columna según urgencia */
+  .kanban-column.pending {
+    border: 0.3px solid var(--pending-color) !important;
+  }
+  .kanban-column.critical {
+    border: 0.3px solid var(--critical-color) !important;
+  }
+  .kanban-column.medium {
+    border: 0.3px solid var(--medium-color) !important;
+  }
+  .kanban-column.low {
+    border: 0.3px solid var(--low-color) !important;
+  }
+  
+  /* Tickets con fondo pastel según urgencia, borde blanco y texto blanco */
+  .kanban-column.pending .ticket {
+    background: rgba(255, 165, 0, 0.18);   /* naranja pastel */
+    border: 0.1px solid #fff;
+    color: #fff;
+  }
+  .kanban-column.critical .ticket {
+    background: rgba(255, 23, 68, 0.15);   /* rojo pastel */
+    border: 0.4px solid #fff;
+    color: #fff;
+  }
+  .kanban-column.medium .ticket {
+    background: rgba(255, 152, 0, 0.15);   /* naranja medio pastel */
+    border: 0.4px solid #fff;
+    color: #fff;
+  }
+  .kanban-column.low .ticket {
+    background: rgba(76, 175, 80, 0.15);   /* verde pastel */
+    border: 0.4px solid #fff;
+    color: #fff;
+  }
+  
+  /* CORREGIR: Usar colores apropiados para modo claro */
+  .kanban-column .ticket * {
+    color: #000 !important; /* Cambiar de #fff a #000 */
+  }
+
+  /* Asegurar que los títulos de los tickets sean negros */
+  .ticket .ticket-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #000 !important; /* Forzar color negro */
+  }
+
+  .ticket .ticket-meta {
+    font-size: 13px;
+    color: #333 !important; /* Gris oscuro en lugar de #888 */
+    margin-bottom: 6px;
+  }
+
+  .ticket .ticket-time {
+    font-size: 12px;
+    color: #1976d2 !important; /* Mantener azul para el tiempo */
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  /* Corregir el color del área específica */
+  .ticket-area {
+    color: #1976d2 !important; /* Mantener azul */
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 2px;
+    margin-bottom: 0;
+    letter-spacing: 0.01em;
+  }
+
+  /* Corregir el color del problema del ticket */
+  .modal-problema-ticket {
+    color: #000 !important; /* Cambiar a negro */
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 14px 0 0 0;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    word-break: break-word;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Corregir colores en los modales de usuarios asignados */
+  .modal-asignado-nombre {
+    font-weight: 500;
+    color: #fff !important; /* Mantener blanco para el fondo azul */
+    background: #3c6b8f;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+
+  /* Estilos para el semáforo de tiempo */
+  .modal-asignado-nombre.tiempo-verde {
+    background: #4caf50 !important;
+    color: #fff !important;
+  }
+  
+  .modal-asignado-nombre.tiempo-amarillo {
+    background: #ff9800 !important;
+    color: #fff !important;
+  }
+  
+  .modal-asignado-nombre.tiempo-rojo {
+    background: #f44336 !important;
+    color: #fff !important;
+  }
+  
+  /* Corregir el color del tiempo abierto */
+  .modal-asignado-nombre[style*="color:#000"] {
+    color: #000 !important;
+  }
+
+  /* Estilos para los toggle switches */
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    cursor: pointer;
+  }
+
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-switch input:checked + .toggle-slider {
+    background-color: #2196F3;
+  }
+
+  .toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+  }
+
+  .toggle-switch:hover .toggle-slider {
+    background-color: #b3b3b3;
+  }
+
+  .toggle-switch input:checked:hover + .toggle-slider {
+    background-color: #1976D2;
+  }
+
+  .toggle-switch:active .toggle-slider:before {
+    width: 30px;
+  }
+
+  .toggle-switch input:checked:active + .toggle-slider:before {
+    width: 30px;
+    transform: translateX(22px);
+  }
+
+/* Botón glass tipo tuerca abajo a la derecha */
+.glass-gear-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.13);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  z-index: 2001;
+  cursor: pointer;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.glass-gear-btn:hover {
+  background: rgba(33,150,243,0.18);
+  color: #1565c0;
+  transform: scale(1.08) rotate(20deg);
+}
+
+/* Modal glass con efecto "Aladino" */
+#settingsGlassModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 3000;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+}
+#settingsGlassModal.active {
+  display: flex;
+}
+@keyframes fadeInAladdin {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(80px);
+    filter: blur(8px);
+  }
+  80% {
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+.settings-modal-content {
+  background: linear-gradient(to bottom right, #000000, #204672);
+  border-radius: 25px;
+  box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  padding: 40px 32px;
+  min-width: 320px;
+  max-width: 90vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.settings-modal-content .add-tool-box {
+  background: rgba(255,255,255,0.22);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+  text-align: center;
+  font-size: 20px;
+  color: #23284a;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.settings-modal-content .add-tool-box {
+  background: rgba(255,255,255,0.22);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.08);
+  text-align: center;
+  font-size: 20px;
+  color: #23284a;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.search-tool-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  margin-top: 10px;
+  background: #f5f5f5;
+  border-radius: 16px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 350px;
+}
+
+.search-tool-box input[type="text"] {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #333333;
+  font-size: 17px;
+  padding: 8px 4px;
+}
+
+.search-btn {
+  background: rgba(33,150,243,0.18);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2196F3;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+}
+.search-btn:hover {
+  background: #2196F3;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.search-tools-flexbox {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+}
+/* Mejorar bordes y filas intercaladas en las tablas del modal de ajustes */
+.tools-table-box {
+  background: #f5f5f5;
+  border-radius: 22px; /* Más redondeado */
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  padding: 12px 8px;
+  min-width: 220px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 0;
+  display: flex;
+  align-items: flex-start;
+  border: 1.5px solid rgba(0,0,0,0.1);
+}
+.tools-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+  color: #333333;
+  background: transparent;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.tools-table th, .tools-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  text-align: left;
+}
+  .tools-table th {
+    background: #2196F3;
+    color: #ffffff;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    text-align: center;
+  }
+.tools-table tr:last-child td {
+  border-bottom: none;
+}
+.tools-table tbody tr:nth-child(odd) {
+  background: #ffffff; /* Blanco */
+}
+.tools-table tbody tr:nth-child(even) {
+  background: #f9f9f9; /* Gris muy claro */
+}
+.tools-table tbody tr:hover {
+  background: #e3f2fd !important;
+  color: #1565c0;
+}
+@media (max-width: 700px) {
+  .search-tools-flexbox {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .tools-table-box {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+.topbar {
+  width: 100vw;
+  min-width: 0;
+  height: 44px;
+  background: rgba(35, 36, 58, 0.18);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 2rem;
+  backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  margin: 8px auto 0 auto;
+  max-width: 100vw;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+@media screen and (max-width: 900px) {
+  .topbar {
+    height: 38px;
+    padding: 0 4px;
+    font-size: 13px;
+    border-radius: 1.2rem;
+  }
+  .topbar-header button {
+    font-size: 15px !important;
+    padding: 2px 10px !important;
+  }
+}
+
+.kanban-board {
+  /* Ya está responsivo, pero aseguro que siempre se vea con scroll horizontal */
+  overflow-x: auto !important;
+  min-width: 0;
+  max-width: 100vw;
+}

@@ -1,0 +1,511 @@
+/* Estilos para la jerarquía organizacional */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+/* Contenedor de jerarquía */
+.hierarchy-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    min-height: calc(100vh - 40px);
+}
+
+.hierarchy-tree {
+    position: relative;
+}
+
+/* Organigrama jerárquico mejorado */
+.hierarchy-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 500px;
+    background: #f8fafc;
+    border-radius: 12px;
+    position: relative;
+}
+
+.hierarchy-node {
+    position: relative;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.node-content {
+    background: white;
+    border: 3px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    text-align: center;
+    min-width: 200px;
+    max-width: 250px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    font-weight: 500;
+}
+
+.node-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+/* Información del nodo */
+.node-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.node-position {
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.node-department {
+    font-size: 12px;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.subordinates-count {
+    font-size: 11px;
+    color: #667eea;
+    font-weight: 700;
+    margin-top: 6px;
+    background: rgba(102, 126, 234, 0.15);
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* Hijos del nodo - Organigrama horizontal para compañeros */
+.node-children {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 20px;
+    position: relative;
+    padding-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* Líneas conectoras mejoradas */
+.node-children::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 30px;
+    background: #4a5568;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.node-children::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 80px);
+    height: 3px;
+    background: #4a5568;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.hierarchy-node .node-children .hierarchy-node::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 15px;
+    background: #4a5568;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+/* Ocultar línea horizontal cuando hay un solo subordinado */
+.hierarchy-node:only-child .node-children::after {
+    display: none;
+}
+
+.hierarchy-node:only-child .node-children::before {
+    display: none;
+}
+
+/* Niveles de jerarquía con colores distintivos */
+.level-0 .node-content {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-width: 220px;
+    max-width: 280px;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.level-0 .node-name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.level-0 .node-position {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.level-0 .node-department {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-0 .subordinates-count {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.level-1 .node-content {
+    border-color: #48bb78;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.level-1 .node-name {
+    color: white;
+    font-weight: 600;
+}
+
+.level-1 .node-position {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.level-1 .node-department {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-1 .subordinates-count {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.level-2 .node-content {
+    border-color: #ed8936;
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(237, 137, 54, 0.3);
+}
+
+.level-2 .node-name {
+    color: white;
+    font-weight: 600;
+}
+
+.level-2 .node-position {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.level-2 .node-department {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-2 .subordinates-count {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.level-3 .node-content {
+    border-color: #e53e3e;
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+}
+
+.level-3 .node-name {
+    color: white;
+    font-weight: 600;
+}
+
+.level-3 .node-position {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.level-3 .node-department {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-3 .subordinates-count {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.level-4 .node-content {
+    border-color: #9f7aea;
+    background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(159, 122, 234, 0.3);
+}
+
+.level-4 .node-name {
+    color: white;
+    font-weight: 600;
+}
+
+.level-4 .node-position {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.level-4 .node-department {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-4 .subordinates-count {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive mejorado */
+@media (max-width: 768px) {
+    .hierarchy-tree {
+        padding: 15px 10px;
+    }
+    
+    .node-content {
+        min-width: 160px;
+        max-width: 200px;
+        padding: 12px 16px;
+    }
+    
+    .node-children {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .node-children::after {
+        display: none;
+    }
+    
+    .hierarchy-node .node-children .hierarchy-node::before {
+        display: none;
+    }
+    
+    .node-children::before {
+        height: 10px;
+    }
+    
+    .node-name {
+        font-size: 13px;
+    }
+    
+    .node-position {
+        font-size: 11px;
+    }
+    
+    .node-department {
+        font-size: 9px;
+    }
+}
+
+
+
+/* Estados de carga y error */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #e53e3e;
+}
+
+.error-message i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+    font-size: 18px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.close:hover {
+    opacity: 0.7;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.employee-details {
+    display: grid;
+    gap: 15px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row label {
+    font-weight: 600;
+    color: #4a5568;
+    min-width: 120px;
+}
+
+.detail-row span {
+    color: #2d3748;
+    text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .detail-row span {
+        text-align: left;
+    }
+}
+
+/* Iconos */
+.icon-supervisor::before { content: "👑"; }
+.icon-employee::before { content: "👤"; }
+.icon-expand::before { content: "▶"; }
+.icon-collapse::before { content: "▼"; }
+.icon-refresh::before { content: "🔄"; }
+.icon-download::before { content: "⬇"; }
+.icon-error::before { content: "❌"; }

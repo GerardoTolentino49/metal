@@ -1,0 +1,1037 @@
+.topbar {
+    width: 100%;
+    height: 64px;
+    background: rgba(35, 36, 58, 0.18);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 2rem;
+    backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+    border: 1.5px solid rgba(255,255,255,0.22);
+    margin: 12px auto 0 auto;
+    max-width: 95vw;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-bg: #f5f5f5;
+    --border-color: #e0e0e0;
+    --header-bg: #F5F5F5;
+  }
+  [data-theme="dark"] {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --card-bg: #1a1a1a;
+    --border-color: #333333;
+    --header-bg: #000000;
+  }
+  * {
+    font-family: 'Montserrat', sans-serif;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    min-height: 100vh;
+  }
+  .main-content {
+    margin: 0;
+    transition: margin-left 0.3s ease;
+    padding: 5px;
+    margin-top: 60px; /* Reducido de 80px a 60px para acercar al topbar */
+    width: 100%;
+  }
+  
+  /* Estilos del calendario */
+  .calendar-container {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 10px; /* Aumentado de 5px a 10px */
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Reducido de 30px a 20px */
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px; /* Aumentado de 15px a 20px */
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+  }
+  
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .current-month {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .view-toggle {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .toggle-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .toggle-btn.active {
+    background: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+  }
+  
+  /* Calendario mensual */
+  .monthly-calendar {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px; /* Aumentado de 10px a 15px */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px; /* Aumentado de 3px a 5px */
+  }
+  
+  .calendar-header-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px; /* Aumentado de 3px a 5px */
+    margin-bottom: 8px; /* Aumentado de 5px a 8px */
+  }
+  
+  .day-header {
+    text-align: center;
+    padding: 12px; /* Aumentado de 8px a 12px */
+    font-weight: 600;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 14px; /* Aumentado el tamaño de fuente */
+  }
+  
+  .calendar-day {
+    aspect-ratio: auto;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  
+  .calendar-day:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+  
+  /* Día de hoy - debe tener la mayor prioridad pero mantener el mismo tamaño */
+  .calendar-day.today {
+    background: rgba(255, 255, 255, 0.95) !important; /* Más blanco */
+    color: #000000 !important; /* Texto negro para máximo contraste */
+    font-weight: 700;
+    /* Remover box-shadow y border para mantener el mismo tamaño */
+  }
+  
+  /* Asegurar que el día de hoy siempre sea más visible */
+  .calendar-day.today:hover {
+    background: rgba(255, 255, 255, 1) !important; /* Blanco puro al hacer hover */
+    transform: scale(1.05);
+  }
+
+  .calendar-day.other-month {
+    opacity: 0.5;
+  }
+  
+  /* Remover todos los colores de fondo de los días con eventos */
+  .calendar-day.has-event {
+    background: rgba(255, 255, 255, 0.1) !important; /* Mantener gris */
+  }
+
+  /* Asegurar que el día de hoy mantenga su color blanco incluso si tiene eventos */
+  .calendar-day.today.has-event {
+    background: rgba(255, 255, 255, 0.95) !important; /* Mantener blanco */
+    color: #000000 !important;
+  }
+
+  .calendar-day.has-event::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 6px;
+    height: 6px;
+    background: #ffc107;
+    border-radius: 50%;
+  }
+
+  /* Remover colores de fondo para días con muchos eventos */
+  .calendar-day.has-many-events {
+    background: rgba(255, 255, 255, 0.1) !important; /* Mantener gris */
+  }
+
+  /* Asegurar que el día de hoy mantenga su color blanco incluso si tiene muchos eventos */
+  .calendar-day.today.has-many-events {
+    background: rgba(255, 255, 255, 0.95) !important; /* Mantener blanco */
+    color: #000000 !important;
+  }
+
+  .calendar-day.has-many-events::after {
+    background: #dc3545;
+  }
+
+  /* Remover colores de fondo para días con todos los eventos completados */
+  .calendar-day.all-events-completed {
+    background: rgba(255, 255, 255, 0.1) !important; /* Mantener gris */
+  }
+
+  /* Asegurar que el día de hoy mantenga su color blanco incluso si todos los eventos están completados */
+  .calendar-day.today.all-events-completed {
+    background: rgba(255, 255, 255, 0.95) !important; /* Mantener blanco */
+    color: #000000 !important;
+  }
+
+  .calendar-day.all-events-completed::after {
+    background: #4CAF50 !important;
+  }
+
+  .calendar-day.all-events-completed .event-count {
+    background: #4CAF50 !important;
+    color: white !important;
+  }
+
+  /* Ajustar el color del texto para el día de hoy */
+  .calendar-day.today .completion-percentage,
+  .calendar-day.today .event-count,
+  .calendar-day.today .task-dot {
+    border-color: rgba(0, 0, 0, 0.3); /* Borde oscuro para contraste */
+  }
+
+  .event-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ffc107; /* Color por defecto */
+    color: #ffffff;
+    border-radius: 50%;
+    min-width: 24px; /* Aumentado de 18px a 24px para acomodar "X/Y" */
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px; /* Reducido ligeramente para acomodar más texto */
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0 2px; /* Agregar padding horizontal */
+  }
+
+  /* Hacer que el contador de eventos tenga el mismo color que el porcentaje */
+  .event-count.zero {
+    background: rgba(128, 128, 128, 0.9) !important; /* Gris para 0% */
+  }
+
+  .event-count.low {
+    background: rgba(220, 53, 69, 0.9) !important; /* Rojo para 1-50% */
+  }
+
+  .event-count.medium {
+    background: rgba(255, 152, 0, 0.9) !important; /* Naranja para 51-70% */
+  }
+
+  .event-count.high {
+    background: rgba(255, 193, 7, 0.9) !important; /* Amarillo para 71-99% */
+  }
+
+  .event-count.complete {
+    background: rgba(76, 175, 80, 0.9) !important; /* Verde para 100% */
+  }
+
+  .completion-percentage {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+    border-radius: 12px;
+    min-width: 20px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0 4px;
+  }
+
+  .completion-percentage.low {
+    background: rgba(220, 53, 69, 0.9); /* Rojo para 1-50% */
+  }
+
+  .completion-percentage.medium {
+    background: rgba(255, 152, 0, 0.9); /* Naranja para 51-70% */
+  }
+
+  .completion-percentage.high {
+    background: rgba(255, 193, 7, 0.9); /* Amarillo para 71-99% */
+  }
+
+  .completion-percentage.complete {
+    background: rgba(76, 175, 80, 0.9); /* Verde para 100% */
+  }
+
+  .completion-percentage.zero {
+    background: rgba(128, 128, 128, 0.9); /* Gris para 0% */
+  }
+  
+  /* Calendario anual */
+  .yearly-calendar {
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .yearly-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .month-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .month-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+  }
+  
+  .month-card.current {
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+  }
+  
+  .month-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .month-events {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* Eventos */
+  .events-panel {
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .add-event-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .add-event-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  .event-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .event-info {
+    flex: 1;
+  }
+  
+  .event-title {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 5px;
+  }
+  
+  .event-date {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .event-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .event-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .event-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .event-btn-complete {
+    background: rgba(76, 175, 80, 0.3) !important;
+    color: #4CAF50 !important;
+  }
+
+  .event-btn-complete:hover {
+    background: rgba(76, 175, 80, 0.5) !important;
+  }
+
+  .completed-event {
+    opacity: 0.7;
+    background: rgba(39, 89, 41, 0.74) !important;
+    border-radius: 8px;
+    padding: 10px;
+    margin: -10px;
+  }
+
+  .completed-event .event-title {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .completed-event .event-date {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .completed-badge {
+    color: #4CAF50;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .completed-badge i {
+    font-size: 14px;
+  }
+  
+  /* Modal para agregar eventos */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 30px;
+    width: 80%;
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover {
+    opacity: 0.7;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
+  }
+  
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+  }
+  
+  .btn-primary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .calendar-container {
+      padding: 10px;
+    }
+    
+    .calendar-header {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .yearly-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .calendar-day {
+      font-size: 14px;
+    }
+  }
+
+  .theme-switch-wrapper {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .theme-switch-label {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .menu-item.has-submenu {
+    position: relative;
+  }
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    min-width: 180px;
+    background: rgb(0, 0, 0);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    padding: 0.3rem 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .submenu.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    .main-content {
+      margin-left: 0;
+    }
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    margin: 0 10px;
+    vertical-align: middle;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  .switch-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .menu-item.has-submenu .submenu.active {
+    display: block;
+  }
+
+  .menu-item.has-submenu .submenu.active ~ .submenu-arrow,
+  .menu-item.has-submenu .submenu.active + .submenu-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Estilos para el botón de aplazar */
+  .event-btn-postpone {
+    background: rgba(255, 193, 7, 0.3) !important;
+    color: #ffc107 !important;
+  }
+
+  .event-btn-postpone:hover {
+    background: rgba(255, 193, 7, 0.5) !important;
+  }
+
+  /* Modal para aplazar eventos */
+  .modal-postpone {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  .modal-postpone-content {
+    background: rgba(255, 255, 255, 0.1);
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Estilos para eventos aplazados */
+  .postponed-event {
+    opacity: 0.7;
+    background: rgba(255, 193, 6, 0.57) !important;
+    border-radius: 8px;
+    padding: 10px;
+    margin: -10px;
+  }
+
+  .postponed-event .event-title {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .postponed-event .event-date {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .postponed-badge {
+    color: #ffc107;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .postponed-badge i {
+    font-size: 14px;
+  }
+
+  /* Estilos para el contador de tareas */
+  .tasks-counter {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .counter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .counter-item.pending {
+    color: #ffc107;
+  }
+
+  .counter-item.completed {
+    color: #3a933d;
+  }
+
+  .counter-item.postponed {
+    color: #ff9800;
+  }
+
+  .counter-number {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .counter-number.pending {
+    background: rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+  }
+
+  .counter-number.completed {
+    background: rgba(26, 100, 26, 0.3);
+    color: #3a933d;
+  }
+
+  .counter-number.postponed {
+    background: rgba(255, 152, 0, 0.3);
+    color: #ff9800;
+  }
+
+  /* Estilos para los hilos visuales de tareas aplazadas */
+  .calendar-day.postponed-origin {
+    position: relative;
+    background: rgba(255, 193, 7, 0.4) !important;
+    border: 2px solid #ffc107;
+  }
+
+  .calendar-day.postponed-origin::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #ffc107;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .calendar-day.postponed-destination {
+    position: relative;
+    background: rgba(255, 152, 0, 0.4) !important;
+    border: 2px solid #ff9800;
+  }
+
+  .calendar-day.postponed-destination::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #ff9800;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  /* Contenedor para los hilos SVG */
+  .postponement-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .postponement-line {
+    stroke: #ffc107;
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
+    fill: none;
+    animation: dash 2s linear infinite;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
+
+  /* Indicador de conexión en los días */
+  .connection-indicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: white;
+    font-weight: bold;
+    z-index: 3;
+  }
+
+  .connection-indicator.origin {
+    background: #ffc107;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .connection-indicator.destination {
+    background: #ff9800;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Tooltip para mostrar información de conexión */
+  .connection-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .connection-tooltip.show {
+    opacity: 1;
+  }
+
+  /* Estilos para el panel de conexiones */
+  .connections-panel {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .connections-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .connection-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .connection-info {
+    flex: 1;
+  }
+
+  .connection-title {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+  }
+
+  .connection-dates {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .connection-arrow {
+    color: #ffc107;
+    font-size: 16px;
+    margin: 0 10px;
+  }
+
+/* Contenedor de puntitos de tareas */
+.task-dots-container {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: calc(100% - 10px);
+  max-height: 12px;
+  overflow: hidden;
+}
+
+/* Puntitos individuales de tareas */
+.task-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Ajustar el tamaño del contenedor según la cantidad de puntitos */
+.task-dots-container:has(.task-dot:nth-child(n+8)) {
+  max-height: 8px;
+}
+
+.task-dots-container:has(.task-dot:nth-child(n+12)) {
+  max-height: 6px;
+}
+
+/* Ocultar el puntito original cuando hay puntitos de tareas */
+.calendar-day.has-event:has(.task-dots-container)::after {
+  display: none;
+}
+
+/* Ajustar el espaciado cuando hay muchos puntitos */
+.calendar-day.has-event:has(.task-dots-container .task-dot:nth-child(n+6)) .task-dots-container {
+  gap: 1px;
+}

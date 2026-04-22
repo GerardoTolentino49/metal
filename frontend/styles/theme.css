@@ -1,0 +1,338 @@
+/* Variables para modo claro (por defecto) */
+:root {
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary-color: #8b5cf6;
+  --accent-color: #ec4899;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --bg-gradient-start: #cfe1ea;
+  --bg-gradient-1: #cfe1ea;
+  --bg-gradient-2: #cfe1ea;
+  --bg-gradient-3: #cfe1ea;
+  --bg-gradient-end: #cfe1ea;
+  --card-bg: rgba(255, 255, 255, 0.3);
+  --input-bg: rgba(255, 255, 255, 0.4);
+  --input-border: rgba(255, 255, 255, 0.3);
+}
+
+/* Variables para modo oscuro - Tonos grises */
+body.dark-mode {
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --secondary-color: #8b5cf6;
+  --accent-color: #ec4899;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --glass-bg: rgba(40, 40, 40, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --bg-gradient-start: #474646;
+  --bg-gradient-1: #474646;
+  --bg-gradient-2: #474646;
+  --bg-gradient-3: #474646;
+  --bg-gradient-end: #474646;
+  --card-bg: rgba(45, 45, 45, 0.6);
+  --input-bg: rgba(50, 50, 50, 0.7);
+  --input-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Aplicar gradiente de fondo según el tema */
+body {
+  background: linear-gradient(135deg, 
+    var(--bg-gradient-start) 0%, 
+    var(--bg-gradient-1) 25%, 
+    var(--bg-gradient-2) 50%, 
+    var(--bg-gradient-3) 75%, 
+    var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Ajustes para elementos glass en modo oscuro */
+body.dark-mode .glass-card {
+  background: #252525;
+  border-color: var(--glass-border);
+}
+
+body.dark-mode .topbar {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+}
+
+body.dark-mode .nav-item {
+  background: rgba(50, 50, 50, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+body.dark-mode .nav-item:hover {
+  background: rgba(60, 60, 60, 0.6);
+}
+
+body.dark-mode .user-menu {
+  background: rgba(50, 50, 50, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-primary);
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--input-bg);
+}
+
+/* Cambiar iconos y textos azules a blancos en modo oscuro */
+body.dark-mode .topbar-left .logo {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .nav-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+body.dark-mode .user-avatar {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .username:hover {
+  color: #ffffff;
+}
+
+/* Iconos con color primario en modo oscuro - cambiar a blanco */
+body.dark-mode i[class*="fa-"] {
+  color: bisque;
+}
+
+body.dark-mode .activity-icon,
+body.dark-mode .card-icon,
+body.dark-mode .sidebar-item-icon,
+body.dark-mode .order-form-card h3 i,
+body.dark-mode .design-header h2,
+body.dark-mode h2,
+body.dark-mode h3 {
+  color: #ffffff !important;
+}
+
+/* Elementos con gradiente de color primario - cambiar a blanco */
+body.dark-mode .design-header h2 {
+  background: linear-gradient(135deg, #ffffff, #ffffff) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* Historial y elementos específicos de diseño */
+body.dark-mode .history-item,
+body.dark-mode .activity-item,
+body.dark-mode .session-card {
+  color: #ffffff;
+}
+
+body.dark-mode .history-item .activity-icon,
+body.dark-mode .activity-item .activity-icon,
+body.dark-mode .history-user,
+body.dark-mode .history-order {
+  color: #ffffff !important;
+}
+
+/* Tiempo y números en modo oscuro */
+body.dark-mode .time-value,
+body.dark-mode .card-number,
+body.dark-mode .total-time {
+  color: #ffffff;
+}
+
+/* Buscadores y filtros */
+body.dark-mode input[type="search"],
+body.dark-mode .search-icon,
+body.dark-mode .fa-search,
+body.dark-mode .fa-calendar,
+body.dark-mode .fa-sync-alt,
+body.dark-mode .fa-history {
+  color: #ffffff !important;
+}
+
+body.dark-mode input[type="search"]::placeholder,
+body.dark-mode input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Elementos que usan var(--primary-color) directamente */
+body.dark-mode [style*="color: var(--primary-color)"],
+body.dark-mode [style*="color:var(--primary-color)"] {
+  color: #ffffff !important;
+}
+
+/* Botones de actividad en diseño */
+body.dark-mode .activity-btn i,
+body.dark-mode .btn-activity i {
+  color: #ffffff !important;
+}
+
+/* Total y elementos destacados */
+body.dark-mode .total-badge,
+body.dark-mode .total-time,
+body.dark-mode [class*="total"] {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Iconos en cards y secciones */
+body.dark-mode .card-icon i,
+body.dark-mode .section-icon i,
+body.dark-mode .icon i {
+  color: #ffffff !important;
+}
+
+/* Elementos específicos de diseno.css */
+body.dark-mode .order-form-card h3 i,
+body.dark-mode .history-order,
+body.dark-mode .history-total-time strong,
+body.dark-mode .activity-time-item i {
+  color: #ffffff !important;
+}
+
+body.dark-mode .history-total-time {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .history-total-time strong {
+  color: #ffffff !important;
+}
+
+/* Botones de actividad en diseño */
+body.dark-mode .activity-btn,
+body.dark-mode .btn-activity {
+  color: #ffffff !important;
+}
+
+body.dark-mode .activity-btn i,
+body.dark-mode .btn-activity i {
+  color: #ffffff !important;
+}
+
+/* Tiempo en botones de actividad - cambiar a blanco en modo oscuro */
+body.dark-mode .activity-time,
+body.dark-mode .btn-activity .activity-time,
+body.dark-mode .btn-activity span.activity-time {
+  color: #ffffff !important;
+}
+
+/* Todos los iconos FontAwesome en modo oscuro */
+body.dark-mode .fa,
+body.dark-mode .fas,
+body.dark-mode .far,
+body.dark-mode .fab,
+body.dark-mode .fal,
+body.dark-mode .fad {
+  color: inherit;
+}
+
+/* Sobrescribir específicamente iconos azules */
+body.dark-mode i[style*="color: var(--primary-color)"],
+body.dark-mode i[style*="color:var(--primary-color)"],
+body.dark-mode span[style*="color: var(--primary-color)"],
+body.dark-mode span[style*="color:var(--primary-color)"],
+body.dark-mode div[style*="color: var(--primary-color)"],
+body.dark-mode div[style*="color:var(--primary-color)"] {
+  color: #ffffff !important;
+}
+
+/* Toggle switch para tema */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.theme-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.theme-switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.theme-switch input:checked + .slider {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.theme-switch input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.theme-toggle-container {
+  padding: 20px;
+}
+
+.theme-toggle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.theme-toggle-info h3 {
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-toggle-info p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.appearance-settings {
+  max-width: 800px;
+}
+

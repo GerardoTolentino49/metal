@@ -1,0 +1,1290 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #000000 0%, #000000 50%, #000000 100%);
+    min-height: 100vh;
+    color: #ffffff;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    padding: 20px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    box-shadow: 8px 0 24px rgba(0,0,0,0.25);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #8DCBE6;
+    margin-bottom: 20px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    color: #e0e6ed;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.sidebar-nav a i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.sidebar-nav a.active,
+.sidebar-nav .nav-item.active {
+    background: linear-gradient(145deg, rgba(141,203,230,0.25), rgba(141,203,230,0.12));
+    border: 1px solid rgba(141,203,230,0.35);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.container {
+    width: 95vw;
+    margin: 0;
+    margin-left: 2vw;
+}
+
+/* Header */
+.header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+}
+
+.header h1 {
+    color: #8DCBE6;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+
+
+.header p {
+    font-size: 1.3rem;
+    color: #b8c6db;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Estilos para filas seleccionadas */
+.record-row {
+    transition: all 0.3s ease;
+}
+
+.record-row:hover {
+    background-color: rgba(141, 203, 230, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.record-row.selected {
+    background-color: rgba(141, 203, 230, 0.2);
+    border-left: 4px solid #8DCBE6;
+    box-shadow: 0 4px 12px rgba(141, 203, 230, 0.3);
+}
+
+.record-row.selected td {
+    color: #8DCBE6;
+    font-weight: 500;
+}
+
+/* Estilos para el botón de cancelar edición */
+.btn-clear-selection {
+    background: rgba(255, 107, 107, 0.2);
+    border: 1px solid rgba(255, 107, 107, 0.5);
+    color: #ff6b6b;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-clear-selection:hover {
+    background: rgba(255, 107, 107, 0.3);
+    border-color: #ff6b6b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+}
+
+/* Estilos para el botón de guardado manual */
+.btn-save-manual {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    color: #4CAF50;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-save-manual:hover {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: #4CAF50;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Resaltado verde opaco para columnas numéricas en Base de datos */
+.numeric-highlight {
+    background-color: rgba(76, 175, 80, 0.15) !important;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Resaltado más sutil en hover */
+.record-row:hover .numeric-highlight {
+    background-color: rgba(76, 175, 80, 0.18) !important;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Estilos para paginación */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pagination-info {
+    color: #b8c6db;
+    font-size: 0.9rem;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination-btn {
+    background: rgba(141, 203, 230, 0.2);
+    border: 1px solid rgba(141, 203, 230, 0.3);
+    color: #8DCBE6;
+    padding: 8px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: rgba(141, 203, 230, 0.3);
+    border-color: #8DCBE6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(141, 203, 230, 0.3);
+}
+
+.pagination-btn:disabled {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.page-indicator {
+    color: #8DCBE6;
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin: 0 15px;
+}
+
+.page-indicator span {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.form-container {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Tabla estilo Excel */
+.table-form {
+    overflow-x: auto;
+}
+
+/* Forzar scroll horizontal y ancho amplio en Base de datos */
+.section-base-datos .table-form {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.section-base-datos .excel-table {
+    min-width: 1700px; /* asegura barra para ver columnas finales */
+    table-layout: auto; /* permitir que las columnas crezcan de forma natural */
+}
+
+/* Compactar encabezados y evitar que el final se vea cortado */
+.section-base-datos .excel-table thead th {
+    font-size: 0.72rem;
+    padding: 8px 8px;
+    white-space: nowrap;
+}
+
+.section-base-datos .excel-table thead tr:nth-child(2) th {
+    font-size: 0.7rem;
+}
+
+.section-base-datos .excel-table thead th i {
+    margin-right: 6px;
+}
+
+.section-base-datos .excel-table thead th:last-child,
+.section-base-datos .excel-table tbody td:last-child {
+    padding-right: 16px;
+}
+
+/* Anchos legibles: fila 1 (4 columnas) */
+.section-base-datos .excel-table thead tr:first-child th:nth-child(1) { min-width: 160px; }
+.section-base-datos .excel-table thead tr:first-child th:nth-child(2) { min-width: 280px; }
+.section-base-datos .excel-table thead tr:first-child th:nth-child(3) { min-width: 200px; }
+.section-base-datos .excel-table thead tr:first-child th:nth-child(4) { min-width: 160px; }
+
+.section-base-datos .excel-table tbody tr:first-child td:nth-child(1) { min-width: 160px; }
+.section-base-datos .excel-table tbody tr:first-child td:nth-child(2) { min-width: 280px; }
+.section-base-datos .excel-table tbody tr:first-child td:nth-child(3) { min-width: 200px; }
+.section-base-datos .excel-table tbody tr:first-child td:nth-child(4) { min-width: 160px; }
+
+/* Anchos legibles: fila 2 (9 columnas) — normales para trabajar y usar el scroll */
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(1) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(2) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(3) { min-width: 160px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(4) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(5) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(6) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(7) { min-width: 150px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(8) { min-width: 200px; }
+.section-base-datos .excel-table thead tr:nth-child(2) th:nth-child(9) { min-width: 200px; }
+
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(1) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(2) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(3) { min-width: 160px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(4) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(5) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(6) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(7) { min-width: 150px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(8) { min-width: 200px; }
+.section-base-datos .excel-table tbody tr:nth-child(2) td:nth-child(9) { min-width: 200px; }
+
+/* Evitar inputs diminutos en la fila 2 del formulario */
+.section-base-datos .excel-table tbody tr:nth-child(2) td input,
+.section-base-datos .excel-table tbody tr:nth-child(2) td select {
+    min-width: 140px;
+}
+
+.excel-table {
+    width: 100%;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #2b2f36; /* gris para contraste */
+    border-radius: 12px;
+    table-layout: fixed;
+}
+
+.excel-table thead th {
+    position: sticky;
+    top: 0;
+    background: #3a3f47; /* encabezado gris más oscuro */
+    color: #e6e6e6;
+    text-align: left;
+    padding: 10px 8px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    white-space: nowrap;
+}
+
+.excel-table tbody td {
+    padding: 8px 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.excel-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.excel-table input,
+.excel-table select,
+.excel-table textarea {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: #e8e8e8;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.excel-table textarea { 
+    resize: vertical; 
+    min-height: 60px; 
+    max-height: 120px;
+}
+
+/* Ajustar el ancho de las columnas para que todo se vea sin scroll */
+/* Estilos para Entradas, Base de datos y Proveedores */
+.excel-table th:nth-child(1),
+.excel-table td:nth-child(1) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.excel-table th:nth-child(2),
+.excel-table td:nth-child(2) {
+    width: 6%;
+    min-width: 60px;
+}
+
+.excel-table th:nth-child(3),
+.excel-table td:nth-child(3) {
+    width: 10%;
+    min-width: 80px;
+}
+
+.excel-table th:nth-child(4),
+.excel-table td:nth-child(4) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.excel-table th:nth-child(5),
+.excel-table td:nth-child(5) {
+    width: 20%;
+    min-width: 150px;
+}
+
+.excel-table th:nth-child(6),
+.excel-table td:nth-child(6) {
+    width: 8%;
+    min-width: 60px;
+}
+
+.excel-table th:nth-child(7),
+.excel-table td:nth-child(7) {
+    width: 10%;
+    min-width: 100px;
+}
+
+.excel-table th:nth-child(8),
+.excel-table td:nth-child(8) {
+    width: 12%;
+    min-width: 100px;
+}
+
+/* Estilos específicos para Salidas - 8 columnas */
+.section-salidas .excel-table th:nth-child(1),
+.section-salidas .excel-table td:nth-child(1) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.section-salidas .excel-table th:nth-child(2),
+.section-salidas .excel-table td:nth-child(2) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.section-salidas .excel-table th:nth-child(3),
+.section-salidas .excel-table td:nth-child(3) {
+    width: 10%;
+    min-width: 80px;
+}
+
+.section-salidas .excel-table th:nth-child(4),
+.section-salidas .excel-table td:nth-child(4) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.section-salidas .excel-table th:nth-child(5),
+.section-salidas .excel-table td:nth-child(5) {
+    width: 18%;
+    min-width: 120px;
+}
+
+.section-salidas .excel-table th:nth-child(6),
+.section-salidas .excel-table td:nth-child(6) {
+    width: 12%;
+    min-width: 100px;
+}
+
+.section-salidas .excel-table th:nth-child(7),
+.section-salidas .excel-table td:nth-child(7) {
+    width: 8%;
+    min-width: 60px;
+}
+
+.section-salidas .excel-table th:nth-child(8),
+.section-salidas .excel-table td:nth-child(8) {
+    width: 16%;
+    min-width: 120px;
+}
+
+.excel-table input:focus,
+.excel-table select:focus,
+.excel-table textarea:focus {
+    outline: none;
+    border-color: rgba(141, 203, 230, 0.4);
+    box-shadow: 0 0 0 3px rgba(141,203,230,0.15);
+    background: rgba(255,255,255,0.12);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #e0e6ed;
+    font-size: 1.1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #8DCBE6;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 20px rgba(141, 203, 230, 0.3);
+    transform: translateY(-2px);
+}
+
+.form-group input::placeholder {
+    color: #8a9ba8;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group select option {
+    background: #1a1a2e;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Estilo neumórfico + glassmorphism para botones */
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+    
+    /* Neumórfico */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+    box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.3),
+        -8px -8px 16px rgba(255, 255, 255, 0.05),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Glassmorphism */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Efecto de profundidad */
+    transform: translateY(0);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        12px 12px 24px rgba(0, 0, 0, 0.4),
+        -12px -12px 24px rgba(255, 255, 255, 0.08),
+        inset 3px 3px 6px rgba(255, 255, 255, 0.15),
+        inset -3px -3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: 
+        4px 4px 8px rgba(0, 0, 0, 0.3),
+        -4px -4px 8px rgba(255, 255, 255, 0.05),
+        inset 4px 4px 8px rgba(0, 0, 0, 0.2),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos específicos para cada botón con colores distintivos */
+.btn-save {
+    background: linear-gradient(145deg, #4CAF50, #45a049);
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 2px solid #4CAF50;
+    box-shadow: 
+        0 4px 15px rgba(76, 175, 80, 0.4),
+        0 0 20px rgba(76, 175, 80, 0.2);
+}
+
+.btn-new {
+    background: linear-gradient(145deg, #2196F3, #1976D2);
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 2px solid #2196F3;
+    box-shadow: 
+        0 4px 15px rgba(33, 150, 243, 0.4),
+        0 0 20px rgba(33, 150, 243, 0.2);
+}
+
+.btn-clear {
+    background: linear-gradient(145deg, #FF5722, #E64A19);
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 2px solid #FF5722;
+    box-shadow: 
+        0 4px 15px rgba(255, 87, 34, 0.4),
+        0 0 20px rgba(255, 87, 34, 0.2);
+}
+
+/* Efectos de hover con colores distintivos */
+.btn-save:hover {
+    background: linear-gradient(145deg, #66BB6A, #4CAF50);
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(76, 175, 80, 0.6),
+        0 0 30px rgba(76, 175, 80, 0.4);
+}
+
+.btn-new:hover {
+    background: linear-gradient(145deg, #42A5F5, #2196F3);
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(33, 150, 243, 0.6),
+        0 0 30px rgba(33, 150, 243, 0.4);
+}
+
+.btn-clear:hover {
+    background: linear-gradient(145deg, #FF7043, #FF5722);
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(255, 87, 34, 0.6),
+        0 0 30px rgba(255, 87, 34, 0.4);
+}
+
+/* Efectos de focus para mejor accesibilidad */
+.btn-save:focus {
+    outline: none;
+    background: linear-gradient(145deg, #66BB6A, #4CAF50);
+    box-shadow: 
+        0 0 0 3px rgba(76, 175, 80, 0.3),
+        0 8px 25px rgba(76, 175, 80, 0.6);
+}
+
+.btn-new:focus {
+    outline: none;
+    background: linear-gradient(145deg, #42A5F5, #2196F3);
+    box-shadow: 
+        0 0 0 3px rgba(33, 150, 243, 0.3),
+        0 8px 25px rgba(33, 150, 243, 0.6);
+}
+
+.btn-clear:focus {
+    outline: none;
+    background: linear-gradient(145deg, #FF7043, #FF5722);
+    box-shadow: 
+        0 0 0 3px rgba(255, 87, 34, 0.3),
+        0 8px 25px rgba(255, 87, 34, 0.6);
+}
+
+/* Mejoras neumórficas para el contenedor de botones */
+.buttons-container {
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05));
+    border-radius: 20px;
+    box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.2),
+        -8px -8px 16px rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+}
+
+
+.icon-input input {
+    padding-left: 45px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.status-pedido {
+    background: linear-gradient(45deg, #9c88ff, #6c5ce7);
+    color: white;
+}
+
+.status-disponible {
+    background: linear-gradient(45deg, #51cf66, #40c057);
+    color: white;
+}
+
+.status-bajo {
+    background: linear-gradient(45deg, #ffa726, #ff9800);
+    color: white;
+}
+
+.status-agotado {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.floating-card {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(141, 203, 230, 0.9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(141, 203, 230, 0.3);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.floating-card.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.auto-save-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 167, 38, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transform: translateX(300px);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.auto-save-indicator.show {
+    transform: translateX(0);
+}
+
+.auto-save-indicator i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Mejora: aplicar fondo de hover a TODAS las celdas de la fila
+   - incluye inputs/selects/textareas que antes mantenían fondo blanco
+   - regla general suave para mantener contraste con tema oscuro */
+.excel-table tbody tr:hover td {
+    background-color: rgba(255,255,255,0.03);
+    transition: background-color 120ms ease;
+}
+
+.excel-table tbody tr:hover td input,
+.excel-table tbody tr:hover td select,
+.excel-table tbody tr:hover td textarea {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.10) !important;
+}
+
+/* Asegurar que las celdas con clases especiales (p.ej. numeric-highlight) mantengan su intención pero se suavicen en hover */
+.excel-table tbody tr:hover td.numeric-highlight {
+    background-color: rgba(76,175,80,0.12) !important;
+}
+
+.auto-save-controls {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 998;
+}
+
+.btn-enable-autosave {
+    background: linear-gradient(145deg, rgba(255, 107, 107, 0.9), rgba(255, 107, 107, 0.7));
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn-enable-autosave:hover {
+    background: linear-gradient(145deg, rgba(255, 107, 107, 1), rgba(255, 107, 107, 0.8));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Estilos para la tabla de registros existentes */
+.records-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.records-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.records-header h3 {
+    color: #8DCBE6;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-refresh {
+    background: linear-gradient(145deg, rgba(141, 203, 230, 0.3), rgba(141, 203, 230, 0.1));
+    color: #8DCBE6;
+    border: 1px solid rgba(141, 203, 230, 0.3);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-refresh:hover {
+    background: linear-gradient(145deg, rgba(141, 203, 230, 0.4), rgba(141, 203, 230, 0.2));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(141, 203, 230, 0.3);
+}
+
+.records-table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-base-datos .records-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.section-base-datos .records-table {
+    min-width: 1700px; /* coincide con el formulario */
+}
+
+/* Scrollbar horizontal más visible y con margen para el borde redondeado */
+.section-base-datos .table-form { padding-bottom: 6px; }
+.section-base-datos .table-form::-webkit-scrollbar { height: 10px; }
+.section-base-datos .table-form::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 8px; }
+.section-base-datos .table-form::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 8px; }
+
+/* Proveedores: tabla ancha y scroll */
+.section-proveedores .table-form { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.section-proveedores .excel-table { min-width: 1600px; table-layout: auto; }
+.section-proveedores .records-table-container { overflow-x: auto; }
+.section-proveedores .records-table { min-width: 1600px; }
+
+/* Registros existentes (thead/tbody) — priorizar Address y Address 2 */
+.section-proveedores .records-table thead th:nth-child(1),
+.section-proveedores .records-table tbody td:nth-child(1) { min-width: 180px; }
+.section-proveedores .records-table thead th:nth-child(2),
+.section-proveedores .records-table tbody td:nth-child(2) { min-width: 340px; }
+.section-proveedores .records-table thead th:nth-child(3),
+.section-proveedores .records-table tbody td:nth-child(3) { min-width: 280px; }
+.section-proveedores .records-table thead th:nth-child(4),
+.section-proveedores .records-table tbody td:nth-child(4) { min-width: 160px; }
+.section-proveedores .records-table thead th:nth-child(5),
+.section-proveedores .records-table tbody td:nth-child(5) { min-width: 220px; }
+.section-proveedores .records-table thead th:nth-child(6),
+.section-proveedores .records-table tbody td:nth-child(6) { min-width: 160px; }
+.section-proveedores .records-table thead th:nth-child(7),
+.section-proveedores .records-table tbody td:nth-child(7) { min-width: 120px; }
+.section-proveedores .records-table thead th:nth-child(8),
+.section-proveedores .records-table tbody td:nth-child(8) { min-width: 110px; }
+.section-proveedores .records-table thead th:nth-child(9),
+.section-proveedores .records-table tbody td:nth-child(9) { min-width: 120px; }
+.section-proveedores .records-table thead th:nth-child(10),
+.section-proveedores .records-table tbody td:nth-child(10) { min-width: 140px; }
+
+/* Proveedores: priorizar espacio para direcciones y compactar créditos */
+.section-proveedores .excel-table thead th:nth-child(1),
+.section-proveedores .excel-table tbody td:nth-child(1) { min-width: 180px; }
+.section-proveedores .excel-table thead th:nth-child(2),
+.section-proveedores .excel-table tbody td:nth-child(2) { min-width: 340px; }
+.section-proveedores .excel-table thead th:nth-child(3),
+.section-proveedores .excel-table tbody td:nth-child(3) { min-width: 280px; }
+.section-proveedores .excel-table thead th:nth-child(4),
+.section-proveedores .excel-table tbody td:nth-child(4) { min-width: 160px; }
+.section-proveedores .excel-table thead th:nth-child(5),
+.section-proveedores .excel-table tbody td:nth-child(5) { min-width: 220px; }
+.section-proveedores .excel-table thead th:nth-child(6),
+.section-proveedores .excel-table tbody td:nth-child(6) { min-width: 160px; }
+.section-proveedores .excel-table thead th:nth-child(7),
+.section-proveedores .excel-table tbody td:nth-child(7) { min-width: 120px; }
+.section-proveedores .excel-table thead th:nth-child(8),
+.section-proveedores .excel-table tbody td:nth-child(8) { min-width: 110px; }
+.section-proveedores .excel-table thead th:nth-child(9),
+.section-proveedores .excel-table tbody td:nth-child(9) { min-width: 120px; }
+.section-proveedores .excel-table thead th:nth-child(10),
+.section-proveedores .excel-table tbody td:nth-child(10) { min-width: 140px; }
+
+.records-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #2b2f36; /* gris para contraste */
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.records-table thead th {
+    background: #3a3f47; /* encabezado gris más oscuro */
+    color: #e6e6e6;
+    text-align: left;
+    padding: 12px 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    white-space: nowrap;
+}
+
+.records-table tbody td {
+    padding: 10px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e0e6ed;
+    font-size: 0.85rem;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.records-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.records-table tbody tr:hover {
+    background: rgba(51, 56, 64, 0.6);
+}
+
+.form-header {
+    margin-bottom: 20px;
+}
+
+.form-header h3 {
+    color: #8DCBE6;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        height: auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        backdrop-filter: blur(8px);
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .sidebar-header { display: none; }
+
+    .container {
+        padding-left: 20px;
+        padding-top: 70px; /* para que no tape el contenido */
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Ajuste cuando el sidebar está colapsado */
+.sidebar.collapsed ~ .container {
+    width: calc(100vw - 84px);
+    margin-left: 84px;
+}
+
+/* Tablas responsivas con sidebar colapsado */
+.sidebar.collapsed ~ .container .records-table,
+.sidebar.collapsed ~ .container .excel-table {
+    width: 100%;
+}
+
+/* Estado colapsado: botones centrados y sin sombras externas */
+.sidebar.collapsed .sidebar-nav a {
+    justify-content: center;
+    padding: 10px;
+}
+.sidebar.collapsed .sidebar-nav a:hover {
+    transform: none;
+}
+.sidebar.collapsed .sidebar-nav a.active {
+    background: rgba(141,203,230,0.15);
+    border-color: rgba(141,203,230,0.3);
+    box-shadow: inset 0 0 0 2px rgba(141,203,230,0.25);
+}
+
+/* Mejoras neumórficas para las secciones del formulario */
+.form-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.08));
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.2),
+        -6px -6px 12px rgba(255, 255, 255, 0.05),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.form-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        8px 8px 16px rgba(0, 0, 0, 0.25),
+        -8px -8px 16px rgba(255, 255, 255, 0.08),
+        inset 3px 3px 6px rgba(255, 255, 255, 0.08),
+        inset -3px -3px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Mejoras neumórficas para inputs */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #e8e8e8;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.15),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: rgba(141, 203, 230, 0.4);
+    color: #f0f0f0;
+    box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.15),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.03),
+        0 0 15px rgba(141, 203, 230, 0.2);
+    transform: scale(1.01);
+}
+
+/* Efectos de profundidad para labels */
+.form-group label {
+    color: #d0d0d0;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Placeholder más legible */
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a0a0a0;
+    opacity: 0.8;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Animación de entrada para las secciones */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-section {
+    animation: slideInUp 0.6s ease-out;
+}
+
+.form-section:nth-child(2) { animation-delay: 0.1s; }
+.form-section:nth-child(3) { animation-delay: 0.2s; }
+.form-section:nth-child(4) { animation-delay: 0.3s; }
+.form-section:nth-child(5) { animation-delay: 0.4s; }
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 1200px) {
+    .sections-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .sections-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .buttons-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Estilos especiales para el campo Código del Producto */
+.product-code-section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(141, 203, 230, 0.1);
+    border: 2px solid rgba(141, 203, 230, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(141, 203, 230, 0.2);
+}
+
+.product-code-section label {
+    font-size: 1.1rem;
+    color: #8DCBE6;
+    text-shadow: 0 0 10px rgba(141, 203, 230, 0.5);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.product-code-section input {
+    background: rgba(141, 203, 230, 0.15);
+    border-color: rgba(141, 203, 230, 0.5);
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.product-code-section input:focus {
+    border-color: #8DCBE6;
+    background: rgba(141, 203, 230, 0.2);
+    box-shadow: 0 0 30px rgba(141, 203, 230, 0.4);
+    transform: translateY(-3px);
+}
+
+.tab-switch {
+      display: inline-flex;
+      align-items: center;
+      background: white;
+      border-radius: 30px;
+      padding: 4px;
+      gap: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .tab-switch-button {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: black;
+      opacity: 0.6;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      opacity: 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="light"] .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .tab-switch-button:hover:not(.active) {
+      opacity: 0.8;
+    }

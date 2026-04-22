@@ -1,0 +1,372 @@
+    .topbar {
+        width: 100%;
+        height: 64px;
+        background: rgba(35, 36, 58, 0.18);
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 32px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        border-radius: 2rem;
+        backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+        -webkit-backdrop-filter: blur(18px) brightness(1.25) saturate(1.3);
+        border: 1.5px solid rgba(255,255,255,0.22);
+        margin: 12px auto 0 auto;
+        max-width: 95vw;
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+  
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+  
+      body {
+        min-height: 100vh;
+        height: 100vh;
+        overflow: hidden;
+        /* El fondo se aplicará automáticamente desde global-color.js */
+      }
+  
+      .container {
+        padding: 0 !important;
+        margin: 0;
+        width: 100%;
+        max-width: 100vw;
+        border-radius: 0;
+        background: none;
+      }
+  
+      .kanban-board {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+        height: calc(100vh - 60px);
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+  
+      .kanban-column {
+        background: rgba(255,255,255,0.10);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        border-radius: 28px;
+        border: 1.5px solid rgba(255,255,255,0.22);
+        box-shadow: 0 8px 32px rgba(31,38,135,0.12);
+        transition: all 0.3s ease;
+        padding: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+  
+      /* Esquinas redondeadas solo en los extremos */
+      .kanban-board > .kanban-column:first-child {
+        border-top-left-radius: 28px;
+        border-bottom-left-radius: 28px;
+      }
+  
+      .kanban-board > .kanban-column:last-child {
+        border-top-right-radius: 28px;
+        border-bottom-right-radius: 28px;
+      }
+  
+      .tickets-container {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0; /* Importante para que el flex funcione */
+        padding-right: 5px;
+        margin-right: -5px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+      }
+  
+      .tickets-container::-webkit-scrollbar {
+        width: 6px;
+      }
+  
+      .tickets-container::-webkit-scrollbar-track {
+        background: transparent;
+      }
+  
+      .tickets-container::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+      }
+  
+      .tickets-container::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+  
+      .ticket-media {
+        margin-top: 20px;
+        padding: 10px;
+        background: var(--bg-color);
+        border-radius: 8px;
+      }
+  
+      .media-item {
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+      }
+  
+      .media-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+  
+      .media-item img:hover {
+        transform: scale(1.02);
+      }
+  
+      .media-type {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+  
+      .ticket-info {
+        margin-bottom: 20px;
+      }
+  
+      .ticket-info p {
+        margin: 8px 0;
+        line-height: 1.4;
+      }
+  
+      /* Animación para los submenús */
+      .submenu {
+        display: none;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+  
+      .submenu.active {
+        display: block;
+        transform: translateY(0);
+        opacity: 1;
+      }
+  
+      /* Botón de volver al menú principal */
+      .back-to-menu {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        text-decoration: none;
+        display: inline-block;
+      }
+  
+      .back-to-menu:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+  
+      /* Estilos para el botón de asignación */
+      .assign-button {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(33, 150, 243, 0.8);
+        border: none;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        z-index: 10;
+      }
+  
+      .assign-button:hover {
+        background: rgba(33, 150, 243, 1);
+        transform: scale(1.1);
+      }
+  
+      .assign-button:active {
+        transform: scale(0.95);
+      }
+  
+      /* Modal de asignación */
+      .assign-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .assign-modal.active {
+        display: flex;
+      }
+  
+      .assign-modal-content {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        animation: modalAppear 0.3s ease-out;
+      }
+  
+      .assign-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+  
+      .assign-modal-header h3 {
+        margin: 0;
+        color: var(--text-color);
+        font-size: 20px;
+        font-weight: 600;
+      }
+  
+      .assign-modal-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--text-color);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+  
+      .assign-modal-close:hover {
+        background: rgba(255, 0, 0, 0.1);
+        color: #ff4444;
+        transform: scale(1.1);
+      }
+  
+      .assign-modal-body {
+        color: var(--text-color);
+      }
+  
+      .assign-modal-body p {
+        margin-bottom: 20px;
+        font-size: 16px;
+        opacity: 0.9;
+      }
+  
+      .users-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+  
+      .user-item {
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+  
+      .user-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+  
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+  
+      .user-name {
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--text-color);
+      }
+  
+      .user-username {
+        font-size: 14px;
+        opacity: 0.7;
+        color: var(--text-color);
+      }
+  
+      /* Asegurar que el ticket tenga posición relativa para el botón absoluto */
+      .ticket {
+        position: relative;
+      }
+  
+      .messages-modal {
+        display: none;
+        position: fixed;
+        right: 30px;
+        bottom: 30px;
+        width: 350px;
+        max-width: 95vw;
+        height: 480px;
+        z-index: 2000;
+        background: none;
+        box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+        border-radius: 25px;
+      }
+      .messages-modal.active {
+        display: block !important;
+      }
+      .messages-modal-content {
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.13);
+        border-radius: 25px;
+        box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+        border: 1.5px solid rgba(255,255,255,0.25);
+        backdrop-filter: blur(18px) saturate(160%);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        pointer-events: auto;
+      }

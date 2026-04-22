@@ -1,0 +1,1356 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: url('../fotos/w1_edited.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    padding-top: 100px;
+}* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.tab-empleado-btn {
+    white-space: nowrap;
+    padding: 10px 18px !important;
+    font-size: 14px;
+    color: #999 !important;
+    border-bottom: 3px solid transparent !important;
+}
+
+.tab-empleado-btn.active {
+    color: #2196F3 !important;
+    border-bottom: 3px solid #2196F3 !important;
+}
+
+/* Botón hamburguesa - oculto por defecto en desktop */
+.hamburger-menu-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    width: 50px;
+    height: 50px;
+    background: rgb(255 255 255 / 0%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.hamburger-menu-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* Overlay para el menú móvil */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Menú lateral (drawer) */
+.mobile-menu-drawer {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    max-width: 85%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 1001;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease;
+    overflow-y: auto;
+}
+
+.mobile-menu-drawer.open {
+    left: 0;
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.mobile-menu-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+.mobile-menu-close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 32px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
+}
+
+.mobile-menu-content {
+    padding: 20px 0;
+}
+
+.mobile-menu-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.mobile-menu-option:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.mobile-menu-option.active {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4CAF50;
+    border-left-color: #4CAF50;
+}
+
+.mobile-menu-option .material-symbols-rounded {
+    font-size: 24px;
+    color: inherit;
+}
+
+.switch-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffffc7;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    z-index: 1000;
+    padding: 5px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.switch-option {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    padding: 12px 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.switch-option:hover {
+    background: rgba(0, 0, 0, 0.196);
+}
+
+.switch-option.active {
+    background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.switch-option.active:hover {
+    background: linear-gradient(135deg, #19552d 0%, #3ecf8e 100%);
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: calc(100vh - 200px);
+}
+
+.card {
+    width: 250px;
+    height: 300px;
+    perspective: 1000px;
+    cursor: pointer;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+    visibility: visible;
+}
+
+.card.hidden {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Estilos para tarjetas deshabilitadas */
+.card.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(100%);
+    pointer-events: none;
+}
+
+.card.disabled:hover .card-inner {
+    transform: none;
+}
+
+.card.disabled .card-front {
+    background: linear-gradient(to bottom right, rgba(128, 128, 128, 0), rgba(100, 100, 100, 0.7)) !important;
+}
+
+.card.disabled .card-back {
+    background: rgba(200, 200, 200, 0.5) !important;
+}
+
+.card.disabled .enter-button {
+    background: #9e9e9e !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.card.disabled .enter-button:hover {
+    background: #9e9e9e !important;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(158, 158, 158, 0.3);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.card-front {
+    background: linear-gradient(to bottom right, rgba(76, 175, 80, 0), rgba(69, 160, 73, 0.7));
+    color: white;
+}
+
+.card-front .material-symbols-rounded {
+    font-size: 64px;
+    color: white;
+    margin-bottom: 15px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.card-front h2 {
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-back {
+    background: rgba(255, 255, 255, 0.25);
+    color: #333;
+    transform: rotateY(180deg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.enter-button {
+    padding: 12px 30px;
+    background: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.enter-button:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.card.most-frequent:nth-child(2) .card-front {
+    background: linear-gradient(to bottom right, rgba(33, 150, 243, 0), rgba(25, 118, 211, 0.7));
+}
+
+.card.most-frequent:nth-child(3) .card-front {
+    background: linear-gradient(to bottom right, rgba(255, 152, 0, 0), rgba(245, 124, 0, 0.84));
+}
+
+.card.most-frequent:nth-child(4) .card-front {
+    background: linear-gradient(to bottom right, rgba(244, 67, 54, 0), rgba(211, 47, 47, 0.85));
+}
+
+.card.most-frequent:nth-child(5) .card-front {
+    background: linear-gradient(to bottom right, rgba(244, 67, 54, 0), rgba(211, 47, 47, 0.85));
+}
+
+.card.most-frequent:nth-child(6) .card-front {
+    background: linear-gradient(to bottom right, rgba(76, 175, 80, 0), rgba(69, 160, 73, 0.85));
+}
+
+.card.most-frequent:nth-child(7) .card-front {
+    background: linear-gradient(to bottom right, rgba(76, 175, 80, 0), rgba(69, 160, 73, 0.85));
+}
+
+.card.pdm-line:nth-child(8) .card-front {
+    background: linear-gradient(to bottom right, rgba(156, 39, 177, 0), rgba(123, 31, 162, 0.85));
+}
+
+.card.pdm-line:nth-child(9) .card-front {
+    background: linear-gradient(to bottom right, rgba(233, 30, 99, 0), rgba(194, 24, 91, 0.81));
+}
+
+.card.pdm-line:nth-child(10) .card-front {
+    background: linear-gradient(to bottom right, rgba(63, 81, 180, 0), rgba(48, 63, 160, 0.81));
+}
+
+.card.pdm-line:nth-child(11) .card-front {
+    background: linear-gradient(to bottom right, rgba(63, 81, 180, 0), rgba(48, 63, 160, 0.81));
+}
+
+.card.pdm-line:nth-child(12) .card-front {
+    background: linear-gradient(to bottom right, rgba(0, 150, 136, 0), rgba(0, 122, 108, 0.72));
+}
+
+.card.pdm-line:nth-child(13) .card-front {
+    background: linear-gradient(to bottom right, rgba(255, 193, 7, 0), rgba(255, 160, 0, 0.83));
+}
+
+.card.pdm-line:nth-child(14) .card-front {
+    background: linear-gradient(to bottom right, rgba(103, 58, 183, 0), rgba(81, 45, 167, 0.81));
+}
+
+.card.pdm-line:nth-child(15) .card-front {
+    background: linear-gradient(135deg, #795548 0%, #5D4037 100%);
+}
+
+.card.most-frequent:nth-child(2) .enter-button {
+    background: #2196F3;
+}
+
+.card.most-frequent:nth-child(2) .enter-button:hover {
+    background: #1976D2;
+}
+
+.card.most-frequent:nth-child(3) .enter-button {
+    background: #FF9800;
+}
+
+.card.most-frequent:nth-child(3) .enter-button:hover {
+    background: #F57C00;
+}
+
+.card.most-frequent:nth-child(4) .enter-button {
+    background: #F44336;
+}
+
+.card.most-frequent:nth-child(4) .enter-button:hover {
+    background: #D32F2F;
+}
+
+.card.most-frequent:nth-child(5) .enter-button {
+    background: #F44336;
+}
+
+.card.most-frequent:nth-child(5) .enter-button:hover {
+    background: #D32F2F;
+}
+
+.card.most-frequent:nth-child(6) .enter-button {
+    background: #4CAF50;
+}
+
+.card.most-frequent:nth-child(6) .enter-button:hover {
+    background: #388E3C;
+}
+
+.card.most-frequent:nth-child(7) .enter-button {
+    background: #4CAF50;
+}
+
+.card.most-frequent:nth-child(7) .enter-button:hover {
+    background: #388E3C;
+}
+
+.card.pdm-line:nth-child(8) .enter-button {
+    background: #9C27B0;
+}
+
+.card.pdm-line:nth-child(8) .enter-button:hover {
+    background: #7B1FA2;
+}
+
+.card.pdm-line:nth-child(9) .enter-button {
+    background: #E91E63;
+}
+
+.card.pdm-line:nth-child(9) .enter-button:hover {
+    background: #C2185B;
+}
+
+.card.pdm-line:nth-child(10) .enter-button {
+    background: #3F51B5;
+}
+
+.card.pdm-line:nth-child(10) .enter-button:hover {
+    background: #303F9F;
+}
+
+.card.pdm-line:nth-child(11) .enter-button {
+    background: #00BCD4;
+}
+
+.card.pdm-line:nth-child(11) .enter-button:hover {
+    background: #0097A7;
+}
+
+.card.pdm-line:nth-child(12) .enter-button {
+    background: #009688;
+}
+
+.card.pdm-line:nth-child(12) .enter-button:hover {
+    background: #00796B;
+}
+
+.card.pdm-line:nth-child(13) .enter-button {
+    background: #FFC107;
+    color: #333;
+}
+
+.card.pdm-line:nth-child(13) .enter-button:hover {
+    background: #FFA000;
+}
+
+.card.pdm-line:nth-child(14) .enter-button {
+    background: #673AB7;
+}
+
+.card.pdm-line:nth-child(14) .enter-button:hover {
+    background: #512DA8;
+}
+
+.card.pdm-line:nth-child(15) .enter-button {
+    background: #795548;
+}
+
+.card.pdm-line:nth-child(15) .enter-button:hover {
+    background: #5D4037;
+}
+
+@media (max-width: 1200px) {
+    .cards-container {
+        gap: 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    .cards-container {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .cards-container {
+        gap: 20px;
+        padding: 40px 10px;
+    }
+    
+    .card {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+/* Modal de anuncio */
+.anuncio-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.anuncio-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    aspect-ratio: 16 / 9;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.anuncio-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.anuncio-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 32px;
+    font-weight: 300;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    line-height: 1;
+    padding: 0;
+}
+
+.anuncio-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 80px;
+    }
+
+    /* Mostrar botón hamburguesa y ocultar switch-container en móvil */
+    .hamburger-menu-btn {
+        display: flex;
+    }
+
+    .switch-container {
+        display: none;
+    }
+
+    .switch-option {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+
+    .cards-container {
+        gap: 15px;
+        padding: 20px 10px;
+        min-height: calc(100vh - 150px);
+    }
+
+    .card {
+        width: 160px;
+        height: 200px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 15px;
+        border-radius: 20px;
+    }
+
+    .card-front .material-symbols-rounded {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    .card-front h2 {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+
+    .enter-button {
+        padding: 8px 16px;
+        font-size: 12px;
+        border-radius: 20px;
+    }
+
+    .anuncio-modal-content {
+        width: 95%;
+        max-width: 95%;
+    }
+    
+    .anuncio-close {
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding-top: 80px;
+    }
+
+    .hamburger-menu-btn {
+        width: 45px;
+        height: 45px;
+        top: 15px;
+        left: 15px;
+    }
+
+    .switch-container {
+        display: none;
+    }
+
+    .switch-option {
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+
+    .mobile-menu-drawer {
+        width: 260px;
+    }
+
+    .cards-container {
+        gap: 12px;
+        padding: 15px 8px;
+    }
+
+    .card {
+        width: 140px;
+        height: 170px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 12px;
+    }
+
+    .card-front .material-symbols-rounded {
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
+    .card-front h2 {
+        font-size: 14px;
+    }
+
+    .enter-button {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 400px) {
+    body {
+        padding-top: 70px;
+    }
+
+    .hamburger-menu-btn {
+        width: 40px;
+        height: 40px;
+        top: 10px;
+        left: 10px;
+    }
+
+    .switch-container {
+        display: none;
+    }
+
+    .switch-option {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+
+    .mobile-menu-drawer {
+        width: 240px;
+    }
+
+    .mobile-menu-option {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    .cards-container {
+        gap: 10px;
+        padding: 12px 5px;
+    }
+
+    .card {
+        width: 120px;
+        height: 150px;
+    }
+
+    .card-front .material-symbols-rounded {
+        font-size: 32px;
+        margin-bottom: 5px;
+    }
+
+    .card-front h2 {
+        font-size: 12px;
+    }
+
+    .enter-button {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+}
+
+
+
+        .inicio-section {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .empleados-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .empleado-card {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .empleado-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .empleado-foto {
+            flex-shrink: 0;
+        }
+
+        .empleado-foto img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+        }
+
+        .empleado-foto div {
+            border: 3px solid #4CAF50;
+        }
+
+        .empleado-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .empleado-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .empleado-puesto {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .empleado-fecha {
+            margin: 4px 0 0 0;
+            font-size: 12px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .empleados-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos para el modal de empleado */
+        .empleado-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .empleado-modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .empleado-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+
+        .empleado-modal-close:hover {
+            background: #e0e0e0;
+        }
+
+        .empleado-modal-header {
+            display: flex;
+            gap: 20px;
+            padding: 30px 20px 20px 20px;
+            align-items: flex-start;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .empleado-modal-foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #4CAF50;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .empleado-modal-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .empleado-modal-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .empleado-modal-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .empleado-modal-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            overflow-x: auto;
+        }
+
+        .modal-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .modal-tab.active {
+            color: #4CAF50;
+            border-bottom-color: #4CAF50;
+        }
+
+        .modal-tab:hover {
+            color: #45a049;
+        }
+
+        .empleado-modal-content-section {
+            padding: 20px;
+        }
+
+        .modal-tab-content {
+            display: none;
+        }
+
+        .modal-tab-content.active {
+            display: block;
+        }
+
+        .tab-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .tab-item-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .tab-item-detail {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .tab-empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        /* Estilos para calendario semanal */
+        .calendario-semanal {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            margin-top: 40px;
+            padding: 30px 20px;
+        }
+
+        .calendario-titulo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendario-dias-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        .calendario-dia {
+            background: rgb(255, 255, 255);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            min-height: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        .calendario-dia:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.35);
+            z-index: 5;
+        }
+
+        .calendario-dia.dia-actual {
+            border: 5px solid rgba(76, 175, 80, 0.6);
+            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .calendario-dia.dia-actual:hover {
+            background: rgba(76, 175, 80, 0.35);
+        }
+
+        .dia-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+        }
+
+        .dia-nombre {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .dia-numero {
+            font-size: 36px;
+            font-weight: 700;
+            color: #4CAF50;
+            line-height: 1;
+            margin: 5px 0;
+        }
+
+        .dia-actual .dia-numero {
+            color: #2E7D32;
+        }
+
+        .dia-mes {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dia-eventos {
+            padding: 10px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .eventos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 10px;
+            width: 100%;
+            padding: 0 5px;
+            overflow: visible;
+        }
+
+        .evento-empleado {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+
+        .evento-empleado:hover {
+            transform: scale(1.1);
+            z-index: 25000;
+        }
+
+        .evento-empleado img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .evento-badge {
+            background: #4CAF50;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .evento-badge.vacaciones {
+            background: #2196F3;
+        }
+
+        .evento-badge.falta {
+            background: #F44336;
+        }
+
+        .evento-badge.permiso {
+            background: #FF9800;
+        }
+
+        .evento-badge.retardo {
+            background: #9C27B0;
+        }
+
+        .evento-badge.amonestacion {
+            background: #FF5722;
+        }
+
+        .evento-empleado::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 30000;
+            margin-bottom: 5px;
+        }
+
+        .evento-empleado:hover::after {
+            opacity: 1;
+        }
+
+        .evento-placeholder {
+            text-align: center;
+            color: #000000;
+            font-size: 13px;
+            font-style: italic;
+            padding: 20px 10px;
+        }
+
+        .fuerza-laboral-dia {
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        .fuerza-label {
+            font-size: 11px;
+            color: #000000;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .fuerza-barra {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .fuerza-progreso {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #1b4d1d);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .fuerza-porcentaje {
+            font-size: 11px;
+            color: #555;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .fuerza-laboral-semana {
+            max-width: 1400px;
+            margin: 30px auto 0 auto;
+            padding: 15px 20px;
+            background: rgb(255 255 255);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .fuerza-semana-titulo {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .fuerza-semana-barra {
+            width: 100%;
+            height: 18px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 6px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .fuerza-semana-progreso {
+            height: 100%;
+            background: linear-gradient(90deg, #3aa53f, #316133, #105b13);
+            transition: width 0.8s ease;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .fuerza-semana-porcentaje {
+            font-size: 12px;
+            font-weight: 700;
+            color: #000000;
+            text-align: center;
+        }
+
+        @media (max-width: 1200px) {
+            .calendario-dias-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendario-dias-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .calendario-dia {
+                min-height: 180px;
+                padding: 15px;
+            }
+
+            .dia-numero {
+                font-size: 28px;
+            }
+
+            .calendario-titulo {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .calendario-dias-container {
+                grid-template-columns: 1fr;
+            }
+        }
