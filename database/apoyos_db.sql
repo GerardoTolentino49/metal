@@ -1,0 +1,30 @@
+-- Quitar campos de apoyos de la tabla empleados
+ALTER TABLE empleados
+DROP COLUMN IF EXISTS folio,
+DROP COLUMN IF EXISTS vale_status,
+DROP COLUMN IF EXISTS descripcion,
+DROP COLUMN IF EXISTS material_status,
+DROP COLUMN IF EXISTS tool_out_date,
+DROP COLUMN IF EXISTS tool_return_date,
+DROP COLUMN IF EXISTS notas,
+DROP COLUMN IF EXISTS ultima_modificacion,
+DROP COLUMN IF EXISTS modificado_por,
+DROP COLUMN IF EXISTS ultimo_apoyo,
+DROP COLUMN IF EXISTS tool_loan;
+
+-- Asegurar que la tabla apoyos tenga todos los campos necesarios
+ALTER TABLE apoyos
+ADD COLUMN IF NOT EXISTS folio VARCHAR(50),
+ADD COLUMN IF NOT EXISTS vale_status VARCHAR(20),
+ADD COLUMN IF NOT EXISTS descripcion TEXT,
+ADD COLUMN IF NOT EXISTS material_status VARCHAR(50),
+ADD COLUMN IF NOT EXISTS tool_out_date DATE,
+ADD COLUMN IF NOT EXISTS tool_return_date DATE,
+ADD COLUMN IF NOT EXISTS tool_loan TEXT,
+ADD COLUMN IF NOT EXISTS notas TEXT,
+ADD COLUMN IF NOT EXISTS ultima_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN IF NOT EXISTS modificado_por VARCHAR(100),
+ADD COLUMN IF NOT EXISTS ultimo_apoyo TIMESTAMP,
+ADD COLUMN IF NOT EXISTS evidencia1 VARCHAR(255),
+ADD COLUMN IF NOT EXISTS evidencia2 VARCHAR(255),
+ADD COLUMN IF NOT EXISTS evidencia3 VARCHAR(255); 
