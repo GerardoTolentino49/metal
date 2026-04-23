@@ -953,7 +953,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <button class="finish-btn" id="openChecklistBtn" style="background: #2563eb; border-color: rgba(37,99,235,0.2);">
         <i class="fas fa-list-check"></i>
         Checklist
-        <div class="checklist-btn-badge">0/56</div>
+        <div class="checklist-btn-badge">0/55</div>
       </button>
 
       <button class="finish-btn" id="finishBtn">
@@ -2339,7 +2339,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="checklist-search">
             <input id="checklistSearchInput" type="search" placeholder="Buscar tarea...">
           </div>
-          <div id="checklistProgress" class="checklist-progress">0 / 56 completados</div>
+          <div id="checklistProgress" class="checklist-progress">0 / 55 completados</div>
           <div class="checklist-list">
             <div class="checklist-section" data-section="general">
               <h4>General</h4>
@@ -2523,7 +2523,7 @@ document.addEventListener('DOMContentLoaded', function() {
               const data = await resp.json().catch(() => null);
               if (data && data.success && Array.isArray(data.checklist)) {
                 const list = data.checklist.map(v => String(v));
-                saveChecklistState(modal.dataset.orderNumber, { checked: list, total: 56 });
+                saveChecklistState(modal.dataset.orderNumber, { checked: list, total: 55 });
               }
             }
           } catch (e) { console.warn('[Checklist] Error cargando checklist desde servidor:', e); }
@@ -2555,9 +2555,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadChecklistState(orderNumber) {
       try {
         const raw = localStorage.getItem(getChecklistStorageKey(orderNumber));
-        if (!raw) return { checked: [] , total:56 };
+        if (!raw) return { checked: [] , total:55 };
         return JSON.parse(raw);
-      } catch (e) { return { checked: [], total:56 }; }
+      } catch (e) { return { checked: [], total:55 }; }
     }
 
     function saveChecklistState(orderNumber, state) {
@@ -2573,7 +2573,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const key = String(itemId);
       if (checked) set.add(key); else set.delete(key);
       state.checked = Array.from(set);
-      state.total = 56;
+      state.total = 55;
       saveChecklistState(orderNumber, state);
       try { console.log('[Checklist] Estado local actualizado for', orderNumber, state); } catch (e) { /* ignore */ }
     }
@@ -2714,7 +2714,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const modal = ensureChecklistModal();
       const state = loadChecklistState(orderNumber);
       let checkedCount = Array.isArray(state.checked) ? state.checked.length : 0;
-      const total = Number.isFinite(state.total) ? state.total : 56;
+      const total = Number.isFinite(state.total) ? state.total : 55;
       // If the modal is open for this order, prefer the real DOM checked count
       try {
         if (modal && modal.classList.contains('active') && String(modal.dataset.orderNumber || '') === String(orderNumber || '')) {
@@ -2730,7 +2730,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!orderNumber) return;
       const state = loadChecklistState(orderNumber);
       const checkedCount = Array.isArray(state.checked) ? state.checked.length : 0;
-      const total = Number.isFinite(state.total) ? state.total : 56;
+      const total = Number.isFinite(state.total) ? state.total : 55;
       const badge = document.querySelector(`#ordersList .order-item[data-order-number="${CSS.escape(orderNumber)}"] .checklist-badge`);
       if (badge) badge.textContent = `${checkedCount}/${total}`;
     }
@@ -2741,7 +2741,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const key = orderNumber || btn.dataset.shownOrder || 'session';
       const state = loadChecklistState(key);
       let checked = Array.isArray(state.checked) ? state.checked.length : 0;
-      const total = Number.isFinite(state.total) ? state.total : 56;
+      const total = Number.isFinite(state.total) ? state.total : 55;
       // If modal is open for this key, prefer DOM count
       try {
         const modal = document.getElementById('checklistModal');
@@ -2768,7 +2768,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
               const newState = loadChecklistState(key);
               const newChecked = Array.isArray(newState.checked) ? newState.checked.length : 0;
-              const newTotal = Number.isFinite(newState.total) ? newState.total : 56;
+              const newTotal = Number.isFinite(newState.total) ? newState.total : 55;
               badge.textContent = `${newChecked}/${newTotal}`;
               btn.dataset.shownOrder = key;
             } catch (e) { /* ignore */ }
@@ -2794,7 +2794,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const list = await fetchAndSyncChecklistForSession();
             if (Array.isArray(list)) {
               const mapped = list.map(v => String(v));
-              saveChecklistState('session', { checked: mapped, total: 56, __fetchedFromServer: true });
+              saveChecklistState('session', { checked: mapped, total: 55, __fetchedFromServer: true });
               return mapped;
             }
             return null;
@@ -2814,7 +2814,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   const data = await resp.json().catch(() => null);
                   if (data && data.success && Array.isArray(data.checklist)) {
                     const list = data.checklist.map(v => String(v));
-                    saveChecklistState(key, { checked: list, total: 56, __fetchedFromServer: true });
+                    saveChecklistState(key, { checked: list, total: 55, __fetchedFromServer: true });
                     return list;
                   }
                 }
@@ -2835,7 +2835,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   const data = await resp.json().catch(() => null);
                   if (data && data.success && Array.isArray(data.checklist)) {
                     const list = data.checklist.map(v => String(v));
-                    saveChecklistState(key, { checked: list, total: 56, __fetchedFromServer: true });
+                    saveChecklistState(key, { checked: list, total: 55, __fetchedFromServer: true });
                     return list;
                   }
                 }
@@ -2850,7 +2850,7 @@ document.addEventListener('DOMContentLoaded', function() {
               const data = await resp.json().catch(() => null);
               if (data && data.success && Array.isArray(data.checklist)) {
                 const list = data.checklist.map(v => String(v));
-                saveChecklistState(key, { checked: list, total: 56, __fetchedFromServer: true });
+                saveChecklistState(key, { checked: list, total: 55, __fetchedFromServer: true });
                 return list;
               }
             }
@@ -2862,14 +2862,14 @@ document.addEventListener('DOMContentLoaded', function() {
               const data = await resp.json().catch(() => null);
               if (data && data.success && Array.isArray(data.checklist)) {
                 const list = data.checklist.map(v => String(v));
-                saveChecklistState(key, { checked: list, total: 56, __fetchedFromServer: true });
+                saveChecklistState(key, { checked: list, total: 55, __fetchedFromServer: true });
                 return list;
               }
             }
           } catch (e) { /* ignore */ }
 
           // No checklist found; save empty but mark fetched
-          saveChecklistState(key, { checked: [], total: 56, __fetchedFromServer: true });
+          saveChecklistState(key, { checked: [], total: 55, __fetchedFromServer: true });
           return [];
         } catch (err) {
           console.warn('[Checklist] fetchChecklistForKey error', err);
@@ -2914,7 +2914,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data && data.success && Array.isArray(data.checklist)) {
               const list = data.checklist.map(v => String(v));
               // Save under the 'session' key so badge and UI use it consistently
-              saveChecklistState('session', { checked: list, total: 56 });
+              saveChecklistState('session', { checked: list, total: 55 });
               try { updateChecklistButtonBadge('session'); } catch (e) { /* ignore */ }
               return list;
             }
@@ -3220,7 +3220,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (badge) {
               const state = loadChecklistState(num);
               const checked = Array.isArray(state.checked) ? state.checked.length : 0;
-              const total = Number.isFinite(state.total) ? state.total : 56;
+              const total = Number.isFinite(state.total) ? state.total : 55;
               badge.textContent = `${checked}/${total}`;
             }
           });
@@ -3625,6 +3625,24 @@ document.addEventListener('DOMContentLoaded', function() {
         await maybeOpenPendingDocumentationTarget('submittal', exactSubmittalNumber, displaySubmittalNumber);
         
         showToast(`Logeado exitosamente en: ${displaySubmittalNumber}`, 'success');
+        // Forzar actualización inmediata del checklist/badges tras login
+        try {
+          const key = String(displaySubmittalNumber || exactSubmittalNumber || 'session');
+          const btn = document.getElementById('openChecklistBtn');
+          if (btn) btn.dataset.shownOrder = key;
+          // Intentar refrescar desde servidor y luego actualizar UI
+          fetchChecklistForKey(key).then(() => {
+            updateChecklistButtonBadge(key);
+            renderChecklistProgress(key);
+            updateSidebarBadge(key);
+          }).catch(() => {
+            updateChecklistButtonBadge(key);
+            renderChecklistProgress(key);
+            updateSidebarBadge(key);
+          });
+        } catch (e) {
+          console.error('Checklist refresh error (submittal)', e);
+        }
       } catch (error) {
         clearPendingDocumentationTarget('submittal', exactSubmittalNumber, displaySubmittalNumber);
         console.error('Error en el logeo:', error.message);
@@ -3697,6 +3715,23 @@ document.addEventListener('DOMContentLoaded', function() {
         await maybeOpenPendingDocumentationTarget('order', exactOrderNumber, displayOrderNumber);
         
         showToast(`Logeado exitosamente en: ${displayOrderNumber}`, 'success');
+        // Forzar actualización inmediata del checklist/badges tras login
+        try {
+          const key = String(displayOrderNumber || exactOrderNumber || 'session');
+          const btn = document.getElementById('openChecklistBtn');
+          if (btn) btn.dataset.shownOrder = key;
+          fetchChecklistForKey(key).then(() => {
+            updateChecklistButtonBadge(key);
+            renderChecklistProgress(key);
+            updateSidebarBadge(key);
+          }).catch(() => {
+            updateChecklistButtonBadge(key);
+            renderChecklistProgress(key);
+            updateSidebarBadge(key);
+          });
+        } catch (e) {
+          console.error('Checklist refresh error (order)', e);
+        }
       } catch (error) {
         clearPendingDocumentationTarget('order', exactOrderNumber, displayOrderNumber);
         console.error('Error en el logeo:', error.message);
