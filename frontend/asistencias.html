@@ -449,6 +449,71 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
 
+      <div id="modalRegistrarIncapacidad" class="modal">
+        <div class="modal-content" style="max-width: 900px; width: 94%;">
+          <div class="modal-header">
+            <h3><i class="fas fa-notes-medical"></i> Registrar nueva incapacidad</h3>
+            <button class="modal-close" onclick="cerrarModal('modalRegistrarIncapacidad')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="incapacidadForm" class="registro-form">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label for="incapacidadEmpleadoId">ID empleado</label>
+                  <input type="number" id="incapacidadEmpleadoId" name="empleado_id" min="1" required placeholder="Ej. 123">
+                </div>
+                <div class="form-group">
+                  <label for="incapacidadMotivo">Motivo</label>
+                  <textarea id="incapacidadMotivo" name="motivo" rows="3" required placeholder="Describe el motivo..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="incapacidadFechaInicio">Fecha inicio</label>
+                  <input type="date" id="incapacidadFechaInicio" name="fecha_inicio" required>
+                </div>
+                <div class="form-group">
+                  <label for="incapacidadEvidencia">Evidencia (foto)</label>
+                  <input type="file" id="incapacidadEvidencia" name="evidencia" accept="image/*">
+                </div>
+                <div class="form-group">
+                  <label for="incapacidadFechaFin">Fecha fin</label>
+                  <input type="date" id="incapacidadFechaFin" name="fecha_fin" required>
+                </div>
+                <div class="form-group">
+                  <label for="incapacidadNotas">Notas (opcional)</label>
+                  <textarea id="incapacidadNotas" name="notas" rows="2" placeholder="Notas adicionales..."></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="cancelarRegistroIncapacidad" class="btn btn-secondary">Cancelar</button>
+            <button id="guardarRegistroIncapacidad" class="btn btn-primary">
+              <i class="fas fa-save"></i> Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="modalEvidenciaIncapacidad" class="modal">
+        <div class="modal-content" style="width: 98vw; max-width: 98vw; height: 95vh; max-height: 95vh; padding: 8px; background: rgba(0,0,0,0.94); border: 1px solid rgba(255,255,255,0.15);">
+          <div class="modal-header" style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.18);">
+            <h3 style="margin: 0; color: #fff;"><i class="fas fa-image"></i> Evidencia</h3>
+            <button class="modal-close" onclick="cerrarModal('modalEvidenciaIncapacidad')">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body" style="height: calc(95vh - 72px); display: flex; align-items: center; justify-content: center; padding: 0;">
+            <img
+              id="evidenciaIncapacidadImagen"
+              src=""
+              alt="Evidencia de incapacidad"
+              style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px;"
+            >
+          </div>
+        </div>
+      </div>
+
       <!-- Tabla de registros -->
       <div class="table-section">
         <div class="table-card">
@@ -460,9 +525,10 @@ document.addEventListener('DOMContentLoaded', function() {
               <div style="display:flex; flex-wrap:wrap; flex-direction:row; gap:10px;">
                 <div style="display: flex; align-items: center; gap: 15px; margin-right: 15px;">
                   <!-- Nuevo control visual: usa las mismas clases de tab-switch-button -->
-                  <div class="tab-switch" id="permisoSwitch" role="tablist" aria-label="Faltas y Permisos">
+                    <div class="tab-switch" id="permisoSwitch" role="tablist" aria-label="Faltas, Permisos e Incapacidades">
                     <button class="tab-switch-button" id="btnFaltas" onclick="toggleTabla(false)" aria-pressed="true">Faltas/Retardos</button>
                     <button class="tab-switch-button" id="btnPermisos" onclick="toggleTabla(true)" aria-pressed="false">Permisos</button>
+                    <button class="tab-switch-button" id="btnIncapacidades" onclick="showIncapacidades()" aria-pressed="false">Incapacidades</button>
                   </div>
                   <!-- Hidden checkbox for backward compatibility with existing logic -->
                   <input type="checkbox" id="switchTabla" style="display: none;" onchange="toggleTabla()">
@@ -496,7 +562,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button id="abrirRegistrar" class="btn btn-primary">
                   <i class="fas fa-user-clock"></i> Registrar
                 </button>
-                <button id="btnMandarATodos" class="btn btn-warning" title="Mandar a todos a...">
+                <button id="abrirRegistrarIncapacidad" class="btn btn-primary">
+                  <i class="fas fa-notes-medical"></i> Registrar incapacidad
+                </button>
+                <button id="btnMandarATodos" class="btn btn-warning" title="Mandar a todos a..." style ="display: none;">
                   <i class="fas fa-user-friends"></i> Mandar a todos a...
                 </button>
               </div>
@@ -522,6 +591,26 @@ document.addEventListener('DOMContentLoaded', function() {
               </thead>
               <tbody id="registrosTableBody">
                 <!-- Los registros se cargarán dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+          <!-- Contenedor para Incapacidades (tabla separada) -->
+          <div class="table-container" id="incapacidadesContainer" style="display: none;">
+            <table id="incapacidadesTable" class="registros-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Empleado</th>
+                  <th>Fecha inicio</th>
+                  <th>Fecha fin</th>
+                  <th>Motivo</th>
+                  <th>Notas</th>
+                  <th>Evidencia</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="incapacidadesTableBody">
+                <!-- Registros de incapacidades -->
               </tbody>
             </table>
           </div>
@@ -1240,10 +1329,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Variable para controlar qué tipo de datos se muestran
     let mostrarPermisos = false; // false = faltas/retardos, true = permisos
+    let mostrarIncapacidades = false; // true = mostrar la vista de incapacidades
     // Sincronizar estado inicial del control visual (si existe)
     document.addEventListener('DOMContentLoaded', function() {
       const btnF = document.getElementById('btnFaltas');
       const btnP = document.getElementById('btnPermisos');
+      const btnI = document.getElementById('btnIncapacidades');
       const switchElement = document.getElementById('switchTabla');
       if (switchElement) switchElement.checked = mostrarPermisos;
       if (btnF && btnP) {
@@ -1253,6 +1344,19 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           btnP.classList.remove('active'); btnF.classList.add('active');
           btnP.setAttribute('aria-pressed', 'false'); btnF.setAttribute('aria-pressed', 'true');
+        }
+        // Inicializar estado del botón de incapacidades si existe
+        if (btnI) {
+          if (mostrarIncapacidades) {
+            btnI.classList.add('active'); btnI.setAttribute('aria-pressed', 'true');
+            // ocultar la tabla principal
+            const incCont = document.getElementById('incapacidadesContainer');
+            const mainCont = document.querySelector('.table-container');
+            if (incCont) incCont.style.display = 'block';
+            if (mainCont) mainCont.style.display = 'none';
+          } else {
+            btnI.classList.remove('active'); btnI.setAttribute('aria-pressed', 'false');
+          }
         }
       }
     });
@@ -1784,6 +1888,27 @@ document.addEventListener('DOMContentLoaded', function() {
       const btnGuardarRegistroManual = document.getElementById('guardarRegistroManual');
       if (btnGuardarRegistroManual) btnGuardarRegistroManual.addEventListener('click', function() { validarEmpleado(); });
 
+      const btnAbrirRegistrarIncapacidad = document.getElementById('abrirRegistrarIncapacidad');
+      if (btnAbrirRegistrarIncapacidad) {
+        btnAbrirRegistrarIncapacidad.addEventListener('click', function() {
+          abrirModal('modalRegistrarIncapacidad');
+          const idInput = document.getElementById('incapacidadEmpleadoId');
+          if (idInput) idInput.focus();
+        });
+      }
+
+      const btnCancelarRegistroIncapacidad = document.getElementById('cancelarRegistroIncapacidad');
+      if (btnCancelarRegistroIncapacidad) {
+        btnCancelarRegistroIncapacidad.addEventListener('click', function() {
+          cerrarModal('modalRegistrarIncapacidad');
+        });
+      }
+
+      const btnGuardarRegistroIncapacidad = document.getElementById('guardarRegistroIncapacidad');
+      if (btnGuardarRegistroIncapacidad) {
+        btnGuardarRegistroIncapacidad.addEventListener('click', guardarIncapacidad);
+      }
+
       document.getElementById('exportarBtn').addEventListener('click', exportarRegistros);
       document.getElementById('verGraficasBtn').addEventListener('click', mostrarGraficas);
       document.getElementById('importarBtn').addEventListener('click', () => {
@@ -1808,6 +1933,75 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       });
+    }
+
+    async function guardarIncapacidad() {
+      const empleadoId = (document.getElementById('incapacidadEmpleadoId')?.value || '').trim();
+      const fechaInicio = (document.getElementById('incapacidadFechaInicio')?.value || '').trim();
+      const fechaFin = (document.getElementById('incapacidadFechaFin')?.value || '').trim();
+      const motivo = (document.getElementById('incapacidadMotivo')?.value || '').trim();
+      const notas = (document.getElementById('incapacidadNotas')?.value || '').trim();
+      const evidenciaInput = document.getElementById('incapacidadEvidencia');
+      const evidenciaFile = evidenciaInput?.files?.[0];
+
+      if (!empleadoId || !fechaInicio || !fechaFin || !motivo) {
+        mostrarNotificacion('Completa ID empleado, fechas y motivo', 'warning');
+        return;
+      }
+
+      if (fechaFin < fechaInicio) {
+        mostrarNotificacion('La fecha fin no puede ser menor que la fecha inicio', 'warning');
+        return;
+      }
+
+      try {
+        if (editingIncapacidadId) {
+          // Actualizar via PUT (json)
+          const payload = { fecha_inicio: fechaInicio, fecha_fin: fechaFin, motivo, notas };
+          const res = await fetch(`${API_BASE_URL}/api/incapacidades/${editingIncapacidadId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (!res.ok || !data.success) throw new Error(data.error || data.message || 'Error actualizando incapacidad');
+          editingIncapacidadId = null;
+          const form = document.getElementById('incapacidadForm'); if (form) form.reset();
+          cerrarModal('modalRegistrarIncapacidad');
+          mostrarNotificacion('Incapacidad actualizada correctamente', 'success');
+          await cargarIncapacidadesDesdeBD();
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('empleado_id', empleadoId);
+        formData.append('fecha_inicio', fechaInicio);
+        formData.append('fecha_fin', fechaFin);
+        formData.append('motivo', motivo);
+        if (notas) formData.append('notas', notas);
+        if (evidenciaFile) formData.append('evidencia', evidenciaFile);
+
+        const response = await fetch(`${API_BASE_URL}/api/incapacidades`, {
+          method: 'POST',
+          body: formData,
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || data.message || 'Error al guardar incapacidad');
+        }
+
+        const form = document.getElementById('incapacidadForm');
+        if (form) form.reset();
+        cerrarModal('modalRegistrarIncapacidad');
+        mostrarNotificacion('Incapacidad registrada correctamente', 'success');
+        await cargarIncapacidadesDesdeBD();
+      } catch (error) {
+        console.error('Error guardando incapacidad:', error);
+        mostrarNotificacion(`No se pudo guardar: ${error.message || 'error desconocido'}`, 'error');
+      }
     }
 
     async function validarEmpleado() 
@@ -1984,6 +2178,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function cerrarModal(modalId) {
       document.getElementById(modalId).style.display = 'none';
       document.body.style.overflow = 'auto';
+      if (modalId === 'modalEvidenciaIncapacidad') {
+        const img = document.getElementById('evidenciaIncapacidadImagen');
+        if (img) img.src = '';
+      }
       
       // Si se cierra el modal de importación, resetear el input file
       if (modalId === 'modalImportarAsistencias') {
@@ -2481,6 +2679,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
       mostrarPermisos = switchElement.checked;
 
+      // Si se alterna entre faltas/permisos, asegurarnos de salir de la vista Incapacidades
+      mostrarIncapacidades = false;
+      const incContHide = document.getElementById('incapacidadesContainer');
+      if (incContHide) incContHide.style.display = 'none';
+      // Asegurar que el contenedor principal de registros esté visible
+      const allTableContainers = document.querySelectorAll('.table-container');
+      // el primer .table-container es el principal; mostrarlo
+      if (allTableContainers && allTableContainers.length > 0) {
+        allTableContainers[0].style.display = 'block';
+      }
+
       // Actualizar botones visuales (misma apariencia que los tabs superiores)
       const btnF = document.getElementById('btnFaltas');
       const btnP = document.getElementById('btnPermisos');
@@ -2494,6 +2703,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         btnF.setAttribute('aria-pressed', String(!mostrarPermisos));
         btnP.setAttribute('aria-pressed', String(mostrarPermisos));
+        // Asegurar que el botón de Incapacidades no quede activo
+        const btnIclear = document.getElementById('btnIncapacidades');
+        if (btnIclear) {
+          btnIclear.classList.remove('active');
+          btnIclear.setAttribute('aria-pressed', 'false');
+        }
       }
 
       // Mantener compatibilidad visual si existían los elementos antiguos
@@ -2512,6 +2727,181 @@ document.addEventListener('DOMContentLoaded', function() {
       // Reiniciar paginación y recargar datos
       paginaActual = 1;
       cargarRegistrosDesdeBD();
+    }
+
+    // Mostrar la vista de Incapacidades
+    async function showIncapacidades() {
+      mostrarIncapacidades = true;
+      // Desactivar el switch/table permisos
+      const switchElement = document.getElementById('switchTabla');
+      if (switchElement) { switchElement.checked = false; }
+      mostrarPermisos = false;
+
+      // Actualizar botones visuales
+      const btnF = document.getElementById('btnFaltas');
+      const btnP = document.getElementById('btnPermisos');
+      const btnI = document.getElementById('btnIncapacidades');
+      if (btnF) { btnF.classList.remove('active'); btnF.setAttribute('aria-pressed', 'false'); }
+      if (btnP) { btnP.classList.remove('active'); btnP.setAttribute('aria-pressed', 'false'); }
+      if (btnI) { btnI.classList.add('active'); btnI.setAttribute('aria-pressed', 'true'); }
+
+      // Ocultar el contenedor principal y mostrar el de incapacidades
+      const mainCont = document.querySelector('.table-container');
+      const incCont = document.getElementById('incapacidadesContainer');
+      if (mainCont) mainCont.style.display = 'none';
+      if (incCont) incCont.style.display = 'block';
+
+      // Reiniciar paginación y cargar datos de incapacidades
+      paginaActual = 1;
+      await cargarIncapacidadesDesdeBD();
+    }
+
+    // Cargar incapacidades desde la API (si existe)
+    async function cargarIncapacidadesDesdeBD() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/incapacidades?limit=10000`);
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || 'Error al cargar incapacidades');
+        }
+        const items = Array.isArray(data.incapacidades)
+          ? data.incapacidades
+          : (Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []));
+        // Mapear a formato simple
+        window.incapacidades = items.map(it => ({
+          id: it.id,
+          empleado: it.nombre_completo || it.empleado || it.empleado_nombre || it.empleado_id || '',
+          fecha_inicio: it.fecha_inicio || it.fecha || '',
+          fecha_fin: it.fecha_fin || '',
+          fecha: it.fecha || it.fecha_inicio || '',
+          motivo: it.motivo || it.descripcion || '',
+          notas: it.notas || '',
+          evidencia: it.evidencia || it.adjunto_url || ''
+        }));
+      } catch (error) {
+        console.error('Error al cargar incapacidades:', error);
+        window.incapacidades = [];
+      }
+      cargarIncapacidades();
+    }
+
+    // Construye una URL segura hacia /uploads/ normalizando entradas variadas
+    function buildUploadsUrl(raw) {
+      if (!raw) return '';
+      const s = String(raw || '');
+      if (s.startsWith('http')) return s;
+      // Quitar slashes iniciales
+      let cleaned = s.replace(/^\/+/, '');
+      // Si viene con 'uploads/' al inicio, eliminarlo para evitar duplicados
+      if (cleaned.toLowerCase().startsWith('uploads/')) cleaned = cleaned.slice(8);
+      // Encodear cada segmento del path, preservando separadores
+      const safe = cleaned.split('/').map(seg => encodeURIComponent(seg)).join('/');
+      return `${API_BASE_URL}/uploads/${safe}`;
+    }
+
+    function formatearFechaHumanaDel(fecha) {
+      if (!fecha) return '';
+      const base = formatearFecha(fecha);
+      return String(base).replace(/ de (\d{4})$/, ' del $1');
+    }
+
+    function formatearRangoIncapacidad(fechaInicio, fechaFin, fechaSimple) {
+      if (fechaInicio && fechaFin) {
+        const inicioFmt = formatearFechaHumanaDel(fechaInicio);
+        const finFmt = formatearFechaHumanaDel(fechaFin);
+        return inicioFmt === finFmt ? inicioFmt : `${inicioFmt} al ${finFmt}`;
+      }
+      return formatearFechaHumanaDel(fechaSimple || fechaInicio || '');
+    }
+
+    function abrirEvidenciaIncapacidad(url) {
+      const img = document.getElementById('evidenciaIncapacidadImagen');
+      if (!img || !url) return;
+      img.src = url;
+      abrirModal('modalEvidenciaIncapacidad');
+    }
+
+    // Renderizar la tabla de incapacidades
+    function cargarIncapacidades() {
+      const tbody = document.getElementById('incapacidadesTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const items = window.incapacidades || [];
+      if (items.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 8;
+        td.style.textAlign = 'center';
+        td.textContent = 'No hay incapacidades registradas';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      for (const it of items) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${it.id ?? ''}</td>
+          <td>${it.empleado ?? ''}</td>
+          <td>${formatearFechaHumanaDel(it.fecha_inicio || it.fecha) || '-'}</td>
+          <td>${formatearFechaHumanaDel(it.fecha_fin) || '-'}</td>
+          <td>${it.motivo ?? ''}</td>
+          <td>${it.notas ?? '-'}</td>
+          <td>${it.evidencia ? `<a href="#" onclick="abrirEvidenciaIncapacidad('${(buildUploadsUrl(it.evidencia)).replace(/'/g, "\\'")}'); return false;">Ver</a>` : '-'}</td>
+          <td>
+            <button class="btn btn-primary" onclick="editarIncapacidad(${it.id})">Editar</button>
+            <button class="btn btn-danger" onclick="eliminarIncapacidad(${it.id})">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    // Estado de edición
+    let editingIncapacidadId = null;
+
+    // Abrir modal de edición rellenando campos
+    function editarIncapacidad(id) {
+      try {
+        const items = window.incapacidades || [];
+        const item = items.find(x => Number(x.id) === Number(id));
+        if (!item) {
+          mostrarNotificacion('Registro no encontrado', 'warning');
+          return;
+        }
+        // Rellenar campos del modal de registro (reutilizado para edición)
+        document.getElementById('incapacidadEmpleadoId').value = item.empleado || item.empleado_id || '';
+        const toDateInput = (v) => {
+          if (!v) return '';
+          const d = new Date(v);
+          if (isNaN(d.getTime())) return v;
+          return d.toISOString().split('T')[0];
+        };
+        document.getElementById('incapacidadFechaInicio').value = toDateInput(item.fecha_inicio || item.fecha);
+        document.getElementById('incapacidadFechaFin').value = toDateInput(item.fecha_fin || '');
+        document.getElementById('incapacidadMotivo').value = item.motivo || '';
+        document.getElementById('incapacidadNotas').value = item.notas || '';
+        // Establecer modo edición
+        editingIncapacidadId = Number(id);
+        // Abrir modal
+        abrirModal('modalRegistrarIncapacidad');
+      } catch (e) {
+        console.error('editarIncapacidad error', e);
+        mostrarNotificacion('Error al abrir edición', 'error');
+      }
+    }
+
+    async function eliminarIncapacidad(id) {
+      if (!confirm('¿Confirmas eliminar la incapacidad ' + id + '?')) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/incapacidades/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Error eliminando');
+        mostrarNotificacion('Incapacidad eliminada', 'success');
+        await cargarIncapacidadesDesdeBD();
+      } catch (e) {
+        console.error(e);
+        mostrarNotificacion('Error eliminando incapacidad', 'error');
+      }
     }
 
     function cargarRegistros(filtros = {}) {

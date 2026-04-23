@@ -30,6 +30,30 @@
       cursor: default !important;
     }
   </style>
+  <script>
+    (function legacyRedirect() {
+      var target = 'nuevo-inicio.html';
+      var current = (window.location.pathname || '').toLowerCase();
+      if (current.endsWith('/' + target) || current.endsWith(target)) return;
+
+      try {
+        window.location.replace(target);
+      } catch (_) {
+        // Si falla la redirección, se mostrará aviso legacy al cargar.
+      }
+
+      window.addEventListener('DOMContentLoaded', function () {
+        var stillHere = (window.location.pathname || '').toLowerCase();
+        if (stillHere.endsWith('/inicio.html') || stillHere.endsWith('inicio.html')) {
+          var notice = document.createElement('div');
+          notice.textContent = 'Este menu es una version legacy y ya no tendra soporte.';
+          notice.setAttribute('role', 'alert');
+          notice.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:99999;background:#fff7d6;color:#8a4b00;border:1px solid #f1c66a;border-radius:10px;padding:10px 14px;font:600 14px/1.3 Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.15)';
+          document.body.appendChild(notice);
+        }
+      });
+    })();
+  </script>
   <script src="js/permisos.js"></script>
   <script src="js/global-color.js"></script>
   <script src="js/floating-buttons.js"></script>
@@ -247,7 +271,7 @@
             <!--<span class="cargo-racha-label">Últimos 10 días</span>
             <div class="cargo-racha-grid" id="cargoRachaDias">
               <span class="cargo-racha-dia">-</span>
-            </div>-->
+            </div> -->
           </div>
         </article>
 

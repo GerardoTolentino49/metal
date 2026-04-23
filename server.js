@@ -555,6 +555,32 @@ async function ensureRequisicionesTable() {
   }
 }
 
+// Asegurar tabla incapacidades (ausencias médicas)
+async function ensureIncapacidadesTable() {
+  try {
+    await apoyosPool.query(`
+      CREATE TABLE IF NOT EXISTS incapacidades (
+        id SERIAL PRIMARY KEY,
+        empleado_id INTEGER NOT NULL,
+        fecha_inicio DATE NOT NULL,
+        fecha_fin DATE NOT NULL,
+        motivo TEXT NOT NULL,
+        evidencia VARCHAR(255),
+        notas TEXT,
+        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente','aprobado','rechazado')),
+        aprobado_por VARCHAR(100),
+        fecha_aprobacion TIMESTAMP,
+        CONSTRAINT fk_empleado_incapacidades FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE CASCADE
+      );
+    `);
+    await apoyosPool.query(`CREATE INDEX IF NOT EXISTS idx_incapacidades_empleado_id ON incapacidades (empleado_id);`);
+    logger.info('[ensureIncapacidadesTable] OK');
+  } catch (error) {
+    logger.error('Error al crear/verificar tabla incapacidades:', { message: error?.message, code: error?.code, detail: error?.detail });
+  }
+}
+
 // Asegurar tabla UOMS_pyc
 async function ensureUomsPycTable() {
   try {
@@ -696,7 +722,7 @@ function parseUsuariosAsignadosValue(rawValue) {
 // Asegurar tabla comunidad (comentarios del menú contextual)
 async function ensureComunidadTable() {
   try {
-    await denunciasPool.query(`
+    await apoyosPool.query(`
       CREATE TABLE IF NOT EXISTS comunidad (
         id SERIAL PRIMARY KEY,
         tipo VARCHAR(50),
@@ -2722,6 +2748,9 @@ function createPgPool(options = {}, name = 'pool') {
 
   const config = Object.assign({}, base, options);
   const pool = new Pool(config);
+  // attach debug info for troubleshooting (database name, pool name)
+  pool._databaseName = config.database;
+  pool._poolName = name;
   applyPgTimezone(pool, name);
 
   pool.on('error', (err) => {
@@ -2962,6 +2991,119 @@ app.get('/api/solicitudes_vacaciones/numero-empleado/:numero', async (req, res) 
     return res.status(500).json({ error: 'Error consultando solicitudes de vacaciones', message: error?.message });
   }
 });
+
+// Endpoints para incapacidades (licencias médicas)
+app.post('/api/incapacidades', upload.single('evidencia'), async (req, res) => {
+  try {
+    const body = req.body || {};
+    const empleado_id = body.empleado_id ? Number(body.empleado_id) : null;
+    const fecha_inicio = body.fecha_inicio || null;
+    const fecha_fin = body.fecha_fin || null;
+    const motivo = body.motivo || '';
+    const notas = body.notas || null;
+
+    if (!empleado_id || !fecha_inicio || !fecha_fin || !motivo) {
+      return res.status(400).json({ success: false, error: 'empleado_id, fecha_inicio, fecha_fin y motivo son requeridos' });
+    }
+
+    const evidenciaFile = req.file ? req.file.filename : (body.evidencia || null);
+
+    const insertQuery = `
+      INSERT INTO incapacidades (empleado_id, fecha_inicio, fecha_fin, motivo, evidencia, notas)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `;
+
+    const result = await apoyosPool.query(insertQuery, [empleado_id, fecha_inicio, fecha_fin, motivo, evidenciaFile, notas]);
+    return res.json({ success: true, incapacidad: result.rows[0] });
+  } catch (error) {
+    logger.error('POST /api/incapacidades error:', { message: error?.message });
+    return res.status(500).json({ success: false, error: 'Error al guardar incapacidad' });
+  }
+});
+
+app.get('/api/incapacidades', async (req, res) => {
+  try {
+    const empleadoId = req.query.empleado_id ? Number(req.query.empleado_id) : null;
+    let query = 'SELECT * FROM incapacidades';
+    const params = [];
+    if (Number.isFinite(empleadoId)) {
+      query += ' WHERE empleado_id = $1';
+      params.push(empleadoId);
+    }
+    query += ' ORDER BY fecha_registro DESC';
+
+    const result = await apoyosPool.query(query, params);
+    return res.json({ success: true, incapacidades: result.rows || [] });
+  } catch (error) {
+    logger.error('GET /api/incapacidades error:', { message: error?.message });
+    return res.status(500).json({ success: false, error: 'Error al obtener incapacidades' });
+  }
+});
+
+app.get('/api/incapacidades/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ success: false, error: 'id inválido' });
+
+    const result = await apoyosPool.query('SELECT * FROM incapacidades WHERE id = $1', [id]);
+    if (result.rowCount === 0) return res.status(404).json({ success: false, error: 'No encontrado' });
+    return res.json({ success: true, incapacidad: result.rows[0] });
+  } catch (error) {
+    logger.error('GET /api/incapacidades/:id error:', { message: error?.message });
+    return res.status(500).json({ success: false, error: 'Error al obtener incapacidad' });
+  }
+});
+
+app.put('/api/incapacidades/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ success: false, error: 'id inválido' });
+
+    const { estado, aprobado_por, fecha_aprobacion, notas, motivo, fecha_inicio, fecha_fin } = req.body || {};
+
+    const allowedEstados = new Set(['pendiente', 'aprobado', 'rechazado']);
+    const sets = [];
+    const params = [];
+    let idx = 1;
+
+    if (estado && allowedEstados.has(String(estado))) { sets.push(`estado = $${idx++}`); params.push(estado); }
+    if (aprobado_por) { sets.push(`aprobado_por = $${idx++}`); params.push(aprobado_por); }
+    if (fecha_aprobacion) { sets.push(`fecha_aprobacion = $${idx++}`); params.push(fecha_aprobacion); }
+    if (notas !== undefined) { sets.push(`notas = $${idx++}`); params.push(notas); }
+    if (motivo !== undefined) { sets.push(`motivo = $${idx++}`); params.push(motivo); }
+    if (fecha_inicio !== undefined) { sets.push(`fecha_inicio = $${idx++}`); params.push(fecha_inicio); }
+    if (fecha_fin !== undefined) { sets.push(`fecha_fin = $${idx++}`); params.push(fecha_fin); }
+
+    if (sets.length === 0) return res.status(400).json({ success: false, error: 'No hay campos para actualizar' });
+
+    const sql = `UPDATE incapacidades SET ${sets.join(', ')} WHERE id = $${idx} RETURNING *`;
+    params.push(id);
+
+    const result = await apoyosPool.query(sql, params);
+    if (result.rowCount === 0) return res.status(404).json({ success: false, error: 'No encontrado' });
+    return res.json({ success: true, incapacidad: result.rows[0] });
+  } catch (error) {
+    logger.error('PUT /api/incapacidades/:id error:', { message: error?.message });
+    return res.status(500).json({ success: false, error: 'Error al actualizar incapacidad' });
+  }
+});
+
+// Eliminar incapacidad
+app.delete('/api/incapacidades/:id', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ success: false, error: 'id inválido' });
+
+    const result = await apoyosPool.query('DELETE FROM incapacidades WHERE id = $1', [id]);
+    if (result.rowCount === 0) return res.status(404).json({ success: false, error: 'No encontrado' });
+    return res.json({ success: true });
+  } catch (error) {
+    logger.error('DELETE /api/incapacidades/:id error:', { message: error?.message });
+    return res.status(500).json({ success: false, error: 'Error al eliminar incapacidad' });
+  }
+});
+
 
 // Endpoint para obtener la foto del empleado logeado
 app.get('/api/get-employee-photo', async (req, res) => {
@@ -8019,29 +8161,13 @@ app.get('/api/employees/me', async (req, res) => {
     let employee = null;
 
     if (numeroEmpleado) {
-      const hasNumeroEmpleadoColumnResult = await apoyosPool.query(
-        `SELECT EXISTS (
-          SELECT 1
-          FROM information_schema.columns
-          WHERE table_schema = 'public'
-            AND table_name = 'empleados'
-            AND column_name = 'numero_empleado'
-        ) AS has_numero_empleado`
+      const employeeByNumberResult = await apoyosPool.query(
+        `SELECT *
+         FROM usuarios
+         WHERE id::text = $1 OR numero_empleado::text = $1
+         LIMIT 1`,
+        [numeroEmpleado]
       );
-
-      const hasNumeroEmpleadoColumn = Boolean(hasNumeroEmpleadoColumnResult.rows[0]?.has_numero_empleado);
-
-      const employeeByNumberQuery = hasNumeroEmpleadoColumn
-        ? `SELECT *
-           FROM empleados
-           WHERE id::text = $1 OR numero_empleado::text = $1
-           LIMIT 1`
-        : `SELECT *
-           FROM empleados
-           WHERE id::text = $1
-           LIMIT 1`;
-
-      const employeeByNumberResult = await apoyosPool.query(employeeByNumberQuery, [numeroEmpleado]);
       if (employeeByNumberResult.rowCount > 0) {
         employee = employeeByNumberResult.rows[0];
       }
@@ -8050,9 +8176,9 @@ app.get('/api/employees/me', async (req, res) => {
     if (!employee) {
       const employeeByNameResult = await apoyosPool.query(
         `SELECT *
-         FROM empleados
+         FROM usuarios
          WHERE LOWER(TRIM(nombre_completo)) = LOWER(TRIM($1))
-            OR LOWER(TRIM(COALESCE(usuario, ''))) = LOWER(TRIM($2))
+            OR LOWER(TRIM(COALESCE(username, ''))) = LOWER(TRIM($2))
          LIMIT 1`,
         [user.nombre_completo || '', user.username || '']
       );
@@ -8064,7 +8190,7 @@ app.get('/api/employees/me', async (req, res) => {
 
     const mergedEmployee = {
       ...(employee || {}),
-      usuario: (employee && employee.usuario) ? employee.usuario : user.username,
+      usuario: (employee && (employee.usuario || employee.username)) ? (employee.usuario || employee.username) : user.username,
       username: user.username,
       rol: user.rol,
       numero_empleado: numeroEmpleado || (employee ? employee.numero_empleado : null),
@@ -8180,6 +8306,44 @@ app.patch('/api/employees/change-password', async (req, res) => {
       error: 'Error al actualizar la contraseña',
       message: error.message
     });
+  }
+});
+
+// Cambiar contraseña por id (verifica la contraseña actual)
+app.patch('/api/usuarios/:id/change-password', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const currentPassword = String(req.body?.currentPassword || '');
+    const newPassword = String(req.body?.newPassword || '');
+
+    if (!id || !currentPassword || !newPassword) {
+      return res.status(400).json({ success: false, error: 'Faltan parámetros (id, currentPassword, newPassword)' });
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(400).json({ success: false, error: 'La nueva contraseña debe ser diferente a la actual' });
+    }
+
+    const userResult = await apoyosPool.query(
+      `SELECT id, password FROM usuarios WHERE id = $1 LIMIT 1`,
+      [id]
+    );
+
+    if (userResult.rowCount === 0) {
+      return res.status(404).json({ success: false, error: 'Usuario no encontrado' });
+    }
+
+    const user = userResult.rows[0];
+    if (String(user.password || '') !== currentPassword) {
+      return res.status(401).json({ success: false, error: 'La contraseña actual no es correcta' });
+    }
+
+    await apoyosPool.query(`UPDATE usuarios SET password = $1 WHERE id = $2`, [newPassword, id]);
+
+    return res.json({ success: true, message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error al cambiar contraseña por id:', error);
+    return res.status(500).json({ success: false, error: 'Error al actualizar la contraseña', message: error.message });
   }
 });
 
@@ -15571,6 +15735,8 @@ app.listen(port, '0.0.0.0', async () => {
     await ensureItemsTable();
     // Asegurar tabla para comunidad (feedback del menú contextual)
     await ensureComunidadTable();
+    // Asegurar tabla incapacidades
+    await ensureIncapacidadesTable();
     // Asegurar tabla para Canva
     await ensureCanvaTable();
     // Asegurar tabla para likes de publicaciones
@@ -18506,7 +18672,9 @@ app.get('/api/denuncias-anonimas', async (req, res) => {
       // POST: crear un nuevo comentario (tipo = 'halago' | 'problema' | 'sugerencia')
       app.post('/api/comunidad', async (req, res) => {
         try {
-          const { tipo, mensaje } = req.body || {};
+          const { tipo, mensaje, usuario: bodyUsuario } = req.body || {};
+          // Diagnostic log: record request body for debugging persistence issues
+          try { logger.debug('[API /api/comunidad] request body', { body: req.body }); } catch(_) { console.debug('[API /api/comunidad] request body', req.body); }
           const allowed = ['halago', 'problema', 'sugerencia'];
 
           logger.info(`Creando entrada comunidad - tipo: ${tipo}`);
@@ -18521,15 +18689,25 @@ app.get('/api/denuncias-anonimas', async (req, res) => {
             return res.status(400).json({ error: 'Mensaje requerido' });
           }
 
-          const result = await denunciasPool.query(
-            `INSERT INTO comunidad (tipo, mensaje, fecha_creacion) VALUES ($1, $2, NOW()) RETURNING *`,
-            [tipo, String(mensaje).trim()]
+          const usuario = (req.session && req.session.username) ? req.session.username : (bodyUsuario || 'Anonimo');
+
+          const result = await apoyosPool.query(
+            `INSERT INTO comunidad (tipo, mensaje, fecha_creacion, usuario) VALUES ($1, $2, NOW(), $3) RETURNING *`,
+            [tipo, String(mensaje).trim(), usuario]
           );
 
-          logger.info('Entrada comunidad creada exitosamente');
+          // More detailed diagnostic logging
+          try {
+            logger.info('Entrada comunidad creada exitosamente', { pool: apoyosPool._poolName, database: apoyosPool._databaseName, rowCount: result.rowCount });
+            logger.debug('Entrada comunidad result rows', { rows: result.rows });
+          } catch (_) {
+            console.log('[comunidad] created', result && result.rowCount, result && result.rows);
+          }
+
           res.status(201).json({ success: true, comunidad: result.rows[0] });
         } catch (error) {
-          logger.error(`[ERROR] Error al crear entrada comunidad: ${error.message}`);
+          logger.error(`[ERROR] Error al crear entrada comunidad: ${error.message}`, { stack: error.stack, code: error.code, detail: error.detail });
+          try { console.error('[ERROR] Error al crear entrada comunidad', error); } catch(_) {}
           res.status(500).json({ error: 'Error interno del servidor al procesar la solicitud' });
         }
       });
@@ -18537,9 +18715,10 @@ app.get('/api/denuncias-anonimas', async (req, res) => {
       // GET: obtener entradas de comunidad
       app.get('/api/comunidad', async (req, res) => {
         try {
-          logger.info('Consultando entradas comunidad');
+          logger.info('Consultando entradas comunidad', { pool: apoyosPool._poolName, database: apoyosPool._databaseName });
           const query = 'SELECT * FROM comunidad ORDER BY fecha_creacion DESC';
-          const result = await denunciasPool.query(query);
+          const result = await apoyosPool.query(query);
+          logger.info('Consulted comunidad rows', { count: Array.isArray(result.rows) ? result.rows.length : 0 });
           res.json({ success: true, comunidad: result.rows });
         } catch (error) {
           logger.error(`[ERROR] Error al obtener entradas comunidad: ${error.message}`);
@@ -18927,7 +19106,6 @@ app.get('/api/warehouse/nationality', async (req, res) => {
       ORDER BY nacionalidad, valor_total DESC
     `);
     
-    console.log('📊 Resultado de nacionalidad:', result.rows);
     
     // Agrupar por nacionalidad y recopilar proveedores
     const groupedData = {};

@@ -1964,10 +1964,29 @@
             function pick(obj, keys){ if(!obj) return undefined; for(const k of keys) if(obj[k] != null) return obj[k]; return undefined; }
             function getAvatar(u){
               if(!u) return '';
-              const keys = ['avatar','photo','image','foto','foto_url','profile_photo','avatarUrl','photo_url','picture','img','url'];
+              // If a plain string was provided (common when we store only the URL), return it directly
+              if (typeof u === 'string') return u;
+
+              // Try common avatar-like keys on the object
+              const keys = ['avatar','photo','image','foto','foto_url','profile_photo','avatarUrl','photo_url','picture','img','url','src','file','path'];
               let v = pick(u, keys);
-              if(!v && u.user) v = pick(u.user, keys);
-              if(!v && u.profile) v = pick(u.profile, keys);
+
+              // If value is itself an object (e.g. { url: '...' }), try to extract a string URL
+              if (v && typeof v === 'object') {
+                v = pick(v, ['url','src','path']) || v.url || v.src || v.path || '';
+              }
+
+              if ((!v || v === '') && u.user) {
+                v = pick(u.user, keys);
+                if (v && typeof v === 'object') v = v.url || v.src || '';
+              }
+              if ((!v || v === '') && u.profile) {
+                v = pick(u.profile, keys);
+                if (v && typeof v === 'object') v = v.url || v.src || '';
+              }
+
+              // Final normalization: ensure we return a string or empty
+              if (v && typeof v !== 'string') v = String(v);
               return v || '';
             }
             function getScore(u){
@@ -1977,26 +1996,150 @@
               if(v == null && u.metrics) v = pick(u.metrics, keys);
               return (v == null || v === '') ? '' : v;
             }
-            function renderTopDesignersPodium(){
+            function getTopThreePodiumData(){
+              const cacheFromWindow = Array.isArray(window.topDesignersScoreCache)
+                ? window.topDesignersScoreCache
+                : [];
+              const cacheFromGlobal = (typeof topDesignersScoreCache !== 'undefined' && Array.isArray(topDesignersScoreCache))
+                ? topDesignersScoreCache
+                : [];
+              const source = cacheFromGlobal.length ? cacheFromGlobal : cacheFromWindow;
+              const normalized = source
+                .map((u) => {
+                  const totalSecs = Number(u?.totalSecs ?? u?._totalSecs ?? 0);
+                  const scoreVal = Number(getScore(u) ?? 0);
+                  return {
+                    ...u,
+                    totalSecs,
+                    score: Number.isFinite(scoreVal) ? scoreVal : 0
+                  };
+                })
+                .filter((u) => u.totalSecs > 0)
+                .sort((a, b) => Number(b.score || 0) - Number(a.score || 0))
+                .slice(0, 3);
+
+              while (normalized.length < 3) {
+                normalized.push({
+                  name: 'Sin datos',
+                  avatar: (window.DEFAULT_AVATAR || DEFAULT_AVATAR || ''),
+                  score: 0,
+                  __generic: true
+                });
+              }
+
+              return normalized;
+            }
+            async function renderTopDesignersPodium(){
               const podium = document.getElementById('topDesignersPodium');
               if(!podium) return;
-              const data = (window.topDesignersScoreCache && topDesignersScoreCache.length) ? topDesignersScoreCache.slice(0,3) : [];
-              const mapping = {1:0,2:1,3:2};
-              podium.querySelectorAll('.podium-slot').forEach(slot=>{
-                const rank = parseInt(slot.getAttribute('data-rank'),10);
-                const u = data[mapping[rank]] || null;
-                const img = slot.querySelector('.podium-avatar img');
-                const nameEl = slot.querySelector('.podium-name');
-                const scoreEl = slot.querySelector('.podium-score');
-                const avatarUrl = getAvatar(u);
-                img.onerror = function(){ this.onerror = null; this.src = (window.DEFAULT_AVATAR || ''); };
-                img.src = avatarUrl || (window.DEFAULT_AVATAR || '');
-                img.alt = (u && (u.name || u.username || u.displayName || u.fullName)) || img.alt || '';
-                nameEl.textContent = (u && (u.name || u.username || u.displayName || u.fullName)) || 'Sin datos';
-                const score = getScore(u);
-                scoreEl.textContent = score !== '' ? (score + ' pts') : '0 pts';
-                slot.classList.remove('loading');
-              });
+              // Usar exactamente la misma fuente que alimenta la scoreline.
+              const data = getTopThreePodiumData();
+              console.debug('renderTopDesignersPodium: top3 data', data);
+              // Pre-fetch profile photos for the top-3 when missing.
+              try {
+                console.debug('renderTopDesignersPodium: top3 avatars before prefetch', data.map(d => ({ name: d && (d.name||d.nombre), avatar: d && (d.avatar||d.foto_url||d.photo) })));
+                await Promise.all((data || []).map(async (u) => {
+                  try {
+                    if (u && u.__generic) return;
+                    // If getAvatar already returns a usable URL, skip.
+                    const current = getAvatar(u);
+                    const defaultAvatar = (window.DEFAULT_AVATAR || DEFAULT_AVATAR || '');
+                    const needsFetch = !current || current === '' || (defaultAvatar && current === defaultAvatar);
+                    if (!needsFetch) return;
+
+                    // Try multiple name-like fields to look up the employee
+                    const possibleName = (u && (u.name || u.nombre || u.username || u.displayName || u.fullName || '')) || '';
+                    if (!possibleName) return;
+
+                    const fetched = await getEmployeePhoto(possibleName);
+                    if (fetched) {
+                      // Prefer storing on a common `avatar` key so getAvatar can find it later
+                      if (u && typeof u === 'object') u.avatar = fetched;
+                    }
+                  } catch (e) {
+                    console.warn('renderTopDesignersPodium: prefetch photo error', e);
+                  }
+                }));
+              } catch (e) {
+                console.warn('renderTopDesignersPodium: error prefetching top3 photos', e);
+              }
+              const slots = Array.from(podium.querySelectorAll('.podium-slot'));
+              for (const slot of slots) {
+                try {
+                  const rank = parseInt(slot.getAttribute('data-rank'),10);
+                  const u = data[rank - 1] || null;
+                  const img = slot.querySelector('.podium-avatar img');
+                  const nameEl = slot.querySelector('.podium-name');
+                  const scoreEl = slot.querySelector('.podium-score');
+
+                  // fallback to any avatar-like field in the object
+                  let avatarUrl = getAvatar(u);
+                  // If avatar is missing or matches the DEFAULT placeholder, try to fetch from empleados API by name
+                  const defaultAvatar = (window.DEFAULT_AVATAR || DEFAULT_AVATAR || '');
+                  const isDefaultAvatar = !avatarUrl || avatarUrl === '' || (defaultAvatar && avatarUrl === defaultAvatar);
+                  if (isDefaultAvatar && u && !u.__generic) {
+                    const possibleName = u.name || u.nombre || u.username || u.displayName || u.fullName || '';
+                    if (possibleName) {
+                      console.debug('renderTopDesignersPodium: attempting fetch photo for', possibleName);
+                      try {
+                        const fetched = await getEmployeePhoto(possibleName);
+                        console.debug('renderTopDesignersPodium: fetched photo for', possibleName, fetched);
+                        if (fetched) avatarUrl = fetched;
+                      } catch (e) {
+                        console.warn('renderTopDesignersPodium: error fetching employee photo', e);
+                      }
+                    }
+                  }
+
+                  // Setup handlers so we only remove loading state when image actually loads
+                  img.onload = function(){
+                    this.onload = null;
+                    this.onerror = null;
+                    slot.classList.remove('loading');
+                  };
+                  img.onerror = async function(){
+                    try {
+                      this.onerror = null;
+                      // last-resort attempt: try fetching directly by name
+                      if (u) {
+                        const possibleName = u.name || u.nombre || u.username || u.displayName || u.fullName || '';
+                        if (possibleName) {
+                          try {
+                            const retry = await getEmployeePhoto(possibleName);
+                            if (retry) {
+                              // set and let onload handle removing loading
+                              this.src = (typeof retry === 'string' && retry.indexOf('/') === 0 && window.location && window.location.origin) ? window.location.origin + retry : (retry || (window.DEFAULT_AVATAR || DEFAULT_AVATAR || ''));
+                              return;
+                            }
+                          } catch (e) {
+                            console.warn('renderTopDesignersPodium: retry getEmployeePhoto failed', e);
+                          }
+                        }
+                      }
+                      // fallback to DEFAULT
+                      this.src = (window.DEFAULT_AVATAR || DEFAULT_AVATAR || '');
+                    } finally {
+                      slot.classList.remove('loading');
+                    }
+                  };
+                  // if avatarUrl is a relative path like '/uploads/..', make it absolute
+                  if (typeof avatarUrl === 'string' && avatarUrl.indexOf('/') === 0 && window.location && window.location.origin) {
+                    avatarUrl = window.location.origin + avatarUrl;
+                  }
+                  // debug log for diagnosis
+                  console.debug('renderTopDesignersPodium: setting img.src for', nameEl.textContent || u, { avatarUrl, cachedAvatar: u && (u.avatar || u.foto_url || u.photo) });
+                  img.alt = (u && (u.name || u.username || u.displayName || u.fullName || u.nombre)) || 'Sin datos';
+                  nameEl.textContent = (u && (u.name || u.username || u.displayName || u.fullName || u.nombre)) || 'Sin datos';
+                  const score = getScore(u);
+                  scoreEl.textContent = score !== '' ? (score + ' pts') : '0 pts';
+                  // expose debug info directly on element for quick inspection
+                  img.dataset.debugSrc = avatarUrl || '';
+                  img.title = avatarUrl || img.title || '';
+                  img.src = avatarUrl || (window.DEFAULT_AVATAR || DEFAULT_AVATAR || '');
+                } catch (err) {
+                  console.error('renderTopDesignersPodium slot error', err);
+                }
+              }
             }
             document.addEventListener('DOMContentLoaded', function(){
               renderTopDesignersPodium();
@@ -3161,11 +3304,50 @@
     }
     const requestPromise = (async () => {
       try {
-        const normalize = v => ('' + (v || '')).toString().trim().toLowerCase();
-        // If we already loaded empleados list, use it
+        const normalizeRaw = v => ('' + (v || '')).toString().trim().toLowerCase();
+        const stripDiacritics = s => ('' + (s || '')).normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/\s+/g, ' ').trim();
+        const normalize = v => stripDiacritics(normalizeRaw(v));
+
+        // Helper to return a usable URL (prefix origin for relative paths)
+        const buildUrl = (url) => {
+          if (!url) return null;
+          if (typeof url !== 'string') return null;
+          if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0 || url.indexOf('data:') === 0) return url;
+          if (url.indexOf('/') === 0) return (window.location && window.location.origin ? window.location.origin : '') + url;
+          return url;
+        };
+
+        // Tokenize name for order-insensitive matching
+        const tokensOf = name => (normalize(name) || '').split(' ').filter(Boolean);
+        const targetTokens = tokensOf(cacheKey);
+
+        const matchEmployee = (e) => {
+          const full = normalize(e.nombre_completo || e.name || e.nombre || e.username || '');
+          if (!full) return false;
+          if (full === cacheKey) return true; // exact
+          const fullTokens = full.split(' ').filter(Boolean);
+          // exact token set equality or containment
+          const allInFull = targetTokens.every(t => fullTokens.includes(t));
+          if (allInFull) return true;
+          // loose includes
+          if (full.indexOf(cacheKey) !== -1 || cacheKey.indexOf(full) !== -1) return true;
+          return false;
+        };
+
+        // If we already loaded empleados list, use it (try exact then fuzzy matches)
         if (Array.isArray(empleadosCache) && empleadosCache.length) {
-          const found = empleadosCache.find(e => normalize(e.nombre_completo || e.username || '') === cacheKey || normalize(e.username || '') === cacheKey);
-          return found?.foto_url || null;
+          let found = empleadosCache.find(e => matchEmployee(e));
+          // as extra fallback try matching by email/username tokens
+          if (!found) {
+            found = empleadosCache.find(e => {
+              const uname = normalize(e.username || e.email || e.correo || '');
+              return uname && (uname === cacheKey || uname.indexOf(cacheKey) !== -1 || cacheKey.indexOf(uname) !== -1);
+            });
+          }
+          const foto = found?.foto_url || found?.foto || found?.photo || found?.avatar || null;
+          const built = buildUrl(foto);
+          console.debug('getEmployeePhoto: found in cache', cacheKey, built);
+          return built || null;
         }
 
         // Fallback: fetch full empleados list once (avoid per-name 404 endpoint)
@@ -3175,12 +3357,21 @@
             const list = await res.json();
             if (Array.isArray(list)) {
               empleadosCache = list;
-              const found = list.find(e => normalize(e.nombre_completo || e.username || '') === cacheKey || normalize(e.username || '') === cacheKey);
-              return found?.foto_url || null;
+              let found = list.find(e => matchEmployee(e));
+              if (!found) {
+                found = list.find(e => {
+                  const uname = normalize(e.username || e.email || e.correo || '');
+                  return uname && (uname === cacheKey || uname.indexOf(cacheKey) !== -1 || cacheKey.indexOf(uname) !== -1);
+                });
+              }
+              const foto = found?.foto_url || found?.foto || found?.photo || found?.avatar || null;
+              const built = buildUrl(foto);
+              console.debug('getEmployeePhoto: searched empleados list', cacheKey, built);
+              return built || null;
             }
           }
         } catch (e) {
-          // ignore
+          console.warn('getEmployeePhoto: fetch /api/empleados failed', e);
         }
 
         // Last resort: try the specific endpoint if available
@@ -3188,10 +3379,15 @@
           const response = await fetch(`/api/empleados?nombre=${encodeURIComponent(nombreCompleto)}`);
           if (!response.ok) return null;
           const employee = await response.json();
-          if (Array.isArray(employee)) {
-            return employee[0]?.foto_url || null;
+          let foto = null;
+          if (Array.isArray(employee) && employee.length) {
+            foto = employee[0]?.foto_url || employee[0]?.foto || employee[0]?.photo || employee[0]?.avatar || null;
+          } else if (employee && typeof employee === 'object') {
+            foto = employee?.foto_url || employee?.foto || employee?.photo || employee?.avatar || null;
           }
-          return employee?.foto_url || null;
+          const built = buildUrl(foto);
+          console.debug('getEmployeePhoto: fetched specific endpoint', cacheKey, built);
+          return built || null;
         } catch (error) {
           console.error('Error al obtener foto del empleado:', error);
           return null;
@@ -7273,15 +7469,30 @@
       });
 
       const aggregatedArray = Array.from(aggregatedMap.values()).map(item => {
+        const buildAbsolute = (url) => {
+          if (!url) return '';
+          try {
+            if (typeof url !== 'string') url = String(url);
+            if (url.indexOf('http://') === 0 || url.indexOf('https://') === 0 || url.indexOf('data:') === 0) return url;
+            if (url.indexOf('/') === 0 && window.location && window.location.origin) return window.location.origin + url;
+            return url;
+          } catch (e) {
+            return url;
+          }
+        };
         // Total = working-like fields + ausencia (match renderDesignerPieChart)
         const workingTotal = (item.workingSecs || 0) + (item.meetingTrabajoSecs || 0) + (item.pendienteSecs || 0) + (item.esperandoSecs || 0) + (item.buscandoSecs || 0) + (item.aprobadoSecs || 0) + (item.cambiosSecs || 0) + (item.revisionOrdenSecs || 0);
         const ausenciaTotal = (item.pausaSecs || 0) + (item.comidaSecs || 0) + (item.cincoSSecs || 0) + (item.meetingSecs || 0) + (item.trainingSecs || 0) + (item.pdmRwkSecs || 0);
         const breakTotal = ausenciaTotal;
         const totalCalc = workingTotal + breakTotal;
 
+        // calcular puntuación usando la utilidad ya definida
+        const scoreVal = (typeof computeDesignerScore === 'function') ? computeDesignerScore(totalCalc, breakTotal) : 0;
+
+        const avatarUrl = buildAbsolute(item.avatar || DEFAULT_AVATAR);
         return {
           name: item.name,
-          avatar: item.avatar || DEFAULT_AVATAR,
+          avatar: avatarUrl || DEFAULT_AVATAR,
           ordenLogeo: item.ordenLogeo || '-',
           numeroParte: item.numeroParte || '-',
           cliente: item.cliente || '-',
@@ -7303,13 +7514,27 @@
           tiempoAprobado: formatSecondsToHms(item.aprobadoSecs),
           tiempoCambios: formatSecondsToHms(item.cambiosSecs),
           totalSecs: totalCalc,
+          // puntuación numérica para el podio
+          score: scoreVal,
+          // alias para compatibilidad con distintos getters en la UI
+          points: scoreVal,
+          puntaje: scoreVal,
           breakSecs: breakTotal,
           _totalSecs: totalCalc
         };
       });
 
       topDesignersScoreCache = aggregatedArray;
+      window.topDesignersScoreCache = aggregatedArray;
       renderTopDesignersScoreLine(aggregatedArray);
+      try {
+        if (typeof renderTopDesignersPodium === 'function') {
+          // actualizar podio con las fotos/puntajes recién calculados
+          renderTopDesignersPodium().catch(e => console.warn('podium render error', e));
+        }
+      } catch (e) {
+        console.warn('Error invocando renderTopDesignersPodium:', e);
+      }
 
       // Mostrar filas individuales por sesión (no agregar por usuario)
       // Ordenar sesiones por fecha inicio descendente

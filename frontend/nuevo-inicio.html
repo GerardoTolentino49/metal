@@ -114,7 +114,7 @@
 			width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 4px 10px rgba(196,58,58,0.22)
 		}
 
-				.main{padding-top:60px;margin-left:calc(var(--sidebar-width) + 40px)}
+				.main{padding-top:80px;margin-left:calc(var(--sidebar-width) + 40px)}
 			.header-grid{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px;padding-left:18px}
 		.title{font-size:20px;font-weight:700}
 			.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px;margin-bottom:28px}
@@ -489,8 +489,22 @@
 		cursor: not-allowed !important;
 		opacity: 1 !important;
 	}
+	.inicio-tablero-view {
+		display: none;
+		flex: 1;
+		min-height: 0;
+	}
 
-		.footer-space{height:80px}
+	.inicio-tablero-view.is-active {
+		display: block;
+	}
+
+	#tableroCargoSection.inicio-tablero-view.is-active {
+		display: flex;
+		flex-direction: column;
+	}
+
+		.footer-space{height:150px}
 
 			@media (max-width:900px){
 				.wrap{max-width:960px;padding:18px}
@@ -590,6 +604,597 @@
 	/* When checked use black background with white knob as requested */
 	.switch input:checked + .slider { background: #000; }
 	.switch input:checked + .slider > span { transform: translateX(20px); }
+	.inicio-cargo-grid {
+		width: 100%;
+		padding-bottom: 14px;
+		min-height: calc(100vh - 240px);
+	}
+	.cargo-resumen-card,
+	.cargo-metrica-card,
+	.cargo-dia-card {
+	border-radius: 28px;
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	background: rgba(255, 255, 255, 0.86);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	.cargo-accidente-card {
+	border-radius: 28px;
+	margin-top: 2%;
+	height: auto;
+	border: 2px solid #ff9800;
+	background: rgba(254, 254, 125, 0.86);
+	box-shadow: 0 8px 24px rgba(255, 152, 0, 0.15);
+	text-align: center;
+	padding: 20px 18px;
+	position: relative;
+	overflow: hidden;
+	}
+
+	.cargo-accidente-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background: linear-gradient(90deg, #ff9800 0%, #ffc107 100%);
+	}
+
+	.cargo-accidente-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-bottom: 8px;
+	}
+
+	.cargo-accidente-icon {
+	font-size: 28px;
+	color: #ff9800;
+	animation: pulse-warning 2s infinite;
+	}
+
+	@keyframes pulse-warning {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.6;
+	}
+	}
+
+	.cargo-accidente-card h4 {
+	margin: 0;
+	text-transform: uppercase;
+	color: #ff6f00;
+	font-size: 22px;
+	font-weight: 600;
+	}
+
+	.cargo-accidente-total {
+	margin: 10px 0 4px;
+	color: rgba(0, 0, 0, 0.84);
+	font-size: 22px;
+	font-weight: 700;
+	}
+
+	.cargo-accidente-total span {
+	font-size: 44px;
+	line-height: 1;
+	}
+
+	.cargo-racha-wrap {
+	margin-top: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	}
+
+	.cargo-racha-historica {
+	margin: 0;
+	font-size: 15px;
+	color: rgba(0, 0, 0, 0.7);
+	}
+
+	.cargo-racha-historica strong {
+	color: rgba(0, 0, 0, 0.88);
+	}
+
+	.cargo-racha-label {
+	color: rgba(0, 0, 0, 0.56);
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	}
+
+	.cargo-racha-grid {
+	display: grid;
+	grid-template-columns: repeat(10, minmax(32px, 1fr));
+	gap: 8px;
+	}
+
+	.cargo-racha-dia {
+	width: 32px;
+	height: 32px;
+	border-radius: 999px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	font-weight: 700;
+	background: rgba(148, 163, 184, 0.25);
+	color: rgba(0, 0, 0, 0.65);
+	border: 1px solid rgba(148, 163, 184, 0.4);
+	}
+
+	.cargo-racha-dia.is-today {
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+	}
+
+	.cargo-racha-dia.is-safe {
+	background: rgba(76, 175, 80, 0.24);
+	border-color: rgba(76, 175, 80, 0.45);
+	color: #2e7d32;
+	}
+
+	.cargo-racha-dia.is-incident {
+	background: rgba(239, 83, 80, 0.2);
+	border-color: rgba(239, 83, 80, 0.45);
+	color: #c62828;
+	}
+	.cargo-racha-dia.is-clickable {
+	cursor: pointer;
+	transition: transform .18s ease, box-shadow .18s ease;
+	}
+	.cargo-racha-dia.is-clickable:hover,
+	.cargo-racha-dia.is-clickable:focus-visible {
+	transform: translateY(-1px);
+	box-shadow: 0 3px 10px rgba(198, 40, 40, 0.28);
+	outline: none;
+	}
+
+	.cargo-racha-dia.is-pending {
+	opacity: 0.5;
+	}
+
+	.cargo-resumen-card {
+	text-align: center;
+	padding: 24px 18px;
+	cursor: pointer;
+	transition: transform .2s ease, box-shadow .2s ease;
+	}
+
+	.cargo-resumen-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+	}
+
+	.cargo-resumen-card h3 {
+	margin: 0;
+	text-transform: uppercase;
+	font-size: 22px;
+	}
+
+	.cargo-resumen-total {
+	margin: 10px 0 6px;
+	font-size: 56px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	}
+
+	.cargo-resumen-card p {
+	margin: 0;
+	color: rgba(0, 0, 0, 0.75);
+	}
+
+	.cargo-metricas-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(180px, 1fr));
+	gap: 16px;
+	margin-top: 2%;
+	}
+
+	.cargo-metrica-card {
+	padding: 18px 14px;
+	text-align: center;
+	}
+
+	.cargo-metrica-card h4 {
+	margin: 0 0 14px;
+	font-size: 20px;
+	color: rgba(0, 0, 0, 0.72);
+	}
+
+	.cargo-metrica-card p {
+	margin: 10px 0 0;
+	color: rgba(0, 0, 0, 0.52);
+	font-size: 14px;
+	}
+/* Cargo empleados modal styles (copied from inicio.html) */
+.cargo-empleados-modal {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 2500;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+.cargo-empleados-modal.is-open {
+	display: flex;
+}
+.cargo-empleados-content {
+	width: min(1100px, 96vw);
+	max-width: 90%;
+	max-height: 90%;
+	background: #f5f5f5;
+	border-radius: 28px;
+	padding: 36px 40px;
+	position: relative;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+.cargo-empleados-close {
+	position: absolute;
+	top: 14px;
+	right: 18px;
+	width: 34px;
+	height: 34px;
+	border: 0;
+	border-radius: 999px;
+	background: transparent;
+	font-size: 34px;
+	color: #8a8a8a;
+	cursor: pointer;
+	line-height: 1;
+}
+.cargo-empleados-content h3 {
+	margin: 0 0 28px;
+	text-align: center;
+	font-size: 40px;
+	color: #383838;
+}
+.cargo-empleados-field {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.cargo-empleados-field label {
+	font-size: 30px;
+	font-weight: 700;
+	color: #666;
+}
+.cargo-empleados-field select {
+	width: 100%;
+	border: 2px solid #ddd;
+	border-radius: 10px;
+	background: #fff;
+	min-height: 52px;
+	font-size: 33px;
+	padding: 8px 14px;
+	color: #222;
+}
+.cargo-empleados-field input {
+	max-width: 100%;
+	border: 2px solid #ddd;
+	border-radius: 30px;
+	background: #fff;
+	min-height: 46px;
+	font-size: 22px;
+	padding: 8px 14px;
+	color: #222;
+}
+.cargo-empleados-field input::placeholder {
+	color: #9aa0a6;
+}
+.cargo-empleado-select-hidden { display: none; }
+.cargo-empleados-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.cargo-nivel-back-btn {
+	border: 1px solid #cbd5e1;
+	border-radius: 999px;
+	background: #fff;
+	color: #374151;
+	padding: 8px 14px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.cargo-nivel-back-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cargo-nivel-actual { font-size: 14px; font-weight: 700; color: #4b5563; }
+.cargo-empleado-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 12px;
+	max-height: 320px;
+	overflow-y: auto;
+	padding: 4px;
+}
+.cargo-empleado-card {
+	border: 1px solid rgba(15, 23, 42, 0.12);
+	border-radius: 30px;
+	background: #fff;
+	padding: 10px;
+	display: grid;
+	grid-template-rows: auto auto;
+	gap: 10px;
+	cursor: pointer;
+	text-align: left;
+}
+.cargo-empleado-card:hover { border-color: rgba(59, 130, 246, 0.45); }
+.cargo-card-photo { width: 100%; aspect-ratio: 1 / 1; border-radius: 30px; background: #e5e7eb; overflow: hidden; display:flex; align-items:center; justify-content:center }
+.cargo-card-photo img { width:100%;height:100%;object-fit:cover;border-radius:30px }
+.cargo-card-initials { font-size:30px;font-weight:700;color:#6b7280 }
+.cargo-card-info { display:grid; gap:3px }
+.cargo-card-info strong { font-size:14px;color:#111827;line-height:1.25 }
+.cargo-card-info span,.cargo-card-info small { font-size:12px;color:#6b7280 }
+.cargo-ver-jerarquia-btn { margin-top:4px;border:0;border-radius:30px;min-height:46px;padding:10px 14px;background:linear-gradient(180deg,#4b5563 0%,#374151 100%);color:#fff;font-size:18px;font-weight:700;cursor:pointer }
+.cargo-empleado-tabs { margin-top: 22px; }
+.cargo-tabs-header {
+	display: flex;
+	gap: 8px;
+	border-bottom: 2px solid #e0e0e0;
+	overflow-x: auto;
+	padding-bottom: 6px;
+}
+.cargo-empleado-tabs .cargo-tab-btn {
+	border: 0;
+	background: transparent;
+	color: #999;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	padding: 10px 14px;
+	border-bottom: 3px solid transparent;
+	white-space: nowrap;
+	border-radius: 0;
+	box-shadow: none;
+}
+.cargo-empleado-tabs .cargo-tab-btn.active {
+	color: #2196F3;
+	border-bottom-color: #2196F3;
+}
+.cargo-tabs-content {
+	margin-top: 12px;
+	max-height: 20vh;
+	overflow-y: auto;
+	padding-right: 4px;
+}
+.cargo-tab-pane { display: none; }
+.cargo-tab-pane.active { display: block; }
+.cargo-tab-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-height: 10rem;
+}
+.cargo-tab-item {
+	background: #fff;
+	border-left: 4px solid #2196F3;
+	border-radius: 12px;
+	padding: 12px;
+	color: #444;
+	font-size: 14px;
+}
+.cargo-tab-empty {
+	text-align: center;
+	color: #888;
+	padding: 22px 8px;
+}
+.cargo-calendario-title {
+	text-align: center;
+	margin: 6px 0 0;
+	font-size: 40px;
+	color: rgb(0, 0, 0);
+}
+.cargo-semana-grid {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(140px, 1fr));
+	gap: 14px;
+}
+.cargo-dia-card {
+	padding: 14px 10px;
+	text-align: center;
+	min-height: 210px;
+}
+.cargo-dia-card h5 {
+	margin: 0;
+	text-transform: uppercase;
+	font-size: 16px;
+	color: rgba(0, 0, 0, 0.75);
+}
+.cargo-dia-numero {
+	margin: 8px 0 0;
+	font-size: 44px;
+	line-height: 1;
+	font-weight: 700;
+	color: #2f9e44;
+}
+.cargo-dia-mes {
+	margin: 2px 0 14px;
+	text-transform: uppercase;
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.5);
+}
+.cargo-avatar-group {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 8px;
+	justify-items: center;
+}
+.cargo-avatar-group span {
+	width: 34px;
+	height: 34px;
+	border-radius: 999px;
+	background: rgba(63, 81, 181, 0.16);
+	color: rgba(0, 0, 0, 0.72);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 11px;
+	font-weight: 700;
+	position: relative;
+	overflow: visible;
+}
+.cargo-avatar-photo {
+	width: 100%;
+	height: 100%;
+	border-radius: 999px;
+	object-fit: cover;
+	display: block;
+}
+.cargo-avatar-fallback {
+	width: 100%;
+	height: 100%;
+	border-radius: 999px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 11px;
+	font-weight: 700;
+}
+.cargo-event-avatar { cursor: help; }
+.cargo-event-hover-overlay {
+	position: fixed;
+	left: -9999px;
+	top: -9999px;
+	background: rgba(17, 24, 39, 0.97);
+	color: #fff;
+	padding: 8px 10px;
+	border-radius: 10px;
+	font-size: 12px;
+	line-height: 1.35;
+	width: max-content;
+	max-width: min(280px, 86vw);
+	text-align: left;
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+	z-index: 5000;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .12s ease;
+	white-space: normal;
+}
+.cargo-event-hover-overlay.is-visible { opacity: 1; }
+.cargo-avatar-group span i {
+	position: absolute;
+	bottom: -6px;
+	right: -4px;
+	width: 14px;
+	height: 14px;
+	border-radius: 999px;
+	background: #7c3aed;
+	color: #fff;
+	font-size: 9px;
+	font-style: normal;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.cargo-avatar-group .cargo-event-vacaciones i { background: #2563eb; }
+.cargo-avatar-group .cargo-event-permiso i { background: #16a34a; }
+.cargo-avatar-group .cargo-event-falta i { background: #dc2626; }
+.cargo-avatar-group .cargo-event-retardo i { background: #f59e0b; }
+.cargo-avatar-group .cargo-event-amonestacion i { background: #7c3aed; }
+.cargo-dia-card.is-active-day {
+	border-color: rgba(56, 161, 105, 0.5);
+	box-shadow: 0 0 0 2px rgba(56, 161, 105, 0.35);
+}
+.cargo-sin-ausencias {
+	margin-top: 34px;
+	color: rgba(0, 0, 0, 0.72);
+	font-size: 13px;
+}
+.cargo-jerarquia-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 2600; display: none; align-items: center; justify-content: center; padding: 18px; }
+.cargo-jerarquia-modal.is-open { display: flex; }
+.cargo-jerarquia-content { width: min(1200px, 98vw); max-height: 88vh; }
+
+/* Igualación estricta con inicio.html para tabs y calendario semanal */
+#tableroCargoSection .cargo-empleado-tabs { margin-top: 22px; }
+#tableroCargoSection .cargo-tabs-header {
+	display: flex;
+	gap: 8px;
+	border-bottom: 2px solid #e0e0e0;
+	overflow-x: auto;
+	padding-bottom: 6px;
+}
+#tableroCargoSection .cargo-tab-btn {
+	border: 0 !important;
+	background: transparent !important;
+	color: #999 !important;
+	font-size: 14px !important;
+	font-weight: 700 !important;
+	cursor: pointer !important;
+	padding: 10px 14px !important;
+	border-bottom: 3px solid transparent !important;
+	white-space: nowrap;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+#tableroCargoSection .cargo-tab-btn.active {
+	color: #2196F3 !important;
+	border-bottom-color: #2196F3 !important;
+}
+#tableroCargoSection .cargo-tabs-content {
+	margin-top: 12px;
+	max-height: 20vh;
+	overflow-y: auto;
+	padding-right: 4px;
+}
+#tableroCargoSection .cargo-tab-pane { display: none; }
+#tableroCargoSection .cargo-tab-pane.active { display: block; }
+
+#tableroCargoSection .cargo-calendario-title {
+	text-align: center;
+	margin: 4px 0 0;
+	font-size: 40px;
+	color: rgb(0, 0, 0);
+}
+#tableroCargoSection .cargo-semana-grid {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(140px, 1fr));
+	gap: 14px;
+}
+#tableroCargoSection .cargo-dia-card {
+	padding: 14px 10px;
+	text-align: center;
+	min-height: 210px;
+}
+#tableroCargoSection .cargo-dia-card h5 {
+	margin: 0;
+	text-transform: uppercase;
+	font-size: 16px;
+	color: rgba(0, 0, 0, 0.75);
+}
+#tableroCargoSection .cargo-dia-numero {
+	margin: 8px 0 0;
+	font-size: 44px;
+	line-height: 1;
+	font-weight: 700;
+	color: #2f9e44;
+}
+#tableroCargoSection .cargo-dia-mes {
+	margin: 2px 0 14px;
+	text-transform: uppercase;
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.5);
+}
+#tableroCargoSection .cargo-sin-ausencias {
+	margin-top: 34px;
+	color: rgba(0, 0, 0, 0.72);
+	font-size: 13px;
+}
+#tableroCargoSection .cargo-dia-card.is-active-day {
+	border-color: rgba(56, 161, 105, 0.5);
+	box-shadow: 0 0 0 2px rgba(56, 161, 105, 0.35);
+}
 	</style>
 	</head>
 	<body>
@@ -716,8 +1321,23 @@
 					</div>
 				</div>
 			</section>
+
+
+			<section class="hero" aria-label="PDMmetal ERP hero">
+				<div>
+					<h2>Gerardo, hemos trabajado con orgullo 2 días sin accidentes</h2>
+					<p>¡Continuemos así!</p>
+					<div style="height:14px"></div>
+					<div class="usage">
+
+					</div>
+					<div class="filter-row" style="margin-top:12px">
+					</div>
+				</div>
+			</section>
 		
 
+			<div id="inicio-explore-sections">
 			<section class = section>
 				<h3 class = section-title>Tickets</h3>
 				<!-- <div class="header-grid">
@@ -736,28 +1356,6 @@
 				</div>
 			</section>
 			
-
-			<section class="section">
-				<h3 class="section-title">Departamentos de apoyo</h3>
-				<div class="explore-grid">
-					<a class="ex-card card-it" href="panel.html" data-permission="show_it">
-						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">memory</span></div>
-						<div><div style="font-weight:700">IT</div><div style="color:var(--muted);font-size:13px"></div></div>
-					</a>
-					<a class="ex-card card-rh" href="empleados_panel.html" data-permission="show_rh">
-						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">groups</span></div>
-						<div><div style="font-weight:700">Recursos Humanos</div><div style="color:var(--muted);font-size:13px"></div></div>
-					</a>
-					<a class="ex-card card-mantenimiento" href="mantenimiento.html" data-permission="show_mantenimiento">
-						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">build</span></div>
-						<div><div style="font-weight:700">Mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
-					</a>
-					<a class="ex-card card-envios" href="enviosyrecibos.html" data-permission="show_enviosyrecibos">
-						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">local_shipping</span></div>
-						<div><div style="font-weight:700">Envíos y recibos</div><div style="color:var(--muted);font-size:13px"></div></div>
-					</a>
-				</div>
-			</section>
 
 			<section class="section">
 				<h3 class="section-title">Linea PDM</h3>
@@ -798,19 +1396,6 @@
 			</section>
 
 
-			<section class="hero" aria-label="PDMmetal ERP hero">
-				<div>
-					<h2>Gerardo, hemos trabajado con orgullo 2 días sin accidentes</h2>
-					<p>¡Continuemos así!</p>
-					<div style="height:14px"></div>
-					<div class="usage">
-
-					</div>
-					<div class="filter-row" style="margin-top:12px">
-					</div>
-				</div>
-			</section>
-
 
 			<section class="section">
 				<h3 class="section-title">Otras opciones</h3>
@@ -834,8 +1419,242 @@
 				</div>
 			</section>
 
-			<div class="footer-space"></div>
-		</main>
+			<section class="section">
+				<h3 class="section-title">Departamentos de apoyo</h3>
+				<div class="explore-grid">
+					<a class="ex-card card-it" href="panel.html" data-permission="show_it">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">memory</span></div>
+						<div><div style="font-weight:700">IT</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-rh" href="empleados_panel.html" data-permission="show_rh">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">groups</span></div>
+						<div><div style="font-weight:700">Recursos Humanos</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-mantenimiento" href="mantenimiento.html" data-permission="show_mantenimiento">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">build</span></div>
+						<div><div style="font-weight:700">Mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+					<a class="ex-card card-envios" href="enviosyrecibos.html" data-permission="show_enviosyrecibos">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">local_shipping</span></div>
+						<div><div style="font-weight:700">Envíos y recibos</div><div style="color:var(--muted);font-size:13px"></div></div>
+					</a>
+				</div>
+			</section>
+
+			</div>
+
+			<script>
+			document.addEventListener('DOMContentLoaded', function(){
+				var navPersonal = document.getElementById('nav-personal');
+				var explore = document.getElementById('inicio-explore-sections');
+				var cargo = document.getElementById('tableroCargoSection');
+				if(!navPersonal) return;
+				navPersonal.addEventListener('click', function(e){
+					e.preventDefault();
+					// // Prefer the centralized pdmToggleTablero if available (prevents duplicate/conflicting handlers)
+					// if (typeof window.pdmToggleTablero === 'function') {
+					// 	try { window.pdmToggleTablero(); } catch (_) {}
+					// 	return;
+					// }
+					if(!explore || !cargo) return;
+					var cargoHidden = cargo.hidden || cargo.getAttribute('aria-hidden') === 'true';
+					if (cargoHidden) {
+						explore.style.display = 'none';
+						cargo.hidden = false;
+						cargo.setAttribute('aria-hidden','false');
+						cargo.style.display = 'flex';
+						cargo.style.flexDirection = 'column';
+					} else {
+						explore.style.display = '';
+						cargo.hidden = true;
+						cargo.setAttribute('aria-hidden','true');
+						cargo.style.display = 'none';
+					}
+				});
+			});
+			</script>
+				<section id="tableroCargoSection" class="inicio-tablero-view inicio-cargo-grid" aria-label="Tablero de personal a cargo" hidden aria-hidden="true">
+				<article class="cargo-resumen-card" id="cargoResumenCard" role="button" tabindex="0" aria-label="Ver lista de empleados">
+				<h3 style="color: black;">Empleados asignados</h3>
+				<p class="cargo-resumen-total" id="cargoEmpleadosTotal">0</p>
+				<p>Total en mi equipo</p>
+				</article>
+
+				<!-- <article class="cargo-accidente-card" aria-live="polite">
+				<div class="cargo-accidente-header">
+					<i class="fas fa-triangle-exclamation cargo-accidente-icon"></i>
+					<h4>Hemos trabajado con orgullo</h4>
+				</div>
+				<p class="cargo-accidente-total"><span id="cargoSinAccidentesDias">0</span></p>
+				<p class="cargo-accidente-total">días sin accidentes</p>
+				<div class="cargo-racha-wrap">
+					<p class="cargo-racha-historica">Racha histórica: <strong id="cargoRachaHistoricaDias">0</strong> días</p>
+					!--<span class="cargo-racha-label">Últimos 10 días</span>
+					<div class="cargo-racha-grid" id="cargoRachaDias">
+					<span class="cargo-racha-dia">-</span>
+					</div>--
+				</div>
+				</article> -->
+
+				<div class="cargo-metricas-grid">
+				<article class="cargo-metrica-card">
+					<h4>Ausentismo General</h4>
+					<div class="cargo-gauge gauge-warn">
+					<span id="cargoAusentismoPorcentaje">0.0%</span>
+					</div>
+					<p id="cargoAusentismoTotal">Total de ausencias: 0</p>
+				</article>
+
+				<article class="cargo-metrica-card">
+					<h4>Desempeño General</h4>
+					<div class="cargo-gauge gauge-success">
+					<span id="cargoDesempenoPorcentaje">100.0%</span>
+					</div>
+					<p id="cargoDesempenoTotal">Incidentes totales: 0</p>
+				</article>
+
+				<article class="cargo-metrica-card is-muted">
+					<h4>Vales ($700)</h4>
+					<div class="cargo-gauge gauge-muted">
+					<span>$0</span>
+					</div>
+					<p>Próximamente disponible</p>
+				</article>
+
+				<article class="cargo-metrica-card is-muted">
+					<h4>Órdenes</h4>
+					<div class="cargo-gauge gauge-muted">
+					<span>0</span>
+					</div>
+					<p>Próximamente disponible</p>
+				</article>
+				</div>
+				<h3 class="cargo-calendario-title">Calendario Semanal</h3>
+				<div class="cargo-semana-grid" id="cargoSemanaGrid">
+					<article class="cargo-dia-card">
+						<h5>Cargando...</h5>
+						<p class="cargo-dia-numero">-</p>
+						<p class="cargo-dia-mes">---</p>
+					</article>
+				</div>
+			</section>
+			</div>
+
+
+		<!-- Cargo empleados modal (copiado de inicio.html) -->
+		<div class="cargo-empleados-modal" id="cargoEmpleadosModal" aria-hidden="true">
+		  <div class="cargo-empleados-content" role="dialog" aria-modal="true" aria-labelledby="cargoEmpleadosTitle">
+			<button class="cargo-empleados-close" id="cargoEmpleadosClose" aria-label="Cerrar">&times;</button>
+			<h3 id="cargoEmpleadosTitle">Información de Empleado</h3>
+			<div class="cargo-empleados-field">
+			  <label for="cargoEmpleadoSearch">Selecciona un empleado:</label>
+			  <input type="text" id="cargoEmpleadoSearch" placeholder="Buscar empleado..." autocomplete="off" />
+			  <div class="cargo-empleados-nav">
+				<button type="button" id="cargoNivelBackBtn" class="cargo-nivel-back-btn" disabled>← Regresar</button>
+				<span id="cargoNivelActualLabel" class="cargo-nivel-actual">Mi equipo</span>
+			  </div>
+			  <div id="cargoEmpleadoCards" class="cargo-empleado-cards" aria-live="polite">
+				<div class="cargo-tab-empty">Cargando empleados...</div>
+			  </div>
+			  <select id="cargoEmpleadoIdSelect" class="cargo-empleado-select-hidden" onchange="cargarEmpleadoCargoSeleccionado()" aria-hidden="true" tabindex="-1">
+				<option value="">-- Selecciona un empleado --</option>
+			  </select>
+			  <button type="button" id="cargoVerJerarquiaBtn" class="cargo-ver-jerarquia-btn">Ver jerarquía organizacional</button>
+			</div>
+
+			<div class="cargo-empleado-tabs" id="cargoEmpleadoTabs" style="display: none;">
+			  <div class="cargo-tabs-header">
+				<button class="cargo-tab-btn active" data-cargo-tab="apoyos" onclick="cambiarCargoTab('apoyos')">Apoyos</button>
+				<button class="cargo-tab-btn" data-cargo-tab="amonestaciones" onclick="cambiarCargoTab('amonestaciones')">Amonestaciones</button>
+				<button class="cargo-tab-btn" data-cargo-tab="faltas" onclick="cambiarCargoTab('faltas')">Faltas</button>
+				<button class="cargo-tab-btn" data-cargo-tab="permisos" onclick="cambiarCargoTab('permisos')">Permisos</button>
+				<button class="cargo-tab-btn" data-cargo-tab="retardos" onclick="cambiarCargoTab('retardos')">Retardos</button>
+				<button class="cargo-tab-btn" data-cargo-tab="vacaciones" onclick="cambiarCargoTab('vacaciones')">Vacaciones</button>
+			  </div>
+			  <div class="cargo-tabs-content">
+				<div id="cargo-tab-apoyos" class="cargo-tab-pane active"></div>
+				<div id="cargo-tab-amonestaciones" class="cargo-tab-pane"></div>
+				<div id="cargo-tab-faltas" class="cargo-tab-pane"></div>
+				<div id="cargo-tab-permisos" class="cargo-tab-pane"></div>
+				<div id="cargo-tab-retardos" class="cargo-tab-pane"></div>
+				<div id="cargo-tab-vacaciones" class="cargo-tab-pane"></div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="cargo-jerarquia-modal" id="cargoJerarquiaModal" aria-hidden="true">
+		  <div class="cargo-jerarquia-content" role="dialog" aria-modal="true" aria-labelledby="cargoJerarquiaTitle">
+			<button class="cargo-jerarquia-close" id="cargoJerarquiaClose" aria-label="Cerrar">&times;</button>
+			<h3 id="cargoJerarquiaTitle">Jerarquía Organizacional</h3>
+			<div class="cargo-jerarquia-tree" id="cargoJerarquiaTree">
+			  <p class="cargo-tab-empty">Cargando jerarquía...</p>
+			</div>
+		  </div>
+		</div>
+
+		<script>
+		// Modal open/close handlers for cargo-empleados
+		(function(){
+		  function openModal(modal){
+			if(!modal) return;
+			modal.classList.add('is-open');
+			modal.setAttribute('aria-hidden','false');
+			// focus the search input if present
+			var inp = modal.querySelector('#cargoEmpleadoSearch');
+			if(inp) setTimeout(function(){ inp.focus(); }, 50);
+		  }
+		  function closeModal(modal){
+			if(!modal) return;
+			modal.classList.remove('is-open');
+			modal.setAttribute('aria-hidden','true');
+		  }
+		  var modal = document.getElementById('cargoEmpleadosModal');
+		  var opener = document.getElementById('cargoResumenCard');
+		  var closer = document.getElementById('cargoEmpleadosClose');
+		  if(opener && modal){
+			opener.addEventListener('click', function(e){ e.preventDefault(); openModal(modal); });
+			opener.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); openModal(modal); } });
+		  }
+		  if(closer && modal){ closer.addEventListener('click', function(){ closeModal(modal); }); }
+		  if(modal){
+			modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(modal); });
+			document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(modal); });
+		  }
+		})();
+
+// Auto-invocar carga del total de empleados supervisados al cargar la página
+// (si la función ya fue definida en este script, se ejecuta; si no, se reintenta brevemente)
+// Intentar invocar `cargarTableroPersonalCargo` repetidamente hasta que exista
+(function autoInvokeCargo() {
+	const MAX_ATTEMPTS = 20;
+	const INTERVAL_MS = 200;
+	let attempts = 0;
+
+	const runner = async () => {
+		attempts += 1;
+		try {
+			if (typeof cargarTableroPersonalCargo === 'function') {
+				try { await cargarTableroPersonalCargo(true); } catch(e){ console.warn('[cargo] invoked but error', e); }
+				return; // éxito
+			}
+		} catch (e) {
+			console.error('[cargo] auto-invoke unexpected error', e);
+		}
+
+		if (attempts < MAX_ATTEMPTS) {
+			setTimeout(runner, INTERVAL_MS);
+		} else {
+			console.warn('[cargo] auto-invoke gave up after', attempts, 'attempts');
+		}
+	};
+
+	// arrancar tras un pequeño retardo para permitir que el resto del script se inicialice
+	setTimeout(runner, 120);
+})();
+		</script>
+
+		<div class="footer-space"></div>
+	</main>
 
 		<aside id="messages-right-sidebar" class="right-sidebar" style="display:none">
 			<div style="padding:12px;">
@@ -977,7 +1796,22 @@
 					}
 				});
 				document.addEventListener('keydown', function(e){ if(e.key === 'Escape') openMenu(false); });
-				if(report) report.addEventListener('click', function(e){ e.stopPropagation(); openMenu(false); const rm = document.getElementById('report-modal'); if(rm){ rm.classList.add('open'); rm.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; const focus = rm.querySelector('.report-option'); if(focus) focus.focus(); } });
+				if(report) report.addEventListener('click', function(e){
+					e.stopPropagation();
+					openMenu(false);
+					const rm = document.getElementById('report-modal');
+					try {
+						try { if (typeof __lastFocusedElementBeforeModal !== 'undefined') __lastFocusedElementBeforeModal = document.activeElement; } catch(_) {}
+						try { window.__lastFocusedElementBeforeModal = document.activeElement; } catch(_) { window.__lastFocusedElementBeforeModal = null; }
+					} catch(_) {}
+					if(rm){
+						rm.classList.add('open');
+						rm.setAttribute('aria-hidden','false');
+						document.body.style.overflow = 'hidden';
+						const focus = rm.querySelector('.report-option');
+						if(focus) focus.focus();
+					}
+				});
 				if(logout) logout.addEventListener('click', async function(){
 					openMenu(false);
 					try {
@@ -993,6 +1827,7 @@
 						localStorage.removeItem('username');
 						localStorage.removeItem('sessionToken');
 						localStorage.removeItem('loggedInUser');
+						localStorage.removeItem('userProfile');
 						localStorage.removeItem('rol');
 						localStorage.removeItem('permissions');
 						localStorage.removeItem('userId');
@@ -1013,9 +1848,21 @@
 			const textarea = document.getElementById('report-description');
 
 			function closeModal(){
-				overlay.classList.remove('open');
-				overlay.setAttribute('aria-hidden','true');
-				document.body.style.overflow = '';
+					try {
+						const active = document.activeElement;
+						if (active && overlay.contains(active)) {
+							if (window.__lastFocusedElementBeforeModal && document.contains(window.__lastFocusedElementBeforeModal)) {
+								try { window.__lastFocusedElementBeforeModal.focus(); } catch(_) { try { document.body.focus(); } catch(_){} }
+							} else {
+								try { document.body.focus(); } catch(_){}
+							}
+							try { if (overlay.contains(document.activeElement)) document.activeElement.blur(); } catch(_){}
+						}
+					} catch(_){}
+
+					overlay.classList.remove('open');
+					overlay.setAttribute('aria-hidden','true');
+					document.body.style.overflow = '';
 				options.forEach(o=>o.classList.remove('selected'));
 				if(textarea) textarea.value = '';
 				sendBtn.disabled = true;
@@ -1069,18 +1916,21 @@
 					}
 					return;
 				}
-
-				// Cerrar modal inmediatamente (la función limpia el textarea y el estado)
 				closeModal();
 
 				// Preparar payload para la API
-				const payload = { tipo: tipo, mensaje: mensaje };
+				const usuario = localStorage.getItem('username') || (window.currentUser && window.currentUser.username) || 'Anonimo';
+				const payload = { tipo: tipo, mensaje: mensaje, usuario: usuario };
 
-				// Intentar enviar al servidor; si falla, guardar en localStorage como fallback
+				// Enviar al servidor (BD) sin fallback local
 				(async function(){
 					try {
 						sendBtn.disabled = true;
-						const res = await fetch('/api/comunidad', {
+						const apiBase = (window.location.protocol === 'file:')
+							? 'http://localhost:3000'
+							: '';
+						const endpoint = `${apiBase}/api/comunidad`;
+						const res = await fetch(endpoint, {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
 							credentials: 'include',
@@ -1088,38 +1938,29 @@
 						});
 
 						if (res.ok) {
+							let created = null;
+							try { created = await res.json(); } catch(_) {}
 							if (typeof window.showAlert === 'function') {
 								window.showAlert('Gracias por tus comentarios.');
 							} else {
 								alert('Gracias por tus comentarios.');
 							}
 						} else {
-							// Guardar en localStorage como backup
-							const backup = { tipo: tipo, mensaje: mensaje, fecha_creacion: new Date().toISOString() };
-							try {
-								const list = JSON.parse(localStorage.getItem('pendingComunidad') || '[]');
-								list.push(backup);
-								localStorage.setItem('pendingComunidad', JSON.stringify(list));
-							} catch (e) {
-								// ignore storage errors
-							}
+							let detail = '';
+							try { detail = await res.text(); } catch(_) {}
+							console.error('[report] server responded with non-OK', res.status, detail);
 							if (typeof window.showAlert === 'function') {
-								window.showAlert('No se pudo enviar al servidor. Se guardó localmente.');
+								window.showAlert('No se pudo guardar en la BD. Intenta nuevamente.');
 							} else {
-								alert('No se pudo enviar al servidor. Se guardó localmente.');
+								alert('No se pudo guardar en la BD. Intenta nuevamente.');
 							}
 						}
 					} catch (err) {
-						const backup = { tipo: tipo, mensaje: mensaje, fecha_creacion: new Date().toISOString() };
-						try {
-							const list = JSON.parse(localStorage.getItem('pendingComunidad') || '[]');
-							list.push(backup);
-							localStorage.setItem('pendingComunidad', JSON.stringify(list));
-						} catch (e) {}
+						console.error('[report] fetch error', err);
 						if (typeof window.showAlert === 'function') {
-							window.showAlert('No se pudo conectar al servidor. Se guardó localmente.');
+							window.showAlert('No se pudo conectar al servidor para guardar en la BD.');
 						} else {
-							alert('No se pudo conectar al servidor. Se guardó localmente.');
+							alert('No se pudo conectar al servidor para guardar en la BD.');
 						}
 					} finally {
 						sendBtn.disabled = false;
@@ -1179,6 +2020,7 @@
 				      <li>Se corrigió el error visual que hacía que se mostraran elementos con nada de contraste.</li>
 				      <li>Se agregó un submenú contextual para mejorar la navegación en los empleados.</li>
 					  <li>Se mejoró la visualización de las fotos de evidencia de los apoyos.</li>
+					  <li>Se agregó la funcionalidad de agregar/editar/eliminar incapacidades, el cual afectará el tiempo de días sin accidentes.</li>
 				    </ul>
 					<h4>Formularios (Vacaciones, tickets, amonestaciones, permisos y requisición de compra)</h4>
 				    <ul>
@@ -1312,17 +2154,18 @@
 		.user-panel-nav .nav-item:hover { background: rgba(0,0,0,0.04); color: #0b1220; }
 		.user-panel-nav .nav-item.active { background: rgba(0,0,0,0.06); color: #0b1220; }
 
-		.user-panel-body { flex: 1; padding: 20px; overflow: auto; background: #fff; color: #0b1220; }
-		.user-panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-		.user-panel-close { background: transparent; border: none; color: #0b1220; font-size: 20px; cursor: pointer; }
+		.user-panel-body { flex: 1; padding: 20px; background: #fff; color: #0b1220; }
+		.user-panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-direction: column; gap: 12px; }
+		.user-panel-close { background: transparent; border: none; color: #d31212; font-size: 20px; cursor: pointer; position:absolute; top: 12px; right: 12px; }
+			.user-panel-close:hover { color: #0b1220; }
 
 		/* Small links under user name (Acerca de / Política) */
-		.user-profile-links { margin-top:6px; font-size:11px; color:#6b7280; display:flex; gap:8px; align-items:center; }
+		.user-profile-links { margin-top:6px; font-size:11px; color:#6b7280; display:flex; gap:8px; align-items:center; position:absolute; bottom: 25px;}
 		.user-profile-links .small-link { color:#6b7280; text-decoration:none; font-weight:600; opacity:0.9 }
 		.user-profile-links .small-link:hover { text-decoration:underline; color:var(--user-accent); }
 		.user-profile-links .sep { opacity:0.36 }
 
-		.panel-section { background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; color: #0b1220; border: 1px solid #eef2f7; }
+		.panel-section { background: #f8fafc; padding: 12px; border-radius: 30px; margin-bottom: 12px; color: #0b1220; border: 1px solid #eef2f7; }
 		.panel-section h4 { margin: 0 0 8px 0; color: #0b1220; }
 
 		:root { --user-accent: #06b6d4; }
@@ -1397,22 +2240,10 @@
 					<button class="nav-item" data-section="personal"><i class="fas fa-key"></i> Contraseña</button>
 			</nav>
 			<div class="user-panel-body">
-				<div class="user-panel-header">
-					<div style="display:flex;align-items:center;gap:12px;">
-						<div id="userProfileAvatar" class="avatar" style="width:48px;height:48px;border-radius:30px;display:flex;align-items:center;justify-content:center;background:#6b7280;color:#fff;font-weight:700;">GJ</div>
-						<div>
-							<div id="userProfileName" style="font-weight:700;color:#0b1220;">Gerardo</div>
-							<div id="userProfileEmail" style="color:#475569;font-size:13px;">gerardo@pdmmetal.com</div>
-							<div class="user-profile-links">
-								<a href="acerca.html" class="small-link">Acerca de</a>
-								<span class="sep">·</span>
-								<a href="privacidad.html" class="small-link">Política de privacidad</a>
-							</div>
-						</div>
-					</div>
 					<button id="userPanelCloseBtn" class="user-panel-close" aria-label="Cerrar">×</button>
-				</div>
-				<div id="userPanelContent">
+				<div class="user-panel-header">
+					</div>
+					<div id="userPanelContent">
 					<!-- Sección General: foto centrada, nombre, puesto, fecha de ingreso y años de servicio -->
 					<div class="panel-section user-general" data-section-content="general" data-joined="2018-06-15" data-role="IT">
 						<div class="user-general-profile">
@@ -1420,7 +2251,7 @@
 							<div id="userGeneralName" class="user-general-name">Gerardo</div>
 							<div id="userGeneralRole" class="user-general-role">IT</div>
 						</div>
-						<div class="user-general-stats">
+						<div class="user-general-stats" style="display:none;">
 							<div class="stat">
 								<div class="stat-value" id="user-joined-date">15/06/2018</div>
 								<div class="stat-label">Fecha de ingreso</div>
@@ -1474,24 +2305,1455 @@
 					<div class="panel-section" data-section-content="personal" style="display:none;">
 						<h4>Contraseña</h4>
 						<div style="margin-top:8px; display:flex; flex-direction:column; gap:8px; max-width:560px;">
+						<form id="passwordForm">
 							<label style="font-weight:700;">Contraseña actual
-								<input id="current-password" type="password" placeholder="Contraseña actual" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+								<div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+								  <input id="currentPassword" name="currentPassword" type="password" placeholder="Contraseña actual" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06)">
+								  <button type="button" class="password-toggle" data-target="currentPassword" title="Mostrar contraseña" style="background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px"><i class="fas fa-eye"></i></button>
+								</div>
 							</label>
 							<label style="font-weight:700;">Nueva contraseña
-								<input id="new-password" type="password" placeholder="Nueva contraseña" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+								<div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+								  <input id="newPassword" name="newPassword" type="password" placeholder="Nueva contraseña" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06)">
+								  <button type="button" class="password-toggle" data-target="newPassword" title="Mostrar contraseña" style="background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px"><i class="fas fa-eye"></i></button>
+								</div>
 							</label>
 							<label style="font-weight:700;">Repetir nueva contraseña
-								<input id="repeat-password" type="password" placeholder="Repetir nueva contraseña" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);margin-top:6px">
+								<div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+								  <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Repetir nueva contraseña" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(15,23,42,0.06)">
+								  <button type="button" class="password-toggle" data-target="confirmPassword" title="Mostrar contraseña" style="background:transparent;border:none;cursor:pointer;padding:6px;border-radius:6px"><i class="fas fa-eye"></i></button>
+								</div>
 							</label>
 							<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px">
 								<button id="password-cancel-btn" class="btn" type="button">Cancelar</button>
-								<button id="password-save-btn" class="btn primary" type="button" disabled>Guardar</button>
+								<button id="password-save-btn" class="btn primary" type="submit" disabled>Guardar</button>
 							</div>
 							<div id="password-msg" style="margin-top:8px;color:var(--muted);font-size:13px"></div>
+						</form>
 						</div>
 					</div>
 
 				</div>
+				<div class="footer-space"></div>
+			</main>
+			<script>
+			// Helpers de depuración disponibles incluso antes de que la función esté definida
+			(function(){
+				window.pdmDebugCargo = async function() {
+					for (let i = 0; i < 20; i++) {
+						if (typeof cargarTableroPersonalCargo === 'function') return cargarTableroPersonalCargo(true);
+						await new Promise(r => setTimeout(r, 200));
+					}
+					console.warn('pdmDebugCargo: cargarTableroPersonalCargo no está definida');
+				};
+				window.cargarTableroPersonalCargo = window.cargarTableroPersonalCargo || function() { console.warn('cargarTableroPersonalCargo: función no inicializada aún'); };
+			})();
+			// Mostrar/ocultar tablero de personal a cargo (toggle + cerrar con Escape / clic fuera)
+			document.addEventListener('DOMContentLoaded', function() {
+				var navPersonal = document.getElementById('nav-personal');
+				var tableroCargo = document.getElementById('tableroCargoSection');
+				var userModalGlobal = document.getElementById('userProfileModal');
+				var sidebarUserAreaGlobal = document.querySelector('.sidebar-footer > div');
+				if (!tableroCargo) return;
+
+				// Estado inicial: oculto
+				tableroCargo.hidden = true;
+				tableroCargo.setAttribute('aria-hidden', 'true');
+
+				function showTablero(){
+					tableroCargo.hidden = false;
+					tableroCargo.setAttribute('aria-hidden', 'false');
+					// ensure visible regardless of prior inline styles
+					try { tableroCargo.style.display = 'flex'; tableroCargo.style.flexDirection = 'column'; } catch(_){ }
+					tableroCargo.classList.add('is-active');
+					try { tableroCargo.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch(_){}
+					document.addEventListener('click', outsideClickHandler);
+					document.addEventListener('keydown', escapeHandler);
+
+					// Update the displayed total of employees when showing the tablero
+					try { if (typeof cargarTableroPersonalCargo === 'function') cargarTableroPersonalCargo(true); } catch(_){ }
+				}
+
+				function hideTablero(){
+					tableroCargo.hidden = true;
+					tableroCargo.setAttribute('aria-hidden', 'true');
+					// remove any inline styles and active class so it won't remain visible
+					try { tableroCargo.style.display = 'none'; tableroCargo.style.flexDirection = ''; } catch(_){ }
+					tableroCargo.classList.remove('is-active');
+					document.removeEventListener('click', outsideClickHandler);
+					document.removeEventListener('keydown', escapeHandler);
+				}
+
+				function toggleTablero(e){
+					if (e && e.preventDefault) e.preventDefault();
+					if (tableroCargo.hidden) showTablero(); else hideTablero();
+				}
+
+				function outsideClickHandler(e){
+					// Ignore clicks inside the user modal or on the sidebar user area (they open the modal)
+					if (userModalGlobal && userModalGlobal.contains(e.target)) return;
+					if (sidebarUserAreaGlobal && sidebarUserAreaGlobal.contains(e.target)) return;
+					if (!tableroCargo.contains(e.target) && e.target !== navPersonal) hideTablero();
+				}
+
+				function escapeHandler(e){ if (e.key === 'Escape') hideTablero(); }
+
+				if (navPersonal){
+					// expose control helpers so other scripts can hide/show the tablero reliably
+					try {
+						window.pdmShowTablero = showTablero;
+						window.pdmHideTablero = hideTablero;
+						window.pdmToggleTablero = toggleTablero;
+					} catch (e) { /* ignore */ }
+					navPersonal.addEventListener('click', toggleTablero);
+					navPersonal.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') toggleTablero(e); });
+				}
+
+				// Helper: fetch employees hierarchy for a supervisor (copied logic from inicio.html)
+				async function cargoFetchEmployeesHierarchy(supervisorName) {
+					console.log('[cargo][hierarchy] inicio búsqueda jerarquía', { supervisorName });
+					const queue = [supervisorName];
+					const visitedSupervisors = new Set();
+					const visitedEmployees = new Set();
+					const allEmployees = [];
+					const MAX_NODES = 500;
+
+					while (queue.length > 0 && allEmployees.length < MAX_NODES) {
+						const currentSupervisor = (queue.shift() || '').toString().trim();
+						if (!currentSupervisor) continue;
+
+						const supervisorKey = currentSupervisor.toLowerCase();
+						if (visitedSupervisors.has(supervisorKey)) continue;
+						visitedSupervisors.add(supervisorKey);
+
+						try {
+						console.log('[cargo][hierarchy] consultando supervisor', { currentSupervisor, queueLength: queue.length });
+						let directEmployees = [];
+						try {
+							console.log('[cargo][hierarchy] GET /api/empleados/por-supervisor', { currentSupervisor });
+							const response = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(currentSupervisor)}`);
+							if (response && response.ok) {
+								directEmployees = await response.json();
+								if (!Array.isArray(directEmployees)) directEmployees = [];
+								console.log('[cargo][hierarchy] respuesta por-supervisor OK', { currentSupervisor, count: directEmployees.length });
+							} else {
+								console.warn('[cargo][hierarchy] por-supervisor no OK', { currentSupervisor, status: response && response.status });
+							}
+						} catch (errFetch) {
+							console.warn('[cargo][hierarchy] error por-supervisor', { currentSupervisor, errFetch });
+							directEmployees = [];
+						}
+
+						// Fallback: si no encontramos empleados con la ruta específica, intentar cargar todos y filtrar localmente
+						if ((!Array.isArray(directEmployees) || directEmployees.length === 0) && currentSupervisor) {
+							try {
+								console.log('[cargo][hierarchy] fallback GET /api/empleados/todos', { currentSupervisor });
+								const allResp = await fetch('/api/empleados/todos');
+								if (allResp && allResp.ok) {
+									const allEmployees = await allResp.json();
+									const words = currentSupervisor.toLowerCase().split(/\s+/).filter(Boolean);
+									const filtered = (Array.isArray(allEmployees) ? allEmployees : []).filter(emp => {
+										const sup = (emp && (emp.supervisor || emp.supervisor_nombre || '')) .toString().toLowerCase();
+										if (!sup) return false;
+										return words.every(w => sup.indexOf(w) !== -1);
+									});
+									if (filtered.length > 0) directEmployees = filtered;
+									console.log('[cargo][hierarchy] fallback filtrado', { currentSupervisor, totalGlobal: Array.isArray(allEmployees) ? allEmployees.length : 0, filtrados: filtered.length });
+								}
+							} catch (errFallback) {
+								console.warn('[cargo][hierarchy] fallback falló', { currentSupervisor, errFallback });
+							}
+						}
+
+						if (!Array.isArray(directEmployees) || directEmployees.length === 0) continue;
+
+							directEmployees.forEach((employee) => {
+								const uniqueKey = (employee?.id !== undefined && employee?.id !== null && employee?.id !== '') ? `id:${employee.id}` : `name:${(employee?.nombre_completo || employee?.nombre || employee?.name || '').toString().trim().toLowerCase()}`;
+								if (visitedEmployees.has(uniqueKey)) return;
+								visitedEmployees.add(uniqueKey);
+								allEmployees.push(employee);
+
+								const subordinateSupervisorName = (employee?.nombre_completo || employee?.nombre || employee?.name || '');
+								if (subordinateSupervisorName) queue.push(subordinateSupervisorName);
+							});
+						} catch (error) {
+							console.error(`Error al cargar jerarquía para supervisor ${currentSupervisor}:`, error);
+						}
+					}
+
+					console.log('[cargo][hierarchy] fin búsqueda jerarquía', { supervisorName, totalEmployees: allEmployees.length });
+					return allEmployees;
+				}
+
+				function setCargoButtonAvailability(hasEmployees) {
+					const personalCargoBtn = document.getElementById('tableroPersonalCargoLink');
+					if (!personalCargoBtn) return;
+					const enabled = hasEmployees === true;
+					personalCargoBtn.disabled = !enabled;
+					personalCargoBtn.classList.toggle('is-disabled', !enabled);
+					personalCargoBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+					personalCargoBtn.title = enabled ? '' : 'No tienes personal a cargo';
+				}
+
+				function cargoParseApiArray(payload) {
+					if (Array.isArray(payload)) return payload;
+					return payload?.data || payload?.registros || payload?.rows || payload?.result || [];
+				}
+
+				function cargoParseLocalDate(dateStr, endOfDay = false) {
+					if (!dateStr) return null;
+					const raw = String(dateStr);
+					const match = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+					const datePart = match ? match[0] : raw.split('T')[0];
+					const [year, month, day] = datePart.split('-').map(v => parseInt(v, 10));
+					if (!year || !month || !day) return null;
+					const result = new Date(year, month - 1, day);
+					if (endOfDay) result.setHours(23, 59, 59, 999);
+					else result.setHours(0, 0, 0, 0);
+					return result;
+				}
+
+				function cargoNormalizeEventDate(dateRaw) {
+					if (!dateRaw) return null;
+					const parsed = cargoParseLocalDate(dateRaw);
+					if (parsed) return parsed;
+					const fallback = new Date(dateRaw);
+					if (Number.isNaN(fallback.getTime())) return null;
+					fallback.setHours(0, 0, 0, 0);
+					return fallback;
+				}
+
+				function cargoNormalizeName(name) {
+					const raw = (name || '').toString();
+					const normalized = typeof raw.normalize === 'function'
+						? raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+						: raw;
+					return normalized.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+				}
+
+				function formatDateLocal(date) {
+					const year = date.getFullYear();
+					const month = String(date.getMonth() + 1).padStart(2, '0');
+					const day = String(date.getDate()).padStart(2, '0');
+					return `${year}-${month}-${day}`;
+				}
+
+				async function cargoFetchEmployeeEvents(employeeId) {
+					const [vacRes, permRes, faltasRes] = await Promise.all([
+						fetch(`/api/vacaciones/empleado/${employeeId}`).catch(() => null),
+						fetch(`/api/permisos/empleado/${employeeId}`).catch(() => null),
+						fetch(`/api/faltas-retardos?empleado_id=${employeeId}`).catch(() => null)
+					]);
+					const amonRes = await fetch(`/api/amonestaciones/empleado/${employeeId}`).catch(() => null);
+					const vacaciones = vacRes && vacRes.ok ? cargoParseApiArray(await vacRes.json()) : [];
+					const permisos = permRes && permRes.ok ? cargoParseApiArray(await permRes.json()) : [];
+					const faltasRetardos = faltasRes && faltasRes.ok ? cargoParseApiArray(await faltasRes.json()) : [];
+					const amonPayload = amonRes && amonRes.ok ? await amonRes.json() : [];
+					const amonestaciones = Array.isArray(amonPayload) ? amonPayload : (amonPayload?.data || amonPayload?.rows || amonPayload?.result || []);
+
+					const employeeIdNum = Number(employeeId);
+					const incidentesPorEmpleado = [...faltasRetardos].filter((row) => {
+						const type = row?.tipo || row?.tipo_incidencia;
+						if (!cargoIsSafetyIncidentType(type)) return false;
+						const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+						return rowEmployeeId === employeeIdNum;
+					});
+
+					let incidentesFinales = incidentesPorEmpleado;
+					if (incidentesFinales.length === 0 && Number.isFinite(employeeIdNum)) {
+						const incidentesGlobales = await cargoGetAllIncidentRows();
+						incidentesFinales = incidentesGlobales.filter((row) => cargoGetIncidentRowEmployeeId(row) === employeeIdNum);
+					}
+					return { vacaciones, permisos, faltasRetardos, amonestaciones, accidentesIncidentes: incidentesFinales };
+				}
+
+				function cargoGetWeekStart(date) {
+					const day = date.getDay();
+					const diffToMonday = day === 0 ? -6 : 1 - day;
+					const monday = new Date(date);
+					monday.setHours(0, 0, 0, 0);
+					monday.setDate(date.getDate() + diffToMonday);
+					return monday;
+				}
+
+				function cargoBuildIncidentDateSet(dataByEmployee) {
+					const incidentDateKeys = new Set();
+					if (!(dataByEmployee instanceof Map)) return incidentDateKeys;
+					dataByEmployee.forEach((employeeData) => {
+						const incidentes = Array.isArray(employeeData?.accidentesIncidentes) ? employeeData.accidentesIncidentes : [];
+						incidentes.forEach((item) => {
+							const type = item?.tipo || item?.tipo_incidencia;
+							if (!cargoIsSafetyIncidentType(type)) return;
+							const date = cargoGetIncidentRowDate(item);
+							if (date) incidentDateKeys.add(formatDateLocal(date));
+						});
+					});
+					return incidentDateKeys;
+				}
+
+				function cargoDiffDays(fromDate, toDate) {
+					const start = new Date(fromDate);
+					const end = new Date(toDate);
+					start.setHours(0, 0, 0, 0);
+					end.setHours(0, 0, 0, 0);
+					return Math.floor((end.getTime() - start.getTime()) / 86400000);
+				}
+
+				function cargoCalculateSafetyStreaks(incidentDateKeys) {
+					if (!(incidentDateKeys instanceof Set) || incidentDateKeys.size === 0) return { currentStreak: 0, maxStreak: 0 };
+					const sortedIncidentDates = Array.from(incidentDateKeys)
+						.map((dateKey) => cargoParseLocalDate(dateKey))
+						.filter((date) => date instanceof Date && !Number.isNaN(date.getTime()))
+						.sort((a, b) => a.getTime() - b.getTime());
+					if (sortedIncidentDates.length === 0) return { currentStreak: 0, maxStreak: 0 };
+					const today = new Date();
+					today.setHours(0, 0, 0, 0);
+					const todayKey = formatDateLocal(today);
+					const latestIncident = sortedIncidentDates[sortedIncidentDates.length - 1];
+					const currentStreak = incidentDateKeys.has(todayKey) ? 0 : Math.max(0, cargoDiffDays(latestIncident, today));
+					let maxStreak = currentStreak;
+					for (let i = 1; i < sortedIncidentDates.length; i += 1) {
+						const gap = cargoDiffDays(sortedIncidentDates[i - 1], sortedIncidentDates[i]) - 1;
+						if (gap > maxStreak) maxStreak = gap;
+					}
+					return { currentStreak, maxStreak };
+				}
+
+				function cargoRenderRecentStreakDays(container, incidentDateKeys, daysToShow = 10) {
+					if (!container) return;
+					const today = new Date();
+					today.setHours(0, 0, 0, 0);
+					if (!(incidentDateKeys instanceof Set)) {
+						container.innerHTML = Array.from({ length: daysToShow }, () => '<span class="cargo-racha-dia" tabindex="-1">-</span>').join('');
+						return;
+					}
+					let html = '';
+					for (let offset = daysToShow - 1; offset >= 0; offset -= 1) {
+						const date = new Date(today);
+						date.setDate(today.getDate() - offset);
+						const dateKey = formatDateLocal(date);
+						const isIncident = incidentDateKeys.has(dateKey);
+						const isToday = offset === 0;
+						const cssClass = isIncident ? 'is-incident' : 'is-safe';
+						const todayClass = isToday ? ' is-today' : '';
+						const clickableClass = isIncident ? ' is-clickable' : '';
+						const tabIndex = isIncident ? '0' : '-1';
+						const helperTitle = isIncident ? `${dateKey} (clic para ver detalle)` : dateKey;
+						html += `<span class="cargo-racha-dia ${cssClass}${todayClass}${clickableClass}" data-date="${dateKey}" tabindex="${tabIndex}" role="button" title="${helperTitle}">${date.getDate()}</span>`;
+					}
+					container.innerHTML = html;
+				}
+
+				function cargoInitials(name) {
+					const parts = (name || '').split(' ').filter(Boolean).slice(0, 2);
+					if (parts.length === 0) return 'NA';
+					return parts.map(part => part.charAt(0).toUpperCase()).join('');
+				}
+
+				function cargoEventLabel(type) {
+					if (type === 'vacaciones') return 'V';
+					if (type === 'permiso') return 'P';
+					if (type === 'falta') return 'F';
+					if (type === 'retardo') return 'R';
+					if (type === 'amonestacion') return 'A';
+					return '-';
+				}
+
+				function cargoGetRetardoHora(row) {
+					const possibleHour = row?.hora_llegada ?? row?.hora ?? row?.hora_entrada ?? row?.hora_registro ?? row?.hora_evento ?? row?.llegada;
+					return (possibleHour ?? '').toString().trim();
+				}
+
+				function cargoBuildRetardoTooltip(row) {
+					const horaLlegada = cargoGetRetardoHora(row);
+					const motivo = (row?.motivo || row?.detalle || row?.descripcion || '').toString().trim();
+					if (horaLlegada && motivo) return `Retardo • Llegó: ${horaLlegada} • ${motivo}`;
+					if (horaLlegada) return `Retardo • Llegó: ${horaLlegada}`;
+					if (motivo) return `Retardo • ${motivo}`;
+					return 'Retardo';
+				}
+
+				async function cargoGetDayEvents(employees, dateStr, cacheMap) {
+					const events = [];
+					const currentDate = cargoParseLocalDate(dateStr);
+					for (const employee of employees) {
+						const employeeId = Number(employee.id);
+						let employeeData = cacheMap instanceof Map ? cacheMap.get(employeeId) : null;
+						if (!employeeData) employeeData = await cargoFetchEmployeeEvents(employee.id);
+
+						const vacaciones = Array.isArray(employeeData?.vacaciones) ? employeeData.vacaciones : [];
+						const permisos = Array.isArray(employeeData?.permisos) ? employeeData.permisos : [];
+						const faltas = Array.isArray(employeeData?.faltasRetardos) ? employeeData.faltasRetardos : [];
+						const amonestaciones = Array.isArray(employeeData?.amonestaciones) ? employeeData.amonestaciones : [];
+						let onVacation = false;
+						let fullDayPermit = false;
+						let absence = false;
+
+						vacaciones.forEach(vac => {
+							const start = cargoParseLocalDate(vac.fecha_inicio);
+							const end = cargoParseLocalDate(vac.fecha_fin, true);
+							const state = (vac.estado || '').toString().trim().toLowerCase();
+							if (!start || !end || !currentDate) return;
+							if (currentDate >= start && currentDate <= end && ['aprobado', 'aprobada', 'pendiente'].includes(state)) {
+								onVacation = true;
+								events.push({ name: employee.nombre_completo || 'Empleado', type: 'vacaciones', affectsForce: true, photoUrl: cargoGetEmpleadoFotoUrl(employee), tooltip: `Vacaciones (${vac.estado || 'pendiente'})` });
+							}
+						});
+
+						permisos.forEach(perm => {
+							const type = (perm.tipo || '').toString().trim().toLowerCase();
+							const state = (perm.estado || '').toString().trim().toLowerCase();
+							if (type !== 'dia_completo' || !['aprobado', 'aprobada', 'pendiente'].includes(state) || onVacation || !currentDate) return;
+							const start = cargoParseLocalDate(perm.fecha_inicio || perm.fecha);
+							const end = cargoParseLocalDate(perm.fecha_fin || perm.fecha_inicio || perm.fecha, true);
+							if (!start || !end) return;
+							if (currentDate >= start && currentDate <= end) {
+								fullDayPermit = true;
+								events.push({ name: employee.nombre_completo || 'Empleado', type: 'permiso', affectsForce: true, photoUrl: cargoGetEmpleadoFotoUrl(employee), tooltip: `Permiso ${perm.tipo || ''} (${perm.estado || 'pendiente'})`.trim() });
+							}
+						});
+
+						faltas.forEach(row => {
+							if (!currentDate) return;
+							const type = (row.tipo || row.tipo_incidencia || '').toString().trim().toLowerCase();
+							const date = cargoParseLocalDate(row.fecha);
+							if (!date || date.getTime() !== currentDate.getTime()) return;
+							if (type === 'falta' && !onVacation && !fullDayPermit) {
+								absence = true;
+								events.push({ name: employee.nombre_completo || 'Empleado', type: 'falta', affectsForce: true, photoUrl: cargoGetEmpleadoFotoUrl(employee), tooltip: row?.motivo ? `Falta: ${row.motivo}` : 'Falta' });
+							}
+							if (type === 'retardo' && !onVacation && !fullDayPermit && !absence) {
+								events.push({ name: employee.nombre_completo || 'Empleado', type: 'retardo', affectsForce: false, photoUrl: cargoGetEmpleadoFotoUrl(employee), tooltip: cargoBuildRetardoTooltip(row) });
+							}
+						});
+
+						amonestaciones.forEach(row => {
+							const amonDate = cargoNormalizeEventDate(row.fecha_solicitud || row.fecha || row.fecha_amonestacion || row.created_at);
+							if (!amonDate || !currentDate) return;
+							if (amonDate.getTime() === currentDate.getTime()) {
+								events.push({ name: employee.nombre_completo || 'Empleado', type: 'amonestacion', affectsForce: false, photoUrl: cargoGetEmpleadoFotoUrl(employee), tooltip: row?.motivo ? `Amonestación: ${row.motivo}` : 'Amonestación' });
+							}
+						});
+					}
+
+					const uniqueByEmployeeType = new Map();
+					events.forEach(evt => {
+						const key = `${evt.name}|${evt.type}`;
+						if (!uniqueByEmployeeType.has(key)) uniqueByEmployeeType.set(key, evt);
+					});
+					return Array.from(uniqueByEmployeeType.values());
+				}
+
+								async function cargarTableroPersonalCargo(force = false) {
+			console.log('[cargo][dashboard] iniciar carga tablero', { force });
+			const now = Date.now();
+			if (!force && (now - cargoTableroLastLoad < 15000)) {
+				console.log('[cargo][dashboard] carga omitida por throttling', { lastLoadMsAgo: now - cargoTableroLastLoad });
+				return;
+			}
+
+			cargoTableroLastLoad = now;
+
+			const totalElement = document.getElementById('cargoEmpleadosTotal');
+			const ausPctEl = document.getElementById('cargoAusentismoPorcentaje');
+			const ausTotalEl = document.getElementById('cargoAusentismoTotal');
+			const desPctEl = document.getElementById('cargoDesempenoPorcentaje');
+			const desTotalEl = document.getElementById('cargoDesempenoTotal');
+			const weekGrid = document.getElementById('cargoSemanaGrid');
+			const safetyDaysEl = document.getElementById('cargoSinAccidentesDias');
+			const bestStreakEl = document.getElementById('cargoRachaHistoricaDias');
+			const streakGridEl = document.getElementById('cargoRachaDias');
+
+			const loggedUser = localStorage.getItem('loggedInUser');
+			if (!loggedUser) {
+				console.warn('[cargo][dashboard] no hay loggedInUser en localStorage');
+				cargoLastIncidentRows = [];
+				cargoLastEmployeesSnapshot = [];
+				if (totalElement) totalElement.textContent = '0';
+				if (weekGrid) weekGrid.innerHTML = '<article class="cargo-dia-card"><h5>Sin sesión</h5><p class="cargo-dia-numero">-</p><p class="cargo-dia-mes">---</p></article>';
+				if (safetyDaysEl) safetyDaysEl.textContent = '0';
+				if (bestStreakEl) bestStreakEl.textContent = '0';
+				cargoRenderRecentStreakDays(streakGridEl, null);
+				return;
+			}
+
+			let parsedUser = null;
+			try { parsedUser = JSON.parse(loggedUser); } catch (e) { parsedUser = null; }
+			const supervisorName = parsedUser?.nombre_completo || parsedUser?.name || parsedUser?.nombre || '';
+			console.log('[cargo][dashboard] usuario supervisor detectado', { supervisorName, parsedUser });
+			if (!supervisorName) {
+				console.warn('[cargo][dashboard] supervisorName vacío, no se puede consultar jerarquía');
+				cargoLastIncidentRows = [];
+				cargoLastEmployeesSnapshot = [];
+				if (totalElement) totalElement.textContent = '0';
+				if (safetyDaysEl) safetyDaysEl.textContent = '0';
+				if (bestStreakEl) bestStreakEl.textContent = '0';
+				cargoRenderRecentStreakDays(streakGridEl, null);
+				return;
+			}
+
+			const employees = await cargoFetchEmployeesHierarchy(supervisorName);
+			cargoEmployeesList = Array.isArray(employees) ? employees : [];
+			const totalEmployees = cargoEmployeesList.length;
+			console.log('[cargo][dashboard] empleados encontrados para tablero', { totalEmployees, sample: cargoEmployeesList.slice(0, 5) });
+			if (totalElement) totalElement.textContent = String(totalEmployees);
+			try { setCargoButtonAvailability(totalEmployees > 0); } catch (_) {}
+
+			if (totalEmployees === 0) {
+				cargoLastIncidentRows = [];
+				cargoLastEmployeesSnapshot = [];
+				if (ausPctEl) ausPctEl.textContent = '0.0%';
+				if (ausTotalEl) ausTotalEl.textContent = 'Total de ausencias: 0';
+				if (desPctEl) desPctEl.textContent = '100.0%';
+				if (desTotalEl) desTotalEl.textContent = 'Incidentes totales: 0';
+				if (weekGrid) weekGrid.innerHTML = '<article class="cargo-dia-card"><h5>Sin personal</h5><p class="cargo-dia-numero">0</p><p class="cargo-dia-mes">---</p><p class="cargo-sin-ausencias">No hay empleados asignados</p></article>';
+				if (safetyDaysEl) safetyDaysEl.textContent = '0';
+				if (bestStreakEl) bestStreakEl.textContent = '0';
+				cargoRenderRecentStreakDays(streakGridEl, null);
+				return;
+			}
+
+			const today = new Date();
+			today.setHours(23, 59, 59, 999);
+			const weekStart = cargoGetWeekStart(new Date());
+			const weekCache = await cargoBuildWeekCache(employees, weekStart);
+			console.log('[cargo][dashboard] week cache generado', { employeeCount: employees.length, weekStart: formatDateLocal(weekStart) });
+
+			let weeklyAbsences = 0;
+			let incidentesTotal = 0;
+
+			weekCache.forEach((employeeData) => {
+				const amonestaciones = Array.isArray(employeeData?.amonestaciones) ? employeeData.amonestaciones : [];
+				const faltasRetardos = Array.isArray(employeeData?.faltasRetardos) ? employeeData.faltasRetardos : [];
+				const accidentesIncidentes = Array.isArray(employeeData?.accidentesIncidentes) ? employeeData.accidentesIncidentes : [];
+
+				amonestaciones.forEach(item => {
+					const date = cargoNormalizeEventDate(item.fecha_solicitud || item.fecha || item.fecha_amonestacion || item.created_at);
+					if (date && date >= weekStart && date <= today) incidentesTotal += 1;
+				});
+
+				faltasRetardos.forEach(item => {
+					const type = (item.tipo || item.tipo_incidencia || '').toString().trim().toLowerCase();
+					const date = cargoNormalizeEventDate(item.fecha);
+					if (type === 'retardo' && date && date >= weekStart && date <= today) incidentesTotal += 1;
+				});
+
+				accidentesIncidentes.forEach(item => {
+					const type = item?.tipo || item?.tipo_incidencia;
+					const date = cargoGetIncidentRowDate(item);
+					if (cargoIsSafetyIncidentType(type) && date && date >= weekStart && date <= today) incidentesTotal += 1;
+				});
+			});
+
+			const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+			const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+			let weekHtml = '';
+
+			for (let i = 0; i < 6; i += 1) {
+				const date = new Date(weekStart);
+				date.setDate(weekStart.getDate() + i);
+				const dateStr = formatDateLocal(date);
+				const dayEvents = await cargoGetDayEvents(employees, dateStr, weekCache);
+				const absenceCount = dayEvents.filter(evt => evt.affectsForce !== false).length;
+				weeklyAbsences += absenceCount;
+				const isToday = date.toDateString() === new Date().toDateString();
+
+				const avatarHtml = dayEvents.length > 0
+					? `<div class="cargo-avatar-group">${dayEvents.slice(0, 8).map(evt => {
+							const detailText = `${evt.name}${evt.tooltip ? ` • ${evt.tooltip}` : ''}`;
+							const safeTooltip = cargoEscapeHtml(detailText);
+							const photoUrl = (evt.photoUrl || '').toString().trim();
+							const photoHtml = photoUrl
+								? `<img class="cargo-avatar-photo" src="${cargoEscapeHtml(photoUrl)}" alt="${cargoEscapeHtml(evt.name)}" loading="lazy" />`
+								: `<span class="cargo-avatar-fallback">${cargoInitials(evt.name)}</span>`;
+							return `<span class="cargo-event-${evt.type} cargo-event-avatar" data-tooltip="${safeTooltip}" title="${safeTooltip}">${photoHtml}<i>${cargoEventLabel(evt.type)}</i></span>`;
+						}).join('')}</div>`
+					: '<p class="cargo-sin-ausencias">Sin ausencias</p>';
+
+				weekHtml += `
+					<article class="cargo-dia-card ${isToday ? 'is-active-day' : ''}">
+						<h5>${dayNames[i]}</h5>
+						<p class="cargo-dia-numero">${date.getDate()}</p>
+						<p class="cargo-dia-mes">${monthNames[date.getMonth()]}</p>
+						${avatarHtml}
+					</article>
+				`;
+			}
+
+			if (weekGrid) weekGrid.innerHTML = weekHtml;
+
+			const totalSlots = totalEmployees * 6 || 1;
+			const absencePercentage = (weeklyAbsences / totalSlots) * 100;
+			const { level: absenceLevel, gaugeClass: absenceClass } = cargoDetermineAbsenceLevel(absencePercentage);
+			if (ausPctEl) {
+				const ausGauge = ausPctEl.closest('.cargo-gauge');
+				if (ausGauge) ausGauge.classList.remove('gauge-success', 'gauge-warn', 'gauge-danger');
+				if (ausGauge) ausGauge.classList.add(absenceClass);
+				ausPctEl.textContent = `${absencePercentage.toFixed(1)}%`;
+			}
+			if (ausTotalEl) ausTotalEl.textContent = `Total de ausencias: ${weeklyAbsences} (${absenceLevel})`;
+
+			const incidentPercentage = Math.min(100, (incidentesTotal / totalSlots) * 100);
+			const performance = Math.max(0, 100 - incidentPercentage);
+			const { level: perfLevel, gaugeClass: perfClass } = cargoDeterminePerformanceLevel(performance);
+			if (desPctEl) {
+				const desGauge = desPctEl.closest('.cargo-gauge');
+				if (desGauge) desGauge.classList.remove('gauge-success', 'gauge-warn', 'gauge-danger');
+				if (desGauge) desGauge.classList.add(perfClass);
+				desPctEl.textContent = `${performance.toFixed(1)}%`;
+			}
+			if (desTotalEl) desTotalEl.textContent = `Incidentes totales: ${incidentesTotal} (${perfLevel})`;
+
+			const incidentRows = await cargoGetAllIncidentRows();
+			cargoLastIncidentRows = Array.isArray(incidentRows) ? incidentRows : [];
+			cargoLastEmployeesSnapshot = Array.isArray(employees) ? employees : [];
+			let incidentDateKeys = cargoBuildTeamIncidentDateSet(employees, incidentRows);
+
+			if (incidentDateKeys.size === 0) {
+				incidentDateKeys = cargoBuildIncidentDateSet(weekCache);
+			}
+
+			if (incidentDateKeys.size === 0 && Array.isArray(incidentRows) && incidentRows.length > 0) {
+				incidentRows.forEach((row) => {
+					const type = row?.tipo || row?.tipo_incidencia;
+					if (!cargoIsSafetyIncidentType(type)) return;
+					const date = cargoGetIncidentRowDate(row);
+					if (date) incidentDateKeys.add(formatDateLocal(date));
+				});
+			}
+			const { currentStreak, maxStreak } = cargoCalculateSafetyStreaks(incidentDateKeys);
+			console.log('[cargo][dashboard] métricas calculadas', {
+				weeklyAbsences,
+				incidentesTotal,
+				absencePercentage: Number(absencePercentage.toFixed(1)),
+				performance: Number(performance.toFixed(1)),
+				currentStreak,
+				maxStreak
+			});
+
+			if (safetyDaysEl) {
+				safetyDaysEl.textContent = String(currentStreak);
+			}
+			if (bestStreakEl) bestStreakEl.textContent = String(maxStreak);
+			cargoRenderRecentStreakDays(streakGridEl, incidentDateKeys);
+		}
+
+		function populateCargoEmployeesSelect() {
+			const select = document.getElementById('cargoEmpleadoIdSelect');
+			const searchInput = document.getElementById('cargoEmpleadoSearch');
+			if (!select) return;
+			const previousValue = select.value;
+			const searchTerm = (searchInput?.value || '').toString().trim().toLowerCase();
+			select.innerHTML = '<option value="">-- Selecciona un empleado --</option>';
+
+			if (!Array.isArray(cargoEmployeesList) || cargoEmployeesList.length === 0) {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No hay empleados a cargo';
+				select.appendChild(option);
+				return;
+			}
+
+			const filteredEmployees = cargoEmployeesList.filter((employee) => {
+				if (!searchTerm) return true;
+				const displayName = (employee.nombre_completo || employee.nombre || employee.name || '').toString().toLowerCase();
+				const employeeIdText = (employee.employeeNumber || employee.numero_empleado || employee.id || '').toString().toLowerCase();
+				return displayName.includes(searchTerm) || employeeIdText.includes(searchTerm);
+			});
+
+			if (filteredEmployees.length === 0) {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'Sin resultados';
+				select.appendChild(option);
+				return;
+			}
+
+			filteredEmployees.forEach((employee) => {
+				const option = document.createElement('option');
+				option.value = employee.id || '';
+				option.textContent = employee.nombre_completo || employee.nombre || employee.name || `Empleado ${employee.id || ''}`;
+				select.appendChild(option);
+			});
+
+			if (previousValue && Array.from(select.options).some((opt) => opt.value === previousValue)) {
+				select.value = previousValue;
+			}
+		}
+
+		function cargoGetEmpleadoNombre(employee) {
+			return (employee?.nombre_completo || employee?.nombre || employee?.name || `Empleado ${employee?.id || ''}`).toString().trim();
+		}
+
+		function cargoGetDirectReportsFromList(supervisorName, employees) {
+			if (!supervisorName || !Array.isArray(employees)) return [];
+			return employees.filter((employee) => cargoNormalizeName(employee?.supervisor || '') === cargoNormalizeName(supervisorName));
+		}
+
+		let cargoHierarchyRootName = '';
+		let cargoHierarchyCurrentName = '';
+		let cargoHierarchyStack = [];
+		let cargoEmpleadoIdActual = null;
+
+		function cargoRenderEmployeeCardsLevel() {
+			const cardsContainer = document.getElementById('cargoEmpleadoCards');
+			const searchInput = document.getElementById('cargoEmpleadoSearch');
+			const levelLabel = document.getElementById('cargoNivelActualLabel');
+			const backBtn = document.getElementById('cargoNivelBackBtn');
+			if (!cardsContainer || !levelLabel || !backBtn) return;
+
+			const currentLabel = cargoHierarchyCurrentName || cargoHierarchyRootName || 'Mi equipo';
+			const searchTerm = (searchInput?.value || '').toString().trim().toLowerCase();
+			const directReports = cargoGetDirectReportsFromList(cargoHierarchyCurrentName, cargoEmployeesList);
+			const filteredReports = directReports.filter((employee) => {
+				if (!searchTerm) return true;
+				const name = cargoGetEmpleadoNombre(employee).toLowerCase();
+				const code = (employee?.employeeNumber || employee?.numero_empleado || employee?.id || '').toString().toLowerCase();
+				return name.includes(searchTerm) || code.includes(searchTerm);
+			});
+
+			levelLabel.textContent = currentLabel;
+			backBtn.disabled = cargoHierarchyStack.length === 0;
+
+			if (filteredReports.length === 0) {
+				const baseMessage = directReports.length === 0
+					? 'Este empleado no tiene personal a cargo.'
+					: 'No hay empleados que coincidan con la búsqueda.';
+				cardsContainer.innerHTML = `<div class="cargo-tab-empty">${baseMessage}</div>`;
+				return;
+			}
+
+			cardsContainer.innerHTML = filteredReports.map((employee) => {
+				const name = cargoEscapeHtml(cargoGetEmpleadoNombre(employee));
+				const puesto = cargoEscapeHtml((employee?.puesto || 'Sin puesto').toString());
+				const code = cargoEscapeHtml((employee?.employeeNumber || employee?.numero_empleado || employee?.id || '').toString());
+				const photoUrl = cargoGetEmpleadoFotoUrl(employee);
+				const initials = cargoEscapeHtml(cargoInitials(cargoGetEmpleadoNombre(employee)));
+				const photoHtml = photoUrl
+					? `<img src="${cargoEscapeHtml(photoUrl)}" alt="${name}" loading="lazy" />`
+					: `<span class="cargo-card-initials">${initials}</span>`;
+
+				return `
+					<button type="button" class="cargo-empleado-card" data-employee-id="${employee?.id || ''}">
+						<div class="cargo-card-photo">${photoHtml}</div>
+						<div class="cargo-card-info">
+							<strong>${name}</strong>
+							<span>${puesto}</span>
+							<small>${code ? `#${code}` : ''}</small>
+						</div>
+					</button>
+				`;
+			}).join('');
+		}
+
+		async function cargarEmpleadoCargoSeleccionado() {
+			const select = document.getElementById('cargoEmpleadoIdSelect');
+			const tabsContainer = document.getElementById('cargoEmpleadoTabs');
+			if (!select || !tabsContainer) return;
+			const empleadoId = select.value;
+			cargoEmpleadoIdActual = empleadoId || null;
+			if (!empleadoId) {
+				tabsContainer.style.display = 'none';
+				return;
+			}
+			tabsContainer.style.display = 'block';
+			const activeBtn = document.querySelector('.cargo-tab-btn.active');
+			const activeTab = activeBtn?.dataset.cargoTab || 'apoyos';
+			await cargarCargoTab(activeTab, empleadoId);
+		}
+
+		function cambiarCargoTab(tabName) {
+			document.querySelectorAll('.cargo-tab-btn').forEach((btn) => {
+				btn.classList.toggle('active', btn.dataset.cargoTab === tabName);
+			});
+			document.querySelectorAll('.cargo-tab-pane').forEach((pane) => {
+				pane.classList.toggle('active', pane.id === `cargo-tab-${tabName}`);
+			});
+			if (cargoEmpleadoIdActual) {
+				cargarCargoTab(tabName, cargoEmpleadoIdActual).catch((error) => {
+					console.error(`Error al cargar tab ${tabName}:`, error);
+				});
+			}
+		}
+
+		function cargoRenderEmpty(containerId, message) {
+			const container = document.getElementById(containerId);
+			if (!container) return;
+			container.innerHTML = `<div class="cargo-tab-empty">${message}</div>`;
+		}
+
+		function cargoRenderList(containerId, items) {
+			const container = document.getElementById(containerId);
+			if (!container) return;
+			if (!Array.isArray(items) || items.length === 0) {
+				container.innerHTML = '<div class="cargo-tab-empty">Sin registros</div>';
+				return;
+			}
+			container.innerHTML = `<div class="cargo-tab-list">${items.map(item => `<div class="cargo-tab-item">${item}</div>`).join('')}</div>`;
+		}
+
+		async function cargarCargoTab(tabName, empleadoId) {
+			const targetId = `cargo-tab-${tabName}`;
+			const target = document.getElementById(targetId);
+			if (!target) return;
+			target.innerHTML = '<div class="cargo-tab-empty">Cargando...</div>';
+
+			if (tabName === 'apoyos') {
+				const response = await fetch(`/api/empleados/${empleadoId}/historial`);
+				if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar apoyos');
+				const apoyos = await response.json();
+				const list = (Array.isArray(apoyos) ? apoyos : []).map(a => {
+					const estado = (a.vale_status || a.estado || a.estatus || 'pendiente').toString();
+					return `<strong>Folio:</strong> ${a.folio || 'N/A'}<br><strong>Descripción:</strong> ${a.descripcion || 'Sin descripción'}<br><strong>Estado:</strong> ${estado}`;
+				});
+				return cargoRenderList(targetId, list);
+			}
+
+			if (tabName === 'amonestaciones') {
+				const response = await fetch(`/api/amonestaciones/empleado/${empleadoId}`);
+				if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar amonestaciones');
+				const payload = await response.json();
+				const amonestaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || []);
+				const list = amonestaciones.map(a => {
+					const fecha = a.fecha ? new Date(a.fecha).toLocaleDateString() : 'Sin fecha';
+					return `<strong>Fecha:</strong> ${fecha}<br><strong>Tipo:</strong> ${a.tipo || 'Escrita'}<br><strong>Motivo:</strong> ${a.motivo || 'Sin motivo'}`;
+				});
+				return cargoRenderList(targetId, list);
+			}
+
+			if (tabName === 'faltas' || tabName === 'retardos') {
+				const response = await fetch(`/api/faltas-retardos?empleado_id=${empleadoId}`);
+				if (!response.ok) return cargoRenderEmpty(targetId, `Error al cargar ${tabName}`);
+				const payload = await response.json();
+				const registros = Array.isArray(payload) ? payload : (payload?.registros || payload?.rows || payload?.result || []);
+				const tipoObjetivo = tabName === 'faltas' ? 'falta' : 'retardo';
+				const filtrados = registros.filter(r => (r.tipo || r.tipo_incidencia || '').toLowerCase() === tipoObjetivo);
+				const list = filtrados.map(r => {
+					const fecha = r.fecha ? new Date(r.fecha).toLocaleDateString() : 'Sin fecha';
+					return `<strong>Fecha:</strong> ${fecha}${r.minutos ? `<br><strong>Minutos:</strong> ${r.minutos}` : ''}${r.motivo ? `<br><strong>Motivo:</strong> ${r.motivo}` : ''}`;
+				});
+				return cargoRenderList(targetId, list);
+			}
+
+			if (tabName === 'permisos') {
+				const response = await fetch(`/api/permisos/empleado/${empleadoId}`);
+				if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar permisos');
+				const payload = await response.json();
+				const permisos = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || payload?.result || []);
+				const list = permisos.map(p => {
+					const fecha = p.fecha_inicio ? new Date(p.fecha_inicio).toLocaleDateString() : 'Sin fecha';
+					return `<strong>Fecha:</strong> ${fecha}<br><strong>Tipo:</strong> ${p.tipo || 'N/A'}<br><strong>Estado:</strong> ${p.estado || 'pendiente'}`;
+				});
+				return cargoRenderList(targetId, list);
+			}
+
+			if (tabName === 'vacaciones') {
+				const response = await fetch(`/api/vacaciones/empleado/${empleadoId}`);
+				if (!response.ok) return cargoRenderEmpty(targetId, 'Error al cargar vacaciones');
+				const payload = await response.json();
+				const vacaciones = Array.isArray(payload) ? payload : (payload?.data || payload?.rows || payload?.result || []);
+				const list = vacaciones.map(v => {
+					const desde = v.fecha_inicio ? new Date(v.fecha_inicio).toLocaleDateString() : 'N/A';
+					const hasta = v.fecha_fin ? new Date(v.fecha_fin).toLocaleDateString() : 'N/A';
+					return `<strong>Desde:</strong> ${desde}<br><strong>Hasta:</strong> ${hasta}<br><strong>Estado:</strong> ${v.estado || 'Pendiente'}<br><strong>Días:</strong> ${v.dias_solicitados || 'N/A'}`;
+				});
+				return cargoRenderList(targetId, list);
+			}
+		}
+
+		async function cargoFetchAllEmployees() {
+			try {
+				const response = await fetch('/api/empleados');
+				if (!response.ok) return [];
+				const payload = await response.json();
+				return Array.isArray(payload) ? payload : [];
+			} catch (error) {
+				console.error('Error al cargar empleados para jerarquía completa:', error);
+				return [];
+			}
+		}
+
+		function cargoNamesMatch(nameA, nameB) {
+			const normalizedA = cargoNormalizeName(nameA);
+			const normalizedB = cargoNormalizeName(nameB);
+			if (!normalizedA || !normalizedB) return false;
+			if (normalizedA === normalizedB) return true;
+			const wordsA = normalizedA.split(' ').filter(Boolean);
+			const wordsB = normalizedB.split(' ').filter(Boolean);
+			if (wordsA.length === 0 || wordsB.length === 0) return false;
+			const shorter = wordsA.length <= wordsB.length ? wordsA : wordsB;
+			const longerSet = new Set(wordsA.length <= wordsB.length ? wordsB : wordsA);
+			return shorter.every(word => longerSet.has(word));
+		}
+
+		function cargoFindEmployeeByName(employees, targetName) {
+			if (!Array.isArray(employees) || !targetName) return null;
+			const targetNormalized = cargoNormalizeName(targetName);
+			if (!targetNormalized) return null;
+			const exact = employees.find((employee) => cargoNormalizeName(cargoGetEmpleadoNombre(employee)) === targetNormalized);
+			if (exact) return exact;
+			return employees.find((employee) => cargoNamesMatch(cargoGetEmpleadoNombre(employee), targetName)) || null;
+		}
+
+		function cargoResolveTopBossName(currentUserName, employees) {
+			let currentName = (currentUserName || '').toString().trim();
+			if (!currentName) return '';
+			const visited = new Set();
+			let safetyCounter = 0;
+			while (currentName && safetyCounter < 30) {
+				safetyCounter += 1;
+				const currentKey = cargoNormalizeName(currentName);
+				if (!currentKey || visited.has(currentKey)) break;
+				visited.add(currentKey);
+				const employee = cargoFindEmployeeByName(employees, currentName);
+				const bossName = (employee?.supervisor || '').toString().trim();
+				if (!bossName) break;
+				currentName = bossName;
+			}
+			return currentName;
+		}
+
+		function cargoBuildHierarchyTreeFromEmployees(rootName, employees, visited = new Set(), depth = 0) {
+			const safeName = (rootName || '').toString().trim();
+			if (!safeName || depth > 12) return null;
+			const visitKey = cargoNormalizeName(safeName);
+			if (!visitKey) return null;
+			if (visited.has(visitKey)) return { name: safeName, children: [] };
+			visited.add(visitKey);
+
+			const children = [];
+			const addedChildren = new Set();
+			employees.forEach((employee) => {
+				const employeeName = cargoGetEmpleadoNombre(employee) || `Empleado ${employee?.id || ''}`.trim();
+				if (!employeeName) return;
+				const employeeKey = cargoNormalizeName(employeeName);
+				if (!employeeKey || addedChildren.has(employeeKey)) return;
+				if (!cargoNamesMatch(employee?.supervisor, safeName)) return;
+				addedChildren.add(employeeKey);
+				const childNode = cargoBuildHierarchyTreeFromEmployees(employeeName, employees, visited, depth + 1);
+				children.push(childNode || { name: employeeName, children: [] });
+			});
+			return { name: safeName, children };
+		}
+
+		function cargoRenderHierarchyNode(node) {
+			if (!node) return '';
+			const childHtml = Array.isArray(node.children) && node.children.length > 0
+				? `<ul>${node.children.map((child) => cargoRenderHierarchyNode(child)).join('')}</ul>`
+				: '';
+			return `<li><span class="cargo-jerarquia-node">${cargoEscapeHtml(node.name)}</span>${childHtml}</li>`;
+		}
+
+		async function openCargoJerarquiaModal() {
+			const modal = document.getElementById('cargoJerarquiaModal');
+			const treeContainer = document.getElementById('cargoJerarquiaTree');
+			if (!modal || !treeContainer) return;
+			const loggedUser = localStorage.getItem('loggedInUser');
+			if (!loggedUser) return;
+			const parsedUser = JSON.parse(loggedUser);
+			const supervisorName = parsedUser.nombre_completo || parsedUser.name || parsedUser.nombre || '';
+			if (!supervisorName) return;
+
+			treeContainer.innerHTML = '<p class="cargo-tab-empty">Cargando jerarquía...</p>';
+			modal.classList.add('is-open');
+			modal.setAttribute('aria-hidden', 'false');
+
+			const allEmployees = await cargoFetchAllEmployees();
+			const topBossName = allEmployees.length > 0 ? cargoResolveTopBossName(supervisorName, allEmployees) : supervisorName;
+			const hierarchy = allEmployees.length > 0
+				? cargoBuildHierarchyTreeFromEmployees(topBossName || supervisorName, allEmployees)
+				: null;
+			if (!hierarchy) {
+				treeContainer.innerHTML = '<p class="cargo-tab-empty">No fue posible cargar la jerarquía.</p>';
+				return;
+			}
+			treeContainer.innerHTML = `<ul>${cargoRenderHierarchyNode(hierarchy)}</ul>`;
+		}
+
+		function closeCargoJerarquiaModal() {
+			const modal = document.getElementById('cargoJerarquiaModal');
+			if (!modal) return;
+			modal.classList.remove('is-open');
+			modal.setAttribute('aria-hidden', 'true');
+		}
+
+		async function openCargoEmployeesModal() {
+			const modal = document.getElementById('cargoEmpleadosModal');
+			const searchInput = document.getElementById('cargoEmpleadoSearch');
+			const cardsContainer = document.getElementById('cargoEmpleadoCards');
+			if (!modal) return;
+
+			if (!Array.isArray(cargoEmployeesList) || cargoEmployeesList.length === 0) {
+				console.log('[cargo][modal] lista vacía, forzando carga de tablero');
+				await cargarTableroPersonalCargo(true);
+			}
+
+			if (searchInput) searchInput.value = '';
+			const loggedUser = localStorage.getItem('loggedInUser');
+			let supervisorName = '';
+			if (loggedUser) {
+				try {
+					const parsedUser = JSON.parse(loggedUser);
+					supervisorName = (parsedUser?.nombre_completo || parsedUser?.name || parsedUser?.nombre || '').toString().trim();
+				} catch (_) {}
+			}
+
+			cargoHierarchyRootName = supervisorName;
+			cargoHierarchyCurrentName = supervisorName;
+			cargoHierarchyStack = [];
+			console.log('[cargo][modal] abrir modal empleados', {
+				supervisorName,
+				totalCargoEmployees: Array.isArray(cargoEmployeesList) ? cargoEmployeesList.length : 0
+			});
+			populateCargoEmployeesSelect();
+			cargoRenderEmployeeCardsLevel();
+
+			if (cardsContainer && cardsContainer.dataset.bound !== '1') {
+				cardsContainer.dataset.bound = '1';
+				cardsContainer.addEventListener('click', (event) => {
+					const card = event.target.closest('.cargo-empleado-card');
+					if (!card || !cardsContainer.contains(card)) return;
+					const employeeId = card.getAttribute('data-employee-id');
+					const select = document.getElementById('cargoEmpleadoIdSelect');
+					if (select) {
+						select.value = String(employeeId || '');
+						cargarEmpleadoCargoSeleccionado().catch(() => {});
+					}
+					const selectedEmployee = cargoEmployeesList.find((employee) => String(employee?.id) === String(employeeId));
+					const employeeName = cargoGetEmpleadoNombre(selectedEmployee);
+					if (selectedEmployee && employeeName) {
+						cargoHierarchyStack.push(cargoHierarchyCurrentName);
+						cargoHierarchyCurrentName = employeeName;
+						cargoRenderEmployeeCardsLevel();
+					}
+				});
+			}
+		}
+
+			// --- Cargo helpers & caches (copied/adapted from inicio.html) ---
+			const CARGO_CACHE_TTL_MS = 2 * 60 * 1000;
+			let cargoDataCache = { key: null, timestamp: 0, dataByEmployee: new Map() };
+			let cargoIncidentRowsCache = { timestamp: 0, rows: [] };
+			let cargoTableroLastLoad = 0;
+			let cargoEmployeesList = [];
+			let cargoLastIncidentRows = [];
+			let cargoLastEmployeesSnapshot = [];
+
+			function cargoNormalizeIncidentType(value) {
+				return String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+			}
+
+			function cargoIsSafetyIncidentType(value) {
+				const normalized = cargoNormalizeIncidentType(value);
+				return normalized === 'accidente';
+			}
+
+			function cargoGetIncidentRowDate(row) {
+				return cargoNormalizeEventDate(row?.fecha || row?.fecha_incidencia || row?.fecha_registro || row?.created_at);
+			}
+
+			function cargoGetIncidentRowEmployeeId(row) {
+				const rawId = row?.empleado_id ?? row?.id_empleado ?? row?.employee_id ?? null;
+				const parsedId = Number(rawId);
+				return Number.isFinite(parsedId) ? parsedId : null;
+			}
+
+			async function cargoGetAllIncidentRows() {
+				const isCacheValid = (Date.now() - cargoIncidentRowsCache.timestamp) < CARGO_CACHE_TTL_MS
+					&& Array.isArray(cargoIncidentRowsCache.rows);
+				if (isCacheValid) return cargoIncidentRowsCache.rows;
+				try {
+					const faltasResp = await fetch('/api/faltas-retardos').catch(() => null);
+					const faltasRows = faltasResp && faltasResp.ok ? cargoParseApiArray(await faltasResp.json()) : [];
+					const combinedRows = faltasRows.filter((row) => {
+						const type = row?.tipo || row?.tipo_incidencia;
+						return cargoIsSafetyIncidentType(type);
+					});
+					cargoIncidentRowsCache = { timestamp: Date.now(), rows: combinedRows };
+					return combinedRows;
+				} catch (error) {
+					console.warn('No se pudieron cargar incidentes globales:', error);
+					return [];
+				}
+			}
+
+			function cargoBuildTeamIncidentDateSet(employees, incidentRows) {
+				const incidentDateKeys = new Set();
+				if (!Array.isArray(employees) || employees.length === 0 || !Array.isArray(incidentRows)) return incidentDateKeys;
+				const employeeIdSet = new Set(employees.map(emp => Number(emp?.id)).filter(Number.isFinite));
+				const employeeNameSet = new Set(employees.map(emp => cargoNormalizeName(emp?.nombre_completo || emp?.nombre || emp?.name || '')).filter(Boolean));
+				incidentRows.forEach((row) => {
+					const type = row?.tipo || row?.tipo_incidencia;
+					if (!cargoIsSafetyIncidentType(type)) return;
+					const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+					const rowEmployeeName = cargoNormalizeName(row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || '');
+					const belongsToTeam = (rowEmployeeId !== null && employeeIdSet.has(rowEmployeeId)) || (rowEmployeeName && employeeNameSet.has(rowEmployeeName));
+					if (!belongsToTeam) return;
+					const date = cargoGetIncidentRowDate(row);
+					if (date) incidentDateKeys.add(formatDateLocal(date));
+				});
+				return incidentDateKeys;
+			}
+
+			function cargoBuildTeamIncidentRows(employees, incidentRows) {
+				if (!Array.isArray(employees) || employees.length === 0 || !Array.isArray(incidentRows)) return [];
+				const employeeIdSet = new Set(employees.map(emp => Number(emp?.id)).filter(Number.isFinite));
+				const employeeNameSet = new Set(employees.map(emp => cargoNormalizeName(emp?.nombre_completo || emp?.nombre || emp?.name || '')).filter(Boolean));
+				return incidentRows.filter((row) => {
+					const type = row?.tipo || row?.tipo_incidencia;
+					if (!cargoIsSafetyIncidentType(type)) return false;
+					const rowEmployeeId = cargoGetIncidentRowEmployeeId(row);
+					const rowEmployeeName = cargoNormalizeName(row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || '');
+					return (rowEmployeeId !== null && employeeIdSet.has(rowEmployeeId)) || (rowEmployeeName && employeeNameSet.has(rowEmployeeName));
+				});
+			}
+
+			function cargoFormatDisplayDate(dateKey) {
+				const parsed = cargoParseLocalDate(dateKey);
+				if (!parsed) return dateKey || 'Sin fecha';
+				return parsed.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+			}
+
+			function cargoIncidentTypeLabel(value) {
+				const normalized = cargoNormalizeIncidentType(value);
+				if (normalized === 'accidente') return 'Accidente';
+				return 'Incidencia';
+			}
+
+			function cargoGetIncidentEmployeeName(row) {
+				return (row?.nombre_completo || row?.nombre || row?.empleado_nombre || row?.usuario || 'Empleado no identificado').toString().trim();
+			}
+
+			function cargoGetIncidentEmployeeCode(row) {
+				const possibleCode = row?.numero_empleado ?? row?.employee_number ?? row?.empleado_numero ?? row?.empleado_id ?? row?.id_empleado ?? row?.employee_id;
+				return (possibleCode ?? '').toString().trim();
+			}
+
+			function cargoGetIncidentDetailText(row) {
+				return (row?.detalle || row?.descripcion || row?.motivo || row?.comentario || row?.observaciones || row?.nota || 'Sin detalle registrado').toString().trim();
+			}
+
+			function cargoEscapeHtml(text) {
+				return (text || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+			}
+
+			function cargoGetEmpleadoFotoUrl(employee) {
+				const photo = (employee && (employee.foto_url || employee.foto || employee.photo || employee.photo_url || employee.avatar)) || null;
+				if (!photo) return null;
+				try {
+					let src = String(photo || '');
+					if (src && !/^https?:\/\//i.test(src)) { if (!src.startsWith('/')) src = '/' + src; try { src = window.location.origin + src; } catch(_){} }
+					return src;
+				} catch (_) { return null; }
+			}
+
+			// cargoBuildWeekCache, cargoDetermineAbsenceLevel and cargoDeterminePerformanceLevel
+			async function cargoBuildWeekCache(employees, weekStart) {
+				if (!Array.isArray(employees) || employees.length === 0) return new Map();
+				const idsKey = employees.map(emp => Number(emp.id)).filter(id => !Number.isNaN(id)).sort((a,b)=>a-b).join(',');
+				const weekKey = `${formatDateLocal(weekStart)}|${idsKey}`;
+				const isValid = cargoDataCache.key === weekKey && (Date.now() - cargoDataCache.timestamp) < CARGO_CACHE_TTL_MS && cargoDataCache.dataByEmployee instanceof Map;
+				if (isValid) return cargoDataCache.dataByEmployee;
+				const dataByEmployee = new Map();
+				const chunkSize = 8;
+				for (let i = 0; i < employees.length; i += chunkSize) {
+					const chunk = employees.slice(i, i + chunkSize);
+					const chunkData = await Promise.all(chunk.map(async (employee) => {
+						try { const data = await cargoFetchEmployeeEvents(employee.id); return { employeeId: Number(employee.id), data }; } catch (error) { return { employeeId: Number(employee.id), data: { vacaciones: [], permisos: [], faltasRetardos: [], amonestaciones: [], accidentesIncidentes: [] } }; }
+					}));
+					chunkData.forEach(({ employeeId, data }) => { dataByEmployee.set(employeeId, data); });
+				}
+				cargoDataCache = { key: weekKey, timestamp: Date.now(), dataByEmployee };
+				return dataByEmployee;
+			}
+
+			function cargoDetermineAbsenceLevel(percentage) {
+				let level = 'Bajo'; let gaugeClass = 'gauge-success';
+				if (percentage > 60) { level = 'Alto'; gaugeClass = 'gauge-danger'; }
+				else if (percentage > 20) { level = 'Medio'; gaugeClass = 'gauge-warn'; }
+				return { level, gaugeClass };
+			}
+
+			function cargoDeterminePerformanceLevel(percentage) {
+				let level = 'Bajo'; let gaugeClass = 'gauge-danger';
+				if (percentage > 80) { level = 'Alto'; gaugeClass = 'gauge-success'; }
+				else if (percentage > 50) { level = 'Medio'; gaugeClass = 'gauge-warn'; }
+				return { level, gaugeClass };
+			}
+
+			(function initializeCargoEmployeesModal(){
+				const card = document.getElementById('cargoResumenCard');
+				const modal = document.getElementById('cargoEmpleadosModal');
+				const closeButton = document.getElementById('cargoEmpleadosClose');
+				const searchInput = document.getElementById('cargoEmpleadoSearch');
+				const backBtn = document.getElementById('cargoNivelBackBtn');
+				const jerarquiaBtn = document.getElementById('cargoVerJerarquiaBtn');
+				const jerarquiaModal = document.getElementById('cargoJerarquiaModal');
+				const jerarquiaClose = document.getElementById('cargoJerarquiaClose');
+				if (!card || !modal || !closeButton) return;
+
+				if (card.dataset.modalBound !== '1') {
+					card.dataset.modalBound = '1';
+					card.addEventListener('click', () => openCargoEmployeesModal().catch(() => {}));
+					card.addEventListener('keydown', (event) => {
+						if (event.key === 'Enter' || event.key === ' ') {
+							event.preventDefault();
+							openCargoEmployeesModal().catch(() => {});
+						}
+					});
+				}
+
+				if (closeButton.dataset.modalBound !== '1') {
+					closeButton.dataset.modalBound = '1';
+					closeButton.addEventListener('click', () => {
+						modal.classList.remove('is-open');
+						modal.setAttribute('aria-hidden', 'true');
+					});
+				}
+
+				if (searchInput && searchInput.dataset.bound !== '1') {
+					searchInput.dataset.bound = '1';
+					searchInput.addEventListener('input', () => {
+						populateCargoEmployeesSelect();
+						cargoRenderEmployeeCardsLevel();
+					});
+				}
+
+				if (backBtn && backBtn.dataset.bound !== '1') {
+					backBtn.dataset.bound = '1';
+					backBtn.addEventListener('click', () => {
+						if (cargoHierarchyStack.length === 0) return;
+						const previousLevel = cargoHierarchyStack.pop();
+						cargoHierarchyCurrentName = previousLevel || cargoHierarchyRootName;
+						cargoRenderEmployeeCardsLevel();
+					});
+				}
+
+				if (jerarquiaBtn && jerarquiaBtn.dataset.bound !== '1') {
+					jerarquiaBtn.dataset.bound = '1';
+					jerarquiaBtn.addEventListener('click', () => {
+						openCargoJerarquiaModal().catch((error) => {
+							console.error('Error al abrir jerarquía organizacional:', error);
+						});
+					});
+				}
+
+				if (jerarquiaClose && jerarquiaClose.dataset.bound !== '1') {
+					jerarquiaClose.dataset.bound = '1';
+					jerarquiaClose.addEventListener('click', closeCargoJerarquiaModal);
+				}
+
+				if (jerarquiaModal && jerarquiaModal.dataset.bound !== '1') {
+					jerarquiaModal.dataset.bound = '1';
+					jerarquiaModal.addEventListener('click', (event) => {
+						if (event.target === jerarquiaModal) closeCargoJerarquiaModal();
+					});
+				}
+			})();
+
+			window.cargarEmpleadoCargoSeleccionado = cargarEmpleadoCargoSeleccionado;
+			window.cambiarCargoTab = cambiarCargoTab;
+			window.cargarTableroPersonalCargo = cargarTableroPersonalCargo;
+			console.log('[cargo][init] funciones globales registradas');
+			setTimeout(() => {
+				cargarTableroPersonalCargo(true).catch((error) => {
+					console.error('[cargo][init] error en carga inicial forzada:', error);
+				});
+			}, 150);
+
+			});
+			</script>
+
+			<script>
+			// Password change UI logic (mimics perfil.html behavior)
+			(function(){
+			  function ensureShowNotification() {
+			    if (window.showNotification) return;
+			    window.showNotification = function(message, type = 'success') {
+			      const notification = document.createElement('div');
+			      notification.className = `notification notification-${type}`;
+			      const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+			      notification.innerHTML = `\n+        <div class="notification-content">\n+          <i class="fas ${icon}"></i>\n+          <span>${message}</span>\n+        </div>\n+      `;
+			      document.body.appendChild(notification);
+			      setTimeout(() => notification.classList.add('show'), 10);
+			      setTimeout(() => { notification.classList.remove('show'); setTimeout(()=>notification.remove(), 300); }, 3000);
+			    };
+			  }
+
+			  // Robust token getter: checks multiple localStorage keys and returns first token found
+			  function getAuthToken() {
+			    const keys = ['sessionToken','authToken','token','accessToken','id_token','auth_token'];
+			    for (const k of keys) {
+			      try {
+			        const v = localStorage.getItem(k);
+			        if (v && v.length > 10) return { key: k, token: v };
+			      } catch (e) {}
+			    }
+			    return null;
+			  }
+
+			  function maskToken(t) {
+			    if (!t) return '';
+			    return t.length > 10 ? (t.slice(0,6) + '…' + t.slice(-4)) : t;
+			  }
+
+			  async function submitPasswordChange(currentPassword, newPassword, btn) {
+			    const token = localStorage.getItem('sessionToken');
+			    const originalText = btn.innerHTML;
+			    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+			    btn.disabled = true;
+			    try {
+			      const headers = { 'Content-Type': 'application/json' };
+							// prefer explicit passed token, otherwise try localStorage keys
+							let auth = token;
+							if (!auth) {
+								const found = getAuthToken();
+								if (found) { auth = found.token; console.debug('[auth] using token from localStorage key', found.key, maskToken(auth)); }
+							} else {
+								console.debug('[auth] using token passed to submitPasswordChange', maskToken(auth));
+							}
+							if (auth) headers['Authorization'] = `Bearer ${auth}`;
+							// If we have a numeric user id, call usuarios/:id/change-password endpoint
+							let targetResponse;
+							const uid = window.currentUserId || (JSON.parse(localStorage.getItem('loggedInUser')||'{}').id) || null;
+							if (uid) {
+								console.debug('[password] changing password for user id', uid);
+								targetResponse = await fetch(`/api/usuarios/${encodeURIComponent(uid)}/change-password`, {
+									method: 'PATCH', headers, body: JSON.stringify({ currentPassword, newPassword }), credentials: 'include'
+								});
+							} else {
+								targetResponse = await fetch('/api/employees/change-password', { method: 'PATCH', headers, body: JSON.stringify({ currentPassword, newPassword }), credentials: 'include' });
+							}
+							const resp = targetResponse;
+			      const data = await resp.json().catch(()=>({}));
+							if (resp.ok && data.success) {
+			        showNotification('Contraseña actualizada correctamente', 'success');
+			        return { ok: true };
+			      } else {
+								// If we got unauthorized, log body to console for diagnosis
+								if (resp.status === 401) console.warn('[auth] change-password returned 401, response body:', data);
+								showNotification(data.error || 'Error al cambiar contraseña', 'error');
+			        return { ok: false };
+			      }
+			    } catch (err) {
+			      console.error('Error changing password', err);
+			      showNotification('Error de conexión', 'error');
+			      return { ok: false };
+			    } finally {
+			      btn.innerHTML = originalText;
+			      btn.disabled = false;
+			    }
+			  }
+
+			  function setupPasswordSection() {
+			    ensureShowNotification();
+			    const current = document.getElementById('currentPassword');
+			    const nw = document.getElementById('newPassword');
+			    const rpt = document.getElementById('confirmPassword');
+			    const btnSave = document.getElementById('password-save-btn');
+			    const btnCancel = document.getElementById('password-cancel-btn');
+			    const msg = document.getElementById('password-msg');
+
+			    if (!current || !nw || !rpt || !btnSave) return;
+
+			    function validate() {
+			      const curVal = String(current.value || '');
+			      const newVal = String(nw.value || '');
+			      const rptVal = String(rpt.value || '');
+			      if (!curVal || !newVal || !rptVal) {
+			        btnSave.disabled = true; msg.textContent = '';
+			        return false;
+			      }
+			      if (newVal !== rptVal) { btnSave.disabled = true; msg.textContent = 'Las contraseñas no coinciden.'; return false; }
+			      if (newVal === curVal) { btnSave.disabled = true; msg.textContent = 'La nueva contraseña debe ser diferente.'; return false; }
+			      btnSave.disabled = false; msg.textContent = '';
+			      return true;
+			    }
+
+			    [current, nw, rpt].forEach(el => el.addEventListener('input', validate));
+
+			    if (btnCancel) btnCancel.addEventListener('click', function(){
+			      current.value = ''; nw.value = ''; rpt.value = ''; btnSave.disabled = true; msg.textContent = '';
+			    });
+
+				// Attach form submit handler that mirrors perfil.html
+				const passwordForm = document.getElementById('passwordForm');
+				async function changePassword(e) {
+					e.preventDefault();
+					const currentPassword = current && current.value;
+					const newPassword = nw && nw.value;
+					const confirmPassword = rpt && rpt.value;
+					if (!currentPassword || !newPassword || !confirmPassword) { showNotification('Please fill in all fields.', 'error'); return; }
+					if (newPassword !== confirmPassword) { showNotification('Passwords do not match.', 'error'); return; }
+					if (newPassword === currentPassword) { showNotification('New password must be different from your current password.', 'error'); return; }
+					// send to server
+					const token = localStorage.getItem('sessionToken');
+					const submitBtn = btnSave;
+					const originalText = submitBtn.innerHTML;
+					submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+					submitBtn.disabled = true;
+					try {
+						const headers = { 'Content-Type': 'application/json' };
+						if (token) headers['Authorization'] = `Bearer ${token}`;
+						// prefer token from localStorage if not present
+						let auth = token;
+						if (!auth) {
+							const found = getAuthToken();
+							if (found) { auth = found.token; console.debug('[auth] using token from localStorage key', found.key, maskToken(auth)); }
+						} else {
+							console.debug('[auth] using token from localStorage (variable)', maskToken(auth));
+						}
+						if (auth) headers['Authorization'] = `Bearer ${auth}`;
+						// If we have a user id, use usuarios/:id/change-password
+						const uid = window.currentUserId || (JSON.parse(localStorage.getItem('loggedInUser')||'{}').id) || null;
+						if (uid) console.debug('[password-form] submitting change for user id', uid);
+						const endpoint = uid ? `/api/usuarios/${encodeURIComponent(uid)}/change-password` : '/api/employees/change-password';
+						const response = await fetch(endpoint, { method: 'PATCH', headers, body: JSON.stringify({ currentPassword: currentPassword, newPassword: newPassword }), credentials: 'include' });
+						const data = await response.json().catch(()=>({}));
+						if (response.ok && data.success) {
+							showNotification('Password changed successfully', 'success');
+							if (passwordForm) passwordForm.reset();
+						} else {
+							showNotification(data.error || 'Error changing password', 'error');
+						}
+					} catch (err) {
+						console.error('Error al cambiar contraseña:', err);
+						showNotification('Error connecting to server', 'error');
+					} finally {
+						submitBtn.innerHTML = originalText;
+						submitBtn.disabled = false;
+					}
+				}
+				if (passwordForm) passwordForm.addEventListener('submit', changePassword);
+
+			    // visibility toggles
+			    const toggles = document.querySelectorAll('.password-toggle');
+			    toggles.forEach(btn => {
+			      btn.addEventListener('click', function(){
+			        const target = this.getAttribute('data-target');
+			        const input = document.getElementById(target);
+			        if (!input) return;
+			        const isText = input.type === 'text';
+			        input.type = isText ? 'password' : 'text';
+			        const icon = this.querySelector('i');
+			        if (icon) { icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash'); }
+			      });
+			    });
+			  }
+
+			  document.addEventListener('DOMContentLoaded', setupPasswordSection);
+			})();
+			</script>
+
+					<div class="user-profile-links">
+								<a href="acerca.html" class="small-link">Acerca de</a>
+								<span class="sep">·</span>
+								<a href="privacidad.html" class="small-link">Política de privacidad</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -1587,7 +3849,6 @@
 					const permisoValue = matchingKey ? tarjetasPermisos[matchingKey] : tarjetasPermisos[permiso];
 					const allowedByTarjeta = isPermissionAllowed(permisoValue);
 					if (allowedByTarjeta) allowed = true;
-					console.log('perm check:', permAttr, 'allowedByPermissions=', allowedByPermissions, 'allowedByTarjeta=', allowedByTarjeta);
 				}
 				// Elemento accionable (si está dentro de un wrapper)
 				const actionable = (node.tagName.toLowerCase() === 'a' || node.tagName.toLowerCase() === 'button') ? node : node.querySelector('a,button');
@@ -1697,7 +3958,6 @@
 					const avatarEl = document.getElementById('sidebarUserAvatar');
 					const nameEl = document.getElementById('sidebarUserName');
 					const handleEl = document.getElementById('sidebarUserHandle');
-					console.log('nuevo-inicio: loaded loggedInUser=', stored, 'username=', storedUsername);
 
 					// Prefer persisted employee profile when available
 					let userProfile = null;
@@ -1705,6 +3965,24 @@
 
 					// Prefer persisted employee profile when available
 					const displayNameFull = (userProfile && (userProfile.nombre_completo || userProfile.fullName || userProfile.fullname)) || (stored && (stored.nombre_completo || stored.name || stored.fullName)) || storedUsername || 'Invitado';
+
+					// If loggedInUser differs from stored userProfile, invalidate stale userProfile
+					try {
+					  const storedUserKey = stored && (stored.username || stored.employeeNumber || stored.name) ? (stored.username || stored.employeeNumber || stored.name) : null;
+					  const profileUserKey = userProfile && (userProfile.username || userProfile.numero_empleado || userProfile.employeeNumber || userProfile.nombre_completo) ? (userProfile.username || userProfile.numero_empleado || userProfile.employeeNumber || userProfile.nombre_completo) : null;
+					  if (storedUserKey && profileUserKey && String(storedUserKey).trim().toLowerCase() !== String(profileUserKey).trim().toLowerCase()) {
+					    try { localStorage.removeItem('userProfile'); userProfile = null; console.debug('Removed stale userProfile due to username mismatch'); } catch(_){}
+					  }
+					} catch(e) { /* ignore */ }
+
+					// Update hero immediately based on stored loggedInUser to avoid stale display
+					try {
+					  const heroH2 = document.querySelector('.hero h2');
+					  const heroP = document.querySelector('.hero p');
+					  const nameForHero = (stored && (stored.nombre_completo || stored.name || stored.fullName)) || storedUsername || (userProfile && (userProfile.nombre_completo || userProfile.fullName)) || 'Usuario';
+					  if (heroH2) heroH2.textContent = `${nameForHero}, hemos trabajado con orgullo 0 días sin accidentes`;
+					  if (heroP) heroP.textContent = '¡Hay que tener cuidado!';
+					} catch(e) { /* ignore hero init errors */ }
 					const firstName = String(displayNameFull || '').trim().split(/\s+/).filter(Boolean)[0] || displayNameFull;
 					const displayHandle = storedUsername ? '@' + storedUsername : '';
 
@@ -1768,6 +4046,8 @@
 			const sidebarPersonal = document.getElementById('nav-personal');
 			if (sidebarPersonal) {
 				sidebarPersonal.addEventListener('click', function(e){
+					// If another handler already prevented the event (e.g. tablero toggle), don't open the user modal
+					if (e && e.defaultPrevented) return;
 					e.preventDefault && e.preventDefault();
 					// open user modal and activate personal tab
 					try {
@@ -1781,6 +4061,16 @@
 						try { if (typeof populateUserProfile === 'function') populateUserProfile(); } catch(_){}
 						// Activate section 'personal'
 						setActiveSection('personal');
+						// Ensure the 'TableroCargoSection' stays visible when opening the user modal
+						try {
+							const tableroCargo = document.getElementById('tableroCargoSection');
+							if (tableroCargo) {
+								tableroCargo.hidden = false;
+								tableroCargo.setAttribute('aria-hidden', 'false');
+								tableroCargo.classList.add('is-active');
+								try { tableroCargo.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(_){}
+							}
+						} catch (_) {}
 						// copy the main content into the personal panel if empty
 						const personalSec = userModal.querySelector('[data-section-content="personal"]');
 						if (personalSec) {
@@ -1843,6 +4133,10 @@
 			})();
 
 			function updateUserGeneralInfo() {
+				// Ensure helper exists (defined later in file too) to avoid race conditions
+				if (typeof _escapeHtml !== 'function') {
+					window._escapeHtml = function(s) { return String(s === null || s === undefined ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); };
+				}
 				const generalSection = userModal.querySelector('.panel-section.user-general');
 				if (!generalSection) return;
 				const joined = generalSection.dataset.joined;
@@ -1906,6 +4200,8 @@
 					userModal.setAttribute('aria-hidden','false');
 					document.documentElement.classList.add('no-scroll');
 					try { if (typeof populateUserProfile === 'function') await populateUserProfile(); } catch (e) { console.warn('populateUserProfile on modal open failed', e); }
+					// Log current user id for debugging (as requested)
+					try { console.debug('[user-modal] currentUserId =', window.currentUserId || localStorage.getItem('currentUserId') || JSON.parse(localStorage.getItem('loggedInUser')||'{}').id || JSON.parse(localStorage.getItem('loggedInUser')||'{}').employeeNumber || localStorage.getItem('username')); } catch(e) {}
 					updateUserGeneralInfo();
 					setActiveSection('general');
 					// Ensure personal section placeholder is ready
@@ -1982,7 +4278,6 @@
 					document.documentElement.setAttribute('data-theme', theme);
 					// persist
 					localStorage.setItem('theme', theme);
-					console.log('applyTheme ->', theme, 'data-theme now:', document.documentElement.getAttribute('data-theme'));
 
 					// add/remove helper classes both on <html> and <body> to maximize compatibility
 					if(theme === 'dark'){
@@ -2096,62 +4391,83 @@
 					}
 				}
 			} catch(_){ }
-			if (main) main.classList.remove('modules-visible');
+				// Ensure the cargo tablero is hidden when switching away from the "personal" nav
+				try {
+					const tableroCargo = document.getElementById('tableroCargoSection');
+					if (tableroCargo && this.id !== 'nav-personal') {
+						if (window && typeof window.pdmHideTablero === 'function') {
+							window.pdmHideTablero();
+						} else {
+							try { tableroCargo.hidden = true; tableroCargo.setAttribute('aria-hidden','true'); tableroCargo.classList.remove('is-active'); tableroCargo.style.display = 'none'; } catch(_){ }
+						}
+					}
+				} catch(_){ }
+				if (main) main.classList.remove('modules-visible');
 
-			// Manage panels
-			if (updatesPanel && newsPanel && main) {
+			// Manage panels - show ONLY the intended sections for each nav item
+			if (main) {
+				function hideAllMainChildren(exceptIds) {
+					exceptIds = Array.isArray(exceptIds) ? exceptIds : [];
+					Array.from(main.children).forEach(ch => {
+						try {
+							if (exceptIds.includes(ch.id)) {
+								ch.style.display = '';
+								ch.hidden = false;
+								ch.setAttribute && ch.setAttribute('aria-hidden','false');
+							} else {
+								ch.style.display = 'none';
+								ch.hidden = true;
+								try { ch.setAttribute && ch.setAttribute('aria-hidden','true'); } catch(_){ }
+							}
+						} catch(_){ }
+					});
+				}
+
+				// helper to reset main classes used for view state
+				function resetMainState(){ main.classList.remove('updates-visible','news-visible','messages-visible','modules-visible'); }
+
+				// Default: hide all panels
 				if (this.id === 'nav-actualizacion') {
-					updatesPanel.style.display = 'block';
-					newsPanel.style.display = 'none';
-					if (messagesPanel) messagesPanel.style.display = 'none';
-					main.classList.remove('news-visible', 'messages-visible');
+					hideAllMainChildren(['updates-panel']);
+					resetMainState();
 					main.classList.add('updates-visible');
 					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					try { updatesPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
+					try { document.getElementById('updates-panel')?.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
 				} else if (this.id === 'nav-noticias') {
-					newsPanel.style.display = 'block';
-					updatesPanel.style.display = 'none';
-					if (messagesPanel) messagesPanel.style.display = 'none';
-					main.classList.remove('updates-visible', 'messages-visible');
+					hideAllMainChildren(['news-panel']);
+					resetMainState();
 					main.classList.add('news-visible');
-					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					try { newsPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
 				} else if (this.id === 'nav-personal') {
-					// Mostrar la vista principal (inicio) usando la misma lógica que inicio.html
-					updatesPanel.style.display = 'none';
-					newsPanel.style.display = 'none';
-					if (messagesPanel) messagesPanel.style.display = 'none';
-					main.classList.remove('updates-visible', 'news-visible', 'messages-visible', 'modules-visible');
+					// show only the tableroCargoSection
+					hideAllMainChildren(['tableroCargoSection']);
+					resetMainState();
+					// ensure tablero is visible and marked active
+					try {
+						const tablero = document.getElementById('tableroCargoSection');
+						if (tablero) {
+							tablero.hidden = false; tablero.style.display = ''; tablero.classList.add('is-active'); tablero.setAttribute('aria-hidden','false');
+						}
+					} catch(_){ }
 					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					if (msgComposer) msgComposer.classList.remove('fixed');
-					try { if (main) main.scrollIntoView({behavior:'auto', block:'start'}); } catch(e) {}
 				} else if (this.id === 'nav-mensajes') {
-					if (messagesPanel) messagesPanel.style.display = 'block';
-					updatesPanel.style.display = 'none';
-					if (newsPanel) newsPanel.style.display = 'none';
-					main.classList.remove('updates-visible', 'news-visible');
+					hideAllMainChildren(['messages-panel']);
+					resetMainState();
 					main.classList.add('messages-visible');
 					if (rightSidebar) { rightSidebar.style.display = 'block'; document.body.classList.add('messages-right-open'); }
 					if (msgComposer) msgComposer.classList.add('fixed');
-					try { messagesPanel.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e) {}
 				} else if (this.id === 'nav-modulos') {
-					updatesPanel.style.display = 'none';
-					newsPanel.style.display = 'none';
-					if (messagesPanel) messagesPanel.style.display = 'none';
-					main.classList.remove('updates-visible','news-visible','messages-visible');
+					// show modules embed but keep inicio sections and cargo tablero visible
+					hideAllMainChildren(['modules-embed','inicio-explore-sections','tableroCargoSection']);
+					resetMainState();
 					main.classList.add('modules-visible');
-					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					if (msgComposer) msgComposer.classList.remove('fixed');
-					try { if (main) main.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
 					if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
 				} else {
-					updatesPanel.style.display = 'none';
-					newsPanel.style.display = 'none';
-					if (messagesPanel) messagesPanel.style.display = 'none';
-					main.classList.remove('updates-visible','news-visible','messages-visible');
-					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					if (msgComposer) msgComposer.classList.remove('fixed');
+					// Fallback: show the main explore sections only
+					hideAllMainChildren(['inicio-explore-sections']);
+					resetMainState();
 				}
+				// ensure message composer state cleaned up
+				if (msgComposer && this.id !== 'nav-mensajes') msgComposer.classList.remove('fixed');
 			}
 		    });
 		  });
@@ -2329,8 +4645,6 @@
 						const j = await resp.json();
 						const dbVal = j && j.url_canva ? String(j.url_canva).trim() : null;
 						if (dbVal) {
-							console.log('Importando canva desde BD:', dbVal);
-							// Normalizar si es necesario
 							const ext = getCanvaEmbedUrl(dbVal);
 							embedUrl = ext || dbVal;
 						}
@@ -2639,8 +4953,24 @@
 	// Resolver usado por window.showConfirm
 	let confirmCompletionResolver = null;
 
+	// Guardar el elemento que tenía foco antes de abrir un modal, para restaurarlo al cerrar
+	let __lastFocusedElementBeforeModal = null;
+
 	function closeConfirmModal(){
 		if(confirmModal){
+			try {
+				// If the modal (or a descendant) currently has focus, restore focus to the previously
+				// focused element before hiding the modal to avoid aria-hidden on a focused element.
+				const active = document.activeElement;
+				if (active && confirmModal.contains(active)) {
+					if (__lastFocusedElementBeforeModal && document.contains(__lastFocusedElementBeforeModal)) {
+						try { __lastFocusedElementBeforeModal.focus(); } catch(_) { try { document.body.focus(); } catch(_){} }
+					} else {
+						try { document.body.focus(); } catch(_){}
+					}
+				}
+			} catch(_){}
+
 			confirmModal.classList.remove('open');
 			confirmModal.setAttribute('aria-hidden','true');
 			document.body.style.overflow = '';
@@ -2650,15 +4980,15 @@
 					confirmOkBtn.textContent = confirmModal.dataset._okText || '';
 					delete confirmModal.dataset._okText;
 				}
-			} catch(_){}
+			} catch(_){ }
 		}
 		// If a generic confirm was awaiting resolution, resolve as false (cancel)
 		try {
 			if (confirmCompletionResolver) {
-				try { confirmCompletionResolver(false); } catch(_){}
+				try { confirmCompletionResolver(false); } catch(_){ }
 				confirmCompletionResolver = null;
 			}
-		} catch(_){}
+		} catch(_){ }
 		pendingDeleteId = null;
 	}
 	if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', function(){ closeConfirmModal(); });
@@ -2700,6 +5030,8 @@
 				} catch(_){}
 
 				confirmCompletionResolver = function(result) { try{ resolve(Boolean(result)); } catch(e){ resolve(Boolean(result)); } };
+				// Save focus before opening the modal so we can restore it when closing
+				try { __lastFocusedElementBeforeModal = document.activeElement; } catch(_) { __lastFocusedElementBeforeModal = null; }
 				confirmModal.classList.add('open');
 				confirmModal.setAttribute('aria-hidden','false');
 				document.body.style.overflow = 'hidden';
@@ -2737,14 +5069,38 @@
 				const closeBtn = alertModal.querySelector('.modal-close');
 
 				function close() {
-					try { alertModal.classList.remove('open'); alertModal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; } catch(_){}
+					try {
+						// If an element inside the modal has focus, restore previous focus before hiding
+						const active = document.activeElement;
+						if (active && alertModal.contains(active)) {
+							let restored = false;
+							try {
+								if (typeof __lastFocusedElementBeforeModal !== 'undefined' && __lastFocusedElementBeforeModal && document.contains(__lastFocusedElementBeforeModal)) {
+									try { __lastFocusedElementBeforeModal.focus(); restored = true; } catch(_) { restored = false; }
+								}
+							} catch(_){}
+							try {
+								if (!restored && window.__lastFocusedElementBeforeModal && document.contains(window.__lastFocusedElementBeforeModal)) {
+									try { window.__lastFocusedElementBeforeModal.focus(); restored = true; } catch(_) { restored = false; }
+								}
+							} catch(_){}
+							if (!restored) {
+								try { document.body.focus(); } catch(_){}
+							}
+							try { if (alertModal.contains(document.activeElement)) document.activeElement.blur(); } catch(_){}
+						}
+						alertModal.classList.remove('open');
+						alertModal.setAttribute('aria-hidden','true');
+						document.body.style.overflow = '';
+					} catch(_){ }
 					resolve();
 				}
 
 				if (okBtn) okBtn.addEventListener('click', close, { once: true });
 				if (closeBtn) closeBtn.addEventListener('click', close, { once: true });
 				alertModal.addEventListener('click', function(e){ if (e.target === alertModal) close(); });
-				// open
+				// Save focus and open
+				try { __lastFocusedElementBeforeModal = document.activeElement; } catch(_) { __lastFocusedElementBeforeModal = null; }
 				alertModal.classList.add('open');
 				alertModal.setAttribute('aria-hidden','false');
 				document.body.style.overflow = 'hidden';
@@ -3281,8 +5637,17 @@ document.addEventListener('DOMContentLoaded', function(){
 					try {
 						const headers = { 'Content-Type': 'application/json' };
 						if (token) headers['Authorization'] = `Bearer ${token}`;
-						const response = await fetch('/api/employees/me', { headers });
-						if (!response.ok) return null;
+						let response = await fetch('/api/employees/me', { headers, credentials: 'include' });
+						if (response.status === 401) {
+							console.warn('[auth] /api/employees/me returned 401 with Authorization header; retrying without header (cookie session)');
+							// retry without Authorization header, just credentials
+							response = await fetch('/api/employees/me', { credentials: 'include' });
+						}
+						if (!response.ok) {
+							console.warn('[auth] fetchEmployeeFromMe non-ok status', response.status);
+							try { const body = await response.json().catch(()=>null); if (body) console.debug('[auth] response body:', body); } catch(e){}
+							return null;
+						}
 						const data = await response.json();
 						return data && data.success && data.employee ? data.employee : null;
 					} catch (error) { console.warn('fetchEmployeeFromMe error', error); return null; }
@@ -3290,7 +5655,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
 				// Try to get employee record (token -> by id -> by username -> by name)
 				let employee = null;
-				const token = localStorage.getItem('sessionToken') || localStorage.getItem('authToken') || null;
+				// Find token in multiple possible storage keys
+				let token = null;
+				const tokenKeys = ['sessionToken','authToken','token','accessToken','id_token','auth_token'];
+				for (const k of tokenKeys) {
+					try { const v = localStorage.getItem(k); if (v && v.length > 8) { token = v; console.debug('[auth] found token in localStorage key', k); break; } } catch(e){}
+				}
 				if (token) {
 					employee = await fetchEmployeeFromMe(token);
 				}
@@ -3352,6 +5722,15 @@ document.addEventListener('DOMContentLoaded', function(){
 							photo: empPhoto || ''
 						};
 						localStorage.setItem('userProfile', JSON.stringify(storedProfile));
+                        
+												// Actualizar hero inmediatamente con el nombre obtenido
+												try {
+													const heroH2 = document.querySelector('.hero h2');
+													const heroP = document.querySelector('.hero p');
+													const displayName = employee.nombre_completo || employee.fullName || name || localStorage.getItem('username') || window.currentUsername || 'Usuario';
+													if (heroH2) heroH2.textContent = `${displayName}, hemos trabajado con orgullo 0 días sin accidentes`;
+													if (heroP) heroP.textContent = '¡Hay que tener cuidado!';
+												} catch (e) { /* ignore hero update errors */ }
 					} catch (e) { console.warn('could not persist userProfile', e); }
 				}
 
@@ -3384,37 +5763,74 @@ document.addEventListener('DOMContentLoaded', function(){
 	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _disableMensajeriaClick); else _disableMensajeriaClick();
 	})();
 	</script>
+
 	<script>
+	// Obtener días sin accidentes desde /api/incapacidades y registrarlo en consola
 	(function(){
-	  function initPasswordUI(){
-	    var cur = document.getElementById('current-password');
-	    var nw = document.getElementById('new-password');
-	    var rep = document.getElementById('repeat-password');
-	    var save = document.getElementById('password-save-btn');
-	    var cancel = document.getElementById('password-cancel-btn');
-	    var msg = document.getElementById('password-msg');
-	    if (!save) return;
-	    function updateState(){
-	      var curVal = cur && cur.value.trim();
-	      var nVal = nw && nw.value.trim();
-	      var rVal = rep && rep.value.trim();
-	      var ok = Boolean(curVal && nVal && rVal && (nVal === rVal) && nVal.length >= 6);
-	      save.disabled = !ok;
-	      if (nVal && rVal && nVal !== rVal) { msg.textContent = 'Las contraseñas no coinciden.'; } 
-	      else if (nVal && nVal.length > 0 && nVal.length < 6) { msg.textContent = 'La contraseña debe tener al menos 6 caracteres.'; }
-	      else { msg.textContent = ''; }
+	  async function computeFromIncapacidades(){
+	    try{
+	      const resp = await fetch('/api/incapacidades', { credentials: 'include' });
+	      if (!resp || !resp.ok) { console.warn('fetch /api/incapacidades failed', resp && resp.status); return; }
+		const data = await resp.json();
+		console.debug('raw /api/incapacidades response', data);
+		let rows = [];
+		if (Array.isArray(data)) rows = data;
+		else if (Array.isArray(data.incapacidades)) rows = data.incapacidades;
+		else if (Array.isArray(data.data)) rows = data.data;
+		else if (Array.isArray(data.rows)) rows = data.rows;
+		else rows = [];
+	      if (!rows || rows.length === 0) {
+	        console.log('diasSinAccidentes (incapacidades): no hay registros');
+	        return;
+	      }
+	      let latest = null;
+	      rows.forEach(r => {
+	        const cand = r && (r.fecha_inicio || r.fecha_registro || r.fecha || r.created_at || r.fecha_amonestacion || r.fecha_solicitud);
+	        if (!cand) return;
+	        const d = new Date(cand);
+	        if (isNaN(d.getTime())) return;
+	        if (!latest || d.getTime() > latest.getTime()) latest = d;
+	      });
+	      if (!latest) { console.log('diasSinAccidentes (incapacidades): no se encontraron fechas válidas'); return; }
+	      const last = new Date(latest.getFullYear(), latest.getMonth(), latest.getDate());
+	      const now = new Date();
+	      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+	      const diffDays = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+	      const numEl = document.getElementById('cargoSinAccidentesDias');
+	      if (numEl) numEl.textContent = String(diffDays);
+			// Actualizar texto del hero con nombre del usuario y mensaje según días sin accidentes
+			try {
+				const heroH2 = document.querySelector('.hero h2');
+				const heroP = document.querySelector('.hero p');
+				// Obtener nombre del usuario desde distintos orígenes
+				let name = 'Usuario';
+				try {
+				  const userProfile = JSON.parse(localStorage.getItem('userProfile') || 'null');
+				  const logged = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+				  name = (userProfile && (userProfile.fullName || userProfile.nombre_completo || userProfile.fullname))
+					|| (logged && (logged.name || logged.nombre_completo || logged.username || logged.employeeNumber))
+					|| localStorage.getItem('username') || window.currentUsername || 'Usuario';
+				} catch(ex) { name = localStorage.getItem('username') || window.currentUsername || 'Usuario'; }
+
+				const daysText = `${diffDays} día${diffDays === 1 ? '' : 's'}`;
+				const title = `${name}, hemos trabajado con orgullo ${daysText} sin accidentes`;
+				if (heroH2) heroH2.textContent = title;
+
+				// Mensaje secundario según rango de días
+				if (heroP) {
+				  let sub = '¡Continuemos así!';
+				  if (diffDays >= 0 && diffDays <= 10) sub = '¡Hay que tener cuidado!';
+				  else if (diffDays >= 11 && diffDays <= 20) sub = '¡Hay que mejorar un poco mas!';
+				  else if (diffDays > 20) sub = '¡Continuemos así!';
+				  heroP.textContent = sub;
+				}
+
+			} catch (e) { console.warn('Error al actualizar hero con diasSinAccidentes', e); }
+	    } catch (e) {
+	      console.warn('computeFromIncapacidades error', e && e.message ? e.message : e);
 	    }
-	    [cur, nw, rep].forEach(function(el){ if (el) el.addEventListener('input', updateState); });
-	    if (cancel) cancel.addEventListener('click', function(){ if (cur) cur.value=''; if (nw) nw.value=''; if (rep) rep.value=''; updateState(); });
-	    if (save) save.addEventListener('click', function(){
-	      // Nota: aquí sólo simulamos el guardado en el cliente. Implementar llamada al servidor si es necesario.
-	      save.disabled = true;
-	      if (msg) { msg.style.color = 'green'; msg.textContent = 'Cambios guardados (simulado).'; }
-	      setTimeout(function(){ if (msg) { msg.textContent=''; msg.style.color='var(--muted)'; } }, 2200);
-	      if (cur) cur.value=''; if (nw) nw.value=''; if (rep) rep.value='';
-	    });
 	  }
-	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPasswordUI); else initPasswordUI();
+	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', computeFromIncapacidades); else computeFromIncapacidades();
 	})();
 	</script>
 	</body>
