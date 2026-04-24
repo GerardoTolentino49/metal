@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/topbar.css">
   <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <script src="js/global-color.js"></script>
@@ -123,50 +124,93 @@ document.addEventListener('DOMContentLoaded', function() {
           align-items: center;
           gap: 12px;
           padding: 6px 12px;
+          position: relative;
         }
         /* Posicionar el área del header como contenedor relativo para centrar absolutemente la barra */
-        .interface-header { position: relative; }
+        /* .interface-header { position: relative; } */
 
         /* Forzar la barra de búsqueda al centro del header */
-        .search-bar-wrapper {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          top: 12px;
+        /* .search-bar-wrapper {
           width: 100%;
-          display: flex;
-          justify-content: center;
-          pointer-events: none; /* desactivar eventos en el wrapper para no bloquear otros elementos; habilitar en hijos */
-        }
+          pointer-events: none; 
+          position: relative;
+        } */
 
-        .search-bar-center { flex: 1; display:flex; justify-content:center; pointer-events: auto; }
-        .search-input-group { position: relative; width: 56%; max-width: 720px; pointer-events: auto; }
+        .search-bar-center { flex: 1; display:flex; justify-content:center; pointer-events: auto; width: 100%;}
+        .search-input-group { width: 100%; pointer-events: auto; position: relative; }
         .search-input-group .search-bar {
           width: 100%;
-          padding: 12px 46px 12px 18px;
+          /* padding: 12px 46px 12px 18px; */
           border-radius: 999px;
           border: 1px solid #e5e7eb;
           background: #fff;
           box-shadow: none;
           font-size: 14px;
         }
-        .search-input-group .filter-btn {
+        /* Asegurar espacio a la derecha para el botón de filtro */
+        .search-bar {
+          padding-right: 0px !important;
+        }
+        .filter-btn {
           position: absolute;
-          right: 6px;
+          right: 2px;
           top: 50%;
           transform: translateY(-50%);
+          background: linear-gradient(to bottom right, #273f26, #50daa1);
+          color: white;
+          border: none;
           width: 36px;
           height: 36px;
-          border-radius: 999px;
-          border: none;
-          background: #059669;
-          color: #fff;
-          display:flex; align-items:center; justify-content:center;
+          border-radius: 50%;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(42, 143, 75, 0.3);
+        }
+
+        .filter-btn:hover {
+          background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+          transform: translateY(-50%) scale(1.05);
+          box-shadow: 0 4px 12px rgba(42, 143, 75, 0.4);
+        }
+
+        .filter-btn.active {
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .search-input-group .filter-btn {
+          position: absolute;
+          right: -15px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: linear-gradient(to bottom right, #273f26, #50daa1);
+          color: white;
+          border: none;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(42, 143, 75, 0.3);
+          z-index: 40;
+        }
+
+        .search-input-group .filter-btn:hover {
+          background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+          transform: translateY(-50%) scale(1.05);
+          box-shadow: 0 4px 12px rgba(42, 143, 75, 0.4);
+        }
+
+        .search-input-group .filter-btn.active {
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
         .add-provider-wrapper { display:flex; align-items:center; pointer-events: auto; }
         /* Mantener el botón Agregar proveedor en la esquina superior derecha */
-        .add-provider-wrapper { position: absolute; right: 24px; top: 10px; z-index: 60; }
+        .add-provider-wrapper { z-index: 60; }
         @media (max-width: 900px) {
           .search-input-group { width: 86%; }
           .add-provider-wrapper { position: static; margin-left: 8px; }
@@ -2178,6 +2222,90 @@ document.addEventListener('DOMContentLoaded', function() {
       const ordersTableWrapper = document.querySelector('.orders-interface .table-wrapper');
       const projectsEmbedWrapper = document.getElementById('projectsEmbedWrapper');
       const projectsEmbedFrame = document.getElementById('projectsEmbedFrame');
+      // Interval/timeout handles
+      let projectsAutoIntervalId = null;
+      let ordersAutoIntervalId = null;
+      let usersAutoIntervalId = null;
+      let tabRefreshTimeoutId = null;
+      let projectsUpdateAbortController = null;
+
+      function stopProjectsAutoRefresh() {
+        if (projectsAutoIntervalId) {
+          clearInterval(projectsAutoIntervalId);
+          projectsAutoIntervalId = null;
+        }
+        // Abort any in-flight partial update
+        try {
+          if (projectsUpdateAbortController) {
+            try { projectsUpdateAbortController.abort(); } catch(e){}
+            projectsUpdateAbortController = null;
+          }
+        } catch (e) {
+          console.warn('Error aborting projects update', e);
+        }
+      }
+
+      function stopOrdersAutoRefresh() {
+        if (ordersAutoIntervalId) {
+          clearInterval(ordersAutoIntervalId);
+          ordersAutoIntervalId = null;
+        }
+      }
+
+      function startOrdersAutoRefresh() {
+        stopOrdersAutoRefresh();
+        // run immediately without resetting page
+        loadOrders({ resetPage: false }).catch(() => {});
+        ordersAutoIntervalId = setInterval(async () => {
+          try {
+            if (isDateEditInProgress()) return;
+            await loadOrders({ resetPage: false });
+          } catch (e) { console.warn('orders auto refresh failed', e); }
+        }, 10000);
+      }
+
+      function stopUsersAutoRefresh() {
+        if (usersAutoIntervalId) {
+          clearInterval(usersAutoIntervalId);
+          usersAutoIntervalId = null;
+        }
+      }
+
+      function startUsersAutoRefresh() {
+        stopUsersAutoRefresh();
+        // run once immediately
+        loadDesignUsers().catch(() => {});
+        usersAutoIntervalId = setInterval(async () => {
+          try {
+            await loadDesignUsers();
+          } catch (e) { console.warn('users auto refresh failed', e); }
+        }, 15000);
+      }
+
+      function startProjectsAutoRefresh() {
+        stopProjectsAutoRefresh();
+        // run once immediately
+        updateProjectsPartial((searchBar?.value || '').trim()).catch(() => {});
+        projectsAutoIntervalId = setInterval(async () => {
+          try {
+            // don't run if editing or expanded view is open
+            if (getExpandedProjectIdInView()) return;
+            if (document.activeElement && document.activeElement.classList.contains('provider-credit-limit-input')) return;
+            await updateProjectsPartial((searchBar?.value || '').trim());
+          } catch (e) {
+            console.warn('projects auto refresh failed', e);
+          }
+        }, 5000);
+      }
+
+      function scheduleSingleRefreshForTab(tabName) {
+        // Replace delayed refresh with immediate refresh to avoid UX delay when switching tabs.
+        try {
+          if (tabName === 'facturas') return; // do not refresh for facturas
+          if (currentTab === 'orders' && typeof loadOrders === 'function') loadOrders({ resetPage: false });
+          if (currentTab === 'users' && typeof loadDesignUsers === 'function') loadDesignUsers();
+        } catch (e) { console.warn('scheduled tab refresh failed', e); }
+      }
 
       const ordersHeaders = [
         '#PO',
@@ -4330,8 +4458,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span>${creditUsedLabel}</span>
                     <span>${creditPercent}%</span>
                   </div>
-                  <div style="width:100%;height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;">
-                    <div style="width:${creditPercent}%;height:100%;border-radius:999px;background:${barColor};"></div>
+                  <div class="bar-outer" style="width:100%;height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;">
+                    <div class="bar-inner" style="width:${creditPercent}%;height:100%;border-radius:999px;background:${barColor};"></div>
                   </div>
                 </div>
               </td>
@@ -4702,8 +4830,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', async function() {
           const previousTab = currentTab;
+          // cancel any scheduled single-refresh and stop all auto-refresh when switching
+            if (tabRefreshTimeoutId) { clearTimeout(tabRefreshTimeoutId); tabRefreshTimeoutId = null; }
+            stopProjectsAutoRefresh();
+            stopOrdersAutoRefresh();
+            stopUsersAutoRefresh();
           tabButtons.forEach(btn => btn.classList.remove('active'));
           this.classList.add('active');
           currentTab = this.dataset.tab;
@@ -4726,6 +4859,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             currentPage = 1; // Resetear paginación al cambiar a proyectos
             loadProjectsView((searchBar?.value || '').trim());
+            // start projects auto refresh only when viewing projects
+            startProjectsAutoRefresh();
             return;
           }
 
@@ -4748,12 +4883,23 @@ document.addEventListener('DOMContentLoaded', function() {
               else if (index === 6) thead.children[index].className = 'col-notas';
               else if (index === 7) thead.children[index].className = 'col-acciones';
             });
-            addOrderBtn.innerHTML = '<i class="fas fa-plus"></i> Agregar Orden';
-            addOrderBtn.classList.remove('danger');
+            if (addOrderBtn) {
+              addOrderBtn.innerHTML = '<i class="fas fa-plus"></i> Agregar Orden';
+              addOrderBtn.classList.remove('danger');
+            }
             if (pendingOrdersBtn) pendingOrdersBtn.style.display = '';
             if (exportCsvBtn) exportCsvBtn.style.display = '';
             if (filterBtn) filterBtn.style.display = '';
-            loadOrders();
+            // Mostrar indicador de carga inmediatamente
+            const tbody = document.querySelector('.orders-table tbody');
+            if (tbody) tbody.innerHTML = `<tr class="empty-row"><td colspan="8"><div style="padding:18px; color:#666; text-align:center;">Cargando POs...</div></td></tr>`;
+            // Render cached orders immediately (si existe) y luego cargar datos actualizados
+            try {
+              if (Array.isArray(window.ordersCache) && window.ordersCache.length && typeof renderOrdersTable === 'function') {
+                await renderOrdersTable(window.ordersCache, (searchBar?.value || '').trim());
+              }
+            } catch (e) { console.warn('render cached orders failed', e); }
+            try { await loadOrders(); } catch(e){ console.warn('loadOrders failed', e); }
           } else if (currentTab === 'users') {
             activarVistaEquipo();
             const neededCols2 = usersHeaders.length;
@@ -4764,12 +4910,23 @@ document.addEventListener('DOMContentLoaded', function() {
               thead.children[index].className = '';
               if (index === 5) thead.children[index].className = 'col-time-in-order';
             });
-            addOrderBtn.innerHTML = '<i class="fas fa-times"></i> Cerrar Sesiones Atascadas';
-            addOrderBtn.classList.add('danger');
+            if (addOrderBtn) {
+              addOrderBtn.innerHTML = '<i class="fas fa-times"></i> Cerrar Sesiones Atascadas';
+              addOrderBtn.classList.add('danger');
+            }
             if (pendingOrdersBtn) pendingOrdersBtn.style.display = 'none';
             if (exportCsvBtn) exportCsvBtn.style.display = 'none';
             if (filterBtn) filterBtn.style.display = 'none';
-            loadDesignUsers();
+            // Mostrar indicador de carga
+            const tbodyU = document.querySelector('.orders-table tbody');
+            if (tbodyU) tbodyU.innerHTML = `<tr class="empty-row"><td colspan="8"><div style="padding:18px; color:#666; text-align:center;">Cargando usuarios...</div></td></tr>`;
+            // Render cached users inmediatamente y luego refrescar
+            try {
+              if (Array.isArray(window.usersCache) && window.usersCache.length && typeof renderUsersTable === 'function') {
+                await renderUsersTable(window.usersCache, (searchBar?.value || '').trim());
+              }
+            } catch (e) { console.warn('render cached users failed', e); }
+            try { await loadDesignUsers(); } catch(e){ console.warn('loadDesignUsers failed', e); }
           } else if (currentTab === 'facturas') {
             activarVistaFacturas();
             while (thead.children.length > 7) {
@@ -4784,9 +4941,15 @@ document.addEventListener('DOMContentLoaded', function() {
               thead.children[index].className = '';
             });
             loadInvoices();
+            // do not schedule refresh for facturas
           }
         });
       });
+
+      // Start projects auto-refresh if initial tab is projects
+      if (currentTab === 'projects') {
+        startProjectsAutoRefresh();
+      }
 
       // Search functionality
       if (searchBar) 
@@ -5950,6 +6113,305 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Hacer funciones accesibles globalmente
       window.loadOrders = loadOrders;
+
+      // Partial update helper: actualiza solo filas existentes en la vista de Proveedores
+      async function updateProjectsPartial(searchTerm = '') {
+        const term = (searchTerm || '').trim().toLowerCase();
+        const tbody = document.querySelector('.orders-table tbody');
+        if (!tbody) return;
+
+        // Cargar proyectos (igual lógica de fallback que en loadProjectsView)
+        let projects = [];
+        const controller = new AbortController();
+        // register controller globally so it can be aborted when stopping refresh
+        projectsUpdateAbortController = controller;
+        try {
+          const response = await fetch('/api/proveedores', { credentials: 'include', signal: controller.signal });
+          if (controller.signal.aborted) return;
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data)) projects = data;
+            else if (data && Array.isArray(data.proveedores)) projects = data.proveedores;
+            else if (data && Array.isArray(data.items)) projects = data.items;
+            else if (data && typeof data === 'object') projects = [data];
+          } else {
+            projects = localPayablesStore.listProjects();
+          }
+        } catch (err) {
+          if (controller.signal.aborted) return;
+          projects = localPayablesStore.listProjects();
+        } finally {
+          // clear controller reference if it's still the same
+          if (projectsUpdateAbortController === controller) projectsUpdateAbortController = null;
+        }
+
+        // Normalizar y filtrar (reuse same helpers)
+        projectsCache = Array.isArray(projects) ? projects.map((p, idx) => {
+          const id = p && (p.id || p.ID || p.Id) ? (p.id || p.ID || p.Id) : (`p_${idx}`);
+          const providerName = String(p?.provider_name || p?.supplier || p?.nombre || p?.proveedor || p?.name || p?.supplier_name || '').trim() || '-';
+          const priceUsd = Number(p?.price_usd ?? p?.credit_used_usd ?? p?.credit_used ?? 0) || 0;
+          const priceMxn = Number(p?.price_mxn ?? p?.credit_limit_mxn ?? p?.credit_limit ?? p?.limite_credito ?? 0) || 0;
+          const creditDays = Number(p?.credit_days ?? p?.dias_credito ?? p?.plazo_credito ?? p?.days_credit ?? p?.credit_term ?? 0) || 0;
+          const address = String(p?.address || p?.direccion || p?.address1 || p?.street || p?.direccion_fiscal || '').trim();
+          const acceptedCurrencies = Array.isArray(p?.accepted_currencies) ? p.accepted_currencies : (typeof p?.accepted_currencies === 'string' ? p.accepted_currencies.split(/[\/,|]/).map(s=>s.trim()) : (p?.currencies || p?.supplier_type ? [String(p?.currency || p?.tipo_cambio || p?.supplier_type || '').trim()] : []));
+          return {
+            ...p,
+            id,
+            provider_name: providerName,
+            project_name: p?.project_name || providerName,
+            client: p?.client || providerName,
+            price_usd: priceUsd,
+            price_mxn: priceMxn,
+            credit_days: creditDays,
+            address: address,
+            accepted_currencies: acceptedCurrencies
+          };
+        }) : [];
+
+        let filtered = buildProjectResults(projectsCache, term);
+        const totalItems = filtered.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / rowsPerPage));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = Math.min(startIndex + rowsPerPage, totalItems);
+        const paginatedFiltered = filtered.slice(startIndex, endIndex);
+
+        // Map of existing rows by project id
+        const existingRows = Array.from(tbody.querySelectorAll('tr.project-row'));
+        const existingMap = new Map(existingRows.map(r => [r.getAttribute('data-project-id'), r]));
+
+        const desiredIds = paginatedFiltered.map((p, i) => p.id || `project_${i}`);
+
+        // Insert/update rows in correct order (don't remove undesired rows yet — remove leftovers after)
+        for (let i = 0; i < paginatedFiltered.length; i++) {
+          const project = paginatedFiltered[i];
+          const projectId = project.id || `project_${i}`;
+          const clientCode = project.client || '-';
+          const client = project.provider_name || clientNames[clientCode] || clientCode;
+          const priceUSD = Number(project.price_usd || 0);
+          const priceMXN = Number(project.price_mxn || 0);
+          const creditUsed = Number(priceUSD) || 0;
+          const creditLimit = Number(project.credit_amount || priceMXN || 0);
+          const creditPercent = creditLimit > 0 ? Math.min(100, Math.round((creditUsed / creditLimit) * 100)) : 0;
+          const creditUsedLabel = creditUsed === 0 ? '0.00' : `$${creditUsed.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          const hue = Math.max(0, 120 - (creditPercent * 1.2));
+          const barColor = `hsl(${hue}, 85%, 48%)`;
+          const natLabel = getNationalityLabel(project);
+          const natClass = (String(natLabel || '').toLowerCase().startsWith('extr')) ? 'nationality--extranjero' : 'nationality--nacional';
+          const hasCredit = (String((project.credit || '')).toLowerCase() === 'si') || creditLimit > 0;
+          const creditAvailableClass = hasCredit ? 'credit-available--yes' : 'credit-available--no';
+          const creditAvailableLabel = hasCredit ? 'SI' : 'NO';
+          const formatMoney = (v) => { const n = Number(v || 0) || 0; return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+
+          let row = existingMap.get(String(projectId));
+          const rowHtml = `
+              <td>${client}</td>
+              <td>
+                <div style="display:flex;flex-direction:column;gap:4px;min-width:140px;">
+                  <div style="display:flex;justify-content:space-between;font-size:11px;color:#4b5563;">
+                    <span>${creditUsedLabel}</span>
+                    <span>${creditPercent}%</span>
+                  </div>
+                  <div style="width:100%;height:6px;border-radius:999px;background:#e5e7eb;overflow:hidden;">
+                    <div style="width:${creditPercent}%;height:100%;border-radius:999px;background:${barColor};"></div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="nationality-badge ${natClass}">${escapeHtml(natLabel)}</span></td>
+              <td><span class="credit-available-badge ${creditAvailableClass}">${escapeHtml(creditAvailableLabel)}</span></td>
+              <td>
+                <input
+                  type="text"
+                  value="${formatMoney(creditLimit)}"
+                  data-project-id="${projectId}"
+                  class="provider-credit-limit-input readonly-value"
+                  readonly
+                  style="width:120px;padding:4px 8px;border-radius:999px;border:1px solid #d1d5db;font-size:12px;text-align:right;"
+                />
+              </td>
+              <td style="font-weight:700; text-align:center;">${Number.isFinite(Number(project.credit_days)) && Number(project.credit_days) > 0 ? String(Number(project.credit_days)) : '-'}</td>
+              <td style="max-width:320px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(String(project.address || '-'))}</td>
+              <td></td>
+              <td></td>
+            `;
+
+          if (row) {
+            // Update specific cells to avoid full row re-render — perform diffs and reuse nodes
+            const cells = row.children;
+            // Expect at least 7 cells from our template; if not, rebuild conservatively
+            if (cells.length >= 7) {
+              // client (index 0)
+              if (cells[0].textContent !== client) cells[0].textContent = client;
+
+              // credit cell (index 1): try to reuse existing structure
+              const creditCell = cells[1];
+              let creditWrapper = creditCell.querySelector(':scope > div');
+              if (!creditWrapper) {
+                // create minimal wrapper once
+                creditWrapper = document.createElement('div');
+                creditWrapper.style.display = 'flex'; creditWrapper.style.flexDirection = 'column'; creditWrapper.style.gap = '4px'; creditWrapper.style.minWidth = '140px';
+                creditCell.appendChild(creditWrapper);
+              }
+
+              // Top row with used amount and percent
+              let creditTop = creditWrapper.querySelector(':scope > div');
+              if (!creditTop) {
+                creditTop = document.createElement('div');
+                creditTop.style.display = 'flex'; creditTop.style.justifyContent = 'space-between'; creditTop.style.fontSize = '11px'; creditTop.style.color = '#4b5563';
+                creditWrapper.insertBefore(creditTop, creditWrapper.firstChild || null);
+              }
+              const leftSpan = creditTop.children[0] || document.createElement('span');
+              const rightSpan = creditTop.children[1] || document.createElement('span');
+              if (!creditTop.children.length) { creditTop.appendChild(leftSpan); creditTop.appendChild(rightSpan); }
+              if (leftSpan.textContent !== creditUsedLabel) leftSpan.textContent = creditUsedLabel;
+              if (rightSpan.textContent !== `${creditPercent}%`) rightSpan.textContent = `${creditPercent}%`;
+
+              // progress bar
+              let barOuter = creditWrapper.querySelector(':scope > div.bar-outer');
+              if (!barOuter) {
+                barOuter = document.createElement('div');
+                barOuter.className = 'bar-outer';
+                barOuter.style.width = '100%'; barOuter.style.height = '6px'; barOuter.style.borderRadius = '999px'; barOuter.style.background = '#e5e7eb'; barOuter.style.overflow = 'hidden';
+                const barInnerNew = document.createElement('div');
+                barInnerNew.className = 'bar-inner';
+                barInnerNew.style.height = '100%'; barInnerNew.style.borderRadius = '999px';
+                barOuter.appendChild(barInnerNew);
+                // ensure it's after creditTop
+                if (creditTop.nextSibling) creditWrapper.insertBefore(barOuter, creditTop.nextSibling);
+                else creditWrapper.appendChild(barOuter);
+              }
+              const barInner = barOuter.querySelector('.bar-inner');
+              if (barInner) {
+                const newWidth = `${creditPercent}%`;
+                if (barInner.style.width !== newWidth) barInner.style.width = newWidth;
+                if (barInner.style.background !== barColor) barInner.style.background = barColor;
+              }
+
+              // nationality badge (index 2)
+              const natCell = cells[2];
+              let natSpan = natCell.querySelector('.nationality-badge');
+              if (!natSpan) {
+                natSpan = document.createElement('span');
+                natSpan.className = `nationality-badge ${natClass}`;
+                natSpan.textContent = natLabel;
+                natCell.innerHTML = ''; natCell.appendChild(natSpan);
+              } else {
+                const expectedClass = `nationality-badge ${natClass}`;
+                if (natSpan.className !== expectedClass) natSpan.className = expectedClass;
+                if (natSpan.textContent !== natLabel) natSpan.textContent = natLabel;
+              }
+
+              // credit available badge (index 3)
+              const availCell = cells[3];
+              let availSpan = availCell.querySelector('.credit-available-badge');
+              if (!availSpan) {
+                availSpan = document.createElement('span');
+                availSpan.className = `credit-available-badge ${creditAvailableClass}`;
+                availSpan.textContent = creditAvailableLabel;
+                availCell.innerHTML = ''; availCell.appendChild(availSpan);
+              } else {
+                const expectedAvailClass = `credit-available-badge ${creditAvailableClass}`;
+                if (availSpan.className !== expectedAvailClass) availSpan.className = expectedAvailClass;
+                if (availSpan.textContent !== creditAvailableLabel) availSpan.textContent = creditAvailableLabel;
+              }
+
+              // credit limit input (index 4)
+              const input = cells[4].querySelector('input.provider-credit-limit-input');
+              const formattedLimit = formatMoney(creditLimit);
+              if (input) {
+                if (input.value !== formattedLimit) input.value = formattedLimit;
+              } else {
+                const newInput = document.createElement('input'); newInput.type = 'text'; newInput.value = formattedLimit; newInput.setAttribute('data-project-id', projectId); newInput.className = 'provider-credit-limit-input readonly-value'; newInput.readOnly = true; newInput.style.width = '120px'; newInput.style.padding = '4px 8px'; newInput.style.borderRadius = '999px'; newInput.style.border = '1px solid #d1d5db'; newInput.style.fontSize = '12px'; newInput.style.textAlign = 'right'; cells[4].innerHTML = ''; cells[4].appendChild(newInput);
+              }
+
+              // credit days (index 5)
+              const daysText = Number.isFinite(Number(project.credit_days)) && Number(project.credit_days) > 0 ? String(Number(project.credit_days)) : '-';
+              if (cells[5].textContent !== daysText) cells[5].textContent = daysText;
+
+              // address (index 6)
+              const addr = String(project.address || '-');
+              if (cells[6].textContent !== addr) cells[6].textContent = addr;
+            } else {
+              // If structure unexpected, rebuild the row conservatively by replacing its children
+              const wrapper = document.createElement('tr'); wrapper.innerHTML = rowHtml; row.replaceWith(wrapper); row = wrapper;
+            }
+          } else {
+            // Create new row and insert at correct position (build cells individually)
+            row = document.createElement('tr');
+            row.className = 'project-row';
+            row.setAttribute('data-project-id', projectId);
+            row.style.cursor = 'pointer';
+
+            const tdClient = document.createElement('td'); tdClient.textContent = client;
+            const tdCredit = document.createElement('td');
+            const creditWrapper = document.createElement('div');
+            creditWrapper.style.display = 'flex'; creditWrapper.style.flexDirection = 'column'; creditWrapper.style.gap = '4px'; creditWrapper.style.minWidth = '140px';
+            creditWrapper.innerHTML = `<div style="display:flex;justify-content:space-between;font-size:11px;color:#4b5563;"><span>${creditUsedLabel}</span><span>${creditPercent}%</span></div>`;
+            const barOuter = document.createElement('div'); barOuter.className = 'bar-outer'; barOuter.style.width = '100%'; barOuter.style.height = '6px'; barOuter.style.borderRadius = '999px'; barOuter.style.background = '#e5e7eb'; barOuter.style.overflow = 'hidden';
+            const barInner = document.createElement('div'); barInner.className = 'bar-inner'; barInner.style.width = `${creditPercent}%`; barInner.style.height = '100%'; barInner.style.borderRadius = '999px'; barInner.style.background = barColor;
+            barOuter.appendChild(barInner); creditWrapper.appendChild(barOuter); tdCredit.appendChild(creditWrapper);
+            const tdNat = document.createElement('td'); tdNat.innerHTML = `<span class="nationality-badge ${natClass}">${escapeHtml(natLabel)}</span>`;
+            const tdHasCredit = document.createElement('td'); tdHasCredit.innerHTML = `<span class="credit-available-badge ${creditAvailableClass}">${escapeHtml(creditAvailableLabel)}</span>`;
+            const tdLimit = document.createElement('td');
+            const newInput = document.createElement('input'); newInput.type = 'text'; newInput.value = formatMoney(creditLimit); newInput.setAttribute('data-project-id', projectId); newInput.className = 'provider-credit-limit-input readonly-value'; newInput.readOnly = true; newInput.style.width = '120px'; newInput.style.padding = '4px 8px'; newInput.style.borderRadius = '999px'; newInput.style.border = '1px solid #d1d5db'; newInput.style.fontSize = '12px'; newInput.style.textAlign = 'right';
+            tdLimit.appendChild(newInput);
+            const tdDays = document.createElement('td'); tdDays.style.fontWeight = '700'; tdDays.style.textAlign = 'center'; tdDays.textContent = Number.isFinite(Number(project.credit_days)) && Number(project.credit_days) > 0 ? String(Number(project.credit_days)) : '-';
+            const tdAddress = document.createElement('td'); tdAddress.style.maxWidth = '320px'; tdAddress.style.whiteSpace = 'nowrap'; tdAddress.style.overflow = 'hidden'; tdAddress.style.textOverflow = 'ellipsis'; tdAddress.textContent = String(project.address || '-');
+            const tdEmpty1 = document.createElement('td'); const tdEmpty2 = document.createElement('td');
+            row.appendChild(tdClient); row.appendChild(tdCredit); row.appendChild(tdNat); row.appendChild(tdHasCredit); row.appendChild(tdLimit); row.appendChild(tdDays); row.appendChild(tdAddress); row.appendChild(tdEmpty1); row.appendChild(tdEmpty2);
+
+            const nextId = desiredIds[i + 1];
+            const nextRow = nextId ? tbody.querySelector(`tr[data-project-id="${nextId}"]`) : null;
+            if (nextRow) tbody.insertBefore(row, nextRow);
+            else tbody.appendChild(row);
+          }
+
+          // Ensure expanded row exists if needed
+          const expandedProjectId = getExpandedProjectIdInView();
+          const hasExpanded = row.nextElementSibling && row.nextElementSibling.classList && row.nextElementSibling.classList.contains('project-expanded-row');
+          if (String(expandedProjectId) === String(projectId) && !hasExpanded) {
+            // Recreate expanded row (lightweight version)
+            const expandedRow = document.createElement('tr');
+            expandedRow.className = 'project-expanded-row';
+            expandedRow.style.display = 'table-row';
+            expandedRow.innerHTML = `
+              <td colspan="${projectsHeaders.length}" style="background:linear-gradient(to bottom right, #c2e3efb5, #9be8eb14); padding:16px 20px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+                  <div class="orders-section" data-project-id="${projectId}">
+                    <h4 style="margin:0 0 12px 0;font-size:14px;font-weight:700;color:#333;">Órdenes del Proyecto</h4>
+                    <div class="orders-list" style="display:flex;flex-direction:column;gap:8px;">
+                      <div style="font-size:12px;color:#6b7280;"><i class="fas fa-spinner fa-spin"></i> Cargando órdenes...</div>
+                    </div>
+                  </div>
+                  <div class="project-buttons">
+                    <h4 style="margin:0 0 12px 0;font-size:14px;font-weight:700;color:#333;">Acciones</h4>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                      <button class="btn-project" data-action="new-submittal" data-project-id="${projectId}" style="border:none;border-radius:9999px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#2c2a8f 0%,#3e50cf52 100%);">
+                        <i class="fas fa-folder-plus"></i> Opción 1
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            `;
+            if (row.nextElementSibling) tbody.insertBefore(expandedRow, row.nextElementSibling);
+            else tbody.appendChild(expandedRow);
+          }
+        }
+        // After inserting/updating desired rows, remove any leftover rows that are not in desiredIds
+        const desiredSet = new Set(desiredIds.map(String));
+        Array.from(tbody.querySelectorAll('tr.project-row')).forEach(r => {
+          const pid = String(r.getAttribute('data-project-id'));
+          if (!desiredSet.has(pid)) {
+            const next = r.nextElementSibling;
+            if (next && next.classList && next.classList.contains('project-expanded-row')) next.remove();
+            r.remove();
+          }
+        });
+
+        updatePaginationControls(totalItems, totalPages);
+      }
       window.loadInvoices = loadInvoices;
       window.getCurrentTab = () => currentTab;
       
@@ -5962,33 +6424,17 @@ document.addEventListener('DOMContentLoaded', function() {
         loadProjectsView((searchBar?.value || '').trim());
       }
 
-      // Actualización automática cada 5 segundos para simular tiempo real
+      // Actualización automática cada 5 segundos para proyectos únicamente.
+      // (Orders/users tienen sus propios pollers: startOrdersAutoRefresh/startUsersAutoRefresh)
       setInterval(async () => {
         const term = (searchBar?.value || '').trim();
-        
-        if (currentTab === 'projects') {
-          // Evita cerrar el panel desplegado mientras el usuario revisa detalles.
-          if (getExpandedProjectIdInView()) {
-            return;
-          }
-          // Evita resetear el campo si el usuario está editando un límite de crédito.
-          if (document.activeElement && document.activeElement.classList.contains('provider-credit-limit-input')) {
-            return;
-          }
-          // Actualizar tabla de proyectos
-          await loadProjectsView(term);
-        } else if (currentTab === 'orders') {
-          if (isDateEditInProgress()) {
-            return;
-          }
-          // Refrescar desde almacenamiento local para mantener estatus al día sin perder la página actual
-          await loadOrders({ resetPage: false });
-        } else if (currentTab === 'facturas') {
-          loadInvoices({ resetPage: false });
-        } else if (currentTab === 'users') {
-          // Actualizar tabla de usuarios
-          await loadDesignUsers();
-        }
+        if (currentTab !== 'projects') return;
+        // Evita cerrar el panel desplegado mientras el usuario revisa detalles.
+        if (getExpandedProjectIdInView()) return;
+        // Evita resetear el campo si el usuario está editando un límite de crédito.
+        if (document.activeElement && document.activeElement.classList.contains('provider-credit-limit-input')) return;
+        // Actualizar tabla de proyectos (parcial para evitar re-render completo)
+        try { await updateProjectsPartial(term); } catch (e) { console.warn('projects auto refresh failed', e); }
       }, 5000);
     });
 

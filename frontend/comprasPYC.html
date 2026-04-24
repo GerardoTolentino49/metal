@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="styles/comprasPYC.css">
   <link rel="stylesheet" href="styles/planeacionycompras.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
   <script src="js/global-color.js"></script>
   <style>
     .compras-table-section {
@@ -30,23 +31,32 @@
       gap: 6px;
       padding: 6px 12px;
       border-radius: 999px;
-      background: linear-gradient(to bottom right, #2a4b7d, #80b3d5);
+      /* increase saturation slightly for a more vivid pastel blue */
+      background: linear-gradient(to bottom right, #5b94d6, #bfeafb);
       color: #ffffff;
       font-size: 12px;
       font-weight: 600;
       border: none;
       cursor: pointer;
-      box-shadow: 0 8px 16px rgba(29, 78, 216, 0.25);
+      box-shadow: 0 6px 14px rgba(29, 78, 216, 0.16);
     }
 
     .detail-pill-button.detail-pill-alt {
-      background: linear-gradient(to bottom right, #7b4726, #c9b27f);
-      box-shadow: 0 8px 16px rgba(15, 118, 110, 0.25);
+      /* warmer, slightly more saturated pastel brown/gold */
+      background: linear-gradient(to bottom right, #c48851, #f3dcb7);
+      box-shadow: 0 6px 14px rgba(170, 110, 40, 0.14);
     }
 
     .detail-pill-button.detail-pill-img {
-      background: linear-gradient(to bottom right, #66267b, #c97fbd);
-      box-shadow: 0 8px 16px rgba(124, 58, 237, 0.25);
+      /* richer pastel purple */
+      background: linear-gradient(to bottom right, #b175d6, #f1c9ef);
+      box-shadow: 0 6px 14px rgba(124, 58, 237, 0.14);
+    }
+    /* Slightly more colorful Crear PO while keeping it soft */
+    .crear-po-btn {
+      background: linear-gradient(to bottom right, #5b94d6, #bfeafb);
+      color: #ffffff;
+      box-shadow: 0 6px 14px rgba(59, 130, 246, 0.16);
     }
 
     .reference-image-thumb-placeholder {
@@ -721,6 +731,63 @@
     .belongs-suggestion--order { background: #D1FAE5; } /* pastel green for orders */
     .belongs-suggestion-item .suggestion-number { font-weight:700; color:#0f172a; margin-right:8px; min-width:80px; }
     .belongs-suggestion-item .suggestion-name { color:#374151; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    /* Estilos para los pills de Estatus y el selector desplegable */
+    .status-pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Colores por estatus solicitados */
+    .status-realizado { background: #58ce93; }     /* verde */
+    .status-en-proceso { background: #ffc737;} /* amarillo */
+    .status-pendiente { background: #f9a468;}      /* naranja */
+    .status-en-revision { background: #ff7d7d; }     /* rojo */
+    .status-autorizado { background: #47b3e2; }     /* azul */
+    .status-default { background: #6b7280; }
+
+    /* Dropdown (recuadro) que muestra las opciones */
+    .status-editor-dropdown { position: relative; display: inline-block; }
+    .status-editor-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 160px;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 8px;
+      box-shadow: 0 12px 30px rgba(2,6,23,0.18);
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .status-editor-option {
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      color: #ffffff;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    /* Asegurar contraste para la opción amarilla */
+    /* .status-editor-option.status-en-revision { color: #1f2937; } */
+    /* .status-editor-option.status-realizado { color: #1f2937; } */
+
+    .status-editor-option:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,6,23,0.08); }
   </style>
 </head>
   <body>
@@ -1151,6 +1218,8 @@
                 <button type="button" class="po-modal-tab active" data-tab="po" id="poTabPo" style="padding:8px 12px;border-radius:30px;border:1px solid #e2e8f0;background:#fff;font-weight:700;">Configuración PO</button>
                 <button type="button" class="po-modal-tab" data-tab="items" id="poTabItems" style="padding:8px 12px;border-radius:30px;border:1px solid transparent;background:transparent;font-weight:700;color:#64748b;">Configuración Items</button>
               </div>
+              <div class="po-modal-method-title" style="font-weight: 700;margin-bottom: 8px;display: flex;justify-content: center;font-size: xx-large;
+              ">Método 2</div>
               <div class="po-modal-right" data-panel="po">
                 <div>
                   <label class="po-field-label" for="poProveedorLocal">Proveedor</label>
@@ -1397,6 +1466,8 @@
                 <button type="button" class="po-modal-tab active" data-tab="po" id="poTabPoGeneral" style="padding:8px 12px;border-radius:30px;border:1px solid #e2e8f0;background:#fff;font-weight:700;">Configuración PO</button>
                 <button type="button" class="po-modal-tab" data-tab="items" id="poTabItemsGeneral" style="padding:8px 12px;border-radius:30px;border:1px solid transparent;background:transparent;font-weight:700;color:#64748b;">Configuración Items</button>
               </div>
+              <div class="po-modal-method-title" style="font-weight: 700;margin-bottom: 8px;display: flex;justify-content: center;font-size: xx-large;
+              ">Método 1</div>
               <div class="po-modal-right" data-panel="po">
                 <div>
                   <label class="po-field-label" for="poProveedorGeneral">Proveedor</label>
@@ -1760,6 +1831,8 @@
                 <button type="button" class="po-modal-tab active" data-tab="po" id="poTabPoIrregular" style="padding:8px 12px;border-radius:30px;border:1px solid #e2e8f0;background:#fff;font-weight:700;">Configuración PO</button>
                 <button type="button" class="po-modal-tab" data-tab="items" id="poTabItemsIrregular" style="padding:8px 12px;border-radius:30px;border:1px solid transparent;background:transparent;font-weight:700;color:#64748b;">Configuración Items</button>
               </div>
+              <div class="po-modal-method-title" style="font-weight: 700;margin-bottom: 8px;display: flex;justify-content: center;font-size: xx-large;
+              ">Método 3</div>
               <div class="po-modal-right" data-panel="po">
                 <div>
                   <label class="po-field-label" for="poProveedorIrregular">Proveedor</label>
@@ -5093,34 +5166,36 @@
         })();
       </script>
     <div class="table-wrapper" style="position: relative;">
-      <table class="orders-table" id="comprasTable">
-        <thead>
-          <tr>
-            <th class="col-creado">Creado Por</th>
-            <th class="col-descripcion">Descripción</th>
-            <th class="col-departamento">Destino</th>
-            <th class="col-cantidad">Cant.</th>
-            <th class="col-url">URL</th>
-            <th class="col-alternativas">Alternativas</th>
-            <th class="col-imagen">Img. referencia</th>
-            <th class="col-users-assigned">Asignado a</th>
-            <th class="col-estatus">Estatus</th>
-            <th class="col-pos">PO's</th>
-          </tr>
-        </thead>
-        <tbody id="comprasTableBody">
-          <tr class="empty-row">
-            <td colspan="5">
-              <div class="error-message">
-                <div class="error-icon">
-                  <i class="fas fa-spinner fa-spin"></i>
+      <div style = "overflow-x:auto;">
+        <table class="orders-table" id="comprasTable">
+          <thead>
+            <tr>
+              <th class="col-creado">Creado Por</th>
+              <th class="col-descripcion">Descripción</th>
+              <th class="col-departamento">Destino</th>
+              <th class="col-cantidad">Cant.</th>
+              <th class="col-url">URL</th>
+              <th class="col-alternativas">Alternativas</th>
+              <th class="col-imagen">Img. referencia</th>
+              <th class="col-users-assigned">Asignado a</th>
+              <th class="col-estatus">Estatus</th>
+              <th class="col-pos">PO's</th>
+            </tr>
+          </thead>
+          <tbody id="comprasTableBody">
+            <tr class="empty-row">
+              <td colspan="5">
+                <div class="error-message">
+                  <div class="error-icon">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </div>
+                  <div class="error-text">Cargando...</div>
                 </div>
-                <div class="error-text">Cargando...</div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="pagination-controls" id="comprasPaginationControls" style="display: none;">
         <div class="pagination-info">
@@ -5427,7 +5502,7 @@
     /* Buttons */
     .btn-primary{  padding:10px 16px; border-radius:999px; border:0; font-weight:700; box-shadow:0 6px 18px rgba(4,120,87,0.06); }
     .btn-primary:active{ transform:translateY(1px); }
-    .btn-secondary{ background:transparent; color:#374151; border:1px solid #e6eef2; padding:8px 14px; border-radius:999px; }
+    .btn-secondary{ background:transparent; color:#ffffff; border:1px solid #e6eef2; padding:8px 14px; border-radius:999px; }
     .btn-small{ background:transparent; border:0; padding:6px 8px; border-radius:8px; }
     /* Inputs and selects */
     input, select, textarea{ font-size:14px; padding:10px 12px; border:1px solid #e9eef2; border-radius:14px; outline:none; transition:box-shadow .15s, border-color .12s; }

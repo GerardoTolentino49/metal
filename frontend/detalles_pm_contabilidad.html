@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="styles/nuevo-equipo.css">
   <link rel="stylesheet" href="styles/detalles_pm.css">
   <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1626,12 +1627,11 @@ document.addEventListener('DOMContentLoaded', function() {
         <i class="fas fa-exclamation-triangle"></i>
         Exportar Anomalías PDF
       </button>
-      <button id="exportTableDataBtn" style="padding: 10px 20px; background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+      <button id="exportTableDataBtn" style="display:none;padding: 10px 20px; background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; align-items: center; gap: 8px;">
         <i class="fas fa-file-csv"></i>
         Descargar Excel / CSV
       </button>
-      <button id="exportTablePdfBtn" style="padding: 10px 20px; background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%); color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-        <i class="fas fa-file-pdf"></i>
+      <button id="exportTablePdfBtn" style="display: none; padding: 10px 20px; background: linear-gradient(135deg, #2a8f4b 0%, #3ecf8e 100%); color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: 600; align-items: center; gap: 8px;">        <i class="fas fa-file-pdf"></i>
         Exportar Tabla a PDF
       </button>
     </div>
