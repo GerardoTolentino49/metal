@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1" rel="stylesheet" />
+    <link rel="icon" href="/favicon.png" type="image/png">  
 	<title>Inicio</title>
 	<style>
 			:root{
@@ -27,40 +28,7 @@
 		html,body{height:100%}
         body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
 
-			/* Dark theme variables and some key overrides. applyTheme() sets data-theme on <html>. */
-			[data-theme="dark"] {
-				--bg: #071226;
-				--fg: #e6eef8;
-				--muted: #94a3b8;
-				--accent-1: #4f9ef8;
-				--accent-2: rgba(79,158,248,0.08);
-				--card: #0b1220;
-				--card-text: #e6eef8;
-				--accent-red: #ff6b6b;
-			}
-
-			[data-theme="dark"] .sidebar,
-			[data-theme="dark"] .right-sidebar { background-color: var(--card); }
-
-			[data-theme="dark"] #pill-logo { background: rgba(0,0,0,0.45); color: var(--fg); }
-
-			[data-theme="dark"] .user-menu,
-			[data-theme="dark"] .user-menu.open { background: var(--card); color: var(--fg); }
-
-			/* Wider dark-mode overrides to ensure visible contrast across the page */
-			[data-theme="dark"] body { background: var(--bg); color: var(--fg); }
-			[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] p, [data-theme="dark"] label { color: var(--fg); }
-			[data-theme="dark"] a { color: var(--accent-1); }
-			[data-theme="dark"] .sidebar, [data-theme="dark"] .right-sidebar { background: var(--card); color: var(--fg); box-shadow: none }
-			[data-theme="dark"] .sidebar-footer .name, [data-theme="dark"] .sidebar-footer .handle { color: var(--fg); }
-			[data-theme="dark"] .app-link { color: var(--muted); }
-			[data-theme="dark"] .app-link.active { background: rgba(255,255,255,0.03); color: var(--fg); }
-			[data-theme="dark"] .app-card, [data-theme="dark"] .ex-card, [data-theme="dark"] .small-card, [data-theme="dark"] .note-small, [data-theme="dark"] .news-composer, [data-theme="dark"] .news-post { background: var(--card); color: var(--card-text); box-shadow: 0 6px 18px rgba(2,6,23,0.25); }
-			[data-theme="dark"] .hero { background: linear-gradient(48deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12)); }
-			[data-theme="dark"] .chip { background: var(--card); border-color: rgba(255,255,255,0.03); color: var(--muted); }
-			[data-theme="dark"] .user-panel, [data-theme="dark"] .modal-dialog { background: var(--card); color: var(--card-text); }
-			[data-theme="dark"] .post-options-dropdown, [data-theme="dark"] .user-menu { background: var(--card); color: var(--fg); }
-			[data-theme="dark"] .slider { background: rgba(255,255,255,0.06) !important; }
+			/* Dark mode removed: site fixed to light theme */
 				.wrap{margin:auto; padding:0 22px;display:block;max-width:80%;}
 			/* Sidebar fixed to the left edge (narrower to give main more room) */
 			.sidebar{background-color: rgb(255, 255, 255);padding-top:10px;position:fixed;left:0;top:0;width:var(--sidebar-width);height:100vh;overflow:visible;z-index:30;padding-left:12px;padding-right:12px;font-size:12px;scrollbar-width: none;display:flex;flex-direction:column;transform:translateX(0);opacity:1;transition:transform .22s cubic-bezier(.2,.8,.2,1),opacity .22s cubic-bezier(.2,.8,.2,1);will-change:transform,opacity}
@@ -166,6 +134,7 @@
 			.card-permisos{--card-start:#e1383885;--card-end:#e1383885;--card-text:#11386b}
 			.card-amonestacion{--card-start:#e1383885;--card-end:#e1383885;--card-text:#681313}
 			.card-requisicion{--card-start:#e1383885;--card-end:#e1383885;--card-text:#0b5a3a}
+			.card-comidas{--card-start:#38d3e185;--card-end:#38d3e185;--card-text:#3a661b}
 
 		.hero{background:linear-gradient(48deg, #ff000040, #d6d91e);border-radius:30px;padding:24px;display:grid;grid-template-columns:1fr 320px;gap:18px;box-shadow:0 14px 40px rgba(22,40,80,.06);border:2px solid #ff9800;align-items:center;margin-bottom:18px}
 		.hero h2{margin:0;font-size:22px}
@@ -401,7 +370,7 @@
 			/* Modal for update details */
 			.modal-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.55);-webkit-backdrop-filter:blur(10px) saturate(120%);backdrop-filter:blur(10px) saturate(120%);isolation:isolate;will-change:backdrop-filter,transform;z-index:var(--z-modal,100030);padding:20px;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden}
 			.modal-overlay.open{display:flex}
-			.modal-dialog{background:#fff;border-radius:30px;width:760px;max-width:100%;padding:22px;box-shadow:0 20px 60px rgba(2,6,23,.35);position:relative;color:#0b1f3a}
+			.modal-dialog{background:#fff;border-radius:30px;width:760px;max-width:100%;padding:22px;box-shadow:0 20px 60px rgba(2,6,23,.35);max-height:100%;overflow:auto;color:#0b1f3a}
 			.modal-close{position:absolute;top:12px;right:12px;border:none;background:transparent;font-size:20px;cursor:pointer;color:#556}
 			.modal-dialog h3{margin:0 0 8px}
 			.modal-dialog h4{margin:14px 0 6px}
@@ -558,7 +527,7 @@
 				.message-send-btn,
 				.user-menu-btn,
 				#sidebar-toggle{
-					z-index: calc(var(--z-popover) + 1) !important;
+					z-index: 900;
 				}
 			}
 
@@ -936,7 +905,7 @@
 .cargo-card-info { display:grid; gap:3px }
 .cargo-card-info strong { font-size:14px;color:#111827;line-height:1.25 }
 .cargo-card-info span,.cargo-card-info small { font-size:12px;color:#6b7280 }
-.cargo-ver-jerarquia-btn { margin-top:4px;border:0;border-radius:30px;min-height:46px;padding:10px 14px;background:linear-gradient(180deg,#4b5563 0%,#374151 100%);color:#fff;font-size:18px;font-weight:700;cursor:pointer }
+.cargo-ver-jerarquia-btn { display:none; margin-top:4px;border:0;border-radius:30px;min-height:46px;padding:10px 14px;background:linear-gradient(180deg,#4b5563 0%,#374151 100%);color:#fff;font-size:18px;font-weight:700;cursor:pointer }
 .cargo-empleado-tabs { margin-top: 22px; }
 .cargo-tabs-header {
 	display: flex;
@@ -1162,10 +1131,19 @@
 	grid-template-columns: repeat(6, minmax(140px, 1fr));
 	gap: 14px;
 }
+@media (max-width: 1536px) {
+	#tableroCargoSection .cargo-semana-grid {
+		display:flex;
+		flex-wrap: wrap;
+		gap:14px;
+		justify-content: center;
+	}
+}
 #tableroCargoSection .cargo-dia-card {
 	padding: 14px 10px;
 	text-align: center;
 	min-height: 210px;
+	min-width: 140px;
 }
 #tableroCargoSection .cargo-dia-card h5 {
 	margin: 0;
@@ -1323,7 +1301,11 @@
 			</section>
 
 
-			<section class="hero" aria-label="PDMmetal ERP hero">
+			
+		
+
+			<div id="inicio-explore-sections">
+				<section class="hero" aria-label="PDMmetal ERP hero">
 				<div>
 					<h2>Gerardo, hemos trabajado con orgullo 2 días sin accidentes</h2>
 					<p>¡Continuemos así!</p>
@@ -1335,9 +1317,7 @@
 					</div>
 				</div>
 			</section>
-		
 
-			<div id="inicio-explore-sections">
 			<section class = section>
 				<h3 class = section-title>Tickets</h3>
 				<!-- <div class="header-grid">
@@ -1395,8 +1375,6 @@
 				</div>
 			</section>
 
-
-
 			<section class="section">
 				<h3 class="section-title">Otras opciones</h3>
 				<div class="explore-grid">
@@ -1441,6 +1419,18 @@
 				</div>
 			</section>
 
+			<section class="section">
+				<h3 class="section-title">Comidas</h3>
+				<div class="explore-grid">
+					<a class="ex-card card-comidas" href="comida.html" data-permission="show_comidas">
+						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">restaurant</span></div>
+						<div style="display:flex;flex-direction:column;gap:6px">
+							<div style="font-weight:700">Registro de comidas</div>
+							<div style="color:var(--muted);font-size:13px"></div>
+							<span class="agenda-count" id="weeklyMealsCount" style="font-size:28px;display:none;font-weight:800;color:var(--card-text)">0</span>
+						</div>
+					</a>
+				</div>
 			</div>
 
 			<script>
@@ -1451,11 +1441,6 @@
 				if(!navPersonal) return;
 				navPersonal.addEventListener('click', function(e){
 					e.preventDefault();
-					// // Prefer the centralized pdmToggleTablero if available (prevents duplicate/conflicting handlers)
-					// if (typeof window.pdmToggleTablero === 'function') {
-					// 	try { window.pdmToggleTablero(); } catch (_) {}
-					// 	return;
-					// }
 					if(!explore || !cargo) return;
 					var cargoHidden = cargo.hidden || cargo.getAttribute('aria-hidden') === 'true';
 					if (cargoHidden) {
@@ -1480,21 +1465,6 @@
 				<p>Total en mi equipo</p>
 				</article>
 
-				<!-- <article class="cargo-accidente-card" aria-live="polite">
-				<div class="cargo-accidente-header">
-					<i class="fas fa-triangle-exclamation cargo-accidente-icon"></i>
-					<h4>Hemos trabajado con orgullo</h4>
-				</div>
-				<p class="cargo-accidente-total"><span id="cargoSinAccidentesDias">0</span></p>
-				<p class="cargo-accidente-total">días sin accidentes</p>
-				<div class="cargo-racha-wrap">
-					<p class="cargo-racha-historica">Racha histórica: <strong id="cargoRachaHistoricaDias">0</strong> días</p>
-					!--<span class="cargo-racha-label">Últimos 10 días</span>
-					<div class="cargo-racha-grid" id="cargoRachaDias">
-					<span class="cargo-racha-dia">-</span>
-					</div>--
-				</div>
-				</article> -->
 
 				<div class="cargo-metricas-grid">
 				<article class="cargo-metrica-card">
@@ -1556,7 +1526,7 @@
 			  <div id="cargoEmpleadoCards" class="cargo-empleado-cards" aria-live="polite">
 				<div class="cargo-tab-empty">Cargando empleados...</div>
 			  </div>
-			  <select id="cargoEmpleadoIdSelect" class="cargo-empleado-select-hidden" onchange="cargarEmpleadoCargoSeleccionado()" aria-hidden="true" tabindex="-1">
+			  <select id="cargoEmpleadoIdSelect" class="cargo-empleado-select-hidden" onchange="cargarEmpleadoCargoSeleccionado()" aria-hidden="true" tabindex="-1"">
 				<option value="">-- Selecciona un empleado --</option>
 			  </select>
 			  <button type="button" id="cargoVerJerarquiaBtn" class="cargo-ver-jerarquia-btn">Ver jerarquía organizacional</button>
@@ -1689,7 +1659,7 @@
 				</div>
 
 				<textarea id="report-description" placeholder="Describe brevemente tu experiencia o problema..."></textarea>
-				<p class="report-note">El departamento de IT puede ponerse en contacto con usted con el correo empresarial sobre sus comentarios. Al presionar Enviar, los comentarios se usarán para mejorar.</p>
+				<p class="report-note">El departamento de IT puede ponerse en contacto con usted con el correo empresarial sobre sus comentarios. Al presionar Enviar, se aceptan las condiciones de uso y los comentarios se usarán para mejorar.</p>
 
 				<div class="modal-actions report-actions">
 					<button id="report-cancel-btn" class="btn">Cancelar</button>
@@ -2536,6 +2506,59 @@
 					const month = String(date.getMonth() + 1).padStart(2, '0');
 					const day = String(date.getDate()).padStart(2, '0');
 					return `${year}-${month}-${day}`;
+				}
+
+				function getCurrentWeekRange() {
+				  const today = new Date();
+				  const day = today.getDay();
+				  const diffToMonday = day === 0 ? -6 : 1 - day;
+
+				  const monday = new Date(today);
+				  monday.setHours(0, 0, 0, 0);
+				  monday.setDate(today.getDate() + diffToMonday);
+
+				  const sunday = new Date(monday);
+				  sunday.setDate(monday.getDate() + 6);
+
+				  return {
+				    inicio: formatDateLocal(monday),
+				    fin: formatDateLocal(sunday)
+				  };
+				}
+
+				async function cargarComidasSemana() {
+				  const countElement = document.getElementById('weeklyMealsCount');
+				  if (!countElement) {
+				    return;
+				  }
+
+				  try {
+				    const { inicio, fin } = getCurrentWeekRange();
+				    const loggedInRaw = localStorage.getItem('loggedInUser');
+				    const fallbackUsername = (localStorage.getItem('username') || '').toString().trim();
+				    let username = fallbackUsername;
+
+				    if (loggedInRaw) {
+				      try {
+				        const user = JSON.parse(loggedInRaw);
+				        username = (user?.username || user?.employeeNumber || fallbackUsername || '').toString().trim();
+				      } catch (_) {}
+				    }
+
+				    const response = await fetch(`/api/comidas/semana-usuario?inicio=${encodeURIComponent(inicio)}&fin=${encodeURIComponent(fin)}&username=${encodeURIComponent(username)}`);
+
+				    if (!response.ok) {
+				      throw new Error('No se pudo obtener comidas de la semana');
+				    }
+
+				    const payload = await response.json();
+				    const weeklyTotal = Number(payload?.total) || 0;
+
+				    countElement.textContent = String(weeklyTotal);
+				  } catch (error) {
+				    console.error('Error al cargar comidas de la semana:', error);
+				    countElement.textContent = '0';
+				  }
 				}
 
 				async function cargoFetchEmployeeEvents(employeeId) {
@@ -4270,72 +4293,7 @@
 				r.addEventListener('change', function(){ if (this.checked) setLang(this.value); });
 			});
 
-			// Theme toggle: light/dark
-			(function(){
-				const themeSwitch = document.getElementById('themeSwitch');
-				function applyTheme(theme){
-					// Primary: set attribute on <html>
-					document.documentElement.setAttribute('data-theme', theme);
-					// persist
-					localStorage.setItem('theme', theme);
-
-					// add/remove helper classes both on <html> and <body> to maximize compatibility
-					if(theme === 'dark'){
-						document.documentElement.classList.add('dark-mode');
-						document.documentElement.classList.add('dark');
-						document.body.classList.add('dark-mode');
-					} else {
-						document.documentElement.classList.remove('dark-mode');
-						document.documentElement.classList.remove('dark');
-						document.body.classList.remove('dark-mode');
-					}
-
-					// As a robust fallback, set key CSS variables inline on :root so pages that
-					// don't re-evaluate the attribute selectors still pick up the colors.
-					const root = document.documentElement;
-					if(theme === 'dark'){
-						root.style.setProperty('--bg', '#071226');
-						root.style.setProperty('--fg', '#e6eef8');
-						root.style.setProperty('--muted', '#94a3b8');
-						root.style.setProperty('--accent-1', '#4f9ef8');
-						root.style.setProperty('--accent-2', 'rgba(79,158,248,0.08)');
-						root.style.setProperty('--card', '#0b1220');
-						root.style.setProperty('--card-text', '#e6eef8');
-						root.style.setProperty('--accent-red', '#ff6b6b');
-					} else {
-						root.style.setProperty('--bg', '#f3f6fb');
-						root.style.setProperty('--fg', '#0f172a');
-						root.style.setProperty('--muted', '#6b7280');
-						root.style.setProperty('--accent-1', '#5b86e5');
-						root.style.setProperty('--accent-2', '#cfe8ff');
-						root.style.setProperty('--card', '#ffffff');
-						root.style.setProperty('--card-text', '#0b1220');
-						root.style.setProperty('--accent-red', '#c43a3a');
-					}
-
-					// update visual of slider if present (keep inline so it matches immediate state)
-					const slider = themeSwitch ? themeSwitch.closest('label')?.querySelector('.slider') : null;
-					if(slider){
-						const knob = slider.querySelector('span');
-						if(theme === 'dark'){ slider.style.background = '#000'; if(knob) knob.style.transform = 'translateX(20px)'; }
-						else { slider.style.background = '#ccc'; if(knob) knob.style.transform = 'translateX(0)'; }
-					}
-				}
-
-				// initialize (respect saved preference, data-theme attribute or OS setting)
-				const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-				const savedTheme = localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme') || (prefersDark ? 'dark' : 'light');
-				applyTheme(savedTheme);
-				if(themeSwitch){
-					themeSwitch.checked = (savedTheme === 'dark');
-					themeSwitch.addEventListener('change', function(){
-						applyTheme(this.checked ? 'dark' : 'light');
-					});
-				}
-
-				// expose small helper for debugging from console: `window.__pdm_applyTheme('dark')`
-				try{ window.__pdm_applyTheme = applyTheme; }catch(e){/* ignore */}
-			})();
+			// Theme support removed: site stays in light theme only.
 
 			// restore saved preferences
 			const savedColor = localStorage.getItem('pdm.themeColor') || 'teal';
@@ -5831,7 +5789,120 @@ document.addEventListener('DOMContentLoaded', function(){
 	    }
 	  }
 	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', computeFromIncapacidades); else computeFromIncapacidades();
+	  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', cargarComidasSemana); else cargarComidasSemana();
 	})();
+	</script>
+	<script>
+(function(){
+try {
+	const head = document.head || document.getElementsByTagName('head')[0];
+	if (!head.querySelector('style[data-generated="cargo-avatar-hover"]')) {
+		const style = document.createElement('style');
+		style.setAttribute('data-generated','cargo-avatar-hover');
+		style.appendChild(document.createTextNode(css));
+		head.appendChild(style);
+	}
+} catch (e) { console.warn('No se pudo inyectar estilos hover:', e); }
+
+let _cargoHoverOverlayEl = null;
+function cargoEnsureHoverOverlay(){
+	if (_cargoHoverOverlayEl && document.body.contains(_cargoHoverOverlayEl)) return _cargoHoverOverlayEl;
+	_cargoHoverOverlayEl = document.createElement('div');
+	_cargoHoverOverlayEl.id = 'cargoEventHoverOverlay';
+	_cargoHoverOverlayEl.className = 'cargo-event-hover-overlay';
+	_cargoHoverOverlayEl.setAttribute('aria-hidden','true');
+	document.body.appendChild(_cargoHoverOverlayEl);
+	return _cargoHoverOverlayEl;
+}
+function cargoHideHoverOverlay(){
+	const overlay = cargoEnsureHoverOverlay();
+	overlay.classList.remove('is-visible');
+	overlay.setAttribute('aria-hidden','true');
+}
+function cargoShowHoverOverlay(text, event){
+	if (!text || !event) return;
+	const overlay = cargoEnsureHoverOverlay();
+	overlay.textContent = text;
+	overlay.classList.add('is-visible');
+	overlay.setAttribute('aria-hidden','false');
+
+	const offset = 14;
+	const rect = overlay.getBoundingClientRect();
+	const maxLeft = window.innerWidth - rect.width - 8;
+	const maxTop = window.innerHeight - rect.height - 8;
+
+	let left = (event.clientX || (window.innerWidth/2)) + offset;
+	let top = (event.clientY || (window.innerHeight/2)) + offset;
+
+	if (left > maxLeft) left = Math.max(8, (event.clientX || 0) - rect.width - offset);
+	if (top > maxTop) top = Math.max(8, (event.clientY || 0) - rect.height - offset);
+
+	overlay.style.left = `${left}px`;
+	overlay.style.top = `${top}px`;
+}
+
+let _cargoOverlayPinnedTarget = null;
+function enableTouchHover(root){
+	root = root || document;
+	const items = root.querySelectorAll('.cargo-avatar-fallback');
+	items.forEach(el=>{
+		if (el._touchHoverBound) return; el._touchHoverBound = true;
+
+		el.addEventListener('click', function(e){
+			e.stopPropagation();
+			const coords = (e.changedTouches && e.changedTouches[0]) || e;
+			const target = el.closest('.cargo-event-avatar') || el.closest('span') || el;
+			const detail = (target && (target.getAttribute('data-tooltip') || target.dataset.tooltip)) || '';
+			if (detail) cargoShowHoverOverlay(detail, coords);
+			_cargoOverlayPinnedTarget = target;
+			document.body.classList.add('cargo-hover-locked');
+			el.classList.add('is-hover');
+		});
+
+		el.addEventListener('pointerenter', function(e){
+			if (_cargoOverlayPinnedTarget) return;
+			const target = el.closest('.cargo-event-avatar') || el;
+			const detail = (target && (target.getAttribute('data-tooltip') || target.dataset.tooltip)) || '';
+			if (detail) cargoShowHoverOverlay(detail, e);
+			el.classList.add('is-hover');
+		});
+
+		el.addEventListener('pointerleave', function(){
+			if (_cargoOverlayPinnedTarget) return;
+			el.classList.remove('is-hover');
+			cargoHideHoverOverlay();
+		});
+	});
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=> enableTouchHover()); else enableTouchHover();
+
+const obs = new MutationObserver((mutations)=>{
+	mutations.forEach(m=>{
+		if (m.addedNodes && m.addedNodes.length) enableTouchHover(m.target || document);
+	});
+});
+try { obs.observe(document.body || document.documentElement, {childList:true, subtree:true}); } catch(e){}
+
+// Hide overlay when clicking outside a pinned avatar
+document.addEventListener('click', function(ev){
+	if (!_cargoOverlayPinnedTarget) return;
+	const overlay = _cargoHoverOverlayEl || document.getElementById('cargoEventHoverOverlay');
+	if (!overlay) return;
+	const clickedInsideOverlay = overlay.contains(ev.target);
+	const clickedInsideTarget = _cargoOverlayPinnedTarget.contains ? _cargoOverlayPinnedTarget.contains(ev.target) : false;
+	if (clickedInsideOverlay || clickedInsideTarget) return;
+
+	cargoHideHoverOverlay();
+	try {
+		const prev = _cargoOverlayPinnedTarget.querySelector && _cargoOverlayPinnedTarget.querySelector('.cargo-avatar-fallback');
+		if (prev) prev.classList.remove('is-hover');
+	} catch (e) {}
+	_cargoOverlayPinnedTarget = null;
+	document.body.classList.remove('cargo-hover-locked');
+});
+
+})();
 	</script>
 	</body>
 	</html>
