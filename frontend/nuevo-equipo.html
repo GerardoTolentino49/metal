@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/topbar.css">
   <link rel="stylesheet" href="styles/floating-buttons.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <script src="js/global-color.js"></script>
@@ -1397,27 +1398,27 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="orders-interface">
     <div class="interface-header">
       <!-- Tab Switch -->
-<div class="tab-switch-proyectos">
-  <button class="tab-switch-proyectos-button active" data-tab="projects">
-    <i class="fas fa-folder-open"></i> Proyectos
-  </button>
+      <div class="tab-switch-proyectos">
+        <button class="tab-switch-proyectos-button active" data-tab="projects">
+          <i class="fas fa-folder-open"></i> Proyectos
+        </button>
 
-  <button class="tab-switch-proyectos-button" data-tab="orders">
-    <i class="fas fa-clipboard-list"></i> Ordenes
-  </button>
+        <button class="tab-switch-proyectos-button" data-tab="orders">
+          <i class="fas fa-clipboard-list"></i> Ordenes
+        </button>
 
-  <button class="tab-switch-proyectos-button" data-tab="users">
-    <i class="fas fa-users"></i> Usuarios
-  </button>
+        <button class="tab-switch-proyectos-button" data-tab="users">
+          <i class="fas fa-users"></i> Usuarios
+        </button>
 
-  <!-- Nueva pestaña Cronograma -->
-  <button class="tab-switch-proyectos-button" data-tab="schedule">
-    <i class="fas fa-stream"></i> Cronograma
-  </button>
-  <button class="tab-switch-proyectos-button tab-insert-force-button" id="forceInsertBtn" style="display:none;">
-    <i class="fas fa-magic"></i> Insertar forzadamente
-  </button>
-</div>
+        <!-- Nueva pestaña Cronograma -->
+        <button class="tab-switch-proyectos-button" data-tab="schedule">
+          <i class="fas fa-stream"></i> Cronograma
+        </button>
+        <button class="tab-switch-proyectos-button tab-insert-force-button" id="forceInsertBtn" style="display:none;">
+          <i class="fas fa-magic"></i> Insertar forzadamente
+        </button>
+      </div>
 
       <!-- Search Bar -->
       <div class="search-bar-wrapper">
@@ -7832,7 +7833,7 @@ document.addEventListener('DOMContentLoaded', function() {
                       <button class="btn-project" data-action="view-summary" data-project-id="${projectId}" style="border:none;border-radius:9999px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#3c9ea3 0%,#3eb4cf52 100%);">
                         <i class="fas fa-chart-bar"></i> Ver Resumen
                       </button>
-                      <button class="btn-project" data-action="po" data-project-id="${projectId}" style="border:none;border-radius:9999px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#6f2a8f 0%,#9f3ecf52 100%);">
+                      <button class="btn-project" data-action="po" data-project-id="${projectId}" style="border:none;display:none;border-radius:9999px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#6f2a8f 0%,#9f3ecf52 100%);">
                         <i class="fas fa-file-invoice-dollar"></i> PO
                       </button>
                       <button class="btn-project" data-action="cotizacion" data-project-id="${projectId}" style="border:none;border-radius:9999px;padding:7px 12px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#aea913 0%,#cccf3e52 100%);">
