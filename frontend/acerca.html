@@ -1,193 +1,538 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Acerca de</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="Estilos/theme.css">
-  <link rel="stylesheet" href="Estilos/acerca.css">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="js/theme.js"></script>
-  <script src="js/permissions.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acerca de</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Josefin+Sans:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; color: white; }
+
+  :root {
+    --bg: #0e0d0b;
+    --ink: #e8e2d6;
+    --accent: #8a7a62;
+    --light: #1e1c18;
+    --fade: #6b6358;
+  }
+
+  html, body {
+    height: 100%;
+    background: #3d3d3d;
+    color: var(--ink);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 200;
+    letter-spacing: 0.08em;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Header */
+  header {
+    padding: 4rem 5vw 0;
+    opacity: 0;
+    transform: translateY(-16px);
+    animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+  }
+
+  .label {
+    font-size: 1.1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1;
+    margin-top: 0.3rem;
+    color: var(--ink);
+  }
+
+  /* Divider line */
+  .line-h {
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+    margin: 2.5rem 5vw 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: scaleIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+  }
+
+  /* Intro text */
+  .intro {
+    max-width: 480px;
+    margin: 2.5rem 5vw 0;
+    font-size: 1.50rem;
+    line-height: 2;
+    color: white;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--light);
+    margin: 4rem 0 0;
+    border-top: 1px solid var(--light);
+  }
+
+  /* Card */
+  .card {
+    background: #3d3d3d;
+    padding: 3rem 5vw 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    transition: background 0.3s;
+  }
+  .card:hover { background: #161410; }
+
+  .card-meta { display: flex; flex-direction: column; gap: 0.2rem; }
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 1.45rem;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .card-role {
+    font-size: 0.8rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  /* SVG Signature */
+  .sig-wrap {
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .sig-wrap svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .sig-path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+    animation: draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) var(--sig-delay) forwards;
+  }
+
+  .card-quote {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: #dc993d;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    border-left: 1px solid var(--accent);
+    padding-left: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease var(--quote-delay) forwards;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 5rem;
+    padding: 2.5rem 5vw;
+    border-top: 1px solid var(--light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fade);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2.4s forwards;
+  }
+
+  /* Timeline Section */
+  .timeline-section {
+    margin-top: 7rem;
+    padding: 0 5vw;
+  }
+
+  .timeline-header {
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+  }
+  .timeline-header.visible { opacity: 1; transform: translateY(0); }
+
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 1.5rem 1px 1fr;
+    gap: 0 2rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    padding-bottom: 3.5rem;
+  }
+  .tl-item.visible { opacity: 1; transform: translateX(0); }
+  .tl-item:last-child { padding-bottom: 0; }
+
+  .tl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: var(--bg);
+    margin-top: 0.35rem;
+    justify-self: center;
+    transition: background 0.4s;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-item.visible .tl-dot { background: var(--accent); }
+
+  .tl-line {
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    justify-self: center;
+    margin-top: 0.6rem;
+  }
+  .tl-item:last-child .tl-line { background: none; }
+
+  .tl-content { padding-top: 0.1rem; }
+
+  .tl-date {
+    font-size: 0.8rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #f5b048;
+  }
+
+  .tl-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin: 0.3rem 0 0.7rem;
+    letter-spacing: 0.01em;
+  }
+
+  .tl-text {
+    font-size: 1.1rem;
+    line-height: 2;
+    color: white;
+    max-width: 520px;
+  }
+
+  /* Stats Section */
+  .stats-section {
+    margin-top: 7rem;
+    padding: 0 5vw;
+  }
+
+  .stats-header {
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+  }
+  .stats-header.visible { opacity: 1; transform: translateY(0); }
+
+  .stats-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.05;
+    margin-top: 0.4rem;
+    color: var(--ink);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--light);
+    border: 1px solid var(--light);
+  }
+
+  .stat-card {
+    background: var(--bg);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1), background 0.3s;
+  }
+  .stat-card.visible { opacity: 1; transform: translateY(0); }
+  .stat-card:hover { background: #161410; }
+
+  .stat-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+    filter: grayscale(0.3);
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2.8rem, 5vw, 4rem);
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .stat-unit {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.2rem;
+  }
+
+  .stat-desc {
+    font-size: 0.7rem;
+    line-height: 1.8;
+    color: var(--fade);
+    margin-top: 0.8rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  /* Keyframes */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleIn {
+    to { opacity: 1; transform: scaleX(1); }
+  }
+  @keyframes draw {
+    to { stroke-dashoffset: 0; }
+  }
+</style>
 </head>
 <body>
 
+<header>
+  <h1 class="title">Quiénes lo hicieron.</h1>
+</header>
 
-  <!-- Contenido principal -->
-  <main class="main-content">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content fade-in">
-        <h1 class="hero-title">Metal ERP</h1>
-        <p class="hero-version">Versión 3.0</p>
+<div class="line-h"></div>
+
+<p class="intro">
+  Cada proyecto tiene personas detrás. Estas son las firmas de quienes pusieron ideas, tiempo y dedicación en hacer esto posible.
+</p>
+
+<div class="grid">
+
+  <!-- Card 1 -->
+  <div class="card" style="--delay:1.1s">
+    <div class="card-meta">
+      <span class="card-name">Gerardo Tolentino</span>
+      <span class="card-role">IT Engineer Jr</span>
+    </div>
+    <div class="sig-wrap">
+      <svg viewBox="0 0 180 60">
+        <path class="sig-path" style="--len:320; --sig-delay:1.3s"
+          d="M10,45 C20,20 30,10 45,30 C52,40 55,15 70,20 C80,23 85,38 95,35 C108,30 112,18 125,22 C135,26 138,40 150,38 C160,36 165,30 170,28"/>
+      </svg>
+    </div>
+    <p class="card-quote" style="--quote-delay:2.5s">"Lo difícil no fue empezar, sino saber cuándo parar de pulir."</p>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="card" style="--delay:1.3s">
+    <div class="card-meta">
+      <span class="card-name">Nahum García</span>
+      <span class="card-role">IT Manager</span>
+    </div>
+    <div class="sig-wrap">
+      <svg viewBox="0 0 180 60">
+        <path class="sig-path" style="--len:380; --sig-delay:1.5s"
+          d="M8,38 Q20,10 35,30 Q42,42 55,25 Q65,12 80,35 Q90,48 100,30 Q112,10 128,28 Q138,38 148,25 Q158,14 172,20"/>
+      </svg>
+    </div>
+    <p class="card-quote" style="--quote-delay:2.7s">"El diseño no es lo que se ve. Es lo que se siente al usarlo."</p>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="card" style="--delay:1.5s">
+    <div class="card-meta">
+      <span class="card-name">Ramiro Cortés</span>
+      <span class="card-role">Gerente de operaciones</span>
+    </div>
+    <div class="sig-wrap">
+      <svg viewBox="0 0 180 60">
+        <path class="sig-path" style="--len:340; --sig-delay:1.7s"
+          d="M12,40 L30,15 L48,40 L60,20 C70,5 82,32 95,28 C108,24 115,42 130,35 C142,28 150,18 162,22 C168,24 172,32 172,32"/>
+      </svg>
+    </div>
+    <p class="card-quote" style="--quote-delay:2.9s">"El mejor código es el que no tienes que explicar dos veces."</p>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="card" style="--delay:1.7s">
+    <div class="card-meta">
+      <span class="card-name">Chris North</span>
+      <span class="card-role">CEO de PHOENIX DISEñO Y MANUFACTURA</span>
+    </div>
+    <div class="sig-wrap">
+      <svg viewBox="0 0 180 60">
+        <path class="sig-path" style="--len:360; --sig-delay:1.9s"
+          d="M10,30 C25,8 38,50 55,30 C65,18 72,42 88,35 C100,28 105,12 120,20 C132,26 135,44 148,38 C158,33 163,20 172,18"/>
+      </svg>
+    </div>
+    <p class="card-quote" style="--quote-delay:3.1s">"Los datos no mienten, pero sí pueden malinterpretarse."</p>
+  </div>
+
+</div>
+
+<section class="timeline-section">
+  <div class="timeline-header" data-scroll-fade>
+    <span class="label">Historia</span>
+    <h2 class="stats-title">De tickets a ERP.</h2>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item" data-tl>
+      <div class="tl-dot"></div>
+      <div class="tl-line"></div>
+      <div class="tl-content">
+        <span class="tl-date">Mayo 2025</span>
+        <h3 class="tl-title">El primer ticket</h3>
+        <p class="tl-text">Todo comenzó con una necesidad simple: rastrear problemas internos. En cuestión de 1 mes se levantó un sistema básico de tickets para que el equipo de IT pudiera registrar y atender solicitudes sin perderlas en un chat de whatsapp.</p>
       </div>
-      <div class="hero-image-container">
-        <div class="hero-image fade-in-delay" style="background-image: url('Fotos/fondo1.webp');"></div>
+    </div>
+
+    <div class="tl-item" data-tl>
+      <div class="tl-dot"></div>
+      <div class="tl-line"></div>
+      <div class="tl-content">
+        <span class="tl-date">Agosto 2025</span>
+        <h3 class="tl-title">La primera expansión</h3>
+        <p class="tl-text">Si ya se gestionaban solicitudes, ¿por qué no también inventario y control de RH? Se integraron los primeros módulos de almacén y RRHH de forma muy sencilla. En este punto el sistema dejó de ser solo de IT y se llamaba LISA en su forma más temprana de desarrollo.</p>
       </div>
-    </section>
+    </div>
 
-
-    <!-- Sección de Compatibilidad -->
-    <section class="content-section reverse">
-      <div class="section-content slide-in-right">
-        <h2 class="section-title">Compatible con PDM System</h2>
-        <p class="section-text">
-          Metal ERP está diseñado para ser completamente amigable con los usaurios.
-           Nuestra aplicación se integra perfectamente con el sistema PDM System, 
-           permitiéndote gestionar tus proyectos de manera eficiente y sin complicaciones.
-        </p>
-        <div class="features-grid">
-          <div class="feature-item fade-in">
-            <span>Sincronización automática</span>
-          </div>
-          <div class="feature-item fade-in">
-            <span>Seguridad garantizada</span>
-          </div>
-          <div class="feature-item fade-in">
-            <span>Rendimiento optimizado</span>
-          </div>
-          <div class="feature-item fade-in">
-            <span>Acceso multiplataforma</span>
-          </div>
-        </div>
+    <div class="tl-item" data-tl>
+      <div class="tl-dot"></div>
+      <div class="tl-line"></div>
+      <div class="tl-content">
+        <span class="tl-date">Octubre 2025</span>
+        <h3 class="tl-title">La primera expansión</h3>
+        <p class="tl-text">¿por qué no sustituir completamente a CiberAlex? Se hizo un módulo de loggeo y PM, sentando las bases para migrar de CiberAlex a Metal ERP.</p>
       </div>
-      <div class="section-image-container">
-        <div class="section-image slide-in-left image-2" style="background-image: url('Fotos/fondo3.webp');"></div>
+    </div>
+
+    <div class="tl-item" data-tl>
+      <div class="tl-dot"></div>
+      <div class="tl-line"></div>
+      <div class="tl-content">
+        <span class="tl-date">Enero 2026</span>
+        <h3 class="tl-title">Producción entra al sistema</h3>
+        <p class="tl-text">Con el respaldo de Chris, el sistema comenzó a tocar el núcleo del negocio: órdenes de producción, seguimiento de piezas y reportes de planta. Ya era algo distinto a un sistema de tickets.</p>
       </div>
-    </section>
+    </div>
 
-
-    <!-- Sección Final -->
-    <section class="final-section">
-      <div class="final-content fade-in">
-        <h2 class="final-title">Hecho con dedicación y pasión</h2>
-        <p class="final-text">
-          Cada detalle ha sido cuidadosamente diseñado para ofrecerte la mejor experiencia 
-          en gestión de proyectos, por lo que reconocemos el esfuerzo de los usuarios que contribuyeron a darle forma.
-        </p>
-          <div class="feature-item fade-in">
-            <span>Gerardo Julian Sánchez Tolentino - Programador / UI Designer / UX Designer / DBA</span>
-          </div>
-          <div class="feature-item fade-in">
-            <span>Nahum García - IT Manager</span>
-          </div>
-          <div class="feature-item fade-in">
-            <span>Ramiro Cortés - Por su contribución en los módulos de PM y diseño</span>
-          </div>
-            <div class="feature-item fade-in">
-            <span>Rosario Valdez  y Alejandra Torres- Por su contibución en el módulo de RH</span>
-          </div>
-            <div class="feature-item fade-in">
-            <span>Cristian Hernandez Vazquez - UI Designer</span>
-          </div>
+    <div class="tl-item" data-tl>
+      <div class="tl-dot"></div>
+      <div class="tl-line"></div>
+      <div class="tl-content">
+        <span class="tl-date">Marzo 2026</span>
+        <h3 class="tl-title">Nace Metal ERP</h3>
+        <p class="tl-text">Con más de 15 módulos independientes funcionando en paralelo desde contabilidad, almacén y recursos humanos, el sistema recibió su nombre definitivo "Metal ERP".</p>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <script>
-    // Verificar autenticación
-    document.addEventListener('DOMContentLoaded', function() {
-      const username = localStorage.getItem('username');
-      const isLoggedIn = localStorage.getItem('isLoggedIn');
+  </div>
+</section>
+</section>
 
-      if (!isLoggedIn || isLoggedIn !== 'true') {
-        window.location.href = 'login.html';
-        return;
+<footer>
+  <span>© 2026 Metal ERP</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+
+        if (el.dataset.tl !== undefined) {
+          const siblings = Array.from(el.parentElement.querySelectorAll('[data-tl]'));
+          const delay = siblings.indexOf(el) * 180;
+          setTimeout(() => el.classList.add('visible'), delay);
+        } else if (el.dataset.scroll !== undefined) {
+          const siblings = Array.from(el.parentElement.children);
+          const delay = siblings.indexOf(el) * 120;
+          setTimeout(() => {
+            el.classList.add('visible');
+            const numEl = el.querySelector('.stat-number');
+            if (numEl) animateCount(numEl);
+          }, delay);
+        } else {
+          el.classList.add('visible');
+        }
+
+        observer.unobserve(el);
       }
-
-      if (username) {
-        document.getElementById('username').textContent = username;
-      }
-
-      // Función para verificar si hay una orden activa
-      function hasActiveOrder() {
-        const activeSession = localStorage.getItem('activeSession');
-        if (activeSession) {
-          try {
-            const session = JSON.parse(activeSession);
-            if (session.orderNumber && session.startTime) {
-              return true;
-            }
-          } catch (e) {
-            console.error('Error al parsear activeSession:', e);
-          }
-        }
-        return false;
-      }
-
-      // Logout
-      document.getElementById('logoutBtn').addEventListener('click', function(e) {
-        // Verificar si hay una orden activa
-        if (hasActiveOrder()) {
-          e.preventDefault();
-          alert('No puedes cerrar sesión mientras tengas una orden activa. Por favor, ve a la página de Diseño y finaliza la orden primero.');
-          return;
-        }
-
-        localStorage.clear();
-        window.location.href = 'login.html';
-      });
-
-      // Prevenir cerrar la pestaña si hay una orden activa
-      window.addEventListener('beforeunload', function(e) {
-        if (hasActiveOrder()) {
-          e.preventDefault();
-          e.returnValue = 'Tienes una orden activa. ¿Estás seguro de que quieres cerrar la pestaña? Debes finalizar la orden primero desde la página de Diseño.';
-          return e.returnValue;
-        }
-      });
-
-      // Intersection Observer para animaciones al hacer scroll
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-      };
-
-      const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
-          }
-        });
-      }, observerOptions);
-
-      // Observar todos los elementos con clases de animación
-      const animatedElements = document.querySelectorAll(
-        '.fade-in, .fade-in-delay, .slide-in-left, .slide-in-right, .scale-in'
-      );
-
-      animatedElements.forEach(el => {
-        observer.observe(el);
-      });
-
-      // Parallax effect para imágenes
-      let ticking = false;
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          window.requestAnimationFrame(function() {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.section-image');
-            
-            parallaxElements.forEach((element, index) => {
-              const rect = element.getBoundingClientRect();
-              const elementTop = rect.top + scrolled;
-              const elementHeight = rect.height;
-              
-              if (scrolled + window.innerHeight > elementTop && scrolled < elementTop + elementHeight) {
-                const yPos = -(scrolled - elementTop) * 0.3;
-                element.style.transform = `translateY(${yPos}px)`;
-              }
-            });
-            
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
     });
-  </script>
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('[data-scroll], [data-tl], .stats-header, .timeline-header').forEach(el => observer.observe(el));
+
+  function animateCount(el) {
+    const target = +el.dataset.target;
+    const duration = 1600;
+    const start = performance.now();
+    const isLarge = target > 100;
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(ease * target);
+      el.textContent = isLarge ? current.toLocaleString('es-MX') : current;
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = isLarge ? target.toLocaleString('es-MX') : target;
+    }
+    requestAnimationFrame(step);
+  }
+</script>
 </body>
 </html>
+
