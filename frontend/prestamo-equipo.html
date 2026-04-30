@@ -1,0 +1,1845 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Préstamo de Equipo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="stylesheet" href="styles/panel_style.css">
+  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .loans-interface { padding: 18px; margin: 18px auto; }
+    .table-wrapper { background: #fff; border-radius: 20px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); width:100%;}
+    .orders-table { width: 100%; border-collapse: collapse; background: #fff; }
+    .orders-table thead th { text-align: left; padding: 10px; border-bottom: 1px solid #e6e6e6; }
+    .orders-table tbody td { padding: 10px; border-bottom: 1px solid #f3f3f3; }
+    .search-bar { width: 100%; padding: 10px 12px; border-radius: 8px; border:1px solid #ddd; border-radius:30px;}
+    .loan-actions .loan-btn { padding:6px 10px;border-radius:8px;border:none;background:#2563eb;color:#fff;cursor:pointer }
+    .loan-empty { text-align:center;color:#777;padding:28px }
+    .return-date { padding:6px 8px;border-radius:6px;border:1px solid #ddd }
+    .action-accept { background: #16a34a; color: #fff; border: none; padding:6px 8px;border-radius:6px; cursor:pointer; margin-right:6px }
+    .action-reject { background: #ef4444; color: #fff; border: none; padding:6px 8px;border-radius:6px; cursor:pointer }
+    .tab-switch { display:flex; gap:8px; justify-content:center; margin-bottom:12px }
+    .tab-switch-button { padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fafafa; cursor:pointer }
+    .tab-switch-button.active { background:#2563eb;color:#fff;border-color:transparent }
+  </style>
+</head>
+<body style="background-color: #000000;">
+ <!--tab switch-->
+<div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+  <div class="tab-switch">
+
+    <button class="tab-switch-button" data-tab="inicio">
+      <i class="fas fa-home"></i> 
+    </button>
+
+    <button class="tab-switch-button" data-tab="tickets">
+      <i class="fas fa-ticket-alt"></i> Tickets
+    </button>        
+
+    <button class="tab-switch-button" data-tab="calendario">
+      <i class="fas fa-calendar-alt"></i> Calendario
+    </button>
+
+    <button class="tab-switch-button" data-tab="qr">
+      <i class="fas fa-qrcode"></i> QR
+    </button>
+
+    <button class="tab-switch-button" data-tab="boveda">
+      <i class="fas fa-vault"></i> Bóveda
+    </button>
+
+    <button class="tab-switch-button" data-tab="estadisticas">
+      <i class="fas fa-chart-bar"></i> Estadísticas
+    </button>
+
+    <button class="tab-switch-button " data-tab="Aingenieria">
+      <i class="fas fa-tools"></i> Ajustes
+    </button>
+    <button class="tab-switch-button active" data-tab="Prestamo">
+      <i class="fa-solid fa-laptop"></i> Inventario
+    </button>
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabRoutes = {
+    inicio: 'nuevo-inicio.html',
+    tickets: 'panel.html',
+    calendario: 'calendario_it.html',
+    qr: 'qr_inventario.html',
+    boveda: 'boveda.html',
+    estadisticas: 'detalles.html',
+    Aingenieria: 'admin_it.html',
+    Prestamo: 'prestamo-equipo.html'
+  };
+
+  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = tabRoutes[this.dataset.tab];
+      if (!targetPage || targetPage === currentPage) {
+        return;
+      }
+      window.location.href = targetPage;
+    });
+  });
+});
+  </script>
+  <style>
+    .tab-switch {
+      display: inline-flex;
+      align-items: center;
+      background: white;
+      border-radius: 30px;
+      padding: 4px;
+      gap: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.12);
+    }
+
+    .tab-switch-button {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: black;
+      opacity: 0.6;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      opacity: 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    [data-theme="light"] .tab-switch-button.active {
+      background: linear-gradient(to bottom right, #000000, #9fabb3);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .tab-switch-button:hover:not(.active) {
+      opacity: 0.8;
+    }
+
+      /* Estilos de paginación (copiados de admin_it.html) */
+      .pagination-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, rgb(221 221 221 / 95%) 0%, rgba(250, 250, 250, 0.95) 100%);
+        border-radius: 0 0 20px 20px;
+      }
+
+      .pagination-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #4b5563;
+      }
+
+      .pagination-info label {
+        font-weight: 600;
+      }
+
+      .rows-per-page-select {
+        padding: 6px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 30px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .rows-per-page-select:hover {
+        border-color: #2a8f4b;
+      }
+
+      .rows-per-page-select:focus {
+        outline: none;
+        border-color: #2a8f4b;
+        box-shadow: 0 0 0 3px rgba(42, 143, 75, 0.1);
+      }
+
+      .pagination-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .pagination-btn {
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 30px;
+        background: white;
+        color: #4b5563;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+      }
+
+      .pagination-btn:hover:not(:disabled) {
+        background: #f3f4f6;
+        border-color: #2a8f4b;
+        color: #2a8f4b;
+      }
+
+      .pagination-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .page-info {
+        font-size: 14px;
+        color: #4b5563;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+      }
+      /* Status pill styles */
+      .status-pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.9em;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .status-available { background: #16a34a; color: #fff; }
+      .status-unavailable { background: #b91c1c; color: #fff; }
+      .status-other { background: #f59e0b; color: #000; }
+      /* Memory pill styles */
+      .mem-pill { display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.9em; line-height:1; white-space:nowrap; }
+      .mem-red { background:#b91c1c; color:#fff }
+      .mem-orange { background:#f97316; color:#fff }
+      .mem-yellow { background:#f59e0b; color:#fff }
+      .mem-lightgreen { background:#65a30d; color:#fff }
+      .mem-green { background:#16a34a; color:#fff }
+      /* Modal styles for Nuevo Equipo */
+        #nuevoEquipoModal { display:none; position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:9999; backdrop-filter: blur(4px); }
+        #nuevoEquipoModal .modal-content { background:linear-gradient(180deg,#e6ffef 0%, #b8f4d8 100%); color:#042014; border-radius:14px; padding:22px; max-width:760px; width:92%; box-shadow:0 20px 50px rgba(2,6,23,0.25); max-height:88vh; overflow:auto; position:relative; animation: popIn 180ms ease both; }
+        #nuevoEquipoModal h3 { margin:0 0 10px; color:#071033; font-size:20px; letter-spacing:0.2px; text-align:center }
+      #nuevoEquipoModal .form-grid { display:flex; flex-direction:column; gap:12px; align-items:start; margin:12px;}
+      #nuevoEquipoModal label { display:block; color:#0f172a; font-weight:600; font-size:13px; width: 100%;}
+      #nuevoEquipoModal input[type="text"], #nuevoEquipoModal input[type="number"], #nuevoEquipoModal input[type="date"], #nuevoEquipoModal select, #nuevoEquipoModal input[type="email"] {
+        width:100%; padding:10px 12px; border:1px solid #e6e6e6; border-radius:8px; background:#fff; color:#0b1220; box-sizing:border-box;
+      }
+      #nuevoEquipoModal input::placeholder { color:#94a3b8; }
+      #nuevoEquipoModal .modal-actions { display:flex; justify-content:space-around; gap:8px; margin-top:14px }
+      #nuevoEquipoModal .btn { padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:1000; font-size: 15px;; }
+      #nuevoEquipoModal .btn-muted { background: linear-gradient(90deg,#ef4444,#dc2626); border:none; color:#fff }
+      #nuevoEquipoModal .btn-primary { background: linear-gradient(90deg,#16a34a,#059669); border:none; color:#fff }
+      #nuevoEquipoModal .checkbox-row { display:flex; align-items:center; gap:8px }
+      @media (max-width:520px){ #nuevoEquipoModal .form-grid { grid-template-columns:1fr } }
+        @keyframes popIn { from { transform: translateY(-8px) scale(0.995); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 } }
+        #nuevoEquipoModal .form-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; align-items:start; margin:12px; }
+        #nuevoEquipoModal input[type="text"]:focus, #nuevoEquipoModal input[type="number"]:focus, #nuevoEquipoModal input[type="date"]:focus, #nuevoEquipoModal select:focus { outline:none; border-color:#8fb8ff; box-shadow:0 6px 18px rgba(37,99,235,0.12); transform:translateY(-1px); }
+        #nuevoEquipoModal .modal-actions { display:flex; justify-content:space-between; gap:8px; margin-top:16px; }
+        #nuevoEquipoModal .btn { padding:10px 14px; border-radius:30px; cursor:pointer; font-weight:800; font-size:16px; min-width:140px; }
+        #nuevoEquipoModal .btn-muted { background: linear-gradient(90deg,#ef4444,#dc2626); border:none; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+        #nuevoEquipoModal .btn-muted:hover { transform:translateY(-1px); opacity:0.95 }
+        #nuevoEquipoModal .btn-primary { background:linear-gradient(90deg,#16a34a,#059669); border:none; color:#fff; box-shadow:0 10px 30px rgba(16,185,129,0.12); }
+        #nuevoEquipoModal .btn-primary:hover { transform:translateY(-2px); }
+
+
+      /* Hovering */
+      #addEquipoBtn.c-button .c-main:hover {
+        box-shadow: inset 0px 0px 5px rgba(17, 17, 17, 0.6);
+        border: 1px solid rgba(26, 26, 26,0.5);
+        color: rgba(255, 255, 255, 0.9);
+      } */
+
+    /* Copiado desde styles/nuevo-equipo.css: estilo del botón "Agregar Proyecto" */
+    .add-order-btn {
+      padding: 10px 20px;
+      background: linear-gradient(to bottom right, #273f26, #50daa1);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .add-order-btn:hover {
+      background: linear-gradient(to bottom right, #405f3f, #50daa1);
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .add-order-btn.danger {
+      background: linear-gradient(to bottom right, #381e1e, #dc2626);
+    }
+
+    .add-order-btn.danger:hover {
+      background: linear-gradient(to bottom right, #381e1e, #dc2626);
+      box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+    }
+    /* Celdas de evidencia */
+    .evid-cell { text-align:center; vertical-align:middle; min-width:110px; }
+    .evid-upload-btn {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 10px; border-radius:30px; border:1px dashed #cbd5e1;
+      background:#f8fafc; color:#475569; font-size:12px; font-weight:600;
+      cursor:pointer; transition:all 0.2s; white-space:nowrap;
+    }
+    .evid-upload-btn:hover { border-color:#3b82f6; color:#1d4ed8; background:#eff6ff; }
+    .evid-upload-btn:disabled { opacity:0.6; cursor:not-allowed; }
+    .evid-thumb {
+      display:block; width:48px; height:48px; object-fit:cover;
+      border-radius:8px; margin:0 auto 4px; border:2px solid #e2e8f0;
+      transition:transform 0.2s;
+    }
+    .evid-thumb:hover { transform:scale(1.08); border-color:#3b82f6; }
+    </style>
+
+  <div class="loans-interface">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+        <div  class="tab-switch">
+          <button class="tab-switch-button active" data-loan-tab="inicio">
+            <i class="fas fa-home"> </i> Préstamos
+          </button>
+          <button class="tab-switch-button" data-loan-tab="tickets">
+            <i class="fa-solid fa-desktop"></i> Equipos
+          </button>
+          <button class="tab-switch-button" data-loan-tab="software">
+            <i class="fas fa-laptop-code"></i> Software
+          </button>
+      </div>
+      <input id="loanSearch" class="search-bar" placeholder="Buscar equipo por nombre, tipo o serial...">
+      <button id="addEquipoBtn" class="add-order-btn" style="display:none;margin-left:8px;">
+        <i class="fas fa-plus"></i> Nuevo Equipo
+      </button>
+      <button id="addSoftwareBtn" class="add-order-btn" style="display:none;margin-left:8px;">
+        <i class="fas fa-plus"></i> Nuevo Software
+      </button>
+      <!-- exchange rate box (also updated into swTotalBox for visibility) -->
+      <!-- exchange-rate-box removed (using inline display inside swTotalBox) -->
+      <!-- <select id="loanRowsPerPage" style="padding:8px;border-radius:8px;border:1px solid #ddd">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select> -->
+    </div>
+
+    <div class="table-wrapper">
+      <div style = "overflow-x:auto; scrollbar-width: none;">
+        <table class="orders-table" id="loanTable">
+        <thead id="loanTableHead">
+          <tr>
+            <th>Empleado</th>
+            <th>ID PC</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Fecha de Retorno</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="loanTableBody">
+          <tr><td colspan="8" class="loan-empty">Cargando...</td></tr>
+        </tbody>
+      </table>
+      </div>
+      
+
+      <div class="pagination-controls" id="loanPaginationControls">
+        <div class="pagination-info">
+          <label for="loanRowsPerPage">Mostrar:</label>
+          <select id="loanRowsPerPage" class="rows-per-page-select">
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <span>renglones por página</span>
+        </div>
+        <div class="pagination-buttons">
+          <button id="loanPrev" class="pagination-btn" title="Página anterior">«</button>
+          <span id="loanPageInfo" class="page-info">Página 1 de 1</span>
+          <button id="loanNext" class="pagination-btn" title="Página siguiente">»</button>
+        </div>
+      </div>
+    </div>
+  <!-- Sección software (oculta por defecto) -->
+  <div id="swSection" style="display:none">
+    <div class="table-wrapper">
+      <div style="overflow-x:auto;scrollbar-width:none">
+        <table class="orders-table" id="swTable">
+          <thead id="swTableHead">
+            <tr>
+              <th>Página</th>
+              <th>Usuario</th>
+              <th>Contraseña</th>
+              <th>Consola</th>
+              <th>Tipo</th>
+              <th>Facturación</th>
+              <th>Fecha de compra</th>
+              <th>Vigencia</th>
+              <th>Precio</th>
+              <th>Notas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="swTableBody">
+            <tr><td colspan="11" class="loan-empty">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-controls" id="swPaginationControls">
+        <div class="pagination-info">
+          <label for="swRowsPerPage">Mostrar:</label>
+          <select id="swRowsPerPage" class="rows-per-page-select">
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+          <span>renglones por página</span>
+        </div>
+        <div class="pagination-buttons">
+          <button id="swPrev" class="pagination-btn">«</button>
+          <span id="swPageInfo" class="page-info">Página 1 de 1</span>
+          <button id="swNext" class="pagination-btn">»</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen financiero software -->
+    <div id="swTotalBox" style="display:flex;align-items:center;position:relative;margin:16px auto 4px;max-width:780px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px 18px;width:100%;box-sizing:border-box;">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div style="text-align:center;padding:8px 12px;min-width:140px;">
+          <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1px;color:#94a3b8;text-transform:uppercase">Gasto mensual</p>
+          <p id="swMensualMXN" style="margin:0 0 2px;font-size:16px;font-weight:800;color:#0f172a">$— MXN</p>
+          <p id="swMensualUSD" style="margin:0;font-size:12px;font-weight:600;color:#2563eb">$— USD</p>
+        </div>
+
+        <div style="width:1px;height:40px;background:#e2e8f0"></div>
+
+        <div id="swAnualBox" style="text-align:center;padding:8px 12px;min-width:140px;display:none;">
+          <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1px;color:#94a3b8;text-transform:uppercase">Gasto anual</p>
+          <p id="swAnualMXN" style="margin:0 0 2px;font-size:16px;font-weight:800;color:#0f172a">$— MXN</p>
+          <p id="swAnualUSD" style="margin:0;font-size:12px;font-weight:600;color:#2563eb">$— USD</p>
+        </div>
+
+        <div style="text-align:center;padding:8px 12px;min-width:160px;">
+          <p style="margin:0 0 6px;font-size:10px;font-weight:700;letter-spacing:1px;color:#94a3b8;text-transform:uppercase">Total invertido (vigente)</p>
+          <p id="swTotalMXN" style="margin:0 0 2px;font-size:16px;font-weight:800;color:#0f172a">$— MXN</p>
+          <p id="swTotalUSD" style="margin:0;font-size:12px;font-weight:600;color:#2563eb">$— USD</p>
+          <p id="swTasaInfo" style="margin:8px 0 0;font-size:10px;color:#94a3b8"></p>
+        </div>
+      </div>
+
+      
+      <div style="width:1px;height:40px;background:#e2e8f0"></div>
+
+      <div id="exchange-rate-inline" style="margin-left:auto;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:140px">
+        <div style="font-size:11px;color:#6b7280;font-weight:700; display:flex; justify-content:center; width:100%;">Tipo de cambio</div>
+        <div id="exchange-rate-inline-value" style="display:flex; justify-content:center; width:100%;font-weight:800;color:#0f172a;background:linear-gradient(90deg,#f8fafc,#eef2ff);padding:6px 10px;border-radius:8px">Cargando…</div>
+        <div id="exchange-rate-inline-updated" style="display:flex; justify-content:center; width:100%; font-size:10px;color:#94a3b8"></div>
+      </div>
+    </div>
+      
+     
+    </div>
+  </div>
+  </div>
+
+  <!-- Modal Software -->
+  <div id="swModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px)">
+    <div style="background:linear-gradient(180deg,#e8f0ff 0%,#c7d9ff 100%);border-radius:20px;padding:24px;max-width:540px;width:92%;box-shadow:0 20px 50px rgba(2,6,23,0.25);max-height:90vh;overflow:auto;position:relative;animation:popIn 180ms ease both">
+      <h3 id="swModalTitle" style="margin:0 0 16px;color:#071033;font-size:18px;text-align:center;font-weight:800">Nuevo software</h3>
+      <form id="swForm">
+        <input type="hidden" id="swId">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <label style="grid-column:1/3;font-weight:700;font-size:13px;color:#071033">PÁGINA / NOMBRE
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px" id="swPagina" placeholder="Ej. Trend Micro, Microsoft 365..." required>
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">USUARIO
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px" id="swUsuario" placeholder="usuario@domino.com">
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">CONTRASEÑA
+            <div style="position:relative">
+              <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px;padding-right:38px" id="swContrasena" type="password" placeholder="••••••••" autocomplete="new-password">
+              <button type="button" id="swTogglePass" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;font-size:14px">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </label>
+          <label style="grid-column:1/3;font-weight:700;font-size:13px;color:#071033">LINK DE CONSOLA
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px" id="swConsola" type="url" placeholder="https://...">
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">TIPO
+            <select id="swTipo" class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px">
+              <option value="">— Sin tipo —</option>
+              <option value="Antivirus">Antivirus</option>
+              <option value="OS">OS</option>
+              <option value="Office">Office</option>
+              <option value="Diseño">Diseño</option>
+              <option value="Seguridad">Seguridad</option>
+              <option value="Desarrollo">Desarrollo</option>
+              <option value="Nube">Nube</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">FACTURACIÓN
+            <select id="swFacturacion" class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px">
+              <option value="">— Sin definir —</option>
+              <option value="Mensual">Mensual</option>
+              <option value="Anual">Anual</option>
+              <option value="Única vez">Única vez</option>
+            </select>
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">PRECIO
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px" id="swPrecio" type="number" min="0" step="0.01" placeholder="ej. 1500.00">
+          </label>
+          <label style="font-weight:700;font-size:13px;color:#071033">FECHA DE COMPRA
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;margin-top:4px" id="swFechaCompra" type="date">
+          </label>
+          <label style="grid-column:1/3;font-weight:700;font-size:13px;color:#071033">NOTAS
+            <textarea id="swNotas" rows="3" placeholder="Observaciones..." style="width:100%;box-sizing:border-box;border:1px solid #e6e6e6;border-radius:16px;padding:10px 12px;font-size:13px;font-family:inherit;resize:vertical;margin-top:4px;outline:none"></textarea>
+          </label>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">
+          <button type="button" id="swModalCancelar" class="btn btn-muted" style="padding:10px 14px;border-radius:30px;border:none;cursor:pointer;font-weight:800;font-size:15px;min-width:130px;background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="padding:10px 14px;border-radius:30px;border:none;cursor:pointer;font-weight:800;font-size:15px;min-width:130px;background:linear-gradient(90deg,#2563eb,#1d4ed8);color:#fff">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal confirmar eliminar software -->
+  <div id="swDeleteModal" style="display:none;position:fixed;inset:0;background:rgba(2,6,23,0.6);align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px)">
+    <div style="background:#fff;border-radius:20px;padding:28px;max-width:360px;width:92%;box-shadow:0 20px 50px rgba(2,6,23,0.2)">
+      <p style="font-weight:700;font-size:15px;margin:0 0 8px">¿Eliminar este software?</p>
+      <p id="swDeleteNombre" style="color:#6b7280;font-size:13px;margin:0 0 22px"></p>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button id="swDeleteCancelar" style="padding:9px 20px;border-radius:30px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-weight:600">Cancelar</button>
+        <button id="swDeleteConfirmar" style="padding:9px 20px;border-radius:30px;border:none;background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff;cursor:pointer;font-weight:700">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabRoutes = { inicio: 'nuevo-inicio.html', tickets: 'panel.html', prestamo: 'prestamo-equipo.html', Aingenieria: 'admin_it.html' };
+    document.querySelectorAll('.tab-switch-button[data-tab]').forEach(btn=>btn.addEventListener('click', function(){ const target=tabRoutes[this.dataset.tab]; if(target && target!==window.location.pathname.split('/').pop()) window.location.href = target; }));
+
+    const state = { items: [], prestamos: [], equipos: [], page:1, perPage:10, filter: '', view: 'prestamos' };
+
+    // small loans tab inside the loans interface (switches table view without navigating)
+    document.querySelectorAll('.loans-interface .tab-switch-button[data-loan-tab]').forEach(btn=>{
+      btn.addEventListener('click', function(){
+        const v = this.dataset.loanTab;
+        document.querySelectorAll('.loans-interface .tab-switch-button[data-loan-tab]').forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        if(v === 'inicio') state.view = 'prestamos';
+        else if(v === 'tickets') state.view = 'equipo';
+        else if(v === 'software') state.view = 'software';
+        state.page = 1;
+        renderTable();
+        const addBtn = document.getElementById('addEquipoBtn');
+        if(addBtn) addBtn.style.display = (state.view === 'equipo') ? 'inline-block' : 'none';
+      });
+    });
+
+    document.getElementById('loanRowsPerPage').addEventListener('change', (e)=>{ state.perPage = Number(e.target.value); state.page = 1; renderTable(); });
+    document.getElementById('loanSearch').addEventListener('input', (e)=>{ state.filter = e.target.value.trim().toLowerCase(); state.page = 1; renderTable(); });
+    document.getElementById('loanPrev').addEventListener('click', ()=>{ if(state.page>1){ state.page--; renderTable(); } });
+    document.getElementById('loanNext').addEventListener('click', ()=>{ state.page++; renderTable(); });
+
+    async function loadEquipos(){
+      try{
+        const [prestamosRes, equiposRes] = await Promise.all([
+          fetch('/api/prestamos', { credentials: 'include' }),
+          fetch('/api/equipos-prestamo?all=true', { credentials: 'include' })
+        ]);
+
+        // prestamos
+        if(prestamosRes && prestamosRes.ok){
+          const data = await prestamosRes.json();
+          if(data && data.success && Array.isArray(data.prestamos)){
+            state.prestamos = data.prestamos.map(function(p){
+              return {
+                  id: p.id,
+                  empleado: p.nombre_usuario || p.id_usuario || '',
+                  pc_id: p.id_computadora || '',
+                  fecha_inicio: p.fecha_inicio || null,
+                  fecha_fin: p.fecha_fin || null,
+                  fecha_retorno: p.fecha_retorno || '',
+                  aprobado: (p.aprobado === true) ? true : (p.aprobado === false) ? false : null,
+                  evidencia_condicion: p.evidencia_condicion || null,
+                  evidencia_retorno: p.evidencia_retorno || null
+                };
+            });
+          } else {
+            state.prestamos = [];
+          }
+        }
+
+        // equipos (todos los campos que devuelva el endpoint)
+        if(equiposRes && equiposRes.ok){
+          const ed = await equiposRes.json();
+          if(ed && ed.success && Array.isArray(ed.equipos)){
+            state.equipos = ed.equipos;
+          } else {
+            state.equipos = [];
+          }
+        }
+
+      }catch(_){
+        // fallback sample
+        state.prestamos = [
+          {id:1, empleado:'Juan Perez', pc_id:'PC-001', fecha_inicio:'2026-04-01', fecha_fin:'2026-04-10', fecha_retorno:'', disponible:true}
+        ];
+        state.equipos = [
+          { id: 1, nombre_qr: 'PMD-008', memoria_ram: '32 GB', memoria_ssd: '512 GB', procesador: 'i7 7300', touch: 'No', bateria_condicion: '90%', cargador: null, estatus: 'Disponible', prestable: 'Sí', notas: null }
+        ];
+      }
+      state.page = 1;
+      renderTable();
+    }
+
+    function matchesFilter(item, q){ if(!q) return true; try{ const text = Object.values(item||{}).map(v=>v==null?'':String(v)).join(' ').toLowerCase(); return text.includes(q); }catch(e){ return false; } }
+
+    function formatDate(val){
+      if(!val) return '-';
+      const d = new Date(val);
+      if(isNaN(d)) return escapeHtml(String(val));
+      return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    }
+
+    function toInputDate(val){
+      if(!val) return '';
+      const d = new Date(val);
+      if(isNaN(d)) return '';
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function headerFriendly(key){ return String(key).replaceAll('_',' ').replace(/\b\w/g, c=>c.toUpperCase()); }
+
+    function statusPill(text){
+      const t = String(text == null ? '' : text).trim();
+      const norm = t.toLowerCase();
+      const esc = escapeHtml(t || '-');
+      if(norm === 'no disponible') return `<span class="status-pill status-unavailable">${esc}</span>`;
+      if(norm === 'disponible') return `<span class="status-pill status-available">${esc}</span>`;
+      return `<span class="status-pill status-other">${esc}</span>`;
+    }
+
+    // Parse size strings (e.g. "32 GB", "1 TB", "512MB") into GB (number)
+    function parseSizeToGB(raw){
+      if(raw == null) return NaN;
+      if(typeof raw === 'number') return Number(raw);
+      let s = String(raw).trim().toUpperCase();
+      if(!s) return NaN;
+      // remove commas
+      s = s.replace(/,/g,'');
+      const m = s.match(/([0-9]+(?:\.[0-9]+)?)\s*(TB|T|GB|G|MB|M|KB|K)?/i);
+      if(!m) return NaN;
+      const num = parseFloat(m[1]);
+      const unit = (m[2] || 'GB').toUpperCase();
+      if(unit === 'TB' || unit === 'T') return num * 1024;
+      if(unit === 'GB' || unit === 'G') return num;
+      if(unit === 'MB' || unit === 'M') return num / 1024;
+      if(unit === 'KB' || unit === 'K') return num / (1024*1024);
+      return num;
+    }
+
+    function formatSizeGB(gb){
+      if(isNaN(gb)) return '-';
+      if(gb >= 1024) return (gb/1024 % 1 === 0 ? (gb/1024) : (+(gb/1024).toFixed(2))) + ' TB';
+      return (gb % 1 === 0 ? gb : +gb.toFixed(2)) + ' GB';
+    }
+
+    // RAM pill: thresholds chosen so 2GB => red, 32GB => green (discrete steps, no gradient)
+    function memoryPillRAM(raw){
+      const gb = parseSizeToGB(raw);
+      let cls = 'mem-red';
+      if(isNaN(gb)) { cls = 'mem-yellow'; }
+      else if(gb <= 2) cls = 'mem-red';
+      else if(gb <= 4) cls = 'mem-orange';
+      else if(gb <= 8) cls = 'mem-yellow';
+      else if(gb <= 16) cls = 'mem-lightgreen';
+      else cls = 'mem-green';
+      const label = (typeof raw === 'string' && raw.trim()) ? escapeHtml(raw) : escapeHtml(formatSizeGB(gb));
+      return `<td><span class="mem-pill ${cls}">${label}</span></td>`;
+    }
+
+    // Storage pill: red for typical small drives (<=125 GB), green at ~2 TB and above
+    function storagePill(raw){
+      const gb = parseSizeToGB(raw);
+      let cls = 'mem-red';
+      if(isNaN(gb)) { cls = 'mem-yellow'; }
+      else if(gb <= 125) cls = 'mem-red';
+      else if(gb <= 256) cls = 'mem-orange';
+      else if(gb <= 512) cls = 'mem-yellow';
+      else if(gb <= 1024) cls = 'mem-lightgreen';
+      else if(gb < 2048) cls = 'mem-lightgreen';
+      else cls = 'mem-green';
+      const label = (typeof raw === 'string' && raw.trim()) ? escapeHtml(raw) : escapeHtml(formatSizeGB(gb));
+      return `<td><span class="mem-pill ${cls}">${label}</span></td>`;
+    }
+
+    function renderTable(){
+      // Ensure the "Nuevo Equipo" button matches the current view
+      try{
+        const __addBtn = document.getElementById('addEquipoBtn');
+        if(__addBtn) __addBtn.style.display = (state.view === 'equipo') ? 'inline-block' : 'none';
+      }catch(e){}
+      const tbody = document.getElementById('loanTableBody');
+      const head = document.getElementById('loanTableHead');
+
+      let items = [];
+      if(state.view === 'equipo') items = state.equipos || [];
+      else items = state.prestamos || [];
+      let equipoCols = null;
+
+      // build header
+      if(state.view === 'equipo'){
+        const first = items[0] || {};
+        const EQUIPO_HIDDEN_COLS = ['evidencia_condicion','evidencia_retorno','evidencia_estado'];
+        let cols = Object.keys(first).filter(c => !EQUIPO_HIDDEN_COLS.includes(c));
+        // Ensure a `tipo` column exists (preferably between `cargador` and `estatus`)
+        if(!cols.includes('tipo')){
+          const idxC = cols.indexOf('cargador');
+          const idxE = cols.indexOf('estatus');
+          if(idxC !== -1 && idxE !== -1 && idxC < idxE){
+            cols.splice(idxE, 0, 'tipo');
+          } else if(idxE !== -1){
+            cols.splice(idxE, 0, 'tipo');
+          } else {
+            cols.push('tipo');
+          }
+        }
+        // Ensure a `prestable` column exists to the right of `estatus`
+        if(!cols.includes('prestable')){
+          const idxE2 = cols.indexOf('estatus');
+          if(idxE2 !== -1){
+            cols.splice(idxE2 + 1, 0, 'prestable');
+          } else {
+            cols.push('prestable');
+          }
+        }
+        equipoCols = cols;
+        if(cols.length === 0){
+          head.innerHTML = `<tr><th>Equipo</th></tr>`;
+        } else {
+          head.innerHTML = `<tr>` + cols.map(c=>{
+            const display = (c === 'memoria_ssd') ? 'Almacenamiento' : (c === 'prestable' ? 'PRESTABLE' : headerFriendly(c));
+            return `<th>${escapeHtml(display)}</th>`;
+          }).join('') + `</tr>`;
+        }
+      } else {
+        head.innerHTML = `<tr>
+          <th>Empleado</th>
+          <th>ID PC</th>
+          <th>Fecha de Inicio</th>
+          <th>Fecha de Fin</th>
+          <th>Fecha de Retorno</th>
+          <th>Evidencia de Condiciones</th>
+          <th>Evidencia de Retorno</th>
+          <th>Vigencia</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>`;
+      }
+
+      const filtered = items.filter(i => matchesFilter(i, state.filter));
+      const total = filtered.length;
+      const per = state.perPage || 10;
+      const totalPages = Math.max(1, Math.ceil(total/per));
+      if(state.page > totalPages) state.page = totalPages;
+      const start = (state.page-1)*per;
+      const pageItems = filtered.slice(start, start+per);
+      tbody.innerHTML = '';
+      if(pageItems.length === 0){
+        const colspan = (state.view === 'equipo') ? (Object.keys(items[0]||{}).length || 1) : 10;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" class="loan-empty">No hay equipos que coincidan</td></tr>`;
+      } else {
+        pageItems.forEach(it=>{
+          const tr = document.createElement('tr');
+          if(state.view === 'equipo'){
+            tr.classList.add('equipo-row');
+            tr.dataset.equipoId = String(it.id ?? '');
+            const cols = equipoCols || Object.keys(it);
+            tr.innerHTML = cols.map(c=>{
+              let v = it[c];
+              if(v === null || v === undefined) v = '-';
+              else if(typeof v === 'boolean') v = v ? 'Sí' : 'No';
+              else v = String(v);
+              const key = String(c).toLowerCase();
+              if(key === 'estatus'){
+                return `<td>${statusPill(v)}</td>`;
+              }
+              if(key === 'prestable'){
+                // render Sí/No for prestable
+                const pv = String(v == null ? '' : v).toLowerCase();
+                if(pv === 'sí' || pv === 'si' || pv === 'true') return `<td><span class="status-pill status-available">Sí</span></td>`;
+                if(pv === 'no' || pv === 'false') return `<td><span class="status-pill status-unavailable">No</span></td>`;
+                return `<td>${escapeHtml(String(v))}</td>`;
+              }
+              if(key === 'memoria_ram'){
+                return memoryPillRAM(v);
+              }
+              if(key === 'memoria_ssd' || key === 'almacenamiento'){
+                return storagePill(v);
+              }
+              return `<td>${escapeHtml(v)}</td>`;
+            }).join('');
+          } else {
+            const id = escapeHtml(String(it.id || it.pc_id || ''));
+            const empleado = escapeHtml(it.empleado || it.nombre || '-');
+            const pc = escapeHtml(String(it.pc_id ?? it.id ?? '-'));
+            const startDate = formatDate(it.fecha_inicio);
+            const endDate = formatDate(it.fecha_fin);
+            const returnVal = toInputDate(it.fecha_retorno);
+
+            // Vigencia: mensaje relativo a la fecha de fin (`fecha_fin`) respecto a hoy
+            let vigencia = '-';
+            if(it.fecha_fin){
+              const fin = new Date(it.fecha_fin);
+              if(!isNaN(fin)){
+                const today = new Date();
+                const finDate = new Date(fin.getFullYear(), fin.getMonth(), fin.getDate());
+                const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                const diff = Math.round((finDate - todayDate) / (1000 * 60 * 60 * 24));
+                if(diff > 2){
+                  vigencia = `Vence en ${diff} día${diff===1?'':'s'}`;
+                } else if(diff === 2){
+                  vigencia = `Vence en 2 días`;
+                } else if(diff === 1){
+                  vigencia = `Vence mañana`;
+                } else if(diff === 0){
+                  vigencia = `Vence hoy`;
+                } else if(diff === -1){
+                  vigencia = `Venció ayer`;
+                } else if(diff < -1){
+                  const ago = Math.abs(diff);
+                  vigencia = `Venció hace ${ago} día${ago===1?'':'s'}`;
+                }
+              }
+            }
+
+            const aprobado = it.aprobado;
+            const estadoLabel = (aprobado === true) ? 'Aprobado' : (aprobado === false) ? 'Rechazado' : 'Pendiente';
+            const estadoColor = (aprobado === true) ? '#16a34a' : (aprobado === false) ? '#b91c1c' : '#92400e';
+            // Botones solo visibles mientras esté Pendiente (aprobado === null/undefined)
+            const showBtns = (aprobado === true || aprobado === false) ? 'style="display:none"' : '';
+            const evCondUrl   = it.evidencia_condicion || '';
+            const evRetornoUrl = it.evidencia_retorno  || '';
+            const evCondThumb   = evCondUrl   ? `<a href="${escapeHtml(evCondUrl)}"   target="_blank"><img src="${escapeHtml(evCondUrl)}"   class="evid-thumb"></a>` : '';
+            const evRetornoThumb= evRetornoUrl? `<a href="${escapeHtml(evRetornoUrl)}" target="_blank"><img src="${escapeHtml(evRetornoUrl)}" class="evid-thumb"></a>` : '';
+            tr.innerHTML = `
+              <td>${empleado}</td>
+              <td>${pc}</td>
+              <td>${escapeHtml(startDate)}</td>
+              <td>${escapeHtml(endDate)}</td>
+              <td><input type="date" class="return-date" data-id="${id}" value="${escapeHtml(returnVal)}"></td>
+              <td class="evid-cell">
+                ${evCondThumb}
+                <button class="evid-upload-btn" data-id="${id}" data-tipo="condicion" title="Subir foto de condiciones">
+                  <i class="fas fa-camera"></i>${evCondUrl ? '' : ' Subir foto'}
+                </button>
+              </td>
+              <td class="evid-cell">
+                ${evRetornoThumb}
+                <button class="evid-upload-btn" data-id="${id}" data-tipo="retorno" title="Subir foto de retorno">
+                  <i class="fas fa-camera"></i>${evRetornoUrl ? '' : ' Subir foto'}
+                </button>
+              </td>
+              <td>${escapeHtml(String(vigencia))}</td>
+              <td><span style="color:${estadoColor};font-weight:600">${escapeHtml(estadoLabel)}</span></td>
+              <td class="loan-actions">
+                <button class="action-accept" data-id="${id}" ${showBtns} title="Aprobar préstamo">✔</button>
+                <button class="action-reject" data-id="${id}" ${showBtns} title="Rechazar y liberar equipo">✖</button>
+              </td>
+            `;
+          }
+          tbody.appendChild(tr);
+        });
+      }
+      const loanInfoEl = document.getElementById('loanInfo');
+      if(loanInfoEl) loanInfoEl.textContent = `Mostrando ${Math.min(total, per)} de ${total} equipos`;
+      const loanPageInfoEl = document.getElementById('loanPageInfo');
+      if(loanPageInfoEl) loanPageInfoEl.textContent = `Página ${state.page} de ${totalPages}`;
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    // Sistema de confirm/alerta propio (reemplaza ventanas nativas)
+    (function(){
+      let _confirmEl = null;
+      let _toastEl = null;
+
+      function ensureConfirm(){
+        if(_confirmEl) return _confirmEl;
+        _confirmEl = document.createElement('div');
+        _confirmEl.id = 'systemConfirmModal';
+        _confirmEl.style.cssText = 'position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;';
+        _confirmEl.innerHTML = `
+          <div style="background:rgba(0,0,0,0.5);position:absolute;inset:0;"></div>
+          <div style="background:#fff;border-radius:8px;padding:18px;min-width:320px;max-width:90%;box-shadow:0 8px 24px rgba(0,0,0,0.25);position:relative;z-index:1;font-family:inherit;color:#111;">
+            <div id="systemConfirmMsg" style="margin-bottom:12px"></div>
+            <div style="text-align:right">
+              <button id="systemConfirmCancel" style="margin-right:8px;padding:6px 12px;border-radius:6px;border:1px solid #d1d5db;background:#fff;">Cancelar</button>
+              <button id="systemConfirmOk" style="padding:6px 12px;border-radius:6px;border:0;background:#0ea5a4;color:#fff;">Aceptar</button>
+            </div>
+          </div>`;
+        document.body.appendChild(_confirmEl);
+        return _confirmEl;
+      }
+
+      function ensureToast(){
+        if(_toastEl) return _toastEl;
+        _toastEl = document.createElement('div');
+        _toastEl.id = 'systemToastContainer';
+        _toastEl.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none;';
+        document.body.appendChild(_toastEl);
+        return _toastEl;
+      }
+
+      window.showSystemConfirm = function(message){
+        return new Promise(resolve => {
+          const el = ensureConfirm();
+          const msg = el.querySelector('#systemConfirmMsg');
+          msg.textContent = message;
+          el.style.display = 'flex';
+          const ok = el.querySelector('#systemConfirmOk');
+          const cancel = el.querySelector('#systemConfirmCancel');
+
+          function cleanup(result){
+            el.style.display = 'none';
+            ok.removeEventListener('click', onOk);
+            cancel.removeEventListener('click', onCancel);
+            document.removeEventListener('keydown', onKey);
+            resolve(result);
+          }
+          function onOk(){ cleanup(true); }
+          function onCancel(){ cleanup(false); }
+          function onKey(e){ if(e.key === 'Escape') cleanup(false); if(e.key === 'Enter') cleanup(true); }
+
+          ok.addEventListener('click', onOk);
+          cancel.addEventListener('click', onCancel);
+          document.addEventListener('keydown', onKey);
+        });
+      };
+
+      window.showSystemAlert = function(message, type){
+        const container = ensureToast();
+        const el = document.createElement('div');
+        el.style.cssText = 'background:#111;color:#fff;padding:10px 14px;border-radius:8px;min-width:200px;max-width:320px;box-shadow:0 6px 18px rgba(0,0,0,0.2);pointer-events:auto;opacity:0;transform:translateY(8px);transition:opacity .16s,transform .16s;font-family:inherit;';
+        if(type === 'error'){ el.style.background = '#b91c1c'; }
+        else if(type === 'success'){ el.style.background = '#16a34a'; }
+        el.textContent = message;
+        container.appendChild(el);
+        requestAnimationFrame(()=>{ el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+        setTimeout(()=>{ el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; setTimeout(()=>{ try{ container.removeChild(el); }catch(_){} },200); }, 3500);
+      };
+    })();
+
+    // Handlers: return date input and accept/reject actions
+    // When return-date input changes, persist to server for prestamos view
+    document.getElementById('loanTableBody').addEventListener('change', async function(e){
+      const input = e.target.closest('input.return-date'); if(!input) return;
+      const id = input.dataset.id;
+      const val = input.value || null; // YYYY-MM-DD or empty
+      // find in prestamos
+      const item = (state.prestamos||[]).find(x=>String(x.id)===String(id) || String(x.id_computadora)===String(id));
+      if(item) item.fecha_retorno = val || null;
+      try{
+        const res = await fetch(`/api/prestamos/${encodeURIComponent(id)}/retorno`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ fecha_retorno: val }) });
+        if(!res.ok) throw new Error('nope');
+      }catch(err){
+        console.warn('No se pudo guardar fecha_retorno localmente:', err);
+      }
+    });
+
+    // Handler para subir fotos de evidencia
+    document.getElementById('loanTableBody').addEventListener('click', function(e){
+      const uploadBtn = e.target.closest('button.evid-upload-btn');
+      if(!uploadBtn) return;
+      e.stopPropagation();
+      const id   = uploadBtn.dataset.id;
+      const tipo = uploadBtn.dataset.tipo; // 'condicion' o 'retorno'
+      const fileInput = document.createElement('input');
+      fileInput.type   = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      document.body.appendChild(fileInput);
+      fileInput.addEventListener('change', async function(){
+        const file = fileInput.files[0];
+        document.body.removeChild(fileInput);
+        if(!file) return;
+        const originalHtml = uploadBtn.innerHTML;
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        const fd = new FormData();
+        fd.append('foto', file);
+        fd.append('tipo', tipo);
+        try {
+          const res  = await fetch(`/api/prestamos/${encodeURIComponent(id)}/evidencia`, { method:'POST', credentials:'include', body: fd });
+          const data = await res.json().catch(()=>({}));
+          if(!res.ok || !data.success){
+            alert('Error al subir foto: ' + (data.error || res.statusText));
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = originalHtml;
+            return;
+          }
+          // Actualizar estado local
+          const item = (state.prestamos||[]).find(x=>String(x.id)===String(id));
+          if(item){
+            if(tipo === 'condicion') item.evidencia_condicion = data.url;
+            else                     item.evidencia_retorno   = data.url;
+          }
+          renderTable();
+        } catch(err){
+          alert('Error de red al subir foto: ' + err.message);
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = originalHtml;
+        }
+      });
+      fileInput.click();
+    });
+
+    document.getElementById('loanTableBody').addEventListener('click', async function(e){
+      const accept = e.target.closest('button.action-accept');
+      const reject = e.target.closest('button.action-reject');
+      if(!accept && !reject) return;
+      const btn = accept || reject;
+      const id = btn.dataset.id;
+      const item = (state.prestamos||[]).find(x=>String(x.id)===String(id) || String(x.id_computadora)===String(id));
+      if(!item) return;
+      if(accept){
+        const ok = await window.showSystemConfirm('¿Aprobar el préstamo de ' + (item.empleado||id) + '?');
+        if(!ok) return;
+        btn.disabled = true;
+        try{
+          const res = await fetch(`/api/prestamos/${encodeURIComponent(id)}/accept`, { method:'POST', headers:{'Content-Type':'application/json'} });
+          const j = await res.json().catch(()=>({}));
+          if(res.ok && j && j.success && j.prestamo){
+            item.aprobado = true;
+            window.showSystemAlert('Préstamo aprobado', 'success');
+          } else {
+            window.showSystemAlert('Error al aprobar: ' + (j && j.error ? j.error : res.status), 'error');
+            btn.disabled = false;
+          }
+        }catch(err){
+          window.showSystemAlert('Error de red al aprobar.', 'error');
+          btn.disabled = false;
+        }
+      } else {
+        const ok = await window.showSystemConfirm('¿Rechazar solicitud de ' + (item.empleado||id) + '? El equipo quedará disponible nuevamente.');
+        if(!ok) return;
+        btn.disabled = true;
+        try{
+          const res = await fetch(`/api/prestamos/${encodeURIComponent(id)}/cancel`, { method:'POST', headers:{'Content-Type':'application/json'} });
+          const j = await res.json().catch(()=>({}));
+          if(res.ok && j && j.success){
+            item.aprobado = false;
+            window.showSystemAlert('Solicitud rechazada', 'success');
+          } else {
+            window.showSystemAlert('Error al rechazar: ' + (j && j.error ? j.error : res.status), 'error');
+            btn.disabled = false;
+          }
+        }catch(err){
+          window.showSystemAlert('Error de red al rechazar.', 'error');
+          btn.disabled = false;
+        }
+      }
+      renderTable();
+    });
+
+    // Click en fila de equipo → abrir modal de edición
+    document.getElementById('loanTableBody').addEventListener('click', function(e){
+      if(state.view !== 'equipo') return;
+      const tr = e.target.closest('tr.equipo-row');
+      if(!tr) return;
+      const id = tr.dataset.equipoId;
+      const item = (state.equipos||[]).find(x=>String(x.id)===String(id));
+      if(item && typeof openEditEquipoModal === 'function') openEditEquipoModal(item);
+    });
+
+    // Auto-refresh silencioso cada 5 segundos (sin parpadeo)
+    let _lastSnapshot = '';
+    async function silentRefresh(){
+      try {
+        const [prestamosRes, equiposRes] = await Promise.all([
+          fetch('/api/prestamos', { credentials: 'include' }),
+          fetch('/api/equipos-prestamo?all=true', { credentials: 'include' })
+        ]);
+        if(!prestamosRes.ok || !equiposRes.ok) return;
+        const [pd, ed] = await Promise.all([prestamosRes.json(), equiposRes.json()]);
+
+        const newPrestamos = (pd && pd.success && Array.isArray(pd.prestamos))
+          ? pd.prestamos.map(p => {
+              // Preservar evidencias locales si la API aún no las devuelve
+              const existing = (state.prestamos||[]).find(x=>String(x.id)===String(p.id));
+              return {
+                id: p.id,
+                empleado: p.nombre_usuario || p.id_usuario || '',
+                pc_id: p.id_computadora || '',
+                fecha_inicio: p.fecha_inicio || null,
+                fecha_fin: p.fecha_fin || null,
+                fecha_retorno: p.fecha_retorno || '',
+                aprobado: (p.aprobado === true) ? true : (p.aprobado === false) ? false : null,
+                evidencia_condicion: p.evidencia_condicion || (existing && existing.evidencia_condicion) || null,
+                evidencia_retorno:   p.evidencia_retorno   || (existing && existing.evidencia_retorno)   || null
+              };
+            })
+          : state.prestamos;
+
+        const newEquipos = (ed && ed.success && Array.isArray(ed.equipos))
+          ? ed.equipos
+          : state.equipos;
+
+        const snapshot = JSON.stringify({ p: newPrestamos, e: newEquipos });
+        if(snapshot === _lastSnapshot) return; // sin cambios, no re-renderizar
+        _lastSnapshot = snapshot;
+
+        state.prestamos = newPrestamos;
+        state.equipos   = newEquipos;
+        renderTable();
+      } catch(_) { /* ignorar errores de red en background */ }
+    }
+
+    // init
+    loadEquipos().then(() => {
+      _lastSnapshot = JSON.stringify({ p: state.prestamos, e: state.equipos });
+    });
+    setInterval(silentRefresh, 5000);
+
+    // ══════════════════════════════════════════════════
+    // PESTAÑA SOFTWARE
+    // ══════════════════════════════════════════════════
+    const swState = { items: [], page: 1, perPage: 10, filter: '', pendingDeleteId: null };
+
+    // Toggle contraseña visible/oculta en el modal
+    document.getElementById('swTogglePass').addEventListener('click', function(){
+      const inp = document.getElementById('swContrasena');
+      const esTexto = inp.type === 'text';
+      inp.type = esTexto ? 'password' : 'text';
+      this.querySelector('i').className = esTexto ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+
+    // Tasa de cambio MXN→USD (se cachea por sesión, pasa por el servidor para evitar CORS)
+    let _swTasaUSD = null;
+    let _swTasaFecha = '';
+    async function obtenerTasaMXN(){
+      if(_swTasaUSD) return _swTasaUSD;
+      try {
+        const r = await fetch('/api/tipo-cambio/mxn-usd', { credentials:'include' });
+        const d = await r.json();
+        if(d.success && d.rate){ _swTasaUSD = d.rate; _swTasaFecha = d.date || ''; }
+      } catch(_){ _swTasaUSD = null; }
+      return _swTasaUSD;
+    }
+
+    function fmtMXN(n){ return `$${n.toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})} MXN`; }
+    function fmtUSD(n){ return `$${n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})} USD`; }
+
+    async function actualizarTotalSW(){
+      const hoy = new Date(); hoy.setHours(0,0,0,0);
+      let mensualMXN = 0, anualMXN = 0, totalMXN = 0;
+
+      swState.items.forEach(it => {
+        const precio = it.precio != null ? Number(it.precio) : 0;
+        // Excluir vencidas
+        if(it.vigencia){
+          const s = String(it.vigencia).substring(0,10);
+          const [y,m,d] = s.split('-').map(Number);
+          if(new Date(y,m-1,d) < hoy) return;
+        }
+        totalMXN += precio;
+        const fact = (it.facturacion || '').toLowerCase();
+        if(fact === 'mensual'){
+          mensualMXN += precio;
+          anualMXN   += precio * 12;
+        } else if(fact === 'anual'){
+          mensualMXN += precio / 12;
+          anualMXN   += precio;
+        }
+      });
+
+      document.getElementById('swMensualMXN').textContent = fmtMXN(mensualMXN);
+      document.getElementById('swAnualMXN').textContent   = fmtMXN(anualMXN);
+      document.getElementById('swTotalMXN').textContent   = fmtMXN(totalMXN);
+      ['swMensualUSD','swAnualUSD','swTotalUSD'].forEach(id => document.getElementById(id).textContent = '…');
+
+      const tasa   = await obtenerTasaMXN();
+      const tasaEl = document.getElementById('swTasaInfo');
+      if(tasa){
+        document.getElementById('swMensualUSD').textContent = fmtUSD(mensualMXN * tasa);
+        document.getElementById('swAnualUSD').textContent   = fmtUSD(anualMXN   * tasa);
+        document.getElementById('swTotalUSD').textContent   = fmtUSD(totalMXN   * tasa);
+        if(tasaEl) tasaEl.textContent = `1 MXN = ${tasa.toFixed(5)} USD · frankfurter.app · ${_swTasaFecha}`;
+      } else {
+        ['swMensualUSD','swAnualUSD','swTotalUSD'].forEach(id => document.getElementById(id).textContent = '— USD');
+        if(tasaEl) tasaEl.textContent = 'Tipo de cambio no disponible';
+      }
+    }
+
+    async function loadSoftware(){
+      try {
+        const r = await fetch('/api/software-credenciales', { credentials:'include' });
+        const d = await r.json().catch(()=>({}));
+        swState.items = d.success && Array.isArray(d.items) ? d.items : [];
+      } catch(_){ swState.items = []; }
+      swState.page = 1;
+      renderSoftware();
+      actualizarTotalSW();
+    }
+
+    function escSW(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function renderSoftware(){
+      const tbody = document.getElementById('swTableBody');
+      const q = swState.filter.toLowerCase();
+      const filtered = swState.items.filter(it =>
+        [it.pagina, it.usuario, it.notas].some(f => String(f||'').toLowerCase().includes(q))
+      );
+      const per = swState.perPage;
+      const totalPages = Math.max(1, Math.ceil(filtered.length / per));
+      if(swState.page > totalPages) swState.page = totalPages;
+      const slice = filtered.slice((swState.page-1)*per, swState.page*per);
+      document.getElementById('swPageInfo').textContent = `Página ${swState.page} de ${totalPages}`;
+      document.getElementById('swPrev').disabled = swState.page <= 1;
+      document.getElementById('swNext').disabled = swState.page >= totalPages;
+
+      if(slice.length === 0){
+        tbody.innerHTML = '<tr><td colspan="11" class="loan-empty">No hay registros</td></tr>'; return;
+      }
+      tbody.innerHTML = '';
+      slice.forEach(it => {
+        const tr = document.createElement('tr');
+        const passDisplay = it.contrasena
+          ? `<span class="sw-pass-hidden" title="Clic para revelar" style="cursor:pointer" data-real="${escSW(it.contrasena)}" onclick="this.textContent=this.textContent==='${escSW(it.contrasena)}'?'••••••••':this.dataset.real;this.title=this.title==='Clic para ocultar'?'Clic para revelar':'Clic para ocultar'">••••••••</span>`
+          : '<span style="color:#d1d5db">—</span>';
+        const consolaBtn = it.consola
+          ? `<a class="sw-link-btn" href="${escSW(it.consola)}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Abrir link</a>`
+          : '<span class="sw-link-none">Sin link</span>';
+
+        // Parsea YYYY-MM-DD sin problemas de timezone
+        function parseFechaSW(str){
+          if(!str) return null;
+          const s = String(str).substring(0,10);
+          const [y,m,d] = s.split('-').map(Number);
+          if(!y||!m||!d) return null;
+          return new Date(y, m-1, d);
+        }
+
+        // Vigencia: días restantes con semáforo
+        let vigDisplay = '—';
+        const vigDate = parseFechaSW(it.vigencia);
+        if(vigDate){
+          const hoy  = new Date(); hoy.setHours(0,0,0,0);
+          const dias = Math.round((vigDate - hoy) / 86400000);
+          let bg, color, texto;
+          if(dias < 0){        bg='#fee2e2'; color='#b91c1c'; texto=`Vencida hace ${Math.abs(dias)} día${Math.abs(dias)===1?'':'s'}`; }
+          else if(dias === 0){ bg='#fef3c7'; color='#92400e'; texto='Vence hoy'; }
+          else if(dias <= 30){ bg='#fef3c7'; color='#92400e'; texto=`${dias} día${dias===1?'':'s'} restante${dias===1?'':'s'}`; }
+          else if(dias <= 90){ bg='#dcfce7'; color='#16a34a'; texto=`${dias} días`; }
+          else {               bg='#f0fdf4'; color='#15803d'; texto=`${dias} días`; }
+          vigDisplay = `<span style="background:${bg};color:${color};padding:3px 10px;border-radius:30px;font-size:11px;font-weight:700;white-space:nowrap">${texto}</span>`;
+        }
+
+        const precioDisplay = it.precio != null
+          ? `$${Number(it.precio).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2})}`
+          : '—';
+        const fcDate = parseFechaSW(it.fecha_compra);
+        const fechaCompraDisplay = fcDate
+          ? fcDate.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'})
+          : '—';
+
+        tr.innerHTML = `
+          <td><strong>${escSW(it.pagina)}</strong></td>
+          <td style="font-size:13px">${escSW(it.usuario||'—')}</td>
+          <td>${passDisplay}</td>
+          <td>${consolaBtn}</td>
+          <td style="font-size:12px">${escSW(it.tipo||'—')}</td>
+          <td style="font-size:12px">${it.facturacion ? `<span style="background:#dbeafe;color:#1d4ed8;padding:2px 9px;border-radius:30px;font-weight:700;font-size:11px">${escSW(it.facturacion)}</span>` : '—'}</td>
+          <td style="font-size:12px;white-space:nowrap">${fechaCompraDisplay}</td>
+          <td style="white-space:nowrap">${vigDisplay}</td>
+          <td style="font-size:12px;white-space:nowrap">${precioDisplay}</td>
+          <td style="font-size:12px;color:#6b7280;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${escSW(it.notas||'')}">${escSW(it.notas||'—')}</td>
+          <td style="white-space:nowrap">
+            <button class="sw-action-btn sw-edit-btn" data-id="${it.id}" title="Editar"><i class="fas fa-pen"></i></button>
+            <button class="sw-action-btn sw-delete-btn" data-id="${it.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+      // botones editar / eliminar
+      tbody.querySelectorAll('.sw-edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const it = swState.items.find(x => String(x.id) === btn.dataset.id); if(!it) return;
+          document.getElementById('swModalTitle').textContent = 'Editar software';
+          document.getElementById('swId').value            = it.id;
+          document.getElementById('swPagina').value        = it.pagina || '';
+          document.getElementById('swUsuario').value       = it.usuario || '';
+          document.getElementById('swContrasena').value    = it.contrasena || '';
+          document.getElementById('swContrasena').type     = 'password';
+          document.getElementById('swTogglePass').querySelector('i').className = 'fas fa-eye';
+          document.getElementById('swConsola').value       = it.consola || '';
+          document.getElementById('swTipo').value          = it.tipo || '';
+          document.getElementById('swFacturacion').value   = it.facturacion || '';
+          document.getElementById('swFechaCompra').value   = it.fecha_compra ? String(it.fecha_compra).substring(0,10) : '';
+          document.getElementById('swPrecio').value        = it.precio != null ? it.precio : '';
+          document.getElementById('swNotas').value         = it.notas || '';
+          document.getElementById('swModal').style.display = 'flex';
+        });
+      });
+      tbody.querySelectorAll('.sw-delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const it = swState.items.find(x => String(x.id) === btn.dataset.id); if(!it) return;
+          swState.pendingDeleteId = it.id;
+          document.getElementById('swDeleteNombre').textContent = `"${it.pagina}"`;
+          document.getElementById('swDeleteModal').style.display = 'flex';
+        });
+      });
+    }
+
+    // Paginación software
+    document.getElementById('swPrev').addEventListener('click', () => { swState.page--; renderSoftware(); });
+    document.getElementById('swNext').addEventListener('click', () => { swState.page++; renderSoftware(); });
+    document.getElementById('swRowsPerPage').addEventListener('change', function(){ swState.perPage = Number(this.value); swState.page = 1; renderSoftware(); });
+
+    // Búsqueda en loanSearch también filtra software cuando estamos en esa pestaña
+    document.getElementById('loanSearch').addEventListener('input', function(){
+      if(state.view === 'software'){ swState.filter = this.value; swState.page = 1; renderSoftware(); }
+    });
+
+    // Botón "Nuevo Software"
+    document.getElementById('addSoftwareBtn').addEventListener('click', () => {
+      document.getElementById('swModalTitle').textContent = 'Nuevo software';
+      document.getElementById('swId').value = '';
+      document.getElementById('swForm').reset();
+      document.getElementById('swContrasena').type = 'password';
+      document.getElementById('swTogglePass').querySelector('i').className = 'fas fa-eye';
+      document.getElementById('swModal').style.display = 'flex';
+    });
+
+    // Cerrar modales
+    document.getElementById('swModalCancelar').addEventListener('click', () => { document.getElementById('swModal').style.display='none'; });
+    document.getElementById('swDeleteCancelar').addEventListener('click', () => { document.getElementById('swDeleteModal').style.display='none'; swState.pendingDeleteId=null; });
+    document.getElementById('swModal').addEventListener('click', e => { if(e.target===document.getElementById('swModal')) document.getElementById('swModal').style.display='none'; });
+    document.getElementById('swDeleteModal').addEventListener('click', e => { if(e.target===document.getElementById('swDeleteModal')){ document.getElementById('swDeleteModal').style.display='none'; swState.pendingDeleteId=null; } });
+
+    // Submit del form
+    document.getElementById('swForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const id       = document.getElementById('swId').value;
+      const precio = document.getElementById('swPrecio').value;
+      const payload  = {
+        pagina:       document.getElementById('swPagina').value.trim(),
+        usuario:      document.getElementById('swUsuario').value.trim(),
+        contrasena:   document.getElementById('swContrasena').value,
+        consola:      document.getElementById('swConsola').value.trim(),
+        tipo:         document.getElementById('swTipo').value,
+        facturacion:  document.getElementById('swFacturacion').value,
+        fecha_compra: document.getElementById('swFechaCompra').value || null,
+        precio:       precio !== '' ? parseFloat(precio) : null,
+        notas:        document.getElementById('swNotas').value.trim()
+      };
+      const method = id ? 'PUT' : 'POST';
+      const url    = id ? `/api/software-credenciales/${id}` : '/api/software-credenciales';
+      try {
+        const r = await fetch(url, { method, credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        const d = await r.json().catch(()=>({}));
+        if(!d.success) throw new Error(d.error || r.statusText);
+        document.getElementById('swModal').style.display = 'none';
+        await loadSoftware();
+      } catch(err){ alert('Error: ' + err.message); }
+    });
+
+    // Confirmar eliminar
+    document.getElementById('swDeleteConfirmar').addEventListener('click', async () => {
+      const id = swState.pendingDeleteId; if(!id) return;
+      try {
+        await fetch(`/api/software-credenciales/${id}`, { method:'DELETE', credentials:'include' });
+        document.getElementById('swDeleteModal').style.display = 'none';
+        swState.pendingDeleteId = null;
+        await loadSoftware();
+      } catch(err){ alert('Error al eliminar: ' + err.message); }
+    });
+
+    // Mostrar/ocultar sección software al cambiar pestaña
+    const _origLoanTabClick = [];
+    document.querySelectorAll('.loans-interface .tab-switch-button[data-loan-tab]').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const v = this.dataset.loanTab;
+        const isSwTab = (v === 'software');
+        const tableWrapper = document.querySelector('.loans-interface .table-wrapper');
+        const swSection    = document.getElementById('swSection');
+        const addSWBtn     = document.getElementById('addSoftwareBtn');
+        const addEqBtn     = document.getElementById('addEquipoBtn');
+        const searchBar    = document.getElementById('loanSearch');
+
+        if(isSwTab){
+          state.view = 'software';
+          tableWrapper.style.display = 'none';
+          swSection.style.display    = 'block';
+          addSWBtn.style.display     = 'inline-flex';
+          addEqBtn.style.display     = 'none';
+          swState.filter = searchBar.value;
+          loadSoftware();
+        } else {
+          tableWrapper.style.display = '';
+          swSection.style.display    = 'none';
+          addSWBtn.style.display     = 'none';
+        }
+      });
+    });
+  </script>
+  <style>
+    .input-modal-nuevo-equipo{
+      width: 100%;
+      height: 36px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      border: 1px solid #e6eef8;
+      background:#fbfeff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      transition: box-shadow 120ms, border-color 120ms, transform 120ms;
+      font-size:13px;
+      color:#071033;
+      box-sizing:border-box;
+    }
+    .input-modal-nuevo-equipo:focus { outline:none; border-color:#8fb8ff; box-shadow:0 6px 18px rgba(37,99,235,0.12); transform:translateY(-1px); }
+    .label-modal-nuevo-equipo{ width: 100%; font-weight:700; color:#071033; font-size:13px; display:block; }
+  </style>
+
+
+  <!-- Estilos Software -->
+  <style>
+    /* Botones redondos de acción (Software) */
+    .sw-action-btn { width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:13px;transition:transform .15s,box-shadow .15s; }
+    .sw-action-btn:hover { transform:scale(1.12);box-shadow:0 3px 10px rgba(0,0,0,0.15); }
+    .sw-edit-btn   { background:#dbeafe;color:#1d4ed8; }
+    .sw-delete-btn { background:#fee2e2;color:#b91c1c; }
+    /* Botón abrir link */
+    .sw-link-btn { display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:30px;border:none;background:linear-gradient(90deg,#2563eb,#1d4ed8);color:#fff;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;transition:opacity .15s; }
+    .sw-link-btn:hover { opacity:.85; }
+    .sw-link-none { color:#d1d5db;font-size:12px;font-style:italic; }
+    /* Contraseña oculta */
+    .sw-pass-hidden { letter-spacing:2px;color:#6b7280;font-size:15px; }
+  </style>
+
+  <!-- Estilos modal de edición y filas clickeables -->
+  <style>
+    .equipo-row { cursor: pointer; }
+    .equipo-row:hover td { background: #f0fdf4; }
+    #editEquipoModal { display:none;  position:fixed; inset:0; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:9999; backdrop-filter: blur(4px); }
+    #editEquipoModal .modal-content { background:linear-gradient(180deg,#e6ffef 0%, #b8f4d8 100%); color:#042014; border-radius:14px; padding:22px; max-width:760px; width:92%; box-shadow:0 20px 50px rgba(2,6,23,0.25); max-height:88vh; overflow:auto; position:relative; animation: popIn 180ms ease both; }
+    #editEquipoModal h3 { margin:0 0 10px; color:#071033; font-size:20px; letter-spacing:0.2px; text-align:center }
+    #editEquipoModal .form-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; align-items:start; margin:12px; }
+    #editEquipoModal label { display:block; color:#0f172a; font-weight:600; font-size:13px; width:100%; }
+    #editEquipoModal input[type="text"], #editEquipoModal input[type="number"], #editEquipoModal select { width:100%; padding:10px 12px; border:1px solid #e6e6e6; border-radius:8px; background:#fff; color:#0b1220; box-sizing:border-box; }
+    #editEquipoModal input[type="text"]:focus, #editEquipoModal input[type="number"]:focus, #editEquipoModal select:focus { outline:none; border-color:#8fb8ff; box-shadow:0 6px 18px rgba(37,99,235,0.12); transform:translateY(-1px); }
+    #editEquipoModal .modal-actions { display:flex; justify-content:space-between; gap:8px; margin-top:16px; }
+    #editEquipoModal .btn { padding:10px 14px; border-radius:30px; cursor:pointer; font-weight:800; font-size:16px; min-width:140px; }
+    #editEquipoModal .btn-muted { background:linear-gradient(90deg,#ef4444,#dc2626); border:none; color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+    #editEquipoModal .btn-muted:hover { transform:translateY(-1px); opacity:0.95 }
+    #editEquipoModal .btn-primary { background:linear-gradient(90deg,#16a34a,#059669); border:none; color:#fff; box-shadow:0 10px 30px rgba(16,185,129,0.12); }
+    #editEquipoModal .btn-primary:hover { transform:translateY(-2px); }
+    #editEquipoModal .checkbox-row { display:flex; align-items:center; gap:8px }
+  </style>
+
+  <!-- Modal de edición de equipo -->
+  <div id="editEquipoModal">
+    <div class="modal-content">
+      <h3>Editar equipo</h3>
+      <form id="editEquipoForm">
+        <input type="hidden" id="editEquipoId" name="equipo_id">
+        <div class="form-grid">
+          <label class="label-modal-nuevo-equipo" style="grid-column:1/3">NOMBRE QR<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="nombre_qr" required id="editNombreQr">
+          </label>
+          <label class="label-modal-nuevo-equipo">MEMORIA RAM<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="memoria_ram" placeholder="ej. 8 GB" id="editMemoriaRam">
+          </label>
+          <label class="label-modal-nuevo-equipo">ALMACENAMIENTO<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="almacenamiento" placeholder="ej. 256 GB" id="editAlmacenamiento">
+          </label>
+          <label class="label-modal-nuevo-equipo">PROCESADOR<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="procesador" placeholder="ej. i5-8250U" id="editProcesador">
+          </label>
+          <label class="label-modal-nuevo-equipo">BATERÍA CONDICIÓN (%)<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" type="number" name="bateria_condicion" min="0" max="100" placeholder="ej. 90" id="editBateria">
+          </label>
+          <label class="label-modal-nuevo-equipo">SISTEMA OPERATIVO<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="so" placeholder="ej. Windows 11, macOS" id="editSo">
+          </label>
+          <label class="label-modal-nuevo-equipo">MARCA<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="marca" placeholder="ej. Dell, HP, Lenovo" id="editMarca">
+          </label>
+          <div style="display:flex; width:100%; justify-content:space-between; gap:16px; grid-column:1/3; flex-wrap:wrap;">
+            <label>TIPO<br>
+              <select style="border-radius:30px; padding:6px 10px;" name="tipo" id="editTipo">
+                <option value="">-- Sin tipo --</option>
+                <option value="laptop">Laptop</option>
+                <option value="pc">PC</option>
+                <option value="monitor">Monitor</option>
+                <option value="teclado">Teclado</option>
+                <option value="mouse">Mouse</option>
+                <option value="impresora">Impresora</option>
+                <option value="tablet">Tablet</option>
+                <option value="usb">USB</option>
+                <option value="cargador">Cargador</option>
+                <option value="otro">Otro</option>
+              </select>
+            </label>
+            <label>ESTATUS<br>
+              <select style="border-radius:30px; padding:6px 10px;" name="estatus" id="editEstatus">
+                <option value="Disponible">Disponible</option>
+                <option value="No disponible">No disponible</option>
+                <option value="Mantenimiento">Mantenimiento</option>
+              </select>
+            </label>
+            <label>TOUCH<br>
+              <div class="checkbox-row"><input type="checkbox" name="touch" id="editTouch"><label for="editTouch" style="margin:0;font-weight:600">Tiene touch</label></div>
+            </label>
+            <label>CARGADOR<br>
+              <div class="checkbox-row"><input type="checkbox" name="cargador" id="editCargador"><label for="editCargador" style="margin:0;font-weight:600">Incluye cargador</label></div>
+            </label>
+            <label>PRESTABLE<br>
+              <div class="checkbox-row"><input type="checkbox" name="prestable" id="editPrestable"><label for="editPrestable" style="margin:0;font-weight:600">Es prestable</label></div>
+            </label>
+          </div>
+          <label style="grid-column:1/3">NOTAS<br>
+            <input class="input-modal-nuevo-equipo" style="border-radius:30px;" name="notas" placeholder="Notas adicionales" id="editNotas">
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelEditEquipo" class="btn btn-muted">Cancelar</button>
+          <button type="submit" id="saveEditEquipo" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal  = document.getElementById('editEquipoModal');
+      const form   = document.getElementById('editEquipoForm');
+      const cancelBtn = document.getElementById('cancelEditEquipo');
+
+      function closeEditModal(){
+        if(modal){ modal.style.display = 'none'; form && form.reset(); }
+      }
+
+      window.openEditEquipoModal = function(item){
+        if(!modal || !form) return;
+        document.getElementById('editEquipoId').value      = item.id ?? '';
+        document.getElementById('editNombreQr').value      = item.nombre_qr ?? '';
+        document.getElementById('editMemoriaRam').value    = item.memoria_ram ?? '';
+        document.getElementById('editAlmacenamiento').value = item.memoria_ssd ?? item.almacenamiento ?? '';
+        document.getElementById('editProcesador').value    = item.procesador ?? '';
+        document.getElementById('editBateria').value       = item.bateria_condicion ?? '';
+        document.getElementById('editSo').value            = item.so    ?? '';
+        document.getElementById('editMarca').value         = item.marca ?? '';
+        document.getElementById('editNotas').value         = item.notas ?? '';
+
+        const tipoSel = document.getElementById('editTipo');
+        tipoSel.value = (item.tipo ?? '').toLowerCase();
+        if(!tipoSel.value) tipoSel.value = '';
+
+        const estatusSel = document.getElementById('editEstatus');
+        estatusSel.value = item.estatus ?? 'Disponible';
+        if(!estatusSel.value) estatusSel.value = 'Disponible';
+
+        const trueVals = ['sí','si','true','1','yes'];
+        document.getElementById('editTouch').checked    = trueVals.includes(String(item.touch    ?? '').toLowerCase());
+        document.getElementById('editCargador').checked = trueVals.includes(String(item.cargador ?? '').toLowerCase());
+        document.getElementById('editPrestable').checked= trueVals.includes(String(item.prestable?? '').toLowerCase());
+
+        modal.style.display = 'flex';
+      };
+
+      if(cancelBtn) cancelBtn.addEventListener('click', closeEditModal);
+      if(modal) modal.addEventListener('click', function(e){ if(e.target === modal) closeEditModal(); });
+
+      if(form) form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        const saveBtn = document.getElementById('saveEditEquipo');
+        if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = 'Guardando...'; }
+
+        const id = document.getElementById('editEquipoId').value;
+        const fd = new FormData(form);
+        const payload = {
+          nombre_qr:         (fd.get('nombre_qr')||'').toString().trim(),
+          memoria_ram:       (fd.get('memoria_ram')||'').toString().trim() || null,
+          memoria_ssd:       (fd.get('almacenamiento')||'').toString().trim() || null,
+          procesador:        (fd.get('procesador')||'').toString().trim() || null,
+          touch:             fd.get('touch') ? 'Sí' : 'No',
+          bateria_condicion: (fd.get('bateria_condicion')||'').toString().trim() || null,
+          cargador:          fd.get('cargador') ? true : false,
+          prestable:         fd.get('prestable') ? true : false,
+          tipo:              (fd.get('tipo')||'').toString(),
+          estatus:           (fd.get('estatus')||'').toString(),
+          so:                (fd.get('so')||'').toString().trim() || null,
+          marca:             (fd.get('marca')||'').toString().trim() || null,
+          notas:             (fd.get('notas')||'').toString().trim() || null
+        };
+
+        try {
+          const res = await fetch(`/api/equipos-prestamo/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json().catch(()=>({}));
+          if(!res.ok || !data.success){
+            alert('Error al guardar: ' + (data.error || res.statusText));
+            return;
+          }
+          const idx = (typeof state !== 'undefined' && Array.isArray(state.equipos))
+            ? state.equipos.findIndex(x=>String(x.id)===String(id)) : -1;
+          if(idx !== -1){
+            if(data.equipo) state.equipos[idx] = data.equipo;
+            else Object.assign(state.equipos[idx], payload);
+          }
+          closeEditModal();
+          if(typeof renderTable === 'function') renderTable();
+        } catch(err) {
+          alert('Error de red al guardar: ' + err.message);
+        } finally {
+          if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = 'Guardar cambios'; }
+        }
+      });
+    })();
+  </script>
+
+  <!-- Modal & handlers for Nuevo Equipo -->
+  <div id="nuevoEquipoModal">
+    <div class="modal-content">
+      <h3 style = "display:flex; justify-content: center;">Agregar nuevo equipo</h3>
+      <form id="nuevoEquipoForm">
+        <div class="form-grid">
+          <label class = "label-modal-nuevo-equipo" style="grid-column:1/3">NOMBRE QR<br><input class = "input-modal-nuevo-equipo"style = "border-radius: 30px;" name="nombre_qr" required></label>
+          <label class = "label-modal-nuevo-equipo">MEMORIA RAM<br><input class = "input-modal-nuevo-equipo" style = "border-radius: 30px;" name="memoria_ram" placeholder="ej. 8 GB"></label>
+          <label class = "label-modal-nuevo-equipo">ALMACENAMIENTO<br><input class = "input-modal-nuevo-equipo" style = "border-radius: 30px;" name="almacenamiento" placeholder="ej. 256 GB"></label>
+          <label class = "label-modal-nuevo-equipo">PROCESADOR<br><input class = "input-modal-nuevo-equipo" style = "border-radius: 30px;" name="procesador" placeholder="ej. i5-8250U"></label>
+          <div style = "display:flex; width: 100%;justify-content: space-between;">
+            <label>TIPO<br><select style = "border-radius: 30px;" name="tipo">
+            <option value="Laptop">Laptop</option>
+            <option value="PC">PC</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Teclado">Teclado</option>
+            <option value="Mouse">Mouse</option>
+            <option value="Impresora">Impresora</option>
+            <option value="Tablet">Tablet</option>
+            <option value="USB">USB</option>
+            <option value="Cargador">Cargador</option>
+            <option value="Otro">Otro</option>
+          </select></label>
+            <label>TOUCH<br><div class="checkbox-row"><input type="checkbox" name="touch" id="touchSwitch"><label for="touchSwitch" style="margin:0;font-weight:600">Tiene touch</label></div></label>
+            <label>CARGADOR<br><div class="checkbox-row"><input type="checkbox" name="cargador" id="cargadorSwitch"><label for="cargadorSwitch" style="margin:0;font-weight:600">Incluye cargador</label></div></label>
+            <label>PRESTABLE<br><div class="checkbox-row"><input type="checkbox" name="prestable" id="prestableSwitch"><label for="prestableSwitch" style="margin:0;font-weight:600">Es prestable</label></div></label>
+          </div>
+          <label class = "label-modal-nuevo-equipo">BATERÍA CONDICIÓN (%)<br><input style = "border-radius: 30px;" type="number" name="bateria_condicion" min="0" max="100" placeholder="ej. 90%"></label>
+          <label class = "label-modal-nuevo-equipo">SISTEMA OPERATIVO<br><input class = "input-modal-nuevo-equipo" style = "border-radius: 30px;" name="so" placeholder="ej. Windows 11, macOS, Ubuntu"></label>
+          <label class = "label-modal-nuevo-equipo">MARCA<br><input class = "input-modal-nuevo-equipo" style = "border-radius: 30px;" name="marca" placeholder="ej. Dell, HP, Lenovo"></label>
+          <label style="grid-column:1/3">NOTAS<br><input style = "border-radius: 30px; height: 25px; width:100%;" name="notas" placeholder="Notas adicionales"></label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelNuevoEquipo" class="btn btn-muted">Cancelar</button>
+          <button type="submit" id="saveNuevoEquipo" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const addBtn = document.getElementById('addEquipoBtn');
+      const modal = document.getElementById('nuevoEquipoModal');
+      const form = document.getElementById('nuevoEquipoForm');
+      const cancel = document.getElementById('cancelNuevoEquipo');
+
+      function openModal(){ if(modal) modal.style.display = 'flex'; }
+      function closeModal(){ if(modal){ modal.style.display = 'none'; form && form.reset(); } }
+
+      if(addBtn) addBtn.addEventListener('click', function(){ openModal(); });
+      if(cancel) cancel.addEventListener('click', function(){ closeModal(); });
+
+      // Close modal when clicking outside the modal content
+      if(modal){
+        modal.addEventListener('click', function(e){
+          if(e.target === modal){
+            closeModal();
+          }
+        });
+      }
+
+      // Submit: guardar en la BD y recargar la tabla
+      if(form) form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        const saveBtn = document.getElementById('saveNuevoEquipo');
+        if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = 'Guardando...'; }
+
+        const fd = new FormData(form);
+        const payload = {
+          nombre_qr:        (fd.get('nombre_qr')||'').toString().trim(),
+          memoria_ram:      (fd.get('memoria_ram')||'').toString().trim() || null,
+          memoria_ssd:      (fd.get('almacenamiento')||'').toString().trim() || null,
+          procesador:       (fd.get('procesador')||'').toString().trim() || null,
+          touch:            fd.get('touch') ? 'Sí' : 'No',
+          bateria_condicion:(fd.get('bateria_condicion')||'').toString().trim() || null,
+          cargador:         fd.get('cargador') ? true : false,
+          prestable:        fd.get('prestable') ? true : false,
+          tipo:             (fd.get('tipo')||'').toString(),
+          so:               (fd.get('so')||'').toString().trim() || null,
+          marca:            (fd.get('marca')||'').toString().trim() || null,
+          notas:            (fd.get('notas')||'').toString().trim() || null
+        };
+
+        try {
+          const res = await fetch('/api/equipos-prestamo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json().catch(() => ({}));
+          if(!res.ok || !data.success){
+            const detalle = data.detail ? `\n${data.detail}` : '';
+            alert('Error al guardar el equipo: ' + (data.error || res.statusText) + detalle);
+            return;
+          }
+          closeModal();
+          // Recargar equipos desde la BD para que la tabla muestre el registro real
+          if(typeof loadEquipos === 'function'){
+            loadEquipos();
+          } else {
+            // fallback: agregar localmente si loadEquipos no está disponible
+            if(data.equipo && Array.isArray(state && state.equipos)){
+              state.equipos.unshift(data.equipo);
+              try{ renderTable(); }catch(_){}
+            }
+          }
+        } catch(err) {
+          alert('Error de red al guardar el equipo: ' + err.message);
+        } finally {
+          if(saveBtn){ saveBtn.disabled = false; saveBtn.textContent = 'Guardar'; }
+        }
+      });
+
+      // ensure button visibility on load (check module-level `state` used elsewhere)
+      try{ if(addBtn) addBtn.style.display = (typeof state !== 'undefined' && state.view === 'equipo') ? 'inline-block' : 'none'; }catch(e){}
+    })();
+  </script>
+  <script>
+    (function(){
+      const VALUE_ID = 'exchange-rate-inline-value';
+      const UPDATED_ID = 'exchange-rate-inline-updated';
+      const CACHE_KEY = 'fx_usd_mxn';
+      const CACHE_TS  = 'fx_usd_mxn_ts';
+      const CACHE_SRC = 'fx_usd_mxn_src';
+      const PROVIDERS = [
+        { name: 'exchangerate.host', url: 'https://api.exchangerate.host/latest?base=USD&symbols=MXN' },
+        { name: 'frankfurter.app', url: 'https://api.frankfurter.app/latest?from=USD&to=MXN' },
+        { name: 'open.er-api.com', url: 'https://open.er-api.com/v6/latest/USD' }
+      ];
+
+      function el(id){ return document.getElementById(id); }
+      function show(rate, ts){
+        const v = el(VALUE_ID); const u = el(UPDATED_ID);
+        const swTasa = el('swTasaInfo');
+        const text = rate ? Number(rate).toFixed(4) + ' MXN' : '—';
+        if(v) v.textContent = text;
+        const updatedText = ts ? ('Última actualización: ' + new Date(Number(ts)).toLocaleString()) : '';
+        if(u) u.textContent = updatedText;
+        if(swTasa) swTasa.textContent = rate ? `1 USD = ${Number(rate).toFixed(5)} MXN · exchangerate.host · ${ts ? new Date(Number(ts)).toLocaleDateString() : ''}` : 'Tipo de cambio no disponible';
+      }
+
+      async function fetchRate(force){
+        const now = Date.now();
+        const cached = localStorage.getItem(CACHE_KEY);
+        const cachedTs = localStorage.getItem(CACHE_TS);
+        const cachedSrc = localStorage.getItem(CACHE_SRC);
+        if(!force && cached && cachedTs && (now - Number(cachedTs) < 24*60*60*1000)){
+          // show cached value and indicate cached source
+          show(cached, cachedTs);
+          const swTasa = el('swTasaInfo'); if(swTasa && cachedSrc) swTasa.textContent += ` · fuente: ${cachedSrc}`;
+          return cached;
+        }
+
+        let lastErr = null;
+        for(const p of PROVIDERS){
+          try{
+            const res = await fetch(p.url);
+            if(!res.ok){ lastErr = new Error(`${p.name} HTTP ${res.status}`); console.warn(lastErr); continue; }
+            const data = await res.json();
+            // detect common error bodies
+            if(data && (data.error || data.errors || data.result === 'error')){
+              lastErr = new Error(`${p.name} returned error: ${JSON.stringify(data.error||data.errors||data)}`);
+              console.warn(lastErr);
+              continue;
+            }
+            // Try to extract MXN rate from known shapes
+            let rate = null;
+            if(data && data.rates && (data.rates.MXN || data.rates.MXN === 0)) rate = data.rates.MXN;
+            else if(data && data.rates && (data.rates['MXN'] || data.rates['MXN'] === 0)) rate = data.rates['MXN'];
+            else if(data && data.conversion_rates && data.conversion_rates.MXN) rate = data.conversion_rates.MXN;
+            if(rate == null){ lastErr = new Error(`${p.name} did not contain MXN rate`); console.warn(lastErr); continue; }
+
+            // success
+            localStorage.setItem(CACHE_KEY, String(rate));
+            localStorage.setItem(CACHE_TS, String(now));
+            localStorage.setItem(CACHE_SRC, p.name);
+            show(rate, now);
+            const swTasa = el('swTasaInfo'); if(swTasa) swTasa.textContent = `1 USD = ${Number(rate).toFixed(5)} MXN · ${p.name} · ${new Date(now).toLocaleDateString()}`;
+            return rate;
+          }catch(err){ lastErr = err; console.warn('Provider', p.name, 'failed', err); continue; }
+        }
+
+        // all providers failed: fall back to cached (if any)
+        console.error('All FX providers failed', lastErr);
+        if(cached){ show(cached, cachedTs); const swTasa = el('swTasaInfo'); if(swTasa) swTasa.textContent = `Tipo de cambio (cache) · fuente: ${cachedSrc || 'local'}`; return cached; }
+        show(null, null);
+        return null;
+      }
+
+      // Initial load (use cache if <24h). Ensure we attempt again once DOM is ready.
+      fetchRate(false);
+      // Schedule daily refresh
+      setInterval(()=>fetchRate(true), 24*60*60*1000);
+      if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', function(){ fetchRate(false); });
+      } else {
+        // DOM already ready — ensure inline element updated
+        fetchRate(false);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -8,10 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/topbar.css">
+  <!-- <link rel="stylesheet" href="styles/topbar.css"> -->
   <link rel="stylesheet" href="styles/empleados_panel.css">
-  <link rel="stylesheet" href="styles/floating-buttons.css">
-  <link rel="stylesheet" href="styles/nuevo-equipo.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
+  <!-- <link rel="stylesheet" href="styles/floating-buttons.css"> -->
+  <!-- <link rel="stylesheet" href="styles/nuevo-equipo.css"> -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -19,103 +20,6 @@
   <script src="js/global-color.js"></script>
 </head>
 <body>
-
-  <!-- <div class="topbar">
-        <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>    <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>
-    <div class="glass-highlight"></div>
-    <div class="topbar-header">
-      <button class="lisa-btn-cromatica">PDM</button>
-    </div>
-    <div class="topbar-menu">
-      <div class="menu-item has-submenu" id="itMenuBtn">
-          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-        </svg>
-        IT
-        <div class="submenu" id="itSubmenu">
-          <a href="panel.html" class="submenu-item">Tickets</a>
-          <a href="detalles.html" class="submenu-item">Estadísticas</a>
-          <a href="it_inventario.html" class="submenu-item">Inventario</a>
-          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
-          <a href="boveda.html" class="submenu-item">Bóveda</a>
-          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
-          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
-          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
-          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
-          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="rhMenuBtn">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        RH
-        <div class="submenu" id="rhSubmenu">
-          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
-          <a href="apoyos.html" class="submenu-item">Apoyos</a>
-          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
-          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
-          <a href="asistencias.html" class="submenu-item">Asistencias</a>
-          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
-          <a href="anuncios.html" class="submenu-item">Anuncios</a>
-          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
-
-      <div class="menu-item has-submenu" id="warehouseMenuBtn">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-        </svg>
-        Almacén
-        <div class="submenu" id="warehouseSubmenu">
-          <a href="inventario.html" class="submenu-item">Warehouse</a>
-          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
-        Mantenimiento
-        <div class="submenu" id="maintenanceSubmenu">
-          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
-          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
-          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
-          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
-        </div>
-      </div>
-
-       Diseno 
-      <div class="menu-item has-submenu" id="designMenuBtn">
-        Diseño
-        <div class="submenu" id="designSubmenu">
-          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
-        </div>
-      </div>
-      
-            
-       PM 
-      <div class="menu-item has-submenu" id="pmMenuBtn">
-        PM
-        <div class="submenu" id="pmSubmenu">
-          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
-          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
-          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="topbar-controls">
-      <div class="user-menu-item">
-        <div class="user-icon" id="userIcon">
-          <i class="fas fa-user"></i>
-        </div>
-        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
-        <div class="user-submenu" id="userSubmenu">
-          <div class="user-info" id="userInfo"></div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
 
   <script src="js/permisos.js"></script>
   <script src="js/floating-buttons.js"></script>
@@ -636,9 +540,9 @@
                 </div>
                 <div class="historial-content active">
                   <div class="comportamiento-editor">
-                    <textarea id="comportamientoTextarea" rows="15" placeholder="Escribe aquí las notas sobre comportamiento, observaciones, etc." maxlength="500" style="width: 100%; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical; background: rgba(255,255,255,0.9);"></textarea>
+                    <textarea id="comportamientoTextarea" rows="15" placeholder="Escribe aquí las notas sobre comportamiento, observaciones, etc." style="width: 99.6%; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical; background: rgba(255,255,255,0.9);"></textarea>
                     <div style="margin-top: 8px; font-size: 12px; color: rgb(233 239 246); text-align: right;">
-                      <span id="comportamientoCharCount">0</span>/500 caracteres
+                      <span id="comportamientoCharCount">0</span> caracteres
                     </div>
                   </div>
                 </div>
@@ -718,22 +622,6 @@
                 </ul>
               </div>
 
-              <!-- <div class="historial-laboral-card">
-                <h3 class="historial-card-title">
-                  <span style="color:black;"><i class="fas fa-first-aid"></i> Amonestaciones</span>
-                  <button style="display:none;" class="btn-agregar-apoyo" type="button" title="Agregar Amonestaciones" onclick="event.stopPropagation(); abrirModalAgregarAccidente()">
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </h3>
-                <div class="info-item">
-                  <label>Registro:</label>
-                  <span id="modalEmpleadoAccidentesEstado">Sin información</span>
-                </div>
-                <div class="historial-subtitle" style="color:black;">Detalle</div>
-                <ul id="modalEmpleadoAccidentesDetalle" class="historial-simple-list historial-accidente-detalle" style="color:black;">
-                  <li>Sin registros de accidentes.</li>
-                </ul>
-              </div> -->
             </div>
 
             <!-- Sistema historial de puestos -->
@@ -920,7 +808,7 @@
               </div>
               <div class="form-group">
                 <label for="editComportamiento">Comportamiento / Notas:</label>
-                <textarea id="editComportamiento" name="comportamiento" rows="4" placeholder="Notas sobre comportamiento, observaciones, etc." maxlength="500"></textarea>
+                <textarea id="editComportamiento" name="comportamiento" rows="4" placeholder="Notas sobre comportamiento, observaciones, etc."></textarea>
               </div>
             </div>
 
@@ -2352,17 +2240,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function formatearFechaCompleta(fecha) {
       if (!fecha) return 'No especificado';
-      
+
       try {
-        const fechaObj = new Date(fecha);
-        if (isNaN(fechaObj.getTime())) return 'Fecha inválida';
-        
-        const opciones = {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        };
-        
+        // Obtener la parte YYYY-MM-DD de forma robusta (evitar desplazamientos por zona horaria)
+        const ymd = (function(f) {
+          if (!f) return null;
+          if (typeof f === 'string') {
+            const m1 = f.match(/^(\d{4}-\d{2}-\d{2})$/);
+            if (m1) return m1[1];
+            const m2 = f.match(/^(\d{4}-\d{2}-\d{2})T/);
+            if (m2) return m2[1];
+          }
+          const d = new Date(f);
+          if (isNaN(d.getTime())) return null;
+          const y = d.getUTCFullYear();
+          const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+          const dd = String(d.getUTCDate()).padStart(2, '0');
+          return `${y}-${m}-${dd}`;
+        })(fecha);
+
+        if (!ymd) return 'Fecha inválida';
+        // Construir Date a partir de Y-M-D en horario local para mostrar correctamente
+        const parts = ymd.split('-').map(Number);
+        const fechaObj = new Date(parts[0], parts[1] - 1, parts[2]);
+
+        const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
         return fechaObj.toLocaleDateString('es-ES', opciones);
       } catch (error) {
         console.error('Error formateando fecha:', error);
@@ -2372,21 +2274,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function formatearFechaParaInput(fecha) {
       if (!fecha) return '';
-      
-      // Si es un string en formato YYYY-MM-DD, úsalo directamente
+
+      // Extraer YYYY-MM-DD de forma consistente (evitar desfase horario)
       if (typeof fecha === 'string') {
-        const coincidencia = fecha.match(/^(\d{4}-\d{2}-\d{2})/);
-        if (coincidencia) return coincidencia[1];
+        const m = fecha.match(/^(\d{4}-\d{2}-\d{2})/);
+        if (m) return m[1];
       }
 
       try {
-        const fechaObj = new Date(fecha);
-        if (isNaN(fechaObj.getTime())) return '';
-
-        // Ajustar zona horaria para evitar desfase de un día
-        const offset = fechaObj.getTimezoneOffset();
-        const fechaLocal = new Date(fechaObj.getTime() - offset * 60000);
-        return fechaLocal.toISOString().split('T')[0];
+        const d = new Date(fecha);
+        if (isNaN(d.getTime())) return '';
+        // Usar componentes UTC para evitar que la zona horaria local reduzca un día
+        const y = d.getUTCFullYear();
+        const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
       } catch (error) {
         console.error('Error formateando fecha para input:', error);
         return '';
@@ -3188,8 +3090,8 @@ document.addEventListener('DOMContentLoaded', function() {
       // Configurar puntuaciones y cargar historial
       configurarPuntuaciones();
 
-      // Mostrar siempre la pestaña personal al abrir el modal
-      cambiarTabModalEmpleado('personal');
+      // Mostrar por defecto la pestaña 'Información de trabajo' al abrir el modal
+      cambiarTabModalEmpleado('trabajo');
 
       // No ocultar la sección de búsqueda cuando se abre el modal (permitir que permanezca visible)
 
@@ -3467,37 +3369,101 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Empleado no encontrado:', empleadoId);
         return;
       }
-      
       // Cargar supervisores antes de llenar el formulario
       await cargarSupervisores();
-      
-      document.getElementById('editNombre').value = empleado.nombre_completo || '';
-      document.getElementById('editPuesto').value = empleado.puesto || '';
-      document.getElementById('editArea').value = empleado.area || '';
-      document.getElementById('editSupervisor').value = empleado.supervisor || '';
-      document.getElementById('editSalarioMxn').value = empleado.salario_mxn || '';
-      document.getElementById('editFechaBaja').value = formatearFechaParaInput(empleado.fecha_baja);
-      
-      // Determinar departamento basado en el puesto
-      const departamento = empleado.departamento || determinarDepartamento(empleado.puesto);
-      document.getElementById('editDepartamento').value = departamento || '';
-      
-      // Formatear fechas correctamente
-      document.getElementById('editFechaIngreso').value = formatearFechaParaInput(empleado.fecha_ingreso);
-      document.getElementById('editFechaNacimiento').value = formatearFechaParaInput(empleado.fecha_cumpleanos);
-      
-      // Campos de contacto usando los nombres correctos de las columnas
-      document.getElementById('editEmail').value = empleado.email || '';
-      document.getElementById('editTelefono').value = empleado.telefono || '';
-      document.getElementById('editDireccion').value = empleado.direccion || '';
-      document.getElementById('editAlergiasEnfermedades').value = empleado.alergias_enfermedades || '';
-      document.getElementById('editHijos').value = empleado.hijos !== undefined && empleado.hijos !== null ? empleado.hijos : '';
-      document.getElementById('editTelefonoEmergencia').value = empleado.telefono_emergencia || '';
-      document.getElementById('editTallaRopa').value = empleado.talla_ropa || '';
-      document.getElementById('editTallaBotas').value = empleado.talla_botas || '';
-      document.getElementById('editComportamiento').value = empleado.comportamiento || '';
-      document.getElementById('editEstado').checked = empleado.activo === true || empleado.activo === 1 || empleado.activo === '1';
-      document.getElementById('editEsSupervisor').checked = empleado.es_supervisor || false;
+
+      // Helper: leer texto mostrado en el modal (ignorar 'No especificado' y 'ID')
+      function leerDesdeModal(id) {
+        const el = document.getElementById(id);
+        if (!el) return null;
+        const txt = (el.textContent || '').trim();
+        if (!txt || txt === 'No especificado' || txt === 'ID') return null;
+        return txt;
+      }
+
+      // Helper: parsear dd/mm/yyyy o yyyy-mm-dd a yyyy-mm-dd para inputs
+      function parsearFechaTextoATarget(fechaTexto) {
+        if (!fechaTexto) return '';
+        // dd/mm/yyyy o dd-mm-yyyy
+        const m = fechaTexto.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+        if (m) {
+          const d = m[1].padStart(2, '0');
+          const mo = m[2].padStart(2, '0');
+          return `${m[3]}-${mo}-${d}`;
+        }
+        // ISO-like yyyy-mm-dd
+        const iso = fechaTexto.match(/^(\d{4}-\d{2}-\d{2})/);
+        if (iso) return iso[1];
+        // Try Date parsing fallback
+        try {
+          const dt = new Date(fechaTexto);
+          if (!isNaN(dt.getTime())) {
+            const offset = dt.getTimezoneOffset();
+            const local = new Date(dt.getTime() - offset * 60000);
+            return local.toISOString().split('T')[0];
+          }
+        } catch (e) {}
+        return '';
+      }
+
+      // Build source values: prefer empleado object, fallback to modal display
+      const src = {};
+      src.nombre = empleado.nombre_completo || leerDesdeModal('modalEmpleadoNombre') || '';
+      src.puesto = empleado.puesto || leerDesdeModal('modalEmpleadoPuesto') || '';
+      src.area = empleado.area || leerDesdeModal('modalEmpleadoArea') || '';
+      src.supervisor = empleado.supervisor || leerDesdeModal('modalEmpleadoSupervisor') || '';
+      src.salario_mxn = empleado.salario_mxn || (leerDesdeModal('modalEmpleadoSalario') || '');
+      src.fecha_baja = empleado.fecha_baja || parsearFechaTextoATarget(leerDesdeModal('modalEmpleadoFechaBaja')) || '';
+
+      const departamento = empleado.departamento || leerDesdeModal('modalEmpleadoDepto') || determinarDepartamento(empleado.puesto);
+      src.departamento = departamento || '';
+
+      src.fecha_ingreso = empleado.fecha_ingreso || parsearFechaTextoATarget(leerDesdeModal('modalEmpleadoIngreso')) || '';
+      src.fecha_nacimiento = empleado.fecha_cumpleanos || parsearFechaTextoATarget(leerDesdeModal('modalEmpleadoFechaNac')) || '';
+
+      src.email = empleado.email || leerDesdeModal('modalEmpleadoEmail') || '';
+      src.telefono = empleado.telefono || leerDesdeModal('modalEmpleadoTelefono') || '';
+      src.direccion = empleado.direccion || leerDesdeModal('modalEmpleadoDireccion') || '';
+      src.alergias_enfermedades = empleado.alergias_enfermedades || leerDesdeModal('modalEmpleadoAlergiasEnfermedades') || '';
+      const hijosModal = leerDesdeModal('modalEmpleadoHijos');
+      src.hijos = empleado.hijos !== undefined && empleado.hijos !== null ? empleado.hijos : (hijosModal ? parseInt(hijosModal) || '' : '');
+      src.telefono_emergencia = empleado.telefono_emergencia || leerDesdeModal('modalEmpleadoTelefonoEmergencia') || '';
+      src.talla_ropa = empleado.talla_ropa || leerDesdeModal('modalEmpleadoTallaRopa') || '';
+      src.talla_botas = empleado.talla_botas || leerDesdeModal('modalEmpleadoTallaBotas') || '';
+      src.comportamiento = empleado.comportamiento || (document.getElementById('comportamientoTextarea') ? document.getElementById('comportamientoTextarea').value : '') || '';
+      src.activo = empleado.activo === true || empleado.activo === 1 || empleado.activo === '1';
+      src.es_supervisor = empleado.es_supervisor || false;
+      // Asignar valores al formulario usando 'src'
+      document.getElementById('editNombre').value = src.nombre || '';
+      // Rellenar escolaridad desde la vista si no está en el objeto empleado
+      const escolaridadDesdeModal = (function(){
+        const el = document.getElementById('modalEmpleadoEscolaridad');
+        if (!el) return null;
+        const v = (el.textContent || '').trim();
+        if (!v || v === 'No especificado') return null;
+        return v;
+      })();
+      document.getElementById('editEscolaridad').value = empleado.escolaridad || escolaridadDesdeModal || '';
+      document.getElementById('editPuesto').value = src.puesto || '';
+      document.getElementById('editArea').value = src.area || '';
+      document.getElementById('editSupervisor').value = src.supervisor || '';
+      document.getElementById('editSalarioMxn').value = src.salario_mxn || '';
+      document.getElementById('editFechaBaja').value = formatearFechaParaInput(src.fecha_baja) || '';
+      document.getElementById('editDepartamento').value = src.departamento || '';
+      document.getElementById('editFechaIngreso').value = formatearFechaParaInput(src.fecha_ingreso) || '';
+      document.getElementById('editFechaNacimiento').value = formatearFechaParaInput(src.fecha_nacimiento) || '';
+      document.getElementById('editEmail').value = src.email || '';
+      document.getElementById('editTelefono').value = src.telefono || '';
+      document.getElementById('editDireccion').value = src.direccion || '';
+      document.getElementById('editAlergiasEnfermedades').value = src.alergias_enfermedades || '';
+      document.getElementById('editHijos').value = src.hijos !== undefined && src.hijos !== null ? src.hijos : '';
+      document.getElementById('editTelefonoEmergencia').value = src.telefono_emergencia || '';
+      document.getElementById('editTallaRopa').value = src.talla_ropa || '';
+      document.getElementById('editTallaBotas').value = src.talla_botas || '';
+      document.getElementById('editComportamiento').value = src.comportamiento || '';
+      document.getElementById('editEstado').checked = !!src.activo;
+      document.getElementById('editEsSupervisor').checked = !!src.es_supervisor;
+
       // Recontratable y motivo (por defecto true si viene null/undefined)
       const recontratable = empleado.recontratable !== false; // true si no está definido
       const motivo = empleado.motivo_no_contratacion || '';
@@ -3622,6 +3588,10 @@ document.addEventListener('DOMContentLoaded', function() {
             actualizarModalVisualizacion(empleados[index]);
             mostrarNotificacion('¡Éxito!', 'Empleado actualizado exitosamente');
             document.getElementById('modalEditarEmpleado').classList.remove('active');
+            const empleadoModalEl = document.getElementById('empleadoModal');
+            if (empleadoModalEl) {
+              empleadoModalEl.classList.remove('active');
+            }
             generarMosaicoEmpleados();
             
           } else {

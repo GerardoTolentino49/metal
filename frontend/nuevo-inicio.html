@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1" rel="stylesheet" />
-    <link rel="icon" href="/favicon.png" type="image/png">  
+    <link rel="icon" href="/favicon.png" type="image/png">
 	<title>Inicio</title>
 	<style>
 			:root{
@@ -26,7 +26,7 @@
 			html{scrollbar-gutter:stable}
 		*{box-sizing:border-box}
 		html,body{height:100%}
-        body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+        body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;margin:0;background:#f8f3f2;color:var(--fg);-webkit-font-smoothing:antialiased}
 
 			/* Dark mode removed: site fixed to light theme */
 				.wrap{margin:auto; padding:0 22px;display:block;max-width:80%;}
@@ -118,22 +118,23 @@
 			/* Per-button color classes - edit these values to change a single button */
 			.card-ticket-it{--card-start:#ffdfb7;--card-end:#ffdfb7;--card-text:#000a5c}
 			.card-ticket-mantenimiento{--card-start:#ffdfb7;--card-end:#ffdfb7;--card-text:#7a3b00;}
+			.card-ticket-prestamo{--card-start:#ffdfb7;--card-end:#ffdfb7;--card-text:#000a5c}
 			.card-it{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#0b5a3a}
 			.card-rh{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#2e3a7a}
 			.card-mantenimiento{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#6a3a00}
 			.card-envios{--card-start:#acf1cf;--card-end:#acf1cf;--card-text:#0a6a50}
-			.card-pm{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#6a1a3b}
-			.card-diseno{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#6a0b1b}
-			.card-planeacion{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#0b3a66}
-			.card-produccion{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#025f6f}
-			.card-calidad{--card-start:#4d75e557;--card-end:#4d64e557;--card-text:#5a3a00}
-			.card-importacion{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#0b4b66}
-			.card-contabilidad{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#3d1f66}
-			.card-almacen{--card-start:#4d75e557;--card-end:#4d75e557;--card-text:#1b3a66}
-			.card-vacaciones{--card-start:#e1383885;--card-end:#e1383885;--card-text:#7a1640}
-			.card-permisos{--card-start:#e1383885;--card-end:#e1383885;--card-text:#11386b}
-			.card-amonestacion{--card-start:#e1383885;--card-end:#e1383885;--card-text:#681313}
-			.card-requisicion{--card-start:#e1383885;--card-end:#e1383885;--card-text:#0b5a3a}
+			.card-pm{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#6a1a3b}
+			.card-diseno{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#6a0b1b}
+			.card-planeacion{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#0b3a66}
+			.card-produccion{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#025f6f}
+			.card-calidad{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#5a3a00}
+			.card-importacion{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#0b4b66}
+			.card-contabilidad{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#3d1f66}
+			.card-almacen{--card-start:#4d75e53d;--card-end:#4d75e53d;--card-text:#1b3a66}
+			.card-vacaciones{--card-start:#e1383842;--card-end:#e1383842;--card-text:#7a1640}
+			.card-permisos{--card-start:#e1383842;--card-end:#e1383842;--card-text:#11386b}
+			.card-amonestacion{--card-start:#e1383842;--card-end:#e1383842;--card-text:#681313}
+			.card-requisicion{--card-start:#e1383842;--card-end:#e1383842;--card-text:#0b5a3a}
 			.card-comidas{--card-start:#38d3e185;--card-end:#38d3e185;--card-text:#3a661b}
 
 		.hero{background:linear-gradient(48deg, #ff000040, #d6d91e);border-radius:30px;padding:24px;display:grid;grid-template-columns:1fr 320px;gap:18px;box-shadow:0 14px 40px rgba(22,40,80,.06);border:2px solid #ff9800;align-items:center;margin-bottom:18px}
@@ -153,7 +154,7 @@
 
 				.section{max-width:1200px;margin:28px auto;padding:0 12px}
 			.section + .section{margin-top:40px;}
-			.section-title{margin:0 0 12px 0;font-size:18px;font-weight:700}
+			.section-title{margin:0 0 12px 0;font-size:25px;font-weight:700}
 
 			.explore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px}
 			.ex-card{background:var(--card);padding:20px;border-radius:30px;box-shadow:0 8px 24px rgba(16,24,40,0.06);display:flex;gap:14px;align-items:center;transition:transform .18s ease,box-shadow .18s ease}
@@ -208,9 +209,8 @@
 				.main.news-visible > :not(#news-panel){display:none}
 				/* When messages view is active, hide everything else in main */
 				.main.messages-visible > :not(#messages-panel){display:none}
-				/* Modules embed: hidden by default; shown only when .main has modules-visible */
-				#modules-embed{display:none}
-				.main.modules-visible > #modules-embed{display:block}
+			/* Modules embed: vive dentro de updates-panel, hereda su visibilidad */
+			#modules-embed{display:block}
 			/* Right sidebar for Mensajes (styled like left sidebar) */
 			.right-sidebar{background-color:#fff;padding-top:10px;position:fixed;right:0;top:0;width:260px;height:100vh;overflow-y:auto;z-index:30;padding-left:12px;padding-right:12px;font-size:12px;transition:transform .18s ease,visibility .18s ease;box-shadow:-8px 0 30px rgba(12,24,60,0.04)}
 			.right-sidebar .user-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:30px;color:var(--muted);cursor:pointer}
@@ -250,6 +250,9 @@
 			/* 16:9 embed container for previews (responsive) */
 			.embed-16-9{position:relative;width:100%;padding-top:56.25%;box-shadow:0 2px 8px rgba(63,69,81,0.16);margin-top:1.6em;margin-bottom:0.9em;overflow:hidden;border-radius:8px}
 			.embed-16-9 iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+			/* Canvas canva al final de inicio: compacto y no intrusivo */
+			/* #modules-embed{max-width:62%;margin-left:0} */
+			#modules-embed .embed-16-9{margin-top:0.5em;box-shadow:0 1px 6px rgba(63,69,81,0.10)}
 			.news-post .post-actions{display:flex;gap:8px;align-items:center}
 			.news-like{border:1px solid rgba(15,23,42,0.06);background:transparent;padding:6px 10px;border-radius:30px;cursor:pointer}
 			.news-like.active{background:var(--accent-1);color:#fff;border-color:transparent}
@@ -543,11 +546,7 @@
 		gap:10px;
 		padding:8px 14px;
 		border-radius:999px;
-		background:rgba(255, 255, 255, 0.2);
-		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(5px);
-		box-shadow:0 8px 30px rgba(2,6,23,0.12);
-		border:1px solid rgba(15,23,42,0.06);
 	}
 	#pill-logo img{height:44px;width:auto;display:block;border-radius:999px;object-fit:contain}
 	@media(max-width:900px){
@@ -1173,9 +1172,568 @@
 	border-color: rgba(56, 161, 105, 0.5);
 	box-shadow: 0 0 0 2px rgba(56, 161, 105, 0.35);
 }
+
+/* ===== NOTIFICACIONES (igual que inicio.html) ===== */
+.inicio-notifications-btn {
+  top: 14px;
+  right: 120px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgb(0, 0, 0);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.95);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1350;
+  transition: transform .2s ease, background .2s ease;
+}
+.inicio-notifications-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(35, 36, 58, 0.42);
+}
+.notification-badge {
+  display: none;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  padding: 0 4px;
+}
+.notifications-panel {
+  position: fixed;
+  top: 64px;
+  right: 10px;
+  width: 500px;
+  max-width: calc(100vw - 24px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 72%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+  z-index: 1360;
+  overflow: hidden;
+  display: none;
+}
+.notifications-panel.is-open {
+  display: block;
+}
+.notifications-header {
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(0, 0, 0);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.notifications-title {
+  flex-shrink: 0;
+}
+.notifications-tabs {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+}
+.notifications-tab-btn {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.notifications-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+}
+.notifications-tab-btn.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+}
+.notifications-badge {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.8);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+.notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  display: none;
+  gap: 8px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+.notifications-list.active {
+  display: grid;
+}
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 30px;
+  border: 1.5px solid #111827;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.notification-item:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.notification-item.is-read {
+  opacity: 0.72;
+}
+.notification-item.is-read .notification-dot {
+  background: rgba(148, 163, 184, 0.65);
+}
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  margin-top: 6px;
+  flex: 0 0 auto;
+}
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: rgba(255, 255, 255, 0.9);
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.notification-content strong {
+  font-size: 13px;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+.notification-content span {
+  font-size: 12px;
+  opacity: 0.88;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+.notification-detail-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+.notification-detail-modal.is-open {
+  display: flex;
+}
+.notification-detail-content {
+  width: 80%;
+  max-height: calc(100vh - 28px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgb(255, 255, 255);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36);
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-word;
+}
+.notification-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.notification-detail-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.96);
+}
+.close-notification-detail {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 22px;
+  cursor: pointer;
+}
+.notification-detail-message {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9) !important;
+  white-space: normal;
+}
+.notification-detail-message * {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+.notification-detail-message p,
+.notification-detail-message div {
+  margin: 0 0 8px 0;
+}
+.notification-detail-message ul,
+.notification-detail-message ol {
+  margin: 0 0 10px 18px;
+  padding: 0;
+}
+.notification-detail-message li {
+  margin-bottom: 4px;
+}
+.notification-detail-image {
+  width: 50%;
+  aspect-ratio: 16 / 9;
+  max-height: min(1080px, calc(100vh - 180px));
+  object-fit: contain;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 12px;
+}
+@media screen and (max-width: 768px) {
+  .inicio-notifications-btn {
+    top: 10px;
+    right: 20%;
+    width: 38px;
+    height: 38px;
+  }
+  .notification-badge {
+    top: -4px;
+    right: -4px;
+  }
+  .notifications-panel {
+    top: 56px;
+    right: 12px;
+    width: min(320px, calc(100vw - 24px));
+  }
+}
+/* ===== PANEL DE AYUDA ===== */
+#ayuda-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: transparent;
+  display: none;
+}
+#ayuda-overlay.open { display: block; }
+
+#ayuda-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(360px, 92vw);
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -6px 0 32px rgba(0,0,0,0.13);
+  z-index: 8100;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.2,.8,.2,1);
+  border-radius: 20px 0 0 20px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+#ayuda-panel.open { transform: translateX(0); }
+
+.ayuda-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.ayuda-header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ayuda-close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+}
+.ayuda-close-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+.ayuda-search-wrap {
+  position: relative;
+  margin: 14px 20px 0;
+  flex-shrink: 0;
+}
+.ayuda-search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 13px;
+  pointer-events: none;
+}
+.ayuda-search-input {
+  width: 100%;
+  padding: 10px 14px 10px 36px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  background: #f8fafc;
+  font-size: 13px;
+  color: #0f172a;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+  box-sizing: border-box;
+}
+.ayuda-search-input:focus {
+  border-color: #5b86e5;
+  box-shadow: 0 0 0 3px rgba(91,134,229,.12);
+  background: #fff;
+}
+.ayuda-search-input::placeholder { color: #94a3b8; }
+.ayuda-no-results {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  padding: 32px 0;
+}
+
+.ayuda-faq-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ayuda-faq-list::-webkit-scrollbar {
+  display: none;
+}
+
+.ayuda-faq-item {
+  border: 1.5px solid #000000;
+  border-radius: 30px;
+  overflow: hidden;
+  transition: border-color .15s;
+  flex-shrink: 0;
+}
+.ayuda-faq-item:hover { border-color: #94a3b8; }
+
+.ayuda-faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  transition: background .15s;
+  box-sizing: border-box;
+}
+.ayuda-faq-question:hover { background: #f1f5f9; }
+.ayuda-faq-question > span:first-child {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+.ayuda-faq-question .ayuda-chevron {
+  font-size: 11px;
+  color: #94a3b8;
+  transition: transform .2s;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.ayuda-faq-item.open .ayuda-chevron { transform: rotate(180deg); }
+
+.ayuda-faq-answer {
+  display: none;
+  padding: 10px 16px 14px;
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.6;
+  background: #ffffff;
+  border-top: 1px solid #f0f0f0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.ayuda-faq-item.open .ayuda-faq-answer { display: block; }
+/* ===== FIN PANEL DE AYUDA ===== */
+
+/* ===== COLOR DE TEXTO NOTIFICACIONES (forzado negro) ===== */
+#notificationsPanel .notifications-title,
+#notificationsPanel .notifications-tab-btn,
+#notificationsPanel .notifications-tab-btn.active,
+#notificationsPanel .notification-content,
+#notificationsPanel .notification-content strong,
+#notificationsPanel .notification-content span,
+#notificationsPanel .notifications-header {
+  color: #111827 !important;
+}
+#notificationDetailModal .notification-detail-header h3,
+#notificationDetailModal .notification-detail-message,
+#notificationDetailModal .notification-detail-message * {
+  color: #111827 !important;
+}
+#notificationDetailModal .close-notification-detail {
+  color: #111827 !important;
+}
+/* ===== FIN NOTIFICACIONES ===== */
 	</style>
 	</head>
 	<body>
+
+  <!-- ===== BOTÓN DE NOTIFICACIONES (esquina superior derecha, igual que inicio.html) ===== -->
+  <div style="position:fixed; top:5px; right:5px; display: flex; gap: 5px; z-index:1350;">
+    <button class="inicio-notifications-btn" id="notificationsButton" title="Notificaciones">
+      <i class="fas fa-bell" style="font-size:20px;"></i>
+      <span class="notification-badge" style="display:none;"></span>
+    </button>
+  </div>
+
+  <div class="notifications-panel" id="notificationsPanel" aria-hidden="true">
+    <div class="notifications-header">
+      <span class="notifications-title">Notificaciones</span>
+      <div class="notifications-tabs">
+        <button class="notifications-tab-btn active" data-tab="todos" id="notificationsTabTodos" aria-selected="true">
+          Todos
+          <span class="notifications-badge" id="badgeTodos">0</span>
+        </button>
+        <button class="notifications-tab-btn" data-tab="diseno" id="notificationsTabDiseno" aria-selected="false">
+          Diseño
+          <span class="notifications-badge" id="badgeDiseno">0</span>
+        </button>
+      </div>
+    </div>
+    <ul class="notifications-list active" id="notificationsList-todos" data-tab="todos" role="tabpanel" aria-labelledby="notificationsTabTodos">
+    </ul>
+    <ul class="notifications-list" id="notificationsList-diseno" data-tab="diseno" role="tabpanel" aria-labelledby="notificationsTabDiseno">
+    </ul>
+  </div>
+
+  <div class="notification-detail-modal" id="notificationDetailModal" aria-hidden="true">
+    <div class="notification-detail-content" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
+      <div class="notification-detail-header">
+        <h3 id="notificationDetailTitle">Notificación</h3>
+        <button class="close-notification-detail" id="closeNotificationDetail" aria-label="Cerrar detalle">&times;</button>
+      </div>
+      <div style="justify-content: center; display: flex;">
+        <img class="notification-detail-image" id="notificationDetailImage" alt="Imagen de la notificacion" style="display:none;" />
+      </div>
+      <div class="notification-detail-message" id="notificationDetailMessage"></div>
+    </div>
+  </div>
+  <!-- ===== FIN NOTIFICACIONES ===== -->
+
+  <!-- ===== PANEL LATERAL DE AYUDA ===== -->
+  <div id="ayuda-overlay" aria-hidden="true"></div>
+  <aside id="ayuda-panel" aria-hidden="true" role="complementary" aria-label="Panel de ayuda">
+    <div class="ayuda-header">
+      <h2></i>Ayuda</h2>
+      <button class="ayuda-close-btn" id="ayuda-close-btn" aria-label="Cerrar ayuda">&times;</button>
+    </div>
+
+    <div class="ayuda-search-wrap">
+      <i class="fas fa-search ayuda-search-icon"></i>
+      <input
+        type="search"
+        id="ayuda-search"
+        class="ayuda-search-input"
+        placeholder="Buscar tema de ayuda…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <div class="ayuda-faq-list" id="ayuda-faq-list"></div>
+  </aside>
+  <!-- ===== FIN PANEL LATERAL DE AYUDA ===== -->
+
 	<!-- Pill logo: fixed at top with backdrop blur -->
 	<div id="pill-logo" aria-hidden="false">
 		<img src="fotos/New-IMAGE.png" alt="New Logo" onerror="this.style.opacity=0.6;console.warn('Image load failed:', this.src)">
@@ -1223,6 +1781,7 @@
 						<ul>
 							<li id="test">Modo Entrenamiento (Beta)</li>
 							<li id="report-problem">Reportar un problema</li>
+							<li id="open-ayuda">Ayuda</li>
 							<li id="logout" class="danger">Cerrar sesión</li>
 						</ul>
 					</div>
@@ -1231,11 +1790,12 @@
 		</aside>
 
 		<main class="main">
-			<div id="modules-embed" style="margin-bottom:18px"></div>
 
-			<!-- Updates panel (hidden by default) -->
-			<section id="updates-panel" class="section updates-panel" style="display:none">
-					<div id="update-card-4" class="update-card" role="button" tabindex="0" style="margin-bottom:12px">
+		<!-- Updates panel (hidden by default) -->
+		<section id="updates-panel" class="section updates-panel" style="display:none">
+			<div id="modules-embed" style="margin-bottom:22px"></div>
+
+				<div id="update-card-4" class="update-card" role="button" tabindex="0" style="margin-bottom:12px">
 						<div style="flex:1;display:flex;flex-direction:column;">
 							<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
 								<h3>Versión 3.0</h3>
@@ -1251,6 +1811,7 @@
 							<h3>Versión 2.9.1</h3>
 							<span class="update-badge update-badge-minor">Menor</span>
 						</div>
+
 						<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento de la versión 2.9.1 — incluye mejoras y correcciones menores.</p>
 						<button id="update-details-btn" class="details-btn" type="button">Ver detalles</button>
 					</div>
@@ -1320,18 +1881,19 @@
 
 			<section class = section>
 				<h3 class = section-title>Tickets</h3>
-				<!-- <div class="header-grid">
-					<div class="title">Tickets</div>
-				</div> -->
 
 				<div class="apps-grid" aria-hidden="true">
 					<a class="app-card card-ticket-it" href="index.html" data-permission="show_tickets_it">
 						<div class="logo"><span class="material-symbols-rounded" style="font-size:22px;">confirmation_number</span></div>
-						<div><div style="font-weight:700">Ticket de IT</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Ticket de IT</div><div style="color:#000000;font-size:12px">Reporta un problema o haz una solicitud al área de sistemas.</div></div>
 					</a>
 					<a class="app-card card-ticket-mantenimiento" href="index_mantenimiento.html" data-permission="show_tickets_mantenimiento">
 						<div class="logo"><span class="material-symbols-rounded" style="font-size:22px;">construction</span></div>
-						<div><div style="font-weight:700">Ticket de mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Ticket de mantenimiento</div><div style="color:#000000;font-size:12px">Solicita revisión o reparación de equipos e instalaciones.</div></div>
+					</a>
+					<a id="openPrestamoBtn" class="app-card card-ticket-prestamo" href="#" data-permission="show_prestamos" role="button">
+						<div class="logo"><span class="material-symbols-rounded" style="font-size:22px;">computer</span></div>
+						<div><div style="font-weight:700">Ticket de Préstamo de equipo</div><div style="color:#000000;font-size:12px">Registra el préstamo temporal de equipo de cómputo.</div></div>
 					</a>
 				</div>
 			</section>
@@ -1342,35 +1904,35 @@
 				<div class="explore-grid">
 					<a class="ex-card card-pm" href="nuevo-equipo.html" data-permission="show_proyectos">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">folder</span></div>
-						<div><div style="font-weight:700">PM</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">PM</div><div style="color:#000000;font-size:12px">Gestión y seguimiento de proyectos activos.</div></div>
 					</a>
 					<a class="ex-card card-diseno" href="logeo-diseno.html" data-permission="show_diseno">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">architecture</span></div>
-						<div><div style="font-weight:700">Diseño</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Diseño</div><div style="color:#000000;font-size:12px">Logeo de actividades del área de diseño.</div></div>
 					</a>
 					<a class="ex-card card-planeacion" href="planeacionycompras.html" data-permission="show_planeacion_compras">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">event_note</span></div>
-						<div><div style="font-weight:700">Planeación y compras</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Planeación y compras</div><div style="color:#000000;font-size:12px">Planifica producción y gestiona órdenes de compra.</div></div>
 					</a>
 					<a class="ex-card card-produccion" href="produccion-supervisor.html" data-permission="show_produccion">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">engineering</span></div>
-						<div><div style="font-weight:700">Producción</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Producción</div><div style="color:#000000;font-size:12px">Supervisa el avance y estado de las órdenes de producción.</div></div>
 					</a>
 					<a class="ex-card card-calidad" href="calidad_qc.html" data-permission="show_calidad">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">fact_check</span></div>
-						<div><div style="font-weight:700">Calidad (QC)</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Calidad (QC)</div><div style="color:#000000;font-size:12px">Inspección y control de calidad en procesos.</div></div>
 					</a>
 					<a class="ex-card card-importacion" href="importacion.html" data-permission="show_importacion_exportacion">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">import_export</span></div>
-						<div><div style="font-weight:700">Importación Exportación</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Importación Exportación</div><div style="color:#000000;font-size:12px">Seguimiento de pedidos internacionales y trámites aduanales.</div></div>
 					</a>
 					<a class="ex-card card-contabilidad" href="cuentas-por-pagar.html" data-permission="show_contabilidad">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">account_balance</span></div>
-						<div><div style="font-weight:700">Contabilidad</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Contabilidad</div><div style="color:#000000;font-size:12px">Consulta y gestiona los movimientos financieros.</div></div>
 					</a>
 					<a class="ex-card card-almacen" href="almacen.html" data-permission="show_almacen">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">inventory_2</span></div>
-						<div><div style="font-weight:700">Almacén</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Almacén</div><div style="color:#000000;font-size:12px">Control de entradas, salidas e inventario en almacén.</div></div>
 					</a>
 				</div>
 			</section>
@@ -1380,19 +1942,19 @@
 				<div class="explore-grid">
 					<a class="ex-card card-vacaciones" href="vacaciones.html" data-permission="show_vacaciones">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">beach_access</span></div>
-						<div><div style="font-weight:700">Solicitar vacaciones</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Solicitar vacaciones</div><div style="color:#000000;font-size:12px">Envía y consulta tus solicitudes de días de descanso.</div></div>
 					</a>
 					<a class="ex-card card-permisos" href="permisos.html" data-permission="show_permisos">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">event_available</span></div>
-						<div><div style="font-weight:700">Permisos</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Permisos</div><div style="color:#000000;font-size:12px">Solicita permisos de ausencia o salida anticipada.</div></div>
 					</a>
 					<a class="ex-card card-amonestacion" href="amonestacion_supervisor.html" data-permission="show_amonestaciones">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">warning</span></div>
-						<div><div style="font-weight:700">Amonestación</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Amonestación</div><div style="color:#000000;font-size:12px">Registro y consulta de amonestaciones del personal.</div></div>
 					</a>
 					<a class="ex-card card-requisicion" href="requisicion.html" data-permission="show_requisicion">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">shopping_cart</span></div>
-						<div><div style="font-weight:700">Requisición de compra</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Requisición de compra</div><div style="color:#000000;font-size:12px">Genera solicitudes de materiales o servicios para aprobación.</div></div>
 					</a>
 				</div>
 			</section>
@@ -1402,19 +1964,19 @@
 				<div class="explore-grid">
 					<a class="ex-card card-it" href="panel.html" data-permission="show_it">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">memory</span></div>
-						<div><div style="font-weight:700">IT</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">IT</div><div style="color:#000000;font-size:12px">Panel de administración y soporte técnico de sistemas.</div></div>
 					</a>
 					<a class="ex-card card-rh" href="empleados_panel.html" data-permission="show_rh">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">groups</span></div>
-						<div><div style="font-weight:700">Recursos Humanos</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Recursos Humanos</div><div style="color:#000000;font-size:12px">Gestión de empleados y expedientes del personal.</div></div>
 					</a>
 					<a class="ex-card card-mantenimiento" href="mantenimiento.html" data-permission="show_mantenimiento">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">build</span></div>
-						<div><div style="font-weight:700">Mantenimiento</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Mantenimiento</div><div style="color:#000000;font-size:12px">Programa y da seguimiento al mantenimiento preventivo y correctivo.</div></div>
 					</a>
 					<a class="ex-card card-envios" href="enviosyrecibos.html" data-permission="show_enviosyrecibos">
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">local_shipping</span></div>
-						<div><div style="font-weight:700">Envíos y recibos</div><div style="color:var(--muted);font-size:13px"></div></div>
+						<div><div style="font-weight:700">Envíos y recibos</div><div style="color:#000000;font-size:12px">Gestiona el registro de envíos y recepción de materiales.</div></div>
 					</a>
 				</div>
 			</section>
@@ -1426,14 +1988,14 @@
 						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">restaurant</span></div>
 						<div style="display:flex;flex-direction:column;gap:6px">
 							<div style="font-weight:700">Registro de comidas</div>
-							<div style="color:var(--muted);font-size:13px"></div>
-							<span class="agenda-count" id="weeklyMealsCount" style="font-size:28px;display:none;font-weight:800;color:var(--card-text)">0</span>
-						</div>
-					</a>
-				</div>
+							<div style="color:#000000;font-size:12px">Consulta y registra tus comidas de la semana.</div>
+					<span class="agenda-count" id="weeklyMealsCount" style="font-size:28px;display:none;font-weight:800;color:var(--card-text)">0</span>
+					</div>
+				</a>
 			</div>
+		</div>
 
-			<script>
+		<script>
 			document.addEventListener('DOMContentLoaded', function(){
 				var navPersonal = document.getElementById('nav-personal');
 				var explore = document.getElementById('inicio-explore-sections');
@@ -1562,7 +2124,106 @@
 		  </div>
 		</div>
 
-		<script>
+			<!-- Modal: Préstamo de equipo -->
+			<div id="prestamoModal" class="app-modal" aria-hidden="true">
+			  <div class="app-modal-backdrop" data-close="true"></div>
+			  <div class="app-modal-content" role="dialog" aria-modal="true" aria-labelledby="prestamoModalTitle">
+				<button class="app-modal-close" id="prestamoModalClose" aria-label="Cerrar">&times;</button>
+				<h3 id="prestamoModalTitle">Préstamo de equipo</h3>
+				<div class="equipment-container">
+				<div class="equipment-list-pane">
+				  <p style="margin-top:0;color:var(--muted)">Lista de dispositivos disponibles para préstamo:</p>
+				  <input id="equipmentSearch" type="text" placeholder="Buscar equipo..." autocomplete="off">
+				  <div id="equipmentFilters">
+				    <button class="eq-filter" data-filter="todos">Todos</button>
+				    <button class="eq-filter active" data-filter="laptop"><i class="fas fa-laptop"></i> Laptop</button>
+				    <button class="eq-filter" data-filter="pc"><i class="fas fa-desktop"></i> PC</button>
+				    <button class="eq-filter" data-filter="monitor"><i class="fas fa-tv"></i> Monitor</button>
+				    <button class="eq-filter" data-filter="teclado"><i class="fas fa-keyboard"></i> Teclado</button>
+				    <button class="eq-filter" data-filter="mouse"><i class="fas fa-mouse"></i> Mouse</button>
+				    <button class="eq-filter" data-filter="tablet"><i class="fas fa-tablet-alt"></i> Tablet</button>
+				    <button class="eq-filter" data-filter="otro">Otro</button>
+				  </div>
+				  <ul id="equipmentList" class="equipment-list"></ul>
+				</div>
+									<div class="equipment-detail-pane" id="equipmentSelectedPane" aria-hidden="false">
+										<h4 style="margin-top:0;color:#0b1220">Equipos seleccionados</h4>
+										<div id="selectedEquipmentContainer" style="min-height:60px">
+											<ul id="selectedEquipmentList" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px"></ul>
+										</div>
+										<div class="equipment-actions" style="margin-top:12px">
+											<button id="equipmentAcceptBtn" class="btn primary" disabled>Solicitar</button>
+											<button id="equipmentClearBtn" class="btn" type="button" style="margin-left:8px; background: #fff; border-radius: 30px; border-width: 1px;">Limpiar</button>
+										</div>
+									</div>
+				</div>
+			  </div>
+			</div>
+
+			<style>
+			/* Minimal styles for préstamo modal */
+			.app-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 4000; }
+			.app-modal.is-open { display: flex; }
+			.app-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+			.app-modal-content { position: relative; background: #fff; border-radius: 30px; padding: 18px; width: min(920px, 96vw); max-height: 86vh; overflow:auto; box-shadow:0 24px 60px rgba(2,6,23,0.2); z-index:4001 }
+			/* Ensure content stacks so actions can stay at bottom */
+			.app-modal-content { display:flex; flex-direction:column; }
+			.app-modal-close { position:absolute; top:10px; right:14px; border:0; background:transparent; font-size:28px; cursor:pointer }
+			.equipment-container { display:flex; gap:18px; align-items:flex-start; flex:1; overflow:auto }
+			.equipment-list-pane { flex:1; min-width:220px }
+			.equipment-list { list-style:none; padding:0; margin:8px 0 0; display:grid; gap:8px }
+			.equipment-item { padding:10px 12px; border:1px solid #e6e6e6; border-radius:30px; cursor:pointer; background:#fff }
+			.equipment-item:hover { border-color:rgba(59,130,246,0.4); }
+			/* Selected item style */
+			.equipment-item.selected { background: linear-gradient(90deg,#f0fff4,#ffffff); border-color:#10b981; box-shadow:0 6px 18px rgba(16,185,129,0.08); color:#064e3b; font-weight:700 }
+			.equipment-detail-pane { width:360px; border-left:1px solid #f0f0f0; padding-left:16px }
+			.equipment-features { margin:8px 0 14px; color:#333 }
+			/* New structured specs layout */
+			.equipment-specs{display:flex;flex-direction:column;gap:6px}
+			.equipment-specs .spec-row{display:flex;gap:12px;align-items:flex-start;padding:8px 6px;border-radius:8px}
+			.equipment-specs .spec-row + .spec-row{border-top:1px dashed #f3f4f6}
+			.equipment-specs .spec-label{width:140px;font-weight:800;color:#0b1f3a}
+			.equipment-specs .spec-value{flex:1;color:#111827}
+			.equipment-specs .spec-value .muted{color:var(--muted);margin-top:6px}
+			.equipment-detail-pane h4{margin-bottom:10px;color:#0b1220}
+			.equipment-detail-pane{background:linear-gradient(180deg, rgb(237 237 237 / 98%), #ffffff);box-shadow:0 8px 24px rgba(12,24,60,0.04);padding:14px;border-radius:30px}
+			.equipment-actions { display:flex; gap:8px; justify-content:center }
+			/* Keep actions pinned to bottom of modal */
+			.equipment-actions { position: sticky; bottom: 0; background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,1)); padding-top:10px; padding-bottom:6px }
+
+			/* Button styles: rounded + colors */
+			#equipmentAcceptBtn { border-radius:24px; background:#16a34a; color:#ffffff; border:0; padding:12px 28px; font-weight:800; cursor:pointer; min-width:180px; box-shadow:0 8px 20px rgba(16,185,129,0.16) }
+			#equipmentCancelBtn { border-radius:30px; background:#dc2626; color:#ffffff; border:0; padding:10px 16px; font-weight:700; cursor:pointer }
+			#equipmentAcceptBtn:disabled, #equipmentCancelBtn:disabled { opacity:0.6; cursor:not-allowed }
+
+			/* Clear button styles */
+			#equipmentClearBtn{ background:#fff; border:1px solid #e6e6e6; color:#0b1220; padding:10px 16px; border-radius:30px; cursor:pointer; font-weight:700 }
+			#equipmentClearBtn:hover{ background:#f3f4f6; transform:translateY(-1px) }
+
+			/* Remove button (per-selected item) */
+			.remove-selected-btn{ transition:transform .12s ease, background .12s ease }
+			.remove-selected-btn:hover{ filter:brightness(0.95); transform:translateY(-1px) }
+
+			/* Tooltip for equipment: follows mouse, avoids edges */
+			.equipment-tooltip{position:fixed;z-index:4500;max-width:360px;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 12px 40px rgba(2,6,23,0.16);color:#0b1220;font-size:13px;pointer-events:none;display:none}
+			.equipment-tooltip h4{margin:0 0 8px;font-size:15px}
+			.equipment-tooltip .equipment-specs{max-height:60vh;overflow:auto}
+
+		/* Modal fecha buttons */
+		#modalConfirmPrestamoBtn { background: #16a34a; color: #fff; border: 0; padding: 8px 14px; border-radius: 30px; font-weight:700; cursor:pointer }
+		#modalConfirmPrestamoBtn:hover { filter: brightness(0.95) }
+		#modalCancelPrestamoBtn { background: #dc2626; color: #fff; border: 0; padding: 8px 14px; border-radius: 30px; font-weight:700; cursor:pointer }
+		#modalCancelPrestamoBtn:hover { filter: brightness(0.95) }
+		/* Search bar & filter buttons */
+		#equipmentSearch { width:100%; padding:8px 14px; border-radius:30px; border:1px solid #e6e6e6; font-size:13px; margin-bottom:8px; box-sizing:border-box; }
+		#equipmentSearch:focus { outline:none; border-color:#10b981; box-shadow:0 0 0 3px rgba(16,185,129,0.1); }
+		#equipmentFilters { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+		.eq-filter { padding:5px 12px; border-radius:30px; border:1px solid #e6e6e6; background:#fff; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:4px; }
+		.eq-filter:hover { border-color:#10b981; color:#064e3b; }
+		.eq-filter.active { background:linear-gradient(90deg,#16a34a,#059669); color:#fff; border-color:transparent; box-shadow:0 4px 10px rgba(16,185,129,0.2); }
+		</style>
+
+			<script>
 		// Modal open/close handlers for cargo-empleados
 		(function(){
 		  function openModal(modal){
@@ -1590,6 +2251,467 @@
 			modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(modal); });
 			document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(modal); });
 		  }
+		})();
+
+		// --- Préstamo Modal: lógica básica ---
+		(function(){
+		  var modal = document.getElementById('prestamoModal');
+		  var closeBtn = document.getElementById('prestamoModalClose');
+		  var backdrop = modal && modal.querySelector('.app-modal-backdrop');
+		  var listEl = document.getElementById('equipmentList');
+		  var selectedPane = document.getElementById('equipmentSelectedPane');
+		  var selectedListEl = document.getElementById('selectedEquipmentList');
+		  var acceptBtn = document.getElementById('equipmentAcceptBtn');
+		  var clearBtn = document.getElementById('equipmentClearBtn');
+		
+					// inicialmente vacío; se cargará desde la API /api/equipos-prestamo
+					var sampleEquipos = [];
+					// Fallback local por si la API no responde
+					var fallbackEquipos = [
+						{ id: 1, name: 'Laptop Dell Latitude', ram: '16 GB', almacenamiento: '512 GB SSD', procesador: 'Intel i7-1185G7', touch: true, batteryCondition: 'Bueno (85%)', charger: true, notes: 'Incluye 2 cables USB-C' },
+						{ id: 2, name: 'Monitor 24"', ram: '', almacenamiento: '', procesador: '', touch: false, batteryCondition: '', charger: false, notes: 'Soporte VESA incluido' },
+						{ id: 3, name: 'Proyector Epson', ram: '', almacenamiento: '', procesador: '', touch: false, batteryCondition: '', charger: false, notes: 'Bolsa de transporte y cable HDMI' }
+					];
+
+				function showPrestamoMsg(content, isRed){
+					var bloqEl = document.getElementById('prestamoActivoMsg');
+					if(!bloqEl){
+						bloqEl = document.createElement('div');
+						bloqEl.id = 'prestamoActivoMsg';
+						bloqEl.style.cssText = 'border-radius:30px;padding:18px 20px;font-size:14px;line-height:1.5;margin-bottom:12px';
+						var mc = modal.querySelector('.app-modal-content');
+						mc.insertBefore(bloqEl, mc.firstChild);
+					}
+					bloqEl.style.background = isRed ? '#fef2f2' : '#fffbeb';
+					bloqEl.style.border     = isRed ? '1px solid #fecaca' : '1px solid #fde68a';
+					bloqEl.style.color      = isRed ? '#b91c1c' : '#92400e';
+					bloqEl.style.display    = 'block';
+					bloqEl.innerHTML        = content;
+				}
+				function hidePrestamoMsg(){
+					var bloqEl = document.getElementById('prestamoActivoMsg');
+					if(bloqEl) bloqEl.style.display = 'none';
+				}
+
+				function openPrestamo(){
+					if(!modal) return;
+					// Verificar préstamo activo sin importar si la sesión está viva
+					fetch('/api/prestamos/activo', { credentials: 'include' })
+						.then(function(resp){ return resp.json().catch(function(){ return {}; }); })
+						.then(function(data){
+							modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false');
+							if(data && data.sesion_expirada){
+								// Sesión expirada: aviso amigable con botón de re-login
+								if(listEl) listEl.style.display = 'none';
+								if(selectedPane) selectedPane.setAttribute('aria-hidden','true');
+								showPrestamoMsg(
+									'<strong>Tu sesión ha expirado.</strong><br>Por favor vuelve a iniciar sesión para continuar.' +
+									' <a href="/login.html" style="color:#b45309;font-weight:700;text-decoration:underline">Iniciar sesión</a>',
+									false
+								);
+							} else if(data && data.activo && data.prestamo){
+								// Préstamo activo: bloquear
+								var p = data.prestamo;
+								var fechaFin = '';
+								if(p.fecha_fin){
+									try{
+										var d = new Date(p.fecha_fin);
+										var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+										fechaFin = ' (hasta el ' + d.getUTCDate() + ' de ' + meses[d.getUTCMonth()] + ' del ' + d.getUTCFullYear() + ')';
+									}catch(e){ fechaFin = ' (hasta ' + p.fecha_fin + ')'; }
+								}
+								if(listEl) listEl.style.display = 'none';
+								if(selectedPane) selectedPane.setAttribute('aria-hidden','true');
+								showPrestamoMsg(
+									'<strong>⚠ Ya tienes un préstamo activo</strong><br>' +
+									'El equipo <b>' + (p.id_computadora || '') + '</b>' + fechaFin +
+									' aún no ha sido retornado. No puedes solicitar otro préstamo hasta registrar la devolución.',
+									true
+								);
+							} else {
+								// Sin problema: mostrar lista normal
+								hidePrestamoMsg();
+								if(listEl) listEl.style.display = '';
+								populateList();
+							}
+						})
+						.catch(function(){
+							// Error de red: abrir de todas formas sin bloquear
+							modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false');
+							hidePrestamoMsg();
+							if(listEl) listEl.style.display = '';
+							populateList();
+						});
+				}
+		  function closePrestamo(){ if(!modal) return; modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); if(window._prestamoQueue){ window._prestamoQueue = null; } selectedEquipos = []; try{ renderSelectedList(); }catch(e){} if(acceptBtn) acceptBtn.disabled = true; }
+
+				var equipFilter = 'laptop';
+				var equipSearch = '';
+
+				function populateList(){
+					if(!listEl) return;
+					listEl.innerHTML = '';
+					var q = equipSearch.toLowerCase().trim();
+					var filtered = sampleEquipos.filter(function(eq){
+						var matchFilter = equipFilter === 'todos' || (eq.tipo || '').toLowerCase() === equipFilter;
+						var matchSearch = !q || (eq.name || '').toLowerCase().includes(q) || (eq.tipo || '').toLowerCase().includes(q) || (eq.procesador || '').toLowerCase().includes(q);
+						return matchFilter && matchSearch;
+					});
+					if(filtered.length === 0){
+						var empty = document.createElement('li');
+						empty.style.cssText = 'padding:16px;text-align:center;color:#9ca3af;font-size:13px';
+						empty.textContent = 'No hay equipos que coincidan';
+						listEl.appendChild(empty);
+						return;
+					}
+						filtered.forEach(function(eq){
+						var li = document.createElement('li'); li.className='equipment-item'; li.tabIndex=0; li.dataset.id=eq.id;
+						var displayName = '';
+						try { displayName = String(eq && (eq.name || eq.nombre_qr || eq.name_qr || eq.displayName || eq.modelo || eq.descripcion) || '').trim(); } catch(e) { displayName = '' }
+						if(!displayName) displayName = 'Sin nombre';
+						li.textContent = displayName;
+						li.title = displayName;
+						li.style.color = '#0b1220';
+						li.style.fontSize = '14px';
+						li.addEventListener('click', function(){ toggleSelection(eq); });
+						li.addEventListener('keydown', function(e){ if(e.key==='Enter') toggleSelection(eq); });
+						// Hover tooltip: show equipment specs following the mouse
+						li.addEventListener('mouseenter', function(e){ showTooltip(eq, e); });
+						li.addEventListener('mousemove', function(e){ moveTooltip(e); });
+						li.addEventListener('mouseleave', function(){ hideTooltip(); });
+						listEl.appendChild(li);
+					});
+				}
+
+				// Event listeners para búsqueda y filtros
+				var searchInput = document.getElementById('equipmentSearch');
+				if(searchInput){
+					searchInput.addEventListener('input', function(){
+						equipSearch = this.value;
+						populateList();
+					});
+				}
+				document.querySelectorAll('.eq-filter').forEach(function(btn){
+					btn.addEventListener('click', function(){
+						document.querySelectorAll('.eq-filter').forEach(function(b){ b.classList.remove('active'); });
+						this.classList.add('active');
+						equipFilter = this.dataset.filter;
+						populateList();
+					});
+				});
+
+					// Cargar equipos desde la API y poblar la lista (con fallback)
+					function loadEquiposFromApi(){
+						fetch('/api/equipos-prestamo', { credentials: 'include' })
+							.then(function(resp){ if(!resp.ok) throw new Error('HTTP '+resp.status); return resp.json(); })
+							.then(function(data){
+								try {
+									console.debug('equipos-prestamo response', data);
+									var rows = (data && data.success && Array.isArray(data.equipos)) ? data.equipos : (Array.isArray(data) ? data : []);
+
+									if (!rows || rows.length === 0) {
+										sampleEquipos = fallbackEquipos;
+									} else {
+										// Normalize DB rows into the shape the UI expects
+							sampleEquipos = rows.map(function(r){
+									return {
+										id: r.id || r.pk || r.codigo || r.equipo_id || null,
+										name: (r.nombre_qr || r.name_qr || r.name || r.nombre || r.descripcion || r.modelo || r.equipo || r.title || '').toString(),
+										ram: r.memoria_ram || r.ram || r.memoria || r.memory || r.ram_gb || '',
+										almacenamiento: r.memoria_ssd || r.almacenamiento || r.ssd || r.hdd || r.disco || r.disk || r.almacenamiento_gb || r.storage || '',
+										procesador: r.procesador || r.cpu || r.processor || r.procesor || '',
+										touch: (r.touch === true) || (r.tactil === true) || (String(r.touch || r.tactil || '').toLowerCase() === 'si') || false,
+										batteryCondition: r.bateria_condicion || r.battery_condition || r.condicion_bateria || r.bateria || r.batteryCondition || '',
+										charger: (r.charger === true) || (r.cargador === true) || (String(r.charger || r.cargador || '').toLowerCase() === 'si') || false,
+										estatus: r.estatus || r.status || r.estado || '',
+										tipo: (r.tipo || r.type || r.categoria || '').toString().toLowerCase(),
+										notes: r.notas || r.notes || r.detalle || r.descripcion_corta || ''
+									};
+								});
+									}
+								} catch (e) {
+									console.warn('Error normalizando equipos-prestamo:', e);
+									sampleEquipos = fallbackEquipos;
+								}
+
+								populateList();
+							})
+							.catch(function(err){
+								console.warn('No se pudo cargar /api/equipos-prestamo, usando fallback:', err);
+								sampleEquipos = fallbackEquipos;
+								populateList();
+							});
+					}
+					// Selection management: allow multiple equipments to be queued for request
+					var selectedEquipos = [];
+					function toggleSelection(eq){
+						if(!eq || !eq.id) return;
+						var idx = selectedEquipos.findIndex(function(x){ return String(x.id) === String(eq.id); });
+						if(idx === -1){
+							selectedEquipos.push(eq);
+						} else {
+							selectedEquipos.splice(idx,1);
+						}
+						renderSelectedList();
+					}
+					function removeFromSelection(id){
+						selectedEquipos = selectedEquipos.filter(function(x){ return String(x.id) !== String(id); });
+						renderSelectedList();
+					}
+					function renderSelectedList(){
+						if(!selectedListEl) return;
+						selectedListEl.innerHTML = '';
+						if(selectedEquipos.length === 0){
+							var empty = document.createElement('li'); empty.style.cssText = 'padding:8px;color:#9ca3af;font-size:13px'; empty.textContent = 'No has seleccionado equipos'; selectedListEl.appendChild(empty); acceptBtn.disabled = true; return;
+						}
+						selectedEquipos.forEach(function(eq){
+							var li = document.createElement('li'); li.style.display='flex'; li.style.justifyContent='space-between'; li.style.alignItems='center'; li.style.padding='8px 10px'; li.style.border='1px solid #e6e6e6'; li.style.borderRadius='30px';li.style.background='#fff'; li.style.color='#0b1220';
+							var left = document.createElement('div'); left.style.flex='1'; left.style.marginRight='8px';
+							var title = document.createElement('div'); title.style.fontWeight='700'; title.style.color='#0b1220'; title.textContent = eq.name || eq.nombre_qr || eq.displayName || 'Sin nombre';
+							var meta = document.createElement('div'); meta.style.fontSize='12px'; meta.style.color='var(--muted)'; meta.textContent = (eq.tipo || '') + (eq.procesador ? ' • ' + eq.procesador : '');
+							left.appendChild(title); left.appendChild(meta);
+							var actions = document.createElement('div');
+							var removeBtn = document.createElement('button'); removeBtn.className='btn remove-selected-btn'; removeBtn.textContent='Quitar'; 
+							removeBtn.style.marginLeft='6px'; 
+							removeBtn.style.fontSize='13px';
+							removeBtn.style.color='white';
+							removeBtn.style.background='#eb0000';
+							removeBtn.style.borderRadius='30px';
+							removeBtn.style.borderColor='white';
+							removeBtn.style.cursor = 'pointer';
+							removeBtn.addEventListener('click', function(){ removeFromSelection(eq.id); });
+							actions.appendChild(removeBtn);
+							li.appendChild(left); li.appendChild(actions);
+							selectedListEl.appendChild(li);
+						});
+						acceptBtn.disabled = false;
+						// Reflect selection state in the main list
+						try{
+							if(listEl){
+								listEl.querySelectorAll('.equipment-item').forEach(function(item){
+									var id = item.dataset && item.dataset.id ? String(item.dataset.id) : null;
+									var found = selectedEquipos.some(function(x){ return String(x.id) === String(id); });
+									if(found) item.classList.add('selected'); else item.classList.remove('selected');
+								});
+							}
+						}catch(e){}
+					}
+
+			// Tooltip element and helpers: shows the same spec layout as the detail pane
+			var tooltipEl = null;
+			function ensureTooltipEl(){
+				if(tooltipEl) return;
+				tooltipEl = document.createElement('div');
+				tooltipEl.className = 'equipment-tooltip';
+				document.body.appendChild(tooltipEl);
+			}
+
+			function buildSpecsHtml(eq){
+				var parts = [];
+				function addRow(label, value){
+					parts.push('<div class="spec-row"><div class="spec-label">'+label+':</div><div class="spec-value">'+(value !== null && value !== undefined ? String(value) : '')+'</div></div>');
+				}
+				addRow('Nombre', (eq && (eq.name || eq.nombre_qr || eq.name_qr)) || '');
+				addRow('RAM', (eq && (eq.ram || eq.memoria || '')) || '');
+				addRow('Almacenamiento', (eq && (eq.almacenamiento || eq.disk || eq.storage || '')) || '');
+				addRow('Procesador', (eq && (eq.procesador || eq.cpu || '')) || '');
+				addRow('Touch', (eq && (eq.touch === true || String(eq.touch).toLowerCase() === 'si')) ? 'Sí' : 'No');
+				addRow('Condición de la batería', (eq && (eq.batteryCondition || eq.condicion_bateria || eq.bateria || '')) || '');
+				addRow('Cargador', (eq && (eq.charger === true || String(eq.charger).toLowerCase() === 'si')) ? 'Sí' : 'No');
+				addRow('Estatus', (eq && (eq.estatus || eq.status || eq.estado || '')) || '');
+				var notesHtml = (eq && eq.notes) ? '<div class="spec-row"><div class="spec-label">Notas:</div><div class="spec-value"><div class="muted">'+(eq.notes||'')+'</div></div></div>' : '';
+				var title = '';
+				try{ title = eq && (eq.name || eq.nombre_qr || eq.name_qr || eq.displayName) ? String(eq.name || eq.nombre_qr || eq.name_qr || eq.displayName) : ''; }catch(e){ title = ''; }
+				return '<h4>'+ (title || 'Sin nombre') +'</h4><div class="equipment-specs">'+parts.join('') + notesHtml + '</div>';
+			}
+
+			function showTooltip(eq, ev){
+				ensureTooltipEl();
+				tooltipEl.innerHTML = buildSpecsHtml(eq);
+				tooltipEl.style.display = 'block';
+				moveTooltip(ev);
+			}
+
+			function moveTooltip(ev){
+				if(!tooltipEl || tooltipEl.style.display==='none') return;
+				var tw = tooltipEl.offsetWidth || 240;
+				var th = tooltipEl.offsetHeight || 120;
+				var x = ev.clientX + 16;
+				var y = ev.clientY + 12;
+				var vw = window.innerWidth || document.documentElement.clientWidth;
+				var vh = window.innerHeight || document.documentElement.clientHeight;
+				// Flip horizontally if overflowing right edge
+				if(x + tw + 8 > vw) x = ev.clientX - 16 - tw;
+				// If still off-screen on left, clamp
+				if(x < 8) x = 8;
+				// Flip vertically if overflowing bottom
+				if(y + th + 8 > vh) y = ev.clientY - 8 - th;
+				if(y < 8) y = 8;
+				tooltipEl.style.left = x + 'px';
+				tooltipEl.style.top = y + 'px';
+			}
+
+			function hideTooltip(){ if(tooltipEl) tooltipEl.style.display = 'none'; }
+
+					// Connect accept/cancel and date modal handling (lazy element queries)
+					function openDateModal(eqId){
+						var dateModal = document.getElementById('prestamoDateModal');
+						var fechaInicioInput = document.getElementById('modalPrestamoFechaInicio');
+						var fechaFinInput = document.getElementById('modalPrestamoFechaFin');
+						var modalConfirmBtn = document.getElementById('modalConfirmPrestamoBtn');
+						var modalCancelBtn = document.getElementById('modalCancelPrestamoBtn');
+						var modalCloseBtn = document.getElementById('prestamoDateModalClose');
+						if(!dateModal) return;
+						var hoy = new Date();
+						var isoHoy = hoy.toISOString().slice(0,10);
+						var plus7 = new Date(hoy.getTime() + 7*24*60*60*1000).toISOString().slice(0,10);
+						if(fechaInicioInput) fechaInicioInput.value = isoHoy;
+						if(fechaFinInput) fechaFinInput.value = plus7;
+						dateModal.classList.add('is-open'); dateModal.setAttribute('aria-hidden','false');
+						if(modalConfirmBtn) modalConfirmBtn.dataset.eqId = eqId;
+
+						// Attach modal listeners once
+						if(modalConfirmBtn && !modalConfirmBtn.dataset._attached){
+							modalConfirmBtn.dataset._attached = '1';
+							modalConfirmBtn.addEventListener('click', function(e){
+								e.preventDefault();
+								// Support single or batch requests
+								var id = this.dataset.eqId;
+								var isBatch = (this.dataset._batch === '1') || (window._prestamoBatch === true);
+								var fecha_inicio = (fechaInicioInput && fechaInicioInput.value) ? fechaInicioInput.value : null;
+								var fecha_fin = (fechaFinInput && fechaFinInput.value) ? fechaFinInput.value : null;
+								if(!isBatch && !id) { alert('No hay equipo seleccionado'); return; }
+								modalConfirmBtn.disabled = true;
+								var messageEl = document.getElementById('modalPrestamoMessage');
+								if(messageEl){ messageEl.style.display = 'none'; messageEl.textContent = ''; }
+
+								function sendOne(eqId){
+									var payload = {
+										id_computadora: String(eqId),
+										fecha_inicio: fecha_inicio,
+										fecha_fin: fecha_fin
+									};
+									return fetch('/api/prestamos', { method: 'POST', credentials: 'include', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+										.then(function(resp){ return resp.json().then(function(j){ return {ok: resp.ok, status: resp.status, body: j}; }); })
+										.catch(function(err){ return {ok:false, status:0, body:{error: String(err)}}; });
+								}
+
+								if(isBatch){
+									// Collect queue from window._prestamoQueue (fallback to selectedEquipos)
+									var queue = Array.isArray(window._prestamoQueue) && window._prestamoQueue.length>0 ? window._prestamoQueue.slice() : (Array.isArray(selectedEquipos) ? selectedEquipos.map(function(x){ return String(x.id); }) : []);
+									if(queue.length === 0){ modalConfirmBtn.disabled = false; alert('No hay equipos en la cola para procesar'); return; }
+									// Send sequentially to preserve server order and show progress
+									var results = [];
+									queue.reduce(function(prev, nextId){
+										return prev.then(function(){ return sendOne(nextId).then(function(res){ results.push({id: nextId, res: res}); }); });
+									}, Promise.resolve()).then(function(){
+										modalConfirmBtn.disabled = false;
+										// Show summary
+										var okCount = results.filter(function(r){ return r.res && r.res.ok; }).length;
+										var failCount = results.length - okCount;
+										if(messageEl){ messageEl.style.display = 'block'; messageEl.style.color = (failCount===0 ? '#059669' : '#b91c1c'); messageEl.textContent = 'Procesadas: ' + okCount + ' correctas, ' + failCount + ' fallidas.'; }
+										// clear queue and batch flag
+										window._prestamoQueue = null; window._prestamoBatch = false;
+										setTimeout(function(){ if(messageEl) messageEl.style.display='none'; closeDateModal(); closePrestamo(); }, 1200);
+									}).catch(function(err){ modalConfirmBtn.disabled = false; console.error('Error en batch prestamo', err); if(messageEl){ messageEl.style.display='block'; messageEl.style.color='#b91c1c'; messageEl.textContent = 'Error procesando solicitudes en lote'; } });
+								} else {
+									// Single request path (existing behavior)
+									sendOne(id).then(function(r){
+										modalConfirmBtn.disabled = false;
+										var messageEl = document.getElementById('modalPrestamoMessage');
+										if(r.ok && r.body && r.body.success){
+											if(messageEl){ messageEl.style.display = 'block'; messageEl.style.color = '#059669'; messageEl.textContent = 'Solicitud enviada correctamente.'; }
+											if(window._prestamoQueue && Array.isArray(window._prestamoQueue) && window._prestamoQueue.length>0){
+												setTimeout(function(){ if(messageEl) messageEl.style.display='none'; closeDateModal(); processNextInQueue(); }, 900);
+											} else {
+												setTimeout(function(){ if(messageEl) messageEl.style.display='none'; closeDateModal(); closePrestamo(); }, 900);
+											}
+										} else if(r.status === 401){
+											closeDateModal();
+											showPrestamoMsg(
+												'<strong>Tu sesión ha expirado.</strong><br>Por favor vuelve a iniciar sesión para enviar la solicitud.' +
+												' <a href="/login.html" style="color:#b45309;font-weight:700;text-decoration:underline">Iniciar sesión</a>',
+												false
+											);
+										} else {
+											var errMsg = (r.body && r.body.error) ? r.body.error : ('Error ('+ (r.status||'--') +')');
+											if(messageEl){ messageEl.style.display='block'; messageEl.style.color = '#b91c1c'; messageEl.textContent = 'No se pudo enviar la solicitud: ' + errMsg; }
+										}
+									}).catch(function(err){ modalConfirmBtn.disabled = false; console.error('Error al crear prestamo', err); var messageEl = document.getElementById('modalPrestamoMessage'); if(messageEl){ messageEl.style.display='block'; messageEl.style.color='#b91c1c'; messageEl.textContent = 'Error al enviar solicitud'; } });
+								}
+							});
+						}
+
+						if(modalCancelBtn && !modalCancelBtn.dataset._attached){
+							modalCancelBtn.dataset._attached = '1';
+							modalCancelBtn.addEventListener('click', function(e){ e.preventDefault(); closeDateModal(); if(window._prestamoQueue){ window._prestamoQueue = null; } });
+						}
+
+						if(modalCloseBtn && !modalCloseBtn.dataset._attached){
+							modalCloseBtn.dataset._attached = '1';
+							modalCloseBtn.addEventListener('click', function(){ closeDateModal(); });
+						}
+
+						if(dateModal && !dateModal.dataset._backdropAttached){
+							dateModal.dataset._backdropAttached = '1';
+							dateModal.addEventListener('click', function(e){ if(e.target === dateModal) closeDateModal(); });
+						}
+					}
+
+					function closeDateModal(){ var dateModal = document.getElementById('prestamoDateModal'); var modalConfirmBtn = document.getElementById('modalConfirmPrestamoBtn'); if(!dateModal) return; dateModal.classList.remove('is-open'); dateModal.setAttribute('aria-hidden','true'); if(modalConfirmBtn){ modalConfirmBtn.dataset.eqId = ''; modalConfirmBtn.dataset._batch = ''; } window._prestamoBatch = false; }
+
+					function processNextInQueue(){
+						if(!window._prestamoQueue || !Array.isArray(window._prestamoQueue)) return;
+						var next = window._prestamoQueue.shift();
+						if(!next){ window._prestamoQueue = null; return closePrestamo(); }
+						// open date modal for the next item (id expected)
+						openDateModal(next);
+					}
+
+					if(acceptBtn) acceptBtn.addEventListener('click', function(){
+						// If there are selected items, build a queue and start processing
+						if(selectedEquipos && selectedEquipos.length>0){
+							var ids = selectedEquipos.map(function(x){ return String(x.id); });
+							// disable accept to avoid double triggers
+							acceptBtn.disabled = true;
+							if(ids.length > 1){
+								// Batch mode: open single date modal, then send all requests with one confirm
+								window._prestamoQueue = ids.slice();
+								window._prestamoBatch = true;
+								var modalConfirmBtn = document.getElementById('modalConfirmPrestamoBtn');
+								if(modalConfirmBtn) modalConfirmBtn.dataset._batch = '1';
+								openDateModal(null);
+								return;
+							} else {
+								// Single selection: keep existing per-item flow
+								window._prestamoQueue = ids.slice();
+								processNextInQueue();
+								return;
+							}
+						}
+						// fallback: if single id dataset present
+						var id = this.dataset && this.dataset.eqId ? this.dataset.eqId : null;
+						if(id) openDateModal(id);
+					});
+					if(clearBtn) clearBtn.addEventListener('click', function(){ selectedEquipos = []; renderSelectedList(); });
+		  if(closeBtn) closeBtn.addEventListener('click', closePrestamo);
+		  if(backdrop) backdrop.addEventListener('click', closePrestamo);
+		  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePrestamo(); });
+
+					// Open modal from the 'Ticket de Prestamo de equipo' card
+					function initPrestamo() {
+						var ticketCard = document.querySelector('.card-ticket-prestamo');
+						if (ticketCard) { ticketCard.addEventListener('click', function(ev){ ev.preventDefault(); openPrestamo(); }); }
+						// Intentar cargar equipos desde el servidor al inicio
+						try { loadEquiposFromApi(); } catch (e) { console.warn('initPrestamo load failed', e); }
+					}
+
+					if (document.readyState === 'loading') {
+						document.addEventListener('DOMContentLoaded', initPrestamo);
+					} else {
+						// Ya cargado: inicializar inmediatamente
+						initPrestamo();
+					}
 		})();
 
 // Auto-invocar carga del total de empleados supervisados al cargar la página
@@ -1638,6 +2760,26 @@
 	</div>
 
 		<!-- Report modal (centrado) -->
+			<!-- Modal: Fechas de préstamo -->
+			<div id="prestamoDateModal" class="app-modal" aria-hidden="true">
+			  <div class="app-modal-backdrop" data-close="true"></div>
+			  <div class="app-modal-content" role="dialog" aria-modal="true" aria-labelledby="prestamoDateModalTitle" style="width:360px;max-width:94vw;padding:18px;border-radius:30px">
+				<button class="app-modal-close" id="prestamoDateModalClose" aria-label="Cerrar">&times;</button>
+				<h3 id="prestamoDateModalTitle" style="margin-top:0;font-size:16px">Fechas del préstamo</h3>
+				<div style="display:flex;flex-direction:column;gap:8px">
+				  <label for="modalPrestamoFechaInicio" style="font-weight:700;color:#0b1220">Fecha de inicio</label>
+				  <input id="modalPrestamoFechaInicio" type="date" style="padding:10px;border-radius:8px;border:1px solid #e6e6e6" />
+				  <label for="modalPrestamoFechaFin" style="font-weight:700;color:#0b1220">Fecha de fin</label>
+				  <input id="modalPrestamoFechaFin" type="date" style="padding:10px;border-radius:8px;border:1px solid #e6e6e6" />
+									<div style="font-size:13px;color:var(--muted);margin-top:4px">Al presionar confirmar, usted acepta los términos de préstamo indicados en el folio físico.</div>
+									<div id="modalPrestamoMessage" style="font-size:13px;color:#b91c1c;display:none;margin-top:6px"></div>
+									<div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+										<button id="modalCancelPrestamoBtn" class="btn" type="button">Cancelar</button>
+										<button id="modalConfirmPrestamoBtn" class="btn" type="button">Confirmar</button>
+									</div>
+				</div>
+			  </div>
+			</div>
 		<div id="report-modal" class="modal-overlay" aria-hidden="true">
 			<div class="modal-dialog" role="dialog" aria-modal="true">
 				<button class="modal-close" id="report-modal-close" aria-label="Cerrar">✕</button>
@@ -3588,7 +4730,6 @@
 			</script>
 
 			<script>
-			// Password change UI logic (mimics perfil.html behavior)
 			(function(){
 			  function ensureShowNotification() {
 			    if (window.showNotification) return;
@@ -3603,11 +4744,13 @@
 			    };
 			  }
 
-			  // Robust token getter: checks multiple localStorage keys and returns first token found
-			  function getAuthToken() {
+			  function getAuthToken() 
+			  {
 			    const keys = ['sessionToken','authToken','token','accessToken','id_token','auth_token'];
-			    for (const k of keys) {
-			      try {
+			    for (const k of keys) 
+				{
+			      try 
+				  {
 			        const v = localStorage.getItem(k);
 			        if (v && v.length > 10) return { key: k, token: v };
 			      } catch (e) {}
@@ -4385,13 +5528,14 @@
 				function resetMainState(){ main.classList.remove('updates-visible','news-visible','messages-visible','modules-visible'); }
 
 				// Default: hide all panels
-				if (this.id === 'nav-actualizacion') {
-					hideAllMainChildren(['updates-panel']);
-					resetMainState();
-					main.classList.add('updates-visible');
-					if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
-					try { document.getElementById('updates-panel')?.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
-				} else if (this.id === 'nav-noticias') {
+			if (this.id === 'nav-actualizacion') {
+				hideAllMainChildren(['updates-panel']);
+				resetMainState();
+				main.classList.add('updates-visible');
+				if (rightSidebar) { rightSidebar.style.display = 'none'; document.body.classList.remove('messages-right-open'); }
+				if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
+				try { document.getElementById('updates-panel')?.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
+			} else if (this.id === 'nav-noticias') {
 					hideAllMainChildren(['news-panel']);
 					resetMainState();
 					main.classList.add('news-visible');
@@ -4413,17 +5557,16 @@
 					main.classList.add('messages-visible');
 					if (rightSidebar) { rightSidebar.style.display = 'block'; document.body.classList.add('messages-right-open'); }
 					if (msgComposer) msgComposer.classList.add('fixed');
-				} else if (this.id === 'nav-modulos') {
-					// show modules embed but keep inicio sections and cargo tablero visible
-					hideAllMainChildren(['modules-embed','inicio-explore-sections','tableroCargoSection']);
-					resetMainState();
-					main.classList.add('modules-visible');
-					if (typeof updateModulesEmbed === 'function') updateModulesEmbed();
-				} else {
-					// Fallback: show the main explore sections only
-					hideAllMainChildren(['inicio-explore-sections']);
-					resetMainState();
-				}
+			} else if (this.id === 'nav-modulos') {
+				// show inicio sections (canvas lives in updates-panel, not here)
+				hideAllMainChildren(['inicio-explore-sections','tableroCargoSection']);
+				resetMainState();
+				main.classList.add('modules-visible');
+			} else {
+				// Fallback: show the main explore sections only
+				hideAllMainChildren(['inicio-explore-sections']);
+				resetMainState();
+			}
 				// ensure message composer state cleaned up
 				if (msgComposer && this.id !== 'nav-mensajes') msgComposer.classList.remove('fixed');
 			}
@@ -5531,14 +6674,15 @@ document.addEventListener('DOMContentLoaded', function(){
 				try { window.currentUserId = obj && (obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) ? String(obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) : null; } catch(_) { window.currentUserId = null; }
 				try { window.currentUsername = usernameCandidate ? String(usernameCandidate) : null; } catch(_) { window.currentUsername = null; }
 
-				const profileAvatar = document.getElementById('userProfileAvatar');
-				const profileName = document.getElementById('userProfileName');
-				const profileEmail = document.getElementById('userProfileEmail');
-				const generalAvatar = document.getElementById('userGeneralAvatar');
-				const generalName = document.getElementById('userGeneralName');
-				const generalRole = document.getElementById('userGeneralRole');
-				const joinedDateEl = document.getElementById('user-joined-date');
-				const yearsEl = document.getElementById('user-years-service');
+			const profileAvatar = document.getElementById('userProfileAvatar');
+			const profileName = document.getElementById('userProfileName');
+			const profileEmail = document.getElementById('userProfileEmail');
+			const generalAvatar = document.getElementById('userGeneralAvatar');
+			const generalName = document.getElementById('userGeneralName');
+			const generalRole = document.getElementById('userGeneralRole');
+			const joinedDateEl = document.getElementById('user-joined-date');
+			const yearsEl = document.getElementById('user-years-service');
+			const sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
 
 				function setAvatar(el, src, displayName) {
 					if (!el) return;
@@ -5552,12 +6696,13 @@ document.addEventListener('DOMContentLoaded', function(){
 					}
 				}
 
-				// Initial render from localStorage object
-				if (profileName) profileName.textContent = name;
-				if (generalName) generalName.textContent = name;
-				if (profileEmail) profileEmail.textContent = usernameCandidate ? ('@' + usernameCandidate) : (obj && obj.email ? obj.email : '');
-				setAvatar(profileAvatar, foto, name);
-				setAvatar(generalAvatar, foto, name);
+			// Initial render from localStorage object
+			if (profileName) profileName.textContent = name;
+			if (generalName) generalName.textContent = name;
+			if (profileEmail) profileEmail.textContent = usernameCandidate ? ('@' + usernameCandidate) : (obj && obj.email ? obj.email : '');
+			setAvatar(profileAvatar, foto, name);
+			setAvatar(generalAvatar, foto, name);
+			setAvatar(sidebarAvatarEl, foto, name);
 
 				// candidate employee id fields
 				let empleadoId = null;
@@ -5642,14 +6787,16 @@ document.addEventListener('DOMContentLoaded', function(){
 					} catch (e) { /* ignore */ }
 				}
 
-				if (employee) {
-					// prefer foto_url
-					const empPhoto = employee.foto_url || employee.photo || employee.photo_url || employee.avatar || null;
-					if (empPhoto) {
-						foto = empPhoto;
-						setAvatar(profileAvatar, foto, employee.nombre_completo || name);
-						setAvatar(generalAvatar, foto, employee.nombre_completo || name);
-					}
+			if (employee) {
+				// prefer foto_url
+				const empPhoto = employee.foto_url || employee.photo || employee.photo_url || employee.avatar || null;
+				if (empPhoto) {
+					foto = empPhoto;
+					const empName = employee.nombre_completo || name;
+					setAvatar(profileAvatar, foto, empName);
+					setAvatar(generalAvatar, foto, empName);
+					setAvatar(sidebarAvatarEl, foto, empName);
+				}
 					if (generalRole && (employee.puesto || employee.position || employee.cargo)) {
 						generalRole.textContent = employee.puesto || employee.position || employee.cargo;
 					}
@@ -5884,7 +7031,6 @@ const obs = new MutationObserver((mutations)=>{
 });
 try { obs.observe(document.body || document.documentElement, {childList:true, subtree:true}); } catch(e){}
 
-// Hide overlay when clicking outside a pinned avatar
 document.addEventListener('click', function(ev){
 	if (!_cargoOverlayPinnedTarget) return;
 	const overlay = _cargoHoverOverlayEl || document.getElementById('cargoEventHoverOverlay');
@@ -5904,5 +7050,663 @@ document.addEventListener('click', function(ev){
 
 })();
 	</script>
+  <script>
+    // Gestión de tabs de notificaciones
+    function initializeNotificationsTabSwitcher() {
+      const tabBtnTodos = document.getElementById('notificationsTabTodos');
+      const tabBtnDiseno = document.getElementById('notificationsTabDiseno');
+      const listTodos = document.getElementById('notificationsList-todos');
+      const listDiseno = document.getElementById('notificationsList-diseno');
+
+      if (!tabBtnTodos || !tabBtnDiseno || !listTodos || !listDiseno) return;
+
+      function switchTab(tabName) {
+        const isAllTab = tabName === 'todos';
+        tabBtnTodos.classList.toggle('active', isAllTab);
+        tabBtnTodos.setAttribute('aria-selected', isAllTab ? 'true' : 'false');
+        tabBtnDiseno.classList.toggle('active', !isAllTab);
+        tabBtnDiseno.setAttribute('aria-selected', !isAllTab ? 'true' : 'false');
+        listTodos.classList.toggle('active', isAllTab);
+        listDiseno.classList.toggle('active', !isAllTab);
+      }
+
+      tabBtnTodos.addEventListener('click', () => switchTab('todos'));
+      tabBtnDiseno.addEventListener('click', () => switchTab('diseno'));
+
+      updateNotificationsCount();
+    }
+
+    function updateNotificationsCount() {
+      const listTodos = document.getElementById('notificationsList-todos');
+      const listDiseno = document.getElementById('notificationsList-diseno');
+      const badgeTodos = document.getElementById('badgeTodos');
+      const badgeDiseno = document.getElementById('badgeDiseno');
+
+      if (!listTodos || !listDiseno || !badgeTodos || !badgeDiseno) return;
+
+      const todosCount = listTodos.querySelectorAll('li.notification-item').length;
+      const disenoCount = listDiseno.querySelectorAll('li.notification-item').length;
+
+      badgeTodos.textContent = todosCount;
+      badgeDiseno.textContent = disenoCount;
+    }
+
+    function addNotificationToPanel(title, message, type = 'general') {
+      const listId = type === 'diseno' ? 'notificationsList-diseno' : 'notificationsList-todos';
+      const list = document.getElementById(listId);
+      if (!list) return;
+
+      const li = document.createElement('li');
+      li.className = 'notification-item';
+      li.setAttribute('data-title', title);
+      li.setAttribute('data-full-message', message);
+      li.setAttribute('data-type', type);
+      li.innerHTML = `
+        <span class="notification-dot"></span>
+        <div class="notification-content">
+          <strong>${title}</strong>
+          <span>${message}</span>
+        </div>
+      `;
+      list.appendChild(li);
+      updateNotificationsCount();
+
+      li.addEventListener('click', function() {
+        const t = this.getAttribute('data-title');
+        const m = this.getAttribute('data-full-message');
+        if (typeof showNotificationDetail === 'function') {
+          showNotificationDetail(t, m);
+        }
+      });
+    }
+
+    function initializeNotificationsDropdown() {
+      const notificationsButton = document.getElementById('notificationsButton');
+      const notificationsPanel = document.getElementById('notificationsPanel');
+      const notificationsBadge = notificationsButton?.querySelector('.notification-badge');
+      const notificationsList = notificationsPanel?.querySelector('.notifications-list');
+      const detailModal = document.getElementById('notificationDetailModal');
+      const detailCloseButton = document.getElementById('closeNotificationDetail');
+      const detailTitle = document.getElementById('notificationDetailTitle');
+      const detailMessage = document.getElementById('notificationDetailMessage');
+      const detailImage = document.getElementById('notificationDetailImage');
+
+      if (!notificationsButton || !notificationsPanel || !notificationsList || !detailModal || !detailCloseButton || !detailTitle || !detailMessage || !detailImage) {
+        return;
+      }
+
+      if (notificationsButton.dataset.notificationsInitialized === '1') {
+        return;
+      }
+      notificationsButton.dataset.notificationsInitialized = '1';
+
+      if (detailMessage) {
+        detailMessage.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+          const selection = window.getSelection();
+          if (!selection.rangeCount) return;
+          selection.deleteFromDocument();
+          const textNode = document.createTextNode(text);
+          selection.getRangeAt(0).insertNode(textNode);
+          selection.collapseToEnd();
+        });
+      }
+
+      const getUsernameCandidates = () => {
+        const list = [];
+        const username = (localStorage.getItem('username') || '').trim();
+        if (username) list.push(username);
+
+        const rawLogged = localStorage.getItem('loggedInUser');
+        if (rawLogged) {
+          try {
+            const parsed = JSON.parse(rawLogged);
+            const fromLogged = [parsed.username, parsed.employeeNumber, parsed.name, parsed.nombre_completo]
+              .map(v => String(v || '').trim())
+              .filter(Boolean);
+            list.push(...fromLogged);
+          } catch (_) {}
+        }
+
+        const unique = [...new Set(list)];
+        return unique;
+      };
+
+      const resolveUsername = () => {
+        const candidates = getUsernameCandidates();
+        return candidates.length ? candidates[0] : '';
+      };
+
+      const seenNotificationIds = new Set();
+      const NOTIFICATIONS_POLL_INTERVAL_MS = 3000;
+      let notificationsPollTimer = null;
+      let notificationsRequestInFlight = false;
+      let unreadNotificationKeys = new Set();
+      let hasUnreadBaseline = false;
+      let browserNotificationPermissionRequested = false;
+      const notificationMessageByKey = new Map();
+
+      const escapeHtml = (text) => String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+      const sanitizeNotificationHtml = (rawHtml) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = String(rawHtml || '');
+
+        const allowedTags = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'SPAN', 'DIV', 'P', 'UL', 'OL', 'LI', 'FONT']);
+        const allowedStyle = new Set(['color', 'font-weight', 'font-style', 'text-decoration', 'font-family', 'font-size', 'text-align']);
+
+        const sanitizeStyleValue = (value) => {
+          const clean = String(value || '').replace(/[<>]/g, '').trim();
+          if (!clean) return '';
+          if (/expression\s*\(|javascript:|url\s*\(/i.test(clean)) return '';
+          return clean;
+        };
+
+        const cleanNode = (node) => {
+          const children = Array.from(node.childNodes);
+          children.forEach((child) => {
+            if (child.nodeType === Node.TEXT_NODE) return;
+
+            if (child.nodeType !== Node.ELEMENT_NODE) {
+              child.remove();
+              return;
+            }
+
+            const tag = child.tagName.toUpperCase();
+            if (!allowedTags.has(tag)) {
+              while (child.firstChild) {
+                node.insertBefore(child.firstChild, child);
+              }
+              child.remove();
+              return;
+            }
+
+            Array.from(child.attributes).forEach((attr) => {
+              const attrName = attr.name.toLowerCase();
+              if (attrName.startsWith('on')) {
+                child.removeAttribute(attr.name);
+                return;
+              }
+
+              if (attrName === 'style') {
+                const styleEntries = String(attr.value || '')
+                  .split(';')
+                  .map((entry) => entry.trim())
+                  .filter(Boolean)
+                  .map((entry) => {
+                    const [prop, ...rest] = entry.split(':');
+                    const property = String(prop || '').trim().toLowerCase();
+                    const value = sanitizeStyleValue(rest.join(':'));
+                    if (!allowedStyle.has(property) || !value) return null;
+                    return `${property}: ${value}`;
+                  })
+                  .filter(Boolean);
+
+                if (styleEntries.length) {
+                  child.setAttribute('style', styleEntries.join('; '));
+                } else {
+                  child.removeAttribute('style');
+                }
+                return;
+              }
+
+              if (tag === 'FONT' && (attrName === 'color' || attrName === 'face' || attrName === 'size')) {
+                return;
+              }
+
+              child.removeAttribute(attr.name);
+            });
+
+            cleanNode(child);
+          });
+        };
+
+        cleanNode(wrapper);
+        return wrapper.innerHTML.trim();
+      };
+
+      const richMessageToPlainText = (rawHtml) => {
+        const temp = document.createElement('div');
+        temp.innerHTML = sanitizeNotificationHtml(rawHtml);
+        return String(temp.textContent || '').replace(/\s+/g, ' ').trim();
+      };
+
+      const getNotificationKey = (item, index) => {
+        const notificacionId = Number.parseInt(item?.id, 10);
+        if (Number.isInteger(notificacionId) && notificacionId > 0) {
+          return `id-${notificacionId}`;
+        }
+        return [item?.titulo || '', item?.mensaje || '', item?.fecha || '', item?.created_at || '', index].join('|');
+      };
+
+      const ensureBrowserNotificationPermission = async (forcePrompt = false) => {
+        if (!("Notification" in window)) return 'unsupported';
+        if (Notification.permission === 'granted' || Notification.permission === 'denied') return Notification.permission;
+        if (!forcePrompt && browserNotificationPermissionRequested) return Notification.permission || 'default';
+        browserNotificationPermissionRequested = true;
+        try {
+          return await Notification.requestPermission();
+        } catch (_) {
+          return Notification.permission || 'default';
+        }
+      };
+
+      const showExternalNotification = async ({ title, body, tag } = {}) => {
+        try {
+          if (!("Notification" in window)) return;
+          let permission = Notification.permission;
+          if (permission === 'default') permission = await ensureBrowserNotificationPermission();
+          if (permission !== 'granted') return;
+          const notification = new Notification(title || 'Nueva notificacion', {
+            body: body || 'Tienes una nueva notificacion.',
+            tag: tag || 'inicio-system-notification',
+            renotify: true,
+            silent: false,
+            icon: '/favicon.ico'
+          });
+          notification.onclick = () => {
+            try { notification.close(); } catch (_) {}
+            window.focus();
+          };
+        } catch (error) {
+          console.warn('No se pudo mostrar notificacion externa:', error);
+        }
+      };
+
+      const renderNotifications = (items) => {
+        notificationMessageByKey.clear();
+        if (!items.length) {
+          notificationsList.innerHTML = `
+            <li class="notification-item is-read" data-title="Sin notificaciones" data-full-message="No hay notificaciones para mostrar.">
+              <span class="notification-dot" style="opacity:0;"></span>
+              <div class="notification-content">
+                <strong>Sin notificaciones</strong>
+                <span>No tienes notificaciones nuevas.</span>
+              </div>
+            </li>
+          `;
+          return;
+        }
+        notificationsList.innerHTML = items.map((item, index) => {
+          const notificationId = Number.parseInt(item.id, 10);
+          const isRead = Boolean(item.vio_notificacion);
+          const full = sanitizeNotificationHtml(item.mensaje || '');
+          const shortPlain = richMessageToPlainText(full);
+          const short = shortPlain.length > 70 ? `${shortPlain.slice(0, 67)}...` : shortPlain;
+          const messageKey = Number.isInteger(notificationId) ? `id-${notificationId}` : `idx-${index}`;
+          notificationMessageByKey.set(messageKey, full);
+          return `
+            <li class="notification-item ${isRead ? 'is-read' : ''}" data-id="${Number.isInteger(notificationId) ? notificationId : ''}" data-message-key="${escapeHtml(messageKey)}" data-title="${escapeHtml(item.titulo || 'Notificacion')}" data-foto-url="${escapeHtml(item.foto_url || '')}">
+              <span class="notification-dot"></span>
+              <div class="notification-content">
+                <strong>${escapeHtml(item.titulo || 'Notificacion')}</strong>
+                <span>${escapeHtml(short || 'Sin mensaje')}</span>
+              </div>
+            </li>
+          `;
+        }).join('');
+      };
+
+      const loadNotifications = async () => {
+        if (notificationsRequestInFlight) return;
+
+        const username = resolveUsername();
+        if (!username) {
+          unreadNotificationKeys = new Set();
+          hasUnreadBaseline = false;
+          renderNotifications([]);
+          updateBadge();
+          return;
+        }
+
+        try {
+          notificationsRequestInFlight = true;
+          const response = await fetch(`/api/notificaciones-inicio/${encodeURIComponent(username)}`, { cache: 'no-store' });
+          const data = await response.json().catch(() => ({}));
+
+          notificationsButton.style.display = '';
+          notificationsPanel.style.display = '';
+
+          const list = response.ok && data.success && Array.isArray(data.notificaciones)
+            ? data.notificaciones
+            : [];
+
+          const currentUnreadKeys = new Set(
+            list
+              .map((item, index) => ({ item, index }))
+              .filter(({ item }) => !item?.vio_notificacion)
+              .map(({ item, index }) => getNotificationKey(item, index))
+          );
+
+          const hasNewUnreadNotification = hasUnreadBaseline
+            && [...currentUnreadKeys].some((key) => !unreadNotificationKeys.has(key));
+
+          if (hasNewUnreadNotification) {
+            playNotificationSound();
+            const firstNewUnreadEntry = list
+              .map((item, index) => ({ item, index }))
+              .find(({ item, index }) => !item?.vio_notificacion && !unreadNotificationKeys.has(getNotificationKey(item, index)));
+            if (firstNewUnreadEntry && (document.hidden || !document.hasFocus())) {
+              const plainBody = richMessageToPlainText(firstNewUnreadEntry.item?.mensaje || '');
+              showExternalNotification({
+                title: firstNewUnreadEntry.item?.titulo || 'Nueva notificacion',
+                body: plainBody || 'Tienes una nueva notificacion de inicio.',
+                tag: `inicio-${getNotificationKey(firstNewUnreadEntry.item, firstNewUnreadEntry.index)}`
+              });
+            }
+          }
+
+          unreadNotificationKeys = currentUnreadKeys;
+          hasUnreadBaseline = true;
+          renderNotifications(list);
+          updateBadge();
+        } catch (error) {
+          console.error('Error cargando notificaciones de inicio:', error);
+          notificationsButton.style.display = '';
+          notificationsPanel.style.display = '';
+          unreadNotificationKeys = new Set();
+          hasUnreadBaseline = false;
+          renderNotifications([]);
+          updateBadge();
+        } finally {
+          notificationsRequestInFlight = false;
+        }
+      };
+
+      const updateBadge = () => {
+        const unreadCount = notificationsList.querySelectorAll('.notification-item:not(.is-read)').length;
+        if (!notificationsBadge) return;
+        if (unreadCount > 0) {
+          notificationsBadge.textContent = String(unreadCount);
+          notificationsBadge.style.display = 'inline-block';
+        } else {
+          notificationsBadge.style.display = 'none';
+        }
+      };
+
+      const openPanel = () => {
+        notificationsPanel.classList.add('is-open');
+        notificationsPanel.setAttribute('aria-hidden', 'false');
+        loadNotifications();
+      };
+
+      const closePanel = () => {
+        notificationsPanel.classList.remove('is-open');
+        notificationsPanel.setAttribute('aria-hidden', 'true');
+      };
+
+      const openDetailModal = (title, message, fotoUrl) => {
+        detailTitle.textContent = title || 'Notificación';
+        const safeMessage = sanitizeNotificationHtml(message || '');
+        detailMessage.innerHTML = safeMessage || 'Sin información disponible.';
+        const imageUrl = String(fotoUrl || '').trim();
+        if (imageUrl) {
+          detailImage.src = imageUrl;
+          detailImage.style.display = 'block';
+        } else {
+          detailImage.src = '';
+          detailImage.style.display = 'none';
+        }
+        detailModal.classList.add('is-open');
+        detailModal.setAttribute('aria-hidden', 'false');
+      };
+
+      const markNotificationsAsSeen = async (notificacionId) => {
+        if (!Number.isInteger(notificacionId) || notificacionId <= 0) return;
+        if (seenNotificationIds.has(notificacionId)) return;
+        const username = resolveUsername();
+        if (!username) return;
+        try {
+          const response = await fetch('/api/notificaciones-inicio/visto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, notificacionId })
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.success) {
+            throw new Error(data.error || 'No se pudo marcar la notificación como vista');
+          }
+          seenNotificationIds.add(notificacionId);
+        } catch (error) {
+          console.error('Error al marcar notificaciones de inicio como vistas:', error);
+        }
+      };
+
+      const closeDetailModal = () => {
+        detailImage.src = '';
+        detailImage.style.display = 'none';
+        detailModal.classList.remove('is-open');
+        detailModal.setAttribute('aria-hidden', 'true');
+      };
+
+      notificationsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (notificationsPanel.classList.contains('is-open')) {
+          closePanel();
+        } else {
+          openPanel();
+        }
+      });
+
+      notificationsPanel.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+
+      notificationsList.addEventListener('click', (event) => {
+        const item = event.target.closest('.notification-item');
+        if (!item) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const title = item.dataset.title || item.querySelector('strong')?.textContent?.trim() || 'Notificacion';
+        const messageKey = item.dataset.messageKey || '';
+        const fullMessage = notificationMessageByKey.get(messageKey)
+          || item.querySelector('.notification-content span')?.textContent?.trim()
+          || '';
+        const fotoUrl = item.dataset.fotoUrl || '';
+        const notificacionId = Number.parseInt(item.dataset.id || '', 10);
+        item.classList.add('is-read');
+        updateBadge();
+        closePanel();
+        openDetailModal(title, fullMessage, fotoUrl);
+        markNotificationsAsSeen(notificacionId);
+      });
+
+      detailCloseButton.addEventListener('click', closeDetailModal);
+      detailModal.addEventListener('click', (event) => {
+        if (event.target === detailModal) closeDetailModal();
+      });
+
+      document.addEventListener('click', () => {
+        if (notificationsPanel.classList.contains('is-open')) closePanel();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && notificationsPanel.classList.contains('is-open')) closePanel();
+        if (event.key === 'Escape' && detailModal.classList.contains('is-open')) closeDetailModal();
+      });
+
+      const playNotificationSound = () => {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      };
+
+      const startNotificationsPolling = () => {
+        if (notificationsPollTimer) clearInterval(notificationsPollTimer);
+        notificationsPollTimer = setInterval(() => {
+          loadNotifications();
+        }, NOTIFICATIONS_POLL_INTERVAL_MS);
+      };
+
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) loadNotifications();
+      });
+
+      window.addEventListener('focus', () => {
+        loadNotifications();
+      });
+
+      window.addEventListener('beforeunload', () => {
+        if (notificationsPollTimer) {
+          clearInterval(notificationsPollTimer);
+          notificationsPollTimer = null;
+        }
+      });
+
+      if (notificationsBadge) {
+        notificationsBadge.textContent = '';
+        notificationsBadge.style.display = 'none';
+      }
+
+      const requestPermissionOnFirstGesture = () => {
+        ensureBrowserNotificationPermission(true);
+      };
+
+      window.addEventListener('click', requestPermissionOnFirstGesture, { once: true, capture: true });
+      window.addEventListener('keydown', requestPermissionOnFirstGesture, { once: true, capture: true });
+
+      loadNotifications();
+      startNotificationsPolling();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeNotificationsDropdown();
+      initializeNotificationsTabSwitcher();
+
+      const notificationsButton = document.getElementById('notificationsButton');
+      const notificationsPanel = document.getElementById('notificationsPanel');
+      if (notificationsButton) notificationsButton.style.display = '';
+      if (notificationsPanel) notificationsPanel.style.display = '';
+    });
+  </script>
+  <script>
+  (function() {
+    const ALL_FAQS = [
+      // PM
+      { module: 'PM', q: '¿Cómo creo una nueva orden de producción?', a: 'Ve al módulo PM → Órdenes → Agregar Orden. Rellena los campos como el proyecto, número y nombre de la orden, fehcas de inicio, límite y la fecha requerida por el cliente y finalmente el diseñador a cargo. Presiona Guardar Orden y al diseñador le llegará una notificación.' },
+      { module: 'PM', q: '¿Cómo apruebo una orden?', a: 'Dale clic al botón "Pendientes" y desde el listado y presiona el botón "Aprobar". Solo usuarios con rol PM o superior pueden realizar esta acción, ten en cuenta que si no aparece la orden que quieres aprobar significa que o ya fué aprobada o el diseñador no cambió el estatus de la orden a "Pendiente de aprobación"' },
+      { module: 'PM', q: '¿Cómo genero un reporte de producción semanal?', a: 'Desde PM → Estadísticas, selecciona el rango de fechas y haz clic en "Exportar PDF y EXCEL". Los archivos se descargarán automáticamente.' },
+      { module: 'PM', q: '¿Puedo cancelar una orden ya aprobada?', a: 'Sí, siempre que no haya iniciado producción. Abre la orden, elige "Cancelar orden" e indica el motivo. La acción queda registrada en el historial.' },
+      { module: 'PM', q: '¿Cómo asigno un responsable a una orden?', a: 'En el detalle de la orden, sección "Responsable", busca al empleado por nombre o número y selecciónalo. Recibirá una notificación automática.' },
+      // Diseño
+      { module: 'Diseño', q: '¿Cómo subo un nuevo archivo de diseño?', a: 'En el módulo Diseño , haz clic en "PDFs". Seleccionea el archivo correcto y listo.' },
+      { module: 'Diseño', q: '¿Cómo envío mi orden a "Pendiente de aprobación"?', a: 'Logéate a la orden que deseas mandar a "Pendiente de aprobación", después en la barra de estatus superior hay un botón llamado "Pendiente". El PM asignado recibirá una notificación para aprobar o rechazar el diseño.' },
+      { module: 'Diseño', q: '¿Qué significa el estado "Pausa"?', a: 'Recuerda que hay dos estatus de Pausa, la Pausa de arriba es la pausa que se va a sumar a la orden pero en sí estás trabajando, la pausa de abajo es cuando vas a hacer cualquier otra actividad y no entra en ninguna otra clasificación, después pones en notas el motivo de la pausa y listo.' },
+	  //Comidas
+	  { module: 'Comidas', q: '¿Dónde puedo ver el menú de hoy?', a: 'Una manera de revisar el menú y tus comidas es si acceso al módulo de Comidas, en caso contrario ve con tu supervisor para él te registre tus comidas, y si tu supervisor tampoco tiene acceso, ve físicamente al comedor y ahí podrás revisar el menú y tus comidas de la semana.' },
+	  { module: 'Comidas', q: 'Si se me olvidó checar mis comidas ¿Puedo hacerlo hoy?', a: 'No, no podrás registrar comidas de alguna otra semana que no sea la actual (si es viernes puedes checar las 5 de la semana ese día sin problema), antes tendrás que dar aviso a RRHH y ellas te registrarán las comidas faltantes.' },
+	  //Tickets
+	  {module: 'Tickets de IT', q: '¿Cómo creo un nuevo ticket de soporte IT?', a: 'Ve al Inicio y ahí verás tres botones, selecciona "Ticket de IT" y rellena los campos como tu número de empleado y la descripción detallada del problema. Adjunta capturas de pantalla si es necesario. Presiona "Enviar Ticket" y el equipo de soporte recibirá una notificación para atender tu solicitud.' },
+	  {module: 'Tickets de IT', q: '¿Cuánto demoran en responder un ticket?', a: 'Depende de la carga de trabajo actual del departamento, IT tiene un tiempo de respuesta alto si el problema es crítico, por lo que si es algo no tan grave la respuesta puede tardar un poco.' },
+	  //Vacaciones
+	  {module: 'Vacaciones', q: '¿Cómo solicito vacaciones?', a: 'Ve al botón llamado "Solicitar Vacaciones". Completa el formulario con tu número de empleado, las fechas de inicio y fin. El programa automáticamente calcula los días que tienes pendientes (recuerda que los domingos no cuentan como laborales), después presiona "Solicitar Vacaciones". RRHH recibirá una notificación para aprobar tu solicitud.' },
+	  //Personal a cargo
+	  {module: 'Personal a cargo', q: '¿Cómo veo a las personas que tengo a mi cargo?', a: 'En la barra lateral hay un botón llamado "Personal a cargo", ahí encontrarás un listado con los nombres y números de empleado de las personas que tienes asignadas junto con unas pequeñas estadísticas. Si necesitas saber porqué falta alguien en tu lista de empleados tendrás que acudir a RRHH.' },
+	  //Errores
+	  {module: 'Errores', q: '¿Cómo reporto un error en el sistema?', a: 'En la barra lateral, selecciona "Reportar un Problema". Completa el formulario con una descripción detallada del problema, incluyendo pasos para reproducirlo. Presiona "Enviar" y el equipo de soporte recibirá una notificación para atender el problema.' },
+	  {module: 'Errores', q: '¿Cada cuánto se actualiza Metal ERP?', a: 'Actualmente hay un plan de actualización en el cual cada dos semanas en los viernes se lanzan actualizaciones importantes con mejoras, características, arreglos profundos, lógica, etc. Y los parches de emergencia pueden ser en cualquier día de la semana, Sin embargo no te afectarán (Solo recuerda que tras una actualización grande se recomienda cerrar y volver a iniciar sesión).' },
+	  {module: 'General', q: 'Solicité cambios en mi módulo pero todavía no están ¿Qué pasó?', a: 'Ten en cuenta que las actualizaciones son delicadas en sí mismas y no se pueden adelantar los lanzamientos sin un motivo claro, por lo que recomendamos paciencia si en un módulo falta alguna característica, recuerda que hay más de 18 módulos corriendo al mismo tiempo y todos requieren mantenimiento constante.' },
+	  {module: 'General', q: '¿Puedo sugerir mejoras o nuevas características para el sistema?', a: '¡Claro que sí! Valoramos mucho las sugerencias de los usuarios para mejorar Metal ERP. Puedes enviar tus ideas y sugerencias a través del botón "Reportar un Problema" en la barra lateral, indicando que es una sugerencia de mejora. Nuestro equipo revisará todas las propuestas y considerará su implementación en futuras actualizaciones.' }
+    ];
+
+    const panel      = document.getElementById('ayuda-panel');
+    const overlay    = document.getElementById('ayuda-overlay');
+    const closeBtn   = document.getElementById('ayuda-close-btn');
+    const faqList    = document.getElementById('ayuda-faq-list');
+    const searchInput = document.getElementById('ayuda-search');
+    const openTrigger = document.getElementById('open-ayuda');
+
+    function highlight(text, term) {
+      if (!term) return text;
+      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark style="background:#fef08a;border-radius:3px;padding:0 2px;">$1</mark>');
+    }
+
+    function renderFaqs(query) {
+      const term = (query || '').trim().toLowerCase();
+      const filtered = term
+        ? ALL_FAQS.filter(f => f.q.toLowerCase().includes(term) || f.a.toLowerCase().includes(term) || f.module.toLowerCase().includes(term))
+        : ALL_FAQS;
+
+      if (!filtered.length) {
+        faqList.innerHTML = `<div class="ayuda-no-results"><i class="fas fa-search" style="display:block;font-size:24px;margin-bottom:10px;"></i>Sin resultados para "<strong>${query}</strong>"</div>`;
+        return;
+      }
+
+      faqList.innerHTML = filtered.map((item, i) => `
+        <div class="ayuda-faq-item" data-idx="${i}">
+          <button class="ayuda-faq-question" aria-expanded="false">
+            <span>${highlight(item.q, term)}</span>
+            <span class="ayuda-chevron">▼</span>
+          </button>
+          <div class="ayuda-faq-answer">
+            <span style="display:inline-block;margin-bottom:6px;font-size:11px;font-weight:700;color:#5b86e5;letter-spacing:.4px;text-transform:uppercase;">${item.module}</span><br>
+            ${highlight(item.a, term)}
+          </div>
+        </div>
+      `).join('');
+
+      faqList.querySelectorAll('.ayuda-faq-question').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const faqItem = btn.closest('.ayuda-faq-item');
+          const isOpen = faqItem.classList.contains('open');
+          faqList.querySelectorAll('.ayuda-faq-item').forEach(el => el.classList.remove('open'));
+          if (!isOpen) faqItem.classList.add('open');
+        });
+      });
+    }
+
+    function openPanel() {
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden', 'false');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      renderFaqs('');
+      setTimeout(() => searchInput && searchInput.focus(), 280);
+    }
+
+    function closePanel() {
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden', 'true');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      if (searchInput) searchInput.value = '';
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => renderFaqs(searchInput.value));
+    }
+
+    if (openTrigger) {
+      openTrigger.addEventListener('click', () => {
+        const menu = document.getElementById('user-menu');
+        if (menu) menu.classList.remove('open');
+        openPanel();
+      });
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+    overlay.addEventListener('click', closePanel);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+    });
+  })();
+  </script>
 	</body>
 	</html>
