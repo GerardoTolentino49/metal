@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Inventario - LISA</title>
+  <title>Inventario</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,107 +10,12 @@
   <link rel="stylesheet" href="styles/floating-buttons.css">
   <link rel="stylesheet" href="styles/inventario.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="styles/topbar.css">
-  <link rel="stylesheet" href="styles/nuevo-equipo.css">
-  <script src="js/global-color.js"></script>
+  <!-- <link rel="stylesheet" href="styles/topbar.css"> -->
+  <link rel="icon" href="/favicon.png" type="image/png">  
+  <!-- <link rel="stylesheet" href="styles/nuevo-equipo.css"> -->
 </head>
 <body>
- <!-- <div class="topbar">
-    <div class="glass-highlight"></div>
-    <div class="topbar-header">
-      <button class="lisa-btn-cromatica">PDM</button>
-    </div>
-    <div class="topbar-menu">
-      <div class="menu-item has-submenu" id="itMenuBtn">
-          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-        </svg>
-        IT
-        <div class="submenu" id="itSubmenu">
-          <a href="panel.html" class="submenu-item">Tickets</a>
-          <a href="detalles.html" class="submenu-item">Estadísticas</a>
-          <a href="it_inventario.html" class="submenu-item">Inventario</a>
-          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
-          <a href="boveda.html" class="submenu-item">Bóveda</a>
-          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
-          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
-          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
-          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
-          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="rhMenuBtn">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        RH
-        <div class="submenu" id="rhSubmenu">
-          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
-          <a href="apoyos.html" class="submenu-item">Apoyos</a>
-          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
-          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
-          <a href="asistencias.html" class="submenu-item">Asistencias</a>
-          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
-          <a href="anuncios.html" class="submenu-item">Anuncios</a>
-          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
-
-      <div class="menu-item has-submenu" id="warehouseMenuBtn">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-        </svg>
-        Almacén
-        <div class="submenu" id="warehouseSubmenu">
-          <a href="inventario.html" class="submenu-item">Warehouse</a>
-          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
-        Mantenimiento
-        <div class="submenu" id="maintenanceSubmenu">
-          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
-          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
-          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
-          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
-        </div>
-      </div>
--->
-      <!-- Diseno -->
-       
-      <!-- <div class="menu-item has-submenu" id="designMenuBtn">
-        Diseño
-        <div class="submenu" id="designSubmenu">
-          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
-        </div>
-      </div> -->
-      
-            
-      <!-- PM -->
-      <!-- <div class="menu-item has-submenu" id="pmMenuBtn">
-        PM
-        <div class="submenu" id="pmSubmenu">
-          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
-          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
-          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- <div class="topbar-controls">
-      <div class="user-menu-item">
-        <div class="user-icon" id="userIcon">
-          <i class="fas fa-user"></i>
-        </div>
-        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
-        <div class="user-submenu" id="userSubmenu">
-          <div class="user-info" id="userInfo"></div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
+ 
   <script src="js/permisos.js"></script>
   <script src="js/floating-buttons.js"></script>
   <script>
@@ -302,20 +207,56 @@
   <div class="main-content" style="width:100vw;max-width:100vw;padding:0;margin:0;">
     <div class="admin-container" style="width:100vw;max-width:100vw;padding:0 0 0 0;margin:0;border-radius:0;box-shadow:none;background:transparent;">
       <!-- <div class="admin-header" style="padding:24px 32px 0 32px;"> </div> -->
-            <!-- Tab switch-->
-          <div style="width: 100%; justify-content: center; display: flex;">
-            <div class="tab-switch">
-              <button class="tab-switch-button" data-tab="inicio">
-                <i class="fas fa-home"></i>
-              </button>
-              <button class="tab-switch-button active" data-tab="warehouse">
-                <i class="fas fa-list"></i> Warehouse
-              </button>
-              <button class="tab-switch-button" data-tab="warehouseanalytics">
-                <i class="fas fa-list"></i> Warehouse Analytics
-              </button>
-            </div>
+        <!--tab switch-->
+        <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
+          <div class="tab-switch">
+
+            <button class="tab-switch-button" data-tab="inicio">
+              <i class="fas fa-home"></i> 
+            </button>
+
+            <button class="tab-switch-button" data-tab="planeacion">
+              <i class="fas fa-tasks"></i> Planeación
+            </button>
+            <button class="tab-switch-button" data-tab="compras">
+              <i class="fas fa-shopping-cart"></i> Compras
+            </button>   
+            <button class="tab-switch-button active" data-tab="inventario">
+              <i class="fa-solid fa-warehouse"></i> Inventario
+            </button>  
+            <button class="tab-switch-button" data-tab="estadisticas">
+              <i class="fas fa-chart-bar"></i> Estadísticas
+            </button>      
+
           </div>
+        </div>
+        <script>
+                // Navegación del tab-switch de Nuevo Equipo
+            document.addEventListener('DOMContentLoaded', function() {
+              // Inicializar notificaciones (si la función está disponible)
+              if (typeof initializeNotificationsDropdown === 'function') initializeNotificationsDropdown();
+
+              const tabRoutes = {
+                inicio: 'nuevo-inicio.html',
+                planeacion: 'planeacionycompras.html',
+                compras: 'comprasPYC.html',
+                inventario: 'inventario.html',
+                estadisticas: 'estadisticasPYC.html'
+              };
+
+              const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+
+              document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+                button.addEventListener('click', function() {
+                  const targetPage = tabRoutes[this.dataset.tab];
+                  if (!targetPage || targetPage === currentPage) {
+                    return;
+                  }
+                  window.location.href = targetPage;
+                });
+              });
+            });
+          </script>
     
       
       <!-- Barra de búsqueda centrada -->
@@ -359,7 +300,7 @@
         </select>
       </div>
       
-      <div class="table-wrapper" style="background-color: black; width:calc(100vw - 64px);max-width:calc(100vw - 64px);padding:0;margin:20px auto 0 auto;">
+      <div class="table-wrapper" style="position: relative; overflow-x:auto; padding:0; margin:20px auto 0 auto;">
         <table class="users-table modern-table" style="width:100%;margin:0 auto;">
           <thead>
             <tr>
@@ -618,7 +559,7 @@
   <div id="filtersModal" class="modal-overlay">
     <div class="modal-content filters-modal">
       <div class="modal-header">
-        <h3><i class="fas fa-filter"></i> Filtros Avanzados</h3>
+        <h3> Filtros Avanzados</h3>
         <button class="modal-close" id="closeFiltersModal">
           <i class="fas fa-times"></i>
         </button>
@@ -645,11 +586,11 @@
             <div style="display:flex;gap:16px;">
               <div style="display:flex;align-items:center;gap:8px;">
                 <input type="checkbox" id="filterDM_P1" />
-                <label for="filterDM_P1" style="margin:0;cursor:pointer;">P1 Direct Material</label>
+                <label for="filterDM_P1" style="margin:0;cursor:pointer;color:black;">P1 Direct Material</label>
               </div>
               <div style="display:flex;align-items:center;gap:8px;">
                 <input type="checkbox" id="filterDM_BA" />
-                <label for="filterDM_BA" style="margin:0;cursor:pointer;">BA Direct Material</label>
+                <label for="filterDM_BA" style="margin:0;cursor:pointer;color:black;">BA Direct Material</label>
               </div>
             </div>
           </div>
@@ -691,6 +632,23 @@
                 <button type="button" class="preset-btn" data-min="101" data-max="500">$101 - $500</button>
                 <button type="button" class="preset-btn" data-min="501" data-max="1000">$501 - $1,000</button>
                 <button type="button" class="preset-btn" data-min="1001" data-max="999999">$1,000+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtro por Rango de Fecha -->
+          <div class="filter-group">
+            <label class="filter-label">
+              <i class="fas fa-calendar-alt"></i> Fecha (Inicio - Fin)
+            </label>
+            <div style="display:flex;gap:12px;align-items:center;">
+              <div style="display:flex;flex-direction:column;">
+                <label class="dsb-label" style="font-size:12px;margin-bottom:6px;">Fecha inicio</label>
+                <input type="date" id="filterDateStart" class="filter-date-input">
+              </div>
+              <div style="display:flex;flex-direction:column;">
+                <label class="dsb-label" style="font-size:12px;margin-bottom:6px;">Fecha fin</label>
+                <input type="date" id="filterDateEnd" class="filter-date-input">
               </div>
             </div>
           </div>
@@ -1141,25 +1099,25 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // Navegación del tab-switch de Warehouse
-document.addEventListener('DOMContentLoaded', function() {
-  const tabRoutes = {
-    inicio: 'inicio.html',
-    warehouse: 'inventario.html',
-    warehouseanalytics: 'detalles_warehouse.html'
-  };
+// document.addEventListener('DOMContentLoaded', function() {
+//   const tabRoutes = {
+//     inicio: 'inicio.html',
+//     warehouse: 'inventario.html',
+//     warehouseanalytics: 'detalles_warehouse.html'
+//   };
 
-  const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
+//   const currentPage = window.location.pathname.split('/').pop() || 'inventario.html';
 
-  document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
-    button.addEventListener('click', function() {
-      const targetPage = tabRoutes[this.dataset.tab];
-      if (!targetPage || targetPage === currentPage) {
-        return;
-      }
-      window.location.href = targetPage;
-    });
-  });
-});
+//   document.querySelectorAll('.tab-switch-button[data-tab]').forEach(button => {
+//     button.addEventListener('click', function() {
+//       const targetPage = tabRoutes[this.dataset.tab];
+//       if (!targetPage || targetPage === currentPage) {
+//         return;
+//       }
+//       window.location.href = targetPage;
+//     });
+//   });
+// });
 
 // Funcionalidad de búsqueda en tiempo real
 document.addEventListener('DOMContentLoaded', function() {
@@ -1336,7 +1294,10 @@ let currentFilters = {
   precioMin: '',
   precioMax: '',
   dmP1: false,
-  dmBA: false
+  dmBA: false,
+  // Fecha de filtro (YYYY-MM-DD)
+  dateStart: '',
+  dateEnd: ''
 };
 
 // Función para abrir el modal de filtros
@@ -1385,6 +1346,12 @@ function loadCurrentFilters() {
   
   // Actualizar slider visualmente
   updateRangeSlider(precioMinInput, precioMaxInput);
+
+  // Cargar valores de fecha (si existen)
+  const dateStartInput = document.getElementById('filterDateStart');
+  const dateEndInput = document.getElementById('filterDateEnd');
+  if (dateStartInput) dateStartInput.value = currentFilters.dateStart || '';
+  if (dateEndInput) dateEndInput.value = currentFilters.dateEnd || '';
   
   // Limpiar botones de stock
   document.querySelectorAll('.stock-btn').forEach(btn => {
@@ -1418,13 +1385,18 @@ function getFiltersFromModal() {
   const precioMaxFilter = precioMax !== precioMaxInput.max ? precioMax : '';
 
 
+  const dateStartVal = (document.getElementById('filterDateStart') && document.getElementById('filterDateStart').value) ? document.getElementById('filterDateStart').value : '';
+  const dateEndVal = (document.getElementById('filterDateEnd') && document.getElementById('filterDateEnd').value) ? document.getElementById('filterDateEnd').value : '';
+
   return {
     familia: document.getElementById('filterFamilia').value,
     stock: stockValues,
     precioMin: precioMinFilter,
     precioMax: precioMaxFilter,
     dmP1: document.getElementById('filterDM_P1').checked,
-    dmBA: document.getElementById('filterDM_BA').checked
+    dmBA: document.getElementById('filterDM_BA').checked,
+    dateStart: dateStartVal,
+    dateEnd: dateEndVal
   };
 }
 
@@ -1446,6 +1418,11 @@ function clearAllFilters() {
   const dmBACheckbox = document.getElementById('filterDM_BA');
   if (dmP1Checkbox) dmP1Checkbox.checked = false;
   if (dmBACheckbox) dmBACheckbox.checked = false;
+  // Limpiar fechas
+  const dateStart = document.getElementById('filterDateStart');
+  const dateEnd = document.getElementById('filterDateEnd');
+  if (dateStart) dateStart.value = '';
+  if (dateEnd) dateEnd.value = '';
   
   // Limpiar botones de stock
   document.querySelectorAll('.stock-btn').forEach(btn => {
@@ -1464,7 +1441,9 @@ function clearAllFilters() {
     precioMin: '',
     precioMax: '',
     dmP1: false,
-    dmBA: false
+    dmBA: false,
+    dateStart: '',
+    dateEnd: ''
   };
   inventarioDB.inventarioFiltrado = [];
   inventarioDB.resetearPaginacion();
@@ -1571,6 +1550,30 @@ function performAdvancedSearch() {
       }
     }
     
+    // Filtro por rango de fechas (si se especifica)
+    if (shouldShow && (currentFilters.dateStart || currentFilters.dateEnd)) {
+      // Intentar leer varios posibles campos de fecha del producto
+      const fechaStr = producto.fecha_registro || producto.fecha_ingreso || producto.created_at || producto.createdAt || producto.fecha_creacion || producto.date || '';
+      if (!fechaStr) {
+        // Si no hay fecha en el producto, no se muestra cuando se aplica un filtro por fecha
+        shouldShow = false;
+      } else {
+        const prodDate = new Date(fechaStr);
+        if (isNaN(prodDate.getTime())) {
+          shouldShow = false;
+        } else {
+          if (currentFilters.dateStart) {
+            const start = new Date(currentFilters.dateStart + 'T00:00:00');
+            if (prodDate < start) shouldShow = false;
+          }
+          if (currentFilters.dateEnd) {
+            const end = new Date(currentFilters.dateEnd + 'T23:59:59');
+            if (prodDate > end) shouldShow = false;
+          }
+        }
+      }
+    }
+    
     return shouldShow;
   });
   
@@ -1646,7 +1649,9 @@ function updateFilterButtonState() {
                           currentFilters.precioMin || 
                           currentFilters.precioMax ||
                           currentFilters.dmP1 ||
-                          currentFilters.dmBA;
+                          currentFilters.dmBA ||
+                          currentFilters.dateStart ||
+                          currentFilters.dateEnd;
   
   if (hasActiveFilters) {
     filterButton.classList.add('has-active-filters');
@@ -1671,7 +1676,9 @@ function updateAppliedFiltersDisplay() {
                     currentFilters.precioMin || 
                     currentFilters.precioMax ||
                     currentFilters.dmP1 ||
-                    currentFilters.dmBA;
+                    currentFilters.dmBA ||
+                    currentFilters.dateStart ||
+                    currentFilters.dateEnd;
   
   if (!hasFilters) {
     container.style.display = 'none';
@@ -1714,6 +1721,15 @@ function updateAppliedFiltersDisplay() {
     const precioLabel = `$${parseInt(precioMin).toLocaleString()} - $${precioMax === '∞' ? '∞' : parseInt(precioMax).toLocaleString()}`;
     const precioTag = createFilterTag('Precio MXN', precioLabel, 'precio');
     list.appendChild(precioTag);
+  }
+
+  // Agregar filtro de fecha si existe
+  if (currentFilters.dateStart || currentFilters.dateEnd) {
+    const startLabel = currentFilters.dateStart || '...';
+    const endLabel = currentFilters.dateEnd || '...';
+    const fechaLabel = `${startLabel} - ${endLabel}`;
+    const fechaTag = createFilterTag('Fecha', fechaLabel, 'fecha');
+    list.appendChild(fechaTag);
   }
   
   // Actualizar estado del botón de filtros
@@ -1778,6 +1794,14 @@ function removeFilter(filterType, filterValue = null) {
     currentFilters.dmBA = false;
     const dmBACheckbox = document.getElementById('filterDM_BA');
     if (dmBACheckbox) dmBACheckbox.checked = false;
+  }
+  else if (filterType === 'fecha') {
+    currentFilters.dateStart = '';
+    currentFilters.dateEnd = '';
+    const dateStart = document.getElementById('filterDateStart');
+    const dateEnd = document.getElementById('filterDateEnd');
+    if (dateStart) dateStart.value = '';
+    if (dateEnd) dateEnd.value = '';
   }
   
   // Re-aplicar filtros

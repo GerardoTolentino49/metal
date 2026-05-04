@@ -6,799 +6,146 @@
     <title>Almacén</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/almacen.css">
+    <style>
+        /* Entradas: verde claro */
+        .cell-entradas { background-color: rgba(76, 175, 80, 0.08); }
+        .record-row:hover .cell-entradas { background-color: rgba(76, 175, 80, 0.12); }
+
+        /* Stock: verde más fuerte para diferenciar de Entradas */
+        .cell-stock { background-color: rgba(34, 197, 94, 0.18); font-weight:700; }
+        .record-row:hover .cell-stock { background-color: rgba(34, 197, 94, 0.22); }
+
+        /* Mantener contraste en modo claro */
+        body.light-mode .cell-entradas { background-color: rgba(76,175,80,0.12) !important; }
+        body.light-mode .cell-stock { background-color: rgba(16,185,129,0.18) !important; }
+
+        /* Modal: distinguir campos que rellena el usuario (blanco) vs automáticos (gris, readonly) */
+        .manual-fields .proveedor-search-input {
+            background: #ffffff !important;
+            color: #111827 !important;
+            border-color: #d1d5db !important;
+        }
+        .manual-fields .proveedor-search-input::placeholder {
+            color: #9ca3af !important;
+        }
+
+        .automatic-fields .proveedor-search-input {
+            background: #f3f4f6 !important;
+            color: #6b7280 !important;
+            border-color: #e5e7eb !important;
+            cursor: not-allowed !important;
+        }
+        .automatic-fields .proveedor-search-input::placeholder {
+            color: #9ca3af !important;
+        }
+        .automatic-fields .proveedor-search-input[readonly] {
+            background: #f3f4f6 !important;
+            color: #6b7280 !important;
+            box-shadow: none !important;
+        }
+
+        /* ── Filtro de fechas para snapshot histórico de inventario ── */
+        .date-snapshot-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 10px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        body:not(.light-mode) .date-snapshot-bar {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+        }
+        .date-snapshot-bar .dsb-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #666;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        body:not(.light-mode) .date-snapshot-bar .dsb-label { color: #aab; }
+        .date-snapshot-bar input[type="date"] {
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            padding: 4px 9px;
+            font-size: 0.84rem;
+            background: #f9fafb;
+            color: #111827;
+            outline: none;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+        body:not(.light-mode) .date-snapshot-bar input[type="date"] {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.25);
+            color: #e5e7eb;
+            color-scheme: dark;
+        }
+        .date-snapshot-bar input[type="date"]:focus {
+            border-color: #6366f1;
+        }
+        .date-snapshot-bar .dsb-sep {
+            font-size: 0.78rem;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+        .date-snapshot-bar .dsb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 13px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background 0.18s, transform 0.1s;
+            white-space: nowrap;
+        }
+        .date-snapshot-bar .dsb-btn:active { transform: scale(0.97); }
+        .date-snapshot-bar .dsb-btn-apply {
+            background: #6366f1;
+            color: #fff;
+        }
+        .date-snapshot-bar .dsb-btn-apply:hover { background: #4f46e5; }
+        .date-snapshot-bar .dsb-btn-clear {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        body:not(.light-mode) .date-snapshot-bar .dsb-btn-clear {
+            background: rgba(255,255,255,0.1);
+            color: #e5e7eb;
+            border-color: rgba(255,255,255,0.2);
+        }
+        .date-snapshot-bar .dsb-btn-clear:hover { background: #e5e7eb; }
+        .date-snapshot-bar .dsb-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(99,102,241,0.15);
+            color: #4f46e5;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.77rem;
+            font-weight: 600;
+        }
+        .date-snapshot-bar .dsb-badge.hidden { display: none !important; }
+        /* Columna stock_inicio_periodo — color púrpura suave */
+        .cell-stock-inicio { background-color: rgba(139,92,246,0.10); font-weight: 600; }
+        .record-row:hover .cell-stock-inicio { background-color: rgba(139,92,246,0.15); }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="js/global-color.js"></script>
     <script src="js/tarjetas-guard.js" defer></script>
-    <style>
-        /* Sidebar colapsable: estilos mínimos para no romper el CSS existente */
-        .sidebar.collapsed { width: 64px; }
-        .sidebar.collapsed .sidebar-header span { display: none; }
-        .sidebar.collapsed .nav-item span { display: none; }
-        .sidebar .collapse-btn { 
-            background: transparent; 
-            border: none; 
-            color: #cfd8dc; 
-            cursor: pointer; 
-            font-size: 16px; 
-            width: 36px; 
-            height: 36px; 
-            padding: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 8px; 
-            margin-right: 8px;
-        }
-        .sidebar .collapse-btn:hover { color: #ffffff; }
-        /* Ajuste del contenedor cuando el sidebar está colapsado */
-        .sidebar.collapsed ~ .container { margin-left: 64px; }
-        .sidebar.collapsed .sidebar-header { padding: 0; justify-content: center; }
-        .sidebar.collapsed .collapse-btn { 
-            width: 44px; 
-            height: 44px; 
-            margin: 0 auto; 
-            background: transparent; 
-            box-shadow: none; 
-        }
-
-        /* Modo claro real: alto contraste -> texto negro en toda la UI */
-        body.light-mode { background: #f8fafc; color: #111827; }
-        body.light-mode, body.light-mode * { color: #111827 !important; }
-        body.light-mode .header h1 { color: #111827 !important; }
-
-        /* Preserve tab-switch active contrast in light mode */
-        /* The global "body.light-mode *" rule forces dark text everywhere,
-           which makes dark-on-dark combinations unreadable for some active
-           tab styles. Force white text for the active tab to keep contrast. */
-        body.light-mode .tab-switch-button.active {
-            color: #ffffff !important;
-        }
-        body.light-mode .tab-switch-button.active i {
-            color: #ffffff !important;
-        }
-
-        body.light-mode .tab-switch-button.active  span{
-            color: #ffffff !important;
-        }
-        
-        /* Centrar títulos de las pestañas */
-        .header h1 { 
-            text-align: center; 
-            width: 100%; 
-            margin: 0;
-        }
-        /* Top tabs use shared styles from styles/nuevo-equipo.css: .tab-switch and .tab-switch-button */
-        body.light-mode .sidebar { background: #00000021; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-        body.light-mode .sidebar .nav-item { color: #111827 !important; }
-        body.light-mode .sidebar .nav-item.active { background: #e2e8f0; color: #111827 !important; }
-        body.light-mode .container { background: transparent; }
-        body.light-mode .records-container,
-        body.light-mode .form-container { background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.07); border-radius: 30px; overflow: hidden; border: 1px solid #e5e7eb; }
-        /* Bordes limpios en tablas dentro de contenedores redondeados */
-        .records-table, .excel-table { border-collapse: separate; border-spacing: 0; }
-        .records-table thead th:first-child, .excel-table thead th:first-child { border-top-left-radius: 8px; }
-        .records-table thead th:last-child, .excel-table thead th:last-child { border-top-right-radius: 8px; }
-        .records-table tbody tr:last-child td:first-child, .excel-table tbody tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-        .records-table tbody tr:last-child td:last-child, .excel-table tbody tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-        body.light-mode .records-header h3 { color: #111827 !important; }
-        body.light-mode .records-table { background: #ffffff; }
-        body.light-mode .records-table th { background: #f1f5f9; border-color: #e5e7eb; }
-        body.light-mode .records-table td { background: #ffffff; border-color: #e5e7eb; }
-        body.light-mode table.excel-table th { background: #f1f5f9; border-color: #e5e7eb; }
-        body.light-mode table.excel-table td { background: #ffffff; border-color: #e5e7eb; }
-        body.light-mode input,
-        body.light-mode select,
-        body.light-mode textarea { background: #ffffff;}
-        body.light-mode input::placeholder,
-        body.light-mode textarea::placeholder { color: #111827; opacity: 0.5; }
-        body.light-mode .btn-refresh,
-        body.light-mode .btn-clear-selection,
-        body.light-mode .btn-save-manual,
-        body.light-mode .pagination-btn { background: #e2e8f0; color: #111827 !important; border: 1px solid #cbd5e1; }
-        body.light-mode .btn-refresh:hover,
-        body.light-mode .btn-clear-selection:hover,
-        body.light-mode .btn-save-manual:hover,
-        body.light-mode .pagination-btn:hover { background: #cbd5e1; }
-        body.light-mode .numeric-highlight { background-color: rgba(76, 175, 80, 0.1) !important; }
-        body.light-mode .record-row:hover .numeric-highlight { background-color: rgba(76, 175, 80, 0.15) !important; }
-        body.light-mode .theme-toggle-btn { border-color: #cbd5e1; }
-        body.light-mode .theme-toggle-btn:hover { border-color: #64748b; }
-        body.light-mode .floating-card { color: #111827; }
-
-        /* Colores específicos para columnas solicitadas */
-        .cell-stock-inicial { background-color: rgba(255, 235, 59, 0.15) !important; }
-        .record-row:hover .cell-stock-inicial { background-color: rgba(255, 235, 59, 0.18) !important; }
-        .cell-salidas { background-color: rgba(244, 67, 54, 0.15) !important; }
-        .record-row:hover .cell-salidas { background-color: rgba(244, 67, 54, 0.18) !important; }
-
-        /* Colores para precios (MXN y DLLS) */
-        .cell-precio { background-color: rgba(59, 221, 255, 0.15) !important; }
-        .record-row:hover .cell-precio { background-color: rgba(59, 221, 255, 0.18) !important; }
-
-        /* Colores más intensos para modo claro */
-        body.light-mode .cell-stock-inicial { 
-            background-color: rgba(255, 193, 7, 0.3) !important; 
-        }
-        body.light-mode .record-row:hover .cell-stock-inicial { 
-            background-color: rgba(255, 193, 7, 0.25) !important; 
-        }
-        body.light-mode .cell-salidas { 
-            background-color: rgba(220, 53, 69, 0.3) !important; 
-        }
-        body.light-mode .record-row:hover .cell-salidas { 
-            background-color: rgba(220, 53, 69, 0.25) !important; 
-        }
-        body.light-mode .cell-precio { 
-            background-color: rgba(13, 202, 240, 0.3) !important; 
-        }
-        body.light-mode .record-row:hover .cell-precio { 
-            background-color: rgba(13, 202, 240, 0.25) !important; 
-        }
-
-        /* Barra de búsqueda para proveedores */
-        .search-bar-proveedores {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 25px;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        /* Barra de búsqueda para base de datos (estilo idéntico) */
-        .search-bar-basedatos {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 25px;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        .search-bar-proveedores input,
-        .search-bar-basedatos input {
-            background: transparent;
-            border: none;
-            color: #333333;
-            font-size: 16px;
-            flex: 1;
-            outline: none;
-        }
-        .search-bar-proveedores input::placeholder,
-        .search-bar-basedatos input::placeholder {
-            color: #999999;
-        }
-        .search-bar-proveedores i,
-        .search-bar-basedatos i {
-            color: #666666;
-            font-size: 18px;
-        }
-        body.light-mode .search-bar-proveedores,
-        body.light-mode .search-bar-basedatos {
-            background: #ffffff;
-            border-color: #e0e0e0;
-        }
-        body.light-mode .search-bar-proveedores input,
-        body.light-mode .search-bar-basedatos input {
-            color: #333333;
-        }
-        body.light-mode .search-bar-proveedores input::placeholder,
-        body.light-mode .search-bar-basedatos input::placeholder {
-            color: #999999;
-        }
-        body.light-mode .search-bar-proveedores i,
-        body.light-mode .search-bar-basedatos i {
-            color: #666666;
-        }
-
-        /* Ocultar botones de actualizar */
-        .btn-refresh {
-            display: none !important;
-        }
-
-        /* Estilos para campos de proveedor editables */
-        .proveedor-field {
-            border: 1px solid transparent !important;
-            background: transparent !important;
-            padding: 4px 8px !important;
-            font-size: 14px !important;
-            width: 100% !important;
-            transition: all 0.2s ease !important;
-        }
-
-        .proveedor-field:hover {
-            border-color: rgba(255, 255, 255, 0.3) !important;
-            background: rgba(255, 255, 255, 0.05) !important;
-        }
-
-        .proveedor-field:focus {
-            border-color: #4CAF50 !important;
-            background: rgba(76, 175, 80, 0.1) !important;
-            outline: none !important;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2) !important;
-        }
-
-        /* Estilos para modo claro */
-        body.light-mode .proveedor-field {
-            color: #111827 !important;
-            border-color: transparent !important;
-        }
-
-        body.light-mode .proveedor-field:hover {
-            border-color: rgba(17, 24, 39, 0.2) !important;
-            background: rgba(17, 24, 39, 0.05) !important;
-        }
-
-        body.light-mode .proveedor-field:focus {
-            border-color: #4CAF50 !important;
-            background: rgba(76, 175, 80, 0.1) !important;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2) !important;
-        }
-
-        /* Estilos para sección de comparación */
-        .comparison-container {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .comparison-table {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
-        .comparison-table h3 {
-            margin: 0 0 15px 0;
-            text-align: center;
-            color: #ffffff;
-            font-size: 18px;
-        }
-        .comparison-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .comparison-table th,
-        .comparison-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .comparison-table th {
-            background: rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .comparison-table td {
-            color: #cfd8dc;
-        }
-        .comparison-table tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        /* Estilos para modo claro */
-        body.light-mode .comparison-table {
-            background: rgb(255, 255, 255);
-        }
-        body.light-mode .comparison-table h3 {
-            color: #111827;
-        }
-        body.light-mode .comparison-table th {
-            background: rgba(0, 0, 0, 0.1);
-            color: #111827;
-        }
-        body.light-mode .comparison-table td {
-            color: #111827;
-        }
-        body.light-mode .comparison-table tr:hover td {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* Botón de importar Excel */
-        .btn-import-excel {
-            background: linear-gradient(135deg, #1e7e34, #28a745);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .btn-import-excel:hover {
-            background: linear-gradient(135deg, #155724, #1e7e34);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .btn-import-excel i {
-            font-size: 14px;
-        }
-        
-        /* Estilos para modo claro */
-        body.light-mode .btn-import-excel {
-            background: linear-gradient(135deg, #28a745, #34ce57);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        body.light-mode .btn-import-excel:hover {
-            background: linear-gradient(135deg, #1e7e34, #28a745);
-        }
-
-        /* Botón de descarga de Excel */
-        .btn-download-excel {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-size: 14px;
-        }
-
-        .btn-download-excel:hover {
-            background: linear-gradient(135deg, #20c997, #17a2b8);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-
-        .btn-download-excel:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Botón para crear nuevo registro (verde) */
-        .btn-new-record {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            border: none;
-            color: #ffffff;
-            padding: 8px 14px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(30,126,52,0.2);
-        }
-        .btn-new-record:hover {
-            background: linear-gradient(135deg, #1e7e34, #155724);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(30,126,52,0.25);
-        }
-
-        /* Estilos para modo claro */
-        body.light-mode .btn-download-excel {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        body.light-mode .btn-download-excel:hover {
-            background: linear-gradient(135deg, #20c997, #17a2b8);
-        }
-
-        /* Botón de comparación */
-        .btn-compare {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .btn-compare:hover {
-            background: linear-gradient(135deg, #0056b3, #004085);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .btn-compare i {
-            font-size: 14px;
-        }
-        
-        /* Estilos para modo claro */
-        body.light-mode .btn-compare {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        body.light-mode .btn-compare:hover {
-            background: linear-gradient(135deg, #0056b3, #004085);
-        }
-
-        /* Estilos para discrepancias */
-        .discrepancy-positive {
-            color: #28a745 !important;
-            font-weight: bold;
-        }
-        .discrepancy-negative {
-            color: #dc3545 !important;
-            font-weight: bold;
-        }
-        .discrepancy-zero {
-            color: #6c757d !important;
-            font-weight: bold;
-        }
-        
-        /* Estilos para modo claro */
-        body.light-mode .discrepancy-positive {
-            color: #198754 !important;
-        }
-        body.light-mode .discrepancy-negative {
-            color: #dc3545 !important;
-        }
-        body.light-mode .discrepancy-zero {
-            color: #6c757d !important;
-        }
-
-        /* Ocultar secciones en modo comparación */
-        .section-comparacion .records-container,
-        .section-comparacion .form-container {
-            display: none !important;
-        }
-
-        /* Paginación en modo claro */
-        body.light-mode .pagination-container { color: #111827; }
-        body.light-mode #paginationInfo { color: #111827; }
-        body.light-mode .page-indicator { color: #111827; }
-        body.light-mode .pagination-btn { background: #e2e8f0; color: #111827 !important; border: 1px solid #cbd5e1; }
-        body.light-mode .pagination-btn:hover { background: #cbd5e1; }
-        body.light-mode .pagination-btn[disabled] { background: #e5e7eb; color: #94a3b8; border-color: #e5e7eb; }
-        /* Botón de modo */
-        .theme-toggle-btn {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #cfd8dc;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .theme-toggle-btn:hover { border-color: #ffffff; color: #ffffff; }
-
-        /* Estilos para el modal de proveedores */
-        .proveedor-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .proveedor-modal-content {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            margin: 0;
-            padding: 0;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 760px;
-            max-height: 80vh;
-            overflow: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-sizing: border-box;
-        }
-
-        .proveedor-modal-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .proveedor-modal-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Badge grande para mostrar stock dentro del modal */
-        .modal-stock-container {
-            display: flex;
-            justify-content: center;
-            margin: 12px 0 8px 0;
-        }
-
-        .modal-stock-badge {
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-            padding: 10px 18px;
-            border-radius: 999px;
-            font-size: 18px;
-            font-weight: 700;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-            min-width: 160px;
-            text-align: center;
-            transition: transform .12s ease, box-shadow .12s ease;
-        }
-
-        .modal-stock-badge.positive { background: linear-gradient(135deg,#16a34a,#22c55e); color: #072; }
-        .modal-stock-badge.warning { background: linear-gradient(135deg,#f59e0b,#f97316); color: #2b1a00; }
-        .modal-stock-badge.zero { background: linear-gradient(135deg,#ef4444,#dc2626); color: #fff; }
-
-        .modal-stock-badge:active, .modal-stock-badge:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.45); }
-
-        .proveedor-modal-close {
-            color: #94a3b8;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .proveedor-modal-close:hover {
-            color: #ffffff;
-        }
-
-        .proveedor-search-container {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .proveedor-search-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .proveedor-search-input:focus {
-            border-color: #4CAF50;
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        }
-
-        .proveedor-search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .proveedor-list-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 0;
-        }
-
-        .proveedor-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .proveedor-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .proveedor-item.selected {
-            background: rgba(76, 175, 80, 0.2);
-            border-left: 4px solid #4CAF50;
-        }
-
-        .proveedor-name {
-            color: #ffffff;
-            font-weight: 500;
-            font-size: 16px;
-        }
-
-        .proveedor-details {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-top: 4px;
-        }
-
-        .proveedor-no-results {
-            padding: 40px 20px;
-            text-align: center;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .proveedor-modal-footer {
-            padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Ajustes específicos para el modal de Nuevo Registro */
-        #nuevoRegistroModal .proveedor-modal-content { max-width: 760px; }
-        #nuevoRegistroModal label { display:block; font-size:12px; color:#cbd5e1; margin-bottom:6px; }
-        body.light-mode #nuevoRegistroModal label { color:#64748b; }
-        #nuevoRegistroModal .proveedor-search-input { padding:8px 10px; border-radius:30px; }
-
-        .proveedor-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .proveedor-btn-cancel {
-            background: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .proveedor-btn-cancel:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-        }
-
-        .proveedor-btn-select {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: #ffffff;
-        }
-
-        .proveedor-btn-select:hover {
-            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-            transform: translateY(-1px);
-        }
-
-        .proveedor-btn-select:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Estilos para modo claro */
-        body.light-mode .proveedor-modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode .proveedor-modal-header {
-            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-        }
-
-        body.light-mode .proveedor-modal-title {
-            color: #1e293b;
-        }
-
-        body.light-mode .proveedor-modal-close {
-            color: #64748b;
-        }
-
-        body.light-mode .proveedor-modal-close:hover {
-            color: #1e293b;
-        }
-
-        body.light-mode .proveedor-search-container {
-            border-bottom-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode .proveedor-search-input {
-            background: rgba(0, 0, 0, 0.05);
-            color: #1e293b;
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        body.light-mode .proveedor-search-input:focus {
-            background: rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-mode .proveedor-search-input::placeholder {
-            color: rgba(30, 41, 59, 0.5);
-        }
-
-        body.light-mode .proveedor-item {
-            border-bottom-color: rgba(0, 0, 0, 0.05);
-        }
-
-        body.light-mode .proveedor-item:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        body.light-mode .proveedor-item.selected {
-            background: rgba(76, 175, 80, 0.1);
-        }
-
-        body.light-mode .proveedor-name {
-            color: #1e293b;
-        }
-
-        body.light-mode .proveedor-details {
-            color: #64748b;
-        }
-
-        body.light-mode .proveedor-no-results {
-            color: #64748b;
-        }
-
-        body.light-mode .proveedor-modal-footer {
-            border-top-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode .proveedor-btn-cancel {
-            background: rgba(0, 0, 0, 0.05);
-            color: #64748b;
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        body.light-mode .proveedor-btn-cancel:hover {
-            background: rgba(0, 0, 0, 0.1);
-            color: #1e293b;
-        }
-
-        /* Estilos para el botón de seleccionar proveedor */
-        .proveedor-select-btn {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            cursor: pointer;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .proveedor-select-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .proveedor-select-btn:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-        }
-
-        body.light-mode .proveedor-select-btn {
-            background: rgba(0, 0, 0, 0.05);
-            color: #1e293b;
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        body.light-mode .proveedor-select-btn:hover {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.3);
-        }
-    </style>
+    <link rel="icon" href="/favicon.png" type="image/png">  
 </head>
 <body style="margin-top:5%;">
     <!-- Modal para selección de proveedores -->
@@ -829,7 +176,6 @@
         <div class="proveedor-modal-content" style="max-width:720px;">
             <div class="proveedor-modal-header">
                 <h2 class="proveedor-modal-title">
-                    <i class="fas fa-plus-circle"></i>
                     <span id="modalTitle">Nuevo Registro</span>
                 </h2>
                 <span class="proveedor-modal-close" id="nuevoRegistroModalClose">&times;</span>
@@ -838,34 +184,43 @@
                 <div id="modalStockDisplay" class="modal-stock-badge">Stock: —</div>
             </div>
             <div style="padding:18px; background:transparent;">
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <div style="flex:1; min-width:160px;">
-                        <label>Código del Producto</label>
-                        <input id="modalProductCode" type="text" class="proveedor-search-input" placeholder="Ej: AB-FW-01">
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <!-- Campos que rellena el usuario -->
+                    <div class="manual-fields" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <div style="flex:1; min-width:160px;">
+                            <label>Código del Producto</label>
+                            <input id="modalProductCode" type="text" class="proveedor-search-input" placeholder="AB-FW-01">
+                        </div>
+                        <div style="width:140px;">
+                            <label>PO</label>
+                            <input id="modalPoNumber" type="text" class="proveedor-search-input" placeholder="0001">
+                        </div>
+                        <div style="width:180px;">
+                            <label>Fecha</label>
+                            <input id="modalDate" type="date" class="proveedor-search-input">
+                        </div>
+                        <div style="width:120px;">
+                            <label>Cantidad</label>
+                            <input id="modalQuantity" type="number" class="proveedor-search-input" value="0" min="0">
+                        </div>
+                        <div style="width:160px;">
+                            <label>Factura</label>
+                            <input id="modalInvoice" type="text" class="proveedor-search-input" placeholder="Factura">
+                        </div>
                     </div>
-                    <div style="width:140px;">
-                        <label>PO</label>
-                        <input id="modalPoNumber" type="text" class="proveedor-search-input" placeholder="0001">
-                    </div>
-                    <div style="width:180px;">
-                        <label>Fecha</label>
-                        <input id="modalDate" type="date" class="proveedor-search-input">
-                    </div>
-                    <div style="flex:1; min-width:200px;">
-                        <label>Categoría</label>
-                        <input id="modalCategory" type="text" class="proveedor-search-input" placeholder="Categoría" readonly>
-                    </div>
-                    <div style="flex:2; min-width:200px;">
-                        <label>Descripción</label>
-                        <input id="modalDescription" type="text" class="proveedor-search-input" placeholder="Descripción" readonly>
-                    </div>
-                    <div style="width:120px;">
-                        <label>Cantidad</label>
-                        <input id="modalQuantity" type="number" class="proveedor-search-input" value="0" min="0">
-                    </div>
-                    <div style="width:160px;">
-                        <label>Factura</label>
-                        <input id="modalInvoice" type="text" class="proveedor-search-input" placeholder="Factura">
+
+                    <hr style="border:none; height:1px; background:#e5e7eb; margin:6px 0;">
+
+                    <!-- Campos que se completan automáticamente -->
+                    <div class="automatic-fields" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <div style="flex:1; min-width:200px;">
+                            <label>Categoría</label>
+                            <input id="modalCategory" type="text" class="proveedor-search-input" placeholder="Categoría" readonly>
+                        </div>
+                        <div style="flex:2; min-width:200px;">
+                            <label>Descripción</label>
+                            <input id="modalDescription" type="text" class="proveedor-search-input" placeholder="Descripción" readonly>
+                        </div>
                     </div>
                 </div>
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
@@ -948,6 +303,24 @@
                             <i class="fas fa-sync-alt"></i> Actualizar
                         </button>
                     </div>
+                </div>
+
+                <!-- Panel de filtro por período (solo visible en sección Inventario) -->
+                <div id="dateSnapshotBar" class="date-snapshot-bar" style="display:none;">
+                    <span class="dsb-label"><i class="fas fa-calendar-alt"></i> Ver inventario al:</span>
+                    <label class="dsb-sep">Desde</label>
+                    <input type="date" id="dsbFechaInicio" title="Fecha inicio (opcional)" onkeydown="if(event.key==='Enter') applySnapshotFilter()">
+                    <label class="dsb-sep">Hasta</label>
+                    <input type="date" id="dsbFechaFin" title="Fecha fin (opcional)" onkeydown="if(event.key==='Enter') applySnapshotFilter()">
+                    <button class="dsb-btn dsb-btn-apply" id="dsbApply" onclick="applySnapshotFilter()" title="Ver inventario del período">
+                        <i class="fas fa-filter"></i> Aplicar
+                    </button>
+                    <button class="dsb-btn dsb-btn-clear" id="dsbClear" onclick="clearSnapshotFilter()" title="Volver al inventario actual">
+                        <i class="fas fa-times"></i> Limpiar
+                    </button>
+                    <span class="dsb-badge hidden" id="dsbBadge">
+                        <i class="fas fa-history"></i> <span id="dsbBadgeText"></span>
+                    </span>
                 </div>
             <div class="records-table-container">
                 <table class="records-table" id="recordsTable">
@@ -1097,6 +470,32 @@
         <span id="cardMessage">Producto guardado exitosamente</span>
     </div>
 
+    <!-- Toast de éxito en esquina superior derecha -->
+    <div id="insertToast" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #22c55e;
+        color: #fff;
+        padding: 14px 20px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+        transform: translateX(120%);
+        opacity: 0;
+        transition: transform 0.35s cubic-bezier(.4,0,.2,1), opacity 0.35s ease;
+        z-index: 99999;
+        pointer-events: none;
+    ">
+        <i class="fas fa-check-circle" style="font-size:18px;"></i>
+        <span id="insertToastMsg">Entrada registrada exitosamente</span>
+    </div>
+
     <div class="auto-save-indicator" id="autoSaveIndicator">
         <i class="fas fa-spinner fa-spin"></i>
         <span>Guardando...</span>
@@ -1131,6 +530,123 @@
             }, 3000);
         }
 
+        // Toast verde en esquina superior derecha para confirmación de inserción
+        let _insertToastTimer = null;
+        function showInsertToast(message, isError) {
+            const toast = document.getElementById('insertToast');
+            const msgEl = document.getElementById('insertToastMsg');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = message || 'Acción realizada';
+            toast.style.background = isError ? '#ef4444' : '#22c55e';
+            toast.style.boxShadow = isError
+                ? '0 4px 20px rgba(239,68,68,0.4)'
+                : '0 4px 20px rgba(34,197,94,0.4)';
+            toast.style.transform = 'translateX(0)';
+            toast.style.opacity = '1';
+            clearTimeout(_insertToastTimer);
+            _insertToastTimer = setTimeout(() => {
+                toast.style.transform = 'translateX(120%)';
+                toast.style.opacity = '0';
+            }, 3500);
+        }
+
+        // Guarda directamente el registro del modal via API sin pasar por el formulario
+        async function submitModalRecord() {
+            const section = getActiveSectionKey();
+            const productCode  = (document.getElementById('modalProductCode')?.value || '').trim();
+            const qty          = Number(document.getElementById('modalQuantity')?.value || 0);
+            const dateVal      = document.getElementById('modalDate')?.value || '';
+            const description  = (document.getElementById('modalDescription')?.value || '').trim();
+            const category     = (document.getElementById('modalCategory')?.value || '').trim();
+
+            if (section === 'salidas') {
+                // ── SALIDA ──────────────────────────────────────────────────
+                const area    = document.getElementById('modalArea')?.value || '';
+                const empleado = (document.getElementById('modalEmpleado')?.value || '').trim();
+                const motivo   = (document.getElementById('modalMotivo')?.value || '').trim();
+                // Requerir al menos un origen: área o empleado (no permitir ambos vacíos)
+                if ((!area || area.trim() === '') && (!empleado || empleado.trim() === '')) {
+                    showInsertToast('Selecciona un área o ingresa el nombre del empleado', true);
+                    return;
+                }
+                if (!productCode) { showInsertToast('Ingresa el código del producto', true); return; }
+                if (qty <= 0)     { showInsertToast('La cantidad debe ser mayor a 0', true); return; }
+                // Validar contra stock disponible mostrado en el modal
+                const modalStockDisplay = document.getElementById('modalStockDisplay');
+                const availableStock = Number(modalStockDisplay?.dataset?.stock || (modalStockDisplay?.textContent || '').replace(/[^0-9\-]/g, '') || 0);
+                if (typeof availableStock === 'number' && qty > availableStock) {
+                    showInsertToast('La cantidad no puede ser mayor al stock disponible (' + availableStock + ')', true);
+                    return;
+                }
+
+                const payload = {
+                    departamento:   area || 'General',
+                    empleado:       empleado || 'Sin nombre',
+                    fecha:          dateVal || null,
+                    codigoProducto: productCode,
+                    descripcion:    description || productCode,
+                    clasificacion:  category || 'GENERAL SUPPLY',
+                    cantidad:       qty,
+                    motivo:         motivo || '',
+                    tipo:           'salida'
+                };
+                try {
+                    const resp = await fetch('/api/salidas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!resp.ok) { const t = await resp.text(); throw new Error(t); }
+                    window.__inventoryRecords = null;
+                    window.__inventoryFetchPromise = null;
+                    closeNewRecordModal();
+                    showInsertToast('Salida registrada exitosamente');
+                    await loadRecords();
+                    document.getElementById('recordsBody')?.closest('.records-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } catch (err) {
+                    console.error('Error guardando salida:', err);
+                    showInsertToast('Error al guardar salida: ' + err.message, true);
+                }
+
+            } else {
+                // ── ENTRADA ─────────────────────────────────────────────────
+                const poNumber  = (document.getElementById('modalPoNumber')?.value || '').trim();
+                const invoice   = (document.getElementById('modalInvoice')?.value || '').trim();
+
+                if (!productCode)  { showInsertToast('Ingresa el código del producto', true); return; }
+                if (!description)  { showInsertToast('No se encontró descripción. Verifica el código.', true); return; }
+                if (qty <= 0)      { showInsertToast('La cantidad debe ser mayor a 0', true); return; }
+
+                const payload = {
+                    productCode: productCode,
+                    poNumber:    poNumber,
+                    date:        dateVal || null,
+                    category:    category,
+                    description: description,
+                    quantity:    qty,
+                    entradas:    qty,   // campo clave para sumar al stock
+                    invoice:     invoice
+                };
+                try {
+                    const resp = await fetch('/api/inventario', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!resp.ok) { const t = await resp.text(); throw new Error(t); }
+                    window.__inventoryRecords = null;
+                    window.__inventoryFetchPromise = null;
+                    closeNewRecordModal();
+                    showInsertToast('Entrada registrada exitosamente (' + qty + ' unidades)');
+                    await loadRecords();
+                    document.getElementById('recordsBody')?.closest('.records-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } catch (err) {
+                    console.error('Error guardando entrada:', err);
+                    showInsertToast('Error al guardar entrada: ' + err.message, true);
+                }
+            }
+        }
+
         // ----- Utilidades de moneda (visual) -----
         function formatCurrencyValue(value) {
             const num = Number(value);
@@ -1144,6 +660,46 @@
             const cleaned = str.replace(/[^0-9.\-]/g, '').replace(/,/g, '');
             return cleaned;
         }
+
+        /*
+         * Layout / Column width constants
+         * Edit these values to adjust column widths for the 'base-datos' (Inventario) view.
+         * Exposed as `window.LAYOUT` so you can modify them at runtime from the console.
+         */
+        const LAYOUT = {
+            // Order of columns as displayed in the records table for base-datos
+            baseDatosColumnOrder: ['codigo','descripcion','proveedor','stock','entradas','salidas','uom','categoria','locacion'],
+            // Widths in pixels (numbers) for manual fine-tuning
+            // `columnWidths` remains for legacy / entradas view.
+            columnWidths: {
+                po: 70,
+                codigo: 80,
+                fecha: 150,
+                categoria: 140,
+                descripcion: 380,
+                cantidad: 70,
+                factura: 120,
+                proveedor: 180
+            },
+            // Separate widths specifically for the 'base-datos' (Inventario) view so
+            // changes here don't affect the 'entradas' table which also reads
+            // `columnWidths` for its own layout.
+            baseDatosColumnWidths: {
+                codigo: 2,
+                descripcion: 5,
+                proveedor: 2,
+                entradas: 2,
+                salidas: 2,
+                stock: 2,
+                uom: 2,
+                categoria: 2,
+                locacion: 2
+            },
+            // Expected column count after customization (used by sync logic)
+            baseDatosExpectedColumns: 9
+        };
+        // Hacer accesible globalmente para debugging/ajustes rápidos
+        window.LAYOUT = LAYOUT;
 
         // Helpers para títulos dinámicos según la sección activa
         function getActiveSectionKey() {
@@ -1191,12 +747,156 @@
             showFloatingCard('Modo nuevo registro activado', 'success');
         }
 
+        // Cache and render helpers for keeping Entrada modal unchanged while providing a different Salida modal
+        (function setupModalTemplates(){
+            const modal = document.getElementById('nuevoRegistroModal');
+            if (!modal) return;
+            const contentWrapper = modal.querySelector('.proveedor-modal-content');
+            if (!contentWrapper) return;
+            // Cache original (Entrada / genérico) HTML so we can restore it
+            const entradaTemplate = contentWrapper.innerHTML;
+            window.__entradaModalTemplate = entradaTemplate;
+
+            // Salida-specific template (uses some same IDs for autofill compatibility)
+            window.__salidaModalTemplate = `
+                <div class="proveedor-modal-header">
+                    <h2 class="proveedor-modal-title">
+                        <span id="modalTitle">Nueva Salida</span>
+                    </h2>
+                    <span class="proveedor-modal-close" id="nuevoRegistroModalClose">&times;</span>
+                </div>
+                <div class="modal-stock-container" aria-hidden="false">
+                    <div id="modalStockDisplay" class="modal-stock-badge">Stock: —</div>
+                </div>
+                <div style="padding:18px; background:transparent;">
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <!-- Manual fields for Salida -->
+                        <div class="manual-fields" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                            <div style="flex:1; min-width:160px;">
+                                <label>Código del Producto</label>
+                                <input id="modalProductCode" type="text" class="proveedor-search-input" placeholder="AB-FW-01">
+                            </div>
+                            <div style="width:200px;">
+                                <label>Área</label>
+                                <select id="modalArea" class="proveedor-search-input">
+                                    <option value="">Seleccionar área</option>
+                                    <option value="Corte P1">Corte P1</option>
+                                    <option value="Armado P1">Armado P1</option>
+                                    <option value="Soldadura P1">Soldadura P1</option>
+                                    <option value="Pulido">Pulido</option>
+                                    <option value="Pintura">Pintura</option>
+                                    <option value="Envíos y recibos">Envíos y recibos</option>
+                                    <option value="Maquinado">Maquinado</option>
+
+                                    <option value="Corte BA">Corte BA</option>
+                                    <option value="Armado BA">Armado BA</option>
+                                    <option value="Soldadura BA">Soldadura BA</option>
+
+                                    <option value="Madera">Madera</option>
+                                </select>
+                            </div>
+                            <div style="flex:1; min-width:160px;">
+                                <label>Empleado</label>
+                                <input id="modalEmpleado" type="text" class="proveedor-search-input" placeholder="Nombre del empleado">
+                            </div>
+                            <div style="width:180px;">
+                                <label>Fecha</label>
+                                <input id="modalDate" type="date" class="proveedor-search-input">
+                            </div>
+                            <div style="flex:1; min-width:160px;">
+                                <label>Motivo</label>
+                                <input id="modalMotivo" type="text" class="proveedor-search-input" placeholder="Motivo de la salida">
+                            </div>
+                            <div style="width:120px;">
+                                <label>Cantidad</label>
+                                <input id="modalQuantity" type="number" class="proveedor-search-input" value="0" min="0">
+                            </div>
+                        </div>
+
+                        <hr style="border:none; height:1px; background:#e5e7eb; margin:6px 0;">
+
+                        <!-- Automatic fields (readonly) -->
+                        <div class="automatic-fields" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                            <div style="flex:2; min-width:200px;">
+                                <label>Descripción</label>
+                                <input id="modalDescription" type="text" class="proveedor-search-input" placeholder="Descripción" readonly>
+                            </div>
+                            <div style="flex:1; min-width:160px;">
+                                <label>Clasificación</label>
+                                <input id="modalCategory" type="text" class="proveedor-search-input" placeholder="Clasificación" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+                        <button class="proveedor-btn proveedor-btn-cancel" id="nuevoRegistroCancel">Cancelar</button>
+                        <button class="proveedor-btn proveedor-btn-select" id="nuevoRegistroSave">Insertar</button>
+                    </div>
+                </div>
+            `;
+
+            // Helper to render the Salida template
+            window.renderSalidaModal = function() {
+                const m = document.getElementById('nuevoRegistroModal');
+                if (!m) return;
+                const cw = m.querySelector('.proveedor-modal-content');
+                if (!cw) return;
+                cw.innerHTML = window.__salidaModalTemplate;
+                // After rendering, attach listeners specific to the Salida modal so autofill works
+                try {
+                    const codeInput = document.getElementById('modalProductCode');
+                    if (codeInput) {
+                        let t;
+                        codeInput.addEventListener('input', function() {
+                            clearTimeout(t);
+                            const val = this.value || '';
+                            t = setTimeout(() => {
+                                try { updateModalStockDisplay(val); } catch (e) { /* no-op */ }
+                                try { autofillModalFields(val); } catch (e) { /* no-op */ }
+                            }, 250);
+                        });
+                        codeInput.addEventListener('blur', function() {
+                            const val = this.value.trim();
+                            if (val) {
+                                try { updateModalStockDisplay(val); } catch (e) {}
+                                try { autofillModalFields(val); } catch (e) {}
+                            }
+                        });
+                    }
+                    // If modal opened already, try an initial autofill
+                    const initialCode = document.getElementById('modalProductCode')?.value || '';
+                    if (initialCode) {
+                        try { updateModalStockDisplay(initialCode); } catch (e) {}
+                        try { autofillModalFields(initialCode); } catch (e) {}
+                    }
+                } catch (err) {
+                    console.warn('Failed to attach Salida modal listeners', err);
+                }
+            };
+
+            // Helper to restore Entrada template
+            window.restoreEntradaModal = function() {
+                const m = document.getElementById('nuevoRegistroModal');
+                if (!m) return;
+                const cw = m.querySelector('.proveedor-modal-content');
+                if (!cw) return;
+                cw.innerHTML = window.__entradaModalTemplate;
+            };
+        })();
+
         /* ---------- Modal Nuevo Registro: abrir, autocompletar y guardar ---------- */
         function openNewRecordModal() {
             const modal = document.getElementById('nuevoRegistroModal');
             if (!modal) return;
-            // Asegurar títulos según la sección activa
-            try { setModalTitleForCurrentSection(); setFormTitleForCurrentSection(); } catch (e) { /* no-op */ }
+            // Asegurar títulos según la sección activa y cargar plantilla adecuada
+            try {
+                setModalTitleForCurrentSection(); setFormTitleForCurrentSection();
+                const section = getActiveSectionKey();
+                if (section === 'salidas' && typeof window.renderSalidaModal === 'function') {
+                    window.renderSalidaModal();
+                } else if (typeof window.restoreEntradaModal === 'function') {
+                    window.restoreEntradaModal();
+                }
+            } catch (e) { /* no-op */ }
             // Prefill fecha con hoy
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -1205,12 +905,23 @@
             const iso = `${yyyy}-${mm}-${dd}`;
             const modalDate = document.getElementById('modalDate');
             if (modalDate) modalDate.value = iso;
-            // Limpiar campos dependientes
+            // Limpiar todos los campos del modal al abrir
+            const modalCode = document.getElementById('modalProductCode');
             const modalCategory = document.getElementById('modalCategory');
             const modalDescription = document.getElementById('modalDescription');
+            const modalQty = document.getElementById('modalQuantity');
+            const modalInv = document.getElementById('modalInvoice');
+            const modalPo = document.getElementById('modalPoNumber');
+            if (modalCode) modalCode.value = '';
             if (modalCategory) modalCategory.value = '';
             if (modalDescription) modalDescription.value = '';
+            if (modalQty) modalQty.value = '0';
+            if (modalInv) modalInv.value = '';
+            if (modalPo) modalPo.value = '';
             modal.style.display = 'flex';
+            // Invalidar caché de inventario al abrir el modal para asegurar stock actualizado
+            window.__inventoryRecords = null;
+            window.__inventoryFetchPromise = null;
             // Actualizar visual de stock al abrir
             try { updateModalStockDisplay(document.getElementById('modalProductCode')?.value || ''); } catch (e) { /* no-op */ }
             setTimeout(() => {
@@ -1235,19 +946,35 @@
                 return;
             }
             const normalized = code.trim().toLowerCase();
-            // Usar agregación para obtener stock real por código
-            const aggregated = aggregateByCodigo(allRecords || []);
-            const found = aggregated.find(r => (r.codigo || '').toLowerCase() === normalized);
-            let stockVal = 0;
-            if (found) stockVal = Number(found.stock || 0) || 0;
 
-            display.textContent = `Stock: ${stockVal}`;
-            // Ajustar color/clase según valor y sección
-            const section = getActiveSectionKey();
-            display.className = 'modal-stock-badge';
-            if (stockVal <= 0) display.classList.add('zero');
-            else if (section === 'salidas' && stockVal <= 5) display.classList.add('warning');
-            else display.classList.add('positive');
+            const applyStock = (stockVal) => {
+                display.textContent = `Stock: ${stockVal}`;
+                display.className = 'modal-stock-badge';
+                // Exponer valor en dataset y propagar al input de cantidad
+                try { display.dataset.stock = String(Number(stockVal) || 0); } catch (e) { /* ignore */ }
+                const qtyInput = document.getElementById('modalQuantity');
+                if (qtyInput) {
+                    qtyInput.max = String(Math.max(0, Number(stockVal) || 0));
+                    if (Number(qtyInput.value) > Number(stockVal)) {
+                        qtyInput.value = Number(stockVal) || 0;
+                        showInsertToast('La cantidad ha sido ajustada al stock disponible', true);
+                    }
+                }
+                if (stockVal <= 0) display.classList.add('zero');
+                else {
+                    const section = getActiveSectionKey();
+                    if (section === 'salidas' && stockVal <= 5) display.classList.add('warning');
+                    else display.classList.add('positive');
+                }
+            };
+
+            // Siempre forzar un fetch fresco de inventario para que el stock sea real
+            // (evitar usar caché desactualizado al cambiar de sección o después de inserciones)
+            window.__inventoryFetchPromise = null;  // invalida caché
+            fetchInventorySnapshot().then(inv => {
+                const found = Array.isArray(inv) ? inv.find(r => (r.codigo || '').toLowerCase() === normalized) : null;
+                applyStock(found ? (Number(found.stock || 0) || 0) : 0);
+            }).catch(() => { applyStock(0); });
         }
 
         // Debounced listener para el input del código en el modal
@@ -1257,35 +984,159 @@
                 if (e.target && e.target.id === 'modalProductCode') {
                     clearTimeout(timeout);
                     const val = e.target.value || '';
-                    timeout = setTimeout(() => updateModalStockDisplay(val), 250);
+                    timeout = setTimeout(() => {
+                        updateModalStockDisplay(val);
+                        if (typeof autofillModalFields === 'function') {
+                            try { autofillModalFields(val); } catch (err) { console.warn('autofillModalFields error', err); }
+                        } else {
+                            try { autofillFromRecords(val); } catch (err) { console.warn('autofillFromRecords error', err); }
+                        }
+                    }, 300);
                 }
             });
         })();
 
         function autofillFromRecords(code) {
             if (!code) return;
+            const normalized = code.trim().toLowerCase();
+            // Buscar primero en allRecords (array en memoria, más confiable)
+            const found = (typeof allRecords !== 'undefined' && allRecords.length > 0)
+                ? allRecords.find(r => (r.codigo || '').toLowerCase() === normalized)
+                : null;
+
+            const modalCategory = document.getElementById('modalCategory');
+            const modalDescription = document.getElementById('modalDescription');
+
+            if (found) {
+                if (modalCategory) modalCategory.value = (found.categoria_pdm || found.categoria || '');
+                if (modalDescription) modalDescription.value = (found.descripcion || '');
+                return;
+            }
+
+            // Fallback: leer desde filas visibles usando encabezados (Entradas tiene PO primero,
+            // Inventario tiene Código primero — no usar cells[0] como código.)
+            const headerCells = Array.from(document.querySelectorAll('#recordsHeader th'))
+                .map(h => (h.textContent || '').trim().toLowerCase());
+            const descripcionIdx = headerCells.findIndex(h => h.includes('descrip'));
+            const codigoIdx = headerCells.findIndex(h => h.includes('código') || h.includes('codigo') || h.includes('code'));
+            const categoriaIdx = headerCells.findIndex(h => h.includes('categor') || h.includes('classif'));
+
             const rows = document.querySelectorAll('#recordsBody tr.record-row');
+            const safeCodigoIx = codigoIdx >= 0 ? codigoIdx : 0;
             for (const row of rows) {
                 const cells = row.querySelectorAll('td');
-                if (!cells || cells.length === 0) continue;
-                const rowCode = (cells[0].textContent || '').trim();
-                if (!rowCode) continue;
-                if (rowCode.toLowerCase() === code.toLowerCase()) {
-                    // categoría: 4ta celda (index 3), descripción: 5ta celda (index 4)
-                    const categoria = (cells[3] && cells[3].textContent) ? cells[3].textContent.trim() : '';
-                    const descripcion = (cells[4] && cells[4].textContent) ? cells[4].textContent.trim() : '';
-                    const modalCategory = document.getElementById('modalCategory');
-                    const modalDescription = document.getElementById('modalDescription');
-                    if (modalCategory) modalCategory.value = categoria;
-                    if (modalDescription) modalDescription.value = descripcion;
+                if (!cells.length) continue;
+                const rowCode = (cells[safeCodigoIx] ? cells[safeCodigoIx].textContent : '').trim();
+                if (rowCode.toLowerCase() !== normalized) continue;
+
+                let descripcion = '';
+                let categoria = '';
+                if (descripcionIdx >= 0 && cells[descripcionIdx]) {
+                    descripcion = cells[descripcionIdx].textContent.trim();
+                } else if (cells[1]) {
+                    descripcion = cells[1].textContent.trim();
+                }
+                if (categoriaIdx >= 0 && cells[categoriaIdx]) {
+                    categoria = cells[categoriaIdx].textContent.trim();
+                }
+                if (modalCategory) modalCategory.value = categoria;
+                if (modalDescription) modalDescription.value = descripcion;
+                return;
+            }
+
+            /* No encontrado en tabla: no borrar aquí — el usuario ya pudo tener datos buenos desde
+               autofillModalFields/async; blur de código no debe vaciar categoría/descripción */
+        }
+
+        // More robust autofill specifically for modal fields (used by Salida renderer)
+        function fetchInventorySnapshot() {
+            // Return cached promise if already fetching/loaded
+            if (window.__inventoryFetchPromise) return window.__inventoryFetchPromise;
+            window.__inventoryFetchPromise = (async function() {
+                try {
+                    const resp = await fetch('/api/inventario', { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+                    if (!resp.ok) return [];
+                    const recs = await resp.json();
+                    const agg = aggregateByCodigo(Array.isArray(recs) ? recs : []);
+                    window.__inventoryRecords = agg;
+                    return agg;
+                } catch (e) {
+                    console.warn('fetchInventorySnapshot failed', e);
+                    window.__inventoryRecords = [];
+                    return [];
+                } finally {
+                    // clear promise so subsequent calls re-fetch if needed
+                    setTimeout(() => { window.__inventoryFetchPromise = null; }, 1000);
+                }
+            })();
+            return window.__inventoryFetchPromise;
+        }
+
+        function autofillModalFields(code, opts) {
+            const skipFetch = opts && opts.skipFetch;
+            const modalCategory = document.getElementById('modalCategory');
+            const modalDescription = document.getElementById('modalDescription');
+            if (!code) {
+                if (modalCategory) modalCategory.value = '';
+                if (modalDescription) modalDescription.value = '';
+                return;
+            }
+            const normalized = code.trim().toLowerCase();
+
+            // Prefer inventory snapshot if available (works regardless of current section)
+            const tryFillFromInventory = (inventoryArray) => {
+                if (!Array.isArray(inventoryArray) || !inventoryArray.length) return false;
+                const foundInv = inventoryArray.find(r => (r.codigo || '').toLowerCase() === normalized);
+                if (foundInv) {
+                    if (modalCategory) modalCategory.value = (foundInv.categoria_pdm || foundInv.categoria || foundInv.clasificacion || '');
+                    if (modalDescription) modalDescription.value = (foundInv.descripcion || foundInv.nombre || '');
+                    return true;
+                }
+                return false;
+            };
+
+            if (Array.isArray(window.__inventoryRecords) && window.__inventoryRecords.length) {
+                if (tryFillFromInventory(window.__inventoryRecords)) return;
+            } else if (!skipFetch) {
+                fetchInventorySnapshot().then(() => {
+                    const codeNow = (document.getElementById('modalProductCode')?.value || '').trim();
+                    if (!codeNow) return;
+                    autofillModalFields(codeNow, { skipFetch: true });
+                }).catch(() => {});
+            }
+
+            // Next fallback: search allRecords (may be the current section's data)
+            if (typeof allRecords !== 'undefined' && Array.isArray(allRecords) && allRecords.length) {
+                const found = allRecords.find(r => (r.codigo || '').toLowerCase() === normalized);
+                if (found) {
+                    if (modalCategory) modalCategory.value = (found.categoria_pdm || found.categoria || found.clasificacion || '');
+                    if (modalDescription) modalDescription.value = (found.descripcion || found.nombre || '');
                     return;
                 }
             }
-            // Si no encontró coincidencias, dejar en blanco
-            const modalCategory = document.getElementById('modalCategory');
-            const modalDescription = document.getElementById('modalDescription');
-            if (modalCategory) modalCategory.value = '';
-            if (modalDescription) modalDescription.value = '';
+
+            // Final fallback: search table rows using header lookup (resilient to column reordering)
+            const headerCells = Array.from(document.querySelectorAll('#recordsHeader th'))
+                .map(h => (h.textContent || '').trim().toLowerCase());
+            const descripcionIdx = headerCells.findIndex(h => h.includes('descrip'));
+            const codigoIdx = headerCells.findIndex(h => h.includes('código') || h.includes('codigo') || h.includes('code'));
+            const categoriaIdx = headerCells.findIndex(h => h.includes('categor') || h.includes('classif'));
+
+            const rows = document.querySelectorAll('#recordsBody tr.record-row');
+            for (const row of rows) {
+                const cells = row.querySelectorAll('td');
+                const rowCodeIx = codigoIdx >= 0 ? codigoIdx : 0;
+                const rowCode = (cells[rowCodeIx] ? cells[rowCodeIx].textContent : '').trim();
+                if (rowCode.toLowerCase() !== normalized) continue;
+                const descripcion = descripcionIdx >= 0 && cells[descripcionIdx] ? cells[descripcionIdx].textContent.trim() : (cells[1] ? cells[1].textContent.trim() : '');
+                const categoria = categoriaIdx >= 0 && cells[categoriaIdx] ? cells[categoriaIdx].textContent.trim() : '';
+                if (modalCategory) modalCategory.value = categoria;
+                if (modalDescription) modalDescription.value = descripcion;
+                return;
+            }
+
+            // Sin coincidencia en tabla: igual que autofillFromRecords, no borrar —
+            // el fetch asíncrono de inventario o el siguiente input pueden rellenar.
         }
 
         // Manejo de eventos del modal: cerrar con botón o clic fuera del contenido
@@ -1306,62 +1157,69 @@
         (function attachModalListeners(){
             const codeInput = document.getElementById('modalProductCode');
             if (codeInput) {
-                codeInput.addEventListener('input', function() {
-                    const val = this.value.trim();
-                    if (val.length >= 1) autofillFromRecords(val);
-                });
-                // On blur, also try to autofill
+                // On blur, intentar autofill inmediato (sin esperar el debounce)
                 codeInput.addEventListener('blur', function() {
                     const val = this.value.trim();
-                    if (val) autofillFromRecords(val);
+                    if (val) {
+                        updateModalStockDisplay(val);
+                        autofillFromRecords(val);
+                    }
                 });
             }
 
             const saveBtn = document.getElementById('nuevoRegistroSave');
             if (saveBtn) {
                 saveBtn.addEventListener('click', function() {
-                    // Copiar valores al formulario principal
-                    const modalProductCode = document.getElementById('modalProductCode')?.value || '';
-                    const modalPo = document.getElementById('modalPoNumber')?.value || '';
-                    const modalDateVal = document.getElementById('modalDate')?.value || '';
-                    const modalCategoryVal = document.getElementById('modalCategory')?.value || '';
-                    const modalDescriptionVal = document.getElementById('modalDescription')?.value || '';
-                    const modalQuantityVal = document.getElementById('modalQuantity')?.value || '0';
-                    const modalInvoiceVal = document.getElementById('modalInvoice')?.value || '';
-
-                    const mainProduct = document.getElementById('productCode');
-                    const mainPo = document.getElementById('poNumber');
-                    const mainDate = document.getElementById('date');
-                    const mainCategory = document.getElementById('category');
-                    const mainDescription = document.getElementById('description');
-                    const mainQuantity = document.getElementById('quantity');
-                    const mainInvoice = document.getElementById('invoice');
-
-                    if (mainProduct) mainProduct.value = modalProductCode;
-                    if (mainPo) mainPo.value = modalPo;
-                    if (mainDate) mainDate.value = modalDateVal;
-                    if (mainCategory) {
-                        // If mainCategory is a select, try to pick matching option, otherwise set value
-                        if (mainCategory.tagName === 'SELECT') {
-                            const opt = Array.from(mainCategory.options).find(o => o.value.toLowerCase() === modalCategoryVal.toLowerCase());
-                            if (opt) mainCategory.value = opt.value; else mainCategory.value = '';
-                        } else {
-                            mainCategory.value = modalCategoryVal;
-                        }
+                    submitModalRecord();
+                });
+            }
+            const qtyInput = document.getElementById('modalQuantity');
+            if (qtyInput) {
+                qtyInput.addEventListener('input', function() {
+                    const max = Number(this.max || this.getAttribute('max') || 0);
+                    let v = Number(this.value || 0);
+                    if (max && v > max) {
+                        this.value = max;
+                        showInsertToast('La cantidad no puede superar el stock disponible', true);
                     }
-                    if (mainDescription) mainDescription.value = modalDescriptionVal;
-                    if (mainQuantity) mainQuantity.value = modalQuantityVal;
-                    if (mainInvoice) mainInvoice.value = modalInvoiceVal;
-
-                    closeNewRecordModal();
-                    // Llevar al formulario y enfocar cantidad
-                    openNewRecordForm();
-                    const q = document.getElementById('quantity');
-                    if (q) setTimeout(() => q.focus(), 400);
-                    showFloatingCard('Valores copiados al formulario', 'success');
+                    if (v < 0) this.value = 0;
                 });
             }
         })();
+
+        // Delegated handlers to ensure modal actions work regardless of template swaps
+        document.addEventListener('click', function(e) {
+            const target = e.target;
+            if (!target) return;
+            // Close modal (close icon)
+            if (target.id === 'nuevoRegistroModalClose' || target.closest && target.closest('#nuevoRegistroModalClose')) {
+                closeNewRecordModal();
+                return;
+            }
+            // Cancel button
+            if (target.id === 'nuevoRegistroCancel' || target.closest && target.closest('#nuevoRegistroCancel')) {
+                closeNewRecordModal();
+                return;
+            }
+            // Save/Insert button — guarda directamente via API
+            if (target.id === 'nuevoRegistroSave' || target.closest && target.closest('#nuevoRegistroSave')) {
+                submitModalRecord();
+                return;
+            }
+        });
+
+        // Delegated blur handler for modalProductCode to trigger autofill immediately
+        document.addEventListener('blur', function(e) {
+            const t = e.target;
+            if (!t) return;
+            if (t.id === 'modalProductCode') {
+                const val = t.value.trim();
+                if (val) {
+                    updateModalStockDisplay(val);
+                    autofillFromRecords(val);
+                }
+            }
+        }, true);
 
         function clearForm() 
         {
@@ -1510,6 +1368,10 @@
                 setTimeout(syncBaseDatosColumnWidths, 0);
                 setTimeout(adjustBaseDatosPreferredWidths, 10);
             }
+            else if (sectionKey !== 'entradas') {
+                const recordsTable = document.getElementById('recordsTable');
+                if (recordsTable) recordsTable.style.tableLayout = '';
+            }
             
             // Actualizar encabezado de registros y texto del botón 'nuevo registro' según la sección
             try {
@@ -1527,6 +1389,14 @@
                         const btnText = section.newButton || 'Nuevo registro';
                         newRecordBtn.innerHTML = '<i class="fas fa-plus"></i> ' + btnText;
                         newRecordBtn.style.display = 'inline-block';
+                        // Aplicar clase especial cuando sea la sección de Salidas
+                        if (sectionKey === 'salidas') {
+                            newRecordBtn.classList.add('btn-salida');
+                            newRecordBtn.classList.remove('btn-new-record');
+                        } else {
+                            newRecordBtn.classList.remove('btn-salida');
+                            newRecordBtn.classList.add('btn-new-record');
+                        }
                     }
                 }
             } catch (e) {
@@ -1603,12 +1473,9 @@
                         <th><i class=\"fas fa-truck\"></i> Proveedor</th>
                     </tr>
                     <tr>
-                        <th><i class=\"fas fa-dollar-sign\"></i> Precio MXN</th>
-                        <th><i class=\"fas fa-dollar-sign\"></i> Precio DLLS</th>
-                        <th><i class=\"fas fa-boxes\"></i> Stock inicial</th>
+                        <th><i class=\"fas fa-cubes\"></i> Stock</th>
                         <th><i class=\"fas fa-arrow-down\"></i> Entradas</th>
                         <th><i class=\"fas fa-arrow-up\"></i> Salidas</th>
-                        <th><i class=\"fas fa-cubes\"></i> Stock</th>
                         <th><i class=\"fas fa-ruler-combined\"></i> UOM</th>
                         <th><i class=\"fas fa-layer-group\"></i> Categoría PDM</th>
                         <th><i class=\"fas fa-map-marker-alt\"></i> Locación</th>
@@ -1633,22 +1500,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type=\"text\" id=\"precioMXN\" name=\"precioMXN\" placeholder=\"0.00\" inputmode=\"decimal\">
-                        </td>
-                        <td>
-                            <input type=\"text\" id=\"precioDLLS\" name=\"precioDLLS\" placeholder=\"0.00\" inputmode=\"decimal\">
-                        </td>
-                        <td>
-                            <input type=\"number\" id=\"stockInicial\" name=\"stockInicial\" placeholder=\"0\" min=\"0\">
-                        </td>
-                        <td>
-                            <input type=\"number\" id=\"entradas\" name=\"entradas\" placeholder=\"0\" min=\"0\">
-                        </td>
-                        <td>
-                            <input type=\"number\" id=\"salidas\" name=\"salidas\" placeholder=\"0\" min=\"0\">
-                        </td>
-                        <td>
                             <input type=\"number\" id=\"stock\" name=\"stock\" placeholder=\"0\" min=\"0\">
+                        </td>
+                        <td>
+                            <input type=\"number\" id=\"entradas\" name=\"entradas\" placeholder=\"0\" min=\"0\"> 
+                        </td>
+                        <td>
+                            <input type=\"number\" id=\"salidas\" name=\"salidas\" placeholder=\"0\" min=\"0\"> 
                         </td>
                         <td>
                             <select id=\"uom\" name=\"uom\">
@@ -1701,16 +1559,16 @@
                         <th><i class="fas fa-barcode"></i> Código del Producto</th>
                     </tr>
                     <tr>
-                        <th><i class="fas fa-building"></i> Departamento</th>
+                        <th style="width:10px"><i class="fas fa-building"></i> Departamento</th>
                         <th><i class="fas fa-user"></i> Empleado</th>
-                        <th><i class="fas fa-calendar-alt"></i> Fecha</th>
+                        <th style="width:110px"><i class="fas fa-calendar-alt"></i> Fecha</th>
                         <th><i class="fas fa-align-left"></i> Descripción</th>
-                        <th><i class="fas fa-tags"></i> Clasificación</th>
-                        <th><i class="fas fa-sort-numeric-down"></i> Cantidad</th>
+                        <th style="width:120px"><i class="fas fa-tags"></i> Clasificación</th>
+                        <th style="width:80px"><i class="fas fa-sort-numeric-down"></i> Cantidad</th>
                         <th><i class="fas fa-comment"></i> Motivo</th>
                     </tr>
                 `;
-                
+
                 tableBody.innerHTML = `
                     <tr>
                         <td>
@@ -1719,7 +1577,7 @@
                     </tr>
                     <tr id="salidasDetailsRow" style="display:none;">
                         <td>
-                            <select id="departamento" name="departamento" required>
+                            <select id="departamento" name="departamento" required style="min-width:50px; max-width:50px;">
                                 <option value="">Seleccionar departamento</option>
                                 <option value="produccion">Producción</option>
                                 <option value="mantenimiento">Mantenimiento</option>
@@ -1731,13 +1589,13 @@
                             <input type="text" id="empleado" name="empleado" placeholder="Nombre del empleado" required>
                         </td>
                         <td>
-                            <input type="date" id="fecha" name="fecha" required>
+                            <input type="date" id="fecha" name="fecha" required style="min-width:110px;">
                         </td>
                         <td>
                             <textarea id="descripcion" name="descripcion" rows="2" placeholder="Descripción del producto" required></textarea>
                         </td>
                         <td>
-                        <select id="clasificacion" name="clasificacion" required>
+                        <select id="clasificacion" name="clasificacion" required style="min-width:120px; max-width:180px;">
                             <option value="">Seleccionar categoría</option>
                             <option value="ABRASIVE">ABRASIVE</option>
                             <option value="ACCESORIES">ACCESORIES</option>
@@ -1763,7 +1621,7 @@
                         </select>
                         </td>
                         <td>
-                            <input type="number" id="cantidad" name="cantidad" placeholder="0" min="0" required>
+                            <input type="number" id="cantidad" name="cantidad" placeholder="0" min="0" required style="width:70px;">
                         </td>
                         <td>
                             <textarea id="motivo" name="motivo" rows="2" placeholder="Motivo de la salida" required></textarea>
@@ -1912,6 +1770,10 @@
                     }
                 }
 
+                // Mostrar panel de filtro de fechas (snapshot histórico)
+                const dsbBarEl = document.getElementById('dateSnapshotBar');
+                if (dsbBarEl) dsbBarEl.style.display = 'flex';
+
             } else if (sectionKey === 'proveedores') {
                 // Asegurar que no quede una barra previa
                 document.querySelectorAll('.search-bar-proveedores').forEach(el => el.remove());
@@ -2015,7 +1877,7 @@
                                     <i class="fas fa-file-excel"></i>
                                     <span>Importar Excel</span>
                                 </button>
-                                <button id="compareBtn" class="btn-compare" title="Ejecutar comparación de auditoría" style="background: linear-gradient(135deg, #007bff, #0056b3); border: none; color: white; padding: 8px 12px; border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <button id="compareBtn" class="btn-compare" title="Ejecutar comparación de auditoría" style="background: linear-gradient(135deg, #d6eaff, #afd5fd); border: none; color: white; padding: 8px 12px; border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                     <i class="fas fa-balance-scale"></i>
                                     <span>Comparar</span>
                                 </button>
@@ -2164,6 +2026,12 @@
             }
             if (searchBarBD && sectionKey !== 'base-datos') {
                 searchBarBD.remove();
+            }
+            // Ocultar panel de fechas si no estamos en base-datos
+            const dsbBar = document.getElementById('dateSnapshotBar');
+            if (dsbBar && sectionKey !== 'base-datos') {
+                dsbBar.style.display = 'none';
+                window.__snapshotActive = false;
             }
             
             // Limpiar contenedor de comparación si existe
@@ -2361,23 +2229,10 @@
                     autoSave();
                 });
 
-                // En Base de datos: si el código ya existe, cargarlo para edición al salir del campo
+                // En Base de datos: el autocompletado por código sigue funcionando,
+                // pero no se debe cargar el registro en modo edición al salir del campo.
                 productCodeField.addEventListener('blur', function() {
-                    const activeSection = document.querySelector('.nav-item.active');
-                    if (activeSection && activeSection.getAttribute('data-section') === 'base-datos') {
-                        const code = (productCodeField.value || '').trim().toLowerCase();
-                        if (!code) return;
-                        const existing = allRecords.find(r => (r.codigo || '').toLowerCase() === code);
-                        if (existing) {
-                            isEditMode = true;
-                            editingRecordId = existing.id;
-                            populateForm(existing, 'base-datos');
-                            const formTitle = document.getElementById('formTitle');
-                            const clearBtn = document.getElementById('clearSelectionBtn');
-                            if (formTitle) formTitle.textContent = 'Editando Registro';
-                            if (clearBtn) clearBtn.style.display = 'inline-block';
-                        }
-                    }
+                    // Intencionalmente vacío: evitar cargar el registro para edición desde este evento
                 });
             }
         }
@@ -2424,8 +2279,7 @@
                 showFloatingCard('Datos del producto cargados automáticamente', 'success');
             } else {
                 console.log('Producto no encontrado:', productCode);
-                // Opcional: mostrar mensaje de que no se encontró
-                // showFloatingCard('Producto no encontrado en la base de datos', 'warning');
+
             }
         }
 
@@ -2524,7 +2378,6 @@
                 // Para base de datos, validar que descripción no esté vacía
                 const description = data.description;
                 if (!description || description.trim() === '') {
-                    console.log('Descripción es obligatoria para base de datos');
                     return;
                 }
                 
@@ -2554,7 +2407,6 @@
                 const description = data.description;
                 const quantity = data.quantity;
                 if (!description || description.trim() === '' || !quantity || quantity <= 0) {
-                    console.log('Descripción y cantidad son obligatorios para entradas');
                     return;
                 }
             } else if (activeSection === 'salidas') {
@@ -2642,7 +2494,6 @@
                 }
                 // Validación básica: supplier requerido
                 if (!payload.supplierName || !payload.supplierName.trim()) {
-                    console.log('Supplier es obligatorio para proveedores');
                     return;
                 }
                 endpoint = '/api/proveedores';
@@ -2652,13 +2503,16 @@
                 editingRecordId = null;
 
                 // Payload de creación para Entradas
+                // entradas = quantity para que aggregateByCodigo calcule stock correctamente
+                const qtyNum = Number(data.quantity || 0);
                 payload = {
                     productCode: data.productCode,
                     poNumber: data.poNumber,
                     date: data.date || null,
                     category: data.category,
                     description: data.description,
-                    quantity: Number(data.quantity || 0),
+                    quantity: qtyNum,
+                    entradas: qtyNum,
                     invoice: data.invoice,
                     supplier: data.supplier
                 };
@@ -2779,7 +2633,6 @@
         async function manualSave() {
             const activeSection = document.querySelector('.nav-item.active')?.getAttribute('data-section');
             if (activeSection !== 'base-datos') {
-                console.log('Guardado manual solo disponible para Base de datos');
                 return;
             }
             
@@ -2794,7 +2647,6 @@
         async function saveEntradas() {
             const activeSection = document.querySelector('.nav-item.active')?.getAttribute('data-section');
             if (activeSection !== 'entradas') {
-                console.log('Guardado manual solo disponible para Entradas');
                 return;
             }
             
@@ -2809,7 +2661,6 @@
         async function saveSalidas() {
             const activeSection = document.querySelector('.nav-item.active')?.getAttribute('data-section');
             if (activeSection !== 'salidas') {
-                console.log('Guardado manual solo disponible para Salidas');
                 return;
             }
             
@@ -2824,7 +2675,6 @@
         async function saveProveedores() {
             const activeSection = document.querySelector('.nav-item.active')?.getAttribute('data-section');
             if (activeSection !== 'proveedores') {
-                console.log('Guardado manual solo disponible para Proveedores');
                 return;
             }
             
@@ -2850,6 +2700,8 @@
                 endpoint = '/api/salidas';
             } else if (activeSection === 'proveedores') {
                 endpoint = '/api/proveedores';
+            } else if (activeSection === 'entradas') {
+                endpoint = '/api/entradas';
             } else {
                 endpoint = '/api/inventario';
             }
@@ -2878,12 +2730,7 @@
                     return dateB - dateA; // Orden descendente (más reciente primero)
                 });
                 
-                console.log('Registros ordenados por fecha (más recientes primero):', sortedRecords.slice(0, 3).map(r => ({
-                    id: r.id,
-                    fecha: r.created_at || r.fecha,
-                    descripcion: r.descripcion || r.description
-                })));
-                
+
                 // Almacenar todos los registros ordenados (sin agrupar) y resetear paginación
                 allRecords = sortedRecords;
                 totalRecords = sortedRecords.length;
@@ -2929,8 +2776,6 @@
                     agg.entradas = (Number(agg.entradas || 0) || 0) + (Number(rec.entradas || 0) || 0);
                     agg.salidas = (Number(agg.salidas || 0) || 0) + (Number(rec.salidas || 0) || 0);
                     agg.stock = (Number(agg.stock || 0) || 0) + (Number(rec.stock || 0) || 0);
-                    // Mantener los demás campos del registro más reciente (ya es agg por el orden actual)
-                    // Si quisieras actualizar proveedor/descripcion cuando vengan no vacíos, descomenta:
                     if (rec.descripcion && !agg.descripcion) agg.descripcion = rec.descripcion;
                     if (rec.proveedor && !agg.proveedor) agg.proveedor = rec.proveedor;
                 }
@@ -2947,18 +2792,14 @@
         let allProveedoresRecords = [];
 
         // Función para actualizar solo la fila específica que se editó
-        function updateSpecificRow(updatedRecord, section) {
-            console.log('Actualizando fila específica:', updatedRecord, 'Sección:', section);
-            
+        function updateSpecificRow(updatedRecord, section) {   
             if (!updatedRecord || !updatedRecord.id) {
-                console.log('No se puede actualizar: registro o ID faltante');
                 return;
             }
             
             // Buscar la fila específica por data-record-id
             const targetRow = document.querySelector(`tr[data-record-id="${updatedRecord.id}"]`);
             if (!targetRow) {
-                console.log('No se encontró la fila con ID:', updatedRecord.id);
                 return;
             }
             
@@ -3011,12 +2852,180 @@
         }
 
         // Función para filtrar base de datos
+        // ──────────────────────────────────────────────────
+        //  SNAPSHOT HISTÓRICO DE INVENTARIO
+        // ──────────────────────────────────────────────────
+
+        // Estado del filtro activo
+        window.__snapshotActive = false;
+        window.__snapshotData   = [];
+
+        async function applySnapshotFilter() {
+            const fechaInicio = (document.getElementById('dsbFechaInicio')?.value || '').trim();
+            const fechaFin    = (document.getElementById('dsbFechaFin')?.value    || '').trim();
+
+            if (!fechaInicio && !fechaFin) {
+                showFloatingCard('Ingresa al menos la fecha fin para filtrar', 'warning');
+                return;
+            }
+
+            const applyBtn = document.getElementById('dsbApply');
+            if (applyBtn) { applyBtn.disabled = true; applyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cargando...'; }
+
+            try {
+                const params = new URLSearchParams();
+                if (fechaInicio) params.append('fecha_inicio', fechaInicio);
+                if (fechaFin)    params.append('fecha_fin',    fechaFin);
+
+                const resp = await fetch('/api/inventario/snapshot?' + params.toString());
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({}));
+                    throw new Error(err.error || `Error ${resp.status}`);
+                }
+                const data = await resp.json();
+                const items = data.items || [];
+
+                window.__snapshotActive = true;
+                window.__snapshotData   = items;
+
+                // Actualizar badge
+                const badge = document.getElementById('dsbBadge');
+                const badgeText = document.getElementById('dsbBadgeText');
+                if (badge && badgeText) {
+                    let label = '';
+                    if (fechaInicio && fechaFin) label = `${formatDateLabel(fechaInicio)} → ${formatDateLabel(fechaFin)}`;
+                    else if (fechaFin)           label = `Hasta ${formatDateLabel(fechaFin)}`;
+                    else                          label = `Desde ${formatDateLabel(fechaInicio)}`;
+                    badgeText.textContent = label;
+                    badge.classList.remove('hidden');
+                }
+
+                // Mostrar tabla snapshot (sin agregar porque el backend ya lo hace)
+                totalRecords = items.length;
+                currentPage  = 1;
+                displaySnapshotRecords(items);
+
+            } catch (err) {
+                console.error('Error en snapshot:', err);
+                showFloatingCard('Error al obtener snapshot: ' + err.message, 'error');
+            } finally {
+                if (applyBtn) { applyBtn.disabled = false; applyBtn.innerHTML = '<i class="fas fa-filter"></i> Aplicar'; }
+            }
+        }
+
+        function clearSnapshotFilter() {
+            window.__snapshotActive = false;
+            window.__snapshotData   = [];
+            // Limpiar inputs
+            const fi = document.getElementById('dsbFechaInicio');
+            const ff = document.getElementById('dsbFechaFin');
+            if (fi) fi.value = '';
+            if (ff) ff.value = '';
+            // Ocultar badge
+            const badge = document.getElementById('dsbBadge');
+            if (badge) badge.classList.add('hidden');
+            // Recargar datos actuales
+            loadRecords();
+        }
+
+        function formatDateLabel(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const [y, m, d] = dateStr.split('-');
+                const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+                return `${d} ${months[parseInt(m,10)-1]} ${y}`;
+            } catch { return dateStr; }
+        }
+
+        // Muestra los registros del snapshot en la tabla base-datos
+        function displaySnapshotRecords(items) {
+            const recordsHeader = document.getElementById('recordsHeader');
+            const recordsBody   = document.getElementById('recordsBody');
+            const paginationContainer = document.getElementById('paginationContainer');
+
+            const hasInicio = items.some(i => i.stock_inicio_periodo != null);
+
+            // Encabezados (agrega columna "Stock Inicio" si aplica)
+            recordsHeader.innerHTML = `
+                <th><i class="fas fa-barcode"></i> Código</th>
+                <th><i class="fas fa-align-left"></i> Descripción</th>
+                <th><i class="fas fa-truck"></i> Proveedor</th>
+                ${hasInicio ? '<th style="color:#7c3aed"><i class="fas fa-history"></i> Stock inicio</th>' : ''}
+                <th><i class="fas fa-cubes"></i> Stock al corte</th>
+                <th><i class="fas fa-arrow-down"></i> Entradas</th>
+                <th><i class="fas fa-arrow-up"></i> Salidas período</th>
+                <th><i class="fas fa-ruler-combined"></i> UOM</th>
+                <th><i class="fas fa-layer-group"></i> Categoría PDM</th>
+                <th><i class="fas fa-map-marker-alt"></i> Locación</th>
+            `;
+
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const pageItems  = items.slice(startIndex, startIndex + recordsPerPage);
+
+            if (pageItems.length === 0) {
+                recordsBody.innerHTML = `
+                    <tr>
+                        <td colspan="${hasInicio ? 10 : 9}" style="text-align:center;padding:20px;color:#888;">
+                            <i class="fas fa-inbox"></i> No hay registros para el período seleccionado
+                        </td>
+                    </tr>`;
+                paginationContainer.style.display = 'none';
+                return;
+            }
+
+            recordsBody.innerHTML = pageItems.map((r, idx) => `
+                <tr class="record-row" data-record-index="${idx}">
+                    <td>${r.codigo || ''}</td>
+                    <td>${r.descripcion || ''}</td>
+                    <td>${r.proveedor || ''}</td>
+                    ${hasInicio ? `<td class="numeric-highlight cell-stock-inicio">${r.stock_inicio_periodo != null ? Number(r.stock_inicio_periodo) : '—'}</td>` : ''}
+                    <td class="numeric-highlight cell-stock">${Number(r.stock || 0)}</td>
+                    <td class="numeric-highlight cell-entradas">${Number(r.entradas || 0)}</td>
+                    <td class="numeric-highlight cell-salidas">${Number(r.salidas || 0)}</td>
+                    <td>${r.uom || ''}</td>
+                    <td>${r.categoria_pdm || ''}</td>
+                    <td>${r.locacion || ''}</td>
+                </tr>
+            `).join('');
+
+            // Paginación
+            if (items.length > recordsPerPage) {
+                paginationContainer.style.display = 'flex';
+                updatePaginationControls(items.length);
+            } else {
+                paginationContainer.style.display = 'none';
+            }
+        }
+
         function filterBaseDatos(searchTerm) {
             const active = document.querySelector('.nav-item.active');
             const activeSection = active ? active.getAttribute('data-section') : '';
             if (activeSection !== 'base-datos') return;
             const term = (searchTerm || '').trim();
+
+            // Si hay snapshot activo, filtrar sobre los datos del snapshot
+            if (window.__snapshotActive && window.__snapshotData) {
+                const base = window.__snapshotData;
+                const filtered = term === '' ? base : base.filter(r => {
+                    const s = term.toLowerCase();
+                    return (
+                        (r.codigo && r.codigo.toLowerCase().includes(s)) ||
+                        (r.descripcion && r.descripcion.toLowerCase().includes(s)) ||
+                        (r.proveedor && r.proveedor.toLowerCase().includes(s)) ||
+                        (r.uom && String(r.uom).toLowerCase().includes(s)) ||
+                        (r.categoria_pdm && r.categoria_pdm.toLowerCase().includes(s)) ||
+                        (r.locacion && String(r.locacion).toLowerCase().includes(s))
+                    );
+                });
+                totalRecords = filtered.length;
+                currentPage = 1;
+                displaySnapshotRecords(filtered);
+                return;
+            }
+
             const base = allRecords || [];
+
+            // Filtrar sobre los registros RAW y luego agregar por código
             const filtered = term === '' ? base : base.filter(r => {
                 const s = term.toLowerCase();
                 return (
@@ -3028,10 +3037,12 @@
                     (r.locacion && String(r.locacion).toLowerCase().includes(s))
                 );
             });
-            // Para base de datos, mantenemos las columnas agregadas cuando corresponda
-            totalRecords = filtered.length;
+
+            // Siempre agregar por código antes de mostrar en inventario
+            const aggregated = aggregateByCodigo(filtered);
+            totalRecords = aggregated.length;
             currentPage = 1;
-            displayRecords(filtered, activeSection);
+            displayRecords(aggregated, activeSection);
         }
 
         // Función para filtrar entradas
@@ -3050,6 +3061,7 @@
                     (r.descripcion && r.descripcion.toLowerCase().includes(s)) ||
                     (r.factura && String(r.factura).toLowerCase().includes(s)) ||
                     (r.proveedor && r.proveedor.toLowerCase().includes(s)) ||
+                    (r.fecha && new Date(r.fecha).toLocaleDateString('es-MX').toLowerCase().includes(s)) ||
                     (r.created_at && new Date(r.created_at).toLocaleDateString('es-MX').toLowerCase().includes(s))
                 );
             });
@@ -3393,16 +3405,16 @@
                                     discrepancies.missingInExcel.length + 
                                     discrepancies.quantityMismatch.length;
             
-            let message = `📊 Resultados de Auditoría:\n`;
+            let message = ` Resultados de Auditoría:\n`;
             message += `• Productos en sistema: ${totalSistema}\n`;
             message += `• Productos en Excel: ${totalExcel}\n`;
             message += `• Total discrepancias: ${totalDiscrepancies}\n\n`;
             
             if (totalDiscrepancies === 0) {
-                message += `✅ ¡Perfecto! No se encontraron discrepancias.`;
+                message += `¡Perfecto! No se encontraron discrepancias.`;
                 showFloatingCard(message, 'success');
             } else {
-                message += `⚠️ Discrepancias encontradas:\n`;
+                message += ` Discrepancias encontradas:\n`;
                 
                 if (discrepancies.missingInSystem.length > 0) {
                     message += `• ${discrepancies.missingInSystem.length} productos en Excel pero no en sistema\n`;
@@ -3416,7 +3428,7 @@
                     message += `• ${discrepancies.quantityMismatch.length} productos con cantidades diferentes\n`;
                 }
                 
-                message += `\n💡 Haz clic en "Ver Detalles" para más información.`;
+                message += `\n Haz clic en "Ver Detalles" para más información.`;
                 
                 showFloatingCard(message, 'warning');
                 
@@ -3591,7 +3603,7 @@
                 
                 // Ajustar ancho de columnas (solo Código y Stock Actual)
                 const colWidths = [
-                    { wch: 20 }, // Código
+                    { wch: 15 }, // Código
                     { wch: 15 }  // Stock Actual
                 ];
                 worksheet['!cols'] = colWidths;
@@ -3639,52 +3651,57 @@
                     <th><i class="fas fa-barcode"></i> Código</th>
                     <th><i class="fas fa-align-left"></i> Descripción</th>
                     <th><i class="fas fa-truck"></i> Proveedor</th>
-                    <th><i class="fas fa-dollar-sign"></i> Precio MXN</th>
-                    <th><i class="fas fa-dollar-sign"></i> Precio DLLS</th>
-                    <th><i class="fas fa-boxes"></i> Stock inicial</th>
+                    <th><i class="fas fa-cubes"></i> Stock</th>
                     <th><i class="fas fa-arrow-down"></i> Entradas</th>
                     <th><i class="fas fa-arrow-up"></i> Salidas</th>
-                    <th><i class="fas fa-cubes"></i> Stock</th>
                     <th><i class="fas fa-ruler-combined"></i> UOM</th>
                     <th><i class="fas fa-layer-group"></i> Categoría PDM</th>
                     <th><i class="fas fa-map-marker-alt"></i> Locación</th>
                 `;
 
-                // Filas de datos para base de datos
+                // Filas de datos para base de datos (sin columnas de precio ni stock inicial)
                 recordsBody.innerHTML = recordsToShow.map((record, index) => `
                     <tr class="record-row" data-record-id="${record.id}" data-record-index="${index}" style="cursor: pointer;">
                         <td>${record.codigo || ''}</td>
                         <td>${record.descripcion || ''}</td>
-                        <td onclick="event.stopPropagation()">
-                            <button type="button" 
-                                    class="proveedor-select-btn editable-proveedor-field" 
-                                    data-field="proveedor" 
-                                    data-record-id="${record.id}"
-                                    style="width: 100%; border: none; background: transparent; padding: 4px; font-size: 14px; text-align: left; justify-content: space-between;">
-                                <span>${record.proveedor || 'Seleccionar proveedor'}</span>
-                                <i class="fas fa-chevron-down" style="font-size: 12px;"></i>
-                            </button>
-                            <input type="hidden" 
-                                   class="editable-field" 
-                                   value="${record.proveedor || ''}" 
-                                   data-field="proveedor" 
-                                   data-record-id="${record.id}">
-                        </td>
-                        <td class="cell-precio">${(record.precio_mxn != null ? Number(record.precio_mxn).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '')}</td>
-                        <td class="cell-precio">${(record.precio_dlls != null ? Number(record.precio_dlls).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}) : '')}</td>
-                        <td class="numeric-highlight cell-stock-inicial">${Number(record.stock_inicial || 0)}</td>
-                        <td class="numeric-highlight">${Number(record.entradas || 0)}</td>
+                        <td>${record.proveedor || ''}</td>
+                        <td class="numeric-highlight cell-stock">${Number(record.stock || 0)}</td>
+                        <td class="numeric-highlight cell-entradas">${Number(record.entradas || 0)}</td>
                         <td class="numeric-highlight cell-salidas">${Number(record.salidas || 0)}</td>
-                        <td class="numeric-highlight">${Number(record.stock || 0)}</td>
                         <td>${(record.uom ?? record.UOM ?? '')}</td>
                         <td>${(record.categoria_pdm ?? '')}</td>
                         <td>${(record.locacion ?? record.location ?? '')}</td>
                     </tr>
                 `).join('');
+                // Insertar/actualizar colgroup para forzar anchos de columnas
+                try {
+                    const recordsTable = document.getElementById('recordsTable');
+                    if (recordsTable) {
+                        const order = (window.LAYOUT && window.LAYOUT.baseDatosColumnOrder) ? window.LAYOUT.baseDatosColumnOrder : ['codigo','descripcion','proveedor','stock','entradas','salidas','uom','categoria','locacion'];
+                        const cw = (window.LAYOUT && (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths)) ? (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths) : {};
+                        let colgroup = recordsTable.querySelector('colgroup');
+                        const colsHtml = order.map(key => {
+                            const w = cw && cw[key] ? Number(cw[key]) : null;
+                            if (w) return `<col style="width:${w}px; min-width:${w}px; max-width:${w}px">`;
+                            return '<col>'; 
+                        }).join('');
+                        const newCg = document.createElement('colgroup');
+                        newCg.innerHTML = colsHtml;
+                        if (colgroup) recordsTable.replaceChild(newCg, colgroup); else recordsTable.insertBefore(newCg, recordsTable.firstChild);
+                        // Forzar uso de tamaños fijos
+                        recordsTable.style.tableLayout = 'fixed';
+                    }
+                } catch (e) { /* no-op */ }
+
+                // Sincronizar anchos del formulario también
+                setTimeout(() => {
+                    try { syncBaseDatosColumnWidths(); } catch (e) { /* no-op */ }
+                    try { adjustBaseDatosPreferredWidths(); } catch (e) { /* no-op */ }
+                }, 0);
             } else if (section === 'salidas') {
-                // Encabezados para salidas
+                // Encabezados para salidas (ajustando ancho de la columna Departamento)
                 recordsHeader.innerHTML = `
-                    <th><i class="fas fa-building"></i> Departamento</th>
+                    <th style="width:100px; max-width:160px;"><i class="fas fa-building"></i> Departamento</th>
                     <th><i class="fas fa-user"></i> Empleado</th>
                     <th><i class="fas fa-calendar-alt"></i> Fecha</th>
                     <th><i class="fas fa-barcode"></i> Código</th>
@@ -3694,10 +3711,10 @@
                     <th><i class="fas fa-comment"></i> Motivo</th>
                 `;
 
-                // Filas de datos para salidas
+                // Filas de datos para salidas (aplicar mismo ancho y truncado si es necesario)
                 recordsBody.innerHTML = recordsToShow.map((record, index) => `
                     <tr class="record-row" data-record-id="${record.id}" data-record-index="${index}" style="cursor: pointer;">
-                        <td>${record.departamento || ''}</td>
+                        <td style="width:100px; max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${record.departamento || ''}</td>
                         <td>${record.empleado || ''}</td>
                         <td>${record.fecha ? formatearFechaEspanol(record.fecha) : ''}</td>
                         <td>${record.codigoProducto || ''}</td>
@@ -3736,7 +3753,7 @@
                     </tr>
                 `).join('');
             } else {
-                // Encabezados para entradas (PO primero, luego Código)
+                // Encabezados para entradas (log individual de inventario_entrada)
                 recordsHeader.innerHTML = `
                     <th><i class="fas fa-hashtag"></i> PO</th>
                     <th><i class="fas fa-barcode"></i> Código</th>
@@ -3748,24 +3765,26 @@
                     <th><i class="fas fa-truck"></i> Proveedor</th>
                 `;
 
-                // Filas de datos para entradas (PO primero, luego Código)
+                // Filas de datos para entradas — campos de inventario_entrada
                 recordsBody.innerHTML = recordsToShow.map((record, index) => `
-                    <tr class="record-row" data-record-id="${record.id}" data-record-index="${index}" style="cursor: pointer;">
+                    <tr class="record-row" data-record-id="${record.id}" data-record-index="${index}">
                         <td>${record.po || ''}</td>
                         <td>${record.codigo || ''}</td>
-                        <td>${record.created_at ? formatearFechaEspanol(record.created_at) : ''}</td>
+                        <td>${record.fecha ? formatearFechaEspanol(record.fecha) : (record.created_at ? formatearFechaEspanol(record.created_at) : '')}</td>
                         <td>${record.categoria || ''}</td>
                         <td>${record.descripcion || ''}</td>
-                        <td>${record.stock || 0}</td>
+                        <td class="numeric-highlight cell-entradas">${Number(record.cantidad || record.stock || 0)}</td>
                         <td>${record.factura || ''}</td>
                         <td>${record.proveedor || ''}</td>
                     </tr>
                 `).join('');
+                // Ajustar anchos preferidos para la vista de entradas
+                try { setTimeout(adjustEntradasPreferredWidths, 0); } catch (e) { /* no-op */ }
             }
 
             // Si no hay registros, mostrar mensaje
             if (records.length === 0) {
-                const colspan = section === 'base-datos' ? '13' : '8';
+                const colspan = section === 'base-datos' ? '9' : '8';
                 recordsBody.innerHTML = `
                     <tr>
                         <td colspan="${colspan}" style="text-align: center; padding: 20px; color: #888;">
@@ -3850,36 +3869,50 @@
             
             // Obtener la sección activa
             const activeSection = document.querySelector('.nav-item.active').getAttribute('data-section');
+
+            // Si hay snapshot activo, paginar sobre los datos del snapshot
+            if (activeSection === 'base-datos' && window.__snapshotActive && window.__snapshotData) {
+                displaySnapshotRecords(window.__snapshotData);
+                return;
+            }
             
-            // Mostrar los registros de la nueva página (ya están ordenados)
-            displayRecords(allRecords, activeSection);
+            // Mostrar los registros de la nueva página (agregar si es inventario)
+            const recordsForPage = activeSection === 'base-datos'
+                ? aggregateByCodigo(allRecords)
+                : allRecords;
+            displayRecords(recordsForPage, activeSection);
         }
 
         // Función para agregar event listeners a las filas de la tabla
         function addRowClickListeners(records, section) {
+            // Desactivar la funcionalidad de "registro cargado para edición"
+            // para Entradas, Salidas e Inventario (base-datos).
+            const disabledSections = ['entradas', 'salidas', 'base-datos'];
+            if (disabledSections.includes(section)) {
+                document.querySelectorAll('.record-row').forEach(row => {
+                    // Asegurar que las filas no muestren cursor pointer y no tengan manejadores previos
+                    row.style.cursor = 'default';
+                    row.onclick = null;
+                });
+                return; // No adjuntar listeners que carguen para edición
+            }
+
+            // Para las secciones que sí permiten edición desde la tabla (ej. proveedores),
+            // asignar un handler único evitando duplicados.
             document.querySelectorAll('.record-row').forEach(row => {
-                row.addEventListener('click', function() {
+                row.style.cursor = 'pointer';
+                row.onclick = function() {
                     const recordId = this.getAttribute('data-record-id');
-                    
-                    // Buscar el registro por ID en allRecords
                     const record = allRecords.find(r => String(r.id) === String(recordId));
-                    
                     if (!record) {
                         console.error('No se encontró el registro con ID:', recordId);
                         return;
                     }
-                    
-                    // Remover selección anterior
                     document.querySelectorAll('.record-row').forEach(r => r.classList.remove('selected'));
-                    // Agregar selección a la fila actual
                     this.classList.add('selected');
-                    
-                    // Llenar el formulario con los datos del registro
                     populateForm(record, section);
-                    
-                    // Mostrar mensaje
                     showFloatingCard('Registro cargado para edición', 'success');
-                });
+                };
             });
         }
 
@@ -4000,19 +4033,15 @@
                 // Llenar campos de stock con valores numéricos
                 if (stockInicialField) {
                     stockInicialField.value = record.stock_inicial || 0;
-                    console.log('Stock inicial asignado:', stockInicialField.value);
                 }
                 if (entradasField) {
                     entradasField.value = record.entradas || 0;
-                    console.log('Entradas asignadas:', entradasField.value);
                 }
                 if (salidasField) {
                     salidasField.value = record.salidas || 0;
-                    console.log('Salidas asignadas:', salidasField.value);
                 }
                 if (stockField) {
                     stockField.value = record.stock || 0;
-                    console.log('Stock asignado:', stockField.value);
                 }
                 
                 if (uomField) uomField.value = (record.uom ?? record.UOM ?? '');
@@ -4095,23 +4124,13 @@
         function clearSelection() {
             // Limpiar formulario
             document.getElementById('inventoryForm').reset();
-            
-            // Remover selección visual
             document.querySelectorAll('.record-row').forEach(r => r.classList.remove('selected'));
-            
-            // Resetear modo de edición
             isEditMode = false;
             editingRecordId = null;
-            
-            // Restaurar título del formulario según la sección activa
             const clearBtn = document.getElementById('clearSelectionBtn');
             setFormTitleForCurrentSection();
-            if (clearBtn) clearBtn.style.display = 'none';
-            
-            // Colocar fecha de hoy si estamos en Entradas
+            if (clearBtn) clearBtn.style.display = 'none'; 
             setTodayDateForEntradas();
-            
-            // Mostrar mensaje
             showFloatingCard('Modo nuevo registro activado', 'success');
         }
 
@@ -4126,14 +4145,23 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar con la sección de entradas
             changeSection('entradas');
-            // Aplicar estilos iniciales
             applyFieldStyles();
-            // Asegurar fecha de hoy al iniciar
             setTodayDateForEntradas();
-            // Cargar registros iniciales
             loadRecords();
+
+            // Limpiar filas huérfanas duplicadas al iniciar (una sola vez por sesión)
+            if (!sessionStorage.getItem('orphansCleanedUp')) {
+                fetch('/api/inventario/cleanup-orphans', { method: 'POST' })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.deleted > 0) {
+                            console.log(`[cleanup] Se eliminaron ${d.deleted} fila(s) duplicada(s):`, d.rows);
+                        }
+                    })
+                    .catch(() => {})
+                    .finally(() => sessionStorage.setItem('orphansCleanedUp', '1'));
+            }
 
             // Restaurar estado colapsado del sidebar
             const sidebar = document.querySelector('.sidebar');
@@ -4183,9 +4211,14 @@
             // Re-sincronizar anchos al redimensionar
             window.addEventListener('resize', () => {
                 const activeNav3 = document.querySelector('.nav-item.active');
-                if (activeNav3 && activeNav3.getAttribute('data-section') === 'base-datos') {
-                    syncBaseDatosColumnWidths();
-                    adjustBaseDatosPreferredWidths();
+                if (activeNav3) {
+                    const sec = activeNav3.getAttribute('data-section');
+                    if (sec === 'base-datos') {
+                        syncBaseDatosColumnWidths();
+                        adjustBaseDatosPreferredWidths();
+                    } else if (sec === 'entradas') {
+                        try { adjustEntradasPreferredWidths(); } catch (e) { /* no-op */ }
+                    }
                 }
             });
         });
@@ -4197,25 +4230,126 @@
             const recordsHeaderRow = document.querySelector('#recordsHeader');
             if (!recordsHeaderRow) return;
             const recordsHeadCells = Array.from(recordsHeaderRow.children);
-            if (recordsHeadCells.length < 13) return; // esperamos 13 columnas
+            const recordsTable = document.getElementById('recordsTable');
+            const recordsBodyRows = Array.from(document.querySelectorAll('#recordsBody tr'));
+            // Esperamos al menos 9 columnas ahora (Código + Descripción + Proveedor + Entradas + Salidas + Stock + UOM + Categoría + Locación)
+            if (recordsHeadCells.length < (window.LAYOUT?.baseDatosExpectedColumns || 9)) return;
 
-            // Header del formulario tiene 2 filas: 4 + 9
             const formTable = document.querySelector('.excel-table');
             if (!formTable) return;
             const formHeadRows = formTable.querySelectorAll('thead tr');
             if (formHeadRows.length < 2) return;
-            const formRow1Cells = Array.from(formHeadRows[0].children); // 4
-            const formRow2Cells = Array.from(formHeadRows[1].children); // 9
+            const formRow1Cells = Array.from(formHeadRows[0].children); // 3
+            const formRow2Cells = Array.from(formHeadRows[1].children); // 6
 
-            // Asignar anchos según header de registros
-            for (let i = 0; i < formRow1Cells.length; i++) {
-                const w = recordsHeadCells[i]?.getBoundingClientRect().width;
-                if (w) formRow1Cells[i].style.width = `${w}px`;
+            // Asignar anchos basados en los encabezados reales (buscar por texto),
+            // esto hace la función resistente a columnas opcionales como "Stock inicio".
+            const headerLabels = recordsHeadCells.map(h => (h.textContent || '').trim().toLowerCase());
+            const order = (window.LAYOUT && window.LAYOUT.baseDatosColumnOrder) ? window.LAYOUT.baseDatosColumnOrder : [];
+            const findHeaderIndexForKey = (key) => {
+                const k = String(key).toLowerCase();
+                for (let i = 0; i < headerLabels.length; i++) {
+                    const txt = headerLabels[i];
+                    if (!txt) continue;
+                    if (k === 'codigo' && (txt.includes('código') || txt.includes('codigo') || txt.includes('code'))) return i;
+                    if (k === 'descripcion' && txt.includes('descrip')) return i;
+                    if (k === 'proveedor' && txt.includes('proveedor')) return i;
+                    if (k === 'stock' && txt.includes('stock') && !txt.includes('inicio')) return i;
+                    if (k === 'entradas' && txt.includes('entradas')) return i;
+                    if (k === 'salidas' && txt.includes('salidas')) return i;
+                    if (k === 'uom' && (txt.includes('uom') || txt.includes('unidad') || txt.includes('u.o.m'))) return i;
+                    if (k === 'categoria' && (txt.includes('categor') || txt.includes('pdm') || txt.includes('clasific'))) return i;
+                    if (k === 'locacion' && (txt.includes('locaci') || txt.includes('locación') || txt.includes('map'))) return i;
+                }
+                return -1;
+            };
+            // Apply mapped widths from records header into the form header cells
+            if (order && order.length) {
+                order.forEach((colKey, orderIdx) => {
+                    const rIdx = findHeaderIndexForKey(colKey);
+                    const w = (rIdx >= 0) ? (recordsHeadCells[rIdx]?.getBoundingClientRect().width) : null;
+                    if (w) {
+                        // apply to form header cell (first or second row)
+                        if (orderIdx < formRow1Cells.length) {
+                            const fcell = formRow1Cells[orderIdx];
+                            if (fcell) fcell.style.width = `${w}px`;
+                        } else {
+                            const j = orderIdx - formRow1Cells.length;
+                            const fcell2 = formRow2Cells[j];
+                            if (fcell2) fcell2.style.width = `${w}px`;
+                        }
+                    }
+                });
             }
-            for (let j = 0; j < formRow2Cells.length; j++) {
-                const idx = 4 + j;
-                const w = recordsHeadCells[idx]?.getBoundingClientRect().width;
-                if (w) formRow2Cells[j].style.width = `${w}px`;
+
+            // Aplicar overrides definidos en LAYOUT.columnWidths (si existen)
+            try {
+                const cw = (window.LAYOUT && (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths)) ? (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths) : null;
+                const order = (window.LAYOUT && window.LAYOUT.baseDatosColumnOrder) ? window.LAYOUT.baseDatosColumnOrder : null;
+                if (cw && order) {
+                    Object.keys(cw).forEach(colKey => {
+                        const idx = order.indexOf(colKey);
+                        if (idx === -1) return;
+                        const widthPx = Number(cw[colKey]) || 0;
+                        if (!widthPx) return;
+                        const applyWidth = (cell) => {
+                            if (!cell) return;
+                            const w = `${widthPx}px`;
+                            cell.style.width = w;
+                            cell.style.minWidth = w;
+                            cell.style.maxWidth = w;
+                        };
+                        // Apply to records header
+                        // find actual header index for this logical column
+                        const actualIdx = findHeaderIndexForKey(colKey);
+                        const th = actualIdx >= 0 ? recordsHeadCells[actualIdx] : null;
+                        applyWidth(th);
+
+                        // Apply to records body cells
+                        if (actualIdx >= 0 && recordsBodyRows.length) {
+                            recordsBodyRows.forEach(row => {
+                                const cells = Array.from(row.children);
+                                applyWidth(cells[actualIdx]);
+                            });
+                        }
+
+                        // Apply to form header/body cells
+                        if (idx < formRow1Cells.length) {
+                            const fcell = formRow1Cells[idx];
+                            if (fcell) applyWidth(fcell);
+                        } else {
+                            const j = idx - formRow1Cells.length;
+                            const fcell2 = formRow2Cells[j];
+                            if (fcell2) applyWidth(fcell2);
+                        }
+
+                        // Apply to form body cells if present
+                        const formBodyRows = formTable.querySelectorAll('tbody tr');
+                        if (formBodyRows.length >= 2) {
+                            // try to set both body rows corresponding cell
+                            formBodyRows.forEach((r) => {
+                                const cells = Array.from(r.children);
+                                applyWidth(cells[idx]);
+                            });
+                        }
+                    });
+                }
+            } catch (e) {
+                // no-op on apply
+            }
+
+            if (recordsTable) {
+                try { recordsTable.style.tableLayout = 'fixed'; } catch (e) { /* no-op */ }
+                let totalWidth = 0;
+                recordsHeadCells.forEach(th => {
+                    const w = Number((th.style.width || '').replace('px', '')) || th.getBoundingClientRect().width || 0;
+                    totalWidth += w;
+                });
+                if (totalWidth) {
+                    const totalPx = `${Math.round(totalWidth)}px`;
+                    recordsTable.style.width = totalPx;
+                    recordsTable.style.minWidth = totalPx;
+                }
             }
 
             // Aplicar también a celdas del body para que inputs coincidan
@@ -4232,6 +4366,8 @@
                     td.style.width = `${w}px`;
                 });
             }
+            // Forzar table-layout fijo para respetar anchos aplicados
+            try { formTable.style.tableLayout = 'fixed'; } catch (e) { /* no-op */ }
         }
 
         // Ajustes finos: hacer más chicos Código y Precio MXN en Base de datos
@@ -4242,30 +4378,72 @@
             if (!formTable) return;
             const formHeadRows = formTable.querySelectorAll('thead tr');
             if (formHeadRows.length < 2) return;
+            // Aplicar anchos preferidos desde LAYOUT.columnWidths (si existen)
+            const cw = (window.LAYOUT && (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths)) ? (window.LAYOUT.baseDatosColumnWidths || window.LAYOUT.columnWidths) : {};
+            const row1 = Array.from(formHeadRows[0].children); // primera fila del formulario
+            const row2 = Array.from(formHeadRows[1].children); // segunda fila del formulario
+            const applyWidth = (cell, value) => {
+                if (!cell || !value) return;
+                const w = `${Number(value)}px`;
+                cell.style.width = w;
+                cell.style.minWidth = w;
+                cell.style.maxWidth = w;
+            };
 
-            // Código (col 0 en fila 1)
-            const codigoTh = formHeadRows[0].children[0];
-            if (codigoTh) {
-                codigoTh.style.width = '140px';
-            }
-            // Precio MXN (col 0 en fila 2)
-            const precioMxnTh = formHeadRows[1].children[0];
-            if (precioMxnTh) {
-                precioMxnTh.style.width = '120px';
-            }
+            // Map keys to the expected cells: first row has 3 cells (codigo, descripcion, proveedor)
+            applyWidth(row1[0], cw.codigo);
+            applyWidth(row1[1], cw.descripcion);
+            applyWidth(row1[2], cw.proveedor);
 
-            // Aplicar a inputs correspondientes
+            // Segunda fila: stock, entradas, salidas, uom, categoria, locacion (nuevo orden)
+            const row2Keys = ['stock','entradas','salidas','uom','categoria','locacion'];
+            row2Keys.forEach((key, i) => {
+                const val = cw[key];
+                applyWidth(row2[i], val);
+            });
+
+            // Aplicar a inputs correspondientes en el body
             const bodyRows = formTable.querySelectorAll('tbody tr');
             if (bodyRows.length >= 2) {
-                const row1 = bodyRows[0].children; // incluye código, desc, proveedor, categoría
-                const row2 = bodyRows[1].children; // incluye precioMXN en índice 0
-                if (row1[0]) row1[0].style.width = '140px';
-                if (row2[0]) row2[0].style.width = '120px';
+                // Asegurar aplicar el ancho al input productCode y al campo descripcion
+                const bodyRow1 = Array.from(bodyRows[0].children);
+                const bodyRow2 = Array.from(bodyRows[1].children);
+                applyWidth(bodyRow1[0], cw.codigo);
+                applyWidth(bodyRow1[1], cw.descripcion);
                 const codeInput = formTable.querySelector('#productCode');
-                if (codeInput) codeInput.style.maxWidth = '130px';
-                const precioInput = formTable.querySelector('#precioMXN');
-                if (precioInput) precioInput.style.maxWidth = '110px';
+                if (codeInput && cw.codigo) codeInput.style.maxWidth = `${Math.max(80, Number(cw.codigo) - 10)}px`;
             }
+        }
+
+        // Ajustes preferidos para la vista 'entradas' (PO, Código, Fecha, Categoría, Descripción, Cantidad, Factura, Proveedor)
+        function adjustEntradasPreferredWidths() {
+            const activeNav = document.querySelector('.nav-item.active');
+            if (!activeNav || activeNav.getAttribute('data-section') !== 'entradas') return;
+            const recordsHeaderRow = document.querySelector('#recordsHeader');
+            if (!recordsHeaderRow) return;
+            const ths = Array.from(recordsHeaderRow.children);
+            if (!ths.length) return;
+
+            const cw = (window.LAYOUT && window.LAYOUT.columnWidths) ? window.LAYOUT.columnWidths : {};
+            const defaults = { po:90, codigo:120, fecha:110, categoria:120, descripcion:420, cantidad:90, factura:120, proveedor:160 };
+            const keys = ['po','codigo','fecha','categoria','descripcion','cantidad','factura','proveedor'];
+
+            keys.forEach((key, idx) => {
+                const val = Number(cw[key] || defaults[key] || 0) || 0;
+                if (val && ths[idx]) ths[idx].style.width = `${val}px`;
+            });
+
+            // Aplicar a celdas del body para mantener inputs/columnas alineadas
+            const rows = document.querySelectorAll('#recordsBody tr.record-row');
+            rows.forEach(r => {
+                const cells = Array.from(r.children);
+                keys.forEach((_, i) => {
+                    if (cells[i] && ths[i]) cells[i].style.width = ths[i].style.width || '';
+                });
+            });
+            // Forzar table-layout fijo para respetar anchos aplicados
+            const recordsTable = document.getElementById('recordsTable');
+            if (recordsTable) recordsTable.style.tableLayout = 'fixed';
         }
 
         // Coloca la fecha local de hoy en el input de Entradas si está vacío
@@ -4435,13 +4613,7 @@
         }
 
         // Confirmar selección de proveedor
-        function confirmarSeleccionProveedor() {
-            console.log('Confirmando selección:', {
-                proveedorSeleccionado,
-                campoProveedorActual,
-                recordIdActual
-            });
-            
+        function confirmarSeleccionProveedor() {         
             if (proveedorSeleccionado && campoProveedorActual) {
                 if (recordIdActual) {
                     // Es un campo editable en la tabla
@@ -4488,9 +4660,7 @@
             renderizarProveedores(proveedoresFiltrados);
         }
 
-        // Event listeners para el modal
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar proveedores
             inicializarProveedores();
 
             // Event listeners para botones de proveedor

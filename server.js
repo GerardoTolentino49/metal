@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -9,8 +10,10 @@ const fs = require('fs');
 const pino = require('pino');
 const pinoHttp = require('pino-http');
 const XLSX = require('xlsx');
+const ExcelJS = require('exceljs');
 const { randomUUID } = require('crypto');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -359,6 +362,36 @@ async function ensureSalidasTable() {
   } catch (error) {
     logger.error('Error al crear/verificar tabla salidas:', error);
   }
+}
+
+// Asegurar tabla de log de entradas individuales (idempotente; llamar antes de SELECT/INSERT)
+async function ensureInventarioEntradaTable() {
+  await inventarioPool.query(`
+      CREATE TABLE IF NOT EXISTS inventario_entrada (
+        id          SERIAL PRIMARY KEY,
+        codigo      VARCHAR(150),
+        descripcion TEXT,
+        cantidad    NUMERIC(14,4) NOT NULL DEFAULT 0,
+        po          VARCHAR(150),
+        factura     VARCHAR(150),
+        categoria   VARCHAR(150),
+        proveedor   VARCHAR(255),
+        fecha       DATE NOT NULL DEFAULT CURRENT_DATE,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+  await inventarioPool.query(`
+      CREATE INDEX IF NOT EXISTS idx_inv_entrada_codigo
+      ON inventario_entrada ((LOWER(TRIM(codigo))));
+    `);
+  await inventarioPool.query(`
+      CREATE INDEX IF NOT EXISTS idx_inv_entrada_fecha
+      ON inventario_entrada (fecha DESC);
+    `);
+  await inventarioPool.query(`
+      CREATE INDEX IF NOT EXISTS idx_inv_entrada_created
+      ON inventario_entrada (created_at DESC);
+    `);
 }
 
 // Asegurar tabla proveedores
@@ -964,6 +997,32 @@ function buildTimelineSegmentsForSession(sessionMeta, eventos, rangeStartMs, ran
 
   return clippedSegments;
 }
+
+// Endpoint para leer el log de entradas individuales
+app.get('/api/entradas', async (req, res) => {
+  try {
+    await ensureInventarioEntradaTable();
+    const result = await inventarioPool.query(`
+      SELECT
+        id,
+        COALESCE(codigo, '')      AS codigo,
+        COALESCE(descripcion, '') AS descripcion,
+        cantidad,
+        COALESCE(po, '')          AS po,
+        COALESCE(factura, '')     AS factura,
+        COALESCE(categoria, '')   AS categoria,
+        COALESCE(proveedor, '')   AS proveedor,
+        fecha,
+        created_at
+      FROM inventario_entrada
+      ORDER BY created_at DESC, id DESC
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    logger.error('Error al obtener entradas:', error);
+    res.status(500).json({ error: 'Error al obtener entradas', message: error.message });
+  }
+});
 
 // Endpoints para Salidas (persistencia en Postgres)
 app.get('/api/salidas', async (req, res) => {
@@ -2940,6 +2999,298 @@ app.get('/api/employees/it', async (req, res) => {
   }
 });
 
+// Endpoint para obtener equipos disponibles para préstamo (devuelve todas las columnas)
+// ── Software / Credenciales ──────────────────────────────────────────────────
+// Crear tabla si no existe (se ejecuta una vez al arrancar)
+inventarioPool.query(`
+  CREATE TABLE IF NOT EXISTS software_credenciales (
+    id           SERIAL PRIMARY KEY,
+    pagina       TEXT NOT NULL,
+    usuario      TEXT,
+    contrasena   TEXT,
+    consola      TEXT,
+    tipo         TEXT,
+    facturacion  TEXT,
+    fecha_compra DATE,
+    vigencia     DATE,
+    precio       NUMERIC(12,2),
+    notas        TEXT,
+    created_at   TIMESTAMP DEFAULT NOW()
+  )
+`).catch(e => console.error('Error creando tabla software_credenciales:', e));
+
+// Agregar columnas nuevas si la tabla ya existía (idempotente)
+['ALTER TABLE software_credenciales ADD COLUMN IF NOT EXISTS tipo TEXT',
+ 'ALTER TABLE software_credenciales ADD COLUMN IF NOT EXISTS facturacion TEXT',
+ 'ALTER TABLE software_credenciales ADD COLUMN IF NOT EXISTS fecha_compra DATE',
+ 'ALTER TABLE software_credenciales ADD COLUMN IF NOT EXISTS vigencia DATE',
+ 'ALTER TABLE software_credenciales ADD COLUMN IF NOT EXISTS precio NUMERIC(12,2)']
+  .forEach(q => inventarioPool.query(q).catch(()=>{}));
+
+// Proxy tipo de cambio MXN→USD (evita CORS en el browser)
+app.get('/api/tipo-cambio/mxn-usd', async (req, res) => {
+  try {
+    const { data } = await axios.get('https://api.frankfurter.app/latest?from=MXN&to=USD', { timeout: 8000 });
+    res.json({ success: true, rate: data.rates?.USD || null, date: data.date || '' });
+  } catch(e) {
+    logger.error('Error al obtener tipo de cambio:', e.message);
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+function calcVigenciaSW(fecha_compra, facturacion) {
+  if(!fecha_compra) return null;
+  const d = new Date(fecha_compra);
+  if(isNaN(d)) return null;
+  if(facturacion === 'Mensual') d.setMonth(d.getMonth() + 1);
+  else if(facturacion === 'Anual') d.setFullYear(d.getFullYear() + 1);
+  else return null; // "Única vez" u otros: sin vigencia automática
+  return d.toISOString().split('T')[0];
+}
+
+app.get('/api/software-credenciales', async (req, res) => {
+  try {
+    const r = await inventarioPool.query('SELECT * FROM software_credenciales ORDER BY id ASC');
+    res.json({ success: true, items: r.rows });
+  } catch (e) { res.status(500).json({ success: false, error: e.message }); }
+});
+
+app.post('/api/software-credenciales', async (req, res) => {
+  const { pagina, usuario, contrasena, consola, tipo, facturacion, fecha_compra, precio, notas } = req.body;
+  try {
+    const vigencia = calcVigenciaSW(fecha_compra, facturacion);
+    const r = await inventarioPool.query(
+      `INSERT INTO software_credenciales
+         (pagina, usuario, contrasena, consola, tipo, facturacion, fecha_compra, vigencia, precio, notas)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+      [pagina, usuario||null, contrasena||null, consola||null,
+       tipo||null, facturacion||null, fecha_compra||null, vigencia, precio??null, notas||null]
+    );
+    res.json({ success: true, item: r.rows[0] });
+  } catch (e) { res.status(500).json({ success: false, error: e.message }); }
+});
+
+app.put('/api/software-credenciales/:id', async (req, res) => {
+  const { id } = req.params;
+  const { pagina, usuario, contrasena, consola, tipo, facturacion, fecha_compra, precio, notas } = req.body;
+  try {
+    const vigencia = calcVigenciaSW(fecha_compra, facturacion);
+    const r = await inventarioPool.query(
+      `UPDATE software_credenciales
+       SET pagina=$1, usuario=$2, contrasena=$3, consola=$4,
+           tipo=$5, facturacion=$6, fecha_compra=$7, vigencia=$8, precio=$9, notas=$10
+       WHERE id=$11 RETURNING *`,
+      [pagina, usuario||null, contrasena||null, consola||null,
+       tipo||null, facturacion||null, fecha_compra||null, vigencia, precio??null, notas||null, id]
+    );
+    res.json({ success: true, item: r.rows[0] });
+  } catch (e) { res.status(500).json({ success: false, error: e.message }); }
+});
+
+app.delete('/api/software-credenciales/:id', async (req, res) => {
+  try {
+    await inventarioPool.query('DELETE FROM software_credenciales WHERE id=$1', [req.params.id]);
+    res.json({ success: true });
+  } catch (e) { res.status(500).json({ success: false, error: e.message }); }
+});
+// ── Fin Software ─────────────────────────────────────────────────────────────
+
+app.get('/api/equipos-prestamo', async (req, res) => {
+  try {
+    // ?all=true → devuelve todos (vista admin); sin parámetro → solo disponibles Y prestables (modal de solicitud)
+    const all = req.query.all === 'true';
+    const q = all
+      ? `SELECT * FROM equipos_prestamo ORDER BY id ASC`
+      : `SELECT * FROM equipos_prestamo
+         WHERE LOWER(COALESCE(estatus, 'disponible')) NOT IN ('ocupada', 'ocupado', 'en uso', 'prestado')
+           AND prestable = true
+         ORDER BY id ASC`;
+    const result = await inventarioPool.query(q);
+    res.json({ success: true, equipos: result.rows || [] });
+  } catch (error) {
+    logger.error('Error al obtener equipos para préstamo:', error);
+    res.status(500).json({ success: false, error: 'Error al obtener equipos para préstamo', equipos: [] });
+  }
+});
+
+// Endpoint para agregar un nuevo equipo a equipos_prestamo
+app.post('/api/equipos-prestamo', async (req, res) => {
+  try {
+    const { nombre_qr, memoria_ram, memoria_ssd, procesador, touch, bateria_condicion, cargador, prestable, notas, tipo, so, marca } = req.body || {};
+    if (!nombre_qr || !nombre_qr.toString().trim()) {
+      return res.status(400).json({ success: false, error: 'El campo nombre_qr es obligatorio' });
+    }
+    const q = `
+      INSERT INTO equipos_prestamo
+        (nombre_qr, memoria_ram, memoria_ssd, procesador, touch, bateria_condicion, cargador, prestable, notas, tipo, so, marca, estatus)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'Disponible')
+      RETURNING *`;
+    const values = [
+      nombre_qr.toString().trim(),
+      memoria_ram   || null,
+      memoria_ssd   || null,
+      procesador    || null,
+      touch         || null,
+      bateria_condicion != null && bateria_condicion !== '' ? bateria_condicion : null,
+      cargador      != null ? cargador : null,
+      prestable     != null ? prestable : null,
+      notas         || null,
+      tipo          || null,
+      so            || null,
+      marca         || null
+    ];
+    const result = await inventarioPool.query(q, values);
+    return res.json({ success: true, equipo: result.rows[0] });
+  } catch (error) {
+    logger.error('Error al agregar equipo a equipos_prestamo:', { message: error?.message, code: error?.code, detail: error?.detail, error });
+    return res.status(500).json({ success: false, error: 'Error al agregar equipo', detail: error?.message || '', code: error?.code || '' });
+  }
+});
+
+// Endpoint para editar un equipo existente en equipos_prestamo
+app.put('/api/equipos-prestamo/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { nombre_qr, memoria_ram, memoria_ssd, procesador, touch, bateria_condicion, cargador, prestable, notas, tipo, estatus, so, marca } = req.body || {};
+    if (!nombre_qr || !nombre_qr.toString().trim()) {
+      return res.status(400).json({ success: false, error: 'El campo nombre_qr es obligatorio' });
+    }
+    const q = `
+      UPDATE equipos_prestamo
+      SET nombre_qr        = $1,
+          memoria_ram      = $2,
+          memoria_ssd      = $3,
+          procesador       = $4,
+          touch            = $5,
+          bateria_condicion= $6,
+          cargador         = $7,
+          prestable        = $8,
+          notas            = $9,
+          tipo             = $10,
+          estatus          = $11,
+          so               = $12,
+          marca            = $13
+      WHERE id = $14
+      RETURNING *`;
+    const values = [
+      nombre_qr.toString().trim(),
+      memoria_ram        || null,
+      memoria_ssd        || null,
+      procesador         || null,
+      touch              || null,
+      bateria_condicion != null && bateria_condicion !== '' ? bateria_condicion : null,
+      cargador  != null ? cargador  : null,
+      prestable != null ? prestable : null,
+      notas              || null,
+      tipo               || null,
+      estatus            || 'Disponible',
+      so                 || null,
+      marca              || null,
+      id
+    ];
+    const result = await inventarioPool.query(q, values);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Equipo no encontrado' });
+    }
+    return res.json({ success: true, equipo: result.rows[0] });
+  } catch (error) {
+    logger.error('Error al editar equipo en equipos_prestamo:', { message: error?.message, code: error?.code, detail: error?.detail, error });
+    return res.status(500).json({ success: false, error: 'Error al editar equipo', detail: error?.message || '' });
+  }
+});
+
+// Multer para fotos de evidencia de préstamos
+const evidenciaStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, 'uploads', 'evidencias');
+    if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, `prestamo-${req.params.id}-${req.body.tipo || 'foto'}-${Date.now()}${ext}`);
+  }
+});
+const uploadEvidencia = multer({
+  storage: evidenciaStorage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if(!file.mimetype.startsWith('image/')) return cb(new Error('Solo se aceptan imágenes'));
+    cb(null, true);
+  }
+});
+
+// Endpoint para subir foto de evidencia (condicion o retorno)
+app.post('/api/prestamos/:id/evidencia', uploadEvidencia.single('foto'), async (req, res) => {
+  try {
+    const id   = req.params.id;
+    const tipo = (req.body.tipo || '').toString().toLowerCase(); // 'condicion' o 'retorno'
+    if(!req.file) return res.status(400).json({ success: false, error: 'No se recibió ningún archivo' });
+    if(tipo !== 'condicion' && tipo !== 'retorno')
+      return res.status(400).json({ success: false, error: 'tipo debe ser "condicion" o "retorno"' });
+
+    const col = tipo === 'condicion' ? 'evidencia_condicion' : 'evidencia_retorno';
+    const url = `/uploads/evidencias/${req.file.filename}`;
+
+    const result = await inventarioPool.query(
+      `UPDATE prestamos SET ${col} = $1 WHERE id = $2 RETURNING id, evidencia_condicion, evidencia_retorno`,
+      [url, id]
+    );
+    if(result.rows.length === 0)
+      return res.status(404).json({ success: false, error: 'Préstamo no encontrado' });
+
+    return res.json({ success: true, url, prestamo: result.rows[0] });
+  } catch (error) {
+    logger.error('Error al subir evidencia de préstamo:', { message: error?.message, error });
+    return res.status(500).json({ success: false, error: 'Error al subir evidencia', detail: error?.message || '' });
+  }
+});
+
+    // Endpoint para crear un préstamo (guarda usuario logueado y equipo seleccionado)
+    app.post('/api/prestamos', async (req, res) => {
+      try {
+        if (!req.session || !req.session.userId) {
+          return res.status(401).json({ success: false, error: 'Usuario no autenticado' });
+        }
+
+        const userId = req.session.userId;
+        const id_computadora = req.body && req.body.id_computadora ? String(req.body.id_computadora) : null;
+        const fecha_inicio = req.body && req.body.fecha_inicio ? req.body.fecha_inicio : null;
+        const fecha_fin = req.body && req.body.fecha_fin ? req.body.fecha_fin : null;
+
+        if (!id_computadora) {
+          return res.status(400).json({ success: false, error: 'id_computadora es requerido' });
+        }
+
+        // Usar transacción para insertar el préstamo y marcar el equipo como Ocupada atómicamente
+        const client = await inventarioPool.connect();
+        try {
+          await client.query('BEGIN');
+
+          const insertQ = `INSERT INTO prestamos (id_usuario, id_computadora, fecha_inicio, fecha_fin, fecha_retorno)
+                           VALUES ($1, $2, $3, $4, NULL) RETURNING *`;
+          const insertRes = await client.query(insertQ, [String(userId), id_computadora, fecha_inicio, fecha_fin]);
+
+          // Marcar el equipo como Ocupada
+          await client.query(
+            `UPDATE equipos_prestamo SET estatus = 'Ocupada' WHERE CAST(id AS TEXT) = $1`,
+            [id_computadora]
+          );
+
+          await client.query('COMMIT');
+          return res.json({ success: true, prestamo: insertRes.rows[0] });
+        } catch (txErr) {
+          await client.query('ROLLBACK');
+          throw txErr;
+        } finally {
+          client.release();
+        }
+      } catch (error) {
+        logger.error('Error al crear prestamo:', { message: error?.message, error });
+        return res.status(500).json({ success: false, error: 'Error al crear préstamo' });
+      }
+    });
+
 // Endpoint para obtener empleados del departamento de RH
 app.get('/api/employees/rh', async (req, res) => {
   try {
@@ -2963,6 +3314,159 @@ app.get('/api/employees/rh', async (req, res) => {
       error: 'Error al obtener empleados de RH',
       employees: []
     });
+  }
+});
+
+// Endpoint para verificar si el usuario logueado tiene un préstamo activo (sin fecha_retorno)
+app.get('/api/prestamos/activo', async (req, res) => {
+  try {
+    // Si no hay sesión activa, responder con sesion_expirada en lugar de 401
+    if (!req.session || !req.session.userId) {
+      return res.json({ success: true, activo: false, sesion_expirada: true });
+    }
+    const userId = String(req.session.userId);
+    const q = `SELECT id, id_computadora,
+                      fecha_inicio::date AS fecha_inicio,
+                      fecha_fin::date    AS fecha_fin
+               FROM prestamos
+               WHERE CAST(id_usuario AS TEXT) = $1 AND fecha_retorno IS NULL
+               ORDER BY id DESC LIMIT 1`;
+    const result = await inventarioPool.query(q, [userId]);
+    if (result.rows && result.rows.length > 0) {
+      return res.json({ success: true, activo: true, prestamo: result.rows[0] });
+    }
+    return res.json({ success: true, activo: false, prestamo: null });
+  } catch (error) {
+    logger.error('Error al verificar préstamo activo:', { message: error?.message, error });
+    // Nunca exponer 500 al cliente; fallar silenciosamente
+    return res.json({ success: false, activo: false });
+  }
+});
+
+// Endpoint para listar préstamos (incluye nombre del usuario)
+app.get('/api/prestamos', async (req, res) => {
+  try {
+    const q = `SELECT id, id_usuario, id_computadora,
+                      fecha_inicio::date  AS fecha_inicio,
+                      fecha_fin::date     AS fecha_fin,
+                      fecha_retorno::date AS fecha_retorno,
+                      aprobado,
+                      evidencia_condicion,
+                      evidencia_retorno
+               FROM prestamos
+               ORDER BY id DESC`;
+    const result = await inventarioPool.query(q);
+    const prestamos = result.rows || [];
+
+    // Enriquecer con nombre del usuario (tabla usuarios en apoyosPool)
+    if (prestamos.length > 0) {
+      try {
+        const ids = [...new Set(prestamos.map(p => p.id_usuario).filter(Boolean))];
+        if (ids.length > 0) {
+          const uRes = await apoyosPool.query(
+            `SELECT id::text AS id, COALESCE(nombre_completo, username, id::text) AS nombre
+             FROM usuarios WHERE id::text = ANY($1::text[])`,
+            [ids.map(String)]
+          );
+          const nameMap = new Map(uRes.rows.map(u => [String(u.id), u.nombre]));
+          prestamos.forEach(p => {
+            p.nombre_usuario = nameMap.get(String(p.id_usuario)) || String(p.id_usuario);
+          });
+        }
+      } catch (uErr) {
+        logger.warn('No se pudieron obtener nombres de usuarios para préstamos:', uErr?.message);
+        prestamos.forEach(p => { p.nombre_usuario = String(p.id_usuario); });
+      }
+    }
+
+    return res.json({ success: true, prestamos });
+  } catch (error) {
+    logger.error('Error al obtener prestamos:', { message: error?.message, error });
+    return res.status(500).json({ success: false, error: 'Error al obtener préstamos', prestamos: [] });
+  }
+});
+
+// Endpoint para actualizar fecha_retorno de un prestamo por id
+app.post('/api/prestamos/:id/retorno', async (req, res) => {
+  const client = await inventarioPool.connect();
+  try {
+    const id = req.params.id;
+    const fecha_retorno = req.body && (req.body.fecha_retorno === null ? null : req.body.fecha_retorno) ? req.body.fecha_retorno : null;
+
+    await client.query('BEGIN');
+
+    const result = await client.query(
+      `UPDATE prestamos SET fecha_retorno = $1 WHERE id = $2 RETURNING *`,
+      [fecha_retorno, id]
+    );
+    const prestamo = result.rows[0] || null;
+
+    // Si se registra devolución, volver el equipo a Disponible
+    if (fecha_retorno && prestamo && prestamo.id_computadora) {
+      await client.query(
+        `UPDATE equipos_prestamo SET estatus = 'Disponible' WHERE CAST(id AS TEXT) = $1`,
+        [String(prestamo.id_computadora)]
+      );
+    }
+
+    await client.query('COMMIT');
+    return res.json({ success: true, prestamo });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    logger.error('Error al actualizar fecha_retorno:', { message: error?.message, error });
+    return res.status(500).json({ success: false, error: 'Error al actualizar fecha de retorno' });
+  } finally {
+    client.release();
+  }
+});
+
+// Endpoint para aceptar un préstamo: aprobado = true
+app.post('/api/prestamos/:id/accept', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const q = `UPDATE prestamos SET aprobado = TRUE WHERE id = $1 RETURNING *`;
+    const result = await inventarioPool.query(q, [id]);
+    return res.json({ success: true, prestamo: result.rows[0] || null });
+  } catch (error) {
+    logger.error('Error al aceptar prestamo:', { message: error?.message, error });
+    return res.status(500).json({ success: false, error: 'Error al aceptar préstamo' });
+  }
+});
+
+// Endpoint para rechazar un préstamo: aprobado = false, equipo vuelve a Disponible, préstamo queda libre
+app.post('/api/prestamos/:id/cancel', async (req, res) => {
+  const client = await inventarioPool.connect();
+  try {
+    const id = req.params.id;
+
+    await client.query('BEGIN');
+
+    // Obtener id_computadora antes de actualizar
+    const getRes = await client.query(`SELECT id_computadora FROM prestamos WHERE id = $1`, [id]);
+    const id_computadora = getRes.rows[0] ? String(getRes.rows[0].id_computadora) : null;
+
+    // Marcar préstamo como rechazado
+    const upRes = await client.query(
+      `UPDATE prestamos SET aprobado = FALSE WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    // Devolver el equipo a Disponible para que pueda ser solicitado de nuevo
+    if (id_computadora) {
+      await client.query(
+        `UPDATE equipos_prestamo SET estatus = 'Disponible' WHERE CAST(id AS TEXT) = $1`,
+        [id_computadora]
+      );
+    }
+
+    await client.query('COMMIT');
+    return res.json({ success: true, prestamo: upRes.rows[0] || null });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    logger.error('Error al rechazar prestamo:', { message: error?.message, error });
+    return res.status(500).json({ success: false, error: 'Error al rechazar préstamo' });
+  } finally {
+    client.release();
   }
 });
 
@@ -5127,7 +5631,7 @@ app.get('/api/ordenes', async (req, res) => {
           o.usuario_asignado,
           CASE WHEN o.fecha_inicio IS NULL THEN NULL ELSE to_char(o.fecha_inicio, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_inicio,
           CASE WHEN o.fecha_limite IS NULL THEN NULL ELSE to_char(o.fecha_limite, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_limite,
-          o.fecha_fin, o.fecha_aprobacion, o.visible, o.insert_forzado, o.created_at, o.updated_at, p.project_name as proyecto_nombre
+          o.fecha_fin, o.fecha_aprobacion, o.visible, o.insert_forzado, o.po_creada, o.created_at, o.updated_at, p.project_name as proyecto_nombre
        FROM ordenes o
         LEFT JOIN proyectos p ON o.project_id = p.id
         WHERE 1=1`;
@@ -5166,7 +5670,7 @@ app.get('/api/ordenes/:id', async (req, res) => {
               o.usuario_asignado,
               CASE WHEN o.fecha_inicio IS NULL THEN NULL ELSE to_char(o.fecha_inicio, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_inicio,
               CASE WHEN o.fecha_limite IS NULL THEN NULL ELSE to_char(o.fecha_limite, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_limite,
-              o.fecha_fin, o.fecha_aprobacion, o.insert_forzado, o.created_at, o.updated_at, p.project_name as proyecto_nombre
+              o.fecha_fin, o.fecha_aprobacion, o.insert_forzado, o.po_creada, o.created_at, o.updated_at, p.project_name as proyecto_nombre
        FROM ordenes o
        LEFT JOIN proyectos p ON o.project_id = p.id
        WHERE o.id = $1`,
@@ -6041,16 +6545,16 @@ app.get('/api/submittals', async (req, res) => {
     logger.info('Obteniendo submittals...', { project_id, include_hidden: includeHidden });
     
     let query = `SELECT s.id, s.project_id, s.submittal_number, s.submittal_name, s.client, s.customer_job, 
-        s.project_name, s.status, s.estatus, s.time_worked, s.price_usd, s.price_mxn,
-        s.tiempo_aprobado,
-              COALESCE(s.usuario_asignado, ARRAY[]::INTEGER[]) as usuario_asignado,
-              CASE WHEN s.fecha_inicio IS NULL THEN NULL ELSE to_char(s.fecha_inicio, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_inicio,
-              CASE WHEN s.fecha_limite IS NULL THEN NULL ELSE to_char(s.fecha_limite, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_limite,
-              s.due,
-          s.fecha_fin, s.fecha_aprobacion, s.visible, s.insert_forzado, s.created_at, s.updated_at, p.project_name as proyecto_nombre
+      s.project_name, s.status, s.estatus, s.time_worked, s.price_usd, s.price_mxn,
+      s.tiempo_aprobado,
+          COALESCE(s.usuario_asignado, ARRAY[]::INTEGER[]) as usuario_asignado,
+          CASE WHEN s.fecha_inicio IS NULL THEN NULL ELSE to_char(s.fecha_inicio, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_inicio,
+          CASE WHEN s.fecha_limite IS NULL THEN NULL ELSE to_char(s.fecha_limite, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_limite,
+          s.due,
+        s.fecha_fin, s.fecha_aprobacion, s.visible, s.insert_forzado, s.po_creada, s.created_at, s.updated_at, p.project_name as proyecto_nombre
        FROM submittals s
        LEFT JOIN proyectos p ON s.project_id = p.id
-            WHERE 1=1`;
+        WHERE 1=1`;
 
     let params = [];
 
@@ -6114,7 +6618,7 @@ app.get('/api/submittals/:id', async (req, res) => {
               CASE WHEN s.fecha_inicio IS NULL THEN NULL ELSE to_char(s.fecha_inicio, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_inicio,
               CASE WHEN s.fecha_limite IS NULL THEN NULL ELSE to_char(s.fecha_limite, 'YYYY-MM-DD HH24:MI:SS') END AS fecha_limite,
               s.due,
-              s.fecha_fin, s.fecha_aprobacion, s.insert_forzado, s.created_at, s.updated_at, p.project_name as proyecto_nombre
+              s.fecha_fin, s.fecha_aprobacion, s.insert_forzado, s.po_creada, s.created_at, s.updated_at, p.project_name as proyecto_nombre
        FROM submittals s
        LEFT JOIN proyectos p ON s.project_id = p.id
        WHERE s.id = $1`,
@@ -12249,7 +12753,8 @@ app.get('/api/tarjetas-disponibles', async (req, res) => {
                     show_calidad: false,
                     show_importacion_exportacion: false,
                     show_contabilidad: false,
-                    show_almacen: false
+                    show_almacen: false,
+                    show_prestamos: false
                 }
             });
         }
@@ -12277,7 +12782,8 @@ app.get('/api/tarjetas-disponibles', async (req, res) => {
                 show_calidad: tarjetas.show_calidad || false,
                 show_importacion_exportacion: tarjetas.show_importacion_exportacion || false,
                 show_contabilidad: tarjetas.show_contabilidad || false,
-                show_almacen: tarjetas.show_almacen || false
+                show_almacen: tarjetas.show_almacen || false,
+                show_prestamos: tarjetas.show_prestamos || false
             }
         });
         
@@ -12314,7 +12820,8 @@ app.put('/api/tarjetas-disponibles/:usuarioId', async (req, res) => {
       'show_importacion_exportacion',
       'show_enviosyrecibos',
       'show_contabilidad',
-      'show_almacen'
+      'show_almacen',
+      'show_prestamos'
     ];
     const filteredTarjetasData = {};
 
@@ -12459,6 +12966,147 @@ app.get('/api/inventario', async (req, res) => {
   }
 });
 
+// Endpoint de snapshot histórico: calcula el stock que existía hasta una fecha determinada
+// GET /api/inventario/snapshot?fecha_inicio=YYYY-MM-DD&fecha_fin=YYYY-MM-DD
+app.get('/api/inventario/snapshot', async (req, res) => {
+  try {
+    const { fecha_inicio, fecha_fin } = req.query;
+
+    // Validar formatos de fecha si se proporcionan
+    const reDate = /^\d{4}-\d{2}-\d{2}$/;
+    if (fecha_inicio && !reDate.test(fecha_inicio)) {
+      return res.status(400).json({ success: false, error: 'Formato de fecha_inicio inválido. Use YYYY-MM-DD' });
+    }
+    if (fecha_fin && !reDate.test(fecha_fin)) {
+      return res.status(400).json({ success: false, error: 'Formato de fecha_fin inválido. Use YYYY-MM-DD' });
+    }
+
+    // Parámetros para la consulta (null si no se proporcionan)
+    const pFechaInicio = fecha_inicio || null;
+    const pFechaFin    = fecha_fin    || null;
+
+    const result = await inventarioPool.query(`
+      WITH
+      -- Salidas que ocurrieron DESPUÉS de fecha_fin (para "revertir" al estado histórico)
+      salidas_despues AS (
+        SELECT
+          LOWER(TRIM(codigo_producto)) AS codigo,
+          SUM(cantidad)                AS total
+        FROM inventario_salida
+        WHERE $1::date IS NOT NULL
+          AND fecha > $1::date
+        GROUP BY LOWER(TRIM(codigo_producto))
+      ),
+
+      -- Salidas ocurridas DENTRO del período (fecha_inicio ≤ fecha ≤ fecha_fin)
+      salidas_periodo AS (
+        SELECT
+          LOWER(TRIM(codigo_producto)) AS codigo,
+          SUM(cantidad)                AS total
+        FROM inventario_salida
+        WHERE ($2::date IS NULL OR fecha >= $2::date)
+          AND ($1::date IS NULL OR fecha <= $1::date)
+        GROUP BY LOWER(TRIM(codigo_producto))
+      ),
+
+      -- Salidas hasta fecha_inicio (para calcular stock al inicio del periodo)
+      salidas_hasta_inicio AS (
+        SELECT
+          LOWER(TRIM(codigo_producto)) AS codigo,
+          SUM(cantidad)                AS total
+        FROM inventario_salida
+        WHERE $2::date IS NOT NULL
+          AND fecha > $2::date
+        GROUP BY LOWER(TRIM(codigo_producto))
+      ),
+
+      -- Inventario base agrupado por código (solo productos creados antes de fecha_fin)
+      inv_base AS (
+        SELECT
+          LOWER(COALESCE(TRIM(codigo), ''))  AS codigo_key,
+          MAX(codigo)                         AS codigo,
+          MAX(descripcion)                    AS descripcion,
+          MAX(COALESCE(proveedor, ''))        AS proveedor,
+          MAX(COALESCE(uom, ''))              AS uom,
+          MAX(COALESCE(categoria_pdm, ''))    AS categoria_pdm,
+          MAX(COALESCE(locacion, ''))         AS locacion,
+          SUM(COALESCE(stock_inicial, 0))     AS stock_inicial_sum,
+          SUM(COALESCE(entradas, 0))          AS entradas_sum,
+          SUM(COALESCE(stock, 0))             AS stock_actual
+        FROM inventario
+        WHERE codigo IS NOT NULL AND TRIM(codigo) <> ''
+          AND ($1::date IS NULL OR created_at::date <= $1::date)
+        GROUP BY LOWER(COALESCE(TRIM(codigo), ''))
+      )
+
+      SELECT
+        i.codigo,
+        i.descripcion,
+        i.proveedor,
+        i.uom,
+        i.categoria_pdm,
+        i.locacion,
+        -- Stock al momento de fecha_fin: stock_actual + salidas_después (que aún no habían ocurrido)
+        GREATEST(0, i.stock_actual + COALESCE(sd.total, 0))  AS stock,
+        -- Entradas acumuladas hasta fecha_fin
+        i.entradas_sum                                         AS entradas,
+        -- Salidas en el período solicitado
+        COALESCE(sp.total, 0)                                 AS salidas,
+        -- Stock al inicio del período (si se dio fecha_inicio)
+        CASE WHEN $2::date IS NOT NULL
+             THEN GREATEST(0, i.stock_actual + COALESCE(sd.total, 0) + COALESCE(si.total, 0))
+             ELSE NULL
+        END                                                    AS stock_inicio_periodo
+      FROM inv_base i
+      LEFT JOIN salidas_despues     sd ON sd.codigo = i.codigo_key
+      LEFT JOIN salidas_periodo     sp ON sp.codigo = i.codigo_key
+      LEFT JOIN salidas_hasta_inicio si ON si.codigo = i.codigo_key
+      ORDER BY i.codigo
+    `, [pFechaFin, pFechaInicio]);
+
+    res.json({
+      success: true,
+      fecha_inicio: pFechaInicio,
+      fecha_fin:    pFechaFin,
+      items:        result.rows
+    });
+  } catch (error) {
+    console.error('Error en snapshot de inventario:', error);
+    res.status(500).json({ success: false, error: 'Error al calcular snapshot', message: error.message });
+  }
+});
+
+// Endpoint para limpiar filas huérfanas duplicadas (registros de entrada sin datos maestros)
+app.post('/api/inventario/cleanup-orphans', async (req, res) => {
+  try {
+    // Para cada código que tenga más de una fila, eliminar las filas sin datos maestros
+    // (sin stock_inicial, uom, categoria_pdm, locacion) conservando solo la fila "base"
+    const result = await inventarioPool.query(`
+      DELETE FROM inventario
+      WHERE id IN (
+        SELECT i.id FROM inventario i
+        WHERE i.codigo IS NOT NULL AND i.codigo <> ''
+          AND i.stock_inicial IS NULL
+          AND (i.uom IS NULL OR i.uom = '')
+          AND (i.categoria_pdm IS NULL OR i.categoria_pdm = '')
+          AND (i.locacion IS NULL OR i.locacion = '')
+          AND EXISTS (
+            SELECT 1 FROM inventario base
+            WHERE LOWER(base.codigo) = LOWER(i.codigo)
+              AND base.id <> i.id
+              AND (base.stock_inicial IS NOT NULL OR base.uom IS NOT NULL
+                   OR base.categoria_pdm IS NOT NULL OR base.locacion IS NOT NULL)
+          )
+      )
+      RETURNING id, codigo
+    `);
+    res.json({ success: true, deleted: result.rows.length, rows: result.rows });
+  } catch (error) {
+    console.error('Error en cleanup-orphans:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Endpoint para obtener un item específico del inventario por ID
 app.get('/api/inventario/:id', async (req, res) => {
   try {
@@ -12548,9 +13196,11 @@ app.get('/api/inventario/:id', async (req, res) => {
       const normalizedEntradas = (entradas === '' || entradas == null) ? 0 : Number(entradas);
       const normalizedSalidas = (salidas === '' || salidas == null) ? 0 : Number(salidas);
 
-      // Detectar si es payload de Base de Datos (campos extendidos presentes)
+      // Detectar si es payload de Base de Datos (campos exclusivos de la pantalla de inventario)
+      // NOTA: "entradas" y "salidas" ya NO forman parte de este criterio porque los payloads
+      // de Entrada también incluyen "entradas:qty" para actualizar el stock correctamente.
       const isBaseDatosPayload = (
-        precioMXN != null || precioDLLS != null || normalizedStockInicial != null || entradas != null || salidas != null || uom || categoriaPDM || locacion
+        precioMXN != null || precioDLLS != null || normalizedStockInicial != null || uom || categoriaPDM || locacion
       );
 
       // Validar campos requeridos: siempre requiere descripción y al menos quantity o stockInicial
@@ -12559,6 +13209,11 @@ app.get('/api/inventario/:id', async (req, res) => {
           success: false, 
           error: 'Descripción y cantidad son campos obligatorios' 
         });
+      }
+
+      // Asegurar tabla de log de entradas (por si no corrió al arrancar o falló antes)
+      if (!isBaseDatosPayload) {
+        await ensureInventarioEntradaTable();
       }
 
       // Obtener categoría automática basada en el código del producto
@@ -12577,97 +13232,122 @@ app.get('/api/inventario/:id', async (req, res) => {
         }
       }
 
-      // LÓGICA DESACTIVADA: ya no se actualiza el último registro con el mismo código.
-      // Ahora SIEMPRE se inserta un nuevo registro aunque el código exista.
-      // (Se mantiene el autollenado de categoria vía categoriaAutomatica.)
+      // ── LÓGICA DE ENTRADA: UPDATE si el producto ya existe, INSERT si es nuevo ──
+      // Para payloads de Base de Datos siempre se inserta un registro nuevo.
+      // Para payloads de Entrada se actualiza el registro base existente (entradas += qty).
+      if (!isBaseDatosPayload && productCode) {
+        // Buscar el registro más completo con ese código (el que tiene stock_inicial o el más antiguo)
+        const existing = await inventarioPool.query(
+          `SELECT id, entradas, salidas, stock_inicial, stock FROM inventario
+           WHERE LOWER(codigo) = LOWER($1)
+           ORDER BY (stock_inicial IS NOT NULL) DESC, id ASC
+           LIMIT 1`,
+          [productCode]
+        );
+
+        if (existing.rows.length > 0) {
+          const baseRow = existing.rows[0];
+          const addQty = Number(normalizedQuantity || 0);
+          const newEntradas = (Number(baseRow.entradas || 0)) + addQty;
+          const newStock = Math.max(0,
+            (Number(baseRow.stock_inicial || 0)) + newEntradas - (Number(baseRow.salidas || 0))
+          );
+
+          // Actualizar la fila base: sumar entradas y recalcular stock
+          // También guardar po y factura si se proporcionan
+          const updated = await inventarioPool.query(
+            `UPDATE inventario
+             SET entradas = $1,
+                 stock    = $2,
+                 po       = COALESCE($3, po),
+                 factura  = COALESCE($4, factura),
+                 categoria = COALESCE($5, categoria)
+             WHERE id = $6
+             RETURNING *`,
+            [newEntradas, newStock, poNumber || null, invoice || null, categoriaAutomatica || null, baseRow.id]
+          );
+
+          // Eliminar filas "huérfanas" de entradas previas para ese código
+          // (filas sin stock_inicial ni datos maestros, creadas antes de esta corrección)
+          await inventarioPool.query(
+            `DELETE FROM inventario
+             WHERE LOWER(codigo) = LOWER($1)
+               AND id <> $2
+               AND stock_inicial IS NULL
+               AND (uom IS NULL AND categoria_pdm IS NULL AND locacion IS NULL)`,
+            [productCode, baseRow.id]
+          ).catch(() => { /* no bloquear si falla la limpieza */ });
+
+          // Registrar entrada individual en el log de entradas
+          await inventarioPool.query(
+            `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE))`,
+            [productCode, description, addQty, poNumber || null, invoice || null,
+             categoriaAutomatica || null, supplier || null, date || null]
+          ).catch(e => logger.warn('[inventario_entrada] No se pudo registrar entrada individual:', e?.message));
+
+          return res.status(200).json({ success: true, item: updated.rows[0] });
+        }
+        // Sin registro existente → caer en INSERT normal
+      }
+
+      // ── INSERT: producto nuevo o registro de Base de Datos ──────────────────
 
       // Resetear la secuencia del ID para evitar conflictos de clave duplicada
       await inventarioPool.query('SELECT setval(pg_get_serial_sequence(\'inventario\', \'id\'), COALESCE((SELECT MAX(id) FROM inventario), 0) + 1, false)');
 
       // Calcular stock a insertar
       // - Base de datos: stock = max(0, stockInicial + entradas - salidas)
-      // - Entradas: stock = quantity
+      // - Entradas (producto nuevo sin registro previo): stock = quantity
       const stockValue = isBaseDatosPayload
         ? Math.max(0, (normalizedStockInicial || 0) + (normalizedEntradas || 0) - (normalizedSalidas || 0))
         : Number(normalizedQuantity || 0);
 
       // Generar ID de ingreso único
       const idIngreso = `ING-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      console.log('ID de ingreso generado:', idIngreso);
 
-      // Insertamos en todas las columnas disponibles incluyendo columnas extendidas
       const result = await inventarioPool.query(
         `INSERT INTO inventario (
-            nombre_completo,
-            stock,
-            pedido_abierto,
-            piezas_pedidas,
-            activo,
-            codigo,
-            po,
-            categoria,
-            descripcion,
-            factura,
-            proveedor,
-            costo_unitario_mxn,
-            costo_unitario_dlls,
-            stock_inicial,
-            entradas,
-            salidas,
-            uom,
-            categoria_pdm,
-            locacion,
-            id_ingreso
+            nombre_completo, stock, pedido_abierto, piezas_pedidas, activo,
+            codigo, po, categoria, descripcion, factura, proveedor,
+            costo_unitario_mxn, costo_unitario_dlls,
+            stock_inicial, entradas, salidas, uom, categoria_pdm, locacion, id_ingreso
          )
-         VALUES (
-            $1, $2, $3, $4, $5,
-            $6, $7, $8, $9, $10, $11,
-            $12, $13, $14, $15, $16, $17, $18, $19, $20
-         )
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
          RETURNING *`,
         [
-          description, // nombre_completo (NOT NULL) - $1
-          stockValue, // stock - $2
-          false, // pedido_abierto - $3
-          0, // piezas_pedidas - $4
-          true, // activo - $5
-          productCode || null, // codigo - $6
-          poNumber || null, // po - $7
-          categoriaAutomatica || null, // categoria - $8
-          description, // descripcion - $9
-          invoice || null, // factura - $10
-          supplier || null, // proveedor - $11
-          (precioMXN==null? null : Number(precioMXN)), // costo_unitario_mxn - $12
-          (precioDLLS==null? null : Number(precioDLLS)), // costo_unitario_dlls - $13
-          (normalizedStockInicial==null? null : normalizedStockInicial), // stock_inicial - $14
-          (entradas==null? null : normalizedEntradas), // entradas - $15
-          (salidas==null? null : normalizedSalidas), // salidas - $16
-          uom || null, // uom - $17
-          categoriaPDM || null, // categoria_pdm - $18
-          locacion || null, // locacion - $19
-          idIngreso // id_ingreso - $20
+          description,
+          stockValue,
+          false,
+          0,
+          true,
+          productCode || null,
+          poNumber || null,
+          categoriaAutomatica || null,
+          description,
+          invoice || null,
+          supplier || null,
+          (precioMXN==null ? null : Number(precioMXN)),
+          (precioDLLS==null ? null : Number(precioDLLS)),
+          (normalizedStockInicial==null ? null : normalizedStockInicial),
+          (!isBaseDatosPayload ? Number(normalizedQuantity || 0) : (entradas==null ? null : normalizedEntradas)),
+          (salidas==null ? null : normalizedSalidas),
+          uom || null,
+          categoriaPDM || null,
+          locacion || null,
+          idIngreso
         ]
       );
-      // COMENTADO: Lógica de inicialización de entradas eliminada para permitir registros separados
-      // Ahora cada entrada crea un registro independiente sin actualizaciones adicionales
-      /*
-      if (!isBaseDatosPayload && (normalizedQuantity != null) && productCode) {
-        try {
-          await inventarioPool.query(
-            `UPDATE inventario SET 
-                entradas = COALESCE(entradas, 0) + $1,
-                stock = GREATEST(
-                          0,
-                          COALESCE(stock_inicial, 0) + (COALESCE(entradas, 0)) - COALESCE(salidas, 0)
-                        )
-             WHERE id = $2`,
-            [Number(normalizedQuantity) || 0, result.rows[0].id]
-          );
-        } catch (e) {
-          logger.warn('No se pudo inicializar entradas tras crear producto:', e?.message || e);
-        }
+
+      // Registrar en log de entradas individuales (solo para flujo de Entrada, no Base de datos)
+      if (!isBaseDatosPayload) {
+        await inventarioPool.query(
+          `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE))`,
+          [productCode || null, description, Number(normalizedQuantity || 0),
+           poNumber || null, invoice || null, categoriaAutomatica || null, supplier || null, date || null]
+        ).catch(e => logger.warn('[inventario_entrada] No se pudo registrar entrada individual (insert):', e?.message));
       }
-      */
 
       res.status(201).json({ success: true, item: result.rows[0] });
     } catch (error) {
@@ -15689,6 +16369,44 @@ app.use((err, req, res, next) => {
   return res.status(status).json({ success: false, error: err && err.message ? err.message : 'Error interno del servidor' });
 });
 
+// Corrige el trigger de inventario que causaba error "updatedat" al insertar/actualizar
+async function fixInventarioTrigger() {
+  try {
+    // 1. Asegurar que la columna updated_at exista en inventario
+    await inventarioPool.query(`
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+    `);
+
+    // 2. Recrear la función trigger con la referencia correcta (updated_at con guión bajo)
+    await inventarioPool.query(`
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.updated_at = NOW();
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql;
+    `);
+
+    // 3. Eliminar el trigger anterior en inventario si existe (puede tener el bug)
+    await inventarioPool.query(`
+      DROP TRIGGER IF EXISTS update_inventario_updated_at ON inventario;
+    `);
+
+    // 4. Recrear el trigger correctamente (solo en UPDATE, no en INSERT)
+    await inventarioPool.query(`
+      CREATE TRIGGER update_inventario_updated_at
+        BEFORE UPDATE ON inventario
+        FOR EACH ROW
+        EXECUTE FUNCTION update_updated_at_column();
+    `);
+
+    logger.info('[fixInventarioTrigger] Trigger de inventario verificado/corregido correctamente');
+  } catch (error) {
+    logger.error('[fixInventarioTrigger] Error al corregir trigger de inventario:', error?.message || error);
+  }
+}
+
 app.listen(port, '0.0.0.0', async () => {
     logger.info(`Servidor iniciado en puerto ${port}`);
     logger.info(`URL: http://localhost:${port}`);
@@ -15710,8 +16428,16 @@ app.listen(port, '0.0.0.0', async () => {
     } catch (e) {
       logger.warn('Could not enumerate network interfaces', { error: e && e.message ? e.message : String(e) });
     }
+    // Corregir trigger de inventario (bug "updatedat" sin guión bajo)
+    await fixInventarioTrigger();
     // Verificar/crear tabla de salidas al arrancar
     ensureSalidasTable();
+    // Verificar/crear tabla de log de entradas individuales
+    try {
+      await ensureInventarioEntradaTable();
+    } catch (e) {
+      logger.error('[startup] ensureInventarioEntradaTable:', e);
+    }
     // Verificar/crear tabla de sesiones de usuarios
     await ensureSesionesTable();
     // Verificar/crear tabla de cambios de estado para reconstruir mini tiempos
@@ -15768,6 +16494,100 @@ app.post('/api/mantenimiento/herramientas', async (req, res) => {
     }
     console.error('Error al insertar herramienta:', err);
     res.status(500).json({ error: 'Error al insertar en la base de datos', details: err.message });
+  }
+});
+
+// ── /api/herramientas  (CRUD completo para modal de mantenimiento) ──────────────
+
+// Multer para fotos de herramientas
+const herramientaFotoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const p = path.join(__dirname, 'uploads', 'herramientas');
+    if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+    cb(null, p);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, `herramienta-${Date.now()}${ext}`);
+  }
+});
+const uploadHerramientaFoto = multer({
+  storage: herramientaFotoStorage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) return cb(new Error('Solo imágenes'));
+    cb(null, true);
+  }
+});
+
+// Subir foto
+app.post('/api/herramientas/foto', uploadHerramientaFoto.single('foto'), (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, error: 'No se recibió archivo' });
+  res.json({ success: true, url: `/uploads/herramientas/${req.file.filename}` });
+});
+
+// Listar todas
+app.get('/api/herramientas', async (req, res) => {
+  try {
+    const result = await mantenimientoPool.query(
+      `SELECT id, nombre, department AS departamento, area_especifica, prestable, foto_url
+       FROM herramientas_mantenimiento ORDER BY nombre ASC`
+    );
+    res.json({ success: true, herramientas: result.rows });
+  } catch (err) {
+    logger.error('Error GET /api/herramientas:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Crear
+app.post('/api/herramientas', async (req, res) => {
+  const { nombre, departamento, area_especifica, prestable, foto_url } = req.body || {};
+  if (!nombre || !nombre.trim()) return res.status(400).json({ success: false, error: 'Nombre requerido' });
+  try {
+    const result = await mantenimientoPool.query(
+      `INSERT INTO herramientas_mantenimiento (nombre, department, area_especifica, prestable, foto_url)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [nombre.trim(), departamento || null, area_especifica || null, !!prestable, foto_url || null]
+    );
+    res.json({ success: true, herramienta: result.rows[0] });
+  } catch (err) {
+    logger.error('Error POST /api/herramientas:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Actualizar
+app.put('/api/herramientas/:id', async (req, res) => {
+  const { nombre, departamento, area_especifica, prestable, foto_url } = req.body || {};
+  if (!nombre || !nombre.trim()) return res.status(400).json({ success: false, error: 'Nombre requerido' });
+  try {
+    const result = await mantenimientoPool.query(
+      `UPDATE herramientas_mantenimiento
+       SET nombre=$1, department=$2, area_especifica=$3, prestable=$4,
+           foto_url=COALESCE($5, foto_url)
+       WHERE id=$6 RETURNING *`,
+      [nombre.trim(), departamento || null, area_especifica || null, !!prestable, foto_url || null, req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ success: false, error: 'No encontrada' });
+    res.json({ success: true, herramienta: result.rows[0] });
+  } catch (err) {
+    logger.error('Error PUT /api/herramientas:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Eliminar
+app.delete('/api/herramientas/:id', async (req, res) => {
+  try {
+    const result = await mantenimientoPool.query(
+      'DELETE FROM herramientas_mantenimiento WHERE id=$1 RETURNING id', [req.params.id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ success: false, error: 'No encontrada' });
+    res.json({ success: true });
+  } catch (err) {
+    logger.error('Error DELETE /api/herramientas:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -16132,6 +16952,354 @@ app.patch('/api/mantenimiento/herramientas/:id/herramienta', async (req, res) =>
   } catch (err) {
     console.error('Error al actualizar switch de herramienta:', err);
     res.status(500).json({ error: 'Error al actualizar el switch de herramienta', details: err.message });
+  }
+});
+
+// Endpoint para subir y guardar foto de herramienta
+const herramientaUploadMant = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const p = path.join(__dirname, 'uploads', 'herramientas');
+      if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+      cb(null, p);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname) || '.jpg';
+      cb(null, `herramienta-${req.params.id}-${Date.now()}${ext}`);
+    }
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) return cb(new Error('Solo imágenes'));
+    cb(null, true);
+  }
+});
+
+// Endpoint para descargar herramientas en Excel (con imágenes embebidas)
+app.get('/api/mantenimiento/herramientas/exportar-excel', async (req, res) => {
+  try {
+    const result = await mantenimientoPool.query(
+      `SELECT id, nombre, department AS departamento, area AS area_especifica,
+              prestable, foto
+       FROM herramientas_mantenimiento ORDER BY nombre ASC`
+    );
+    const rows = result.rows;
+
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('Herramientas');
+
+    // Columnas (Foto sin header de valor, se rellena con imagen)
+    ws.columns = [
+      { header: 'ID',              key: 'id',              width: 6  },
+      { header: 'Herramienta',     key: 'nombre',          width: 30 },
+      { header: 'Departamento',    key: 'departamento',    width: 22 },
+      { header: 'Área Específica', key: 'area_especifica', width: 22 },
+      { header: 'Prestable',       key: 'prestable',       width: 12 },
+      { header: 'Foto',            key: 'foto',            width: 18 },
+    ];
+
+    // Estilo encabezado
+    ws.getRow(1).eachCell(cell => {
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      cell.fill  = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF166534' } };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    });
+    ws.getRow(1).height = 22;
+
+    const IMG_H_PX = 70; // altura de celda en píxeles
+    const ROW_H_PT = IMG_H_PX * 0.75; // puntos (aprox)
+
+    for (let i = 0; i < rows.length; i++) {
+      const r   = rows[i];
+      const rowNum = i + 2; // fila 1 = encabezado
+      const row = ws.getRow(rowNum);
+
+      row.getCell('id').value            = r.id;
+      row.getCell('nombre').value        = r.nombre        || '';
+      row.getCell('departamento').value  = r.departamento  || '';
+      row.getCell('area_especifica').value = r.area_especifica || '';
+      row.getCell('prestable').value     = r.prestable ? 'Sí' : 'No';
+      row.height = ROW_H_PT;
+
+      // Centrar verticalmente todas las celdas de la fila
+      row.eachCell(cell => { cell.alignment = { vertical: 'middle' }; });
+
+      // Embeber imagen si existe
+      if (r.foto) {
+        try {
+          // Convertir ruta URL a ruta de disco
+          const relPath  = r.foto.replace(/^\//, '');
+          const diskPath = path.join(__dirname, relPath);
+          if (fs.existsSync(diskPath)) {
+            const ext = path.extname(diskPath).replace('.', '').toLowerCase();
+            const validExts = ['jpg', 'jpeg', 'png', 'gif'];
+            const imgExt = validExts.includes(ext) ? (ext === 'jpg' ? 'jpeg' : ext) : 'jpeg';
+            const imgBuf = fs.readFileSync(diskPath);
+            const imgId  = wb.addImage({ buffer: imgBuf, extension: imgExt });
+            // Columna 6 (índice 5, base-0) = Foto
+            ws.addImage(imgId, {
+              tl: { col: 5, row: rowNum - 1 },
+              br: { col: 6, row: rowNum },
+              editAs: 'oneCell'
+            });
+            row.getCell('foto').value = ''; // limpiar texto
+          }
+        } catch (imgErr) {
+          logger.warn('No se pudo embeber imagen en Excel:', imgErr?.message);
+          row.getCell('foto').value = r.foto; // fallback: mostrar texto
+        }
+      }
+
+      row.commit();
+    }
+
+    res.setHeader('Content-Disposition', 'attachment; filename="herramientas.xlsx"');
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    await wb.xlsx.write(res);
+    res.end();
+  } catch (err) {
+    logger.error('Error al exportar herramientas Excel:', err);
+    if (!res.headersSent) res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ── Préstamos de herramientas ────────────────────────────────────────────────
+
+// Crear préstamo (marca la herramienta como activo=false y registra en prestamos_herramientas)
+app.post('/api/mantenimiento/herramientas/:id/prestamo', async (req, res) => {
+  const id_herramienta = req.params.id;
+  const { id_empleado, fecha_retorno_esperada, notas } = req.body || {};
+  if (!id_empleado) return res.status(400).json({ success: false, error: 'id_empleado es requerido' });
+
+  const client = await mantenimientoPool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Verificar que la herramienta exista y esté disponible
+    const check = await client.query(
+      'SELECT id, activo, prestable FROM herramientas_mantenimiento WHERE id = $1',
+      [id_herramienta]
+    );
+    if (check.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ success: false, error: 'Herramienta no encontrada' });
+    }
+    if (check.rows[0].activo === false) {
+      await client.query('ROLLBACK');
+      return res.status(409).json({ success: false, error: 'La herramienta ya está prestada' });
+    }
+
+    // Insertar registro de préstamo
+    const insRes = await client.query(
+      `INSERT INTO prestamos_herramientas
+         (id_herramienta, id_empleado, fecha_solicitud, fecha_retorno_esperada, notas, activo)
+       VALUES ($1, $2, NOW(), $3, $4, TRUE)
+       RETURNING *`,
+      [id_herramienta, id_empleado, fecha_retorno_esperada || null, notas || null]
+    );
+
+    // Marcar herramienta como no disponible
+    await client.query(
+      'UPDATE herramientas_mantenimiento SET activo = FALSE WHERE id = $1',
+      [id_herramienta]
+    );
+
+    await client.query('COMMIT');
+    res.json({ success: true, prestamo: insRes.rows[0] });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    logger.error('Error al crear préstamo de herramienta:', err);
+    res.status(500).json({ success: false, error: err.message });
+  } finally {
+    client.release();
+  }
+});
+
+// Registrar devolución (activo=true en herramienta y fecha_retorno_real en prestamo)
+app.patch('/api/mantenimiento/herramientas/:id/devolucion', async (req, res) => {
+  const id_herramienta = req.params.id;
+  const { evidencia_estado, evidencia_retorno, notas, fecha_retorno_real } = req.body || {};
+
+  const client = await mantenimientoPool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Cerrar el préstamo activo más reciente
+    const fechaRetorno = fecha_retorno_real || new Date().toISOString().split('T')[0];
+    await client.query(
+      `UPDATE prestamos_herramientas
+       SET activo = FALSE,
+           fecha_retorno_real = $1,
+           evidencia_estado   = COALESCE($2, evidencia_estado),
+           evidencia_retorno  = COALESCE($3, evidencia_retorno),
+           notas              = COALESCE($4, notas)
+       WHERE id_herramienta = $5 AND activo = TRUE`,
+      [fechaRetorno, evidencia_estado || null, evidencia_retorno || null, notas || null, id_herramienta]
+    );
+
+    // Marcar herramienta como disponible
+    await client.query(
+      'UPDATE herramientas_mantenimiento SET activo = TRUE WHERE id = $1',
+      [id_herramienta]
+    );
+
+    await client.query('COMMIT');
+    res.json({ success: true });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    logger.error('Error al registrar devolución:', err);
+    res.status(500).json({ success: false, error: err.message });
+  } finally {
+    client.release();
+  }
+});
+
+// Subir evidencia de un préstamo de herramienta (estado o retorno)
+const uploadPHEvidencia = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const p = path.join(__dirname, 'uploads', 'evidencias-prestamos-herramientas');
+      if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+      cb(null, p);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname) || '.jpg';
+      cb(null, `ph-evid-${Date.now()}${ext}`);
+    }
+  }),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) return cb(new Error('Solo imágenes'));
+    cb(null, true);
+  }
+});
+
+app.post('/api/mantenimiento/prestamos-herramientas/:id/evidencia', uploadPHEvidencia.single('foto'), async (req, res) => {
+  const { id } = req.params;
+  const { tipo } = req.body; // 'estado' o 'retorno'
+  if (!req.file) return res.status(400).json({ success: false, error: 'No se recibió archivo' });
+  if (!['estado', 'retorno'].includes(tipo)) return res.status(400).json({ success: false, error: 'Tipo inválido' });
+
+  const col  = tipo === 'estado' ? 'evidencia_estado' : 'evidencia_retorno';
+  const url  = `/uploads/evidencias-prestamos-herramientas/${req.file.filename}`;
+  try {
+    await mantenimientoPool.query(`UPDATE prestamos_herramientas SET ${col} = $1 WHERE id = $2`, [url, id]);
+    res.json({ success: true, url });
+  } catch (err) {
+    logger.error('Error al guardar evidencia préstamo herramienta:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Actualizar nota de un préstamo de herramienta
+app.patch('/api/mantenimiento/prestamos-herramientas/:id/notas', async (req, res) => {
+  const { id }   = req.params;
+  const { notas } = req.body;
+  try {
+    await mantenimientoPool.query('UPDATE prestamos_herramientas SET notas = $1 WHERE id = $2', [notas || null, id]);
+    res.json({ success: true });
+  } catch (err) {
+    logger.error('Error al guardar nota de préstamo:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Listar TODOS los préstamos (con nombre de herramienta)
+app.get('/api/mantenimiento/prestamos-herramientas', async (req, res) => {
+  try {
+    const result = await mantenimientoPool.query(
+      `SELECT ph.id,
+              ph.id_herramienta,
+              h.nombre                                          AS herramienta_nombre,
+              ph.id_empleado,
+              TO_CHAR(ph.fecha_solicitud,        'DD/MM/YYYY HH24:MI') AS fecha_solicitud,
+              TO_CHAR(ph.fecha_retorno_esperada, 'DD/MM/YYYY')         AS fecha_retorno_esperada,
+              TO_CHAR(ph.fecha_retorno_real,     'DD/MM/YYYY')         AS fecha_retorno_real,
+              ph.evidencia_estado,
+              ph.evidencia_retorno,
+              ph.notas,
+              ph.activo
+       FROM prestamos_herramientas ph
+       LEFT JOIN herramientas_mantenimiento h ON h.id = ph.id_herramienta
+       ORDER BY ph.fecha_solicitud DESC`
+    );
+    res.json({ success: true, prestamos: result.rows });
+  } catch (err) {
+    logger.error('Error al obtener todos los préstamos de herramientas:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Listar préstamos de una herramienta
+app.get('/api/mantenimiento/herramientas/:id/prestamos', async (req, res) => {
+  try {
+    const result = await mantenimientoPool.query(
+      `SELECT ph.*, 
+              TO_CHAR(ph.fecha_solicitud,        'DD/MM/YYYY HH24:MI') AS fecha_solicitud_fmt,
+              TO_CHAR(ph.fecha_retorno_esperada, 'DD/MM/YYYY')          AS fecha_esperada_fmt,
+              TO_CHAR(ph.fecha_retorno_real,     'DD/MM/YYYY')          AS fecha_real_fmt
+       FROM prestamos_herramientas ph
+       WHERE ph.id_herramienta = $1
+       ORDER BY ph.fecha_solicitud DESC`,
+      [req.params.id]
+    );
+    res.json({ success: true, prestamos: result.rows });
+  } catch (err) {
+    logger.error('Error al obtener préstamos de herramienta:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Endpoint para marcar herramienta como prestada (activo=false) o devuelta (activo=true)
+app.patch('/api/mantenimiento/herramientas/:id/activo', async (req, res) => {
+  const { id } = req.params;
+  const { activo } = req.body;
+  try {
+    const val = activo === true || activo === 'true';
+    const result = await mantenimientoPool.query(
+      'UPDATE herramientas_mantenimiento SET activo = $1 WHERE id = $2 RETURNING *',
+      [val, id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ success: false, error: 'Herramienta no encontrada' });
+    res.json({ success: true, herramienta: result.rows[0] });
+  } catch (err) {
+    logger.error('Error al actualizar activo de herramienta:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Endpoint para actualizar columna prestable de herramienta
+app.patch('/api/mantenimiento/herramientas/:id/prestable', async (req, res) => {
+  const { id } = req.params;
+  const { prestable } = req.body;
+  try {
+    const val = prestable === true || prestable === 'true';
+    const result = await mantenimientoPool.query(
+      'UPDATE herramientas_mantenimiento SET prestable = $1 WHERE id = $2 RETURNING *',
+      [val, id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ success: false, error: 'Herramienta no encontrada' });
+    res.json({ success: true, herramienta: result.rows[0] });
+  } catch (err) {
+    logger.error('Error al actualizar prestable:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.patch('/api/mantenimiento/herramientas/:id/foto', herramientaUploadMant.single('foto'), async (req, res) => {
+  const { id } = req.params;
+  if (!req.file) return res.status(400).json({ success: false, error: 'No se recibió archivo' });
+  const fotoUrl = `/uploads/herramientas/${req.file.filename}`;
+  try {
+    const result = await mantenimientoPool.query(
+      'UPDATE herramientas_mantenimiento SET foto = $1 WHERE id = $2 RETURNING *',
+      [fotoUrl, id]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ success: false, error: 'Herramienta no encontrada' });
+    res.json({ success: true, foto: fotoUrl, herramienta: result.rows[0] });
+  } catch (err) {
+    logger.error('Error al guardar foto de herramienta:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
