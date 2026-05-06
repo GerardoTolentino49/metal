@@ -20,101 +20,7 @@
   <script src="js/global-color.js"></script>
 </head>
 <body>
-  <!--
-  <div class="topbar">
-        <div style="background-color: #24645d45; backdrop-filter: blur(5px); position: absolute; width: 100%; height: 100%; border-radius:33px;"></div>
-    <div class="glass-highlight"></div>
-    <div class="topbar-header">
-      <button class="lisa-btn-cromatica">PDM</button>
-    </div>
-    <div class="topbar-menu">
-      <div class="menu-item has-submenu" id="itMenuBtn">
-          <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-        </svg>
-        IT
-        <div class="submenu" id="itSubmenu">
-          <a href="panel.html" class="submenu-item">Tickets</a>
-          <a href="detalles.html" class="submenu-item">Estadísticas</a>
-          <a href="it_inventario.html" class="submenu-item">Inventario</a>
-          <a href="calendario_it.html" class="submenu-item">Calendario de actividades</a>
-          <a href="boveda.html" class="submenu-item">Bóveda</a>
-          <a href="qr_inventario.html" class="submenu-item">Inventario por QR</a>
-          <a href="admin.html" class="submenu-item" id="adminLink">Ajustes de Usuarios</a>
-          <a href="contrasenas.html" class="submenu-item" id="adminPassLink">Ajustes de Contraseñas</a>
-          <a href="departamentos.html" class="submenu-item" id="adminDeptLink">Ajustes de Departamentos</a>
-          <a href="admin_it.html" class="submenu-item" id="adminItLink">Ajustes Generales (NO USAR)</a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="rhMenuBtn">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-        RH
-        <div class="submenu" id="rhSubmenu">
-          <a href="empleados_panel.html" class="submenu-item">Empleados</a>
-          <a href="apoyos.html" class="submenu-item">Apoyos</a>
-          <a href="amonestaciones.html" class="submenu-item">Amonestaciones</a>
-          <a href="vacaciones_panel.html" class="submenu-item">Vacaciones</a>
-          <a href="asistencias.html" class="submenu-item">Asistencias</a>
-          <a href="comidas_panel.html" class="submenu-item">Comidas</a>
-          <a href="anuncios.html" class="submenu-item">Anuncios</a>
-          <a href="detalles_rh.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
 
-      <div class="menu-item has-submenu" id="warehouseMenuBtn">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
-        </svg>
-        Almacén
-        <div class="submenu" id="warehouseSubmenu">
-          <a href="inventario.html" class="submenu-item">Warehouse</a>
-          <a href="detalles_warehouse.html" class="submenu-item">Warehouse Analytics </a>
-        </div>
-      </div>
-      
-      <div class="menu-item has-submenu" id="maintenanceMenuBtn">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-        </svg>
-        Mantenimiento
-        <div class="submenu" id="maintenanceSubmenu">
-          <a href="mantenimiento.html" class="submenu-item">Tickets</a>
-          <a href="detalles_mantenimiento_preventivo.html" class="submenu-item">Estadísticas preventivas</a>
-          <a href="detalles_mantenimiento.html" class="submenu-item">Estadísticas correctivas</a>
-          <a href="calendario_mantenimiento.html" class="submenu-item">Calendario de mantenimiento preventivo</a>
-        </div>
-      </div>
-
-      <div class="menu-item has-submenu" id="designMenuBtn">
-        Diseño
-        <div class="submenu" id="designSubmenu">
-          <a href="logeo-diseno.html" class="submenu-item">Logeo</a>
-        </div>
-      </div>
-      
-            
-      <div class="menu-item has-submenu" id="pmMenuBtn">
-        PM
-        <div class="submenu" id="pmSubmenu">
-          <a href="nuevo-pm.html" class="submenu-item">Proyectos</a>
-          <a href="nuevo-equipo.html" class="submenu-item">Equipo</a>
-          <a href="detalles_pm.html" class="submenu-item">Estadísticas</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="topbar-controls">
-      <div class="user-menu-item">
-        <div class="user-icon" id="userIcon">
-          <i class="fas fa-user"></i>
-        </div>
-        <button class="logout-button logout-button-inline" id="logoutButton">Cerrar sesión</button>
-        <div class="user-submenu" id="userSubmenu">
-          <div class="user-info" id="userInfo"></div>
-        </div>
-      </div>
-    </div>
-  </div>
--->
   <!--tab switch-->
     <div style="width: 100%; justify-content: center; display: flex; margin-top: 1%;">
     <div class="tab-switch">
@@ -222,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <button type="button" class="ep-close" id="epClose" title="Cerrar" aria-label="Cerrar panel">✕</button>
         </div>
       <div class="ep-content" id="epContent">
-        <div style="padding:6px 2px;color:#aaa;">Selecciona un empleado para ver su historial…</div>
+        <div style="padding:6px 2px;color:#000000;">Selecciona un empleado para ver su historial…</div>
       </div>
     </aside>
 
@@ -331,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const co = document.getElementById('editComentarios');
         if(co){
           co.value = vacacion.comentarios || '';
-          co.style.color = '#ffca2c';
+          co.style.color = '##634c06';
         }
         // Asegurar wiring por si no se inicializó aún
         try{ wireEditModal(); }catch(_e){}
@@ -628,9 +534,9 @@ document.addEventListener('DOMContentLoaded', function() {
               <div style="display:flex;gap:12px;align-items:center;padding:12px 12px 4px 12px;margin-bottom:8px;">
                   ${foto}
                   <div style="display:flex;flex-direction:column;gap:4px;">
-                    <div style="font-weight:600;color:#fff;">${escapeHtml(empleado.nombre_completo || empleadoNombre || ('ID '+empleadoId))}</div>
-                    <div style="color:#cfcfcf;font-size:12px;">Fecha de ingreso: <span style="color:#fff;">${fechaIngresoLabel}</span></div>
-                    <div style="color:#cfcfcf;font-size:12px;">Años de servicio: <span style="color:#79d78b;font-weight:600;">${aniosServicio || 'N/D'}</span></div>
+                    <div style="font-weight:600;color:#000000;">${escapeHtml(empleado.nombre_completo || empleadoNombre || ('ID '+empleadoId))}</div>
+                    <div style="color:#000000;font-size:12px;">Fecha de ingreso: <span style="color:#000000;">${fechaIngresoLabel}</span></div>
+                    <div style="color:#000000;font-size:12px;">Años de servicio: <span style="color:#000000;font-weight:600;">${aniosServicio || 'N/D'}</span></div>
                   </div>
                 </div>`;
           } else {
@@ -653,8 +559,8 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="vac-item" data-id="${v.id}" data-emp-name="${empNombreEscaped}" data-emp-id="${empId}">
                 <div class="vi-top">
                   <div style="font-weight:600;">
-                    <div><span style="color:#79d78b;">Inicio:</span> ${formatDate(v.fecha_inicio)}</div>
-                    <div><span style="color:#ef9a9a;">Fin:</span> ${formatDate(v.fecha_fin)}</div>
+                    <div><span style="color:#3b9e4e;">Inicio:</span> ${formatDate(v.fecha_inicio)}</div>
+                    <div><span style="color:#a72f2f;">Fin:</span> ${formatDate(v.fecha_fin)}</div>
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;">
                     ${badge}
@@ -664,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   </div>
         </div>
                 <div class="vi-dates">Días: ${v.dias_solicitados ?? ''} · Solicitado: ${v.fecha_solicitud ? formatDate(v.fecha_solicitud) : 'N/A'}</div>
-                ${v.comentarios ? `<div style="margin-top:6px;opacity:.9;color:#ffca2c;">${escapeHtml(v.comentarios)}</div>` : ''}
+                ${v.comentarios ? `<div style="margin-top:6px;opacity:.9;color:##634c06;">${escapeHtml(v.comentarios)}</div>` : ''}
               </div>`;
           });
           // Si ya hay encabezado, agregar debajo; si no, solo la lista
@@ -1071,8 +977,8 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <div class="imprimir-constancias-content">
         <div style="display:grid; grid-template-columns: 1fr; gap:18px;">
-          <section style="background: rgba(255,255,255,0.06); border-radius:12px; padding:14px;">
-            <h4 style="margin:0 0 10px 0; color:#fff;">Por empleado</h4>
+          <section style="background: rgba(169, 169, 169, 0.208); border-radius:30px; padding:14px;">
+            <h4 style="margin:0 0 10px 0; color:#000000;">Por empleado</h4>
             <div class="form-group" style="position: relative; max-width: 560px;">
               <label for="constanciaEmpleadoId">Empleado (ID o Nombre):</label>
               <input type="text" id="constanciaEmpleadoId" placeholder="Ingresa el ID o nombre del empleado" required style="width:100%;">
@@ -1083,8 +989,8 @@ document.addEventListener('DOMContentLoaded', function() {
               <button type="button" class="btn btn-primary" id="generarConstancia">Generar Constancia</button>
             </div>
           </section>
-          <section style="background: rgba(255,255,255,0.06); border-radius:12px; padding:14px;">
-            <h4 style="margin:0 0 10px 0; color:#fff;">Por mes</h4>
+          <section style="background: rgba(169, 169, 169, 0.208); border-radius:30px; padding:14px;">
+            <h4 style="margin:0 0 10px 0; color:#000000;">Por mes</h4>
             <div class="form-group">
               <label for="constanciaMes">Constancias por mes:</label>
               <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
@@ -1289,9 +1195,9 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
           
           <!-- Información del empleado -->
-          <div id="rhEmpleadoInfo" class="empleado-info" style="display: none; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 15px 0;">
-            <h4 style="color: white; margin: 0 0 10px 0;">Información del Empleado</h4>
-            <div id="rhEmpleadoContent" style="color: rgba(255,255,255,0.9);"></div>
+          <div id="rhEmpleadoInfo" class="empleado-info" style="display: none; background: rgb(105 105 105 / 10%); padding: 15px; border-radius: 30px; margin: 15px 0;">
+            <h4 style="color: rgb(0, 0, 0); margin: 0 0 10px 0;">Información del Empleado</h4>
+            <div id="rhEmpleadoContent" style="color: rgb(0, 0, 0);"></div>
           </div>
 
           <div class="form-group">

@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/topbar.css">
+  <link rel="icon" href="/favicon.png" type="image/png">  
   <link rel="stylesheet" href="styles/logeo-diseno.css">
   <link rel="stylesheet" href="styles/nuevo-equipo.css">
   <link rel="stylesheet" href="styles/floating-buttons.css">
@@ -3202,7 +3203,7 @@ document.addEventListener('DOMContentLoaded', function() {
           ${submittalsHtml || '<p style="font-size: 11px; color: #777; margin: 4px 4px 8px;">No hay submittals aún</p>'}
 
           <div class="orders-category-header">Aprobados (últimos 3 días)</div>
-          ${dueHtml || '<p style="font-size: 11px; color: #777; margin: 4px 4px 0;">No hay órdenes ni submittals aprobados en los últimos 3 días</p>'}
+          ${dueHtml || '<p style="font-size: 11px; color: #fff; margin: 4px 4px 0;">No hay órdenes ni submittals aprobados en los últimos 3 días</p>'}
 
           ${showExpiredApproved ? `
           <div class="orders-category-header">Aprobados Vencidos (más de 3 días)</div>
@@ -4411,26 +4412,18 @@ document.addEventListener('DOMContentLoaded', function() {
         let hasActiveAbsence = false;
         let activeAbsenceStatus = null;
         
-        // Verificar si hay estado_en_orden (estado de ausencia) en la sesión
+        // Fuente de verdad: estado_en_orden (usuarios) y, en respaldo, tiempo_diseno.estado de la sesión activa.
+        // NO usar tiempos acumulados para inferir ausencia: si tiempo_pausa > tiempo buscando pero ya trabajas,
+        // el refresh volvía incorrectamente a pausa.
         if (session.estado_en_orden && ausenciaStatuses.includes(session.estado_en_orden)) {
           hasActiveAbsence = true;
           activeAbsenceStatus = session.estado_en_orden;
-        }
-        
-        // Si no hay estado_en_orden, intentar detectarlo por los timers (fallback)
-        if (!hasActiveAbsence) {
-          ausenciaStatuses.forEach(status => {
-            const timerValue = statusTimers[status] || 0;
-            if (timerValue > 0) {
-              // Verificar si este estado tiene más tiempo que los estados de trabajo
-              const trabajoStatuses = ['working', 'pendiente', 'cambios', 'esperando_informacion', 'buscando_informacion', 'documentacion', 'meeting_trabajo'];
-              const maxTrabajoTime = Math.max(...trabajoStatuses.map(s => statusTimers[s] || 0));
-              if (timerValue > maxTrabajoTime) {
-                hasActiveAbsence = true;
-                activeAbsenceStatus = status;
-              }
-            }
-          });
+        } else if (session.estado) {
+          const rawAusencia = String(session.estado).trim().toLowerCase();
+          if (ausenciaStatuses.includes(rawAusencia)) {
+            hasActiveAbsence = true;
+            activeAbsenceStatus = rawAusencia;
+          }
         }
         
         // Si hay ausencia activa, activarla y deshabilitar botones de trabajo

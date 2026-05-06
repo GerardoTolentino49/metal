@@ -376,10 +376,14 @@ async function ensureInventarioEntradaTable() {
         factura     VARCHAR(150),
         categoria   VARCHAR(150),
         proveedor   VARCHAR(255),
+        heat_number VARCHAR(150),
         fecha       DATE NOT NULL DEFAULT CURRENT_DATE,
         created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
     `);
+  await inventarioPool.query(`ALTER TABLE inventario_entrada ADD COLUMN IF NOT EXISTS heat_number VARCHAR(150);`);
+  await inventarioPool.query(`ALTER TABLE inventario_salida ADD COLUMN IF NOT EXISTS heat_number VARCHAR(150);`);
+  await inventarioPool.query(`ALTER TABLE inventario ADD COLUMN IF NOT EXISTS heat_number VARCHAR(150);`);
   await inventarioPool.query(`
       CREATE INDEX IF NOT EXISTS idx_inv_entrada_codigo
       ON inventario_entrada ((LOWER(TRIM(codigo))));
@@ -462,9 +466,50 @@ async function ensurePoTable() {
         total VARCHAR(255)
       );
     `);
+    await inventarioPool.query(`
+      ALTER TABLE po
+        ADD COLUMN IF NOT EXISTS tf BOOLEAN NOT NULL DEFAULT FALSE;
+    `);
+    await inventarioPool.query(`
+      ALTER TABLE po
+        ADD COLUMN IF NOT EXISTS usuario_compra_id INTEGER;
+    `);
+    await inventarioPool.query(`
+      ALTER TABLE po
+        ADD COLUMN IF NOT EXISTS total_numerico NUMERIC(14, 2);
+    `);
+    await inventarioPool.query(`
+      ALTER TABLE po
+        ADD COLUMN IF NOT EXISTS proveedor_nombre TEXT,
+        ADD COLUMN IF NOT EXISTS proveedor_direccion TEXT,
+        ADD COLUMN IF NOT EXISTS proveedor_tipo VARCHAR(80),
+        ADD COLUMN IF NOT EXISTS iva_pct NUMERIC(8, 4),
+        ADD COLUMN IF NOT EXISTS terms_credit_days INTEGER,
+        ADD COLUMN IF NOT EXISTS enviar_a_direccion TEXT,
+        ADD COLUMN IF NOT EXISTS require_confirm_text_snap TEXT,
+        ADD COLUMN IF NOT EXISTS require_confirm_enabled_snap BOOLEAN DEFAULT TRUE;
+    `);
+    try {
+      await inventarioPool.query(`ALTER TABLE po ALTER COLUMN proveedor TYPE BIGINT USING proveedor::bigint;`);
+    } catch (eAl) {
+      logger.warn('[ensurePoTable] No se pudo convertir proveedor a BIGINT (puede ser normal si ya está aplicado):', eAl?.message || eAl);
+    }
     logger.info('[ensurePoTable] Tabla PO verificada');
   } catch (err) {
     logger.error('[ensurePoTable] Error al crear/verificar tabla PO:', err?.message || err);
+  }
+}
+
+async function ensurePoItemsExtraColumns() {
+  try {
+    await inventarioPool.query(`
+      ALTER TABLE po_items
+        ADD COLUMN IF NOT EXISTS uom VARCHAR(80),
+        ADD COLUMN IF NOT EXISTS belongs_to TEXT,
+        ADD COLUMN IF NOT EXISTS line_extended_numeric NUMERIC(14, 4);
+    `);
+  } catch (err) {
+    logger.error('[ensurePoItemsExtraColumns]', err?.message || err);
   }
 }
 
@@ -583,6 +628,7 @@ async function ensureRequisicionesTable() {
     await inventarioPool.query(`ALTER TABLE requisiciones ADD COLUMN IF NOT EXISTS usuarios_asignados TEXT;`);
     await inventarioPool.query(`ALTER TABLE requisiciones ADD COLUMN IF NOT EXISTS estatus TEXT NOT NULL DEFAULT 'Pendiente';`);
     await inventarioPool.query(`ALTER TABLE requisiciones ADD COLUMN IF NOT EXISTS po_creada BOOLEAN DEFAULT FALSE;`);
+    await inventarioPool.query(`ALTER TABLE requisiciones ADD COLUMN IF NOT EXISTS po_id BIGINT;`);
   } catch (error) {
     logger.error('Error al crear/verificar tabla requisiciones:', { message: error?.message, code: error?.code, detail: error?.detail });
   }
@@ -690,6 +736,32 @@ async function ensureCommodityTable() {
   }
 }
 
+// Asegurar tabla enviar_a (modal Items — Enviar a)
+async function ensureEnviarATable() {
+  try {
+    await inventarioPool.query(`
+      CREATE TABLE IF NOT EXISTS enviar_a (
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(512) NOT NULL,
+        direccion TEXT DEFAULT '',
+        activo BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+    await inventarioPool.query(
+      `CREATE UNIQUE INDEX IF NOT EXISTS idx_enviar_a_nombre_lower ON enviar_a (lower(trim(nombre)));`,
+    );
+    logger.info('[ensureEnviarATable] OK');
+  } catch (error) {
+    logger.error('Error al crear/verificar tabla enviar_a:', {
+      message: error?.message,
+      code: error?.code,
+      detail: error?.detail,
+    });
+  }
+}
+
 // Asegurar tabla items (para modal de Items)
 async function ensureItemsTable() {
   try {
@@ -708,9 +780,37 @@ async function ensureItemsTable() {
       );
     `);
     await inventarioPool.query(`CREATE INDEX IF NOT EXISTS idx_items_codigo ON items (lower(coalesce(codigo,'')));`);
+    await inventarioPool.query(`ALTER TABLE items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ;`);
     logger.info('[ensureItemsTable] OK');
   } catch (error) {
     logger.error('Error al crear/verificar tabla items:', { message: error?.message, code: error?.code, detail: error?.detail });
+  }
+}
+
+// Columna item_id en inventario → FK a catálogo items (un registro de inventario por item del catálogo)
+async function ensureInventarioItemIdFk() {
+  try {
+    await inventarioPool.query(`ALTER TABLE inventario ADD COLUMN IF NOT EXISTS item_id INTEGER;`);
+    await inventarioPool.query(`
+      DO $do$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_constraint WHERE conname = 'inventario_item_id_fkey'
+        ) THEN
+          ALTER TABLE inventario
+            ADD CONSTRAINT inventario_item_id_fkey
+            FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE SET NULL;
+        END IF;
+      END
+      $do$;
+    `);
+    await inventarioPool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_inventario_item_id_unique
+      ON inventario (item_id) WHERE item_id IS NOT NULL;
+    `);
+    logger.info('[ensureInventarioItemIdFk] OK');
+  } catch (error) {
+    logger.error('[ensureInventarioItemIdFk]', { message: error?.message, code: error?.code, detail: error?.detail });
   }
 }
 
@@ -769,23 +869,64 @@ async function ensureComunidadTable() {
   }
 }
 
-function normalizeRequisicionStatus(rawStatus) {
-  const normalized = String(rawStatus || '')
+function normalizeRequisicionStatusKey(raw) {
+  return String(raw || '')
     .trim()
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
+}
+
+/** No cambiar estatus por asignación si ya hay PO o estatus terminal */
+function isRequisicionEstatusPostAssignmentLocked(estatusRaw, poCreada) {
+  if (poCreada === true || poCreada === 't' || poCreada === 1) return true;
+  const n = normalizeRequisicionStatusKey(estatusRaw);
+  if (!n) return false;
+  return (
+    n.includes('po generada') ||
+    n.includes('po recibida') ||
+    n === 'realizado' ||
+    n === 'autorizado'
+  );
+}
+
+/** Pendiente sin asignados → Cotizando al asignar; Cotizando → Pendiente al quitar todos (si no está bloqueado) */
+function deriveRequisicionEstatusAfterUsuariosUpdate(existingRow, userIds) {
+  const locked = isRequisicionEstatusPostAssignmentLocked(existingRow.estatus, existingRow.po_creada);
+  const ids = Array.isArray(userIds) ? userIds : [];
+
+  if (ids.length === 0) {
+    if (locked) return existingRow.estatus;
+    const n = normalizeRequisicionStatusKey(existingRow.estatus);
+    if (n === 'cotizando') return 'Pendiente';
+    return existingRow.estatus;
+  }
+
+  if (locked) return existingRow.estatus;
+  return 'Cotizando';
+}
+
+function normalizeRequisicionStatus(rawStatus) {
+  const normalized = normalizeRequisicionStatusKey(rawStatus);
 
   if (!normalized) return null;
 
   const aliases = {
     pendiente: 'Pendiente',
+    cotizando: 'Cotizando',
     'en proceso': 'En proceso',
     proceso: 'En proceso',
     'en revision': 'En revisión',
     revision: 'En revisión',
     autorizado: 'Autorizado',
-    realizado: 'Realizado'
+    realizado: 'Realizado',
+    'po generada': 'PO generada',
+    po_generada: 'PO generada',
+    'po-generada': 'PO generada',
+    'po recibida': 'PO recibida',
+    po_recibida: 'PO recibida',
+    'po recibida parcialmente': 'PO recibida parcialmente',
+    po_recibida_parcialmente: 'PO recibida parcialmente'
   };
 
   return aliases[normalized] || null;
@@ -1012,6 +1153,7 @@ app.get('/api/entradas', async (req, res) => {
         COALESCE(factura, '')     AS factura,
         COALESCE(categoria, '')   AS categoria,
         COALESCE(proveedor, '')   AS proveedor,
+        COALESCE(heat_number, '') AS heat_number,
         fecha,
         created_at
       FROM inventario_entrada
@@ -1037,7 +1179,8 @@ app.get('/api/salidas', async (req, res) => {
         descripcion,
         clasificacion,
         cantidad,
-        motivo
+        motivo,
+        COALESCE(heat_number, '') AS heat_number
       FROM inventario_salida
       ORDER BY fecha DESC, id DESC
     `);
@@ -1059,19 +1202,22 @@ app.post('/api/salidas', async (req, res) => {
       clasificacion,
       cantidad,
       motivo,
-      tipo
+      tipo,
+      heatNumber
     } = req.body || {};
 
     if (!departamento || !empleado || !codigoProducto || !descripcion || !clasificacion || !cantidad) {
       return res.status(400).json({ error: 'Datos incompletos para salida' });
     }
 
+    const heatVal = heatNumber != null && String(heatNumber).trim() !== '' ? String(heatNumber).trim() : null;
+
     const insert = await inventarioPool.query(
       `INSERT INTO inventario_salida (
-        departamento, empleado, fecha, codigo_producto, descripcion, clasificacion, cantidad, motivo
-      ) VALUES ($1, $2, COALESCE($3, NOW()), $4, $5, $6, $7, $8)
-      RETURNING id, departamento, empleado, fecha, codigo_producto AS "codigoProducto", descripcion, clasificacion, cantidad, motivo`,
-      [departamento, empleado, fecha || null, codigoProducto, descripcion, clasificacion, Number(cantidad) || 0, motivo || null]
+        departamento, empleado, fecha, codigo_producto, descripcion, clasificacion, cantidad, motivo, heat_number
+      ) VALUES ($1, $2, COALESCE($3, NOW()), $4, $5, $6, $7, $8, $9)
+      RETURNING id, departamento, empleado, fecha, codigo_producto AS "codigoProducto", descripcion, clasificacion, cantidad, motivo, COALESCE(heat_number, '') AS heat_number`,
+      [departamento, empleado, fecha || null, codigoProducto, descripcion, clasificacion, Number(cantidad) || 0, motivo || null, heatVal]
     );
 
     // Descontar del inventario: actualizar solo el registro más reciente con ese código
@@ -1269,7 +1415,7 @@ app.get('/api/requisiciones', async (req, res) => {
   try {
     const limit = Math.min(1000, Math.max(1, Number(req.query.limit) || 1000));
     const qry = await inventarioPool.query(
-      `SELECT id, descripcion, enlace_producto, cantidad, url_imagen, tipo_destino, es_para_solicitante, departamento, area, alternativas, usuario_destino, usuarios_asignados, estatus, po_creada, creado_por, creado_en
+      `SELECT id, descripcion, enlace_producto, cantidad, url_imagen, tipo_destino, es_para_solicitante, departamento, area, alternativas, usuario_destino, usuarios_asignados, estatus, po_creada, po_id, creado_por, creado_en
        FROM requisiciones
        ORDER BY creado_en DESC
        LIMIT $1`,
@@ -1346,17 +1492,24 @@ app.put('/api/requisiciones/:id/usuarios', async (req, res) => {
 
     const serializedValue = JSON.stringify(userIds);
 
-    const updateResult = await inventarioPool.query(
-      `UPDATE requisiciones
-         SET usuarios_asignados = $1
-       WHERE id = $2
-       RETURNING id, usuarios_asignados`,
-      [serializedValue, requisicionId]
+    const existingResult = await inventarioPool.query(
+      `SELECT id, estatus, po_creada FROM requisiciones WHERE id = $1`,
+      [requisicionId]
     );
-
-    if (updateResult.rowCount === 0) {
+    if (existingResult.rowCount === 0) {
       return res.status(404).json({ error: 'Requisición no encontrada' });
     }
+    const existingRow = existingResult.rows[0];
+    const nextEstatus = deriveRequisicionEstatusAfterUsuariosUpdate(existingRow, userIds);
+
+    const updateResult = await inventarioPool.query(
+      `UPDATE requisiciones
+         SET usuarios_asignados = $1,
+             estatus = $2
+       WHERE id = $3
+       RETURNING id, usuarios_asignados, estatus`,
+      [serializedValue, nextEstatus, requisicionId]
+    );
 
     let usuariosDetalle = [];
     if (userIds.length > 0) {
@@ -1378,7 +1531,8 @@ app.put('/api/requisiciones/:id/usuarios', async (req, res) => {
       success: true,
       requisicion_id: requisicionId,
       usuarios_asignados_ids: userIds,
-      usuarios_asignados: usuariosDetalle
+      usuarios_asignados: usuariosDetalle,
+      estatus: updateResult.rows[0].estatus
     });
   } catch (error) {
     logger.error('Error al actualizar usuarios asignados de requisición:', error);
@@ -1446,8 +1600,32 @@ app.patch('/api/requisiciones/:id', async (req, res) => {
       allowed.po_creada = boolVal;
     }
 
+    if (req.body && Object.prototype.hasOwnProperty.call(req.body, 'po_id')) {
+      const rawPid = req.body.po_id;
+      if (rawPid === null || rawPid === undefined || rawPid === '') {
+        allowed.po_id = null;
+      } else {
+        const n = parseInt(rawPid, 10);
+        if (!Number.isFinite(n)) return res.status(400).json({ error: 'Valor inválido para po_id' });
+        allowed.po_id = n;
+      }
+    }
+
     const keys = Object.keys(allowed);
     if (!keys.length) return res.status(400).json({ error: 'No hay campos válidos para actualizar' });
+
+    let forcedEstatus = null;
+    if (allowed.po_creada === true) {
+      const cur = await inventarioPool.query(`SELECT estatus FROM requisiciones WHERE id = $1`, [requisicionId]);
+      if (cur.rowCount > 0) {
+        const prev = normalizeRequisicionStatusKey(cur.rows[0].estatus || '');
+        const keepPrev =
+          prev.includes('po recibida') ||
+          prev === 'realizado' ||
+          prev === 'autorizado';
+        if (!keepPrev) forcedEstatus = 'PO generada';
+      }
+    }
 
     // Construir consulta dinámica segura
     const sets = [];
@@ -1458,13 +1636,24 @@ app.patch('/api/requisiciones/:id', async (req, res) => {
       params.push(allowed[k]);
       idx++;
     }
+    if (forcedEstatus != null) {
+      sets.push(`estatus = $${idx}`);
+      params.push(forcedEstatus);
+      idx++;
+    }
     params.push(requisicionId);
 
-    const q = `UPDATE requisiciones SET ${sets.join(', ')} WHERE id = $${idx} RETURNING id, po_creada`; 
+    const q = `UPDATE requisiciones SET ${sets.join(', ')} WHERE id = $${idx} RETURNING id, po_creada, po_id, estatus`;
     const result = await inventarioPool.query(q, params);
     if (result.rowCount === 0) return res.status(404).json({ error: 'Requisición no encontrada' });
 
-    res.json({ success: true, requisicion_id: requisicionId, po_creada: result.rows[0].po_creada });
+    res.json({
+      success: true,
+      requisicion_id: requisicionId,
+      po_creada: result.rows[0].po_creada,
+      po_id: result.rows[0].po_id != null ? result.rows[0].po_id : null,
+      estatus: result.rows[0].estatus
+    });
   } catch (error) {
     logger.error('Error al actualizar requisición (PATCH):', error);
     res.status(500).json({ error: 'Error al actualizar requisición' });
@@ -1485,8 +1674,11 @@ app.put('/api/salidas/:id', async (req, res) => {
       descripcion,
       clasificacion,
       cantidad,
-      motivo
+      motivo,
+      heatNumber
     } = req.body || {};
+
+    const heatOut = heatNumber != null && String(heatNumber).trim() !== '' ? String(heatNumber).trim() : null;
 
     // Nota: por simplicidad no permitimos cambiar codigo_producto aquí
     const update = await inventarioPool.query(
@@ -1497,10 +1689,11 @@ app.put('/api/salidas/:id', async (req, res) => {
          descripcion = COALESCE($4, descripcion),
          clasificacion = COALESCE($5, clasificacion),
          cantidad = COALESCE($6, cantidad),
-         motivo = COALESCE($7, motivo)
-       WHERE id = $8
-       RETURNING id, departamento, empleado, fecha, codigo_producto AS "codigoProducto", descripcion, clasificacion, cantidad, motivo`,
-      [departamento || null, empleado || null, fecha || null, descripcion || null, clasificacion || null, (cantidad == null ? null : Number(cantidad)), motivo || null, id]
+         motivo = COALESCE($7, motivo),
+         heat_number = COALESCE($8, heat_number)
+       WHERE id = $9
+       RETURNING id, departamento, empleado, fecha, codigo_producto AS "codigoProducto", descripcion, clasificacion, cantidad, motivo, COALESCE(heat_number, '') AS heat_number`,
+      [departamento || null, empleado || null, fecha || null, descripcion || null, clasificacion || null, (cantidad == null ? null : Number(cantidad)), motivo || null, heatOut, id]
     );
 
     if (update.rowCount === 0) {
@@ -10417,16 +10610,28 @@ app.post('/api/diseno/update-status', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Tipo de estado inválido. Debe ser "trabajo" o "ausencia"' });
     }
 
-    // Actualizar el campo correspondiente según el tipo de estado
-    const campo = tipoEstado === 'trabajo' ? 'estado_trabajo' : 'estado_en_orden';
-    
-    const result = await apoyosPool.query(
-      `UPDATE usuarios 
-       SET ${campo} = $1
-       WHERE LOWER(TRIM(username)) = LOWER(TRIM($2))
-       RETURNING username, estado_trabajo, estado_en_orden, orden_en_logeo`,
-      [estadoParaPersistir, username]
-    );
+    // Actualizar el campo correspondiente según el tipo de estado.
+    // IMPORTANTE: al activar trabajo (presionado), limpiar estado_en_orden; si no, tras una pausa la BD
+    // puede seguir marcando ausencia y loadActiveSession restaura pausa aunque estado_trabajo sea correcto.
+    let result;
+    if (tipoEstado === 'trabajo') {
+      result = await apoyosPool.query(
+        `UPDATE usuarios 
+         SET estado_trabajo = $1,
+             estado_en_orden = CASE WHEN $3::boolean = true THEN NULL ELSE estado_en_orden END
+         WHERE LOWER(TRIM(username)) = LOWER(TRIM($2))
+         RETURNING username, estado_trabajo, estado_en_orden, orden_en_logeo`,
+        [estadoParaPersistir, username, isPressed]
+      );
+    } else {
+      result = await apoyosPool.query(
+        `UPDATE usuarios 
+         SET estado_en_orden = $1
+         WHERE LOWER(TRIM(username)) = LOWER(TRIM($2))
+         RETURNING username, estado_trabajo, estado_en_orden, orden_en_logeo`,
+        [estadoParaPersistir, username]
+      );
+    }
 
     if (result.rowCount === 0) {
       console.error('Usuario no encontrado:', username);
@@ -10464,11 +10669,15 @@ app.post('/api/diseno/update-status', async (req, res) => {
           const updateTiempoDiseno = await apoyosPool.query(
             `UPDATE tiempo_diseno
              SET
-               estado_trabajo = CASE WHEN $2 = 'trabajo' THEN $3 ELSE estado_trabajo END,
-               estado = CASE WHEN $2 = 'ausencia' THEN $3 ELSE estado END
+               estado_trabajo = CASE WHEN $2::text = 'trabajo' THEN $3 ELSE estado_trabajo END,
+               estado = CASE
+                 WHEN $2::text = 'trabajo' AND COALESCE($4::boolean, false) = true THEN NULL
+                 WHEN $2::text = 'ausencia' THEN $3
+                 ELSE estado
+               END
              WHERE id = $1
              RETURNING id, estado_trabajo, estado`,
-            [activeSessionId, tipoEstado, estadoParaPersistir]
+            [activeSessionId, tipoEstado, estadoParaPersistir, isPressed]
           );
 
           console.log(`Estado persistido en tiempo_diseno (filas afectadas: ${updateTiempoDiseno.rowCount})`);
@@ -12930,6 +13139,7 @@ app.get('/api/inventario', async (req, res) => {
     const result = await inventarioPool.query(`
       SELECT 
           id,
+          item_id,
           COALESCE(nombre_completo, 'Sin nombre') AS nombre_completo,
           COALESCE(stock, 0) AS stock,
           pedido_abierto,
@@ -12952,6 +13162,7 @@ app.get('/api/inventario', async (req, res) => {
           COALESCE(categoria_pdm, '') AS categoria_pdm,
           COALESCE(locacion, '') AS locacion,
           COALESCE(id_ingreso, '') AS id_ingreso,
+          COALESCE(heat_number, '') AS heat_number,
           created_at,
           updated_at
       FROM inventario
@@ -13030,6 +13241,7 @@ app.get('/api/inventario/snapshot', async (req, res) => {
           MAX(COALESCE(uom, ''))              AS uom,
           MAX(COALESCE(categoria_pdm, ''))    AS categoria_pdm,
           MAX(COALESCE(locacion, ''))         AS locacion,
+          MAX(COALESCE(heat_number, ''))       AS heat_number,
           SUM(COALESCE(stock_inicial, 0))     AS stock_inicial_sum,
           SUM(COALESCE(entradas, 0))          AS entradas_sum,
           SUM(COALESCE(stock, 0))             AS stock_actual
@@ -13046,6 +13258,7 @@ app.get('/api/inventario/snapshot', async (req, res) => {
         i.uom,
         i.categoria_pdm,
         i.locacion,
+        COALESCE(NULLIF(TRIM(i.heat_number), ''), '') AS heat_number,
         -- Stock al momento de fecha_fin: stock_actual + salidas_después (que aún no habían ocurrido)
         GREATEST(0, i.stock_actual + COALESCE(sd.total, 0))  AS stock,
         -- Entradas acumuladas hasta fecha_fin
@@ -13115,8 +13328,8 @@ app.get('/api/inventario/:id', async (req, res) => {
     const result = await inventarioPool.query(`
       SELECT 
           id,
+          item_id,
           COALESCE(nombre_completo, 'Sin nombre') AS nombre_completo,
-          COALESCE(hostname, '') AS hostname,
           COALESCE(area, '') AS area,
           COALESCE(departamento, '') AS departamento,
           COALESCE(usuario_asignado, '') AS usuario_asignado,
@@ -13141,6 +13354,7 @@ app.get('/api/inventario/:id', async (req, res) => {
           COALESCE(categoria_pdm, '') AS categoria_pdm,
           COALESCE(locacion, '') AS locacion,
           COALESCE(notas, '') AS notas,
+          COALESCE(heat_number, '') AS heat_number,
           created_at,
           updated_at
       FROM inventario
@@ -13188,7 +13402,8 @@ app.get('/api/inventario/:id', async (req, res) => {
         salidas,
         uom,
         categoriaPDM,
-        locacion
+        locacion,
+        heatNumber
       } = req.body || {};
       // Normalizar valores numéricos que pueden venir como string vacío
       const normalizedQuantity = (quantity === '' || quantity == null) ? null : Number(quantity);
@@ -13202,6 +13417,10 @@ app.get('/api/inventario/:id', async (req, res) => {
       const isBaseDatosPayload = (
         precioMXN != null || precioDLLS != null || normalizedStockInicial != null || uom || categoriaPDM || locacion
       );
+
+      const heatSql = (heatNumber != null && String(heatNumber).trim() !== '')
+        ? String(heatNumber).trim()
+        : null;
 
       // Validar campos requeridos: siempre requiere descripción y al menos quantity o stockInicial
       if (!description || (normalizedQuantity == null && normalizedStockInicial == null)) {
@@ -13261,10 +13480,11 @@ app.get('/api/inventario/:id', async (req, res) => {
                  stock    = $2,
                  po       = COALESCE($3, po),
                  factura  = COALESCE($4, factura),
-                 categoria = COALESCE($5, categoria)
-             WHERE id = $6
+                 categoria = COALESCE($5, categoria),
+                 heat_number = COALESCE($6, heat_number)
+             WHERE id = $7
              RETURNING *`,
-            [newEntradas, newStock, poNumber || null, invoice || null, categoriaAutomatica || null, baseRow.id]
+            [newEntradas, newStock, poNumber || null, invoice || null, categoriaAutomatica || null, heatSql, baseRow.id]
           );
 
           // Eliminar filas "huérfanas" de entradas previas para ese código
@@ -13280,10 +13500,10 @@ app.get('/api/inventario/:id', async (req, res) => {
 
           // Registrar entrada individual en el log de entradas
           await inventarioPool.query(
-            `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE))`,
+            `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha, heat_number)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE), $9)`,
             [productCode, description, addQty, poNumber || null, invoice || null,
-             categoriaAutomatica || null, supplier || null, date || null]
+             categoriaAutomatica || null, supplier || null, date || null, heatSql]
           ).catch(e => logger.warn('[inventario_entrada] No se pudo registrar entrada individual:', e?.message));
 
           return res.status(200).json({ success: true, item: updated.rows[0] });
@@ -13311,9 +13531,9 @@ app.get('/api/inventario/:id', async (req, res) => {
             nombre_completo, stock, pedido_abierto, piezas_pedidas, activo,
             codigo, po, categoria, descripcion, factura, proveedor,
             costo_unitario_mxn, costo_unitario_dlls,
-            stock_inicial, entradas, salidas, uom, categoria_pdm, locacion, id_ingreso
+            stock_inicial, entradas, salidas, uom, categoria_pdm, locacion, id_ingreso, heat_number
          )
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
          RETURNING *`,
         [
           description,
@@ -13335,17 +13555,18 @@ app.get('/api/inventario/:id', async (req, res) => {
           uom || null,
           categoriaPDM || null,
           locacion || null,
-          idIngreso
+          idIngreso,
+          heatSql
         ]
       );
 
       // Registrar en log de entradas individuales (solo para flujo de Entrada, no Base de datos)
       if (!isBaseDatosPayload) {
         await inventarioPool.query(
-          `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE))`,
+          `INSERT INTO inventario_entrada (codigo, descripcion, cantidad, po, factura, categoria, proveedor, fecha, heat_number)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8::date, CURRENT_DATE), $9)`,
           [productCode || null, description, Number(normalizedQuantity || 0),
-           poNumber || null, invoice || null, categoriaAutomatica || null, supplier || null, date || null]
+           poNumber || null, invoice || null, categoriaAutomatica || null, supplier || null, date || null, heatSql]
         ).catch(e => logger.warn('[inventario_entrada] No se pudo registrar entrada individual (insert):', e?.message));
       }
 
@@ -16327,6 +16548,73 @@ app.delete('/api/commodity/:id', async (req, res) => {
   }
 });
 
+// Enviar a (tabla enviar_a)
+app.get('/api/enviar', async (req, res) => {
+  try {
+    const result = await inventarioPool.query(
+      `SELECT id, nombre, direccion, activo FROM enviar_a ORDER BY lower(trim(nombre)) ASC`,
+    );
+    res.json(result.rows);
+  } catch (error) {
+    logger.error('GET /api/enviar error:', { message: error?.message });
+    res.status(500).json({ error: 'Error al leer direcciones enviar_a' });
+  }
+});
+
+app.post('/api/enviar', async (req, res) => {
+  try {
+    const nombre = (req.body.nombre ?? req.body.name ?? '').toString().trim();
+    const direccion = (req.body.direccion ?? req.body.address ?? '').toString().trim();
+    const activo = req.body.activo === undefined ? true : req.body.activo === true || req.body.activo === 'true';
+    if (!nombre) return res.status(400).json({ error: 'nombre requerido' });
+    const insert = await inventarioPool.query(
+      `INSERT INTO enviar_a (nombre, direccion, activo, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW())
+       RETURNING id, nombre, direccion, activo`,
+      [nombre, direccion, activo],
+    );
+    res.json(insert.rows[0]);
+  } catch (error) {
+    logger.error('POST /api/enviar error:', { message: error?.message, code: error?.code });
+    if (error && error.code === '23505')
+      return res.status(409).json({ error: 'Ya existe un destino con ese nombre' });
+    res.status(500).json({ error: 'Error al insertar en enviar_a' });
+  }
+});
+
+app.put('/api/enviar/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'id inválido' });
+    const nombre = (req.body.nombre ?? req.body.name ?? '').toString().trim();
+    const direccion = (req.body.direccion ?? req.body.address ?? '').toString().trim();
+    const activo = req.body.activo === undefined ? true : req.body.activo === true || req.body.activo === 'true';
+    if (!nombre) return res.status(400).json({ error: 'nombre requerido' });
+    await inventarioPool.query(
+      'UPDATE enviar_a SET nombre=$1, direccion=$2, activo=$3, updated_at=NOW() WHERE id=$4',
+      [nombre, direccion, activo, id],
+    );
+    const r = await inventarioPool.query('SELECT id, nombre, direccion, activo FROM enviar_a WHERE id=$1', [id]);
+    res.json(r.rows[0] || {});
+  } catch (error) {
+    logger.error('PUT /api/enviar/:id error:', { message: error?.message, code: error?.code });
+    if (error && error.code === '23505')
+      return res.status(409).json({ error: 'Ya existe un destino con ese nombre' });
+    res.status(500).json({ error: 'Error al actualizar enviar_a' });
+  }
+});
+
+app.delete('/api/enviar/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'id inválido' });
+    await inventarioPool.query('DELETE FROM enviar_a WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error('DELETE /api/enviar/:id error:', { message: error?.message });
+    res.status(500).json({ error: 'Error al eliminar enviar_a' });
+  }
+});
+
 app.delete('/api/linea_producto/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -16452,13 +16740,16 @@ app.listen(port, '0.0.0.0', async () => {
     await ensureComidasTable();
     // Verificar/crear tabla PO
     await ensurePoTable();
+    await ensurePoItemsExtraColumns();
     // Verificar/crear tablas nuevas para UOMs y Línea de producto
     await ensureUomsPycTable();
     await ensureLineaProductoTable();
     await ensureGradoTable();
     await ensureCommodityTable();
+    await ensureEnviarATable();
     // Asegurar tabla para items del modal
     await ensureItemsTable();
+    await ensureInventarioItemIdFk();
     // Asegurar tabla para comunidad (feedback del menú contextual)
     await ensureComunidadTable();
     // Asegurar tabla incapacidades
@@ -16596,7 +16887,11 @@ app.post('/api/po', async (req, res) => {
   try {
     const payload = req.body || {};
     const orden_compra = payload.orden_compra || payload.ordenCompra || null;
-    const proveedor = payload.proveedor != null ? Number(payload.proveedor) : null;
+    let proveedor = null;
+    if (payload.proveedor != null && payload.proveedor !== '') {
+      const pn = Number(payload.proveedor);
+      proveedor = Number.isFinite(pn) ? pn : null;
+    }
     const enviar_a = payload.enviar_a || payload.enviarA || '';
     const locacion = payload.locacion || '';
     const via_despacho = payload.via_despacho || payload.viaDespacho || '';
@@ -16607,14 +16902,87 @@ app.post('/api/po', async (req, res) => {
     const certificado = (typeof payload.certificado === 'boolean') ? payload.certificado : (String(payload.certificado || '').toLowerCase() === 'true');
     const iva = (typeof payload.IVA === 'boolean') ? payload.IVA : (String(payload.IVA || payload.iva || '').toLowerCase() === 'true');
     const creado_por = payload.creado_por || payload.creadoPor || (req.session && req.session.username) || '';
-    const total = payload.total || '';
+
+    let usuario_compra_id = null;
+    if (req.session && req.session.userId != null && req.session.userId !== '') {
+      const uid = Number(req.session.userId);
+      if (Number.isFinite(uid)) usuario_compra_id = uid;
+    }
+    if (usuario_compra_id == null && payload.usuario_compra_id != null && payload.usuario_compra_id !== '') {
+      const uid2 = Number(payload.usuario_compra_id);
+      if (Number.isFinite(uid2)) usuario_compra_id = uid2;
+    }
+    if (usuario_compra_id == null && req.session && req.session.username) {
+      try {
+        const lu = await apoyosPool.query(
+          'SELECT id FROM usuarios WHERE LOWER(TRIM(username)) = LOWER(TRIM($1::text)) LIMIT 1',
+          [String(req.session.username)]
+        );
+        if (lu.rows.length && lu.rows[0].id != null) {
+          const uidLookup = Number(lu.rows[0].id);
+          if (Number.isFinite(uidLookup)) usuario_compra_id = uidLookup;
+        }
+      } catch (eLu) {
+        logger.warn('[POST /api/po] Lookup usuario_compra_id por username:', eLu?.message || eLu);
+      }
+    }
+
+    const tf = (typeof payload.tf === 'boolean')
+      ? payload.tf
+      : (String(payload.tf || '').toLowerCase() === 'true' || payload.tf === 1 || payload.tf === '1');
+
+    let total_numerico = null;
+    const parseMoneyTotal = function(raw){
+      if (raw === undefined || raw === null || raw === '') return null;
+      if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
+      const cleaned = String(raw).replace(/\u00a0/g, ' ').replace(/,/g, '').replace(/^\s*\$\s?/, '').replace(/\s/g, '').trim();
+      const parsed = parseFloat(cleaned);
+      return Number.isFinite(parsed) ? parsed : null;
+    };
+    total_numerico = parseMoneyTotal(payload.total_numerico != null ? payload.total_numerico : payload.totalNumerico);
+    if (total_numerico == null) total_numerico = parseMoneyTotal(payload.total);
+    const rawTotal = payload.total;
+    let total;
+    if (total_numerico != null) {
+      total = Number(total_numerico).toFixed(2);
+    } else {
+      const parsedRt = parseMoneyTotal(rawTotal);
+      total = parsedRt != null ? parsedRt.toFixed(2) : '0.00';
+    }
+
+    const proveedor_nombre = payload.proveedor_nombre || payload.proveedorNombre || null;
+    const proveedor_direccion = payload.proveedor_direccion || payload.proveedorDireccion || null;
+    const proveedor_tipo = payload.proveedor_tipo || payload.proveedorTipo || null;
+    let iva_pct = null;
+    const rawIvaPct = payload.iva_pct != null ? payload.iva_pct : payload.ivaPct;
+    if (rawIvaPct !== undefined && rawIvaPct !== null && rawIvaPct !== '') {
+      const ip = parseFloat(String(rawIvaPct).replace(/%/g, '').trim());
+      if (Number.isFinite(ip)) iva_pct = ip;
+    }
+    let terms_credit_days = null;
+    const rawTermsDays = payload.terms_credit_days != null ? payload.terms_credit_days : payload.termsCreditDays;
+    if (rawTermsDays !== undefined && rawTermsDays !== null && rawTermsDays !== '') {
+      const td = parseInt(String(rawTermsDays).trim(), 10);
+      if (Number.isFinite(td)) terms_credit_days = td;
+    }
+    const enviar_a_direccion = payload.enviar_a_direccion || payload.enviarADireccion || null;
+    const require_confirm_text_snap = payload.require_confirm_text_snap || payload.requireConfirmTextSnap || null;
+    let require_confirm_enabled_snap = true;
+    if (typeof payload.require_confirm_enabled_snap === 'boolean') require_confirm_enabled_snap = payload.require_confirm_enabled_snap;
+    else if (typeof payload.requireConfirmEnabledSnap === 'boolean') require_confirm_enabled_snap = payload.requireConfirmEnabledSnap;
 
     const insertQuery = `
       INSERT INTO po (
-        orden_compra, proveedor, enviar_a, locacion, via_despacho, fecha_po, fecha_requerida, flete, notas, certificado, iva, creado_por, total
-      ) VALUES ($1,$2,$3,$4,$5, COALESCE(NULLIF($6,'')::timestamptz, NOW()), COALESCE(NULLIF($7,'')::timestamptz, NOW()), $8,$9,$10,$11,$12,$13) RETURNING *`;
+        orden_compra, proveedor, enviar_a, locacion, via_despacho, fecha_po, fecha_requerida, flete, notas, certificado, iva, creado_por, total, tf, usuario_compra_id, total_numerico,
+        proveedor_nombre, proveedor_direccion, proveedor_tipo, iva_pct, terms_credit_days, enviar_a_direccion, require_confirm_text_snap, require_confirm_enabled_snap
+      ) VALUES ($1,$2,$3,$4,$5, COALESCE(NULLIF($6,'')::timestamptz, NOW()), COALESCE(NULLIF($7,'')::timestamptz, NOW()), $8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24) RETURNING *`;
 
-    const values = [orden_compra, proveedor, enviar_a, locacion, via_despacho, fecha_po || null, fecha_requerida || null, flete, notas, certificado, iva, creado_por, total];
+    const values = [
+      orden_compra, proveedor, enviar_a, locacion, via_despacho, fecha_po || null, fecha_requerida || null,
+      flete, notas, certificado, iva, creado_por, total, tf, usuario_compra_id, total_numerico,
+      proveedor_nombre, proveedor_direccion, proveedor_tipo, iva_pct, terms_credit_days,
+      enviar_a_direccion, require_confirm_text_snap, require_confirm_enabled_snap
+    ];
     // Log para depuración: mostrar payload y valores que se van a insertar
     logger.info('[POST /api/po] payload:', { payload: payload });
     logger.info('[POST /api/po] db values:', { values: values });
@@ -16625,6 +16993,56 @@ app.post('/api/po', async (req, res) => {
     return res.status(500).json({ success: false, error: 'Error al guardar PO', details: err?.message || String(err) });
   }
 });
+
+async function syncPoTotalsFromLineItems(pool, poId) {
+  try {
+    const pid = Number(poId);
+    if (!Number.isFinite(pid)) return;
+
+    const poRes = await pool.query(
+      `SELECT id, flete, iva_pct FROM po WHERE id = $1`,
+      [pid]
+    );
+    if (!poRes.rows.length) return;
+
+    const sumRes = await pool.query(
+      `SELECT COALESCE(SUM(
+         COALESCE(line_extended_numeric::numeric, quantity::numeric * COALESCE(unit_price::numeric, 0))
+       ), 0)::numeric AS subtotal
+       FROM po_items WHERE po_id = $1`,
+      [pid]
+    );
+    const sub = sumRes.rows[0] && sumRes.rows[0].subtotal != null
+      ? Number(sumRes.rows[0].subtotal)
+      : 0;
+
+    const prow = poRes.rows[0];
+    let fleteNum = 0;
+    const fleteRaw = prow.flete;
+    if (fleteRaw != null && String(fleteRaw).trim() !== '') {
+      const fn = Number(fleteRaw);
+      if (Number.isFinite(fn)) fleteNum = fn;
+      else {
+        const cleaned = String(fleteRaw).replace(/\u00a0/g, '').replace(/,/g, '').replace(/^\s*\$\s?/, '').replace(/\s/g, '').trim();
+        const fp = parseFloat(cleaned);
+        if (Number.isFinite(fp)) fleteNum = fp;
+      }
+    }
+
+    let pct = prow.iva_pct != null ? Number(prow.iva_pct) : 0;
+    if (!Number.isFinite(pct) || pct < 0) pct = 0;
+    const ivaAmt = pct > 0 ? Math.round(sub * (pct / 100) * 100) / 100 : 0;
+    const grand = Math.round((sub + ivaAmt + fleteNum) * 100) / 100;
+    const grandStr = grand.toFixed(2);
+
+    await pool.query(
+      `UPDATE po SET total_numerico = $1::numeric, total = $2 WHERE id = $3`,
+      [grandStr, grandStr, pid]
+    );
+  } catch (e) {
+    logger.warn('[syncPoTotalsFromLineItems] po_id=', poId, e?.message || e);
+  }
+}
 
 // Endpoint para crear uno o varios items asociados a una PO
 app.post('/api/po_items', async (req, res) => {
@@ -16647,13 +17065,29 @@ app.post('/api/po_items', async (req, res) => {
       const currency = it.currency || 'USD';
       const status = it.status || 'pending';
       const creado_por = it.creado_por || it.creadoPor || (req.session && req.session.username) || '';
+      const uom = it.uom || it.um || it.UOM || null;
+      const belongs_to = it.belongs_to || it.belongsTo || null;
+      let line_extended_numeric = null;
+      const ql = Number(it.quantity);
+      const up = Number(it.unit_price);
+      if (Number.isFinite(ql) && Number.isFinite(up)) line_extended_numeric = ql * up;
 
-      const q = `INSERT INTO po_items (po_id, line_number, part_number, description, quantity, unit_price, currency, status, creado_por, created_at, updated_at)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW(),NOW()) RETURNING *`;
-      const vals = [po_id, line_number, part_number, description, quantity, unit_price, currency, status, creado_por];
+      const q = `INSERT INTO po_items (po_id, line_number, part_number, description, quantity, unit_price, currency, status, creado_por, uom, belongs_to, line_extended_numeric, created_at, updated_at)
+                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW(),NOW()) RETURNING *`;
+      const vals = [po_id, line_number, part_number, description, quantity, unit_price, currency, status, creado_por, uom, belongs_to, line_extended_numeric];
       const r = await inventarioPool.query(q, vals);
       inserted.push(r.rows[0]);
     }
+
+    const poIdsToSync = [...new Set(
+      items
+        .map((it) => Number(it.po_id || it.poId))
+        .filter((id) => Number.isFinite(id))
+    )];
+    for (let si = 0; si < poIdsToSync.length; si += 1) {
+      await syncPoTotalsFromLineItems(inventarioPool, poIdsToSync[si]);
+    }
+
     await inventarioPool.query('COMMIT');
     return res.json({ success: true, inserted });
   } catch (err) {
@@ -16665,29 +17099,84 @@ app.post('/api/po_items', async (req, res) => {
 
 // Endpoint para crear items genéricos desde el modal de Items
 app.post('/api/items', async (req, res) => {
-  try {
-    const body = req.body || {};
-    const codigo = body.codigo || body.code || null;
-    const descripcion = body.descripcion || body.description || '';
-    const uom = body.uom || null;
-    const commodity = body.commodity || null;
-    const grado = body.grado || null;
-    const cfdi = body.cfdi || null;
-    const categoria = body.categoria || null;
-    const created_by = req.session && req.session.userId ? Number(req.session.userId) : null;
+  const body = req.body || {};
+  const codigo = body.codigo || body.code || null;
+  const descripcion = body.descripcion || body.description || '';
+  const uom = body.uom || null;
+  const commodity = body.commodity || null;
+  const grado = body.grado || null;
+  const cfdi = body.cfdi || null;
+  const categoria = body.categoria || null;
+  const created_by = req.session && req.session.userId ? Number(req.session.userId) : null;
 
-    if (!descripcion && !codigo) {
-      return res.status(400).json({ error: 'descripcion o codigo requerido' });
+  if (!descripcion && !codigo) {
+    return res.status(400).json({ error: 'descripcion o codigo requerido' });
+  }
+
+  const insertQ = `INSERT INTO items (codigo, descripcion, uom, commodity, grado, cfdi, categoria, created_by, created_at)
+                   VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW()) RETURNING *`;
+  const vals = [codigo, descripcion, uom, commodity, grado, cfdi, categoria, created_by];
+
+  const client = await inventarioPool.connect();
+  try {
+    await client.query('BEGIN');
+    const result = await client.query(insertQ, vals);
+    const row = result.rows[0];
+    const itemId = row && row.id;
+    if (!itemId) {
+      throw new Error('No se obtuvo id del item insertado');
     }
 
-    const insertQ = `INSERT INTO items (codigo, descripcion, uom, commodity, grado, cfdi, categoria, created_by, created_at)
-                     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW()) RETURNING *`;
-    const vals = [codigo, descripcion, uom, commodity, grado, cfdi, categoria, created_by];
-    const result = await inventarioPool.query(insertQ, vals);
-    return res.json(result.rows[0]);
+    const nombreCompletoRaw = String(descripcion || '').trim() || String(codigo || '').trim() || 'Sin nombre';
+    const idIngreso = `ITEM-CAT-${itemId}-${Date.now()}`;
+
+    await client.query(
+      `INSERT INTO inventario (
+          nombre_completo, stock, pedido_abierto, piezas_pedidas, activo,
+          codigo, po, categoria, descripcion, factura, proveedor,
+          costo_unitario_mxn, costo_unitario_dlls,
+          stock_inicial, entradas, salidas, uom, categoria_pdm, locacion, id_ingreso, heat_number, item_id
+       )
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
+       RETURNING id`,
+      [
+        nombreCompletoRaw,
+        0,
+        false,
+        0,
+        true,
+        codigo || null,
+        null,
+        categoria || null,
+        descripcion || null,
+        null,
+        null,
+        null,
+        null,
+        0,
+        0,
+        0,
+        uom || null,
+        null,
+        null,
+        idIngreso,
+        null,
+        itemId,
+      ],
+    );
+
+    await client.query('COMMIT');
+    return res.json(row);
   } catch (err) {
+    try {
+      await client.query('ROLLBACK');
+    } catch (rbErr) {
+      logger.warn('[POST /api/items] ROLLBACK:', rbErr?.message || rbErr);
+    }
     logger.error('[POST /api/items] Error insertando item:', err?.message || err);
     return res.status(500).json({ error: 'Error al guardar item', details: err?.message || String(err) });
+  } finally {
+    client.release();
   }
 });
 
@@ -16710,6 +17199,21 @@ app.put('/api/items/:id', async (req, res) => {
     const vals = [codigo, descripcion, uom, commodity, grado, cfdi, categoria, id];
     const r = await inventarioPool.query(q, vals);
     if (!r.rows || !r.rows.length) return res.status(404).json({ error: 'Item no encontrado' });
+    try {
+      const nombreLista = String(descripcion || '').trim() || String(codigo || '').trim() || null;
+      await inventarioPool.query(
+        `UPDATE inventario SET
+           codigo = $1,
+           descripcion = $2,
+           nombre_completo = COALESCE($3, nombre_completo),
+           uom = $4,
+           categoria = $5
+         WHERE item_id = $6`,
+        [codigo, descripcion || null, nombreLista, uom, categoria || null, id],
+      );
+    } catch (syncErr) {
+      logger.warn('[PUT /api/items/:id] sync inventario:', syncErr?.message || syncErr);
+    }
     return res.json(r.rows[0]);
   } catch (err) {
     logger.error('[PUT /api/items/:id] Error actualizando item:', err?.message || err);
@@ -16804,10 +17308,10 @@ app.get('/api/po_items', async (req, res) => {
   }
 });
 
-  // Obtener POs con filtros opcionales: id, orden_compra (busqueda parcial), proveedor, rango de fechas, paginación
+  // Obtener POs con filtros opcionales: id, orden_compra (busqueda parcial), proveedor, tf, rango de fechas, paginación
   app.get('/api/po', async (req, res) => {
     try {
-      const { id, orden_compra, proveedor, inicio, fin, limit, offset } = req.query;
+      const { id, orden_compra, proveedor, tf, inicio, fin, limit, offset } = req.query;
 
       let query = 'SELECT * FROM PO WHERE 1=1';
       const params = [];
@@ -16826,6 +17330,12 @@ app.get('/api/po_items', async (req, res) => {
       if (proveedor) {
         query += ` AND proveedor = $${i++}`;
         params.push(proveedor);
+      }
+
+      if (tf !== undefined && tf !== '') {
+        const tfBool = String(tf).toLowerCase() === 'true' || tf === '1';
+        query += ` AND tf = $${i++}`;
+        params.push(tfBool);
       }
 
       if (inicio) {
@@ -16851,10 +17361,66 @@ app.get('/api/po_items', async (req, res) => {
       }
 
       const result = await inventarioPool.query(query, params);
-      return res.json({ success: true, rows: result.rows });
+      const rows = Array.isArray(result.rows) ? result.rows : [];
+
+      const userIds = [...new Set(
+        rows.map((r) => r.usuario_compra_id).filter((id) => id != null && String(id).trim() !== '')
+      )].map((id) => Number(id)).filter((id) => Number.isFinite(id));
+
+      if (userIds.length) {
+        try {
+          const ures = await apoyosPool.query(
+            'SELECT id, nombre_completo, username FROM usuarios WHERE id = ANY($1::int[])',
+            [userIds]
+          );
+          const byId = {};
+          ures.rows.forEach((u) => {
+            byId[u.id] = u;
+          });
+          rows.forEach((row) => {
+            const uid = row.usuario_compra_id != null ? Number(row.usuario_compra_id) : null;
+            if (!Number.isFinite(uid)) return;
+            const u = byId[uid];
+            if (u) {
+              row.comprador_nombre = u.nombre_completo || null;
+              row.comprador_username = u.username || null;
+            }
+          });
+        } catch (enrichErr) {
+          logger.warn('[GET /api/po] Enriquecimiento usuarios:', enrichErr?.message || enrichErr);
+        }
+      }
+
+      return res.json({ success: true, rows });
     } catch (err) {
       logger.error('[GET /api/po] Error al obtener POs:', err?.message || err);
       return res.status(500).json({ success: false, error: 'Error al obtener POs', details: err?.message || String(err) });
+    }
+  });
+
+  // Eliminar PO y sus partidas (po_items)
+  app.delete('/api/po/:id', async (req, res) => {
+    const rawId = req.params.id;
+    const poId = Number(rawId);
+    if (!Number.isFinite(poId)) {
+      return res.status(400).json({ success: false, error: 'id inválido' });
+    }
+    const client = await inventarioPool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query('DELETE FROM po_items WHERE po_id = $1', [poId]);
+      const del = await client.query('DELETE FROM po WHERE id = $1 RETURNING id', [poId]);
+      await client.query('COMMIT');
+      if (!del.rows.length) {
+        return res.status(404).json({ success: false, error: 'PO no encontrada' });
+      }
+      return res.json({ success: true, id: poId });
+    } catch (err) {
+      try { await client.query('ROLLBACK'); } catch (e) { /* ignore */ }
+      logger.error('[DELETE /api/po/:id]', err?.message || err);
+      return res.status(500).json({ success: false, error: 'Error al eliminar PO', details: err?.message || String(err) });
+    } finally {
+      client.release();
     }
   });
 
@@ -20096,10 +20662,15 @@ app.put('/api/inventario/:id', async (req, res) => {
     salidas,
     uom,
     categoria_pdm,
-    locacion
+    locacion,
+    heat_number,
+    heatNumber
   } = req.body || {};
   
   try {
+    const heatVal = heat_number != null && String(heat_number).trim() !== ''
+      ? String(heat_number).trim()
+      : (heatNumber != null && String(heatNumber).trim() !== '' ? String(heatNumber).trim() : null);
     const result = await inventarioPool.query(
       `UPDATE inventario SET 
           nombre_completo = COALESCE($1, nombre_completo),
@@ -20121,8 +20692,9 @@ app.put('/api/inventario/:id', async (req, res) => {
           uom = COALESCE($17, uom),
           categoria_pdm = COALESCE($18, categoria_pdm),
           locacion = COALESCE($19, locacion),
+          heat_number = COALESCE($20, heat_number),
           updated_at = NOW()
-       WHERE id = $20 RETURNING *`,
+       WHERE id = $21 RETURNING *`,
       [
         nombre_completo,
         stock,
@@ -20143,6 +20715,7 @@ app.put('/api/inventario/:id', async (req, res) => {
         uom,
         categoria_pdm,
         locacion,
+        heatVal,
         id
       ]
     );

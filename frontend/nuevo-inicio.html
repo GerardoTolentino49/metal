@@ -64,7 +64,7 @@
 			.user-menu li.danger{color:#dc2626;font-weight:700}
 			.apps-list{display:flex;flex-direction:column;flex:1;min-height:0;overflow:auto;padding-right:6px}
 			.sidebar-inner{display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:0}
-		.app-link{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;color:var(--muted);text-decoration:none;position:relative}
+		.app-link{display:flex;align-items:center;gap:10px;padding:10px;border-radius:30px;color:var(--muted);text-decoration:none;position:relative}
 		.app-link.active { background: rgba(15,23,42,0.06); color: #0b1220; font-weight:700; }
 		.app-link .icon{width:36px;height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fff,#f2f5ff);box-shadow:0 4px 12px rgba(12,24,60,0.06)}
 		.app-link:hover{background:rgba(0,0,0,0.02);color:#111827}
@@ -79,7 +79,7 @@
 			transform:translateY(-50%);
 			background:#c43a3a; /* red badge */
 			color:#fff;
-			width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 4px 10px rgba(196,58,58,0.22)
+			width:20px;height:20px;border-radius:999px;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 4px 10px rgba(196,58,58,0.22)
 		}
 
 				.main{padding-top:80px;margin-left:calc(var(--sidebar-width) + 40px)}
@@ -536,18 +536,19 @@
 
 	/* Pill logo (fixed top) */
 	#pill-logo{
-		position:fixed;
-		top:14px;
-		left:50%;
-		transform:translateX(-50%);
-		z-index:20; /* lower than .sidebar (z-index:30) */
-		display:flex;
-		align-items:center;
-		gap:10px;
-		padding:8px 14px;
-		border-radius:999px;
-		-webkit-backdrop-filter: blur(5px);
-	}
+			position:fixed;
+			top:14px;
+			left:50%;
+			transform:translateX(-50%);
+			z-index:20; /* lower than .sidebar (z-index:30) */
+			display:flex;
+			align-items:center;
+			gap:10px;
+			padding:8px 14px;
+			cursor: pointer;
+			border-radius:999px;
+			-webkit-backdrop-filter: blur(5px);
+		}
 	#pill-logo img{height:44px;width:auto;display:block;border-radius:999px;object-fit:contain}
 	@media(max-width:900px){
 		#pill-logo{top:10px;padding:6px 10px}
@@ -1667,6 +1668,7 @@
 	</style>
 	</head>
 	<body>
+	<script src="js/global-color.js"></script>
 
   <!-- ===== BOTÓN DE NOTIFICACIONES (esquina superior derecha, igual que inicio.html) ===== -->
   <div style="position:fixed; top:5px; right:5px; display: flex; gap: 5px; z-index:1350;">
@@ -1735,9 +1737,9 @@
   <!-- ===== FIN PANEL LATERAL DE AYUDA ===== -->
 
 	<!-- Pill logo: fixed at top with backdrop blur -->
-	<div id="pill-logo" aria-hidden="false">
-		<img src="fotos/New-IMAGE.png" alt="New Logo" onerror="this.style.opacity=0.6;console.warn('Image load failed:', this.src)">
-	</div>
+		<div id="pill-logo" aria-hidden="false" role="button" tabindex="0" title="Ir arriba">
+				<img src="fotos/New-IMAGE.png" alt="New Logo" onerror="this.style.opacity=0.6;console.warn('Image load failed:', this.src)">
+		</div>
 	<button id="sidebar-toggle" aria-label="Alternar sidebar" aria-expanded="true">‹</button>
 	<div class="wrap">
 		<aside class="sidebar">
@@ -1795,16 +1797,29 @@
 		<section id="updates-panel" class="section updates-panel" style="display:none">
 			<div id="modules-embed" style="margin-bottom:22px"></div>
 
+					<div id="update-card-4" class="update-card" role="button" tabindex="0" style="margin-bottom:12px">
+						<div style="flex:1;display:flex;flex-direction:column;">
+							<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+								<h3>Versión 3.1</h3>
+								<span class="update-badge">Importante</span>
+							</div>
+							<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento de la versión 3.1 — Incluye mejoras, correcciones y cambios críticos.</p>
+							<button id="update-details-btn-3" class="details-btn" type="button">Ver detalles</button>
+						</div>
+					</div>
+
 				<div id="update-card-4" class="update-card" role="button" tabindex="0" style="margin-bottom:12px">
 						<div style="flex:1;display:flex;flex-direction:column;">
 							<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
 								<h3>Versión 3.0</h3>
 								<span class="update-badge">Importante</span>
 							</div>
-							<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento inicial de la versión 3.0 — incluye mejoras, correcciones y cambios críticos.</p>
+							<p style="margin:0;color:rgba(2,6,23,0.7)">Lanzamiento inicial de la versión 3.0 — Incluye mejoras, correcciones y cambios críticos.</p>
 							<button id="update-details-btn-3" class="details-btn" type="button">Ver detalles</button>
 						</div>
 					</div>
+
+
 				<div id="update-card-3" class="update-card" role="button" tabindex="0">
 					<div style="flex:1;display:flex;flex-direction:column;">
 						<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
@@ -1984,42 +1999,83 @@
 			<section class="section">
 				<h3 class="section-title">Comidas</h3>
 				<div class="explore-grid">
-					<a class="ex-card card-comidas" href="comida.html" data-permission="show_comidas">
-						<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">restaurant</span></div>
-						<div style="display:flex;flex-direction:column;gap:6px">
-							<div style="font-weight:700">Registro de comidas</div>
-							<div style="color:#000000;font-size:12px">Consulta y registra tus comidas de la semana.</div>
-					<span class="agenda-count" id="weeklyMealsCount" style="font-size:28px;display:none;font-weight:800;color:var(--card-text)">0</span>
+				<a class="ex-card card-comidas" href="comida.html" data-permission="show_comidas">
+					<div class="thumb"><span class="material-symbols-rounded" style="font-size:20px">restaurant</span></div>
+					<div style="display:flex;flex-direction:column;gap:6px">
+						<div style="font-weight:700">Registro de comidas</div>
+						<div style="color:#000000;font-size:12px">Comidas registradas esta semana</div>
+						<span class="agenda-count" id="weeklyMealsCount" style="font-size:28px;font-weight:800;color:var(--card-text)">0</span>
 					</div>
 				</a>
 			</div>
 		</div>
 
-		<script>
-			document.addEventListener('DOMContentLoaded', function(){
-				var navPersonal = document.getElementById('nav-personal');
-				var explore = document.getElementById('inicio-explore-sections');
-				var cargo = document.getElementById('tableroCargoSection');
-				if(!navPersonal) return;
-				navPersonal.addEventListener('click', function(e){
-					e.preventDefault();
-					if(!explore || !cargo) return;
-					var cargoHidden = cargo.hidden || cargo.getAttribute('aria-hidden') === 'true';
-					if (cargoHidden) {
-						explore.style.display = 'none';
-						cargo.hidden = false;
-						cargo.setAttribute('aria-hidden','false');
-						cargo.style.display = 'flex';
-						cargo.style.flexDirection = 'column';
-					} else {
-						explore.style.display = '';
-						cargo.hidden = true;
-						cargo.setAttribute('aria-hidden','true');
-						cargo.style.display = 'none';
-					}
-				});
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			var navPersonal = document.getElementById('nav-personal');
+			var explore = document.getElementById('inicio-explore-sections');
+			var cargo = document.getElementById('tableroCargoSection');
+			if(!navPersonal) return;
+			navPersonal.addEventListener('click', function(e){
+				e.preventDefault();
+				if(!explore || !cargo) return;
+				var cargoHidden = cargo.hidden || cargo.getAttribute('aria-hidden') === 'true';
+				if (cargoHidden) {
+					explore.style.display = 'none';
+					cargo.hidden = false;
+					cargo.setAttribute('aria-hidden','false');
+					cargo.style.display = 'flex';
+					cargo.style.flexDirection = 'column';
+				} else {
+					explore.style.display = '';
+					cargo.hidden = true;
+					cargo.setAttribute('aria-hidden','true');
+					cargo.style.display = 'none';
+				}
 			});
-			</script>
+		});
+
+		// Contador de comidas de la semana
+		document.addEventListener('DOMContentLoaded', function() {
+			function _getWeekRange() {
+				var today = new Date();
+				var day = today.getDay();
+				var diff = day === 0 ? -6 : 1 - day;
+				var monday = new Date(today);
+				monday.setHours(0,0,0,0);
+				monday.setDate(today.getDate() + diff);
+				var sunday = new Date(monday);
+				sunday.setDate(monday.getDate() + 6);
+				function _fmt(d) {
+					return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+				}
+				return { inicio: _fmt(monday), fin: _fmt(sunday) };
+			}
+
+			(async function() {
+				var el = document.getElementById('weeklyMealsCount');
+				if (!el) return;
+				try {
+					var raw = localStorage.getItem('loggedInUser');
+					var uname = (localStorage.getItem('username') || '').trim();
+					if (raw) {
+						try {
+							var u = JSON.parse(raw);
+							uname = (u.username || u.employeeNumber || uname || '').toString().trim();
+						} catch(_) {}
+					}
+					var range = _getWeekRange();
+					var url = '/api/comidas/semana-usuario?inicio=' + encodeURIComponent(range.inicio) + '&fin=' + encodeURIComponent(range.fin) + '&username=' + encodeURIComponent(uname);
+					var resp = await fetch(url, { credentials: 'include' });
+					if (!resp.ok) throw new Error('HTTP ' + resp.status);
+					var data = await resp.json();
+					el.textContent = String(Number(data.total) || 0);
+				} catch(err) {
+					console.error('comidas semana error:', err);
+				}
+			})();
+		});
+		</script>
 				<section id="tableroCargoSection" class="inicio-tablero-view inicio-cargo-grid" aria-label="Tablero de personal a cargo" hidden aria-hidden="true">
 				<article class="cargo-resumen-card" id="cargoResumenCard" role="button" tabindex="0" aria-label="Ver lista de empleados">
 				<h3 style="color: black;">Empleados asignados</h3>
@@ -3098,6 +3154,7 @@
 					document.querySelectorAll('.app-link').forEach(a => a.classList.toggle('active', a === link));
 				});
 			})();
+			
 
 			// Modal: details for the update
 				(function(){
@@ -3280,14 +3337,18 @@
 		.panel-section { background: #f8fafc; padding: 12px; border-radius: 30px; margin-bottom: 12px; color: #0b1220; border: 1px solid #eef2f7; }
 		.panel-section h4 { margin: 0 0 8px 0; color: #0b1220; }
 
-		:root { --user-accent: #06b6d4; }
+		:root { --user-accent: #b8eaf4; }
 
 		/* Color palette and language selector */
 		.color-palette { display:flex; gap:8px; flex-wrap:wrap; }
 		.color-swatch {
 			width:34px; height:34px; border-radius:8px; border:2px solid rgba(15,23,42,0.06); cursor:pointer; box-shadow: 0 6px 12px rgba(2,6,23,0.04);
 		}
-		.color-swatch.selected { outline: 3px solid rgba(6,182,212,0.16); transform: translateY(-2px); }
+		.color-swatch.selected {
+			outline: 2px solid var(--user-accent);
+			box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+			transform: translateY(-2px);
+		}
 
 		.language-toggle { display:flex; align-items:center; gap:12px; }
 		.language-toggle label { cursor:pointer; font-weight:600; color:#0b1220; }
@@ -3346,9 +3407,9 @@
 		<div class="user-panel" role="document">
 			<nav class="user-panel-nav" aria-label="Navegación de perfil">
 				<div class="nav-title">Configuración</div>
-				<button class="nav-item active" data-section="general"><i class="fas fa-cog"></i> General</button>
-				<button class="nav-item" data-section="data"><i class="fas fa-database"></i> Controles de datos</button>
+					<!-- <button class="nav-item active" data-section="general"><i class="fas fa-cog"></i> General</button> -->
 					<button class="nav-item" data-section="personalizacion"><i class="fas fa-paint-roller"></i> Personalización</button>
+					<button class="nav-item" data-section="data"><i class="fas fa-database"></i> Controles de datos</button>
 					<button class="nav-item" data-section="personal"><i class="fas fa-key"></i> Contraseña</button>
 			</nav>
 			<div class="user-panel-body">
@@ -3356,62 +3417,62 @@
 				<div class="user-panel-header">
 					</div>
 					<div id="userPanelContent">
-					<!-- Sección General: foto centrada, nombre, puesto, fecha de ingreso y años de servicio -->
-					<div class="panel-section user-general" data-section-content="general" data-joined="2018-06-15" data-role="IT">
-						<div class="user-general-profile">
-							<div id="userGeneralAvatar" class="user-general-avatar">GJ</div>
-							<div id="userGeneralName" class="user-general-name">Gerardo</div>
-							<div id="userGeneralRole" class="user-general-role">IT</div>
-						</div>
-						<div class="user-general-stats" style="display:none;">
-							<div class="stat">
-								<div class="stat-value" id="user-joined-date">15/06/2018</div>
-								<div class="stat-label">Fecha de ingreso</div>
+						<!-- Sección General: foto centrada, nombre, puesto, fecha de ingreso y años de servicio
+						<div class="panel-section user-general" data-section-content="general" data-joined="2018-06-15" data-role="IT">
+							<div class="user-general-profile">
+								<div id="userGeneralAvatar" class="user-general-avatar">GJ</div>
+								<div id="userGeneralName" class="user-general-name">Gerardo</div>
+								<div id="userGeneralRole" class="user-general-role">IT</div>
 							</div>
-							<div class="stat">
-								<div class="stat-value" id="user-years-service">8 años</div>
-								<div class="stat-label">Años de servicio</div>
+							<div class="user-general-stats" style="display:none;">
+								<div class="stat">
+									<div class="stat-value" id="user-joined-date">15/06/2018</div>
+									<div class="stat-label">Fecha de ingreso</div>
+								</div>
+								<div class="stat">
+									<div class="stat-value" id="user-years-service">8 años</div>
+									<div class="stat-label">Años de servicio</div>
+								</div>
 							</div>
-						</div>
-					</div>
+						</div> -->
 
-					<div class="panel-section" data-section-content="data" style="display:none;">
-						<h4>Controles de datos</h4>
-						<p style="margin:0;">Configuraciones relacionadas con datos y privacidad.</p>
-					</div>
+						<div class="panel-section" data-section-content="data" style="display:none;">
+							<h4>Controles de datos</h4>
+							<p style="margin:0;">Configuraciones relacionadas con datos y privacidad.</p>
+						</div>
 
-					<div class="panel-section" data-section-content="personalizacion" style="display:none;">
-						<h4>Personalización</h4>
-						<div style="margin-top:8px;">
-							<div style="font-weight:700; margin-bottom:6px;">Color</div>
-							<div id="colorPalette" class="color-palette">
-								<button class="color-swatch" data-color-key="teal" title="Teal" style="background:#06b6d4"></button>
-								<button class="color-swatch" data-color-key="red" title="Rojo" style="background:#ef4444"></button>
-								<button class="color-swatch" data-color-key="green" title="Verde" style="background:#10b981"></button>
-								<button class="color-swatch" data-color-key="purple" title="Morado" style="background:#7c3aed"></button>
-								<button class="color-swatch" data-color-key="amber" title="Ambar" style="background:#f59e0b"></button>
+						<div class="panel-section" data-section-content="personalizacion" style="display:none;">
+							<h4>Personalización</h4>
+							<div style="margin-top:8px;">
+								<div style="font-weight:700; margin-bottom:6px;">Color</div>
+								<div id="colorPalette" class="color-palette">
+									<button type="button" class="color-swatch" data-color-key="teal" data-color="#b8eaf4" data-name="Celeste pastel" title="Celeste pastel" style="background:#b8eaf4"></button>
+									<button type="button" class="color-swatch" data-color-key="red" data-color="#ffc9cf" data-name="Coral pastel" title="Coral pastel" style="background:#ffc9cf"></button>
+									<button type="button" class="color-swatch" data-color-key="green" data-color="#bff0d8" data-name="Menta pastel" title="Menta pastel" style="background:#bff0d8"></button>
+									<button type="button" class="color-swatch" data-color-key="purple" data-color="#e4dcff" data-name="Lavanda pastel" title="Lavanda pastel" style="background:#e4dcff"></button>
+									<button type="button" class="color-swatch" data-color-key="amber" data-color="#ffecc4" data-name="Melocotón pastel" title="Melocotón pastel" style="background:#ffecc4"></button>
+								</div>
 							</div>
-						</div>
-						<div style="margin-top:14px;">
-							<div style="font-weight:700; margin-bottom:6px;">Idioma</div>
-							<div class="language-toggle">
-								<label><input type="radio" name="userLang" value="es"> Español</label>
-								<label><input type="radio" name="userLang" value="en"> English</label>
+							<div style="margin-top:14px;">
+								<div style="font-weight:700; margin-bottom:6px;">Idioma</div>
+								<div class="language-toggle">
+									<label><input type="radio" name="userLang" value="es"> Español</label>
+									<label><input type="radio" name="userLang" value="en"> English</label>
+								</div>
 							</div>
-						</div>
-						<div style="margin-top:14px;">
-							<div style="font-weight:700; margin-bottom:6px;">Tema</div>
-							<div style="display:flex;align-items:center;gap:12px;">
-								<label class="theme-switch-label">Claro</label>
-								<label class="switch" style="display:inline-block;">
-									<input id="themeSwitch" type="checkbox">
-									<span class="slider" style="display:inline-block;width:44px;height:24px;background:#ccc;border-radius:24px;position:relative;vertical-align:middle;cursor:pointer;transition:.18s">
-										<span style="position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 2px rgba(0,0,0,0.2)"></span>
-									</span>
-								</label>
-								<label class="theme-switch-label">Oscuro</label>
+							<div style="margin-top:14px;display:none;">
+								<div style="font-weight:700; margin-bottom:6px;">Tema</div>
+								<div style="display:flex;align-items:center;gap:12px;">
+									<label class="theme-switch-label">Claro</label>
+									<label class="switch" style="display:inline-block;">
+										<input id="themeSwitch" type="checkbox">
+										<span class="slider" style="display:inline-block;width:44px;height:24px;background:#ccc;border-radius:24px;position:relative;vertical-align:middle;cursor:pointer;transition:.18s">
+											<span style="position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 2px rgba(0,0,0,0.2)"></span>
+										</span>
+									</label>
+									<label class="theme-switch-label">Oscuro</label>
+								</div>
 							</div>
-						</div>
 					</div>
 
 					<div class="panel-section" data-section-content="personal" style="display:none;">
@@ -3523,7 +3584,6 @@
 
 				// Helper: fetch employees hierarchy for a supervisor (copied logic from inicio.html)
 				async function cargoFetchEmployeesHierarchy(supervisorName) {
-					console.log('[cargo][hierarchy] inicio búsqueda jerarquía', { supervisorName });
 					const queue = [supervisorName];
 					const visitedSupervisors = new Set();
 					const visitedEmployees = new Set();
@@ -3539,15 +3599,12 @@
 						visitedSupervisors.add(supervisorKey);
 
 						try {
-						console.log('[cargo][hierarchy] consultando supervisor', { currentSupervisor, queueLength: queue.length });
 						let directEmployees = [];
 						try {
-							console.log('[cargo][hierarchy] GET /api/empleados/por-supervisor', { currentSupervisor });
 							const response = await fetch(`/api/empleados/por-supervisor/${encodeURIComponent(currentSupervisor)}`);
 							if (response && response.ok) {
 								directEmployees = await response.json();
 								if (!Array.isArray(directEmployees)) directEmployees = [];
-								console.log('[cargo][hierarchy] respuesta por-supervisor OK', { currentSupervisor, count: directEmployees.length });
 							} else {
 								console.warn('[cargo][hierarchy] por-supervisor no OK', { currentSupervisor, status: response && response.status });
 							}
@@ -3559,7 +3616,6 @@
 						// Fallback: si no encontramos empleados con la ruta específica, intentar cargar todos y filtrar localmente
 						if ((!Array.isArray(directEmployees) || directEmployees.length === 0) && currentSupervisor) {
 							try {
-								console.log('[cargo][hierarchy] fallback GET /api/empleados/todos', { currentSupervisor });
 								const allResp = await fetch('/api/empleados/todos');
 								if (allResp && allResp.ok) {
 									const allEmployees = await allResp.json();
@@ -3570,7 +3626,6 @@
 										return words.every(w => sup.indexOf(w) !== -1);
 									});
 									if (filtered.length > 0) directEmployees = filtered;
-									console.log('[cargo][hierarchy] fallback filtrado', { currentSupervisor, totalGlobal: Array.isArray(allEmployees) ? allEmployees.length : 0, filtrados: filtered.length });
 								}
 							} catch (errFallback) {
 								console.warn('[cargo][hierarchy] fallback falló', { currentSupervisor, errFallback });
@@ -3592,8 +3647,6 @@
 							console.error(`Error al cargar jerarquía para supervisor ${currentSupervisor}:`, error);
 						}
 					}
-
-					console.log('[cargo][hierarchy] fin búsqueda jerarquía', { supervisorName, totalEmployees: allEmployees.length });
 					return allEmployees;
 				}
 
@@ -3668,40 +3721,32 @@
 				  };
 				}
 
-				async function cargarComidasSemana() {
-				  const countElement = document.getElementById('weeklyMealsCount');
-				  if (!countElement) {
-				    return;
-				  }
-
-				  try {
-				    const { inicio, fin } = getCurrentWeekRange();
-				    const loggedInRaw = localStorage.getItem('loggedInUser');
-				    const fallbackUsername = (localStorage.getItem('username') || '').toString().trim();
-				    let username = fallbackUsername;
-
-				    if (loggedInRaw) {
-				      try {
-				        const user = JSON.parse(loggedInRaw);
-				        username = (user?.username || user?.employeeNumber || fallbackUsername || '').toString().trim();
-				      } catch (_) {}
-				    }
-
-				    const response = await fetch(`/api/comidas/semana-usuario?inicio=${encodeURIComponent(inicio)}&fin=${encodeURIComponent(fin)}&username=${encodeURIComponent(username)}`);
-
-				    if (!response.ok) {
-				      throw new Error('No se pudo obtener comidas de la semana');
-				    }
-
-				    const payload = await response.json();
-				    const weeklyTotal = Number(payload?.total) || 0;
-
-				    countElement.textContent = String(weeklyTotal);
-				  } catch (error) {
-				    console.error('Error al cargar comidas de la semana:', error);
-				    countElement.textContent = '0';
-				  }
+			async function cargarComidasSemana() {
+				const countElement = document.getElementById('weeklyMealsCount');
+				if (!countElement) return;
+				try {
+					const { inicio, fin } = getCurrentWeekRange();
+					const loggedInRaw = localStorage.getItem('loggedInUser');
+					const fallbackUsername = (localStorage.getItem('username') || window.currentUsername || '').toString().trim();
+					let username = fallbackUsername;
+					if (loggedInRaw) {
+						try {
+							const user = JSON.parse(loggedInRaw);
+							username = (user?.username || user?.employeeNumber || fallbackUsername || '').toString().trim();
+						} catch (_) {}
+					}
+					const response = await fetch(
+						`/api/comidas/semana-usuario?inicio=${encodeURIComponent(inicio)}&fin=${encodeURIComponent(fin)}&username=${encodeURIComponent(username)}`,
+						{ credentials: 'include' }
+					);
+					if (!response.ok) throw new Error('No se pudo obtener comidas de la semana');
+					const payload = await response.json();
+					countElement.textContent = String(Number(payload?.total) || 0);
+				} catch (error) {
+					console.error('Error al cargar comidas de la semana:', error);
+					countElement.textContent = '0';
 				}
+			}
 
 				async function cargoFetchEmployeeEvents(employeeId) {
 					const [vacRes, permRes, faltasRes] = await Promise.all([
@@ -3910,7 +3955,6 @@
 				}
 
 								async function cargarTableroPersonalCargo(force = false) {
-			console.log('[cargo][dashboard] iniciar carga tablero', { force });
 			const now = Date.now();
 			if (!force && (now - cargoTableroLastLoad < 15000)) {
 				console.log('[cargo][dashboard] carga omitida por throttling', { lastLoadMsAgo: now - cargoTableroLastLoad });
@@ -3945,7 +3989,6 @@
 			let parsedUser = null;
 			try { parsedUser = JSON.parse(loggedUser); } catch (e) { parsedUser = null; }
 			const supervisorName = parsedUser?.nombre_completo || parsedUser?.name || parsedUser?.nombre || '';
-			console.log('[cargo][dashboard] usuario supervisor detectado', { supervisorName, parsedUser });
 			if (!supervisorName) {
 				console.warn('[cargo][dashboard] supervisorName vacío, no se puede consultar jerarquía');
 				cargoLastIncidentRows = [];
@@ -3960,7 +4003,6 @@
 			const employees = await cargoFetchEmployeesHierarchy(supervisorName);
 			cargoEmployeesList = Array.isArray(employees) ? employees : [];
 			const totalEmployees = cargoEmployeesList.length;
-			console.log('[cargo][dashboard] empleados encontrados para tablero', { totalEmployees, sample: cargoEmployeesList.slice(0, 5) });
 			if (totalElement) totalElement.textContent = String(totalEmployees);
 			try { setCargoButtonAvailability(totalEmployees > 0); } catch (_) {}
 
@@ -3982,8 +4024,6 @@
 			today.setHours(23, 59, 59, 999);
 			const weekStart = cargoGetWeekStart(new Date());
 			const weekCache = await cargoBuildWeekCache(employees, weekStart);
-			console.log('[cargo][dashboard] week cache generado', { employeeCount: employees.length, weekStart: formatDateLocal(weekStart) });
-
 			let weeklyAbsences = 0;
 			let incidentesTotal = 0;
 
@@ -4449,7 +4489,6 @@
 			if (!modal) return;
 
 			if (!Array.isArray(cargoEmployeesList) || cargoEmployeesList.length === 0) {
-				console.log('[cargo][modal] lista vacía, forzando carga de tablero');
 				await cargarTableroPersonalCargo(true);
 			}
 
@@ -4719,7 +4758,6 @@
 			window.cargarEmpleadoCargoSeleccionado = cargarEmpleadoCargoSeleccionado;
 			window.cambiarCargoTab = cambiarCargoTab;
 			window.cargarTableroPersonalCargo = cargarTableroPersonalCargo;
-			console.log('[cargo][init] funciones globales registradas');
 			setTimeout(() => {
 				cargarTableroPersonalCargo(true).catch((error) => {
 					console.error('[cargo][init] error en carga inicial forzada:', error);
@@ -5155,38 +5193,7 @@
 					if (nameEl) nameEl.textContent = firstName;
 					if (handleEl) handleEl.textContent = displayHandle;
 
-					if (avatarEl) {
-						const photo = (userProfile && (userProfile.foto_url || userProfile.photo || userProfile.photo_url || userProfile.avatar)) || (stored && (stored.foto_url || stored.foto || stored.avatar)) || null;
-						if (photo) {
-							// Normalize relative paths to absolute URLs and handle load errors
-							let src = String(photo || '');
-							if (src && !/^https?:\/\//i.test(src)) {
-								if (!src.startsWith('/')) src = '/' + src;
-								try { src = window.location.origin + src; } catch (_) { /* ignore, keep root-relative */ }
-							}
-							avatarEl.innerHTML = '';
-							const img = document.createElement('img');
-							img.src = src;
-							img.alt = firstName || 'Usuario';
-							img.style.width = '100%';
-							img.style.height = '100%';
-							img.style.objectFit = 'cover';
-							img.style.borderRadius = 'inherit';
-							img.addEventListener('error', function () {
-								const seed = (stored && (stored.nombre_completo || stored.name || stored.username)) || storedUsername || displayNameFull || '';
-								const initials = seed.split(' ').filter(Boolean).map(s => s[0]).slice(0,2).join('').toUpperCase() || 'US';
-								avatarEl.innerHTML = initials;
-								avatarEl.style.background = '#6b7280';
-							});
-							avatarEl.appendChild(img);
-							avatarEl.style.background = '';
-						} else {
-							const seed = (stored && (stored.nombre_completo || stored.name || stored.username)) || storedUsername || displayNameFull || '';
-							const initials = seed.split(' ').filter(Boolean).map(s => s[0]).slice(0,2).join('').toUpperCase() || 'US';
-							avatarEl.textContent = initials;
-							avatarEl.style.background = '#6b7280';
-						}
-					}
+					// Avatar del sidebar: lo aplica populateUserProfile() con URL normalizada y reintentos (evita intermitencia).
 				} catch (err) {
 					console.log('nuevo-inicio: error reading user data', err);
 				}
@@ -5365,11 +5372,16 @@
 					userModal.classList.add('open');
 					userModal.setAttribute('aria-hidden','false');
 					document.documentElement.classList.add('no-scroll');
-					try { if (typeof populateUserProfile === 'function') await populateUserProfile(); } catch (e) { console.warn('populateUserProfile on modal open failed', e); }
+						try {
+							if (typeof populateUserProfile === 'function') {
+								// call in background to avoid blocking modal open
+								populateUserProfile().catch(function (e) { console.warn('populateUserProfile on modal open failed', e); });
+							}
+						} catch (e) { console.warn('populateUserProfile on modal open failed', e); }
 					// Log current user id for debugging (as requested)
 					try { console.debug('[user-modal] currentUserId =', window.currentUserId || localStorage.getItem('currentUserId') || JSON.parse(localStorage.getItem('loggedInUser')||'{}').id || JSON.parse(localStorage.getItem('loggedInUser')||'{}').employeeNumber || localStorage.getItem('username')); } catch(e) {}
 					updateUserGeneralInfo();
-					setActiveSection('general');
+					setActiveSection('personalizacion');
 					// Ensure personal section placeholder is ready
 					const personalSection = userModal.querySelector('[data-section-content="personal"]');
 					if (personalSection) {
@@ -5388,21 +5400,113 @@
 			}
 
 			// Inicializar info de la sección General
-			updateUserGeneralInfo();
-			function applyColorKey(key) {
-				const map = {
-					teal: '#06b6d4',
-					red: '#ef4444',
-					green: '#10b981',
-					purple: '#7c3aed',
-					amber: '#f59e0b'
+			// Paleta pastel: misma persistencia que inicio.html (localStorage favoriteColor* + API /api/usuario/favorite-color)
+			const PDMAccentPaletteMeta = {
+				teal: { hex: '#b8eaf4', name: 'Celeste pastel' },
+				red: { hex: '#ffc9cf', name: 'Coral pastel' },
+				green: { hex: '#bff0d8', name: 'Menta pastel' },
+				purple: { hex: '#e4dcff', name: 'Lavanda pastel' },
+				amber: { hex: '#ffecc4', name: 'Melocotón pastel' },
+			};
+			const PDMLegacyVibrantHexToKey = {
+				'#06b6d4': 'teal', '#00bcd4': 'teal', '#00b6d4': 'teal',
+				'#ef4444': 'red', '#e53935': 'red', '#f44336': 'red',
+				'#10b981': 'green', '#00b16a': 'green', '#4caf50': 'green',
+				'#7c3aed': 'purple', '#7e57c2': 'purple', '#673ab7': 'purple',
+				'#f59e0b': 'amber', '#f39c12': 'amber', '#ff9800': 'amber'
+			};
+			function normalizeAccentHex(hex) {
+				let h = String(hex || '').trim();
+				if (!h) return '';
+				if (!h.startsWith('#')) h = '#' + h.replace(/^#+/, '');
+				if (/^#[0-9a-fA-F]{6}$/.test(h)) return h.toLowerCase();
+				return h.toLowerCase();
+			}
+			function accentHexToRgb(hex) {
+				const n = normalizeAccentHex(hex);
+				if (!/^#[0-9a-f]{6}$/.test(n)) return null;
+				return {
+					r: parseInt(n.slice(1, 3), 16),
+					g: parseInt(n.slice(3, 5), 16),
+					b: parseInt(n.slice(5, 7), 16),
 				};
-				const val = map[key] || map.teal;
-				document.documentElement.style.setProperty('--user-accent', val);
-				// mark selected
-				Array.from(userModal.querySelectorAll('.color-swatch')).forEach(s => s.classList.toggle('selected', s.dataset.colorKey === key));
+			}
+			function nearestAccentKey(hex) {
+				const t = accentHexToRgb(hex);
+				if (!t) return 'teal';
+				let best = 'teal';
+				let dist = Infinity;
+				Object.entries(PDMAccentPaletteMeta).forEach(([k, v]) => {
+					const r = accentHexToRgb(v.hex);
+					if (!r) return;
+					const d = Math.pow(r.r - t.r, 2) + Math.pow(r.g - t.g, 2) + Math.pow(r.b - t.b, 2);
+					if (d < dist) { dist = d; best = k; }
+				});
+				return best;
+			}
+			function keyFromFavoriteHex(hex) {
+				const n = normalizeAccentHex(hex);
+				if (PDMLegacyVibrantHexToKey[n]) return PDMLegacyVibrantHexToKey[n];
+				const direct = Object.keys(PDMAccentPaletteMeta).find(
+					k => normalizeAccentHex(PDMAccentPaletteMeta[k].hex) === n
+				);
+				if (direct) return direct;
+				return nearestAccentKey(n || hex);
+			}
+			function setSwatchesSelected(activeKey) {
+				Array.from(userModal.querySelectorAll('.color-swatch')).forEach(s => {
+					s.classList.toggle('selected', s.dataset.colorKey === activeKey);
+				});
+			}
+			async function applyAccentPaletteKey(key, opts) {
+				const meta = PDMAccentPaletteMeta[key] || PDMAccentPaletteMeta.teal;
+				const persist = !(opts && opts.skipPersist === true);
+				if (typeof changeGlobalColor === 'function' && persist) {
+					await changeGlobalColor(meta.hex, meta.name);
+				} else {
+					document.documentElement.style.setProperty('--user-accent', meta.hex);
+					document.documentElement.style.setProperty('--bg-color', meta.hex);
+				}
+				setSwatchesSelected(key);
 				localStorage.setItem('pdm.themeColor', key);
 			}
+			function syncAccentFromFavorite() {
+				let hex =
+					(window.favoriteColor && window.favoriteColor.hex) ||
+					localStorage.getItem('favoriteColor') ||
+					PDMAccentPaletteMeta.teal.hex;
+				const noLocalFav = !localStorage.getItem('favoriteColor');
+				if (noLocalFav && /^#232946$/i.test(String(hex))) {
+					hex = PDMAccentPaletteMeta.teal.hex;
+				}
+				const key = keyFromFavoriteHex(hex);
+				const meta = PDMAccentPaletteMeta[key];
+				document.documentElement.style.setProperty('--user-accent', normalizeAccentHex(hex) || meta.hex);
+				setSwatchesSelected(key);
+				localStorage.setItem('pdm.themeColor', key);
+			}
+			async function maybeMigrateLegacyFavoriteToPastel() {
+				const hex = (window.favoriteColor && window.favoriteColor.hex) || localStorage.getItem('favoriteColor') || '';
+				const n = normalizeAccentHex(hex);
+				if (!n || /^#232946$/i.test(n)) return;
+				const k = PDMLegacyVibrantHexToKey[n];
+				if (!k || typeof changeGlobalColor !== 'function') return;
+				const meta = PDMAccentPaletteMeta[k];
+				if (normalizeAccentHex(meta.hex) === n) return;
+				await changeGlobalColor(meta.hex, meta.name);
+				setSwatchesSelected(k);
+				localStorage.setItem('pdm.themeColor', k);
+			}
+
+			updateUserGeneralInfo();
+			async function hydrateAccentPreferences() {
+				if (typeof applyFavoriteColor === 'function') {
+					await applyFavoriteColor().catch(() => {});
+				}
+				await maybeMigrateLegacyFavoriteToPastel().catch(() => {});
+				syncAccentFromFavorite();
+			}
+			hydrateAccentPreferences();
 
 			function setLang(lang) {
 				const labels = {
@@ -5426,9 +5530,16 @@
 				localStorage.setItem('pdm.lang', lang);
 			}
 
+			window.addEventListener('favoriteColorChanged', function accentSwatchRefresh() {
+				syncAccentFromFavorite();
+				try { document.body.style.removeProperty('background'); document.body.style.removeProperty('background-color'); } catch (_e) {}
+			});
+
 			// wire palette clicks
 			Array.from(userModal.querySelectorAll('.color-swatch')).forEach(btn => {
-				btn.addEventListener('click', function(){ applyColorKey(this.dataset.colorKey); });
+				btn.addEventListener('click', function () {
+					applyAccentPaletteKey(this.dataset.colorKey).catch(function () {});
+				});
 			});
 
 			// language radios
@@ -5438,9 +5549,6 @@
 
 			// Theme support removed: site stays in light theme only.
 
-			// restore saved preferences
-			const savedColor = localStorage.getItem('pdm.themeColor') || 'teal';
-			applyColorKey(savedColor);
 			const savedLang = localStorage.getItem('pdm.lang') || 'es';
 			// set radio state
 			const radio = userModal.querySelector(`input[name="userLang"][value="${savedLang}"]`);
@@ -6654,10 +6762,82 @@ document.addEventListener('DOMContentLoaded', function(){
 	setTimeout(updateComposerPosition, 300);
 })();
 </script>
-</script>
 <script>
 	(function () {
 		function _escapeHtml(s) { return String(s === null || s === undefined ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+		function normalizeUserPhotoUrl(raw) {
+			if (raw == null || raw === '') return '';
+			let s = String(raw).trim();
+			if (!s || s === 'null' || s === 'undefined') return '';
+			if (/^https?:\/\//i.test(s)) return s;
+			try {
+				if (s.startsWith('//')) return window.location.protocol + s;
+				if (!s.startsWith('/')) s = '/' + s;
+				return window.location.origin + s;
+			} catch (_) {
+				return s.startsWith('/') ? s : '/' + s;
+			}
+		}
+
+		function photoSrcVariants(raw) {
+			const out = [];
+			const seen = new Set();
+			const add = (v) => {
+				const x = String(v || '').trim();
+				if (!x || x === 'null' || seen.has(x)) return;
+				seen.add(x);
+				out.push(x);
+			};
+			const base = String(raw || '').trim().replace(/\\/g, '/');
+			if (!base) return out;
+			add(base);
+			add(normalizeUserPhotoUrl(base));
+			try {
+				if (/^https?:\/\//i.test(base)) {
+					const u = new URL(base);
+					if (u.origin === window.location.origin) add(u.pathname + u.search + u.hash);
+				}
+			} catch (_) { /* ignore */ }
+			return out;
+		}
+
+		function setAvatar(el, rawSrc, displayName) {
+			if (!el) return;
+			const initials = (String(displayName || '').trim().split(/\s+/).filter(Boolean).map(s => s[0]).slice(0, 2).join('').toUpperCase()) || 'US';
+			const variants = photoSrcVariants(rawSrc);
+			if (!variants.length) {
+				el.innerHTML = '';
+				el.textContent = initials;
+				el.style.background = '#6b7280';
+				return;
+			}
+			el.innerHTML = '';
+			el.style.background = '';
+			const img = document.createElement('img');
+			img.alt = _escapeHtml(displayName || '');
+			img.setAttribute('decoding', 'async');
+			img.loading = 'eager';
+			img.style.width = '100%';
+			img.style.height = '100%';
+			img.style.objectFit = 'cover';
+			img.style.borderRadius = 'inherit';
+			img.style.display = 'block';
+			let i = 0;
+			img.onerror = function () {
+				i += 1;
+				if (i >= variants.length) {
+					if (img.parentNode === el) el.removeChild(img);
+					el.textContent = initials;
+					el.style.background = '#6b7280';
+					return;
+				}
+				img.src = variants[i];
+			};
+			img.src = variants[0];
+			el.appendChild(img);
+		}
+
 		async function populateUserProfile() {
 			try {
 				const raw = localStorage.getItem('loggedInUser') || localStorage.getItem('userInfo') || localStorage.getItem('username');
@@ -6670,6 +6850,25 @@ document.addEventListener('DOMContentLoaded', function(){
 				const name = (obj && (obj.nombre_completo || obj.name || obj.fullname || obj.username)) || localStorage.getItem('username') || 'Mi cuenta';
 				const usernameCandidate = (obj && (obj.username || obj.user)) || localStorage.getItem('username') || (obj && obj.email ? String(obj.email).split('@')[0] : null) || null;
 				let foto = obj && (obj.foto_url || obj.foto || obj.photo_url || obj.photo || obj.avatar_url || obj.avatar) ? (obj.foto_url || obj.foto || obj.photo_url || obj.photo || obj.avatar_url || obj.avatar) : null;
+
+				try {
+					let cachedProfile = null;
+					try { cachedProfile = JSON.parse(localStorage.getItem('userProfile') || 'null'); } catch (_unused) { cachedProfile = null; }
+					if (!foto && cachedProfile) {
+						foto = cachedProfile.foto_url || cachedProfile.foto || cachedProfile.photo || cachedProfile.photo_url || cachedProfile.avatar || null;
+					}
+				} catch (_unused2) { /* ignore */ }
+
+				function normalizeNumeroEmpleadoUsuario(v) {
+					const s = String(v == null ? '' : v).trim();
+					if (!s || s === 'null' || s === 'undefined') return '';
+					return s;
+				}
+
+				function pickFotoEmpleados(row) {
+					if (!row || typeof row !== 'object') return null;
+					return row.foto_url || row.photo_url || row.photo || row.avatar || null;
+				}
 
 				try { window.currentUserId = obj && (obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) ? String(obj.id || obj.userId || obj.idEmpleado || obj.employeeNumber || obj.empleado_id || obj.numero_empleado) : null; } catch(_) { window.currentUserId = null; }
 				try { window.currentUsername = usernameCandidate ? String(usernameCandidate) : null; } catch(_) { window.currentUsername = null; }
@@ -6684,56 +6883,78 @@ document.addEventListener('DOMContentLoaded', function(){
 			const yearsEl = document.getElementById('user-years-service');
 			const sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
 
-				function setAvatar(el, src, displayName) {
-					if (!el) return;
-					if (src) {
-						el.innerHTML = '<img src="' + _escapeHtml(src) + '" alt="' + _escapeHtml(displayName || '') + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
-						el.style.background = '';
-					} else {
-						const initials = (displayName || '').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
-						el.textContent = initials;
-						el.style.background = '#6b7280';
-					}
-				}
-
 			// Initial render from localStorage object
 			if (profileName) profileName.textContent = name;
 			if (generalName) generalName.textContent = name;
 			if (profileEmail) profileEmail.textContent = usernameCandidate ? ('@' + usernameCandidate) : (obj && obj.email ? obj.email : '');
-			setAvatar(profileAvatar, foto, name);
-			setAvatar(generalAvatar, foto, name);
-			setAvatar(sidebarAvatarEl, foto, name);
-
-				// candidate employee id fields
-				let empleadoId = null;
-				const candidateFields = ['empleado_id','idEmpleado','id_empleado','numero_empleado','numeroEmpleado','employeeNumber','employee_id','id'];
-				for (const f of candidateFields) {
-					if (obj && Object.prototype.hasOwnProperty.call(obj, f) && obj[f]) { empleadoId = String(obj[f]); break; }
-				}
-
-				function isNumericEmployeeId(value) {
-					return /^\d+$/.test(String(value || '').trim());
-				}
+				let fotoPrioridadEmpleados = null;
+				let empleadoRowPorNumeroUsuario = null;
 
 				async function resolveEmployeeNumberFromUsername(username) {
 					const cleanUsername = String(username || '').trim();
 					if (!cleanUsername) return '';
 					try {
-						const response = await fetch(`/api/usuarios/numero-empleado/${encodeURIComponent(cleanUsername)}`, { cache: 'no-store' });
+						const response = await fetch(`/api/usuarios/numero-empleado/${encodeURIComponent(cleanUsername)}`, { cache: 'no-store', credentials: 'include' });
 						if (!response.ok) return '';
 						const data = await response.json();
-						const numeroEmpleado = String(data?.numero_empleado || '').trim();
-						return isNumericEmployeeId(numeroEmpleado) ? numeroEmpleado : '';
+						return normalizeNumeroEmpleadoUsuario(data?.numero_empleado);
 					} catch (error) { console.warn('resolveEmployeeNumberFromUsername error', error); return ''; }
 				}
 
 				async function fetchEmployeeById(employeeId) {
 					try {
-						const response = await fetch(`/api/empleados/${encodeURIComponent(employeeId)}`, { cache: 'no-store' });
+						const response = await fetch(`/api/empleados/${encodeURIComponent(employeeId)}`, { cache: 'no-store', credentials: 'include' });
 						if (!response.ok) return null;
 						const data = await response.json();
 						return data && typeof data === 'object' ? data : null;
 					} catch (error) { console.warn('fetchEmployeeById error', error); return null; }
+				}
+
+				/** Encadena usuarios.numero_empleado → fila en tabla empleados (foto_url). GET /api/empleados/:id solo busca por id; si falla, busca en el listado por numero_empleado o id. */
+				async function fetchEmpleadoPorNumeroUsuario(numeroRaw) {
+					const num = normalizeNumeroEmpleadoUsuario(numeroRaw);
+					if (!num) return null;
+					let row = await fetchEmployeeById(num);
+					if (row && pickFotoEmpleados(row)) return row;
+					try {
+						const response = await fetch('/api/empleados', { cache: 'no-store', credentials: 'include' });
+						if (!response.ok) return row || null;
+						const data = await response.json();
+						if (!Array.isArray(data)) return row || null;
+						const found = data.find(function (r) {
+							if (!r || typeof r !== 'object') return false;
+							if (normalizeNumeroEmpleadoUsuario(r.numero_empleado) === num) return true;
+							if (String(r.id) === num) return true;
+							return false;
+						});
+						return found || row || null;
+					} catch (error) {
+						console.warn('fetchEmpleadoPorNumeroUsuario list fallback error', error);
+						return row || null;
+					}
+				}
+
+				let numeroUsuarioParaEmpleado = normalizeNumeroEmpleadoUsuario(obj && obj.numero_empleado);
+				if (!numeroUsuarioParaEmpleado && usernameCandidate) {
+					numeroUsuarioParaEmpleado = await resolveEmployeeNumberFromUsername(usernameCandidate);
+				}
+				if (numeroUsuarioParaEmpleado) {
+					empleadoRowPorNumeroUsuario = await fetchEmpleadoPorNumeroUsuario(numeroUsuarioParaEmpleado);
+					fotoPrioridadEmpleados = pickFotoEmpleados(empleadoRowPorNumeroUsuario);
+				}
+				if (fotoPrioridadEmpleados) {
+					foto = fotoPrioridadEmpleados;
+				}
+
+			setAvatar(profileAvatar, foto, name);
+			setAvatar(generalAvatar, foto, name);
+			setAvatar(sidebarAvatarEl, foto, name);
+
+				// Id numérico de empleados (no usar obj.id: suele ser PK de usuarios)
+				let empleadoId = null;
+				const candidateFields = ['empleado_id','idEmpleado','id_empleado','numero_empleado','numeroEmpleado','employeeNumber','employee_id'];
+				for (const f of candidateFields) {
+					if (obj && Object.prototype.hasOwnProperty.call(obj, f) && obj[f]) { empleadoId = String(obj[f]); break; }
 				}
 
 				async function fetchEmployeeFromMe(token) {
@@ -6769,17 +6990,17 @@ document.addEventListener('DOMContentLoaded', function(){
 				}
 
 				if (!employee) {
-					if (empleadoId && isNumericEmployeeId(empleadoId)) {
-						employee = await fetchEmployeeById(empleadoId);
+					if (empleadoId) {
+						employee = await fetchEmpleadoPorNumeroUsuario(empleadoId);
 					} else if (usernameCandidate) {
-						const resolved = await resolveEmployeeNumberFromUsername(usernameCandidate);
-						if (resolved) employee = await fetchEmployeeById(resolved);
+						const resolved = numeroUsuarioParaEmpleado || await resolveEmployeeNumberFromUsername(usernameCandidate);
+						if (resolved) employee = await fetchEmpleadoPorNumeroUsuario(resolved);
 					}
 				}
 
 				if (!employee) {
 					try {
-						const resp = await fetch('/api/empleados?nombre=' + encodeURIComponent(name), { cache: 'no-store' });
+						const resp = await fetch('/api/empleados?nombre=' + encodeURIComponent(name), { cache: 'no-store', credentials: 'include' });
 						if (resp && resp.ok) {
 							const emp = await resp.json();
 							if (emp && typeof emp === 'object') employee = emp;
@@ -6787,12 +7008,14 @@ document.addEventListener('DOMContentLoaded', function(){
 					} catch (e) { /* ignore */ }
 				}
 
+				if (!employee && empleadoRowPorNumeroUsuario) employee = empleadoRowPorNumeroUsuario;
+
 			if (employee) {
-				// prefer foto_url
-				const empPhoto = employee.foto_url || employee.photo || employee.photo_url || employee.avatar || null;
-				if (empPhoto) {
-					foto = empPhoto;
-					const empName = employee.nombre_completo || name;
+				const empPhoto = pickFotoEmpleados(employee);
+				const fotoParaAvatar = fotoPrioridadEmpleados || empPhoto || foto;
+				if (fotoParaAvatar) {
+					foto = fotoParaAvatar;
+					const empName = (empleadoRowPorNumeroUsuario && empleadoRowPorNumeroUsuario.nombre_completo) || employee.nombre_completo || name;
 					setAvatar(profileAvatar, foto, empName);
 					setAvatar(generalAvatar, foto, empName);
 					setAvatar(sidebarAvatarEl, foto, empName);
@@ -6824,7 +7047,7 @@ document.addEventListener('DOMContentLoaded', function(){
 						const storedProfile = {
 							...employee,
 							fullName: employee.nombre_completo || name,
-							photo: empPhoto || ''
+							photo: fotoPrioridadEmpleados || pickFotoEmpleados(employee) || ''
 						};
 						localStorage.setItem('userProfile', JSON.stringify(storedProfile));
                         
@@ -7594,6 +7817,19 @@ document.addEventListener('click', function(ev){
       if (notificationsPanel) notificationsPanel.style.display = '';
     });
   </script>
+
+	<script>
+		// Make the top-center pill logo scroll to top when clicked or activated via keyboard
+		document.addEventListener('DOMContentLoaded', function() {
+			try {
+				const pill = document.getElementById('pill-logo');
+				if (!pill) return;
+				function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+				pill.addEventListener('click', function(e){ e.preventDefault(); scrollTop(); });
+				pill.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); scrollTop(); } });
+			} catch (e) { console.error('pill-logo scroll attach failed', e); }
+		});
+	</script>
   <script>
   (function() {
     const ALL_FAQS = [
